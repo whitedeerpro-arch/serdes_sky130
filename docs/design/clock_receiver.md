@@ -1,8 +1,8 @@
 # CML→CMOS 时钟接收器
 
-> **当前修订**：PLL r3 中的 `serdes_cml_to_cmos_pvt_candidate`，用于每条抽出支路的全速 2 GHz CMOS 和 250 MHz 反馈（[网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)）。
-> **关键数字**：250 MHz 反馈转换 45/45；全速 2 GHz 转换 44/45。
-> **主要缺口**：SS/1.65 V/−40 °C 全速转换失败（原生 VCO 下四相全部失效）。PLL 不依赖全速时钟，但 RX 的 pair 对齐和 RTL 桥依赖。
+> **当前修订**：PLL r4。全速 2 GHz 用 `serdes_cml_to_cmos_r4`（[网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice)），250 MHz 反馈仍用 `serdes_cml_to_cmos_pvt_candidate`（[网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)）。两者拓扑和输入源跟随器相同，抽出 buffer 看到的负载不变。
+> **关键数字**：全速转换在标准边界 45/45（占空比 0.477–0.511），原生 VCO 5 个工作点四路全部正常（含 r3 失败的 SS/1.65 V/−40 °C）；250 MHz 反馈 45/45。前端功耗 TT 增加约 4.2 mW（每路约 1 mW）。
+> **主要缺口**：SS 热角幅度余量约 110 mV；1.95 V 下输出过冲到约 2.05 V（I-11）。
 
 ## 电路
 
@@ -57,7 +57,7 @@ SS/1.65 V/85 °C 下原接收器的增益节点仍在摆动，但预驱动 `bp` 
 - PLL 反馈只用 ÷8 后的 250 MHz CMOS，不受影响。
 - RX 的 [rx_cmos_pair_align.spice](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice) 把恢复的 EDGE 时钟转成约 2 GHz CMOS 再对齐样本；实时 RTL 桥每 500 ps 读一次 pair。若以后改为 CML 整字保持、低速再转 CMOS，这个依赖可以去掉。见 [尺寸与优先级](../history/divider_size_and_clock_priority.md)。
 
-### 全速 SS 冷角修复候选（2026-10-31）
+### r4：全速 SS 冷角修复（2026-10-31）
 
 bench：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 prescaler 负载后进入转换器，与 r3 的 45 条件测试边界一致（[bench](../../analog/common/cml_to_cmos/tb/fullrate_pvt/run.py)）。
 
@@ -72,6 +72,20 @@ bench：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 pre
 
 幅度余量：源降到 200 mVpp 时，"big" 在 SS 冷、FS 热、SF 冷角仍通过，SS 热角（输入 277 mVpp）失败；SS 热角正常输入约 390 mVpp。
 
+"big" 定为 r4（`serdes_cml_to_cmos_r4`），接进 [r4 前端](../../analog/pll/top/spice/clock_frontend_r4.spice)，按 r3 原生回接的固定 Vctrl 工作点复验（[bench](../../analog/pll/top/tb/pvt_r4/run.py)）：
+
+| 工作点 | VCO | 分频 / 反馈 / 全速 | 全速占空比 | 前端功耗 r3 → r4 |
+|---|---:|---|---:|---:|
+| TT，码 5，1.205 V | 2.0135 GHz | 正常 / 4/4 / 4/4 | 0.495–0.496 | 36.4 → 40.6 mW |
+| SS/1.65 V/85 °C，码 6，1.32 V | 2.0128 GHz | 正常 / 4/4 / 4/4 | 0.490 | 30.0 → 31.8 mW |
+| FS/1.65 V/85 °C，码 5，1.10 V | 1.9915 GHz | 正常 / 4/4 / 4/4 | 0.497 | 29.1 → 30.7 mW |
+| SS/1.65 V/−40 °C，码 5，1.112 V | 2.0025 GHz | 正常 / 4/4 / **4/4**（r3：0/4） | 0.479 | 24.0 → 29.4 mW |
+| SS/1.65 V/−40 °C，码 6，1.32 V | 1.9369 GHz | 正常 / 4/4 / 4/4 | 0.480 | 27.7 → 29.1 mW |
+
+SS 冷角功耗增量较大，是因为 r3 在那里转换器没有翻转。
+
+1.95 V 下 CMOS 输出最高约 2.049 V（SS/1.95 V/−40 °C），下冲最深约 −84 mV（SS/1.65 V/−40 °C），比 r3 的约 2.026 V 略高。
+
 ## 适用范围
 
 - 边界温度是确定性仿真在特定激励下的局部结果，不是带噪声/失配的额定值。
@@ -80,6 +94,6 @@ bench：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 pre
 
 ## 待解决
 
-- 用原生 VCO 复验 "big" 的 SS 冷角，替换进 r3 前端后重跑分频/反馈 45 条件（[问题清单](../status/open_issues.md) I-04）；SS 热角幅度余量约 110 mV。
-- 1.95 V 过冲与器件端电压（I-11）。
+- SS 热角幅度余量约 110 mV（[问题清单](../status/open_issues.md) I-04 的遗留项）。
+- 1.95 V 过冲（r4 约 2.05 V）与器件端电压（I-11）。
 - 恢复级复位/无毛刺门控（随 I-01 的分频同步方案一起考虑）。

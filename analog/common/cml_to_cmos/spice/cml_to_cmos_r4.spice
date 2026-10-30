@@ -1,0 +1,31 @@
+* Full-rate CML-to-CMOS clock receiver, PLL working revision r4 (I-04).
+* Same topology and input followers as serdes_cml_to_cmos_pvt_candidate, so the
+* load on the extraction buffer is unchanged. Larger gain stage (input pair
+* W10, PMOS mirror load W16, tail W16) and a lower pre-driver threshold
+* (NMOS 3.6 um): at SS 1.65 V -40 C the old gain stage only reached ~1.09 V and
+* the pre-driver could not switch. Lowering the threshold alone breaks SS 85 C;
+* the extra gain/bandwidth covers both (45/45 at the standard input boundary).
+* Requires helpers in cml_to_cmos.spice and sky130_primitives.spice.
+.subckt serdes_cml_to_cmos_r4 inp inn outp outn vbias vdd vss
++ params: wsf=20 wsf_sink=2 win=10 wload=16 wtail=16
++ pre_wn=3.6 pre_wp=3.6 out_wn=4 out_wp=8
+
+* Source followers: gates face the VCO, sources drive the gain stages.
+* High input common mode is shifted down before differential gain.
+Xfp vdd inp fp vss serdes_nfet_lvt w={wsf}
+Xfn vdd inn fn vss serdes_nfet_lvt w={wsf}
+Xsp fp vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+Xsn fn vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+
+* Identical reversed-input paths preserve symmetry of complementary outputs.
+Xap fp fn ap vbias vdd vss serdes_rx_diff_to_se
++ win={win} wload={wload} wtail={wtail}
+Xan fn fp an vbias vdd vss serdes_rx_diff_to_se
++ win={win} wload={wload} wtail={wtail}
+Xbp ap bp vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp}
+Xbn an bn vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp}
+Xop bp rawp vdd vss serdes_rx_inverter wn=4 wp=12 nfp=4
+Xon bn rawn vdd vss serdes_rx_inverter wn=4 wp=12 nfp=4
+Xrestore rawp rawn outp outn vdd vss serdes_rx_clock_restorer
++ out_wn={out_wn} out_wp={out_wp}
+.ends serdes_cml_to_cmos_r4

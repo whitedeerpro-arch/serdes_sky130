@@ -27,8 +27,8 @@ flowchart LR
 | 模块 | 当前修订 | 已验证到 | 主要缺口 |
 |---|---|---|---|
 | [VCO](docs/design/pll_vco.md) | PLL r3 | 4 个选定工况原生回接约 2 GHz | 45 条件调谐映射；节点摆幅 < 400 mVpp；相噪 |
-| [÷8 prescaler](docs/design/pll_divider.md) | PLL r3 | 标准输入 45 条件分频/反馈全部正确 | 无确定性复位；FS 冷角尾管余量约 −5 mV |
-| [时钟接收器](docs/design/clock_receiver.md) | PLL r3 | 反馈 45/45，全速 44/45 | SS/1.65 V/−40 °C 全速转换失败 |
+| [÷8 prescaler](docs/design/pll_divider.md) | PLL r3/r4 | 标准输入 45 条件分频/反馈全部正确 | 无确定性复位；FS 冷角尾管余量约 −5 mV |
+| [时钟接收器](docs/design/clock_receiver.md) | PLL r4 | 反馈 45/45，全速 45/45；原生 VCO 5 个工作点全部正常 | SS 热角幅度余量约 110 mV；1.95 V 过冲 |
 | [PFD/CP/LF/启动](docs/design/pll_loop.md) | v0.1 电路 | PFD→CP 45 条件；4 工况分层闭环锁定 | r3 原生持续锁定、从零捕获 |
 | [TX 时钟分发](docs/design/tx_clock_distribution.md) | TX r2 | v0.1 源下相位达标 | r3 源下相位改变，trim 未重标 |
 | [TX 串化器](docs/design/tx_serializer.md) | TX r2 | 45/45 满足 75 mV / 0.15 UI（128 bit） | FS 热角 1024 bit 散布 0.115–0.147 UI |

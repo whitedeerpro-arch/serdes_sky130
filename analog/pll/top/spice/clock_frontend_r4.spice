@@ -6,8 +6,11 @@
 * PVT refinement candidate: exact same balanced wiring and powered dummy.
 * Reusable wiring of the native balanced extraction fixture; external bias.
 * Three powered dummy feedback paths are a conservative reference, not final power optimization.
-* Dummy DFF reset differs from PFD internal reset; see docs/pll_first_debug.md.
-.subckt pll_clock_frontend_r4 ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 cm0p cm0n cm1p cm1n cm2p cm2n cm3p cm3n vdd vdd_dummy vss params: cwire=0.5f
+* Dummy DFF reset differs from PFD internal reset; see docs/history/pll_first_debug.md.
+* Trailing ports expose the extraction-buffer output b0 and the divider taps
+* the TX clocks and the start-state detector use; they add no circuitry.
+.subckt pll_clock_frontend_r4 ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 cm0p cm0n cm1p cm1n cm2p cm2n cm3p cm3n vdd vdd_dummy vss
++ b0p b0n d02p d02n d04p d04n d08p d08n d22p d22n d24p d24n d32p d32n params: cwire=0.5f
 Xvco v0p v0n v1p v1n v2p v2n v3p v3n ctrl cfg0 cfg1 cfg2 vbias vdd vss pll_vco_ring4_pvt_candidate
 Cw0p v0p vss {cwire}
 Cw0n v0n vss {cwire}

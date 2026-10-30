@@ -11,9 +11,10 @@ C1 out 0 1p
 .control
 tran 1p 10n 0 5p
 let vdiff=v(in)-v(out)
+let vcopy=v(out)
 set wr_singlescale
 set wr_vecnames
-wrdata waveforms.tsv v(out) vdiff
+wrdata waveforms.tsv v(out) vdiff vcopy
 quit
 .endc
 .end
@@ -26,8 +27,10 @@ def test_binary_raw_matches_text(tmp_path):
     assert (tmp_path / "raw/waveforms.raw").exists() and not (tmp_path / "raw/waveforms.tsv").exists()
     a = spice.Waves(tmp_path / "text/waveforms.tsv")
     b = spice.Waves(tmp_path / "raw/waveforms.tsv")       # resolves to the .raw
-    assert a.names == b.names == ["time", "v(out)", "vdiff"]
+    assert a.names[:3] == b.names[:3] == ["time", "v(out)", "vdiff"]
     assert np.allclose(a.data, b.data, rtol=1e-8, atol=1e-15)
+    # A plain copy of a node voltage is "vcopy" in text but "v(vcopy)" in binary raw.
+    assert np.allclose(a["vcopy"], b["vcopy"]) and "vcopy" in b and "v(vcopy)" in a
     assert (tmp_path / "raw/waveforms.raw").stat().st_size < (tmp_path / "text/waveforms.tsv").stat().st_size
 
 

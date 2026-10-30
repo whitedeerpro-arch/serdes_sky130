@@ -183,8 +183,20 @@ class Waves:
     def t(self) -> np.ndarray:
         return self.data[:, 0]
 
+    def _column(self, name: str) -> int:
+        # Binary `write` labels a plain copy of a node voltage (let x=v(n)) and
+        # @m...[param] vectors as v(x); wrdata keeps x.  Accept either spelling.
+        for key in (name, f"v({name})", name[2:-1] if name.startswith("v(") and name.endswith(")") else None):
+            if key in self._col:
+                return self._col[key]
+        raise KeyError(name)
+
     def __getitem__(self, name: str) -> np.ndarray:
-        return self.data[:, self._col[name]]
+        return self.data[:, self._column(name)]
 
     def __contains__(self, name: str) -> bool:
-        return name in self._col
+        try:
+            self._column(name)
+            return True
+        except KeyError:
+            return False

@@ -28,7 +28,8 @@ Vcode1 cfg1 0 {(floor(code/2)-2*floor(code/4))*supply}
 Vcode2 cfg2 0 {floor(code/4)*supply}
 Vreset rst_b 0 PWL(0 0 1n 0 1.02n {supply})
 Vref ref 0 PULSE(0 {supply} 2n 30p 30p 1.97n 4n)
-Xclock ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 c0p c0n c1p c1n c2p c2n c3p c3n vdd vdum 0 pll_clock_frontend_r4
+Xclock ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 c0p c0n c1p c1n c2p c2n c3p c3n vdd vdum 0
++ tb0p tb0n t02p t02n t04p t04n t08p t08n t22p t22n t24p t24n t32p t32n pll_clock_frontend_r4
 * Preserve the real active-branch PFD input load; output load is the existing 20 fF proxy.
 Xpfd ref fb0 rst_b up dn vdd 0 pll_pfd
 Cup up 0 20f

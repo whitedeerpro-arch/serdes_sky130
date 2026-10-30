@@ -18,12 +18,12 @@ def ngspice() -> str:
 
 def model_library() -> Path:
     """SKY130 ngspice corner library; select the corner with `.lib "<path>" tt`."""
-    pdk = config("pdk.toml")
+    pdk = config("pdk.toml")["pdk"]
     return Path(pdk["path"]) / pdk["model_library"]
 
 
 def pdk_installation_id() -> str:
-    return config("pdk.toml")["installation_id"]
+    return config("pdk.toml")["pdk"]["installation_id"]
 
 
 def git_revision() -> str | None:

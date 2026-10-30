@@ -15,6 +15,9 @@ grid: all 8 states at each condition (default: the six stress conditions),
       128 payload bits.
 table: export the measured permutation of every state (checked identical
       across conditions and nodes) for the TX remap RTL testbench.
+window: timing windows.  One clock at a time (500 MHz, 1 GHz, 2 GHz) is moved
+      by a fraction of a UI relative to the calibrated r2 position (taken
+      modulo its own period, so the divider state is unchanged), 128 bits.
 long: 1024 payload bits (300 ns record) for state (0, 0), or for the states
       given as sAB tokens (A = 500 MHz cycles late, B = 1 GHz cycles late).
 Add "remap" to grid/long to pre-permute the parallel data with the inverse of
@@ -68,6 +71,50 @@ def stimuli(c500, c1g, remap=False):
             line = head + "PWL(" + " ".join(tok) + ")"
         out.append(line)
     return "\n".join(out) + "\n"
+
+
+FULL_PERIOD = {"500": 2e-9, "1g": 1e-9, "2g": 0.5e-9}
+SOURCES = {"500": ("Vsrc500p", "Vsrc500n"), "1g": ("Vsrc1gp", "Vsrc1gn"), "2g": ("Vsrc2gp", "Vsrc2gn")}
+WINDOW_STEPS_UI = (-0.75, -0.5, -0.25, 0.25, 0.5, 0.75)
+
+
+def shifted_stimuli(clk, shift_s):
+    """r2 stimuli with one clock's edge record moved by shift_s (taken modulo its period)."""
+    dt = shift_s % FULL_PERIOD[clk]
+    out = []
+    for line in (HERE / "r2_stimuli.inc").read_text().splitlines():
+        if line.split(" ", 1)[0] in SOURCES[clk]:
+            head, body = line.split("PWL(", 1)
+            tok = body.rstrip(")").split()
+            for i in range(2, len(tok), 2):
+                tok[i] = f"{float(tok[i]) + dt:.14e}"
+            line = head + "PWL(" + " ".join(tok) + ")"
+        out.append(line)
+    return "\n".join(out) + "\n"
+
+
+def window(conds):
+    camp = RESULTS / f"window_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    points = [(c, clk, ui) for c in conds for clk in SOURCES for ui in WINDOW_STEPS_UI]
+    jobs = []
+    for c, clk, ui in points:
+        d = camp / f"{c.tag}_{clk}_{ui:+.2f}"
+        d.mkdir(parents=True)
+        (d / "stimuli.inc").write_text(shifted_stimuli(clk, ui * 250e-12))
+        dk = spice.skip_output_before(spice.binary_output(deck(c, "72n")), "12n")
+        jobs.append((dk, d / "run", dict(files={"stimuli.inc": d / "stimuli.inc"},
+                                         meta=dict(condition=c.tag, clock=clk, shift_ui=ui))))
+    for ex in spice.run_many(jobs):
+        assert ex.ok, (ex.run_dir, ex.log_failures)
+    rows = []
+    for c, clk, ui in points:
+        r = analyse(camp / f"{c.tag}_{clk}_{ui:+.2f}" / "run", 128)
+        s = r["serializer"]
+        rows.append(dict(condition=c.tag, clock=clk, shift_ui=ui, nodes=r))
+        print(f"{c.tag:14s} {clk:3s} {ui:+.2f} UI  eye {s['order_free']['eye_min_abs_v']*1e3:6.1f} mV  spread "
+              f"{s['order_free']['edge_spread_ui']:.3f}  {'IN ORDER' if s['order_free']['in_order'] else s['order_free']['mapping']}  "
+              f"draft {serial.meets_draft(s['contract'])}", flush=True)
+    (camp / "summary.json").write_text(json.dumps(rows, indent=2))
 
 
 def deck(c, stop):
@@ -144,6 +191,8 @@ if __name__ == "__main__":
     conds = [Condition.parse(t) for t in tags] if tags else STRESS
     if step == "grid":
         campaign([(c, s) for c in conds for s in STATES], "grid_remap" if remap else "grid", "72n", 128, remap)
+    elif step == "window":
+        window(conds)
     elif step == "table":
         table()
     elif step == "long":

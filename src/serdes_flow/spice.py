@@ -184,11 +184,14 @@ class Waves:
         return self.data[:, 0]
 
     def _column(self, name: str) -> int:
-        # Binary `write` labels a plain copy of a node voltage (let x=v(n)) and
-        # @m...[param] vectors as v(x); wrdata keeps x.  Accept either spelling.
-        for key in (name, f"v({name})", name[2:-1] if name.startswith("v(") and name.endswith(")") else None):
-            if key in self._col:
-                return self._col[key]
+        # Binary `write` lower-cases names and labels a plain copy of a node
+        # voltage (let x=v(n)) and @m...[param] vectors as v(x); wrdata keeps
+        # x as written.  Accept either spelling.
+        bare = name[2:-1] if name.startswith("v(") and name.endswith(")") else name
+        for key in (name, f"v({bare})", bare):
+            for k in (key, key.lower()):
+                if k in self._col:
+                    return self._col[k]
         raise KeyError(name)
 
     def __getitem__(self, name: str) -> np.ndarray:

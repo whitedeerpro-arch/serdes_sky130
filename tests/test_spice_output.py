@@ -12,9 +12,10 @@ C1 out 0 1p
 tran 1p 10n 0 5p
 let vdiff=v(in)-v(out)
 let vcopy=v(out)
+let vMixed=v(in)
 set wr_singlescale
 set wr_vecnames
-wrdata waveforms.tsv v(out) vdiff vcopy
+wrdata waveforms.tsv v(out) vdiff vcopy vMixed
 quit
 .endc
 .end
@@ -31,6 +32,8 @@ def test_binary_raw_matches_text(tmp_path):
     assert np.allclose(a.data, b.data, rtol=1e-8, atol=1e-15)
     # A plain copy of a node voltage is "vcopy" in text but "v(vcopy)" in binary raw.
     assert np.allclose(a["vcopy"], b["vcopy"]) and "vcopy" in b and "v(vcopy)" in a
+    # Binary write lower-cases names; lookups use the spelling of the deck.
+    assert np.allclose(a["vMixed"], b["vMixed"])
     assert (tmp_path / "raw/waveforms.raw").stat().st_size < (tmp_path / "text/waveforms.tsv").stat().st_size
 
 

@@ -1,0 +1,41 @@
+* CML retiming flip-flop for TX clock generation from one divider chain.
+* Same low-overdrive master/slave structure as pll_cml_div2_biased, but with
+* external data: the master tracks while clk is high, the slave updates on
+* the falling clock edge. Retiming a deterministic /2, /4, /8 chain onto a
+* chosen VCO phase gives a fixed, start-up-independent phase relation.
+* Dependencies: sky130_primitives.spice, cml_latch.spice, cml_div2.spice.
+.subckt serdes_cml_dff_lowov dp dn clkp clkn qp qn vbias vbias_logic vdd vss
++ params: wsf=80 wsf_sink=4 wdata=20 whold=80 wclock=64 wtail=72 nftail=24 rload=600
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xmaster dp dn mp mn ckp ckn vbias_logic vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xslave mp mn qp qn ckn ckp vbias_logic vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+.ends serdes_cml_dff_lowov
+
+* Clock-to-q replica for the undivided 2 GHz clock. The retimed /2, /4, /8
+* clocks leave through the slave latch's clock-steered path, whose delay
+* varies by ~80 ps over PVT. Passing 2 GHz through the same structure (same
+* followers, tail, load) keeps the 2 GHz-to-divided relation corner-independent.
+* The latch's cross-coupled hold pair is replaced by a second data pair on
+* constant inverted data, so the output follows the clock: +D on one phase,
+* -D on the other. hip/hin: static CML high/low levels.
+.subckt serdes_cml_clk_replica_lowov clkp clkn qp qn hip hin vbias vbias_logic vdd vss
++ params: wsf=80 wsf_sink=4 wdata=20 wclock=64 wtail=72 nftail=24 rload=600
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Rp vdd qp {rload}
+Rn vdd qn {rload}
+Xap qn hip ta vss serdes_nfet_lvt w={wdata} nf=4
+Xan qp hin ta vss serdes_nfet_lvt w={wdata} nf=4
+Xbp qn hin tb vss serdes_nfet_lvt w={wdata} nf=4
+Xbn qp hip tb vss serdes_nfet_lvt w={wdata} nf=4
+Xca ta ckn tail vss serdes_nfet_lvt w={wclock} nf=4
+Xcb tb ckp tail vss serdes_nfet_lvt w={wclock} nf=4
+Xtail tail vbias_logic vss vss serdes_nfet w={wtail} l=0.5 nf={nftail}
+.ends serdes_cml_clk_replica_lowov

@@ -12,6 +12,12 @@ new results compare directly with docs/data/tx_pvt.json and tx_optimization.json
 * Payload edges are matched to expected transitions within +/-0.45 UI; the
   spread is the peak-to-peak edge residual.  Unmatched expected transitions are
   "missing", unmatched crossings are "extra".
+
+`check` assumes the expected bit order.  `bit_mapping` separates the two
+questions it mixes: is the eye healthy on the UI grid, and which input bit
+does each output slot carry.  A wrong divider start state permutes the bits
+of a word (sometimes with a neighbouring word) while leaving the eye intact;
+`check` reports that as bit errors, `bit_mapping` reports the permutation.
 """
 from dataclasses import dataclass
 
@@ -138,3 +144,64 @@ def meets_draft(m: dict) -> bool:
     """Serializer spec screen: functional, margin >= 75 mV and spread <= 0.15 UI."""
     return bool(m["functional"] and m["minimum_signed_margin_v"] >= DRAFT_MARGIN_V
                 and m["transition_spread_ui"] is not None and m["transition_spread_ui"] <= DRAFT_SPREAD_UI)
+
+
+def bit_mapping(t, y, seq: Sequence, *, first_bit=TRAINING_BITS, end_margin_s=2e-9):
+    """Order-agnostic eye health plus the bit permutation of a serial node.
+
+    The sampling phase is the circular mean of all crossings in the payload
+    span relative to the UI grid anchored at seq.start_s (no training, no
+    knowledge of the order).  Returns:
+
+    eye_min_abs_v   smallest |sample| over payload slots (eye opening)
+    edge_spread_ui  peak-to-peak crossing residual on the UI grid
+    mapping         per 16-UI output frame, mapping[j] = index of the input bit
+                    carried by slot j, relative to the start of the matching
+                    input word (<0 or >=16: bit of a neighbouring word);
+                    None when no consistent one-to-one mapping exists
+    in_order        mapping is a pure latency (j -> j + const)
+    """
+    ui, bits = seq.ui_s, seq.bits
+    stop = t[-1] - end_margin_s
+    t0 = seq.start_s + first_bit * ui
+    e, _ = crossings(t, y)
+    e = e[(e > t0) & (e < stop)]
+    frac = (e - seq.start_s) / ui
+    phase = float(np.angle(np.mean(np.exp(2j * np.pi * frac))) / (2 * np.pi))
+    residual = (frac - phase + 0.5) % 1.0 - 0.5
+    n = np.arange(int((stop - seq.start_s) / ui))
+    samples = np.interp(seq.start_s + (n + phase + 0.5) * ui, t, y)
+    out = (samples > 0).astype(int)
+    payload = samples[first_bit:]
+
+    # Find a frame offset o and per-slot sources m_j with out[16k+o+j] == bits[16k+m_j]
+    # for every usable word k.  Marker and payload words only: alternating
+    # training cannot disambiguate.  Prefer the frame that keeps most slots
+    # inside one input word.
+    best = None
+    for o in range(16):
+        words = [k for k in range(ALTERNATING_BITS // 16 + 1, len(bits) // 16 - 1)
+                 if 16 * k + o + 15 < len(out)]
+        if len(words) < 6:
+            continue
+        m = []
+        for j in range(16):
+            cands = [s for s in range(-16, 32)
+                     if all(out[16 * k + o + j] == bits[16 * k + s] for k in words)]
+            if len(cands) != 1:
+                break
+            m.append(cands[0])
+        if len(m) == 16 and len(set(m)) == 16:
+            inside = sum(0 <= s < 16 for s in m)
+            if best is None or inside > best[0]:
+                best = (inside, o, m, len(words))
+    mapping = best[2] if best else None
+    return dict(
+        eye_min_abs_v=float(np.min(np.abs(payload))),
+        edge_spread_ui=float(np.ptp(residual)) if len(residual) else None,
+        sampling_phase_ui=phase,
+        mapping=mapping,
+        frame_offset_ui=best[1] if best else None,
+        words_used=best[3] if best else 0,
+        in_order=bool(mapping is not None and len({s - j for j, s in enumerate(mapping)}) == 1),
+    )

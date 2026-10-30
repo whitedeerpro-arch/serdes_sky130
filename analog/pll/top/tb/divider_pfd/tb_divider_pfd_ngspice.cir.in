@@ -1,0 +1,59 @@
+SKY130 real CML divider + clock receiver + static CMOS PFD
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_latch.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_dff.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_logic.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_divider_programmable.spice"
+.include "@PROJECT_ROOT@/verification/stimuli/spice/cml_diff_sine.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.param supply=1.8 freq=2G vcm=1.632 vdiff_pp=0.4 iref=0.85m cload=5f
+.param code0=1 code1=1 code2=1 code3=0
+.param ref_period=4n ref_delay=2n edge_time=30p reset_cap=5f reset_release=1n
+Vdd vdd 0 {supply}
+Vdiv vdiv 0 {supply}
+Vrx vrx 0 {supply}
+Vreference vref 0 {supply}
+Iref vref vbias {iref}
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=0.5 nf=4
+Xstim clkp clkn 0 stim_cml_diff_sine vcm={vcm} vdiff_pp={vdiff_pp} freq={freq}
+Vn0 n0 0 {code0*supply}
+Vnb0 nb0 0 {(1-code0)*supply}
+Vn1 n1 0 {code1*supply}
+Vnb1 nb1 0 {(1-code1)*supply}
+Vn2 n2 0 {code2*supply}
+Vnb2 nb2 0 {(1-code2)*supply}
+Vn3 n3 0 {code3*supply}
+Vnb3 nb3 0 {(1-code3)*supply}
+Xdiv clkp clkn qp qn n0 nb0 n1 nb1 n2 nb2 n3 nb3 vbias vdiv 0 pll_cml_divider_programmable
+Cop qp 0 {cload}
+Con qn 0 {cload}
+Ikick xdiv.b0p xdiv.b0n PWL(0 0 1p 0 2p 1u 20p 1u 21p 0)
+Xrx qp qn fb fb_n vbias vrx 0 serdes_cml_to_cmos
+Vref ref 0 PULSE(0 {supply} {ref_delay} {edge_time} {edge_time} {ref_period/2-edge_time} {ref_period})
+Vreset rst_b 0 PWL(0 0 {reset_release} 0 {reset_release+20p} {supply} @RESET_SEQUENCE@)
+Xpfd ref fb rst_b up dn vdd 0 pll_pfd reset_cap={reset_cap}
+Cup up 0 20f
+Cdn dn 0 20f
+Cfb fb 0 5f
+Cfbn fb_n 0 20f
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set wr_singlescale
+set wr_vecnames
+tran 2p 64n 0 2p
+let power=-v(vdd)*i(Vdd)
+let dcml=v(qp)-v(qn)
+let prx=-v(vrx)*i(Vrx)
+let pdiv=-v(vdiv)*i(Vdiv)
+wrdata waveforms.tsv v(ref) v(fb) v(up) v(dn) v(rst_b) v(xpfd.clear_b) v(xpfd.qu) v(xpfd.qd) power v(xpfd.xup.xcore.master_en) v(xpfd.xup.xcore.slave_en) dcml prx pdiv v(fb_n)
+quit
+.endc
+.end

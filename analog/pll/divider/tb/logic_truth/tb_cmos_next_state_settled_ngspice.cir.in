@@ -1,0 +1,21 @@
+SKY130 CMOS combinational truth by settled transient input vectors
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cmos_divider_programmable.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/tb/logic_truth/stimuli/cmos_truth_vectors.spice"
+.param supply=1.8
+Vdd vdd 0 {supply}
+Xvectors q0 q1 q2 q3 m0 m1 m2 m3 0 stim_cmos_truth supply={supply}
+Xlogic q0 q1 q2 q3 m0 m1 m2 m3 d0 d1 d2 d3 zero half vdd 0 pll_cmos_divider_next
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set wr_singlescale
+set wr_vecnames
+tran 100p 1024n 0 100p
+wrdata truth_tran.tsv v(d0) v(d1) v(d2) v(d3) v(zero) v(half)
+quit
+.endc
+.end

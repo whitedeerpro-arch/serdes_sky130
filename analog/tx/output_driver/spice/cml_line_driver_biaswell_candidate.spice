@@ -1,0 +1,26 @@
+* 4Gb/s source-terminated CML line-driver prototype, not a pad/ESD cell.
+* Separate small-input isolation and larger predriver keep line FET gate load
+* off the serializer node. Positive differential input -> positive output.
+* Two local 50ohm pullups are part of the source termination / DC path.
+* With a matched 100ohm remote differential load the AC per-leg load is 25ohm;
+* approximately8mA total tail is needed for400mV differential PEAK-TO-PEAK.
+* Bias is external; wtail is an initial mirror-geometry choice, not an ideal I.
+.subckt serdes_tx_cml_line_driver_biaswell_candidate inp inn tx_en qp qn vbias vdd_pre vdd_out vss
++ params: wiso=12 wtiso=12 riso=600 wpre=48 wtpre=48 rpre=150 wout=256 wtout=172 rterm=50
+Xiso inp inn ip in vbias vdd_pre vss serdes_cml_buffer wn={wiso} wt={wtiso} rload={riso}
+Xpre ip in gp gn vbias vdd_pre vss serdes_cml_buffer wn={wpre} wt={wtpre} rload={rpre}
+Rp vdd_out qp {rterm}
+Rn vdd_out qn {rterm}
+Xp qn gp tail vss serdes_nfet_lvt w={wout} nf=16
+Xn qp gn tail vss serdes_nfet_lvt w={wout} nf=16
+* tx_en=0 disables line tail current; predrivers are not power-gated.
+* An actual bias switch plus pulldown provides a balanced DC electrical-idle
+* condition before AC-coupled link startup, without forcing capacitor states.
+Xen tx_en en_b vdd_pre vss serdes_cmos_inv wn=4 wp=8
+* Candidate requires its OWN PMOS nwell tied to vbias (highest analog switch node).
+* Do not share that well with VDD PMOS. Bias power sequencing is not qualified.
+Xbgn vbias tx_en vbtail vss serdes_nfet w=2
+Xbgp vbias en_b vbtail vbias serdes_pfet w=4
+Xoff vbtail en_b vss vss serdes_nfet w=1
+Xt tail vbtail vss vss serdes_nfet w={wtout} l=0.5 nf=16
+.ends serdes_tx_cml_line_driver_biaswell_candidate

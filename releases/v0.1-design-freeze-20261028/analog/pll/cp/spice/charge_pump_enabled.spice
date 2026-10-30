@@ -1,0 +1,8 @@
+* Physical CMOS gating; depends on cmos_logic.spice and charge_pump.spice.
+* enable=0 commands both CP switches off. It does not make leakage zero.
+* Added gates/load/delay require PFD/CP recharacterization at integration.
+.subckt pll_cp_enabled up dn enable out vbn vbp vdd vss
+Xup up enable up_on vdd vss serdes_cmos_and2
+Xdn dn enable dn_on vdd vss serdes_cmos_and2
+Xcp up_on dn_on out vbn vbp vdd vss pll_cp
+.ends pll_cp_enabled

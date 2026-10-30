@@ -1,0 +1,87 @@
+status = "retimed_last_rank_TT_ideal_clock_finite_vector_observed"
+parallel_width = 16
+serial_rate_target_bps = 4000000000
+word_rate_target_hz = 250000000
+serial_bit_order = "d0_first_then_d1_to_d15"
+first_topology = "four_ranks_of_differential_2to1_CML_selectors"
+rank_mux_counts = [8, 4, 2, 1]
+rank_selector_clock_hz = [250000000, 500000000, 1000000000, 2000000000]
+rank_pairing = "cross_half: j with j+8, then j+4, then j+2, then even/odd"
+select_polarity = "positive_select_selects_B"
+internal_swing_target_diff_pp_v = 0.4
+external_output_termination = "unspecified; on-chip capacitive load prototype only"
+clock_fixture_view = "ideal correlated CML clocks with explicit phase offsets"
+actual_PLL_clock_integration_verified = false
+ideal_clock_multiword_fixture_observed = true
+candidate_wdata_um = 40
+candidate_intermediate_rload_ohm = 500
+candidate_last_rload_ohm = 400
+candidate_rank_phase_ui = [0.0, 0.16, 0.32, 1.0]
+candidate_subcircuit = "serdes16_cml_tree_retimed"
+candidate_final_rank_retiming_latches = 2
+candidate_final_latch_hold_width_um = 80
+candidate_validation_payload_bits = 1024
+candidate_validation_bit_errors = 0
+candidate_validation_extra_zero_crossings = 0
+candidate_clock_phase_implementation = "Fixed native phase/polarity routing, MOS CML trim/fanout buffers; TT prototype, source edge idealized."
+eye_fold_span_ui = 2
+display_time_unit = "UI"
+word_input_capture_and_retiming_verified = false
+continuous_word_serializer_verified = false
+alternative_4to1_topology = "deferred until 2to1 speed and timing are measured"
+
+finite_ideal_clock_wordstream_observed = true
+late_input_offset_rechecked_ui = 0.125
+late_input_payload_bits = 1024
+late_input_bit_errors = 0
+late_input_extra_zero_crossings = 0
+
+cmos_select_experiment_active = false
+cmos_select_disposition = "User set aside CMOS selection; retain experiment only as history."
+
+frozen_PLL_clock_replay_observed = true
+frozen_PLL_clock_payload_words = 64
+frozen_PLL_natural_phase_bit_errors = 510
+frozen_PLL_fixed_phase_bit_errors = 0
+frozen_PLL_fixed_phase_extra_crossings = 0
+frozen_PLL_fixed_phase_minimum_margin_v = 0.08732727147515335
+frozen_PLL_fixed_phase_transition_spread_ui = 0.16942619802223755
+frozen_PLL_fixed_phase_draft_screen_passed = false
+frozen_PLL_clock_replay_report = "docs/pll_clock_replay_results.md"
+
+physical_clock_distribution_simulated = true
+physical_clock_buffer_stages = 8
+physical_clock_input_is_edge_idealized = true
+physical_clock_individual_source_time_shift = false
+physical_clock_payload_bits = 1024
+physical_clock_payload_errors = 0
+physical_clock_marker_errors = 0
+physical_clock_extra_crossings = 0
+physical_clock_missing_transitions = 0
+physical_clock_min_signed_margin_v = 0.0943814427393918
+physical_clock_transition_spread_ui = 0.1624760780610257
+physical_clock_distribution_power_w = 0.014422426599388935
+physical_clock_draft_screen_passed = false
+physical_clock_result = "docs/physical_clock_distribution_results.md"
+
+[design_freeze]
+release = "v0.1-design-freeze-20261028"
+selected_latch_tail_scale = 2
+selected_latch_load_scale = 0.5
+selected_latch_tail_width_um = 24
+selected_latch_resistor_ohm = 200
+selected_evidence_payload_bits = 256
+selected_evidence_errors = 0
+selected_evidence_transition_spread_ui = 0.041920412348787295
+selected_evidence_min_signed_margin_v = 0.14138478508379623
+legacy_metrics_above_are_historical = true
+selected_version_long_vector_and_pvt_pending = true
+
+[pvt_characterization_20261030]
+report = "docs/tx_pvt.md"
+results = "docs/data/tx_pvt.json"
+loaded_functional_cells = 45
+cells_meeting_inherited_draft_margin = 36
+payload_bits_per_grid_cell = 128
+all_PVT_qualified = false
+production_parameters_changed = false

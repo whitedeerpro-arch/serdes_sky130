@@ -1,0 +1,36 @@
+* Synthetic PCB only: no package, pad, AC capacitors or termination.
+* Include pcb_foster_cells.spice separately. vss is the ideal return reference.
+.subckt pcb_c0_debug ap an bp bn vss
+Xp0 ap p1 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp1 p1 p2 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp2 p2 p3 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp3 p3 p4 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp4 p4 p5 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp5 p5 p6 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp6 p6 p7 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp7 p7 p8 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp8 p8 p9 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp9 p9 p10 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp10 p10 p11 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp11 p11 p12 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp12 p12 p13 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp13 p13 p14 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp14 p14 p15 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xp15 p15 bp vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn0 an n1 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn1 n1 n2 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn2 n2 n3 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn3 n3 n4 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn4 n4 n5 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn5 n5 n6 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn6 n6 n7 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn7 n7 n8 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn8 n8 n9 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn9 n9 n10 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn10 n10 n11 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn11 n11 n12 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn12 n12 n13 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn13 n13 n14 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn14 n14 n15 vss pcb_foster_cell dx=6.2605605501737591e-04
+Xn15 n15 bn vss pcb_foster_cell dx=6.2605605501737591e-04
+.ends pcb_c0_debug

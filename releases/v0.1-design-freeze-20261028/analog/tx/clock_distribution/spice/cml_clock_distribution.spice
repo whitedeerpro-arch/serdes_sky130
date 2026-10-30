@@ -1,0 +1,24 @@
+* Fixed phase routing is at the input ports; all delay/drive after them is MOS/RC.
+* Two noninverting CML stages per rank: capacitor-trim stage, then fanout driver.
+* Output clocks directly drive the serializer's 8/4/2/3 local clock followers.
+* Trim capacitors are explicit ideal capacitors, not behavioral time delays.
+.subckt serdes_cml_clock_distribution s250p s250n s500p s500n s1gp s1gn s2gp s2gn
++ c250p c250n c500p c500n c1gp c1gn c2gp c2gn vbias vdd vss
++ params: trim250=100f trim500=0 trim1g=0 trim2g=0
+Xa250 s250p s250n a250p a250n vbias vdd vss serdes_cml_buffer wn=20 wt=12 rload=400
+Ca250p a250p vss {2f+trim250}
+Ca250n a250n vss {2f+trim250}
+Xb250 a250p a250n c250p c250n vbias vdd vss serdes_cml_buffer wn=64 wt=64 rload=100
+Xa500 s500p s500n a500p a500n vbias vdd vss serdes_cml_buffer wn=20 wt=12 rload=400
+Ca500p a500p vss {2f+trim500}
+Ca500n a500n vss {2f+trim500}
+Xb500 a500p a500n c500p c500n vbias vdd vss serdes_cml_buffer wn=40 wt=32 rload=200
+Xa1g s1gp s1gn a1gp a1gn vbias vdd vss serdes_cml_buffer wn=20 wt=12 rload=400
+Ca1gp a1gp vss {2f+trim1g}
+Ca1gn a1gn vss {2f+trim1g}
+Xb1g a1gp a1gn c1gp c1gn vbias vdd vss serdes_cml_buffer wn=24 wt=16 rload=400
+Xa2g s2gp s2gn a2gp a2gn vbias vdd vss serdes_cml_buffer wn=20 wt=12 rload=400
+Ca2gp a2gp vss {2f+trim2g}
+Ca2gn a2gn vss {2f+trim2g}
+Xb2g a2gp a2gn c2gp c2gn vbias vdd vss serdes_cml_buffer wn=32 wt=24 rload=300
+.ends serdes_cml_clock_distribution

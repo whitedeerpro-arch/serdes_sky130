@@ -1,0 +1,15 @@
+* Same nominal loop impedance as passive_rc.spice; explicit integrator port.
+* Precharge BOTH state capacitors, bypassing Rz during startup only.
+* pre_ref is a separately supplied, qualified reference, not an internal DAC.
+* External controller must hold CP disabled while pre_en is high and through
+* the break-before-make interval. Off-switch parasitics remain in the loop.
+.subckt pll_loop_filter_precharge cp_in ctrl z pre_ref pre_en vdd vss
++ params: rz=6.5k cint=40p cfast=2p wn_fast=4 wp_fast=8 wn_int=16 wp_int=32
+Vlink cp_in ctrl 0
+Cf ctrl vss {cfast}
+Rz ctrl z {rz}
+Ci z vss {cint}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss serdes_cmos_tgate wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss serdes_cmos_tgate wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_precharge

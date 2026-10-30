@@ -1,0 +1,19 @@
+id = "jitter"
+dut = "analog/pll/top"
+level = "system"
+status = "planned"
+purpose = "锁定后采集，记录参考、阈值、去趋势、噪声来源、样本数和带宽。"
+analyses = ["noise_method_to_be_validated","tran"]
+measurements = ["tie_rms","period_jitter_rms","cycle_to_cycle_jitter_rms","jitter_psd"]
+shared_stimuli = []
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

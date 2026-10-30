@@ -1,0 +1,52 @@
+{
+  "format_version": 1,
+  "run_id": null,
+  "metrics": [
+    {
+      "name": "frequency",
+      "value": null,
+      "unit": "Hz",
+      "measurement_status": "not_run",
+      "method": null,
+      "window": {
+        "start_s": null,
+        "stop_s": null
+      },
+      "requirement": null,
+      "verdict": "ungraded"
+    },
+    {
+      "name": "kvco",
+      "value": null,
+      "unit": "Hz/V",
+      "measurement_status": "not_run",
+      "method": null,
+      "window": {
+        "start_s": null,
+        "stop_s": null
+      },
+      "requirement": null,
+      "verdict": "ungraded"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "tuning_curve",
+      "path": null,
+      "columns": [
+        {
+          "name": "vctrl",
+          "unit": "V"
+        },
+        {
+          "name": "frequency",
+          "unit": "Hz"
+        },
+        {
+          "name": "power",
+          "unit": "W"
+        }
+      ]
+    }
+  ]
+}

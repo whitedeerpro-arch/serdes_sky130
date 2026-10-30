@@ -1,0 +1,19 @@
+id = "switching"
+dut = "analog/pll/cp"
+level = "block"
+status = "planned"
+purpose = "独立控制 UP/DN 宽度，覆盖重叠和非重叠。"
+analyses = ["tran"]
+measurements = ["source_charge","sink_charge","net_charge","charge_injection","settling_time"]
+shared_stimuli = ["verification/stimuli/spice/cp_pulse_pair.spice"]
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

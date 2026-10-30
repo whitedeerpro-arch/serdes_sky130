@@ -1,0 +1,16 @@
+id = "hybrid_divider_pfd"
+dut = "analog/pll/top"
+level = "integration"
+status = "prototype"
+purpose = "三级 CML ÷8、接收器、CMOS 后级与 PFD 耦合，验证默认 M=1 与 M=2。"
+analyses = ["tran"]
+measurements = ["division_ratio", "tick_duty", "clock_duty", "counter_clock_suppression", "power_components", "pfd_response"]
+shared_stimuli = ["verification/stimuli/spice/cml_diff_sine.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_hybrid_divider_pfd_ngspice.cir.in"
+
+[requirements]
+status = "unspecified"

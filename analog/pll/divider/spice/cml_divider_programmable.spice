@@ -1,0 +1,50 @@
+* Historical exploration; not the current baseline. See cml_prescaler8.spice and cmos_divider_programmable.spice.
+* Integer /1..16 CML-input, CML-state, CML-output feedback divider.
+* n[3:0] and nb[3:0] are static complementary CMOS configuration pins.
+* Configuration encodes N-1 (0000=/1, 0111=/8, 1111=/16).
+* Synchronous reload down-counter; feedback output is a registered terminal pulse.
+* N>1 pulse duty is approximately 1/N, not necessarily 50%; use for edge PFD only.
+* /1 statically bypasses the counter via the buffered input clock.
+* Reconfigure only while the PLL/feedback path is disabled; no live glitchless claim.
+.subckt pll_cml_divider_programmable clkp clkn qp qn
++ n0 nb0 n1 nb1 n2 nb2 n3 nb3 vbias vdd vss
+
+* Strong CML clock fanout buffer; separate from the VCO core itself.
+Xclock clkp clkn ckoutp ckoutn vbias vdd vss serdes_cml_buffer
++ wn=40 nfin=8 wt=20 rload=400
+Xcfg0 n0 nb0 c0p c0n vbias vdd vss pll_cml_config_bit
+Xcfg1 n1 nb1 c1p c1n vbias vdd vss pll_cml_config_bit
+Xcfg2 n2 nb2 c2p c2n vbias vdd vss pll_cml_config_bit
+Xcfg3 n3 nb3 c3p c3n vbias vdd vss pll_cml_config_bit
+
+* Low logic reference is produced by a real current sink and resistor.
+Rvlo vdd vlo 1000
+Xvlo vlo vbias vss vss serdes_nfet w=9.6 l=0.5 nf=4
+Cvlo vlo vss 200f
+
+* Borrow lookahead and zero detection, reusing ~q0 & ~q1.
+Xz01 b0n b0p b1n b1p z01p z01n vlo vbias vdd vss pll_cml_and
+Xz23 b2n b2p b3n b3p z23p z23n vlo vbias vdd vss pll_cml_and
+Xzero z01p z01n z23p z23n zp zn vlo vbias vdd vss pll_cml_and
+Xborrow3 z01p z01n b2n b2p br3p br3n vlo vbias vdd vss pll_cml_and
+Xsub1 b1p b1n b0n b0p s1p s1n vbias vdd vss pll_cml_xor
+Xsub2 b2p b2n z01p z01n s2p s2n vbias vdd vss pll_cml_xor
+Xsub3 b3p b3n br3p br3n s3p s3n vbias vdd vss pll_cml_xor
+
+* Reload N-1 when count==0; otherwise decrement. D0 is simply ~Q0.
+Xd0 b0n b0p c0p c0n zp zn d0p d0n vbias vdd vss pll_cml_mux2
+Xd1 s1p s1n c1p c1n zp zn d1p d1n vbias vdd vss pll_cml_mux2
+Xd2 s2p s2n c2p c2n zp zn d2p d2n vbias vdd vss pll_cml_mux2
+Xd3 s3p s3n c3p c3n zp zn d3p d3n vbias vdd vss pll_cml_mux2
+Xb0 d0p d0n ckoutp ckoutn b0p b0n vbias vdd vss pll_cml_dff
+Xb1 d1p d1n ckoutp ckoutn b1p b1n vbias vdd vss pll_cml_dff
+Xb2 d2p d2n ckoutp ckoutn b2p b2n vbias vdd vss pll_cml_dff
+Xb3 d3p d3n ckoutp ckoutn b3p b3n vbias vdd vss pll_cml_dff
+Xpulse zp zn ckoutp ckoutn pp pn vbias vdd vss pll_cml_dff
+
+* Configuration equals zero => divide-by-one bypass. Static select only.
+Xn01 c0n c0p c1n c1p n01p n01n vlo vbias vdd vss pll_cml_and
+Xn23 c2n c2p c3n c3p n23p n23n vlo vbias vdd vss pll_cml_and
+Xis1 n01p n01n n23p n23n is1p is1n vlo vbias vdd vss pll_cml_and
+Xout pp pn ckoutp ckoutn is1p is1n qp qn vbias vdd vss pll_cml_mux2
+.ends pll_cml_divider_programmable

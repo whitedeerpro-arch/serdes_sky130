@@ -1,0 +1,33 @@
+id = "pll_clock_replay"
+dut = "analog/tx/serializer"
+level = "integration"
+status = "prototype"
+purpose = "Replay a continuous stable native PLL clock record through a CML clock bank, then compare natural and fixed compensated phases over 64 payload words."
+analyses = ["tran", "clock_phase_audit", "2UI_eye", "word_boundary_audit"]
+measurements = ["payload_bit_errors", "extra_zero_crossings", "missing_transitions", "minimum_signed_margin_v", "edge_spread_ui", "clock_frequency", "duty", "common_mode", "supply_power"]
+[implementation]
+clock_bank_bench = "analog/tx/serializer/tb/functional/tb_pll_clock_bank_ngspice.cir.in"
+serializer_bench = "analog/tx/serializer/tb/functional/tb_serializer16_pll_replay_ngspice.cir.in"
+serializer_subcircuit = "serdes16_cml_tree_retimed"
+contract = "verification/contracts/pll_clock_replay.toml"
+simulator = "ngspice47"
+clock_bank = "actual extraction buffer, full-rate receiver, CML /2 /4 /8, feedback receiver; original nominal loads"
+source_PLL_run = "20261027T234336Z_ngspice_tt_native_precharged_checkpoint_ui"
+source_PLL_window_ui = [2816, 4096]
+source_time_warp_or_repetition = false
+clock_replay_common_grid_ui = 0.016
+fixed_compensated_rank_phases_ui = [0.0, 0.16, 0.32, 1.0]
+[conditions]
+corner = "tt"
+supply_v = 1.8
+temperature_c = 27
+output_load_per_leg_f = 2e-14
+payload_words = 64
+payload_bits = 1024
+nominal_ui_s = 2.5e-10
+[limitations]
+PLL_live_resimulation = false
+clock_replay_is_ideal_voltage_source = true
+serializer_load_backaction_on_clock_bank = false
+physical_phase_trim_implemented = false
+hardware_word_alignment_or_reset_verified = false

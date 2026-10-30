@@ -1,0 +1,19 @@
+id = "bandwidth"
+dut = "analog/common/cml_buffer"
+level = "block"
+status = "planned"
+purpose = "固定工作点测差分小信号带宽；大信号速率另用瞬态验证。"
+analyses = ["ac"]
+measurements = ["differential_gain","bandwidth"]
+shared_stimuli = []
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

@@ -1,0 +1,15 @@
+* Master/slave CML toggle divider. Slave output inverted into the master D input.
+* Input source followers shift high-CM CML clocks down for the lower clock pair.
+* Output levels are rebuilt by VDD / tail current / load resistance every stage.
+* No ideal flip-flop or behavioral state element is used.
+.subckt pll_cml_div2 clkp clkn qp qn mp mn vbias vdd vss
++ params: wsf=40 wsf_sink=4 wdata=20 whold=80 wclock=64 wtail=12 rload=600
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+Xmaster qn qp mp mn ckp ckn vbias vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+Xslave mp mn qp qn ckn ckp vbias vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+.ends pll_cml_div2

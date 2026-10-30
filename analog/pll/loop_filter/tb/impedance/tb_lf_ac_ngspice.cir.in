@@ -1,0 +1,15 @@
+Passive PLL loop filter impedance; no PDK needed for nominal R/C prototype
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc.spice"
+Xlf port ctrl 0 pll_loop_filter
+Iac 0 port DC 0 AC 1
+Rdc port 0 1T
+.control
+set wr_singlescale
+set wr_vecnames
+ac dec 100 1k 1G
+let zr=real(v(ctrl))
+let zi=imag(v(ctrl))
+wrdata impedance.tsv zr zi
+quit
+.endc
+.end

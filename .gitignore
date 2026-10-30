@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+# Simulation runs stay on disk only; the catalog and README are tracked.
+results/**
+!results/**/
+!results/**/.gitkeep
+!results/README.md
+!results/catalog/**
+
+# Every figure has a PNG twin; vector copies (~120 MB) stay on disk only.
+docs/figures/**/*.svg
+
+# Release tarball duplicates the tracked release directory.
+releases/*.tar.gz

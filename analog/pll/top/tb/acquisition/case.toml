@@ -1,0 +1,32 @@
+id = "acquisition"
+dut = "analog/pll/top"
+level = "system"
+status = "prototype"
+purpose = "覆盖初始频差、相差及 Vctrl，按频差、相差与持续时间联合判锁。"
+analyses = ["tran"]
+measurements = ["lock_time","frequency_error","phase_error","cycle_slips","control_voltage","power"]
+shared_stimuli = ["verification/stimuli/spice/clock_cmos.spice"]
+
+[implementation]
+view = "mixed_transistor_PFD_CP_ideal_RC_behavioral_VCO_divider"
+simulator = "ngspice47"
+testbench = "analog/pll/top/tb/acquisition/tb_pll_mixed_ngspice.cir.in"
+transistor_testbench = "analog/pll/top/tb/acquisition/tb_pll_transistor_ngspice.cir.in"
+isolation_diagnostic = "analog/pll/top/tb/acquisition/tb_vco_balanced_probe_ngspice.cir.in"
+lock_screen = "verification/contracts/pll_lock_screen.toml"
+transistor_solver = "Sparse; KLU failed initial transient with native varactors plus full divider tree"
+
+[sweep]
+parameters = ["vc_init", "phase_init", "feedback_enable", "reset_release"]
+explored_mixed_initial_control_v = [1.18, 1.3, 1.42]
+reference_hz = 250000000
+feedback_divide = 8
+mixed_record_s = 2e-6
+mixed_max_step_s = 2e-11
+full_transistor_lock_verified = false
+native_transistor_first_response_record_s = 6.4e-8
+native_transistor_first_response_max_step_s = 4e-12
+native_transistor_first_response_observed = true
+
+[requirements]
+status = "engineering_lock_screen_only_not_final_specification"

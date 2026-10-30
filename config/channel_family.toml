@@ -1,0 +1,66 @@
+status = "synthetic_pcb_exploration"
+medium_user_confirmed = "board_intra_or_inter_100ohm_differential"
+line_rate_bps = 4000000000
+ui_s = 2.5e-10
+nyquist_hz = 2000000000
+differential_reference_ohm = 100
+single_ended_reference_ohm = 50
+primary_candidate = "C2_loss6"
+challenge_candidate = "C3_loss10"
+acceptance_specification = false
+source_fixture_and_termination_included = false
+mutual_coupling_or_aggressor_crosstalk_included = false
+measured_or_field_solved = false
+s4p_grid_max_hz = 12000000000
+s4p_grid_step_hz = 5000000
+
+[medium]
+rdc_ohm_per_m = 3.0
+l_external_h_per_m = 2.281121444890956e-07
+c_infinity_f_per_m = 9.1e-11
+skin_pole_hz = [100000000.0, 1000000000.0, 10000000000.0]
+skin_r_ohm_per_m = [41.28625039200651, 130.55858728676017, 412.8625039200651]
+skin_l_h_per_m = [6.570910831617538e-08, 2.0779044529782565e-08, 6.570910831617537e-09]
+dielectric_pole_hz = [200000000.0, 2000000000.0, 20000000000.0]
+dielectric_c_f_per_m = [3e-12, 3e-12, 3e-12]
+dielectric_r_ohm_m = [265.25823848649225, 26.525823848649225, 2.652582384864922]
+skin_scale = 184.63772482520778
+
+[[cases]]
+id = "C0_debug"
+loss_target_db = 0.2
+purpose = "near-through debug; not ideal all-pass"
+backbone_length_m = 0.010016896880278015
+
+[[cases]]
+id = "C1_loss3"
+loss_target_db = 3.0
+purpose = "short smooth-loss exploration"
+backbone_length_m = 0.15001600187350303
+
+[[cases]]
+id = "C2_loss6"
+loss_target_db = 6.0
+purpose = "proposed primary RX design envelope, not acceptance specification"
+backbone_length_m = 0.30002197903471733
+
+[[cases]]
+id = "C3_loss10"
+loss_target_db = 10.0
+purpose = "challenge envelope; equalization/launch budget TBD"
+backbone_length_m = 0.5000175949496402
+
+[[cases]]
+id = "C4_stub"
+loss_target_db = 6.0
+stub_length_m = 0.020939578700064413
+stub_series_ohm = 10.0
+purpose = "C2 backbone plus symmetric open testpoint branches; deliberately bad routing"
+backbone_length_m = 0.30002197903471733
+
+[[cases]]
+id = "C5_skew"
+loss_target_db = 6.0
+skew_delta_m = 0.005234894675016103
+purpose = "C2 backbone plus 0.1 UI phase skew at Nyquist"
+backbone_length_m = 0.30002197903471733

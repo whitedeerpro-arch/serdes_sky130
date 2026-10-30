@@ -1,0 +1,108 @@
+* EXPLORATORY ONLY. Not selected for production; common SKY130 MOS adapters required.
+* Resistive-current-mode latch data/hold network; separate load choices below.
+.subckt ex_latch_load qp qn loadbias vdd vss params: mode=0 rload=600 wp=16
+.if (mode == 0)
+Rp vdd qp {rload}
+Rn vdd qn {rload}
+.elseif (mode == 1)
+* Two independent triode-PMOS load devices: this is NOT a current mirror.
+Xlp qp loadbias vdd vdd serdes_pfet w={wp} l=.5 nf=4
+Xln qn loadbias vdd vdd serdes_pfet w={wp} l=.5 nf=4
+.else
+* Saturated PMOS current-source loads. A weak 20kohm rail path permits recovery
+* when a branch is off; common mode remains unregulated. Exploratory contrast.
+Xlp qp loadbias vdd vdd serdes_pfet w={wp} l=.5 nf=4
+Xln qn loadbias vdd vdd serdes_pfet w={wp} l=.5 nf=4
+Rp vdd qp 20k
+Rn vdd qn 20k
+.endif
+.ends ex_latch_load
+
+.subckt ex_cml_latch dp dn qp qn ct ch vbias loadbias vdd vss
++ params: tailless=0 loadmode=0 wdata=20 whold=80 wclock=64 wtail=72 rload=600 wp=16
+Xload qp qn loadbias vdd vss ex_latch_load mode={loadmode} rload={rload} wp={wp}
+Xdp qn dp track vss serdes_nfet_lvt w={wdata} nf=4
+Xdn qp dn track vss serdes_nfet_lvt w={wdata} nf=4
+Xhp qn qp hold vss serdes_nfet_lvt w={whold} nf=4
+Xhn qp qn hold vss serdes_nfet_lvt w={whold} nf=4
+.if (tailless == 0)
+Xct track ct tail vss serdes_nfet_lvt w={wclock} nf=4
+Xch hold ch tail vss serdes_nfet_lvt w={wclock} nf=4
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=.5 nf=24
+.else
+* Gira et al. Fig.7 topology; independent tail source is removed.
+Xct track ct vss vss serdes_nfet_lvt w={wclock} nf=4
+Xch hold ch vss vss serdes_nfet_lvt w={wclock} nf=4
+.endif
+.ends ex_cml_latch
+
+.subckt ex_clock_ac cp cn lp ln vc vdd vss params: cc=200f rb=50k
+* Ideal external vc for feasibility only, NOT a implemented replica servo.
+Ccp cp lp {cc}
+Ccn cn ln {cc}
+Rbp lp vc {rb}
+Rbn ln vc {rb}
+.ends ex_clock_ac
+
+.subckt ex_div2 cp cn qp qn mp mn vbias logicbias vc loadbias vdd vss
++ params: tailless=0 loadmode=0 wdata=20 whold=80 wclock=64 wp=16
+Xclk cp cn lp ln vc vdd vss ex_clock_ac
+Xm qn qp mp mn lp ln logicbias loadbias vdd vss ex_cml_latch
++ tailless={tailless} loadmode={loadmode} wdata={wdata} whold={whold} wclock={wclock} wp={wp}
+Xs mp mn qp qn ln lp logicbias loadbias vdd vss ex_cml_latch
++ tailless={tailless} loadmode={loadmode} wdata={wdata} whold={whold} wclock={wclock} wp={wp}
+.ends ex_div2
+
+* Basic folded MCML, Centurelli et al. Fig.2a. Body ties are conventional rails;
+* no forward body bias, no improved mirror/cascode. Output loads may be R or PMOS.
+.subckt ex_folded_latch dp dn qp qn ct ch vbp loadbias vdd vss
++ params: wdata=20 whold=80 wclock=80 wmirror=20 wptail=100 loadmode=0 wp=16
+Xload qp qn loadbias vdd vss ex_latch_load mode={loadmode} wp={wp}
+Xdp qn dp track vss serdes_nfet_lvt w={wdata} nf=4
+Xdn qp dn track vss serdes_nfet_lvt w={wdata} nf=4
+Xhp qn qp hold vss serdes_nfet_lvt w={whold} nf=4
+Xhn qp qn hold vss serdes_nfet_lvt w={whold} nf=4
+Xpt ptail vbp vdd vdd serdes_pfet w={wptail} l=.5 nf=20
+* PMOS track branch is active when ct > ch, hence its gate is ch.
+Xpc_t nt ch ptail vdd serdes_pfet w={wclock} nf=8
+Xpc_h nh ct ptail vdd serdes_pfet w={wclock} nf=8
+Xdt nt nt vss vss serdes_nfet w={wmirror} nf=4
+Xdh nh nh vss vss serdes_nfet w={wmirror} nf=4
+Xmt track nt vss vss serdes_nfet w={wmirror} nf=4
+Xmh hold nh vss vss serdes_nfet w={wmirror} nf=4
+.ends ex_folded_latch
+
+.subckt ex_folded_div2 cp cn qp qn mp mn vbp vc loadbias vdd vss
++ params: loadmode=0 wmirror=20 wclock=80 wp=16
+Xclk cp cn lp ln vc vdd vss ex_clock_ac
+Xm qn qp mp mn lp ln vbp loadbias vdd vss ex_folded_latch loadmode={loadmode} wmirror={wmirror} wclock={wclock} wp={wp}
+Xs mp mn qp qn ln lp vbp loadbias vdd vss ex_folded_latch loadmode={loadmode} wmirror={wmirror} wclock={wclock} wp={wp}
+.ends ex_folded_div2
+
+* Dynamic C2MOS clocked inverters (not a static retention latch).
+.subckt ex_c2mos d ct ch q vdd vss params: wn=2 wp=4
+Xmp ps ch vdd vdd serdes_pfet w={wp}
+Xpd q d ps vdd serdes_pfet w={wp}
+Xnd q d ns vss serdes_nfet w={wn}
+Xnc ns ct vss vss serdes_nfet w={wn}
+.ends ex_c2mos
+.subckt ex_c2mos_div2 ck ckn q qb vdd vss params: scale=1
+Xm qb ckn ck m vdd vss ex_c2mos wn={2*scale} wp={4*scale}
+Xs m ck ckn q vdd vss ex_c2mos wn={2*scale} wp={4*scale}
+Xinv q qb vdd vss serdes_rx_inverter wn={2*scale} wp={4*scale}
+.ends ex_c2mos_div2
+
+* 9T TSPC inverting FF plus output inverter, following Fig.5b JLPEA13(3)43.
+* qb is the inverted FF result; feeding qb back to D makes a toggle.
+.subckt ex_tspc_div2 ck q qb vdd vss params: scale=1
+Xp1 px qb vdd vdd serdes_pfet w={4*scale}
+Xp5 x ck px vdd serdes_pfet w={4*scale}
+Xn8 x qb vss vss serdes_nfet w={2*scale}
+Xp2 y ck vdd vdd serdes_pfet w={4*scale}
+Xn6 y x ny vss serdes_nfet w={2*scale}
+Xn9 ny ck vss vss serdes_nfet w={2*scale}
+Xp3 qb y vdd vdd serdes_pfet w={4*scale}
+Xn7 qb ck nq vss serdes_nfet w={2*scale}
+Xn10 nq y vss vss serdes_nfet w={2*scale}
+Xout qb q vdd vss serdes_rx_inverter wn={2*scale} wp={4*scale}
+.ends ex_tspc_div2

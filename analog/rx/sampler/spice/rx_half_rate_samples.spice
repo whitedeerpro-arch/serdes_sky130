@@ -1,0 +1,19 @@
+* Four rising-edge CML samplers, physical opposite clock polarities provide 4 phases.
+* dp/dn data clock; ep/en edge clock advances data clock by 90 degrees.
+* D0 at data rising, D1 at data falling; E0 precedes D0, E1 lies between D0/D1.
+* Four outputs retain CML levels; no static CML-to-CMOS or demux included.
+.subckt serdes_rx_half_rate_samples ip in dp dn ep en
++ d0p d0n d1p d1n e0p e0n e1p e1n vbias vdd vss
++ params: wdata=16 whold=48 wclock=32 wtail=12 rload=600 wsf=40 wsink=8
+Xinput ip in bp bn vbias vdd vss serdes_cml_buffer wn=24 wt=12 rload=600
+Xcd dp dn cdp cdn vbias vdd vss serdes_rx_clock_shift wsf={wsf} wsink={wsink}
+Xce ep en cep cen vbias vdd vss serdes_rx_clock_shift wsf={wsf} wsink={wsink}
+Xd0 bp bn cdp cdn d0p d0n vbias vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+Xd1 bp bn cdn cdp d1p d1n vbias vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+Xe0 bp bn cep cen e0p e0n vbias vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+Xe1 bp bn cen cep e1p e1n vbias vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+.ends serdes_rx_half_rate_samples

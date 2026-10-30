@@ -1,0 +1,34 @@
+id = "pll_vco_receiver_PVT_refinement"
+status = "candidate_characterization"
+level = "native_balanced_frontend_open_loop"
+report = "docs/pll_pvt_refinement.md"
+results = "docs/data/pll_pvt_refinement.json"
+campaign = "results/analog/pll/pvt_refinement/20261029T100030Z"
+testbench = "analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in"
+fixture = "analog/pll/top/spice/clock_frontend_pvt_candidate.spice"
+solver = "ngspice47_Sparse"
+maximum_step_s = 4e-12
+powered_dummy_branches = 3
+real_feedback_divide = 8
+reference_current_a = 0.00085
+candidate_is_frozen_baseline_replacement = false
+full45_environment_grid_completed = false
+native_PLL_closed_loop_capture_test = false
+R_loads = "ideal_nominal; passive_corners_not_qualified"
+calibration_variables = ["coarse_code", "fine_control"]
+qualification_is_distinct_from_frequency_bracket = true
+
+[vco_candidate]
+varactor_w_um = 18.0
+varactor_l_um = 0.5
+coarse_MIM_unit_w_um = 2.35
+coarse_MIM_unit_l_um = 5.0
+fixed_MIM_w_um = 2.5
+fixed_MIM_l_um = 2.5
+fixed_cap_instances = 8
+VCO_bias_current_change = false
+
+[receiver_candidate]
+tail_width_um = 8.0
+pre_inverter_nmos_width_um = 1.8
+input_isolation_and_output_driver_unchanged = true

@@ -1,0 +1,12 @@
+* Source-switched alternative: switches are at supply/ground, not filter output.
+* External references use the same long-channel mirror geometry as baseline.
+.subckt pll_cp_source_switched up dn out vbn vbp vdd vss
++ params: wn=5 wp=20 lmirror=1 wsn=20 wsp=40
+Xup up up_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xdn1 dn dn_b vdd vss serdes_cmos_inv wn=2 wp=4
+Xdn2 dn_b dn_on vdd vss serdes_cmos_inv wn=4 wp=8
+Xps ps up_b vdd vdd serdes_pfet w={wsp} nf=4
+Xp out vbp ps vdd serdes_pfet w={wp} l={lmirror} nf=4
+Xn out vbn ns vss serdes_nfet w={wn} l={lmirror}
+Xns ns dn_on vss vss serdes_nfet w={wsn} nf=4
+.ends pll_cp_source_switched

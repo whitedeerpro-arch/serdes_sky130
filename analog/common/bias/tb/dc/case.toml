@@ -1,0 +1,19 @@
+id = "dc"
+dut = "analog/common/bias"
+level = "block"
+status = "planned"
+purpose = "扫描输出端电压、电源和偏置，检查电流方向及工作区。"
+analyses = ["dc"]
+measurements = ["reference_current","compliance_range","output_resistance","power"]
+shared_stimuli = []
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

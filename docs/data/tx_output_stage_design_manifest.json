@@ -1,0 +1,36 @@
+{
+  "frozen_parent_release": "v0.1-design-freeze-20261028",
+  "completed_runs": [
+    "results/analog/tx/output_driver/terminated/20261028T124105Z_ngspice_tt_matched_channel",
+    "results/analog/tx/output_driver/terminated/20261028T124105Z_ngspice_tt_rc_loss_example",
+    "results/analog/tx/output_driver/integration/20261028T124249Z_ngspice_tt_input_admittance",
+    "results/analog/tx/output_driver/integration/20261028T124249Z_ngspice_tt_serializer_to_line"
+  ],
+  "scope": "TT 256bit first I/O prototype and real gate loading; no real RX/CDR/BER, pad extraction or PVT signoff",
+  "files": [
+    {
+      "path": "analog/tx/output_driver/spice/cml_line_driver.spice",
+      "sha256": "e93c59dd9b6e1448e2e7e37ab80a74268e05e694a988ce95e2559533b4c9f678"
+    },
+    {
+      "path": "verification/models/channel/diff_rlc16.spice",
+      "sha256": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148"
+    },
+    {
+      "path": "config/tx_line_driver.toml",
+      "sha256": "03dd24bb5c3cba78d8795e93edc2555b045708e7395cd1b2285fa2dd582947a0"
+    },
+    {
+      "path": "analog/tx/output_driver/tb/terminated/tb_serializer16_line_driver_ngspice.cir.in",
+      "sha256": "9284ad8af90f8eab0290ec3ceaa620713ee925afd11e309d48f81d73cdb66d7e"
+    },
+    {
+      "path": "analog/tx/output_driver/tb/terminated/tb_cml_line_driver_ngspice.cir.in",
+      "sha256": "fa55981a6692d5c1f40e1106422ce1edcdb29bd016dffe399d02499c2dc56532"
+    },
+    {
+      "path": "analog/tx/output_driver/tb/terminated/tb_cml_line_driver_input_ac_ngspice.cir.in",
+      "sha256": "e982a6db99566392b53f63b67346f248f56906267816aa317828b9375a532cd2"
+    }
+  ]
+}

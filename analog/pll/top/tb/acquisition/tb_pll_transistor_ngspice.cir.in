@@ -1,0 +1,165 @@
+PLL transistor VCO, balanced four-phase extraction with explicit dummy branches
+* Conservative reference fixture: four complete, structurally matched extraction paths.
+* Xpre1..3 / Xfb1..3 / Xload1..3 are powered dummy paths, not the final clock-tree power plan.
+* Match devices, bias, wire/load C and downstream loading; a lone capacitor is insufficient here.
+* PFD internal reset activity differs from the dummy DFF reset: residual dynamic loading is measurable.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/cap_bank_3b.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/vco_ring4.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_latch.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_div2.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_prescaler8.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc.spice"
+.param supply=1.8 ref_period=4n vc_init=1.42 reset_release=20n feedback_enable=0
+.param iref=0.85m irefn=50u irefp=50u code0=1 code1=1 code2=1 cwire=0.5f
+Vcore vcore 0 {supply}
+Vbuf vbuf 0 {supply}
+Vrx vrx 0 {supply}
+Vpre vpre 0 {supply}
+Vpredummy vpredummy 0 {supply}
+Vfb vfb 0 {supply}
+Vfbdummy vfbdummy 0 {supply}
+Vdummy vdummy 0 {supply}
+Vpfd vpfd 0 {supply}
+Vcp vcp 0 {supply}
+Iref vcore vbias {iref}
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=0.5 nf=4
+In vbiascp vbn {irefn}
+Vbiascp vbiascp 0 {supply}
+Ip vbp 0 {irefp}
+Xbn vbn vbn 0 0 serdes_nfet w=5 l=1
+Xbp vbp vbp vbiascp vbiascp serdes_pfet w=20 l=1 nf=4
+Vcode0 cfg0 0 {code0*supply}
+Vcode1 cfg1 0 {code1*supply}
+Vcode2 cfg2 0 {code2*supply}
+Xvco v0p v0n v1p v1n v2p v2n v3p v3n ctrl cfg0 cfg1 cfg2 vbias vcore 0 pll_vco_ring4
+Cw0p v0p 0 {cwire}
+Cw0n v0n 0 {cwire}
+Xbuf0 v0p v0n b0p b0n vbias vbuf 0 serdes_cml_buffer
+Xrx0 b0p b0n cm0p cm0n vbias vrx 0 serdes_cml_to_cmos
+Ccm0p cm0p 0 20f
+Ccm0n cm0n 0 20f
+Xpre0 b0p b0n d02p d02n d04p d04n d08p d08n vbias vpre 0 pll_cml_prescaler8
+Xfb0 d08p d08n fb0 fb0n vbias vfb 0 serdes_cml_to_cmos
+Cfb0 fb0 0 20f
+Cfb0n fb0n 0 20f
+Cdiv02p d02p 0 5f
+Cdiv02n d02n 0 5f
+Cdiv04p d04p 0 5f
+Cdiv04n d04n 0 5f
+Cdiv08p d08p 0 5f
+Cdiv08n d08n 0 5f
+Cw1p v1p 0 {cwire}
+Cw1n v1n 0 {cwire}
+Xbuf1 v1p v1n b1p b1n vbias vbuf 0 serdes_cml_buffer
+Xrx1 b1p b1n cm1p cm1n vbias vrx 0 serdes_cml_to_cmos
+Ccm1p cm1p 0 20f
+Ccm1n cm1n 0 20f
+Xpre1 b1p b1n d12p d12n d14p d14n d18p d18n vbias vpredummy 0 pll_cml_prescaler8
+Xfb1 d18p d18n fb1 fb1n vbias vfbdummy 0 serdes_cml_to_cmos
+Cfb1 fb1 0 20f
+Cfb1n fb1n 0 20f
+Cdiv12p d12p 0 5f
+Cdiv12n d12n 0 5f
+Cdiv14p d14p 0 5f
+Cdiv14n d14n 0 5f
+Cdiv18p d18p 0 5f
+Cdiv18n d18n 0 5f
+Xload1 vdummy fb1 rst_b dq1 vdummy 0 serdes_cmos_dff_reset
+Cdq1 dq1 0 20f
+Cw2p v2p 0 {cwire}
+Cw2n v2n 0 {cwire}
+Xbuf2 v2p v2n b2p b2n vbias vbuf 0 serdes_cml_buffer
+Xrx2 b2p b2n cm2p cm2n vbias vrx 0 serdes_cml_to_cmos
+Ccm2p cm2p 0 20f
+Ccm2n cm2n 0 20f
+Xpre2 b2p b2n d22p d22n d24p d24n d28p d28n vbias vpredummy 0 pll_cml_prescaler8
+Xfb2 d28p d28n fb2 fb2n vbias vfbdummy 0 serdes_cml_to_cmos
+Cfb2 fb2 0 20f
+Cfb2n fb2n 0 20f
+Cdiv22p d22p 0 5f
+Cdiv22n d22n 0 5f
+Cdiv24p d24p 0 5f
+Cdiv24n d24n 0 5f
+Cdiv28p d28p 0 5f
+Cdiv28n d28n 0 5f
+Xload2 vdummy fb2 rst_b dq2 vdummy 0 serdes_cmos_dff_reset
+Cdq2 dq2 0 20f
+Cw3p v3p 0 {cwire}
+Cw3n v3n 0 {cwire}
+Xbuf3 v3p v3n b3p b3n vbias vbuf 0 serdes_cml_buffer
+Xrx3 b3p b3n cm3p cm3n vbias vrx 0 serdes_cml_to_cmos
+Ccm3p cm3p 0 20f
+Ccm3n cm3n 0 20f
+Xpre3 b3p b3n d32p d32n d34p d34n d38p d38n vbias vpredummy 0 pll_cml_prescaler8
+Xfb3 d38p d38n fb3 fb3n vbias vfbdummy 0 serdes_cml_to_cmos
+Cfb3 fb3 0 20f
+Cfb3n fb3n 0 20f
+Cdiv32p d32p 0 5f
+Cdiv32n d32n 0 5f
+Cdiv34p d34p 0 5f
+Cdiv34n d34n 0 5f
+Cdiv38p d38p 0 5f
+Cdiv38n d38n 0 5f
+Xload3 vdummy fb3 rst_b dq3 vdummy 0 serdes_cmos_dff_reset
+Cdq3 dq3 0 20f
+Vref ref 0 PULSE(0 {supply} 2n 30p 30p {ref_period/2-30p} {ref_period})
+Vreset rst_b 0 PWL(0 0 {reset_release} 0 {reset_release+20p} {feedback_enable*supply})
+Xpfd ref fb0 rst_b up dn vpfd 0 pll_pfd
+Xcp up dn out vbn vbp vcp 0 pll_cp
+Vsense out filt 0
+Xlf filt ctrl 0 pll_loop_filter
+* Explicit test precharge reference and real transmission gate; no imposed VCO state.
+Vprecharge precharge_ref 0 {vc_init}
+Vpre_en pre_en 0 PWL(0 {supply} {reset_release} {supply} {reset_release+20p} {(1-feedback_enable)*supply})
+Xpreinv pre_en pre_en_b vpfd 0 serdes_cmos_inv
+Xprecharge precharge_ref ctrl pre_en pre_en_b vpfd 0 serdes_cmos_tgate
+Cup up 0 20f
+Cdn dn 0 20f
+Ikick v0p v0n PWL(0 1u 20p 1u 21p 0)
+.nodeset v(xrx0.xrestore.qp)=0 v(xrx0.xrestore.qn)=1.8
+.nodeset v(xfb0.xrestore.qp)=0 v(xfb0.xrestore.qn)=1.8
+.nodeset v(xrx1.xrestore.qp)=0 v(xrx1.xrestore.qn)=1.8
+.nodeset v(xfb1.xrestore.qp)=0 v(xfb1.xrestore.qn)=1.8
+.nodeset v(xrx2.xrestore.qp)=0 v(xrx2.xrestore.qn)=1.8
+.nodeset v(xfb2.xrestore.qp)=0 v(xfb2.xrestore.qn)=1.8
+.nodeset v(xrx3.xrestore.qp)=0 v(xrx3.xrestore.qn)=1.8
+.nodeset v(xfb3.xrestore.qp)=0 v(xfb3.xrestore.qn)=1.8
+.temp 27
+* Native varactors + full divider failed at the first timestep with KLU.
+* Sparse completed the same native-device test; retain the recorded solver choice.
+.options reltol=1e-4 abstol=1p vntol=1u
+.save v(ref) v(fb0) v(up) v(dn) v(ctrl) i(Vsense) v(v0p) v(v0n) v(cm0p) v(cm0n) v(fb0) v(v1p) v(v1n) v(cm1p) v(cm1n) v(fb1) v(v2p) v(v2n) v(cm2p) v(cm2n) v(fb2) v(v3p) v(v3n) v(cm3p) v(cm3n) v(fb3) v(vcore) i(Vcore) v(vbuf) i(Vbuf) v(vrx) i(Vrx) v(vpre) i(Vpre) v(vpredummy) i(Vpredummy) v(vfb) i(Vfb) v(vfbdummy) i(Vfbdummy) v(vdummy) i(Vdummy) v(vpfd) i(Vpfd) v(vcp) i(Vcp) v(vbias) v(vbiascp) i(Vbiascp)
+.control
+set wr_singlescale
+set wr_vecnames
+tran 2p 32n 0 2p
+let d0=v(v0p)-v(v0n)
+let d1=v(v1p)-v(v1n)
+let d2=v(v2p)-v(v2n)
+let d3=v(v3p)-v(v3n)
+let cm0=(v(v0p)+v(v0n))/2
+let p_core=-v(vcore)*i(Vcore)
+let p_buf=-v(vbuf)*i(Vbuf)
+let p_rx=-v(vrx)*i(Vrx)
+let p_pre=-v(vpre)*i(Vpre)
+let p_predummy=-v(vpredummy)*i(Vpredummy)
+let p_fb=-v(vfb)*i(Vfb)
+let p_fbdummy=-v(vfbdummy)*i(Vfbdummy)
+let p_dummy=-v(vdummy)*i(Vdummy)
+let p_pfd=-v(vpfd)*i(Vpfd)
+let p_cp=-v(vcp)*i(Vcp)
+let p_biascp=-v(vbiascp)*i(Vbiascp)
+wrdata waveforms.tsv v(ref) v(fb0) v(up) v(dn) v(ctrl) d0 d1 d2 d3 cm0 i(Vsense) p_core p_buf p_rx p_pre p_predummy p_fb p_fbdummy p_dummy p_pfd p_cp p_biascp v(cm0p) v(cm0n) v(cm1p) v(cm1n) v(cm2p) v(cm2n) v(cm3p) v(cm3n) v(fb1) v(fb2) v(fb3)
+quit
+.endc
+.end

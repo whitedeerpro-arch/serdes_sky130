@@ -1,0 +1,13 @@
+{
+  "scope": "Educational illustration; not a SPICE run or real-board qualification. Passive ABCD calculation uses existing per-leg pad/package/AC/RLGC/load proxy at50ohm reference ports.",
+  "discretized_line_artifact": "At high frequency, 16-section ladder dispersion is part of this proxy, not evidence of measured PCB material dispersion.",
+  "raised_cosine_scope": "Analytic unit-peak beta0.35 pulse and finite bipolar sequence; no analog driver, noise, CDR, channel distortion or finite FIR implementation.",
+  "at_2ghz": {
+    "matched_s21_db": -0.0357070693889496,
+    "rc_example_s21_db": -1.3364221848274316,
+    "matched_group_delay_ui": 1.0550957302625046,
+    "rc_group_delay_ui": 1.0873475028670931
+  },
+  "raised_cosine_rolloff": 0.35,
+  "bit_period_s": 2.5e-10
+}

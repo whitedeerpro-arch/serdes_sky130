@@ -1,0 +1,12 @@
+* Reusable PLL core assembled from existing circuit prototypes.
+* Bias and reference clock are external; no test precharge, startup source or calibration controller.
+* Native device / ideal R-C view. Circuit function has not been requalified as a new top cell.
+.subckt pll_balanced_core ref rst_b vbn vbp vbias cfg0 cfg1 cfg2 ctrl up dn fb0 cm0p cm0n cm1p cm1n cm2p cm2n cm3p cm3n vdd vdd_dummy vss params: cwire=0.5f
+Xclock ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 cm0p cm0n cm1p cm1n cm2p cm2n cm3p cm3n vdd vdd_dummy vss pll_clock_frontend_balanced cwire={cwire}
+Xpfd ref fb0 rst_b up dn vdd vss pll_pfd
+Xcp up dn out vbn vbp vdd vss pll_cp
+Vsense out filt 0
+Xlf filt ctrl vss pll_loop_filter
+Cup up vss 20f
+Cdn dn vss 20f
+.ends pll_balanced_core

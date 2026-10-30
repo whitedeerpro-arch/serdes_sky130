@@ -1,0 +1,64 @@
+SKY130 VCO and real CML-to-CMOS receiver integration
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/cap_bank_3b.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/vco_ring4.spice"
+
+.param supply=1.8 iref=0.85m vctrl_dc=1.306
+.param code0=1 code1=1 code2=1 cwire=0.5f cload_cmos=20f
+.param rx_wsf=20 rx_wsf_sink=2 rx_win=6 rx_wload=8 rx_wtail=6 rx_pre_wp=3.6
+Vcore vcore 0 {supply}
+Vrx vrx 0 {supply}
+Vbuf vbuf 0 {supply}
+Iref vcore vbias {iref}
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=0.5 nf=4
+Vctrl vctrl 0 {vctrl_dc}
+Vb0 b0 0 {code0*supply}
+Vb1 b1 0 {code1*supply}
+Vb2 b2 0 {code2*supply}
+Xvco q0p q0n q1p q1n q2p q2n q3p q3n vctrl b0 b1 b2 vbias vcore 0
++ pll_vco_ring4 varw=15 varl=0.5 capw=2 capl=5
+
+* Proxy input capacitors are removed. Only an explicit residual wire C remains.
+Cw0p q0p 0 {cwire}
+Cw0n q0n 0 {cwire}
+Cw1p q1p 0 {cwire}
+Cw1n q1n 0 {cwire}
+Cw2p q2p 0 {cwire}
+Cw2n q2n 0 {cwire}
+Cw3p q3p 0 {cwire}
+Cw3n q3n 0 {cwire}
+
+* Replace with four direct receivers or four CML buffers + receivers.
+@RECEIVER_CONNECTIONS@
+
+Cl0p ck0p 0 {cload_cmos}
+Cl0n ck0n 0 {cload_cmos}
+Cl1p ck1p 0 {cload_cmos}
+Cl1n ck1n 0 {cload_cmos}
+Cl2p ck2p 0 {cload_cmos}
+Cl2n ck2n 0 {cload_cmos}
+Cl3p ck3p 0 {cload_cmos}
+Cl3n ck3n 0 {cload_cmos}
+Ikick q0p q0n PWL(0 0 1p 0 2p 1u 20p 1u 21p 0)
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set wr_singlescale
+set wr_vecnames
+tran 1p 16n 0 1p
+let d0=v(q0p)-v(q0n)
+let d1=v(q1p)-v(q1n)
+let d2=v(q2p)-v(q2n)
+let d3=v(q3p)-v(q3n)
+let cm0=(v(q0p)+v(q0n))/2
+let pcore=-v(vcore)*i(Vcore)
+let prx=-v(vrx)*i(Vrx)
+let pbuf=-v(vbuf)*i(Vbuf)
+wrdata waveforms.tsv d0 d1 d2 d3 cm0 pcore prx pbuf v(ck0p) v(ck0n) v(ck1p) v(ck1n) v(ck2p) v(ck2n) v(ck3p) v(ck3n)
+quit
+.endc
+.end

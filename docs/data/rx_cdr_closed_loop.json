@@ -1,0 +1,1320 @@
+{
+  "date_local": "2026-10-29",
+  "status": "CDR_and_SIPO_RTL_functional_prototype_plus_nominal_CMOS_readout; physical_system_closure_pending",
+  "readout": [
+    {
+      "run": "results/analog/rx/sampler/cmos_readout/20261028T194046Z_tt_code00",
+      "pi_code": 0,
+      "bits": 50,
+      "readouts": 100,
+      "errors": 0,
+      "minimum_rail_threshold_margin_v": 0.8968300736162238,
+      "dc_zero_max_v": 3.46845369e-07,
+      "dc_one_min_v": 1.79999992,
+      "six_converters_power_w": 0.003942993128396567,
+      "scope": "four actual sampling outputs plus two DC probes; output10f/leg.250ps readout was premature;350/425ps are tested."
+    },
+    {
+      "run": "results/analog/rx/sampler/cmos_readout/20261028T194046Z_tt_code04",
+      "pi_code": 4,
+      "bits": 50,
+      "readouts": 100,
+      "errors": 0,
+      "minimum_rail_threshold_margin_v": 0.8965378394878608,
+      "dc_zero_max_v": 3.67022582e-07,
+      "dc_one_min_v": 1.7999999,
+      "six_converters_power_w": 0.003946631858330322,
+      "scope": "four actual sampling outputs plus two DC probes; output10f/leg.250ps readout was premature;350/425ps are tested."
+    },
+    {
+      "run": "results/analog/rx/sampler/cmos_readout/20261028T194046Z_tt_code08",
+      "pi_code": 8,
+      "bits": 50,
+      "readouts": 100,
+      "errors": 0,
+      "minimum_rail_threshold_margin_v": 0.89586687321783,
+      "dc_zero_max_v": 5.38903368e-07,
+      "dc_one_min_v": 1.79999989,
+      "six_converters_power_w": 0.003936878617740138,
+      "scope": "four actual sampling outputs plus two DC probes; output10f/leg.250ps readout was premature;350/425ps are tested."
+    }
+  ],
+  "aligned": [
+    {
+      "run": "results/analog/rx/sampler/cmos_aligned_selected/20261028T204928Z_tt_code00",
+      "pi_code": 0,
+      "bits": 48,
+      "errors": 0,
+      "minimum_rail_threshold_margin_v": 0.7955028474464424,
+      "clock_phase_after_data_rise_s": 1.1023064237843646e-10,
+      "early_late_by_edge_path": [
+        [
+          0,
+          11
+        ],
+        [
+          0,
+          9
+        ]
+      ],
+      "early_votes": 0,
+      "late_votes": 20,
+      "decisions": [
+        {
+          "time_s": 3.3170736555515233e-09,
+          "first_source_bit": 10,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 3.815849077993267e-09,
+          "first_source_bit": 12,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 4.317055260096262e-09,
+          "first_source_bit": 14,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 4.816305274792897e-09,
+          "first_source_bit": 16,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 5.316446664374276e-09,
+          "first_source_bit": 18,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 5.816462778089884e-09,
+          "first_source_bit": 20,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 6.316092749600522e-09,
+          "first_source_bit": 22,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 6.8164334600942054e-09,
+          "first_source_bit": 24,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 7.316443375964791e-09,
+          "first_source_bit": 26,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 7.816640722455175e-09,
+          "first_source_bit": 28,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 8.316837864409934e-09,
+          "first_source_bit": 30,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 8.816514878264916e-09,
+          "first_source_bit": 32,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 9.31584617548823e-09,
+          "first_source_bit": 34,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 9.816664747564933e-09,
+          "first_source_bit": 36,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.0316398521483728e-08,
+          "first_source_bit": 38,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.0815846946518771e-08,
+          "first_source_bit": 40,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.1316410877795277e-08,
+          "first_source_bit": 42,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.181679626067134e-08,
+          "first_source_bit": 44,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.2315902010159715e-08,
+          "first_source_bit": 46,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 1.2816251659422979e-08,
+          "first_source_bit": 48,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 1.3316688860752844e-08,
+          "first_source_bit": 50,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.3815811897323393e-08,
+          "first_source_bit": 52,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.4316239704543777e-08,
+          "first_source_bit": 54,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.4816605427896831e-08,
+          "first_source_bit": 56,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        }
+      ],
+      "scope": "real clock receiver and CMOS DFFs; nominal E0 capacitive two-inverter delay;350ps readout after common clock; no physical16UI demux STA"
+    },
+    {
+      "run": "results/analog/rx/sampler/cmos_aligned_selected/20261028T204928Z_tt_code04",
+      "pi_code": 4,
+      "bits": 48,
+      "errors": 0,
+      "minimum_rail_threshold_margin_v": 0.7952416151507921,
+      "clock_phase_after_data_rise_s": 1.1363941127565649e-10,
+      "early_late_by_edge_path": [
+        [
+          0,
+          11
+        ],
+        [
+          0,
+          9
+        ]
+      ],
+      "early_votes": 0,
+      "late_votes": 20,
+      "decisions": [
+        {
+          "time_s": 3.287161405888979e-09,
+          "first_source_bit": 10,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 3.785745267127641e-09,
+          "first_source_bit": 12,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 4.287116008430775e-09,
+          "first_source_bit": 14,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 4.786130755874183e-09,
+          "first_source_bit": 16,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 5.286229132419054e-09,
+          "first_source_bit": 18,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 5.786254062746836e-09,
+          "first_source_bit": 20,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 6.285908835202942e-09,
+          "first_source_bit": 22,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 6.786351959306538e-09,
+          "first_source_bit": 24,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 7.286366315412622e-09,
+          "first_source_bit": 26,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 7.786515785787611e-09,
+          "first_source_bit": 28,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 8.286795802891767e-09,
+          "first_source_bit": 30,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 8.78644292322348e-09,
+          "first_source_bit": 32,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 9.28579267476949e-09,
+          "first_source_bit": 34,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 9.786790398444965e-09,
+          "first_source_bit": 36,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.0286346981533734e-08,
+          "first_source_bit": 38,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.0785780173292508e-08,
+          "first_source_bit": 40,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.1286308079926643e-08,
+          "first_source_bit": 42,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.1786751672532937e-08,
+          "first_source_bit": 44,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.2285848025283824e-08,
+          "first_source_bit": 46,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 1.2786410456893469e-08,
+          "first_source_bit": 48,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 1.3286828746646561e-08,
+          "first_source_bit": 50,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.3785786686222237e-08,
+          "first_source_bit": 52,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.4286165789238903e-08,
+          "first_source_bit": 54,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.4786470635434545e-08,
+          "first_source_bit": 56,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        }
+      ],
+      "scope": "real clock receiver and CMOS DFFs; nominal E0 capacitive two-inverter delay;350ps readout after common clock; no physical16UI demux STA"
+    },
+    {
+      "run": "results/analog/rx/sampler/cmos_aligned_selected/20261028T204928Z_tt_code08",
+      "pi_code": 8,
+      "bits": 48,
+      "errors": 0,
+      "minimum_rail_threshold_margin_v": 0.794955217774007,
+      "clock_phase_after_data_rise_s": 1.1027514001504985e-10,
+      "early_late_by_edge_path": [
+        [
+          11,
+          0
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "early_votes": 20,
+      "late_votes": 0,
+      "decisions": [
+        {
+          "time_s": 3.254464924614364e-09,
+          "first_source_bit": 10,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 3.753570490547195e-09,
+          "first_source_bit": 12,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 4.254481704333179e-09,
+          "first_source_bit": 14,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 4.75387012121218e-09,
+          "first_source_bit": 16,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 5.254111668836797e-09,
+          "first_source_bit": 18,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 5.754123812734607e-09,
+          "first_source_bit": 20,
+          "data": [
+            0,
+            1
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 6.253874648787166e-09,
+          "first_source_bit": 22,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 6.753963480964823e-09,
+          "first_source_bit": 24,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 7.253962126097648e-09,
+          "first_source_bit": 26,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 7.753918784158332e-09,
+          "first_source_bit": 28,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 8.254566468087932e-09,
+          "first_source_bit": 30,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 8.754007824549863e-09,
+          "first_source_bit": 32,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 9.25360686694184e-09,
+          "first_source_bit": 34,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 9.754006869008704e-09,
+          "first_source_bit": 36,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.0254113346052212e-08,
+          "first_source_bit": 38,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.0753517602198706e-08,
+          "first_source_bit": 40,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 1.1253462314782687e-08,
+          "first_source_bit": 42,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        },
+        {
+          "time_s": 1.1754500321496541e-08,
+          "first_source_bit": 44,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.2253636575416004e-08,
+          "first_source_bit": 46,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 1.2753827262141926e-08,
+          "first_source_bit": 48,
+          "data": [
+            1,
+            0
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 1.325403898025271e-08,
+          "first_source_bit": 50,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            0,
+            0
+          ]
+        },
+        {
+          "time_s": 1.3753653766423181e-08,
+          "first_source_bit": 52,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            0,
+            1
+          ]
+        },
+        {
+          "time_s": 1.4253545210661377e-08,
+          "first_source_bit": 54,
+          "data": [
+            1,
+            1
+          ],
+          "edge": [
+            1,
+            1
+          ]
+        },
+        {
+          "time_s": 1.4753862688127804e-08,
+          "first_source_bit": 56,
+          "data": [
+            0,
+            0
+          ],
+          "edge": [
+            1,
+            0
+          ]
+        }
+      ],
+      "scope": "real clock receiver and CMOS DFFs; nominal E0 capacitive two-inverter delay;350ps readout after common clock; no physical16UI demux STA"
+    }
+  ],
+  "closed_loop": [
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_zero",
+      "parameters": {
+        "name": "zero",
+        "offset_ppm": 0,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 0,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": 0.0,
+        "jitter": 0.0,
+        "latency": 2.0,
+        "lock_ns": 2577.953,
+        "freq_ppm": 1.907,
+        "wraps": 1.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 3.662,
+        "rms_ps": 3.513,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_plus300",
+      "parameters": {
+        "name": "plus300",
+        "offset_ppm": 300,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 0,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": 300.0,
+        "jitter": 0.0,
+        "latency": 2.0,
+        "lock_ns": 4112.718,
+        "freq_ppm": 297.546,
+        "wraps": 61.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 10.31,
+        "rms_ps": 3.338,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_minus300",
+      "parameters": {
+        "name": "minus300",
+        "offset_ppm": -300,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 0,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": -300.0,
+        "jitter": 0.0,
+        "latency": 2.0,
+        "lock_ns": 3603.023,
+        "freq_ppm": -298.5,
+        "wraps": 61.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 10.139,
+        "rms_ps": 3.437,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_plus300_jitter",
+      "parameters": {
+        "name": "plus300_jitter",
+        "offset_ppm": 300,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": 300.0,
+        "jitter": 5.0,
+        "latency": 2.0,
+        "lock_ns": 3600.868,
+        "freq_ppm": 301.361,
+        "wraps": 61.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 13.151,
+        "rms_ps": 3.789,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_minus300_jitter",
+      "parameters": {
+        "name": "minus300_jitter",
+        "offset_ppm": -300,
+        "tx_phase_ps": -91,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": -300.0,
+        "jitter": 5.0,
+        "latency": 2.0,
+        "lock_ns": 3602.868,
+        "freq_ppm": -302.315,
+        "wraps": 60.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 13.864,
+        "rms_ps": 3.819,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_plus100_latency",
+      "parameters": {
+        "name": "plus100_latency",
+        "offset_ppm": 100,
+        "tx_phase_ps": 112,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 4,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": 100.0,
+        "jitter": 5.0,
+        "latency": 4.0,
+        "lock_ns": 4121.571,
+        "freq_ppm": 98.228,
+        "wraps": 29.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 17.595,
+        "rms_ps": 5.718,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_minus100_latency",
+      "parameters": {
+        "name": "minus100_latency",
+        "offset_ppm": -100,
+        "tx_phase_ps": -112,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 4,
+        "holdover_bits": 0,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": -100.0,
+        "jitter": 5.0,
+        "latency": 4.0,
+        "lock_ns": 3610.127,
+        "freq_ppm": -103.951,
+        "wraps": 32.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 18.135,
+        "rms_ps": 5.753,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T204157Z_plus300_holdover",
+      "parameters": {
+        "name": "plus300_holdover",
+        "offset_ppm": 300,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 2,
+        "holdover_bits": 2048,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": 300.0,
+        "jitter": 5.0,
+        "latency": 2.0,
+        "lock_ns": 3600.868,
+        "freq_ppm": 298.5,
+        "wraps": 61.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 13.151,
+        "rms_ps": 3.801,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T205617Z_plus300_edge_skew",
+      "parameters": {
+        "name": "plus300_edge_skew",
+        "offset_ppm": 300,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "edge_skew_ps": 20,
+        "edge_duty_ps": 5,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": 300.0,
+        "jitter": 5.0,
+        "latency": 2.0,
+        "lock_ns": 3089.009,
+        "freq_ppm": 300.407,
+        "wraps": 61.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 34.541,
+        "rms_ps": 20.239,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    },
+    {
+      "run": "results/digital/rx/cdr_closed_loop/20261028T205617Z_minus300_edge_skew",
+      "parameters": {
+        "name": "minus300_edge_skew",
+        "offset_ppm": -300,
+        "tx_phase_ps": 73,
+        "bounded_transition_jitter_ps": 5,
+        "latency_words": 2,
+        "holdover_bits": 0,
+        "edge_skew_ps": -20,
+        "edge_duty_ps": 5,
+        "sim_bits": 400000,
+        "plant": "behavioral NRZ sampler with measured physical PI static64code curve, actual voter/filter/commutator/training/SIPO RTL; not transistor or physical CDC simulation"
+      },
+      "metrics": {
+        "ppm": -300.0,
+        "jitter": 5.0,
+        "latency": 2.0,
+        "lock_ns": 3603.056,
+        "freq_ppm": -302.315,
+        "wraps": 61.0,
+        "words": 19936.0,
+        "word_errors": 0.0,
+        "word_gaps": 0.0,
+        "slips": 0.0,
+        "maxerr_ps": 34.42,
+        "rms_ps": 20.357,
+        "locked": 1.0,
+        "limited": 0.0,
+        "aligned": 1.0
+      }
+    }
+  ],
+  "rtl_unit_checks": {
+    "sipo_initial_bit_offsets": 16,
+    "payload_words": 320,
+    "holdover_ns": 512,
+    "no_transition_timeout_tested": true,
+    "saturation_and_reacquire_tested": true,
+    "lint_clean": true,
+    "yosys_structural_check": true,
+    "standard_cell_timing_closure": false
+  },
+  "pcb": {
+    "run": "results/analog/rx/top/pcb_samples/20261028T211851Z_tt_C2_eq3_code4",
+    "record_stop_s": 2.4e-08,
+    "absolute_source_window_s": [
+      2.4e-08,
+      4.8e-08
+    ],
+    "warmup_excluded_s": 4e-09,
+    "data_bits_checked": 80,
+    "data_errors": 0,
+    "minimum_cmos_threshold_margin_v": 0.7925711206130169,
+    "payload_words_checked": 3,
+    "payload_word_hex": [
+      "99dd",
+      "0fea",
+      "4304"
+    ],
+    "payload_word_errors": 0,
+    "pair_clock_phase_after_data_rise_s": 1.1444940978457164e-10,
+    "source_points": 7220,
+    "source_compressed": false,
+    "source_waveform_extended": false,
+    "scope": "Real TX input isolation/driver+package/AC/C2/termination/CTLE+PI/samplers/static CMOS/common retiming. Ideal independent supplies/clock anchors. Saved serializer waveform only before real TX isolation; no live PLL or closed transistor CDR; no stimulus extension. Clock offset trained from prior alternating training of20f reference, plus fixed35ps input buffer compensation; not fitted to current payload.",
+    "description": "\u771f\u5b9eTX\u9694\u79bb/\u9a71\u52a8\u2014\u5c01\u88c5/AC\u2014C2 6dB PCB\u2014\u5355\u5957\u7ec8\u7aef\u2014CTLEeq3\u2014PI\u56db\u76f8\u91c7\u6837\u2014\u9759\u6001CMOS\u8bfb\u51fa\u2014\u5b9e\u9645\u516c\u5171\u65f6\u949f\u91cd\u5b9a\u65f6\u5df2\u5b8c\u621024ns\u3002\u6e90\u4e3a\u539f\u59cb\u4e32\u5316\u8bb0\u5f5524\u201348ns\uff0c\u672a\u538b\u7f29/\u5ef6\u957f/\u590d\u5236\uff1b\u8f93\u51fa\u7ea7\u5728100ps\u542f\u7528\uff0c\u820d\u5f03\u524d4ns\u70ed\u8eab\u3002\u56fa\u5b9a\u65f6\u949f\u4e2d\u5fc3\u7531\u65e7\u4ea4\u66ff\u8bad\u7ec3\u7684\u8fb9\u6cbf\u5ef6\u8fdf+0.5UI\u53ca35ps\u524d\u7aef\u8865\u507f\u786e\u5b9a\uff0c\u672a\u62df\u5408\u672c\u6b21payload\u3002\u6bd4\u8f8380\u4f4d\uff0c\u95190\u4f4d\uff1b\u5b9e\u9645CMOS\u5bf9\u9001\u5165\u4e32\u8f6c\u5e76RTL\uff0c\u8bad\u7ec3\u4f7f\u7528\u65e7\u5939\u5177\u552f\u4e006c9e\u6807\u8bb0\uff08\u4e00\u6b21\uff09\uff0c\u6bd4\u8f833\u4e2apayload\u5b5799dd/0fea/4304\u5747\u6b63\u786e\u3002\u8be5\u77ed\u7a97\u4f7f\u7528\u7406\u60f3\u951a\u70b9\u548c\u56fa\u5b9aPI\u78014\uff0c\u6ca1\u6709\u7269\u7406\u95ed\u73afCDR\u6216\u539f\u751fPLL\u3002",
+    "logic_replay_scope": "numeric CMOS voltage thresholding and sequential pair replay into actual SIPO RTL; not physical digital timing or realtime mixed-signal closed loop"
+  },
+  "scope": "Long runs are actual RTL with behavioral sampler/clock plant and prior measured PI curve; not long transistor/PCB/PLL closed-loop tests. Physical analog cases ideal anchors. No PVT, noise, statistical BER or CDC qualification."
+}

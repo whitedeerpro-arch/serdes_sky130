@@ -1,0 +1,19 @@
+id = "pfd_cp"
+dut = "analog/pll/top"
+level = "integration"
+status = "prototype"
+purpose = "固定 CP 输出电压并扫描相差，确认符号、脉宽和死区。"
+analyses = ["tran"]
+measurements = ["net_charge_vs_phase","source_sink_polarity","minimum_effective_pulse"]
+shared_stimuli = ["verification/stimuli/spice/pfd_clock_pair.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_pfd_cp_ngspice.cir.in"
+
+[sweep]
+parameters = ["phase=-200,-20,0,20,200 ps", "output_voltage", "corner", "temperature", "maximum_step"]
+
+[requirements]
+status = "unspecified"

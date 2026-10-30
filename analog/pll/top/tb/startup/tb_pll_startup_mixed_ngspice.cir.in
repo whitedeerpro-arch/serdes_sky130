@@ -1,0 +1,50 @@
+Startup sequence electrical integration: real PFD / gated CP / dual precharge, local phase-domain VCO
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump_enabled.spice"
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc_precharge.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/behavioral/vco_feedback_model.spice"
+.param supply=1.8 vtarget=1.4 rsource=500 ref_period=4n
+.param pre_end=512n gap_time=8n flush_time=8n
+Vdd vdd 0 {supply}
+Vcp vcp 0 {supply}
+Vbias vb 0 {supply}
+In vb vbn 50u
+Ip vbp 0 50u
+Xbn vbn vbn 0 0 serdes_nfet w=5 l=1
+Xbp vbp vbp vb vb serdes_pfet w=20 l=1 nf=4
+Vpre target 0 {vtarget}
+Rsrc target pre_ref {rsource}
+* These PWLs reproduce supervisor PRECHARGE/GAP/FLUSH/ACQUIRE timing.
+* Readiness and lock measurements are NOT co-simulated RTL/analog frontends.
+Ven pre_en 0 PWL(0 {supply} {pre_end} {supply} {pre_end+100p} 0)
+Vreset rst_b 0 PWL(0 0 {pre_end+gap_time} 0 {pre_end+gap_time+100p} {supply})
+Venable cp_en 0 PWL(0 0 {pre_end+gap_time+flush_time} 0 {pre_end+gap_time+flush_time+100p} {supply})
+Vref ref 0 PULSE(0 {supply} 2n 30p 30p {ref_period/2-30p} {ref_period})
+Xpfd ref fb rst_b up dn vdd 0 pll_pfd
+Xcp up dn cp_en out vbn vbp vcp 0 pll_cp_enabled
+Vsense out filt 0
+Xlf filt ctrl z pre_ref pre_en vdd 0 pll_loop_filter_precharge
+Xosc ctrl fb phase freq_ghz vdd 0 pll_vco_feedback_model
++ fcenter=2G kvco=464552475 vmid=1.39284635465 ndiv=8
+Cup up 0 20f
+Cdn dn 0 20f
+* Genuine cold filter states. Arbitrary divided phase, no near-lock phase preset.
+.ic v(ctrl)=0 v(z)=0 v(phase)=0.35
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set wr_singlescale
+set wr_vecnames
+tran 20p 3u 0 20p
+let ppfd=-v(vdd)*i(Vdd)
+let pcp=-v(vcp)*i(Vcp)
+wrdata waveforms.tsv v(ref) v(fb) v(up) v(dn) v(ctrl) v(z) v(phase) v(freq_ghz) i(Vsense) v(pre_en) v(rst_b) v(cp_en) v(pre_ref) i(Vpre) ppfd pcp
+quit
+.endc
+.end

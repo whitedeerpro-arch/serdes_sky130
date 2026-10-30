@@ -1,0 +1,34 @@
+Real PFD-to-CP delivered charge with a clamped output boundary
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@SOURCE_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@SOURCE_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@SOURCE_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@SOURCE_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@SOURCE_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.include "@SOURCE_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.param supply=1.8 phase_delay=0 output_v=1.2
+Vdd vdd 0 {supply}
+Vbias vb 0 {supply}
+In vb vbn 50u
+Ip vbp 0 50u
+Xbn vbn vbn 0 0 serdes_nfet w=5 l=1
+Xbp vbp vbp vb vb serdes_pfet w=20 l=1 nf=4
+Vref ref 0 PULSE(0 {supply} 2n 30p 30p 1.97n 4n)
+Vfb fb 0 PULSE(0 {supply} {2n+phase_delay} 30p 30p 1.97n 4n)
+Vreset rst_b 0 PWL(0 0 1n 0 1.02n {supply})
+Xpfd ref fb rst_b up dn vdd 0 pll_pfd
+Xcp up dn out vbn vbp vdd 0 pll_cp
+Vout out 0 {output_v}
+Cup up 0 20f
+Cdn dn 0 20f
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(ref) v(fb) v(up) v(dn) v(xpfd.clear_b) i(Vout)
+.control
+set num_threads=1
+set wr_singlescale
+set wr_vecnames
+@ANALYSES@
+quit
+.endc
+.end

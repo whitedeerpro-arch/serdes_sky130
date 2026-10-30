@@ -1,0 +1,24 @@
+SKY130 clock receiver FRONT-END static transfer and polarity
+.lib "@MODEL_LIBRARY@" tt
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+Vdd vdd 0 1.8
+Vref_supply ref_supply 0 1.8
+Iref ref_supply vbias 0.85m
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=0.5 nf=4
+Vdiff diff 0 0
+Bp inp 0 V={1.632+V(diff)/2}
+Bn inn 0 V={1.632-V(diff)/2}
+Xrx inp inn outp outn vbias vdd 0 serdes_cml_to_cmos
++ wsf=20 wsf_sink=2 win=6 wload=8 wtail=6 pre_wp=3.6
+.temp 27
+.control
+set wr_singlescale
+set wr_vecnames
+dc Vdiff -0.3 0.3 0.005
+let power=-v(vdd)*i(Vdd)
+* Clock-restorer outputs have memory; use only raw front-end nodes for DC transfer.
+wrdata dc_transfer.tsv v(xrx.rawp) v(xrx.rawn) v(xrx.ap) v(xrx.an)
+quit
+.endc
+.end

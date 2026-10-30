@@ -1,0 +1,68 @@
+[
+  {
+    "run": "results/analog/tx/output_driver/terminated/20261028T123356Z_ngspice_tt_matched_channel",
+    "case": "matched_channel",
+    "tx": {
+      "training_delay_ui": 0.30662110584413327,
+      "marker_errors": 0,
+      "payload_bits": 256,
+      "bit_errors": 0,
+      "minimum_signed_margin_v": 0.21921476105401577,
+      "differential_pp_v": 0.472469452,
+      "edge_spread_ui": 0.003968197431304121,
+      "matched_transitions": 129
+    },
+    "rx": {
+      "training_delay_ui": 1.3650176559607914,
+      "marker_errors": 0,
+      "payload_bits": 256,
+      "bit_errors": 0,
+      "minimum_signed_margin_v": 0.21790724409584308,
+      "differential_pp_v": 0.44800978700000005,
+      "edge_spread_ui": 0.006263954546714822,
+      "matched_transitions": 129
+    },
+    "power_w": {
+      "predriver": 0.004823640200726429,
+      "line_output": 0.015845596458332837,
+      "standalone_bias": 0.0015300000000000001
+    },
+    "mean_common_mode_v": {
+      "tx": 1.579911264924781,
+      "rx": 0.89939579181386
+    }
+  },
+  {
+    "run": "results/analog/tx/output_driver/terminated/20261028T123356Z_ngspice_tt_rc_loss_example",
+    "case": "rc_loss_example",
+    "tx": {
+      "training_delay_ui": 0.3229696553455703,
+      "marker_errors": 0,
+      "payload_bits": 256,
+      "bit_errors": 0,
+      "minimum_signed_margin_v": 0.18946869125154522,
+      "differential_pp_v": 0.5186015669999999,
+      "edge_spread_ui": 0.03651111609765959,
+      "matched_transitions": 129
+    },
+    "rx": {
+      "training_delay_ui": 1.396585398706435,
+      "marker_errors": 0,
+      "payload_bits": 256,
+      "bit_errors": 0,
+      "minimum_signed_margin_v": 0.18869502585248948,
+      "differential_pp_v": 0.393749731,
+      "edge_spread_ui": 0.009794354987225319,
+      "matched_transitions": 129
+    },
+    "power_w": {
+      "predriver": 0.004823636717813354,
+      "line_output": 0.015850885356908654,
+      "standalone_bias": 0.0015300000000000001
+    },
+    "mean_common_mode_v": {
+      "tx": 1.5798333065088035,
+      "rx": 0.8994662154618717
+    }
+  }
+]

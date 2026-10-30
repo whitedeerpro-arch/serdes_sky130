@@ -1,0 +1,15 @@
+id = "startup_optimization"
+dut = "analog/pll/top"
+level = "integration"
+status = "candidate_nominal_design_bringup"
+purpose = "Cold dual-node LF precharge, nonoverlapping PFD/CP handoff, acquisition and status interfaces."
+analyses = ["tran"]
+measurements = ["both_state_settle", "reference_peak_current", "release_kick", "cp_off_leakage", "lock_screen", "handoff_time", "status_consistency"]
+mixed_template = "analog/pll/top/tb/startup/tb_pll_startup_mixed_ngspice.cir.in"
+native_template = "analog/pll/top/tb/startup/tb_pll_startup_native_ngspice.cir.in"
+native_template_executed_this_round = false
+lock_contract = "verification/contracts/pll_lock_screen.toml"
+handoff_contract = "verification/contracts/pll_startup.toml"
+reference_hz = 250000000
+feedback_divide = 8
+native_vco_control_load_in_mixed_view = false

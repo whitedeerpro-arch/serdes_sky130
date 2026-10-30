@@ -1,0 +1,2770 @@
+{
+  "status": "PLL_first_PVT_pilot_completed_with_gaps; not_signoff",
+  "date_local": "2026-10-29",
+  "campaign": "results/analog/pll/pvt/20261029T070119Z",
+  "pilot_environment_count": 9,
+  "full_grid_environment_count": 45,
+  "full_grid_completed": false,
+  "source_baseline_modified": false,
+  "physical_LF_candidate_promoted": false,
+  "rows": [
+    {
+      "environment": {
+        "id": "tt_nominal",
+        "corner": "tt",
+        "supply_v": 1.8,
+        "temperature_c": 27
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_tt_nominal/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 7,
+        "vctrl_v": 1.3931125623591198,
+        "frequency_hz": 2000091151.4176958,
+        "frequency_error_ppm_vs2GHz": 45.57570884777817,
+        "within0p5percent_of2GHz": true,
+        "swing_pp_v": 0.39958046999999997,
+        "common_mode_v": 1.631615261034651,
+        "active_rail_power_w": 0.03340965059458273,
+        "dummy_rail_power_w": 0.023902700976085895,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999989603794411,
+            "max_abs_cycle_error": 1.0396205588847351e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999993993072173,
+            "max_abs_cycle_error": 6.006927827151287e-06,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.00001508087771,
+            "max_abs_cycle_error": 1.5080877709294782e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999997114470281,
+            "max_abs_cycle_error": 2.885529719165447e-06,
+            "pass": true
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 15,
+            "vco_cycles_per_output_period_mean": 0.9999888456290743,
+            "max_abs_cycle_error": 0.00037558315085606253,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_tt_nominal/raw/waveforms.tsv.gz",
+          "original_sha256": "4c323d87c4ca19320a5790c25812ac49b42b635fae2e4d9181605b61b542f8ea",
+          "gzip_sha256": "802f396ff1f1800cf43f5f4f1689b34e96405078ed6b0e804bd4a2d41e9ecb87",
+          "rows": 4105,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1908428959.0741904,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_tt_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 2003265918.2105105,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_tt_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2083925271.1368139,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_tt_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.3931125623591198,
+          "frequency_hz": 2000091151.4176958,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_tt_nominal"
+        }
+      ],
+      "same_code_bracket_observed": true,
+      "bracket_codes": [
+        7
+      ],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0337910154,
+          "max_v": 1.86956915
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0364794855,
+          "max_v": 1.87593943
+        },
+        "fb1": {
+          "min_v": -0.033792417,
+          "max_v": 1.86946353
+        },
+        "fb2": {
+          "min_v": -0.0334446373,
+          "max_v": 1.8692181
+        },
+        "fb3": {
+          "min_v": -0.0336919925,
+          "max_v": 1.86944366
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "ss_nominal",
+        "corner": "ss",
+        "supply_v": 1.8,
+        "temperature_c": 27
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_ss_nominal/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 7,
+        "vctrl_v": 1.4599194286581272,
+        "frequency_hz": 2008504971.3536465,
+        "frequency_error_ppm_vs2GHz": 4252.485676823348,
+        "within0p5percent_of2GHz": true,
+        "swing_pp_v": 0.408835722,
+        "common_mode_v": 1.632670603387574,
+        "active_rail_power_w": 0.032652574451035504,
+        "dummy_rail_power_w": 0.022257649059467456,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.003634137985754,
+            "max_abs_cycle_error": 0.0036341379857542933,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.00006035913693,
+            "max_abs_cycle_error": 6.0359136929477586e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000091755215713,
+            "max_abs_cycle_error": 9.175521571336276e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.003932429960292,
+            "max_abs_cycle_error": 0.003932429960292083,
+            "pass": true
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 15,
+            "vco_cycles_per_output_period_mean": 1.0000472002853535,
+            "max_abs_cycle_error": 0.0007618436243685967,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_ss_nominal/raw/waveforms.tsv.gz",
+          "original_sha256": "3b2112c02d5cc38136299e95de7c71a49c1853e5bd37f992046f59c9b6b80464",
+          "gzip_sha256": "69b5d3079277a673a7e6df16f92620defbbc05ff6730201014aa29bee8849eb9",
+          "rows": 4067,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1882539765.503442,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 1984817512.202447,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2035493855.8778093,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4599194286581272,
+          "frequency_hz": 2008504971.3536465,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_ss_nominal"
+        }
+      ],
+      "same_code_bracket_observed": true,
+      "bracket_codes": [
+        7
+      ],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.044156815,
+          "max_v": 1.87654106
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0494780758,
+          "max_v": 1.8834753
+        },
+        "fb1": {
+          "min_v": -0.0436909421,
+          "max_v": 1.876722
+        },
+        "fb2": {
+          "min_v": -0.0438819251,
+          "max_v": 1.87652797
+        },
+        "fb3": {
+          "min_v": -0.0438063215,
+          "max_v": 1.87674063
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "ff_nominal",
+        "corner": "ff",
+        "supply_v": 1.8,
+        "temperature_c": 27
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_ff_nominal/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 7,
+        "vctrl_v": 1.1881446275533365,
+        "frequency_hz": 1999571681.6734245,
+        "frequency_error_ppm_vs2GHz": -214.15916328770822,
+        "within0p5percent_of2GHz": true,
+        "swing_pp_v": 0.360257035,
+        "common_mode_v": 1.630437213842527,
+        "active_rail_power_w": 0.03382508605492692,
+        "dummy_rail_power_w": 0.025027307152569542,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.997760311265852,
+            "max_abs_cycle_error": 0.0022396887341482596,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.997784991017231,
+            "max_abs_cycle_error": 0.002215008982768829,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.00006326316237,
+            "max_abs_cycle_error": 6.326316236915375e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000052188695223,
+            "max_abs_cycle_error": 5.218869522316538e-05,
+            "pass": true
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 15,
+            "vco_cycles_per_output_period_mean": 0.9999959507859368,
+            "max_abs_cycle_error": 0.00011784619334076485,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_ff_nominal/raw/waveforms.tsv.gz",
+          "original_sha256": "81f2f3f174f546b55a7d0c1be55453e86adacff2bd06278b7c7fc2625aa9b46a",
+          "gzip_sha256": "fa5917e3fb7cc17083a48b3f2e026ab70eb0056cbec85478f7a3f1908cd62231",
+          "rows": 4231,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 2005432852.8160706,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 2106863827.3303812,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2169526453.070546,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.15,
+          "frequency_hz": 1871006246.3853977,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ff_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.65,
+          "frequency_hz": 1885388637.4478166,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ff_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.15,
+          "frequency_hz": 1982519811.3215387,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ff_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.1881446275533365,
+          "frequency_hz": 1999571681.6734245,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_ff_nominal"
+        }
+      ],
+      "same_code_bracket_observed": true,
+      "bracket_codes": [
+        7
+      ],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0253018354,
+          "max_v": 1.85911376
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0269391087,
+          "max_v": 1.86551237
+        },
+        "fb1": {
+          "min_v": -0.0254706012,
+          "max_v": 1.85912454
+        },
+        "fb2": {
+          "min_v": -0.0252349501,
+          "max_v": 1.86007508
+        },
+        "fb3": {
+          "min_v": -0.0253217172,
+          "max_v": 1.85976483
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "sf_nominal",
+        "corner": "sf",
+        "supply_v": 1.8,
+        "temperature_c": 27
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_sf_nominal/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 7,
+        "vctrl_v": 0.15,
+        "frequency_hz": 2018713386.330339,
+        "frequency_error_ppm_vs2GHz": 9356.693165169405,
+        "within0p5percent_of2GHz": false,
+        "swing_pp_v": 0.368777935,
+        "common_mode_v": 1.6299920331974769,
+        "active_rail_power_w": 0.03477181583343038,
+        "dummy_rail_power_w": 0.025411662968267832,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999937763621126,
+            "max_abs_cycle_error": 6.223637887359246e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000006261364383,
+            "max_abs_cycle_error": 6.261364383419732e-06,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000005719222335,
+            "max_abs_cycle_error": 5.719222334832352e-06,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999951598299284,
+            "max_abs_cycle_error": 4.840170071584993e-05,
+            "pass": true
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 15,
+            "vco_cycles_per_output_period_mean": 1.0000022209342607,
+            "max_abs_cycle_error": 0.00011919817192762583,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_sf_nominal/raw/waveforms.tsv.gz",
+          "original_sha256": "984082272d34be36ab0a2c3c2cab585886f674ab6282c1c4760e3c0ce5fb59eb",
+          "gzip_sha256": "ac391decd533078a8268e8fe6e2a856c05e336964940df74af7da77e11250b2c",
+          "rows": 4125,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 2231246539.1425896,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 2311003289.100084,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2362647469.984999,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.15,
+          "frequency_hz": 2018850118.10846,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.65,
+          "frequency_hz": 2046212523.1437976,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.15,
+          "frequency_hz": 2208611553.1519504,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.15,
+          "frequency_hz": 2018713386.330339,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_sf_nominal"
+        }
+      ],
+      "same_code_bracket_observed": false,
+      "bracket_codes": [],
+      "all_sampled_points_above_target": true,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0380967408,
+          "max_v": 1.86792322
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0430597478,
+          "max_v": 1.87439893
+        },
+        "fb1": {
+          "min_v": -0.037991802,
+          "max_v": 1.86790386
+        },
+        "fb2": {
+          "min_v": -0.0380870808,
+          "max_v": 1.86784889
+        },
+        "fb3": {
+          "min_v": -0.0380503907,
+          "max_v": 1.86792411
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "fs_nominal",
+        "corner": "fs",
+        "supply_v": 1.8,
+        "temperature_c": 27
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/extended_fs_nominal/metrics.json",
+      "static": {
+        "scope": "extended_static_native_frontend; last16ns_of32ns",
+        "analysis_method": "measured_steady_VCO_frequency_times_observed_output_periods",
+        "code": 6,
+        "vctrl_v": 1.4219705484292986,
+        "frequency_hz": 2001213676.6588473,
+        "frequency_error_ppm_vs2GHz": 606.8383294237644,
+        "swing_pp_v": 0.379527088,
+        "common_mode_v": 1.632952378952944,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 3,
+            "mean_vco_cycles_per_output_period": 8.000002304638379,
+            "max_abs_cycle_error": 2.1070480915597045e-05,
+            "pass": true,
+            "output_min_v": -0.0290702992,
+            "output_max_v": 1.86620688
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 3,
+            "mean_vco_cycles_per_output_period": 8.000005518636938,
+            "max_abs_cycle_error": 8.621110248441255e-05,
+            "pass": true,
+            "output_min_v": -0.0290626084,
+            "output_max_v": 1.86622342
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 3,
+            "mean_vco_cycles_per_output_period": 7.999995597614824,
+            "max_abs_cycle_error": 1.8217242496731956e-05,
+            "pass": true,
+            "output_min_v": -0.0290813351,
+            "output_max_v": 1.86621639
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 3,
+            "mean_vco_cycles_per_output_period": 8.000001415149995,
+            "max_abs_cycle_error": 2.8572569519269564e-06,
+            "pass": true,
+            "output_min_v": -0.0290814525,
+            "output_max_v": 1.8662219
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 31,
+            "mean_vco_cycles_per_output_period": 1.0000036982072582,
+            "max_abs_cycle_error": 0.00021380802579984426,
+            "pass": true,
+            "output_min_v": -0.0309723072,
+            "output_max_v": 1.87203791
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 3.2e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/extended_fs_nominal/raw/waveforms.tsv.gz",
+          "original_sha256": "7779eb07cf33d1086096f6f8469c76c9dde5296e7eb6f0fe7466c1f2075dfc1a",
+          "gzip_sha256": "ef2dbbea275e37be02ae8e3e18cc706afe29076d89f748fbba2f1f06289dd3ce",
+          "rows": 8133,
+          "columns": 16
+        }
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1726491653.2929773,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 1818701849.5760162,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_nominal"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 1911382052.0346522,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_nominal"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1881340827.2735791,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_nominal"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.4,
+          "frequency_hz": 1989617267.1661077,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_nominal"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2084132275.4491644,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_nominal"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.4219705484292986,
+          "frequency_hz": 2001213676.6588473,
+          "run": "results/analog/pll/pvt/20261029T070119Z/extended_fs_nominal"
+        }
+      ],
+      "same_code_bracket_observed": true,
+      "bracket_codes": [
+        6
+      ],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0290702992,
+          "max_v": 1.86620688
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0309723072,
+          "max_v": 1.87203791
+        },
+        "fb1": {
+          "min_v": -0.0290626084,
+          "max_v": 1.86622342
+        },
+        "fb2": {
+          "min_v": -0.0290813351,
+          "max_v": 1.86621639
+        },
+        "fb3": {
+          "min_v": -0.0290814525,
+          "max_v": 1.8662219
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "ss_low_hot",
+        "corner": "ss",
+        "supply_v": 1.65,
+        "temperature_c": 85
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/extended_ss_low_hot/metrics.json",
+      "static": {
+        "scope": "extended_static_native_frontend; last16ns_of32ns",
+        "analysis_method": "measured_steady_VCO_frequency_times_observed_output_periods",
+        "code": 7,
+        "vctrl_v": 1.0992332469473447,
+        "frequency_hz": 1998096816.259712,
+        "frequency_error_ppm_vs2GHz": -951.5918701440418,
+        "swing_pp_v": 0.298956209,
+        "common_mode_v": 1.484978103643334,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 0,
+            "mean_vco_cycles_per_output_period": null,
+            "max_abs_cycle_error": null,
+            "pass": false,
+            "output_min_v": -2.41831817e-07,
+            "output_max_v": 6.75347361e-07
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 0,
+            "mean_vco_cycles_per_output_period": null,
+            "max_abs_cycle_error": null,
+            "pass": false,
+            "output_min_v": 2.59902431e-07,
+            "output_max_v": 2.59909285e-07
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 0,
+            "mean_vco_cycles_per_output_period": null,
+            "max_abs_cycle_error": null,
+            "pass": false,
+            "output_min_v": 2.59902878e-07,
+            "output_max_v": 2.59909346e-07
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 0,
+            "mean_vco_cycles_per_output_period": null,
+            "max_abs_cycle_error": null,
+            "pass": false,
+            "output_min_v": 2.59903416e-07,
+            "output_max_v": 2.59909678e-07
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 0,
+            "mean_vco_cycles_per_output_period": null,
+            "max_abs_cycle_error": null,
+            "pass": false,
+            "output_min_v": -6.27614586e-06,
+            "output_max_v": 1.39893912e-05
+          }
+        ],
+        "steady_clock_integrity_pass": false,
+        "measured_stop_s": 3.2e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/extended_ss_low_hot/raw/waveforms.tsv.gz",
+          "original_sha256": "5f9fb4c3169d476bfdf4ec55876d9d93902e6dea5dfb68b68edc208f905c2287",
+          "gzip_sha256": "176877e43080f4623d8fe4e804b113e233d7105edbf8dba65a66a767a046c7e9",
+          "rows": 8108,
+          "columns": 16
+        }
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 2045742387.2825215,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 2115538407.2365348,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2130105237.1176338,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.15,
+          "frequency_hz": 1788222480.2739623,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ss_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.65,
+          "frequency_hz": 1814521624.6522827,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ss_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.15,
+          "frequency_hz": 2020960458.6077952,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ss_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.0992332469473447,
+          "frequency_hz": 1998096816.259712,
+          "run": "results/analog/pll/pvt/20261029T070119Z/extended_ss_low_hot"
+        }
+      ],
+      "same_code_bracket_observed": true,
+      "bracket_codes": [
+        7
+      ],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -2.41831817e-07,
+          "max_v": 6.75347361e-07
+        },
+        "fullrate_cmos": {
+          "min_v": -6.27614586e-06,
+          "max_v": 1.39893912e-05
+        },
+        "fb1": {
+          "min_v": 2.59902431e-07,
+          "max_v": 2.59909285e-07
+        },
+        "fb2": {
+          "min_v": 2.59902878e-07,
+          "max_v": 2.59909346e-07
+        },
+        "fb3": {
+          "min_v": 2.59903416e-07,
+          "max_v": 2.59909678e-07
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "ff_high_cold",
+        "corner": "ff",
+        "supply_v": 1.95,
+        "temperature_c": -40
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_ff_high_cold/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 7,
+        "vctrl_v": 1.3872863640776436,
+        "frequency_hz": 1998522385.209828,
+        "frequency_error_ppm_vs2GHz": -738.8073950860274,
+        "within0p5percent_of2GHz": true,
+        "swing_pp_v": 0.415101642,
+        "common_mode_v": 1.7788116556985136,
+        "active_rail_power_w": 0.037495434685817404,
+        "dummy_rail_power_w": 0.027335527002887473,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000096142233025,
+            "max_abs_cycle_error": 9.614223302456537e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999997010821176,
+            "max_abs_cycle_error": 2.9891788235758554e-06,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.99992606986147,
+            "max_abs_cycle_error": 7.393013853018715e-05,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000000810110025,
+            "max_abs_cycle_error": 8.101100252844162e-07,
+            "pass": true
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 15,
+            "vco_cycles_per_output_period_mean": 1.0000035036461592,
+            "max_abs_cycle_error": 0.00012709801813481914,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_ff_high_cold/raw/waveforms.tsv.gz",
+          "original_sha256": "8a9bf0d530822e9e0d30f034bb6216afdf8660d3d42f6339b864b7741938590d",
+          "gzip_sha256": "dcab29b1e1112325703f60011e33d817bd7cf636d86f8e34ac7254fbbbb07a7d",
+          "rows": 4658,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1933969290.758451,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_high_cold"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 2004482389.3139598,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_high_cold"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2110168039.3786614,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_high_cold"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.3872863640776436,
+          "frequency_hz": 1998522385.209828,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_ff_high_cold"
+        }
+      ],
+      "same_code_bracket_observed": true,
+      "bracket_codes": [
+        7
+      ],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0301196817,
+          "max_v": 2.01517337
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0318801402,
+          "max_v": 2.02157402
+        },
+        "fb1": {
+          "min_v": -0.0301343188,
+          "max_v": 2.01499324
+        },
+        "fb2": {
+          "min_v": -0.0301283282,
+          "max_v": 2.01364599
+        },
+        "fb3": {
+          "min_v": -0.0301328438,
+          "max_v": 2.01500091
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "sf_low_hot",
+        "corner": "sf",
+        "supply_v": 1.65,
+        "temperature_c": 85
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_sf_low_hot/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 7,
+        "vctrl_v": 0.65,
+        "frequency_hz": 2136348989.484451,
+        "frequency_error_ppm_vs2GHz": 68174.4947422256,
+        "within0p5percent_of2GHz": false,
+        "swing_pp_v": 0.254991321,
+        "common_mode_v": 1.4818936799408284,
+        "active_rail_power_w": 0.030495715971548324,
+        "dummy_rail_power_w": 0.022187239062573964,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 0,
+            "vco_cycles_per_output_period_mean": null,
+            "max_abs_cycle_error": null,
+            "pass": false
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 0,
+            "vco_cycles_per_output_period_mean": null,
+            "max_abs_cycle_error": null,
+            "pass": false
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 0,
+            "vco_cycles_per_output_period_mean": null,
+            "max_abs_cycle_error": null,
+            "pass": false
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 0,
+            "vco_cycles_per_output_period_mean": null,
+            "max_abs_cycle_error": null,
+            "pass": false
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 16,
+            "vco_cycles_per_output_period_mean": 0.9990794745660505,
+            "max_abs_cycle_error": 0.009283727699718747,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": false,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_sf_low_hot/raw/waveforms.tsv.gz",
+          "original_sha256": "f95b9f5c238e0d9f846cc3b1a04f8c347a0d00a30534f8183832c9afaf167cc1",
+          "gzip_sha256": "a6fe6f8f35ba6b95cd8d17d07c2fbadd44828b38f53111e041afa5f484d52b1b",
+          "rows": 4066,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 2356531920.921326,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 2400580204.0584083,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 2415152456.131432,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.15,
+          "frequency_hz": 2187711683.831185,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.65,
+          "frequency_hz": 2135981212.4958003,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.15,
+          "frequency_hz": 2331455636.8771772,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_low_hot"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 0.65,
+          "frequency_hz": 2136348989.484451,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_sf_low_hot"
+        }
+      ],
+      "same_code_bracket_observed": false,
+      "bracket_codes": [],
+      "all_sampled_points_above_target": true,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0305690884,
+          "max_v": 1.65029756
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0369931421,
+          "max_v": 1.71641714
+        },
+        "fb1": {
+          "min_v": -0.0305758119,
+          "max_v": 1.65029742
+        },
+        "fb2": {
+          "min_v": -0.0306903261,
+          "max_v": 1.65029719
+        },
+        "fb3": {
+          "min_v": -0.0306847597,
+          "max_v": 1.65029765
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    },
+    {
+      "environment": {
+        "id": "fs_high_cold",
+        "corner": "fs",
+        "supply_v": 1.95,
+        "temperature_c": -40
+      },
+      "preferred_static_metrics": "results/analog/pll/pvt/20261029T070119Z/static_fs_high_cold/metrics_static_recheck.json",
+      "static": {
+        "scope": "static_native_frontend_probe; fixed_control_not_PLL_capture",
+        "code": 5,
+        "vctrl_v": 1.29,
+        "frequency_hz": 1993765388.9732552,
+        "frequency_error_ppm_vs2GHz": -3117.3055133724147,
+        "within0p5percent_of2GHz": true,
+        "swing_pp_v": 0.433508593,
+        "common_mode_v": 1.781206511817343,
+        "active_rail_power_w": 0.036176438313929894,
+        "dummy_rail_power_w": 0.025077157526429892,
+        "steady_clock_checks": [
+          {
+            "node": "active_fb0",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.000000865829774,
+            "max_abs_cycle_error": 8.658297740993248e-07,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb1",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 8.00015520805484,
+            "max_abs_cycle_error": 0.00015520805484037226,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb2",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999993403787627,
+            "max_abs_cycle_error": 6.596212372755872e-06,
+            "pass": true
+          },
+          {
+            "node": "dummy_fb3",
+            "steady_intervals": 1,
+            "vco_cycles_per_output_period_mean": 7.999994374505759,
+            "max_abs_cycle_error": 5.625494241101592e-06,
+            "pass": true
+          },
+          {
+            "node": "fullrate_cmos",
+            "steady_intervals": 15,
+            "vco_cycles_per_output_period_mean": 1.0000013227551876,
+            "max_abs_cycle_error": 0.00026253300577505634,
+            "pass": true
+          }
+        ],
+        "steady_clock_integrity_pass": true,
+        "measured_stop_s": 1.6e-08,
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/static_fs_high_cold/raw/waveforms.tsv.gz",
+          "original_sha256": "92ff1ae9fedded79a75c763e467a2fd2d5177b690db8227f3f75e5fca60acddd",
+          "gzip_sha256": "d503e5fc6131d50689f6146e91a6d08163f6b51f38be9f3aa1f1681815ffe5fc",
+          "rows": 4332,
+          "columns": 16
+        },
+        "original_analysis": "metrics.json",
+        "analysis_method": "static_steady_frequency_times_output_period; retain_all_observed_output_edges_after8ns; no_waveform_extension"
+      },
+      "tuning_samples": [
+        {
+          "code": 7,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1664761741.3180857,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_high_cold"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.4,
+          "frequency_hz": 1717120726.380258,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_high_cold"
+        },
+        {
+          "code": 7,
+          "vctrl_v": 1.6,
+          "frequency_hz": 1815402354.9906766,
+          "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_high_cold"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.2,
+          "frequency_hz": 1802410567.5339162,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_high_cold"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.4,
+          "frequency_hz": 1866167682.45104,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_high_cold"
+        },
+        {
+          "code": 6,
+          "vctrl_v": 1.6,
+          "frequency_hz": 1978779468.3283331,
+          "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_high_cold"
+        },
+        {
+          "code": 5,
+          "vctrl_v": 1.29,
+          "frequency_hz": 1993765388.9732552,
+          "run": "results/analog/pll/pvt/20261029T070119Z/static_fs_high_cold"
+        }
+      ],
+      "same_code_bracket_observed": false,
+      "bracket_codes": [],
+      "all_sampled_points_above_target": false,
+      "all_control_range_covered": false,
+      "observed_cmos_ranges": {
+        "fb0": {
+          "min_v": -0.0352518287,
+          "max_v": 2.01921017
+        },
+        "fullrate_cmos": {
+          "min_v": -0.0375498812,
+          "max_v": 2.02610715
+        },
+        "fb1": {
+          "min_v": -0.0347140807,
+          "max_v": 2.01954205
+        },
+        "fb2": {
+          "min_v": -0.0347582397,
+          "max_v": 2.01964203
+        },
+        "fb3": {
+          "min_v": -0.0346156573,
+          "max_v": 2.01890232
+        }
+      },
+      "all_device_terminal_ranges_verified": false
+    }
+  ],
+  "passive_conditions": [
+    {
+      "name": "tt_27",
+      "section": "tt",
+      "temperature_c": 27,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt_27",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 6507.68860631924,
+        "cap_unit_f": 1.0000011638715168e-12,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 4.0000046554860675e-11,
+        "Cfast_effective_f": 2.0000023277430336e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 3789126.339696587,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": -0.000646614231882628,
+            "phase_difference_deg": 0.0001095778371433464
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 38393.58919535405,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": -0.000362055765732115,
+            "phase_difference_deg": 0.010651513348058987
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 7242.375939372621,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": 0.007236369919107187,
+            "phase_difference_deg": 0.0235371719548462
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 6172.663385422968,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": 0.0090259236661937,
+            "phase_difference_deg": -0.009841963379071507
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 4897.449888496206,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": 0.003850276623647351,
+            "phase_difference_deg": -0.04993645872839058
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_tt_27/raw/ac.tsv.gz",
+          "original_sha256": "b7e24dfdd2acd502f9d8618338537c247f77596f29c53d1dcd8bd9ba55c5d0cd",
+          "gzip_sha256": "e87379d3060eb1c6b8ef40582c2408f5e890f31c68d986a9fc9cd4901258922f",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    },
+    {
+      "name": "ll_27",
+      "section": "ll",
+      "temperature_c": 27,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_ll_27",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 5507.807788457692,
+        "cap_unit_f": 8.802781088884914e-13,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 3.521112435553965e-11,
+        "Cfast_effective_f": 1.7605562177769827e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 4304462.960286208,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": 1.1069511661438967,
+            "phase_difference_deg": -0.02261917252128716
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 43362.2979719767,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": 1.056709459092924,
+            "phase_difference_deg": -2.2171789029230102
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 6774.106986604951,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": -0.57334389357964,
+            "phase_difference_deg": -6.775530078389127
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 5370.3799022013945,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": -1.200325781923585,
+            "phase_difference_deg": -0.6645101028516455
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 4551.352543377706,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": -0.6327402049117774,
+            "phase_difference_deg": 6.547941972880049
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_ll_27/raw/ac.tsv.gz",
+          "original_sha256": "705f8d47085f82b2228d4d738bb28c71bfa53aa537bea4bb086eb06359c3ef37",
+          "gzip_sha256": "1137f06e0bd3129513a7c4f9400145c1f1ca83f0a76044f84e89e38f0949a2ab",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    },
+    {
+      "name": "hh_27",
+      "section": "hh",
+      "temperature_c": 27,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_hh_27",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 7507.569394228134,
+        "cap_unit_f": 1.123184482866676e-12,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 4.492737931466704e-11,
+        "Cfast_effective_f": 2.246368965733352e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 3373549.7454062807,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": -1.0096859651262926,
+            "phase_difference_deg": 0.026484250646134768
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 34483.0793497594,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": -0.9334154994805166,
+            "phase_difference_deg": 2.5556902924815366
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 7866.063022403564,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": 0.7247635114485241,
+            "phase_difference_deg": 4.8945213876426505
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 6944.930083643658,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": 1.0329315989276415,
+            "phase_difference_deg": -0.9899437233223447
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 5036.264642237055,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": 0.24662111924707267,
+            "phase_difference_deg": -6.603999407500815
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_hh_27/raw/ac.tsv.gz",
+          "original_sha256": "bfc89cf32684ce4e6676f640e00df634dd2420aa690f709284abfc2693fe7e97",
+          "gzip_sha256": "bee4a8374849c6408b31c94a14617fe46150a354500086f7c2cfb5ce80151d14",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    },
+    {
+      "name": "hl_27",
+      "section": "hl",
+      "temperature_c": 27,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_hl_27",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 7507.5693942281605,
+        "cap_unit_f": 8.715566551479206e-13,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 3.486226620591683e-11,
+        "Cfast_effective_f": 1.7431133102958413e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 4347552.842460943,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": 1.1934690514835335,
+            "phase_difference_deg": 0.0006307432039828515
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 44058.17671866668,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": 1.1949940814350948,
+            "phase_difference_deg": 0.05822373699610249
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 8342.623916006989,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": 1.2356684010437362,
+            "phase_difference_deg": 0.13846990800288228
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 7117.629582021019,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": 1.2462816912913959,
+            "phase_difference_deg": -0.015222438749241602
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 5638.239256119378,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": 1.2273202785788475,
+            "phase_difference_deg": -0.18228498788101338
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_hl_27/raw/ac.tsv.gz",
+          "original_sha256": "8c6eb02802b2eaa1cbcb9d025eafbbbb9a1c15949e0a0b803480e5db471687f4",
+          "gzip_sha256": "932aa4416569471f0f78a6a15bfa8d79d4302025bd8374354c7f4c380d555f58",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    },
+    {
+      "name": "lh_27",
+      "section": "lh",
+      "temperature_c": 27,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_lh_27",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 5507.8077884576805,
+        "cap_unit_f": 1.1342756709493145e-12,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 4.5371026837972584e-11,
+        "Cfast_effective_f": 2.268551341898629e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 3340544.551834097,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": -1.0950829719037496,
+            "phase_difference_deg": -0.0034880347117868518
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 33813.7800329433,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": -1.10366186707903,
+            "phase_difference_deg": -0.33714572718844377
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 6201.496033710927,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": -1.340455515624138,
+            "phase_difference_deg": -0.8499766600026771
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 5243.58695418731,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": -1.407856474198549,
+            "phase_difference_deg": 0.010714663847083887
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 4208.257388030702,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": -1.3135038508377068,
+            "phase_difference_deg": 0.9310294164716942
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_lh_27/raw/ac.tsv.gz",
+          "original_sha256": "7a5f47da2d542006b4b56eaf777b99b32f766b037460bb4e0d2f0dc9e637aa80",
+          "gzip_sha256": "e41878e05adc63be2b91d2f98a7e2d38fca50e8f3afe95a1e1a2677dfbde2668",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    },
+    {
+      "name": "tt_-40",
+      "section": "tt",
+      "temperature_c": -40,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt_-40",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 6332.142571811965,
+        "cap_unit_f": 1.0000011638715168e-12,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 4.0000046554860675e-11,
+        "Cfast_effective_f": 2.0000023277430336e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 3789126.0745376423,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": -0.000647222061024475,
+            "phase_difference_deg": -0.0022967714087453704
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 38367.032149712555,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": -0.0063722097409505815,
+            "phase_difference_deg": -0.22357207564487075
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 7101.910894849472,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": -0.16288053988076565,
+            "phase_difference_deg": -0.557953974142103
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 6021.219742416984,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": -0.2067364213634039,
+            "phase_difference_deg": 0.008562913630973798
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 4814.550584030835,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": -0.144434662196932,
+            "phase_difference_deg": 0.6100349362073695
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_tt_-40/raw/ac.tsv.gz",
+          "original_sha256": "988ce6f92f10b9d6f6c937afeb68c0246077e5a1dd9a7b31bb46fd6c7c1e7d69",
+          "gzip_sha256": "fb6ef94f06bb0e45310467f5c82f52471816cebab9c7819e9431600576a3b874",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    },
+    {
+      "name": "tt_85",
+      "section": "tt",
+      "temperature_c": 85,
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt_85",
+      "metrics": {
+        "scope": "geometry_fixed_poly_MIM_LF_model; not_extracted_layout",
+        "R_small_signal_ohm": 6713.7192307981495,
+        "cap_unit_f": 1.0000011638715168e-12,
+        "Cint_units": 40,
+        "Cfast_units": 2,
+        "Cint_effective_f": 4.0000046554860675e-11,
+        "Cfast_effective_f": 2.0000023277430336e-12,
+        "MIM_nominal_plate_area_um2": 20692.753714500002,
+        "LF_impedance_comparison": [
+          {
+            "frequency_hz": 1000.0,
+            "Zphysical_magnitude_ohm": 3789126.665991394,
+            "Zideal_magnitude_ohm": 3789408.428730642,
+            "ratio_db": -0.0006458662598421318,
+            "phase_difference_deg": 0.0029341525714138986
+          },
+          {
+            "frequency_hz": 100000.0,
+            "Zphysical_magnitude_ohm": 38425.663021117245,
+            "Zideal_magnitude_ohm": 38395.18959676712,
+            "ratio_db": 0.006891066830490054,
+            "phase_difference_deg": 0.28514175071366127
+          },
+          {
+            "frequency_hz": 1000000.0,
+            "Zphysical_magnitude_ohm": 7408.481174702901,
+            "Zideal_magnitude_ohm": 7236.34469923476,
+            "ratio_db": 0.20419871201308953,
+            "phase_difference_deg": 0.6718084375919164
+          },
+          {
+            "frequency_hz": 2928644.56,
+            "Zphysical_magnitude_ohm": 6349.870729807326,
+            "Zideal_magnitude_ohm": 6166.252407003656,
+            "ratio_db": 0.25487172099723776,
+            "phase_difference_deg": -0.050598318804276475
+          },
+          {
+            "frequency_hz": 10000000.0,
+            "Zphysical_magnitude_ohm": 4991.5884516031165,
+            "Zideal_magnitude_ohm": 4895.279430561982,
+            "ratio_db": 0.16922568372051877,
+            "phase_difference_deg": -0.8115838308396365
+          }
+        ],
+        "dataset": {
+          "path": "results/analog/pll/pvt/20261029T070119Z/lf_tt_85/raw/ac.tsv.gz",
+          "original_sha256": "b87dfcb5fb44efce5ea8e9447720258dc062e23ac6a815983ba278ccc2b91739",
+          "gzip_sha256": "7813c2d204c29310b8afe58698c09f2ee99ec988444af8840a4fa2e1247970c9",
+          "rows": 181,
+          "columns": 9
+        }
+      }
+    }
+  ],
+  "TT_hierarchical_loops": {
+    "loop_tt_ideal_v2": {
+      "scope": "actual_PFD_CP_and_LF; measured_corner_VCO_behavioral_and_ideal_divide8; not_native_PLL_capture",
+      "physical_LF_candidate": false,
+      "target_2GHz_Vctrl_piecewise_fit_v": 1.3931125623591198,
+      "vctrl_min_v": 1.34291042,
+      "vctrl_max_v": 1.46694385,
+      "vctrl_end_v": 1.39329499,
+      "model_control_domain_valid": true,
+      "lock_screen": {
+        "frequency_tolerance_ppm": 100,
+        "phase_span_limit_ps": 20,
+        "hold_required_s": 3.2e-07,
+        "passed": true,
+        "first_continuous_good_window_end_s": 5.420554206098742e-07,
+        "held_since_first_good_window_end_s": 1.4579445793901257e-06,
+        "last_window": {
+          "end_s": 1.9820414059782206e-06,
+          "frequency_error_ppm": -0.4412496479311301,
+          "phase_span_ps": 0.10380808748712524,
+          "good": true
+        }
+      },
+      "windows": [
+        {
+          "end_s": 1.2645406966038922e-07,
+          "frequency_error_ppm": 8650.787765911438,
+          "phase_span_ps": 1076.0088868651317,
+          "good": false
+        },
+        {
+          "end_s": 1.5831032963138598e-07,
+          "frequency_error_ppm": 7973.430764103507,
+          "phase_span_ps": 980.8844008907513,
+          "good": false
+        },
+        {
+          "end_s": 1.9021669608761454e-07,
+          "frequency_error_ppm": 5722.060480293667,
+          "phase_span_ps": 705.4985939331617,
+          "good": false
+        },
+        {
+          "end_s": 2.2215745661340525e-07,
+          "frequency_error_ppm": 3867.67986404557,
+          "phase_span_ps": 477.7445402033458,
+          "good": false
+        },
+        {
+          "end_s": 2.5412178180006503e-07,
+          "frequency_error_ppm": 2514.1063521745277,
+          "phase_span_ps": 310.9673825977625,
+          "good": false
+        },
+        {
+          "end_s": 2.8610141209991594e-07,
+          "frequency_error_ppm": 1574.7573735336307,
+          "phase_span_ps": 194.96289506159857,
+          "good": false
+        },
+        {
+          "end_s": 3.1808890279920645e-07,
+          "frequency_error_ppm": 958.7200758351955,
+          "phase_span_ps": 118.76742468916869,
+          "good": false
+        },
+        {
+          "end_s": 3.5008034332764626e-07,
+          "frequency_error_ppm": 578.1937035662654,
+          "phase_span_ps": 71.65458901005323,
+          "good": false
+        },
+        {
+          "end_s": 3.820735913622307e-07,
+          "frequency_error_ppm": 364.0028673641549,
+          "phase_span_ps": 45.11993176862076,
+          "good": false
+        },
+        {
+          "end_s": 4.140682978595255e-07,
+          "frequency_error_ppm": 251.6784458250765,
+          "phase_span_ps": 31.200274845614327,
+          "good": false
+        },
+        {
+          "end_s": 4.4606402145872857e-07,
+          "frequency_error_ppm": 190.78489233281815,
+          "phase_span_ps": 23.652814049678504,
+          "good": false
+        },
+        {
+          "end_s": 4.780607544495794e-07,
+          "frequency_error_ppm": 150.33853124468698,
+          "phase_span_ps": 18.639175688088947,
+          "good": false
+        },
+        {
+          "end_s": 5.100577618348081e-07,
+          "frequency_error_ppm": 122.25151637634823,
+          "phase_span_ps": 15.157335023478277,
+          "good": false
+        },
+        {
+          "end_s": 5.420554206098742e-07,
+          "frequency_error_ppm": 98.59462289041332,
+          "phase_span_ps": 12.224527965673673,
+          "good": true
+        },
+        {
+          "end_s": 5.740537381739174e-07,
+          "frequency_error_ppm": 79.8283102620978,
+          "phase_span_ps": 9.897920338204349,
+          "good": true
+        },
+        {
+          "end_s": 6.060520840369868e-07,
+          "frequency_error_ppm": 67.03111707762055,
+          "phase_span_ps": 8.311301401823755,
+          "good": true
+        },
+        {
+          "end_s": 6.380503097188647e-07,
+          "frequency_error_ppm": 57.14458446481885,
+          "phase_span_ps": 7.085523574330272,
+          "good": true
+        },
+        {
+          "end_s": 6.700488049455477e-07,
+          "frequency_error_ppm": 51.280181027513194,
+          "phase_span_ps": 6.35841638666163,
+          "good": true
+        },
+        {
+          "end_s": 7.020477653316144e-07,
+          "frequency_error_ppm": 46.64643214602471,
+          "phase_span_ps": 5.783887788374758,
+          "good": true
+        },
+        {
+          "end_s": 7.34046926040012e-07,
+          "frequency_error_ppm": 39.73383889332993,
+          "phase_span_ps": 4.92680026209271,
+          "good": true
+        },
+        {
+          "end_s": 7.660460329550542e-07,
+          "frequency_error_ppm": 32.56791372008294,
+          "phase_span_ps": 4.0382897826073725,
+          "good": true
+        },
+        {
+          "end_s": 7.980452240144253e-07,
+          "frequency_error_ppm": 28.17145682088018,
+          "phase_span_ps": 3.493162238326718,
+          "good": true
+        },
+        {
+          "end_s": 8.300444260764081e-07,
+          "frequency_error_ppm": 26.222369388984035,
+          "phase_span_ps": 3.251488542492234,
+          "good": true
+        },
+        {
+          "end_s": 8.620437458793443e-07,
+          "frequency_error_ppm": 24.786423586498074,
+          "phase_span_ps": 3.073440345142446,
+          "good": true
+        },
+        {
+          "end_s": 8.940431050133066e-07,
+          "frequency_error_ppm": 22.77177326814872,
+          "phase_span_ps": 2.8236355860710685,
+          "good": true
+        },
+        {
+          "end_s": 9.260428296997714e-07,
+          "frequency_error_ppm": 18.548299309362193,
+          "phase_span_ps": 2.299946454261629,
+          "good": true
+        },
+        {
+          "end_s": 9.580427119630328e-07,
+          "frequency_error_ppm": 13.045299089853302,
+          "phase_span_ps": 1.617595985129488,
+          "good": true
+        },
+        {
+          "end_s": 9.900424183306645e-07,
+          "frequency_error_ppm": 10.002384869034486,
+          "phase_span_ps": 1.2402833180665866,
+          "good": true
+        },
+        {
+          "end_s": 1.0220422553671504e-06,
+          "frequency_error_ppm": 6.358881926127324,
+          "phase_span_ps": 0.7884963447896775,
+          "good": true
+        },
+        {
+          "end_s": 1.0540420482828828e-06,
+          "frequency_error_ppm": 6.170635711733041,
+          "phase_span_ps": 0.7651541067613793,
+          "good": true
+        },
+        {
+          "end_s": 1.0860416729957385e-06,
+          "frequency_error_ppm": 8.130418284846286,
+          "phase_span_ps": 1.0081636705389556,
+          "good": true
+        },
+        {
+          "end_s": 1.1180415443044315e-06,
+          "frequency_error_ppm": 6.833975477960053,
+          "phase_span_ps": 0.8565327586651121,
+          "good": true
+        },
+        {
+          "end_s": 1.1500414951223277e-06,
+          "frequency_error_ppm": 5.88790683275775,
+          "phase_span_ps": 0.7300961485108803,
+          "good": true
+        },
+        {
+          "end_s": 1.1820414160279353e-06,
+          "frequency_error_ppm": 4.81407970998049,
+          "phase_span_ps": 0.5969430102949116,
+          "good": true
+        },
+        {
+          "end_s": 1.2140415068723441e-06,
+          "frequency_error_ppm": 1.0174920386241126,
+          "phase_span_ps": 0.22772587724841456,
+          "good": true
+        },
+        {
+          "end_s": 1.2460413958187238e-06,
+          "frequency_error_ppm": 1.1869202203307339,
+          "phase_span_ps": 0.14717793261518566,
+          "good": true
+        },
+        {
+          "end_s": 1.278041390448773e-06,
+          "frequency_error_ppm": 0.7895427975856961,
+          "phase_span_ps": 0.11760943586540591,
+          "good": true
+        },
+        {
+          "end_s": 1.3100414292481876e-06,
+          "frequency_error_ppm": -0.1930067070610164,
+          "phase_span_ps": 0.11760943586540591,
+          "good": true
+        },
+        {
+          "end_s": 1.3420414032874772e-06,
+          "frequency_error_ppm": 0.791332041449877,
+          "phase_span_ps": 0.11096975592659979,
+          "good": true
+        },
+        {
+          "end_s": 1.374041441186626e-06,
+          "frequency_error_ppm": -0.22693258072692402,
+          "phase_span_ps": 0.08645287833567523,
+          "good": true
+        },
+        {
+          "end_s": 1.406041394163486e-06,
+          "frequency_error_ppm": -0.008344210211674863,
+          "phase_span_ps": 0.08645287833567523,
+          "good": true
+        },
+        {
+          "end_s": 1.4380413746060989e-06,
+          "frequency_error_ppm": 0.16322663975998353,
+          "phase_span_ps": 0.09094031595341867,
+          "good": true
+        },
+        {
+          "end_s": 1.4700413879813747e-06,
+          "frequency_error_ppm": -0.07167610893699106,
+          "phase_span_ps": 0.0967603945304838,
+          "good": true
+        },
+        {
+          "end_s": 1.5020413787005392e-06,
+          "frequency_error_ppm": 0.3706768429978524,
+          "phase_span_ps": 0.08001830128405787,
+          "good": true
+        },
+        {
+          "end_s": 1.5340413737269513e-06,
+          "frequency_error_ppm": 0.33789447240195614,
+          "phase_span_ps": 0.08127952254284945,
+          "good": true
+        },
+        {
+          "end_s": 1.5660413861598604e-06,
+          "frequency_error_ppm": -0.14011159377158577,
+          "phase_span_ps": 0.08127952254284945,
+          "good": true
+        },
+        {
+          "end_s": 1.5980413707525629e-06,
+          "frequency_error_ppm": 0.05007870118589608,
+          "phase_span_ps": 0.07948598152253178,
+          "good": true
+        },
+        {
+          "end_s": 1.6300414136589078e-06,
+          "frequency_error_ppm": -0.37204912595178996,
+          "phase_span_ps": 0.12841608443559244,
+          "good": true
+        },
+        {
+          "end_s": 1.6620413044426916e-06,
+          "frequency_error_ppm": 0.6111930765939633,
+          "phase_span_ps": 0.22557675772607017,
+          "good": true
+        },
+        {
+          "end_s": 1.6940413580588985e-06,
+          "frequency_error_ppm": 0.31307818559866973,
+          "phase_span_ps": 0.22557675772607017,
+          "good": true
+        },
+        {
+          "end_s": 1.7260413942321657e-06,
+          "frequency_error_ppm": 0.011584919246132586,
+          "phase_span_ps": 0.22557675772607017,
+          "good": true
+        },
+        {
+          "end_s": 1.7580413912896258e-06,
+          "frequency_error_ppm": -0.18474597707207607,
+          "phase_span_ps": 0.185815225519468,
+          "good": true
+        },
+        {
+          "end_s": 1.790041448257569e-06,
+          "frequency_error_ppm": -0.8685732311164429,
+          "phase_span_ps": 0.12128952487650685,
+          "good": true
+        },
+        {
+          "end_s": 1.8220413691866404e-06,
+          "frequency_error_ppm": 0.011975362257388156,
+          "phase_span_ps": 0.12837398859217977,
+          "good": true
+        },
+        {
+          "end_s": 1.854041340194719e-06,
+          "frequency_error_ppm": 0.3973895981168596,
+          "phase_span_ps": 0.12837398859217977,
+          "good": true
+        },
+        {
+          "end_s": 1.8860413910285166e-06,
+          "frequency_error_ppm": -0.0787204164076627,
+          "phase_span_ps": 0.12837398859217977,
+          "good": true
+        },
+        {
+          "end_s": 1.9180413525935733e-06,
+          "frequency_error_ppm": 0.5826364708472198,
+          "phase_span_ps": 0.11089648927072818,
+          "good": true
+        },
+        {
+          "end_s": 1.950041416594467e-06,
+          "frequency_error_ppm": -0.13187060410313478,
+          "phase_span_ps": 0.10586385487307802,
+          "good": true
+        },
+        {
+          "end_s": 1.9820414059782206e-06,
+          "frequency_error_ppm": -0.4412496479311301,
+          "phase_span_ps": 0.10380808748712524,
+          "good": true
+        }
+      ],
+      "measured_stop_s": 2e-06,
+      "dataset": {
+        "path": "results/analog/pll/pvt/20261029T070119Z/loop_tt_ideal_v2/raw/waveforms.tsv.gz",
+        "original_sha256": "3a83fb7acbbe4eb9403cd9559d722cc49be840f8a901779bdcb6b1e20a9a02dc",
+        "gzip_sha256": "3152954cb226bbc5518c82b71a8b89158c55c001af9a14f0841ea9240950165f"
+      }
+    },
+    "loop_tt_physical_v2": {
+      "scope": "actual_PFD_CP_and_LF; measured_corner_VCO_behavioral_and_ideal_divide8; not_native_PLL_capture",
+      "physical_LF_candidate": true,
+      "target_2GHz_Vctrl_piecewise_fit_v": 1.3931125623591198,
+      "vctrl_min_v": 1.34291035,
+      "vctrl_max_v": 1.46701068,
+      "vctrl_end_v": 1.39328161,
+      "model_control_domain_valid": true,
+      "lock_screen": {
+        "frequency_tolerance_ppm": 100,
+        "phase_span_limit_ps": 20,
+        "hold_required_s": 3.2e-07,
+        "passed": true,
+        "first_continuous_good_window_end_s": 5.420555817840027e-07,
+        "held_since_first_good_window_end_s": 1.4579444182159972e-06,
+        "last_window": {
+          "end_s": 1.982041378510781e-06,
+          "frequency_error_ppm": -0.76360586742652,
+          "phase_span_ps": 0.1423283566487555,
+          "good": true
+        }
+      },
+      "windows": [
+        {
+          "end_s": 1.264533358632707e-07,
+          "frequency_error_ppm": 8656.831651089104,
+          "phase_span_ps": 1076.7630029304835,
+          "good": false
+        },
+        {
+          "end_s": 1.583098232773438e-07,
+          "frequency_error_ppm": 7976.2999162396045,
+          "phase_span_ps": 981.2345684079005,
+          "good": false
+        },
+        {
+          "end_s": 1.902164081115357e-07,
+          "frequency_error_ppm": 5719.4350184535115,
+          "phase_span_ps": 705.1767298055811,
+          "good": false
+        },
+        {
+          "end_s": 2.221573708070684e-07,
+          "frequency_error_ppm": 3862.3263373180894,
+          "phase_span_ps": 477.0858047585409,
+          "good": false
+        },
+        {
+          "end_s": 2.5412187248643754e-07,
+          "frequency_error_ppm": 2507.5415612914044,
+          "phase_span_ps": 310.1574209765076,
+          "good": false
+        },
+        {
+          "end_s": 2.861015792976051e-07,
+          "frequency_error_ppm": 1569.577017672019,
+          "phase_span_ps": 194.3225459891379,
+          "good": false
+        },
+        {
+          "end_s": 3.1808904865008455e-07,
+          "frequency_error_ppm": 955.471168476496,
+          "phase_span_ps": 118.36533023069897,
+          "good": false
+        },
+        {
+          "end_s": 3.500805170076836e-07,
+          "frequency_error_ppm": 576.287281679022,
+          "phase_span_ps": 71.41846537494467,
+          "good": false
+        },
+        {
+          "end_s": 3.8207383090559067e-07,
+          "frequency_error_ppm": 362.21749615084065,
+          "phase_span_ps": 44.898706425661956,
+          "good": false
+        },
+        {
+          "end_s": 4.1406841647561326e-07,
+          "frequency_error_ppm": 252.23945521046787,
+          "phase_span_ps": 31.269804967522713,
+          "good": false
+        },
+        {
+          "end_s": 4.4606414816979905e-07,
+          "frequency_error_ppm": 190.73093491539515,
+          "phase_span_ps": 23.646125881815088,
+          "good": false
+        },
+        {
+          "end_s": 4.780609400585868e-07,
+          "frequency_error_ppm": 150.29428738011495,
+          "phase_span_ps": 18.633691097874706,
+          "good": false
+        },
+        {
+          "end_s": 5.100578747106641e-07,
+          "frequency_error_ppm": 123.1360460225428,
+          "phase_span_ps": 15.26698979002984,
+          "good": false
+        },
+        {
+          "end_s": 5.420555817840027e-07,
+          "frequency_error_ppm": 98.39719974014116,
+          "phase_span_ps": 12.200052316776182,
+          "good": true
+        },
+        {
+          "end_s": 5.740536175910013e-07,
+          "frequency_error_ppm": 81.3842066311743,
+          "phase_span_ps": 10.090820388804921,
+          "good": true
+        },
+        {
+          "end_s": 6.060517982798426e-07,
+          "frequency_error_ppm": 70.31676210211835,
+          "phase_span_ps": 8.71866543233225,
+          "good": true
+        },
+        {
+          "end_s": 6.380501257959964e-07,
+          "frequency_error_ppm": 59.54685952391792,
+          "phase_span_ps": 7.383370924404059,
+          "good": true
+        },
+        {
+          "end_s": 6.700487531053104e-07,
+          "frequency_error_ppm": 52.700821931095376,
+          "phase_span_ps": 6.534557542905509,
+          "good": true
+        },
+        {
+          "end_s": 7.02047735506202e-07,
+          "frequency_error_ppm": 45.373677800997214,
+          "phase_span_ps": 5.626080771341394,
+          "good": true
+        },
+        {
+          "end_s": 7.340469969855581e-07,
+          "frequency_error_ppm": 37.06555642501996,
+          "phase_span_ps": 4.595958644935839,
+          "good": true
+        },
+        {
+          "end_s": 7.660461149774275e-07,
+          "frequency_error_ppm": 30.76255057021804,
+          "phase_span_ps": 3.8144389288384737,
+          "good": true
+        },
+        {
+          "end_s": 7.980452677063228e-07,
+          "frequency_error_ppm": 26.630630781010467,
+          "phase_span_ps": 3.302110279574091,
+          "good": true
+        },
+        {
+          "end_s": 8.300444886649768e-07,
+          "frequency_error_ppm": 25.49610635504962,
+          "phase_span_ps": 3.1614365836824674,
+          "good": true
+        },
+        {
+          "end_s": 8.620437519992556e-07,
+          "frequency_error_ppm": 25.353739875777492,
+          "phase_span_ps": 3.143784037908565,
+          "good": true
+        },
+        {
+          "end_s": 8.940431261753219e-07,
+          "frequency_error_ppm": 23.227638631606595,
+          "phase_span_ps": 2.88016029099778,
+          "good": true
+        },
+        {
+          "end_s": 9.260428501598804e-07,
+          "frequency_error_ppm": 18.670720622671055,
+          "phase_span_ps": 2.3151261321328898,
+          "good": true
+        },
+        {
+          "end_s": 9.580427372619302e-07,
+          "frequency_error_ppm": 13.29361808188878,
+          "phase_span_ps": 1.648386729140453,
+          "good": true
+        },
+        {
+          "end_s": 9.900425382420418e-07,
+          "frequency_error_ppm": 9.09554351391506,
+          "phase_span_ps": 1.127837137549627,
+          "good": true
+        },
+        {
+          "end_s": 1.0220422843115355e-06,
+          "frequency_error_ppm": 6.270046826184483,
+          "phase_span_ps": 0.777480931502992,
+          "good": true
+        },
+        {
+          "end_s": 1.0540420358141318e-06,
+          "frequency_error_ppm": 6.439770985799953,
+          "phase_span_ps": 0.7985264599177216,
+          "good": true
+        },
+        {
+          "end_s": 1.086041861452931e-06,
+          "frequency_error_ppm": 6.937252654326542,
+          "phase_span_ps": 0.8602133616134537,
+          "good": true
+        },
+        {
+          "end_s": 1.118041680911731e-06,
+          "frequency_error_ppm": 6.71153014342174,
+          "phase_span_ps": 0.8322241522881155,
+          "good": true
+        },
+        {
+          "end_s": 1.1500415697182587e-06,
+          "frequency_error_ppm": 5.52891967720015,
+          "phase_span_ps": 0.6855822494387649,
+          "good": true
+        },
+        {
+          "end_s": 1.182041557249363e-06,
+          "frequency_error_ppm": 3.597941792499171,
+          "phase_span_ps": 0.4461431770792443,
+          "good": true
+        },
+        {
+          "end_s": 1.2140415411715972e-06,
+          "frequency_error_ppm": 2.663059184282446,
+          "phase_span_ps": 0.3302184594644993,
+          "good": true
+        },
+        {
+          "end_s": 1.246041405998492e-06,
+          "frequency_error_ppm": 2.1919863733010914,
+          "phase_span_ps": 0.2761615361134603,
+          "good": true
+        },
+        {
+          "end_s": 1.278041514704548e-06,
+          "frequency_error_ppm": 0.35408575915774065,
+          "phase_span_ps": 0.20039156182239953,
+          "good": true
+        },
+        {
+          "end_s": 1.3100414188987228e-06,
+          "frequency_error_ppm": 1.3861582652818782,
+          "phase_span_ps": 0.22308774590484923,
+          "good": true
+        },
+        {
+          "end_s": 1.3420414363088178e-06,
+          "frequency_error_ppm": 0.7564782740221432,
+          "phase_span_ps": 0.17672167546235665,
+          "good": true
+        },
+        {
+          "end_s": 1.3740414896244885e-06,
+          "frequency_error_ppm": -0.4868898909604624,
+          "phase_span_ps": 0.19012569021420098,
+          "good": true
+        },
+        {
+          "end_s": 1.4060413684855768e-06,
+          "frequency_error_ppm": 0.973101665469045,
+          "phase_span_ps": 0.14387008282066746,
+          "good": true
+        },
+        {
+          "end_s": 1.4380413868606933e-06,
+          "frequency_error_ppm": 0.5005491467979795,
+          "phase_span_ps": 0.14387008282066746,
+          "good": true
+        },
+        {
+          "end_s": 1.4700415138117039e-06,
+          "frequency_error_ppm": -0.7805556980766681,
+          "phase_span_ps": 0.14826923228849445,
+          "good": true
+        },
+        {
+          "end_s": 1.5020412984246283e-06,
+          "frequency_error_ppm": 1.5621336939553032,
+          "phase_span_ps": 0.2153870754609277,
+          "good": true
+        },
+        {
+          "end_s": 1.5340412627884598e-06,
+          "frequency_error_ppm": 0.9660566842040197,
+          "phase_span_ps": 0.2869965768045223,
+          "good": true
+        },
+        {
+          "end_s": 1.5660414410350828e-06,
+          "frequency_error_ppm": -0.512019085907589,
+          "phase_span_ps": 0.2869965768045223,
+          "good": true
+        },
+        {
+          "end_s": 1.5980413973500068e-06,
+          "frequency_error_ppm": 0.8672701328205079,
+          "phase_span_ps": 0.2780762831016071,
+          "good": true
+        },
+        {
+          "end_s": 1.6300414100594424e-06,
+          "frequency_error_ppm": -1.256274722694073,
+          "phase_span_ps": 0.22590447180874754,
+          "good": true
+        },
+        {
+          "end_s": 1.6620413833581075e-06,
+          "frequency_error_ppm": -0.8488778021620291,
+          "phase_span_ps": 0.1746224281811554,
+          "good": true
+        },
+        {
+          "end_s": 1.6940413732662733e-06,
+          "frequency_error_ppm": 0.3940595332263541,
+          "phase_span_ps": 0.06768612287070207,
+          "good": true
+        },
+        {
+          "end_s": 1.7260414258321204e-06,
+          "frequency_error_ppm": -0.24629125172648259,
+          "phase_span_ps": 0.08621017502068315,
+          "good": true
+        },
+        {
+          "end_s": 1.7580414495459056e-06,
+          "frequency_error_ppm": -0.2781259300643768,
+          "phase_span_ps": 0.10321184320786103,
+          "good": true
+        },
+        {
+          "end_s": 1.790041370429528e-06,
+          "frequency_error_ppm": 0.043666336546621665,
+          "phase_span_ps": 0.10541929555994223,
+          "good": true
+        },
+        {
+          "end_s": 1.822041370206206e-06,
+          "frequency_error_ppm": 0.06377442285376844,
+          "phase_span_ps": 0.10967637833251512,
+          "good": true
+        },
+        {
+          "end_s": 1.8540412791212958e-06,
+          "frequency_error_ppm": 0.8229753425403885,
+          "phase_span_ps": 0.1846122352347013,
+          "good": true
+        },
+        {
+          "end_s": 1.8860412982601114e-06,
+          "frequency_error_ppm": 1.1625110811763761,
+          "phase_span_ps": 0.1846122352347013,
+          "good": true
+        },
+        {
+          "end_s": 1.918041346416017e-06,
+          "frequency_error_ppm": 0.35189970382099034,
+          "phase_span_ps": 0.1846122352347013,
+          "good": true
+        },
+        {
+          "end_s": 1.9500413725127333e-06,
+          "frequency_error_ppm": -0.1086812930761738,
+          "phase_span_ps": 0.14703064184422937,
+          "good": true
+        },
+        {
+          "end_s": 1.982041378510781e-06,
+          "frequency_error_ppm": -0.76360586742652,
+          "phase_span_ps": 0.1423283566487555,
+          "good": true
+        }
+      ],
+      "measured_stop_s": 2e-06,
+      "dataset": {
+        "path": "results/analog/pll/pvt/20261029T070119Z/loop_tt_physical_v2/raw/waveforms.tsv.gz",
+        "original_sha256": "70b41e4bead52037d4fdfb415996d97cdb18192f6f9d5f5db6c824379c863db7",
+        "gzip_sha256": "0d787860df8a89a95d36920a0017fd8c15b82e40272a07a8ad54ad25bbf982a6"
+      }
+    }
+  },
+  "key_findings": {
+    "SF_cases_without_sampled_2GHz_bracket": [
+      "sf_nominal",
+      "sf_low_hot"
+    ],
+    "static_clock_checks_pass": 7,
+    "static_clock_checks_not_pass": [
+      "ss_low_hot",
+      "sf_low_hot"
+    ],
+    "ss_low_hot": {
+      "steady_native_VCO_frequency_hz": 1998096816.259712,
+      "VCO_diff_pp_v": 0.298956209,
+      "CML_buffer_diff_pp_v": 0.401438889,
+      "CMOS_clock_max_v": 1.39893912e-05,
+      "feedback_readout_has_no_steady_edges": true
+    },
+    "FS_nominal_32ns_recheck_pass": true,
+    "same_code_target_bracket_environments": 6,
+    "FS_high_cold_exact_calibration_pending": true,
+    "high_voltage_model_range_review": [
+      {
+        "case": "ff_high_cold",
+        "fullrate_cmos_peak_v": 2.02157402,
+        "note": "Observed node excursion above published1.95V MOS model range; device terminal qualification pending."
+      },
+      {
+        "case": "fs_high_cold",
+        "fullrate_cmos_peak_v": 2.02610715,
+        "note": "Observed node excursion above published1.95V MOS model range; device terminal qualification pending."
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_high_cold",
+      "execution_status": "completed",
+      "elapsed_s": 190.71858661499573,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_code6_fs_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 194.21302806401218,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ff_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 213.9500855019869,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 158.75012197400793,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_sf_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 191.55347920799977,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/adaptive_low_ss_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 188.59606220600836,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/extended_fs_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 177.1059325469978,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/extended_ss_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 178.30612503900193,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_high_cold",
+      "execution_status": "completed",
+      "elapsed_s": 237.30916234100005,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ff_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 218.1516365139978,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_high_cold",
+      "execution_status": "completed",
+      "elapsed_s": 176.48147998499917,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_fs_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 186.69155645699357,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 179.90865643099824,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_sf_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 199.4602911640104,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 177.1813228349929,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_ss_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 192.55280837998725,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/frontend_tt_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 206.67834227599087,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_hh_27",
+      "execution_status": "completed",
+      "elapsed_s": 22.23534363199724,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_hl_27",
+      "execution_status": "completed",
+      "elapsed_s": 23.481524047005223,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_lh_27",
+      "execution_status": "completed",
+      "elapsed_s": 24.832353980003973,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_ll_27",
+      "execution_status": "completed",
+      "elapsed_s": 22.55225634299859,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt27",
+      "execution_status": "failed",
+      "elapsed_s": null,
+      "kind": "diagnostic_or_reference",
+      "failure": "Characterization harness connected both ports of Vlink together; use corrected distinct current injection pin/control node in new run."
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt_-40",
+      "execution_status": "completed",
+      "elapsed_s": 23.970047634997172,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt_27",
+      "execution_status": "completed",
+      "elapsed_s": 21.637914161998197,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/lf_tt_85",
+      "execution_status": "completed",
+      "elapsed_s": 20.37922064999293,
+      "kind": "passive",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/loop_tt_ideal",
+      "execution_status": "failed",
+      "elapsed_s": 23.642888788002892,
+      "kind": "mixed_PLL_loop",
+      "failure": "loop simulator/output failure"
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/loop_tt_ideal_v2",
+      "execution_status": "completed",
+      "elapsed_s": 188.8932021199871,
+      "kind": "mixed_PLL_loop",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/loop_tt_physical",
+      "execution_status": "failed",
+      "elapsed_s": 23.836570571991615,
+      "kind": "mixed_PLL_loop",
+      "failure": "loop simulator/output failure"
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/loop_tt_physical_v2",
+      "execution_status": "completed",
+      "elapsed_s": 304.2112430949928,
+      "kind": "mixed_PLL_loop",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_ff_high_cold",
+      "execution_status": "completed",
+      "elapsed_s": 164.12985926200054,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_ff_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 148.59413814300206,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_fs_high_cold",
+      "execution_status": "completed",
+      "elapsed_s": 123.31181168199691,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_fs_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 135.97279955100385,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_sf_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 130.7007403489988,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_sf_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 137.32733264300623,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_ss_low_hot",
+      "execution_status": "completed",
+      "elapsed_s": 133.19743287299934,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_ss_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 141.2198033829918,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/static_tt_nominal",
+      "execution_status": "completed",
+      "elapsed_s": 150.13609652000014,
+      "kind": "frontend",
+      "failure": null
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/tt_klu_smoke",
+      "execution_status": "failed",
+      "elapsed_s": null,
+      "kind": "diagnostic_or_reference",
+      "failure": "KLU initial timestep failure; same Sparse fixture completed. Numerical failure is not a process-corner functional failure."
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/tt_smoke",
+      "execution_status": "failed",
+      "elapsed_s": null,
+      "kind": "diagnostic_or_reference",
+      "failure": "ngspice .param has no mod function; replaced with code-2*floor(code/2) in new test version"
+    },
+    {
+      "run": "results/analog/pll/pvt/20261029T070119Z/tt_smoke_v2",
+      "execution_status": "completed",
+      "elapsed_s": 112.16403651237488,
+      "kind": "diagnostic_or_reference",
+      "failure": null
+    }
+  ],
+  "successful_runs": 36,
+  "excluded_setup_or_solver_runs": 5,
+  "pending": [
+    "dense_VCO_tuning_coverage_and_slow_end_margin_in_SF",
+    "low_voltage_hot_CML_CMOS_interface_repair",
+    "precise_same_frequency_calibration",
+    "full45_environment_and_MOS_RC_cross_grid",
+    "native_PLL_selected_corner_capture",
+    "physical_CML_resistors_and_reference_bias",
+    "mismatch_phase_noise_layout"
+  ],
+  "artifacts_are_not_statistical_noise_or_BER_evidence": true
+}

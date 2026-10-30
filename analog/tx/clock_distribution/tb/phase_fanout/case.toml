@@ -1,0 +1,26 @@
+id = "phase_fanout"
+dut = "analog/tx/clock_distribution"
+level = "integration"
+status = "prototype"
+purpose = "标定真实电容微调与MOS时钟buffer，输出连接实际串化器的时钟负载。"
+analyses = ["tran", "loaded_phase", "fanout"]
+measurements = ["phase_ui", "diff_pp_v", "common_mode", "power"]
+[implementation]
+subcircuit = "serdes_cml_clock_distribution"
+bench = "analog/tx/serializer/tb/functional/tb_serializer16_physical_clock_ngspice.cir.in"
+behavioral_time_delay = false
+buffer_stages_per_rank = 2
+rank_clock_follower_pair_loads = [8, 4, 2, 3]
+trim_capacitance_per_leg_f = [1e-13, 5e-13, 1.6e-13, 2.7e-13]
+target_loaded_phase_ui = [0.0, 0.16, 0.32, 1.0]
+[conditions]
+corner = "tt"
+supply_v = 1.8
+temperature_c = 27
+nominal_ui_s = 2.5e-10
+idealized_source_cm_v = 1.63
+idealized_source_diff_pp_v = 0.4
+idealized_source_edge_ui = 0.08
+[limitations]
+automatic_phase_select_implemented = false
+PVT_or_layout_signoff = false

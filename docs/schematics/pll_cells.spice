@@ -1,0 +1,792 @@
+* Generated Xschem circuit library; load the SKY130 corner separately.
+.subckt pll_balanced_core ref rst_b vbn vbp vbias cfg0 cfg1 cfg2 ctrl up dn fb0 cm0p cm0n cm1p cm1n
++cm2p cm2n cm3p cm3n vdd vdd_dummy vss cwire=0.5f
+*.iopin ref
+*.iopin rst_b
+*.iopin vbn
+*.iopin vbp
+*.iopin vbias
+*.iopin cfg0
+*.iopin cfg1
+*.iopin cfg2
+*.iopin ctrl
+*.iopin up
+*.iopin dn
+*.iopin fb0
+*.iopin cm0p
+*.iopin cm0n
+*.iopin cm1p
+*.iopin cm1n
+*.iopin cm2p
+*.iopin cm2n
+*.iopin cm3p
+*.iopin cm3n
+*.iopin vdd
+*.iopin vdd_dummy
+*.iopin vss
+Xpfd ref fb0 rst_b up dn vdd vss pll_pfd reset_cap=5f out_wn=4 out_wp=8
+Xcp up dn out vbn vbp vdd vss pll_cp wn=5 wp=20 lmirror=1 wsn=2 wsp=4 up_wn=0.5 up_wp=2 up_ln=0.88
+Vsense out filt 0
+Xlf filt ctrl vss pll_loop_filter rz=6.5k cint=40p cfast=2p
+Xclock ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 cm0p cm0n cm1p cm1n cm2p cm2n cm3p cm3n vdd vdd_dummy vss
++ pll_clock_frontend_balanced cwire={cwire} 
+Cup up vss 20f
+Cdn dn vss 20f
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_pfd # of pins=7
+
+
+.subckt pll_pfd ref fb rst_b up dn vdd vss reset_cap=5f out_wn=4 out_wp=8
+*.iopin ref
+*.iopin fb
+*.iopin rst_b
+*.iopin up
+*.iopin dn
+*.iopin vdd
+*.iopin vss
+Xup vdd ref clear_b qu vdd vss pll_cmos_dff_reset
+Xdn vdd fb clear_b qd vdd vss pll_cmos_dff_reset
+Xdetect qu qd request_b vdd vss serdes_cmos_nand2 wn=2 wp=2
+Xdelay1 request_b rd1 vdd vss serdes_cmos_inv wn=1 wp=2
+Xdelay2 rd1 rd2 vdd vss serdes_cmos_inv wn=1 wp=2
+Cd1 rd1 vss {reset_cap} 
+Cd2 rd2 vss {reset_cap} 
+Xclear rst_b rd2 clear_b vdd vss serdes_cmos_and2
+Xub1 qu ub vdd vss serdes_cmos_inv wn=2 wp=4
+Xub2 ub up vdd vss serdes_cmos_inv wn={out_wn} wp={out_wp} 
+Xdb1 qd db vdd vss serdes_cmos_inv wn=2 wp=4
+Xdb2 db dn vdd vss serdes_cmos_inv wn={out_wn} wp={out_wp} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_cp # of pins=7
+
+
+.subckt pll_cp up dn out vbn vbp vdd vss wn=5 wp=20 lmirror=1 wsn=2 wsp=4 up_wn=0.5 up_wp=2
++up_ln=0.88
+*.iopin up
+*.iopin dn
+*.iopin out
+*.iopin vbn
+*.iopin vbp
+*.iopin vdd
+*.iopin vss
+Xupn up_b up vss vss serdes_nfet w={up_wn} l={up_ln} nf=1 
+Xupp up_b up vdd vdd serdes_pfet w={up_wp} l=0.15 nf=1 
+Xdn1 dn dn_b vdd vss serdes_cmos_inv wn=1 wp=2
+Xdn2 dn_b dn_on vdd vss serdes_cmos_inv wn=1 wp=2
+Xp ps vbp vdd vdd serdes_pfet w={wp} l={lmirror} nf=4 
+Xps out up_b ps vdd serdes_pfet w={wsp} l=0.15 nf=1 
+Xns out dn_on ns vss serdes_nfet w={wsn} l=0.15 nf=1 
+Xn ns vbn vss vss serdes_nfet w={wn} l={lmirror} nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_loop_filter # of pins=3
+
+
+.subckt pll_loop_filter cp_in vctrl vss rz=6.5k cint=40p cfast=2p
+*.iopin cp_in
+*.iopin vctrl
+*.iopin vss
+Vlink cp_in vctrl 0
+Cf vctrl vss {cfast} m=1 
+Rz vctrl z {rz} m=1 
+Ci z vss {cint} m=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_clock_frontend_balanced # of pins=18
+
+
+.subckt pll_clock_frontend_balanced ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 cm0p cm0n cm1p cm1n cm2p
++cm2n cm3p cm3n vdd vdd_dummy vss cwire=0.5f
+*.iopin ctrl
+*.iopin cfg0
+*.iopin cfg1
+*.iopin cfg2
+*.iopin vbias
+*.iopin rst_b
+*.iopin fb0
+*.iopin cm0p
+*.iopin cm0n
+*.iopin cm1p
+*.iopin cm1n
+*.iopin cm2p
+*.iopin cm2n
+*.iopin cm3p
+*.iopin cm3n
+*.iopin vdd
+*.iopin vdd_dummy
+*.iopin vss
+Xvco v0p v0n v1p v1n v2p v2n v3p v3n ctrl cfg0 cfg1 cfg2 vbias vdd vss pll_vco_ring4 wn=40 nfin=8
++wt=20 lt=0.5 rload=400 varw=15 varl=0.5 capw=2 capl=5 sw=1
+Xbuf0 v0p v0n b0p b0n vbias vdd vss serdes_cml_buffer wn=12 nfin=4 wt=12 rload=600
+Xrx0 b0p b0n cm0p cm0n vbias vdd vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8 wtail=6
++pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xpre0 b0p b0n d02p d02n d04p d04n d08p d08n vbias vdd vss pll_cml_prescaler8
+Xfb0 d08p d08n fb0 fb0n vbias vdd vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8 wtail=6
++pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xbuf1 v1p v1n b1p b1n vbias vdd vss serdes_cml_buffer wn=12 nfin=4 wt=12 rload=600
+Xrx1 b1p b1n cm1p cm1n vbias vdd vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8 wtail=6
++pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xpre1 b1p b1n d12p d12n d14p d14n d18p d18n vbias vdd_dummy vss pll_cml_prescaler8
+Xfb1 d18p d18n fb1 fb1n vbias vdd_dummy vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8
++wtail=6 pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xload1 vdd_dummy fb1 rst_b dq1 vdd_dummy vss serdes_cmos_dff_reset
+Xbuf2 v2p v2n b2p b2n vbias vdd vss serdes_cml_buffer wn=12 nfin=4 wt=12 rload=600
+Xrx2 b2p b2n cm2p cm2n vbias vdd vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8 wtail=6
++pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xpre2 b2p b2n d22p d22n d24p d24n d28p d28n vbias vdd_dummy vss pll_cml_prescaler8
+Xfb2 d28p d28n fb2 fb2n vbias vdd_dummy vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8
++wtail=6 pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xload2 vdd_dummy fb2 rst_b dq2 vdd_dummy vss serdes_cmos_dff_reset
+Xbuf3 v3p v3n b3p b3n vbias vdd vss serdes_cml_buffer wn=12 nfin=4 wt=12 rload=600
+Xrx3 b3p b3n cm3p cm3n vbias vdd vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8 wtail=6
++pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xpre3 b3p b3n d32p d32n d34p d34n d38p d38n vbias vdd_dummy vss pll_cml_prescaler8
+Xfb3 d38p d38n fb3 fb3n vbias vdd_dummy vss serdes_cml_to_cmos wsf=20 wsf_sink=2 win=6 wload=8
++wtail=6 pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+Xload3 vdd_dummy fb3 rst_b dq3 vdd_dummy vss serdes_cmos_dff_reset
+Cw0p v0p vss {cwire} 
+Cw0n v0n vss {cwire} 
+Ccm0p cm0p vss 20f
+Ccm0n cm0n vss 20f
+Cfb0 fb0 vss 20f
+Cfb0n fb0n vss 20f
+Cdiv02p d02p vss 5f
+Cdiv02n d02n vss 5f
+Cdiv04p d04p vss 5f
+Cdiv04n d04n vss 5f
+Cdiv08p d08p vss 5f
+Cdiv08n d08n vss 5f
+Cw1p v1p vss {cwire} 
+Cw1n v1n vss {cwire} 
+Ccm1p cm1p vss 20f
+Ccm1n cm1n vss 20f
+Cfb1 fb1 vss 20f
+Cfb1n fb1n vss 20f
+Cdiv12p d12p vss 5f
+Cdiv12n d12n vss 5f
+Cdiv14p d14p vss 5f
+Cdiv14n d14n vss 5f
+Cdiv18p d18p vss 5f
+Cdiv18n d18n vss 5f
+Cdq1 dq1 vss 20f
+Cw2p v2p vss {cwire} 
+Cw2n v2n vss {cwire} 
+Ccm2p cm2p vss 20f
+Ccm2n cm2n vss 20f
+Cfb2 fb2 vss 20f
+Cfb2n fb2n vss 20f
+Cdiv22p d22p vss 5f
+Cdiv22n d22n vss 5f
+Cdiv24p d24p vss 5f
+Cdiv24n d24n vss 5f
+Cdiv28p d28p vss 5f
+Cdiv28n d28n vss 5f
+Cdq2 dq2 vss 20f
+Cw3p v3p vss {cwire} 
+Cw3n v3n vss {cwire} 
+Ccm3p cm3p vss 20f
+Ccm3n cm3n vss 20f
+Cfb3 fb3 vss 20f
+Cfb3n fb3n vss 20f
+Cdiv32p d32p vss 5f
+Cdiv32n d32n vss 5f
+Cdiv34p d34p vss 5f
+Cdiv34n d34n vss 5f
+Cdiv38p d38p vss 5f
+Cdiv38n d38n vss 5f
+Cdq3 dq3 vss 20f
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_cmos_dff_reset # of pins=6
+
+
+.subckt pll_cmos_dff_reset d clk rst_b q vdd vss
+*.iopin d
+*.iopin clk
+*.iopin rst_b
+*.iopin q
+*.iopin vdd
+*.iopin vss
+Xcore d clk rst_b q vdd vss serdes_cmos_dff_reset
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_nand2 # of pins=5
+
+
+.subckt serdes_cmos_nand2 a b y vdd vss wn=2 wp=2
+*.iopin a
+*.iopin b
+*.iopin y
+*.iopin vdd
+*.iopin vss
+Xna y a mid vss serdes_nfet w={wn} l=0.15 nf=1 
+Xnb mid b vss vss serdes_nfet w={wn} l=0.15 nf=1 
+Xpa y a vdd vdd serdes_pfet w={wp} l=0.15 nf=1 
+Xpb y b vdd vdd serdes_pfet w={wp} l=0.15 nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_inv # of pins=4
+
+
+.subckt serdes_cmos_inv a y vdd vss wn=1 wp=2
+*.iopin a
+*.iopin y
+*.iopin vdd
+*.iopin vss
+Xn y a vss vss serdes_nfet w={wn} l=0.15 nf=1 
+Xp y a vdd vdd serdes_pfet w={wp} l=0.15 nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_and2 # of pins=5
+
+
+.subckt serdes_cmos_and2 a b y vdd vss
+*.iopin a
+*.iopin b
+*.iopin y
+*.iopin vdd
+*.iopin vss
+Xn a b yn vdd vss serdes_cmos_nand2 wn=2 wp=2
+Xi yn y vdd vss serdes_cmos_inv wn=1 wp=2
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_nfet # of pins=4
+
+
+.subckt serdes_nfet d g s b w=1 l=0.15 nf=1
+*.iopin d
+*.iopin g
+*.iopin s
+*.iopin b
+Xmos d g s b sky130_fd_pr__nfet_01v8 w={w} l={l} nf={nf} ad={floor((nf+1)/2)*(w/nf)*0.29} as={floor((nf+2)/2)*(w/nf)*0.29}
++ pd={2*floor((nf+1)/2)*(w/nf+0.29)} ps={2*floor((nf+2)/2)*(w/nf+0.29)} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_pfet # of pins=4
+
+
+.subckt serdes_pfet d g s b w=3 l=0.15 nf=1
+*.iopin d
+*.iopin g
+*.iopin s
+*.iopin b
+Xmos d g s b sky130_fd_pr__pfet_01v8 w={w} l={l} nf={nf} ad={floor((nf+1)/2)*(w/nf)*0.29} as={floor((nf+2)/2)*(w/nf)*0.29}
++ pd={2*floor((nf+1)/2)*(w/nf+0.29)} ps={2*floor((nf+2)/2)*(w/nf+0.29)} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_vco_ring4 # of pins=15
+
+
+.subckt pll_vco_ring4 q0p q0n q1p q1n q2p q2n q3p q3n vctrl b0 b1 b2 vbias vdd vss wn=40 nfin=8
++wt=20 lt=0.5 rload=400 varw=15 varl=0.5 capw=2 capl=5 sw=1
+*.iopin q0p
+*.iopin q0n
+*.iopin q1p
+*.iopin q1n
+*.iopin q2p
+*.iopin q2n
+*.iopin q3p
+*.iopin q3n
+*.iopin vctrl
+*.iopin b0
+*.iopin b1
+*.iopin b2
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+X0 q3n q3p q0p q0n vbias vdd vss serdes_cml_delay wn={wn} lin=0.15 nfin={nfin} wt={wt} lt={lt} nftail=4
++ rload={rload} 
+X1 q0p q0n q1p q1n vbias vdd vss serdes_cml_delay wn={wn} lin=0.15 nfin={nfin} wt={wt} lt={lt} nftail=4
++ rload={rload} 
+X2 q1p q1n q2p q2n vbias vdd vss serdes_cml_delay wn={wn} lin=0.15 nfin={nfin} wt={wt} lt={lt} nftail=4
++ rload={rload} 
+X3 q2p q2n q3p q3n vbias vdd vss serdes_cml_delay wn={wn} lin=0.15 nfin={nfin} wt={wt} lt={lt} nftail=4
++ rload={rload} 
+Xv0p q0p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv0n q0n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv1p q1p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv1n q1n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv2p q2p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv2n q2n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv3p q3p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xv3n q3n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} 
+Xc0p q0p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc0n q0n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc1p q1p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc1n q1n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc2p q2p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc2n q2n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc3p q3p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+Xc3n q3n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cml_buffer # of pins=7
+
+
+.subckt serdes_cml_buffer inp inn outp outn vbias vdd vss wn=12 nfin=4 wt=12 rload=600
+*.iopin inp
+*.iopin inn
+*.iopin outp
+*.iopin outn
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+Xgain inp inn outn outp vbias vdd vss serdes_cml_delay wn={wn} lin=0.15 nfin={nfin} wt={wt} lt=0.5 nftail=4
++ rload={rload} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cml_to_cmos # of pins=7
+
+
+.subckt serdes_cml_to_cmos inp inn outp outn vbias vdd vss wsf=20 wsf_sink=2 win=6 wload=8 wtail=6
++pre_wn=1 pre_wp=3.6 out_wn=4 out_wp=8
+*.iopin inp
+*.iopin inn
+*.iopin outp
+*.iopin outn
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+Xfp vdd inp fp vss serdes_nfet_lvt w={wsf} l=0.15 nf=1 
+Xfn vdd inn fn vss serdes_nfet_lvt w={wsf} l=0.15 nf=1 
+Xsp fp vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1 
+Xsn fn vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1 
+Xap fp fn ap vbias vdd vss serdes_rx_diff_to_se win={win} nfin=1 wload={wload} nfload=2 wtail={wtail}
++ 
+Xan fn fp an vbias vdd vss serdes_rx_diff_to_se win={win} nfin=1 wload={wload} nfload=2 wtail={wtail}
++ 
+Xbp ap bp vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp} nfn=1 nfp=1 
+Xbn an bn vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp} nfn=1 nfp=1 
+Xop bp rawp vdd vss serdes_rx_inverter wn=4 wp=12 nfn=1 nfp=4
+Xon bn rawn vdd vss serdes_rx_inverter wn=4 wp=12 nfn=1 nfp=4
+Xrestore rawp rawn outp outn vdd vss serdes_rx_clock_restorer out_wn={out_wn} out_wp={out_wp} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_cml_prescaler8 # of pins=11
+
+
+.subckt pll_cml_prescaler8 clkp clkn q2p q2n q4p q4n q8p q8n vbias vdd vss
+*.iopin clkp
+*.iopin clkn
+*.iopin q2p
+*.iopin q2n
+*.iopin q4p
+*.iopin q4n
+*.iopin q8p
+*.iopin q8n
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+X2 clkp clkn q2p q2n m2p m2n vbias vdd vss pll_cml_div2 wsf=40 wsf_sink=4 wdata=20 whold=80
++wclock=64 wtail=12 rload=600
+X4 q2p q2n q4p q4n m4p m4n vbias vdd vss pll_cml_div2 wsf=40 wsf_sink=4 wdata=20 whold=80 wclock=64
++wtail=12 rload=600
+X8 q4p q4n q8p q8n m8p m8n vbias vdd vss pll_cml_div2 wsf=40 wsf_sink=4 wdata=20 whold=80 wclock=64
++wtail=12 rload=600
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_dff_reset # of pins=6
+
+
+.subckt serdes_cmos_dff_reset d clk rst_b q vdd vss
+*.iopin d
+*.iopin clk
+*.iopin rst_b
+*.iopin q
+*.iopin vdd
+*.iopin vss
+Xcb clk clk_b vdd vss serdes_cmos_inv wn=1 wp=2
+Xme clk slave_en master_en vdd vss serdes_cmos_nor2 wn=1 wp=4
+Xse clk_b master_en slave_en vdd vss serdes_cmos_nor2 wn=1 wp=4
+Xm d master_en rst_b m vdd vss serdes_cmos_latch_reset
+Xs m slave_en rst_b q vdd vss serdes_cmos_latch_reset
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cml_delay # of pins=7
+
+
+.subckt serdes_cml_delay inp inn outp outn vbias vdd vss wn=40 lin=0.15 nfin=8 wt=20 lt=0.5
++nftail=4 rload=400
+*.iopin inp
+*.iopin inn
+*.iopin outp
+*.iopin outn
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+Rp vdd outp {rload} 
+Rn vdd outn {rload} 
+Xmp outp inp tail vss sky130_fd_pr__nfet_01v8_lvt w={wn} l={lin} nf={nfin} ad={floor((nfin+1)/2)*(wn/nfin)*0.29}
++ as={floor((nfin+2)/2)*(wn/nfin)*0.29} pd={2*floor((nfin+1)/2)*(wn/nfin+0.29)} ps={2*floor((nfin+2)/2)*(wn/nfin+0.29)}
++ 
+Xmn outn inn tail vss sky130_fd_pr__nfet_01v8_lvt w={wn} l={lin} nf={nfin} ad={floor((nfin+1)/2)*(wn/nfin)*0.29}
++ as={floor((nfin+2)/2)*(wn/nfin)*0.29} pd={2*floor((nfin+1)/2)*(wn/nfin+0.29)} ps={2*floor((nfin+2)/2)*(wn/nfin+0.29)}
++ 
+Xtail tail vbias vss vss sky130_fd_pr__nfet_01v8 w={wt} l={lt} nf={nftail} ad={floor((nftail+1)/2)*(wt/nftail)*0.29}
++ as={floor((nftail+2)/2)*(wt/nftail)*0.29} pd={2*floor((nftail+1)/2)*(wt/nftail+0.29)} ps={2*floor((nftail+2)/2)*(wt/nftail+0.29)}
++ 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_vco_cap_bank # of pins=5
+
+
+.subckt pll_vco_cap_bank node b0 b1 b2 vss capw=2 capl=2 sw=1
+*.iopin node
+*.iopin b0
+*.iopin b1
+*.iopin b2
+*.iopin vss
+X00 node b0 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+X10 node b1 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+X11 node b1 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+X20 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+X21 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+X22 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+X23 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_nfet_lvt # of pins=4
+
+
+.subckt serdes_nfet_lvt d g s b w=1 l=0.15 nf=1
+*.iopin d
+*.iopin g
+*.iopin s
+*.iopin b
+Xmos d g s b sky130_fd_pr__nfet_01v8_lvt w={w} l={l} nf={nf} ad={floor((nf+1)/2)*(w/nf)*0.29} as={floor((nf+2)/2)*(w/nf)*0.29}
++ pd={2*floor((nf+1)/2)*(w/nf+0.29)} ps={2*floor((nf+2)/2)*(w/nf+0.29)} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_rx_diff_to_se # of pins=6
+
+
+.subckt serdes_rx_diff_to_se inp inn out vbias vdd vss win=6 nfin=1 wload=8 nfload=2 wtail=6
+*.iopin inp
+*.iopin inn
+*.iopin out
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+Xip mirror inp tail vss serdes_nfet_lvt w={win} l=0.15 nf={nfin} 
+Xin out inn tail vss serdes_nfet_lvt w={win} l=0.15 nf={nfin} 
+Xlp mirror mirror vdd vdd serdes_pfet w={wload} l=0.15 nf={nfload} 
+Xln out mirror vdd vdd serdes_pfet w={wload} l=0.15 nf={nfload} 
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=0.5 nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_rx_inverter # of pins=4
+
+
+.subckt serdes_rx_inverter in out vdd vss wn=1 wp=3 nfn=1 nfp=1
+*.iopin in
+*.iopin out
+*.iopin vdd
+*.iopin vss
+Xn out in vss vss serdes_nfet w={wn} l=0.15 nf={nfn} 
+Xp out in vdd vdd serdes_pfet w={wp} l=0.15 nf={nfp} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_rx_clock_restorer # of pins=6
+
+
+.subckt serdes_rx_clock_restorer rawp rawn outp outn vdd vss out_wn=4 out_wp=8
+*.iopin rawp
+*.iopin rawn
+*.iopin outp
+*.iopin outn
+*.iopin vdd
+*.iopin vss
+Xdp1 rawp dp1 vdd vss serdes_rx_inverter wn=0.5 wp=1.5 nfn=1 nfp=1
+Xdp2 dp1 dp2 vdd vss serdes_rx_inverter wn=0.5 wp=1.5 nfn=1 nfp=1
+Xdp3 dp2 dp3 vdd vss serdes_rx_inverter wn=0.5 wp=1.5 nfn=1 nfp=1
+Xdn1 rawn dn1 vdd vss serdes_rx_inverter wn=0.5 wp=1.5 nfn=1 nfp=1
+Xdn2 dn1 dn2 vdd vss serdes_rx_inverter wn=0.5 wp=1.5 nfn=1 nfp=1
+Xdn3 dn2 dn3 vdd vss serdes_rx_inverter wn=0.5 wp=1.5 nfn=1 nfp=1
+Xset rawp dp3 set_b vdd vss serdes_rx_nand2 wn=2 wp=3
+Xreset rawn dn3 reset_b vdd vss serdes_rx_nand2 wn=2 wp=3
+Xqp set_b qn qp vdd vss serdes_rx_nand2 wn=4 wp=6
+Xqn reset_b qp qn vdd vss serdes_rx_nand2 wn=4 wp=6
+Xrp1 qp rp1 vdd vss serdes_rx_inverter wn=2 wp=6 nfn=1 nfp=1
+Xrp2 rp1 rp2 vdd vss serdes_rx_inverter wn=1 wp=3 nfn=1 nfp=1
+Xrn1 qn rn1 vdd vss serdes_rx_inverter wn=2 wp=6 nfn=1 nfp=1
+Xrn2 rn1 rn2 vdd vss serdes_rx_inverter wn=1 wp=3 nfn=1 nfp=1
+Xbp qp rp2 bp vdd vss serdes_rx_nand2 wn=2 wp=3
+Xbn qn rn2 bn vdd vss serdes_rx_nand2 wn=2 wp=3
+Xop bp outp vdd vss serdes_rx_inverter wn={out_wn} wp={out_wp} nfn=1 nfp=4 
+Xon bn outn vdd vss serdes_rx_inverter wn={out_wn} wp={out_wp} nfn=1 nfp=4 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_cml_div2 # of pins=9
+
+
+.subckt pll_cml_div2 clkp clkn qp qn mp mn vbias vdd vss wsf=40 wsf_sink=4 wdata=20 whold=80
++wclock=64 wtail=12 rload=600
+*.iopin clkp
+*.iopin clkn
+*.iopin qp
+*.iopin qn
+*.iopin mp
+*.iopin mn
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} l=0.15 nf=4 
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} l=0.15 nf=4 
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1 
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1 
+Xmaster qn qp mp mn ckp ckn vbias vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail}
++ rload={rload} 
+Xslave mp mn qp qn ckn ckp vbias vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail}
++ rload={rload} 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_nor2 # of pins=5
+
+
+.subckt serdes_cmos_nor2 a b y vdd vss wn=1 wp=4
+*.iopin a
+*.iopin b
+*.iopin y
+*.iopin vdd
+*.iopin vss
+Xna y a vss vss serdes_nfet w={wn} l=0.15 nf=1 
+Xnb y b vss vss serdes_nfet w={wn} l=0.15 nf=1 
+Xpa y a mid vdd serdes_pfet w={wp} l=0.15 nf=1 
+Xpb mid b vdd vdd serdes_pfet w={wp} l=0.15 nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_latch_reset # of pins=6
+
+
+.subckt serdes_cmos_latch_reset d en rst_b q vdd vss
+*.iopin d
+*.iopin en
+*.iopin rst_b
+*.iopin q
+*.iopin vdd
+*.iopin vss
+Xeb en en_b vdd vss serdes_cmos_inv wn=1 wp=2
+Xpn en rst_b pass_b vdd vss serdes_cmos_nand2 wn=2 wp=2
+Xpi pass_b pass vdd vss serdes_cmos_inv wn=1 wp=2
+Xhn en_b rst_b hold_b vdd vss serdes_cmos_nand2 wn=2 wp=2
+Xhi hold_b hold vdd vss serdes_cmos_inv wn=1 wp=2
+Xr rst_b rst vdd vss serdes_cmos_inv wn=1 wp=2
+Xpass d x pass pass_b vdd vss serdes_cmos_tgate wn=1 wp=2
+Xhold q x hold hold_b vdd vss serdes_cmos_tgate wn=1 wp=2
+Xreset x rst vss vss serdes_nfet w=4 l=0.15 nf=1
+Xi x q_b vdd vss serdes_cmos_inv wn=1 wp=2
+Xo q_b q vdd vss serdes_cmos_inv wn=1 wp=2
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_vco_cap_unit # of pins=3
+
+
+.subckt pll_vco_cap_unit node en vss capw=2 capl=2 sw=1
+*.iopin node
+*.iopin en
+*.iopin vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w={capw} l={capl} 
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w={sw} l=0.15 nf=1 ad={sw*0.29} as={sw*0.29} pd={2*(sw+0.29)}
++ ps={2*(sw+0.29)} 
+Rdc plate vss 1T
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_rx_nand2 # of pins=5
+
+
+.subckt serdes_rx_nand2 a b out vdd vss wn=2 wp=3
+*.iopin a
+*.iopin b
+*.iopin out
+*.iopin vdd
+*.iopin vss
+Xnt out a mid vss serdes_nfet w={wn} l=0.15 nf=1 
+Xnb mid b vss vss serdes_nfet w={wn} l=0.15 nf=1 
+Xpa out a vdd vdd serdes_pfet w={wp} l=0.15 nf=1 
+Xpb out b vdd vdd serdes_pfet w={wp} l=0.15 nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/pll_cml_latch # of pins=9
+
+
+.subckt pll_cml_latch dp dn qp qn clk_track clk_hold vbias vdd vss wdata=20 whold=20 wclock=24
++wtail=12 rload=600
+*.iopin dp
+*.iopin dn
+*.iopin qp
+*.iopin qn
+*.iopin clk_track
+*.iopin clk_hold
+*.iopin vbias
+*.iopin vdd
+*.iopin vss
+Rp vdd qp {rload} 
+Rn vdd qn {rload} 
+Xdp qn dp track vss serdes_nfet_lvt w={wdata} l=0.15 nf=4 
+Xdn qp dn track vss serdes_nfet_lvt w={wdata} l=0.15 nf=4 
+Xhp qn qp hold vss serdes_nfet_lvt w={whold} l=0.15 nf=4 
+Xhn qp qn hold vss serdes_nfet_lvt w={whold} l=0.15 nf=4 
+Xct track clk_track tail vss serdes_nfet_lvt w={wclock} l=0.15 nf=4 
+Xch hold clk_hold tail vss serdes_nfet_lvt w={wclock} l=0.15 nf=4 
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=0.5 nf=4 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+
+
+
+* expanding symbol: serdes/serdes_cmos_tgate # of pins=6
+
+
+.subckt serdes_cmos_tgate a b en en_b vdd vss wn=1 wp=2
+*.iopin a
+*.iopin b
+*.iopin en
+*.iopin en_b
+*.iopin vdd
+*.iopin vss
+Xn a en b vss serdes_nfet w={wn} l=0.15 nf=1 
+Xp a en_b b vdd serdes_pfet w={wp} l=0.15 nf=1 
+**** begin user architecture code
+**** end user architecture code
+.ends
+
+

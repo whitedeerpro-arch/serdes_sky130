@@ -1,0 +1,23 @@
+status = "characterization_complete_with_margin_and_enable_gaps_not_signoff"
+campaign = "results/analog/tx/pvt/20261029T172144Z"
+baseline = "frozen serializer v0.1 plus existing output-stage prototype"
+report = "docs/tx_pvt.md"
+results = "docs/data/tx_pvt.json"
+contract = "verification/contracts/tx_pvt.toml"
+production_geometry_or_bias_changed = false
+frozen_release_modified = false
+MOS_environment_cells = 45
+standalone_driver_cells = 45
+loaded_serializer_cells = 45
+DC_enable_cells = 45
+DC_enable_states_per_cell = 2
+full_noise_passive_reference_or_layout_PVT = false
+
+standalone_functional_cells = 45
+loaded_TX_functional_cells = 45
+serializer_draft_screen_pass_cells = 36
+selected_C2_cells = 4
+selected_C2_SS_hot_errors_per128 = 6
+selected_C2_FS_hot_errors_per128 = 9
+candidates_promoted = false
+evidence = "docs/data/tx_pvt_evidence.json"

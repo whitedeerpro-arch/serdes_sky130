@@ -1,0 +1,80 @@
+PLL PVT: native loaded VCO, four matched extraction branches and powered dummy
+.lib "@MODEL_LIBRARY@" tt
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/cap_bank_3b.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/vco_ring4.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_latch.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_div2.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_prescaler8.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice"
+.include "@PROJECT_ROOT@/analog/pll/vco/spice/vco_ring4_pvt_candidate.spice"
+.include "@PROJECT_ROOT@/analog/pll/top/spice/clock_frontend_lowov.spice"
+.param supply=1.8 iref=0.85m code=5
+Vcore vdd 0 {supply}
+Vdummy vdum 0 {supply}
+Iref vdd vbias {iref}
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=.5 nf=4
+Vctrl ctrl 0 1.1791930525417336
+Vcode0 cfg0 0 {(code-2*floor(code/2))*supply}
+Vcode1 cfg1 0 {(floor(code/2)-2*floor(code/4))*supply}
+Vcode2 cfg2 0 {floor(code/4)*supply}
+Vreset rst_b 0 PWL(0 0 1n 0 1.02n {supply})
+Vref ref 0 PULSE(0 {supply} 2n 30p 30p 1.97n 4n)
+Xclock ctrl cfg0 cfg1 cfg2 vbias rst_b fb0 c0p c0n c1p c1n c2p c2n c3p c3n vdd vdum 0 pll_clock_frontend_lowov
+* Preserve the real active-branch PFD input load; output load is the existing 20 fF proxy.
+Xpfd ref fb0 rst_b up dn vdd 0 pll_pfd
+Cup up 0 20f
+Cdn dn 0 20f
+* A finite initial perturbation; no periodic forcing of the oscillator.
+Ikick xclock.v0p xclock.v0n PWL(0 1u 20p 1u 21p 0)
+.nodeset v(xclock.xrx0.xrestore.qp)=0 v(xclock.xrx0.xrestore.qn)={supply}
+.nodeset v(xclock.xfb0.xrestore.qp)=0 v(xclock.xfb0.xrestore.qn)={supply}
+.nodeset v(xclock.xrx1.xrestore.qp)=0 v(xclock.xrx1.xrestore.qn)={supply}
+.nodeset v(xclock.xfb1.xrestore.qp)=0 v(xclock.xfb1.xrestore.qn)={supply}
+.nodeset v(xclock.xrx2.xrestore.qp)=0 v(xclock.xrx2.xrestore.qn)={supply}
+.nodeset v(xclock.xfb2.xrestore.qp)=0 v(xclock.xfb2.xrestore.qn)={supply}
+.nodeset v(xclock.xrx3.xrestore.qp)=0 v(xclock.xrx3.xrestore.qn)={supply}
+.nodeset v(xclock.xfb3.xrestore.qp)=0 v(xclock.xfb3.xrestore.qn)={supply}
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u
+.save v(xclock.xpre0.vbias_logic) v(xclock.xpre1.vbias_logic) v(xclock.xpre0.x2.xmaster.tail) @m.xclock.xpre0.x2.xmaster.xtail.xmos.msky130_fd_pr__nfet_01v8[id] @m.xclock.xpre0.x2.xmaster.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat]
++ v(xclock.b0p) v(xclock.b0n) v(xclock.d02p) v(xclock.d02n) v(xclock.d04p) v(xclock.d04n) v(xclock.d08p) v(xclock.d08n) v(xclock.xrx0.fp) v(xclock.xrx0.ap) v(xclock.xrx0.bp) v(xclock.xrx0.rawp) v(c1p) v(c2p) v(c3p)
++ v(ctrl) v(xclock.v0p) v(xclock.v0n) v(xclock.v1p) v(xclock.v1n)
++ v(xclock.v2p) v(xclock.v2n) v(xclock.v3p) v(xclock.v3n)
++ v(xclock.b0p) v(xclock.b0n) v(fb0) v(c0p) v(xclock.fb1) v(xclock.fb2) v(xclock.fb3)
++ v(vbias) v(vdd) i(Vcore) v(vdum) i(Vdummy)
+.save v(xclock.xpre0.b24p) v(xclock.xpre0.b24n) v(xclock.xpre0.b48p) v(xclock.xpre0.b48n) v(xclock.xpre0.x4.ckp) v(xclock.xpre0.x4.ckn) v(xclock.xpre0.x4.xmaster.tail) @m.xclock.xpre0.x4.xmaster.xtail.xmos.msky130_fd_pr__nfet_01v8[id] @m.xclock.xpre0.x4.xmaster.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat] v(xclock.xpre0.x8.xmaster.tail) @m.xclock.xpre0.x8.xmaster.xtail.xmos.msky130_fd_pr__nfet_01v8[id] @m.xclock.xpre0.x8.xmaster.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat]
+.save v(xclock.d24p) v(xclock.d24n) v(xclock.d32p) v(xclock.d32n)
+.control
+set num_threads=1
+set num_threads=1
+set wr_singlescale
+set wr_vecnames
+tran 4p 64n 0 4p
+let d0=v(xclock.v0p)-v(xclock.v0n)
+let d1=v(xclock.v1p)-v(xclock.v1n)
+let d2=v(xclock.v2p)-v(xclock.v2n)
+let d3=v(xclock.v3p)-v(xclock.v3n)
+let b0=v(xclock.b0p)-v(xclock.b0n)
+let cm0=(v(xclock.v0p)+v(xclock.v0n))/2
+let pcore=-v(vdd)*i(Vcore)
+let pdummy=-v(vdum)*i(Vdummy)
+let s250=v(xclock.d08p)-v(xclock.d08n)
+let s500=v(xclock.d24p)-v(xclock.d24n)
+let s1g=v(xclock.d32p)-v(xclock.d32n)
+let s2g=v(xclock.b0n)-v(xclock.b0p)
+let q2=v(xclock.d02p)-v(xclock.d02n)
+let q4=v(xclock.d04p)-v(xclock.d04n)
+let b24=v(xclock.xpre0.b24p)-v(xclock.xpre0.b24n)
+let b48=v(xclock.xpre0.b48p)-v(xclock.xpre0.b48n)
+wrdata native_clocks.tsv s250 s500 s1g s2g d0 d1 d2 d3 b0 q2 q4 b24 b48 pcore pdummy
+quit
+.endc
+.end

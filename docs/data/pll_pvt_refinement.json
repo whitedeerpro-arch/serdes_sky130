@@ -1,0 +1,5696 @@
+{
+  "status": "candidate_characterized; SS_prescaler_and_full_PVT_qualification_remain",
+  "campaign": "results/analog/pll/pvt_refinement/20261029T100030Z",
+  "baseline_promoted": false,
+  "selected_vco_environments": [
+    {
+      "run": "candidate_sweep_tt",
+      "corner": "tt",
+      "supply": 1.8,
+      "temp": 27,
+      "code": 5,
+      "points": [
+        {
+          "ctrl": 1.1,
+          "freq_ghz": 1.9485143581345397,
+          "swing_pp": 0.364462394,
+          "full_clock_periods": 7,
+          "full_clock_max_error_cycles": 0.0005166381374083207
+        },
+        {
+          "ctrl": 1.3,
+          "freq_ghz": 2.047573643406677,
+          "swing_pp": 0.370244696,
+          "full_clock_periods": 7,
+          "full_clock_max_error_cycles": 0.00047795322911647897
+        },
+        {
+          "ctrl": 1.55,
+          "freq_ghz": 2.1533942408690723,
+          "swing_pp": 0.409388439,
+          "full_clock_periods": 7,
+          "full_clock_max_error_cycles": 0.0004314992723247757
+        }
+      ],
+      "tail_metrics": {
+        "freq_ghz": 2.1533760433007716,
+        "vco_swing_pp": 0.409388439,
+        "buffer_swing_pp": 0.545617335,
+        "buffer_cm": 1.6575085078263887,
+        "power_active_mw": 35.43059320282407,
+        "power_dummy_mw": 24.761844094814816,
+        "full_clock": {
+          "periods": 17,
+          "error_vco_cycles": 0.0004986940688900265,
+          "pass_clock": true,
+          "min": -0.0366705716,
+          "max": 1.87637678,
+          "duty": 0.4948864588789934
+        },
+        "feedback": [
+          {
+            "periods": 1,
+            "error_vco_cycles": 1.8905387796586126e-05,
+            "pass_clock": true,
+            "min": -0.0338953829,
+            "max": 1.86913953,
+            "duty": 0.5568537787513689
+          },
+          {
+            "periods": 2,
+            "error_vco_cycles": 3.3184151940091056e-05,
+            "pass_clock": true,
+            "min": -0.033900217,
+            "max": 1.86955655,
+            "duty": 0.5243425996476024
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 1.2403490234902392e-06,
+            "pass_clock": true,
+            "min": -0.0338691283,
+            "max": 1.86956192,
+            "duty": 0.4527167960379064
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 6.991312368143099e-06,
+            "pass_clock": true,
+            "min": -0.0339021485,
+            "max": 1.86946172,
+            "duty": 0.5427750845278344
+          }
+        ],
+        "prescalers": [
+          {
+            "divide": 2,
+            "swing_pp": 0.4518356400000001,
+            "edges": 9
+          },
+          {
+            "divide": 4,
+            "swing_pp": 0.5025389099999997,
+            "edges": 5
+          },
+          {
+            "divide": 8,
+            "swing_pp": 0.5458133600000001,
+            "edges": 2
+          }
+        ],
+        "full_phases": [
+          {
+            "periods": 17,
+            "error_vco_cycles": 0.0004986940688900265,
+            "pass_clock": true,
+            "min": -0.0366705716,
+            "max": 1.87637678,
+            "duty": 0.4948864588789934
+          },
+          {
+            "periods": 17,
+            "error_vco_cycles": 0.0003200545480255279,
+            "pass_clock": true,
+            "min": -0.0366826021,
+            "max": 1.87607193,
+            "duty": 0.5000152031049099
+          },
+          {
+            "periods": 17,
+            "error_vco_cycles": 0.0007109390194623977,
+            "pass_clock": true,
+            "min": -0.0366881511,
+            "max": 1.87617477,
+            "duty": 0.49427403090623245
+          },
+          {
+            "periods": 17,
+            "error_vco_cycles": 0.0005101153068568509,
+            "pass_clock": true,
+            "min": -0.0366779791,
+            "max": 1.87607345,
+            "duty": 0.49356578289442393
+          }
+        ]
+      },
+      "target_bracketed": true,
+      "full_phase_periods_ok": true,
+      "feedback_periods_ok": true,
+      "voltage_model_range_review_pending": false,
+      "dataset": "results/analog/pll/pvt_refinement/20261029T100030Z/candidate_sweep_tt/waveforms.tsv.gz"
+    },
+    {
+      "run": "candidate_sf_nominal_code7",
+      "corner": "sf",
+      "supply": 1.8,
+      "temp": 27,
+      "code": 7,
+      "points": [
+        {
+          "ctrl": 1.2,
+          "freq_ghz": 1.9047176085630197,
+          "swing_pp": 0.35238334
+        },
+        {
+          "ctrl": 1.55,
+          "freq_ghz": 2.020422137430413,
+          "swing_pp": 0.381245059
+        }
+      ],
+      "tail_metrics": {
+        "freq_ghz": 2.020422137430413,
+        "vco_swing_pp": 0.381245059,
+        "buffer_swing_pp": 0.519964185,
+        "buffer_cm": 1.652558990633495,
+        "power_active_mw": 36.33451412291262,
+        "power_dummy_mw": 26.28564914776699,
+        "full_clock": {
+          "periods": 15,
+          "error_vco_cycles": 0.0002729401099239581,
+          "pass_clock": true,
+          "min": -0.0430840807,
+          "max": 1.87445642,
+          "duty": 0.4948923823807285
+        },
+        "feedback": [
+          {
+            "periods": 1,
+            "error_vco_cycles": 5.3721422695218735e-05,
+            "pass_clock": true,
+            "min": -0.0381023542,
+            "max": 1.86806153,
+            "duty": 0.5025123973158744
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 2.638538630250764e-05,
+            "pass_clock": true,
+            "min": -0.0381578164,
+            "max": 1.86801339,
+            "duty": 0.49238608050664484
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 0.00010873607555872411,
+            "pass_clock": true,
+            "min": -0.0382948702,
+            "max": 1.86797846,
+            "duty": 0.5022035741019918
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 6.033963859586322e-05,
+            "pass_clock": true,
+            "min": -0.0383001218,
+            "max": 1.86805211,
+            "duty": 0.5020858351735522
+          }
+        ],
+        "prescalers": [
+          {
+            "divide": 2,
+            "swing_pp": 0.4947870300000001,
+            "edges": 8
+          },
+          {
+            "divide": 4,
+            "swing_pp": 0.5630991000000001,
+            "edges": 4
+          },
+          {
+            "divide": 8,
+            "swing_pp": 0.57259952,
+            "edges": 2
+          }
+        ],
+        "full_phases": [
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.0002729401099239581,
+            "pass_clock": true,
+            "min": -0.0430840807,
+            "max": 1.87445642,
+            "duty": 0.4948923823807285
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.0002987715695826898,
+            "pass_clock": true,
+            "min": -0.0430169312,
+            "max": 1.87446478,
+            "duty": 0.4857871614766686
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.000309523465150896,
+            "pass_clock": true,
+            "min": -0.0430823592,
+            "max": 1.87446196,
+            "duty": 0.4950095148908578
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.0002935585070382718,
+            "pass_clock": true,
+            "min": -0.0430885721,
+            "max": 1.87446903,
+            "duty": 0.49253499058663647
+          }
+        ]
+      },
+      "target_bracketed": true,
+      "full_phase_periods_ok": true,
+      "feedback_periods_ok": true,
+      "voltage_model_range_review_pending": false,
+      "dataset": "results/analog/pll/pvt_refinement/20261029T100030Z/candidate_sf_nominal_code7/waveforms.tsv.gz"
+    },
+    {
+      "run": "candidate_sweep_sf_hot",
+      "corner": "sf",
+      "supply": 1.65,
+      "temp": 85,
+      "code": 7,
+      "points": [
+        {
+          "ctrl": 1.1,
+          "freq_ghz": 1.9915460388629018,
+          "swing_pp": 0.257248177,
+          "full_clock_periods": 7,
+          "full_clock_max_error_cycles": 0.006526470741160084
+        },
+        {
+          "ctrl": 1.3,
+          "freq_ghz": 2.0405372297107487,
+          "swing_pp": 0.29540281199999996,
+          "full_clock_periods": 8,
+          "full_clock_max_error_cycles": 0.00014330690612385233
+        },
+        {
+          "ctrl": 1.55,
+          "freq_ghz": 2.0759537172021134,
+          "swing_pp": 0.29423700399999997,
+          "full_clock_periods": 7,
+          "full_clock_max_error_cycles": 0.00018714324953772454
+        }
+      ],
+      "tail_metrics": {
+        "freq_ghz": 2.075977523359905,
+        "vco_swing_pp": 0.294254695,
+        "buffer_swing_pp": 0.40057144,
+        "buffer_cm": 1.501916934261257,
+        "power_active_mw": 31.963807685272037,
+        "power_dummy_mw": 23.49959637692308,
+        "full_clock": {
+          "periods": 17,
+          "error_vco_cycles": 0.00019861297198686678,
+          "pass_clock": true,
+          "min": -0.0366148587,
+          "max": 1.71613042,
+          "duty": 0.4978808514691172
+        },
+        "feedback": [
+          {
+            "periods": 1,
+            "error_vco_cycles": 7.141730076654085e-06,
+            "pass_clock": true,
+            "min": -0.0314183615,
+            "max": 1.71063279,
+            "duty": 0.5390256678889471
+          },
+          {
+            "periods": 2,
+            "error_vco_cycles": 4.0036125025899594e-05,
+            "pass_clock": true,
+            "min": -0.0315269238,
+            "max": 1.71051191,
+            "duty": 0.5221677222724892
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 8.24927919751417e-06,
+            "pass_clock": true,
+            "min": -0.0315172812,
+            "max": 1.7106775,
+            "duty": 0.507357493213963
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 6.067262505737858e-07,
+            "pass_clock": true,
+            "min": -0.0315217271,
+            "max": 1.71068316,
+            "duty": 0.45621220058098033
+          }
+        ],
+        "prescalers": [
+          {
+            "divide": 2,
+            "swing_pp": 0.421648,
+            "edges": 8
+          },
+          {
+            "divide": 4,
+            "swing_pp": 0.50953703,
+            "edges": 4
+          },
+          {
+            "divide": 8,
+            "swing_pp": 0.5413536999999999,
+            "edges": 2
+          }
+        ],
+        "full_phases": [
+          {
+            "periods": 17,
+            "error_vco_cycles": 0.00019861297198686678,
+            "pass_clock": true,
+            "min": -0.0366148587,
+            "max": 1.71613042,
+            "duty": 0.4978808514691172
+          },
+          {
+            "periods": 16,
+            "error_vco_cycles": 0.0005852708225871917,
+            "pass_clock": true,
+            "min": -0.0366678308,
+            "max": 1.71613473,
+            "duty": 0.489975713129197
+          },
+          {
+            "periods": 17,
+            "error_vco_cycles": 0.0003620030888725756,
+            "pass_clock": true,
+            "min": -0.0366148991,
+            "max": 1.71613364,
+            "duty": 0.4838325634554029
+          },
+          {
+            "periods": 16,
+            "error_vco_cycles": 0.00034789567557758083,
+            "pass_clock": true,
+            "min": -0.0366149188,
+            "max": 1.71636638,
+            "duty": 0.5029525215486447
+          }
+        ]
+      },
+      "target_bracketed": true,
+      "full_phase_periods_ok": true,
+      "feedback_periods_ok": true,
+      "voltage_model_range_review_pending": false,
+      "dataset": "results/analog/pll/pvt_refinement/20261029T100030Z/candidate_sweep_sf_hot/waveforms.tsv.gz"
+    },
+    {
+      "run": "candidate_fs_cold_code4",
+      "corner": "fs",
+      "supply": 1.95,
+      "temp": -40,
+      "code": 4,
+      "points": [
+        {
+          "ctrl": 1.1,
+          "freq_ghz": 1.8504317703675812,
+          "swing_pp": 0.431454168
+        },
+        {
+          "ctrl": 1.55,
+          "freq_ghz": 2.0452975867340464,
+          "swing_pp": 0.423474001
+        }
+      ],
+      "tail_metrics": {
+        "freq_ghz": 2.0453107427655546,
+        "vco_swing_pp": 0.423544668,
+        "buffer_swing_pp": 0.563123311,
+        "buffer_cm": 1.8136159480877114,
+        "power_active_mw": 37.72197701910062,
+        "power_dummy_mw": 25.85067188130009,
+        "full_clock": {
+          "periods": 16,
+          "error_vco_cycles": 0.0003060618661883119,
+          "pass_clock": true,
+          "min": -0.037539821,
+          "max": 2.02654458,
+          "duty": 0.5077700613100143
+        },
+        "feedback": [
+          {
+            "periods": 1,
+            "error_vco_cycles": 1.6345463442313246e-05,
+            "pass_clock": true,
+            "min": -0.0348933233,
+            "max": 2.02024304,
+            "duty": 0.49034975474581466
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 6.11328719486437e-05,
+            "pass_clock": true,
+            "min": -0.0352047732,
+            "max": 2.02042642,
+            "duty": 0.5119500474778078
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 9.781583338863697e-07,
+            "pass_clock": true,
+            "min": -0.0352605342,
+            "max": 2.02017298,
+            "duty": 0.4979969317300369
+          },
+          {
+            "periods": 1,
+            "error_vco_cycles": 1.0318248608420788e-05,
+            "pass_clock": true,
+            "min": -0.0352867228,
+            "max": 2.02024442,
+            "duty": 0.4897463350709379
+          }
+        ],
+        "prescalers": [
+          {
+            "divide": 2,
+            "swing_pp": 0.45162403000000007,
+            "edges": 8
+          },
+          {
+            "divide": 4,
+            "swing_pp": 0.48769187000000014,
+            "edges": 4
+          },
+          {
+            "divide": 8,
+            "swing_pp": 0.52973303,
+            "edges": 2
+          }
+        ],
+        "full_phases": [
+          {
+            "periods": 16,
+            "error_vco_cycles": 0.0003060618661883119,
+            "pass_clock": true,
+            "min": -0.037539821,
+            "max": 2.02654458,
+            "duty": 0.5077700613100143
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.0003467648553632241,
+            "pass_clock": true,
+            "min": -0.0376182585,
+            "max": 2.0265305,
+            "duty": 0.5185631595491752
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.0001729237353673696,
+            "pass_clock": true,
+            "min": -0.037544471,
+            "max": 2.02655852,
+            "duty": 0.4965984458414619
+          },
+          {
+            "periods": 16,
+            "error_vco_cycles": 0.00036022854248063396,
+            "pass_clock": true,
+            "min": -0.0375483704,
+            "max": 2.02652357,
+            "duty": 0.516247635783211
+          }
+        ]
+      },
+      "target_bracketed": true,
+      "full_phase_periods_ok": true,
+      "feedback_periods_ok": true,
+      "voltage_model_range_review_pending": true,
+      "dataset": "results/analog/pll/pvt_refinement/20261029T100030Z/candidate_fs_cold_code4/waveforms.tsv.gz"
+    },
+    {
+      "run": "candidate_ss_hot_code6",
+      "corner": "ss",
+      "supply": 1.65,
+      "temp": 85,
+      "code": 6,
+      "points": [
+        {
+          "ctrl": 1.1,
+          "freq_ghz": 1.9035102903203256,
+          "swing_pp": 0.286716894
+        },
+        {
+          "ctrl": 1.55,
+          "freq_ghz": 2.0343809643641007,
+          "swing_pp": 0.311802785
+        }
+      ],
+      "tail_metrics": {
+        "freq_ghz": 2.034396427074565,
+        "vco_swing_pp": 0.311813026,
+        "buffer_swing_pp": 0.414109638,
+        "buffer_cm": 1.5110705120965346,
+        "power_active_mw": 27.07678903529703,
+        "power_dummy_mw": 16.7290381550495,
+        "full_clock": {
+          "periods": 15,
+          "error_vco_cycles": 0.00017407870292762695,
+          "pass_clock": true,
+          "min": -0.0402812688,
+          "max": 1.72482517,
+          "duty": 0.5060030015007502
+        },
+        "feedback": [
+          {
+            "periods": 0,
+            "error_vco_cycles": 999.0,
+            "pass_clock": false,
+            "min": 1.64999884,
+            "max": 1.64999939,
+            "duty": 1.0
+          },
+          {
+            "periods": 0,
+            "error_vco_cycles": 999.0,
+            "pass_clock": false,
+            "min": 2.59898084e-07,
+            "max": 2.59912094e-07,
+            "duty": 0.0
+          },
+          {
+            "periods": 0,
+            "error_vco_cycles": 999.0,
+            "pass_clock": false,
+            "min": 2.59899174e-07,
+            "max": 2.59912238e-07,
+            "duty": 0.0
+          },
+          {
+            "periods": 0,
+            "error_vco_cycles": 999.0,
+            "pass_clock": false,
+            "min": 2.59900095e-07,
+            "max": 2.59912995e-07,
+            "duty": 0.0
+          }
+        ],
+        "prescalers": [
+          {
+            "divide": 2,
+            "swing_pp": 0.15740383000000002,
+            "edges": 8
+          },
+          {
+            "divide": 4,
+            "swing_pp": 1.0900000000368948e-06,
+            "edges": 17
+          },
+          {
+            "divide": 8,
+            "swing_pp": 0.0,
+            "edges": 0
+          }
+        ],
+        "full_phases": [
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.00017407870292762695,
+            "pass_clock": true,
+            "min": -0.0402812688,
+            "max": 1.72482517,
+            "duty": 0.5060030015007502
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.0001299199710468324,
+            "pass_clock": true,
+            "min": -0.0402702783,
+            "max": 1.72483303,
+            "duty": 0.4894947473736869
+          },
+          {
+            "periods": 16,
+            "error_vco_cycles": 0.00014621071535914076,
+            "pass_clock": true,
+            "min": -0.0402669983,
+            "max": 1.7248104,
+            "duty": 0.5025012506253126
+          },
+          {
+            "periods": 15,
+            "error_vco_cycles": 0.00015069116151344986,
+            "pass_clock": true,
+            "min": -0.0402739276,
+            "max": 1.72482902,
+            "duty": 0.49849924962481196
+          }
+        ]
+      },
+      "target_bracketed": true,
+      "full_phase_periods_ok": true,
+      "feedback_periods_ok": false,
+      "voltage_model_range_review_pending": false,
+      "dataset": "results/analog/pll/pvt_refinement/20261029T100030Z/candidate_ss_hot_code6/waveforms.tsv.gz"
+    }
+  ],
+  "static_sf_low_hot": {
+    "code": 7,
+    "ctrl": 1.134512168374734,
+    "freq_ghz": 1.9948949319803886,
+    "vco_swing_pp": 0.267887977,
+    "buffer_swing_pp": 0.37043903300000003,
+    "buffer_cm": 1.5019310198182494,
+    "power_active_mw": 31.631738296364986,
+    "power_dummy_mw": 23.387565969263104,
+    "full_clock": {
+      "periods": 31,
+      "error_vco_cycles": 0.00025819272792226844,
+      "pass_clock": true,
+      "min": -0.0364114968,
+      "max": 1.71618454,
+      "duty": 0.48948723718092935
+    },
+    "feedback": [
+      {
+        "periods": 3,
+        "error_vco_cycles": 4.5945880328801536e-05,
+        "pass_clock": true,
+        "min": -0.031523143,
+        "max": 1.71071634,
+        "duty": 0.49891946048651203
+      },
+      {
+        "periods": 3,
+        "error_vco_cycles": 2.221461869655883e-05,
+        "pass_clock": true,
+        "min": -0.0314532064,
+        "max": 1.7107166,
+        "duty": 0.4960804145103626
+      },
+      {
+        "periods": 3,
+        "error_vco_cycles": 6.361592905701485e-05,
+        "pass_clock": true,
+        "min": -0.0315213341,
+        "max": 1.7107107,
+        "duty": 0.49891946048651203
+      },
+      {
+        "periods": 3,
+        "error_vco_cycles": 2.0493764943729786e-05,
+        "pass_clock": true,
+        "min": -0.0315135402,
+        "max": 1.71071782,
+        "duty": 0.49633042076051914
+      }
+    ],
+    "prescalers": [
+      {
+        "divide": 2,
+        "swing_pp": 0.41642864999999984,
+        "edges": 16
+      },
+      {
+        "divide": 4,
+        "swing_pp": 0.51385692,
+        "edges": 8
+      },
+      {
+        "divide": 8,
+        "swing_pp": 0.54237856,
+        "edges": 4
+      }
+    ],
+    "full_phases": [
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.00025819272792226844,
+        "pass_clock": true,
+        "min": -0.0364114968,
+        "max": 1.71618454,
+        "duty": 0.48948723718092935
+      },
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.0004543942362082998,
+        "pass_clock": true,
+        "min": -0.0364243626,
+        "max": 1.71618334,
+        "duty": 0.49033027075676905
+      },
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.0005392362462072198,
+        "pass_clock": true,
+        "min": -0.036432544,
+        "max": 1.71618413,
+        "duty": 0.4925123128078197
+      },
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.000243201982425445,
+        "pass_clock": true,
+        "min": -0.0364225018,
+        "max": 1.71618319,
+        "duty": 0.4899872496812424
+      }
+    ],
+    "relative_frequency_error_ppm": -2552.534009805707
+  },
+  "tt_adjacent_code_overlap": {
+    "code4_min_ctrl": 0.8,
+    "code4_min_ghz": 2.0646993200745354,
+    "code5_max_ctrl": 1.55,
+    "code5_max_ghz": 2.1533942408690723,
+    "overlap_mhz": 88.6949207945369,
+    "narrow_window_ctrl": [
+      1.1,
+      1.55
+    ],
+    "narrow_window_gap_mhz": 31.420997067274303,
+    "all_codes_all_corners_overlap_tested": false,
+    "dynamic_code_handover_tested": false
+  },
+  "capacitor_characterization": [
+    {
+      "ctrl": 0.3,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 63.136143999999994,
+      "var18_ff": 74.700291
+    },
+    {
+      "ctrl": 0.5,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 62.94204440000001,
+      "var18_ff": 74.42820540000001
+    },
+    {
+      "ctrl": 0.65,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 62.5574057,
+      "var18_ff": 73.91828269999999
+    },
+    {
+      "ctrl": 0.8,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 61.5105758,
+      "var18_ff": 72.60237459999999
+    },
+    {
+      "ctrl": 0.9,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 59.8510477,
+      "var18_ff": 70.587574
+    },
+    {
+      "ctrl": 1.0,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 56.520602499999995,
+      "var18_ff": 66.6298206
+    },
+    {
+      "ctrl": 1.1,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 50.2947938,
+      "var18_ff": 59.33212840000001
+    },
+    {
+      "ctrl": 1.2,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 39.6864541,
+      "var18_ff": 46.9564673
+    },
+    {
+      "ctrl": 1.3,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 25.7836284,
+      "var18_ff": 30.620508200000003
+    },
+    {
+      "ctrl": 1.4,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 16.3309572,
+      "var18_ff": 19.3877029
+    },
+    {
+      "ctrl": 1.5,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 12.6973029,
+      "var18_ff": 15.040763
+    },
+    {
+      "ctrl": 1.6,
+      "mim2_ff": 9.302249999999999,
+      "mim3_ff": 19.96225,
+      "bank_base_ff": 22.29225,
+      "bank25_ff": 27.457250000000002,
+      "var15_ff": 11.513597800000001,
+      "var18_ff": 13.6226173
+    }
+  ],
+  "receiver_grid": {
+    "rx_buffer_temperature_map_v2": [
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -40,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999993,
+            "max": 1.65000005
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.78223312e-08,
+            "max": 2.7837904e-08
+          }
+        ],
+        "power_mw": 0.555937979497751,
+        "input_cm": 1.5155781382933535,
+        "input_swing_pp": 0.457912223
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 0,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999987,
+            "max": 1.65000015
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -6.5096991e-08,
+            "max": 7.10182892e-08
+          }
+        ],
+        "power_mw": 0.638046372321839,
+        "input_cm": 1.5138511468065967,
+        "input_swing_pp": 0.437751574
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 100,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64996991,
+            "max": 1.65004476
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -1.78650117e-05,
+            "max": 2.49024948e-05
+          }
+        ],
+        "power_mw": 0.9607429163943029,
+        "input_cm": 1.5103870000424788,
+        "input_swing_pp": 0.386058468
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 125,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64974973,
+            "max": 1.65017983
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000835597738,
+            "max": 0.000435252073
+          }
+        ],
+        "power_mw": 1.3797984743508247,
+        "input_cm": 1.5096283734007996,
+        "input_swing_pp": 0.373770783
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 27,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999968,
+            "max": 1.65000041
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -1.63351967e-07,
+            "max": 2.22881456e-07
+          }
+        ],
+        "power_mw": 0.6956704752933534,
+        "input_cm": 1.512823419227886,
+        "input_swing_pp": 0.423620207
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 50,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999801,
+            "max": 1.65000376
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -8.85895375e-07,
+            "max": 2.35847945e-06
+          }
+        ],
+        "power_mw": 0.7611511708610694,
+        "input_cm": 1.5120109060844575,
+        "input_swing_pp": 0.41158729
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 65,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999624,
+            "max": 1.65000978
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.31137096e-06,
+            "max": 6.63331404e-06
+          }
+        ],
+        "power_mw": 0.807697715569715,
+        "input_cm": 1.5115058032933535,
+        "input_swing_pp": 0.40381941099999996
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 85,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6499931,
+            "max": 1.65001963
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.21121197e-06,
+            "max": 1.35657982e-05
+          }
+        ],
+        "power_mw": 0.8750923776201899,
+        "input_cm": 1.5108573619990007,
+        "input_swing_pp": 0.39359705700000003
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": -40,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69999373,
+            "max": 1.70001295
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.84278088e-06,
+            "max": 8.09374529e-06
+          }
+        ],
+        "power_mw": 0.800613343023988,
+        "input_cm": 1.5649605359470264,
+        "input_swing_pp": 0.46095493099999996
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 0,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69988111,
+            "max": 1.70021045
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.47650385e-05,
+            "max": 6.95788848e-05
+          }
+        ],
+        "power_mw": 1.072324902266367,
+        "input_cm": 1.5632113975687159,
+        "input_swing_pp": 0.44048155899999997
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.3001588272417735e-06,
+            "duty": 0.4960694497229614,
+            "min_high_ps": 247.06978308316675,
+            "min_low_ps": 252.92906131711743,
+            "min": -0.0337642819,
+            "max": 1.7703783
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.386259480873342e-06,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 247.06859348656317,
+            "min_low_ps": 252.9302169597436,
+            "min": -0.0337637911,
+            "max": 1.77037823
+          }
+        ],
+        "power_mw": 2.9256591670664673,
+        "input_cm": 1.5596582378510744,
+        "input_swing_pp": 0.388296498
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.5851892155804848e-05,
+            "duty": 0.5000700098013722,
+            "min_high_ps": 249.39728001548715,
+            "min_low_ps": 250.5974660876628,
+            "min": -0.0310342416,
+            "max": 1.76645265
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.632402422572902e-06,
+            "duty": 0.4999299901986278,
+            "min_high_ps": 249.39189721595108,
+            "min_low_ps": 250.60272040928118,
+            "min": -0.0310334085,
+            "max": 1.7664523
+          }
+        ],
+        "power_mw": 2.9817661718290855,
+        "input_cm": 1.5588684640954524,
+        "input_swing_pp": 0.375914838
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 27,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69929485,
+            "max": 1.70047048
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000971000034,
+            "max": 0.000518212803
+          }
+        ],
+        "power_mw": 1.5372991363393305,
+        "input_cm": 1.5621645628385807,
+        "input_swing_pp": 0.42621082600000004
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 0.0076203678043484935,
+            "duty": 0.4865681195367349,
+            "min_high_ps": 240.33070610299185,
+            "min_low_ps": 254.20465217221272,
+            "min": -0.042378968,
+            "max": 1.77897825
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 0.004558877120968474,
+            "duty": 0.4789270497869705,
+            "min_high_ps": 234.7017222279306,
+            "min_low_ps": 259.68758710996843,
+            "min": -0.0416774974,
+            "max": 1.7789289
+          }
+        ],
+        "power_mw": 2.8107855755222393,
+        "input_cm": 1.5613330550999502,
+        "input_swing_pp": 0.41405643599999997
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 8.786741484412275e-06,
+            "duty": 0.4840677694877281,
+            "min_high_ps": 243.190614706031,
+            "min_low_ps": 256.80679281316685,
+            "min": -0.0391212188,
+            "max": 1.77639813
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.4293284103537047e-06,
+            "duty": 0.4839277498849841,
+            "min_high_ps": 243.18786900504492,
+            "min_low_ps": 256.80938533169956,
+            "min": -0.0391206725,
+            "max": 1.77639781
+          }
+        ],
+        "power_mw": 2.8497745141379314,
+        "input_cm": 1.560814129067966,
+        "input_swing_pp": 0.406217638
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.0284515983858284e-06,
+            "duty": 0.49206888964455037,
+            "min_high_ps": 245.6461156154336,
+            "min_low_ps": 254.35306767407056,
+            "min": -0.0358310568,
+            "max": 1.77284992
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.0481062250322637e-06,
+            "duty": 0.4919288700418059,
+            "min_high_ps": 245.64571903283834,
+            "min_low_ps": 254.35342848155926,
+            "min": -0.0358307325,
+            "max": 1.77284991
+          }
+        ],
+        "power_mw": 2.893681468590705,
+        "input_cm": 1.5601453658270863,
+        "input_swing_pp": 0.395898142
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": -40,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.1140556921418465e-08,
+            "duty": 0.49206888964455014,
+            "min_high_ps": 245.33980984239446,
+            "min_low_ps": 254.66018821124163,
+            "min": -0.0775940679,
+            "max": 1.85811154
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.6222214399851396e-09,
+            "duty": 0.4919288700418058,
+            "min_high_ps": 245.33980779127606,
+            "min_low_ps": 254.66019015760506,
+            "min": -0.077594063,
+            "max": 1.85811154
+          }
+        ],
+        "power_mw": 3.0458713446976513,
+        "input_cm": 1.614393088608196,
+        "input_swing_pp": 0.4633729
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.5146748078009864e-08,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.1811555588504,
+            "min_low_ps": 251.81884169945897,
+            "min": -0.0608147016,
+            "max": 1.8434533
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.7573713029814826e-09,
+            "duty": 0.49592943012021706,
+            "min_high_ps": 248.18115267905006,
+            "min_low_ps": 251.8188444411483,
+            "min": -0.0608147024,
+            "max": 1.8434533
+          }
+        ],
+        "power_mw": 3.108657285202399,
+        "input_cm": 1.6126278480109943,
+        "input_swing_pp": 0.442775772
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.263368558772186e-07,
+            "duty": 0.5040705698797829,
+            "min_high_ps": 251.9553997452716,
+            "min_low_ps": 248.0444698460788,
+            "min": -0.0354876568,
+            "max": 1.82003885
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.6180467488080552e-07,
+            "duty": 0.5039305502770389,
+            "min_high_ps": 251.95526335011127,
+            "min_low_ps": 248.04460025472625,
+            "min": -0.0354876206,
+            "max": 1.82003882
+          }
+        ],
+        "power_mw": 3.231799311854073,
+        "input_cm": 1.6090068286931536,
+        "input_swing_pp": 0.390397432
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.5329146793318102e-06,
+            "duty": 0.5040705698797829,
+            "min_high_ps": 252.58280948224768,
+            "min_low_ps": 247.41642846855243,
+            "min": -0.032879704,
+            "max": 1.8158821
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 8.527511121680931e-07,
+            "duty": 0.5039305502770389,
+            "min_high_ps": 252.58202379720598,
+            "min_low_ps": 247.41719055445716,
+            "min": -0.0328794143,
+            "max": 1.81588215
+          }
+        ],
+        "power_mw": 3.273459694477761,
+        "input_cm": 1.6081931641054474,
+        "input_swing_pp": 0.377937884
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 27,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.7663549229117734e-08,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 249.57221108372875,
+            "min_low_ps": 250.4277836765382,
+            "min": -0.0508746232,
+            "max": 1.83540633
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.029633319888262e-09,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 249.57220560054284,
+            "min_low_ps": 250.42778891627077,
+            "min": -0.0508746171,
+            "max": 1.83540633
+          }
+        ],
+        "power_mw": 3.140948062988506,
+        "input_cm": 1.6115667047351325,
+        "input_swing_pp": 0.428474484
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.56006165552958e-08,
+            "duty": 0.5000700098013723,
+            "min_high_ps": 250.47699539001619,
+            "min_low_ps": 249.52299349291826,
+            "min": -0.0444727716,
+            "max": 1.82977659
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.4847590268374233e-08,
+            "duty": 0.4999299901986277,
+            "min_high_ps": 250.47698370532157,
+            "min_low_ps": 249.52300460998333,
+            "min": -0.044472767,
+            "max": 1.82977659
+          }
+        ],
+        "power_mw": 3.166895261789105,
+        "input_cm": 1.6107207392528733,
+        "input_swing_pp": 0.416271272
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.770263731390116e-08,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 250.96474373877092,
+            "min_low_ps": 249.03523569720508,
+            "min": -0.0411306862,
+            "max": 1.82659656
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.7059598450840383e-08,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 250.9647221139991,
+            "min_low_ps": 249.03525626122777,
+            "min": -0.0411306804,
+            "max": 1.82659655
+          }
+        ],
+        "power_mw": 3.1844707613943033,
+        "input_cm": 1.6101912212543728,
+        "input_swing_pp": 0.408404788
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.75,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.3623306755204965e-07,
+            "duty": 0.5000700098013722,
+            "min_high_ps": 251.54678165950065,
+            "min_low_ps": 248.4531640699589,
+            "min": -0.0375777384,
+            "max": 1.82273768
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.932490304034644e-08,
+            "duty": 0.4999299901986278,
+            "min_high_ps": 251.54672483739472,
+            "min_low_ps": 248.45321834049722,
+            "min": -0.0375777319,
+            "max": 1.82273768
+          }
+        ],
+        "power_mw": 3.210118887591204,
+        "input_cm": 1.6095068438155922,
+        "input_swing_pp": 0.398043568
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": -40,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49206888964455014,
+            "min_high_ps": 246.40349299892836,
+            "min_low_ps": 253.59650700107116,
+            "min": -0.0747969406,
+            "max": 1.9051187
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.4919288700418059,
+            "min_high_ps": 246.40349299892836,
+            "min_low_ps": 253.59650700107116,
+            "min": -0.0747969406,
+            "max": 1.9051187
+          }
+        ],
+        "power_mw": 3.3504087292053977,
+        "input_cm": 1.6638663031734136,
+        "input_swing_pp": 0.465122486
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.5363268696974046e-11,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 248.96523450171983,
+            "min_low_ps": 251.03476549827886,
+            "min": -0.0585034291,
+            "max": 1.8910699
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.4424906541753444e-15,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 248.96533752285063,
+            "min_low_ps": 251.03466247714888,
+            "min": -0.0585034143,
+            "max": 1.89106991
+          }
+        ],
+        "power_mw": 3.4046300809995005,
+        "input_cm": 1.6620894731734133,
+        "input_swing_pp": 0.444584674
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.581045886022707e-08,
+            "duty": 0.5080711299581939,
+            "min_high_ps": 252.63579545179576,
+            "min_low_ps": 247.36418902988848,
+            "min": -0.0364745219,
+            "max": 1.86941756
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.0438862935456825e-08,
+            "duty": 0.5079311103554499,
+            "min_high_ps": 252.63577950959427,
+            "min_low_ps": 247.36420454820208,
+            "min": -0.0364745194,
+            "max": 1.86941756
+          }
+        ],
+        "power_mw": 3.5213642233733133,
+        "input_cm": 1.6584161818015992,
+        "input_swing_pp": 0.392324648
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.8632814791661474e-07,
+            "duty": 0.5040705698797833,
+            "min_high_ps": 253.03952330739537,
+            "min_low_ps": 246.96036855317004,
+            "min": -0.0336969484,
+            "max": 1.8654526
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.3103540397185753e-07,
+            "duty": 0.5039305502770388,
+            "min_high_ps": 253.03941292602636,
+            "min_low_ps": 246.96047669260415,
+            "min": -0.0336969285,
+            "max": 1.86545261
+          }
+        ],
+        "power_mw": 3.557769592503748,
+        "input_cm": 1.6575838301074464,
+        "input_swing_pp": 0.379818862
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 27,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.0343637057985688e-10,
+            "duty": 0.5000700098013723,
+            "min_high_ps": 250.30802594207924,
+            "min_low_ps": 249.69197404114672,
+            "min": -0.0497618702,
+            "max": 1.8836937
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.4424906541753444e-15,
+            "duty": 0.4999299901986277,
+            "min_high_ps": 250.3077042811198,
+            "min_low_ps": 249.6922957054289,
+            "min": -0.0497618741,
+            "max": 1.88369368
+          }
+        ],
+        "power_mw": 3.4364394250724635,
+        "input_cm": 1.6610175327936032,
+        "input_swing_pp": 0.43035672
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.607184385576943e-09,
+            "duty": 0.5040705698797832,
+            "min_high_ps": 251.23256592945108,
+            "min_low_ps": 248.7674337957764,
+            "min": -0.0441990424,
+            "max": 1.87845929
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.0179737315071407e-10,
+            "duty": 0.5039305502770388,
+            "min_high_ps": 251.23238962903915,
+            "min_low_ps": 248.7676101077184,
+            "min": -0.0441990191,
+            "max": 1.87845926
+          }
+        ],
+        "power_mw": 3.46216401143928,
+        "input_cm": 1.660160481071964,
+        "input_swing_pp": 0.418205576
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.230947008882936e-09,
+            "duty": 0.504070569879783,
+            "min_high_ps": 251.73923868594102,
+            "min_low_ps": 248.2607603116124,
+            "min": -0.0414801995,
+            "max": 1.87549955
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.4089658328941823e-09,
+            "duty": 0.5039305502770388,
+            "min_high_ps": 251.7392376840673,
+            "min_low_ps": 248.2607613140585,
+            "min": -0.0414801993,
+            "max": 1.87549955
+          }
+        ],
+        "power_mw": 3.4788907621689154,
+        "input_cm": 1.6596227738105946,
+        "input_swing_pp": 0.410339228
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.8,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.33731998200426e-08,
+            "duty": 0.5040705698797828,
+            "min_high_ps": 252.29972085984642,
+            "min_low_ps": 247.7002741462015,
+            "min": -0.0384045482,
+            "max": 1.87186436
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.89383339302907e-09,
+            "duty": 0.5039305502770389,
+            "min_high_ps": 252.2997156714884,
+            "min_low_ps": 247.70027914015225,
+            "min": -0.0384045481,
+            "max": 1.87186436
+          }
+        ],
+        "power_mw": 3.5022445168265866,
+        "input_cm": 1.658926254692654,
+        "input_swing_pp": 0.399982936
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -40,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999771,
+            "max": 1.65000388
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -1.05013718e-06,
+            "max": 2.22458883e-06
+          }
+        ],
+        "power_mw": 0.6915363883263369,
+        "input_cm": 1.5155782339755122,
+        "input_swing_pp": 0.45806493299999995
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.0481095344713225e-06,
+            "duty": 0.48406776948772845,
+            "min_high_ps": 242.77818989466834,
+            "min_low_ps": 257.22057190082126,
+            "min": -0.0672826503,
+            "max": 1.74809285
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.3369116144135162e-06,
+            "duty": 0.4839277498849841,
+            "min_high_ps": 242.7769492123232,
+            "min_low_ps": 257.2218101264011,
+            "min": -0.0672828877,
+            "max": 1.74809245
+          }
+        ],
+        "power_mw": 2.61417536956022,
+        "input_cm": 1.5138511920214892,
+        "input_swing_pp": 0.438036954
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.86021076290055e-06,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.73966256936674,
+            "min_low_ps": 251.2593005775011,
+            "min": -0.0371451131,
+            "max": 1.72186543
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.2298181353287418e-06,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.73846324269635,
+            "min_low_ps": 251.26050588659814,
+            "min": -0.0371447873,
+            "max": 1.72186514
+          }
+        ],
+        "power_mw": 2.8682729470664667,
+        "input_cm": 1.5103870160894552,
+        "input_swing_pp": 0.386185062
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.464123854739597e-06,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.52944013418872,
+            "min_low_ps": 251.46955295146233,
+            "min": -0.0330835859,
+            "max": 1.71733249
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.010015328817282e-06,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 248.52877750455255,
+            "min_low_ps": 251.47021545096314,
+            "min": -0.0330835817,
+            "max": 1.7173324
+          }
+        ],
+        "power_mw": 2.909994197006497,
+        "input_cm": 1.5096283858645676,
+        "input_swing_pp": 0.373840412
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 27,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.797898716990545e-06,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 246.73712551940142,
+            "min_low_ps": 253.26164074339206,
+            "min": -0.0565825105,
+            "max": 1.73958825
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.6740040508222975e-06,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 246.73654039014656,
+            "min_low_ps": 253.2620976247193,
+            "min": -0.0565826197,
+            "max": 1.73958789
+          }
+        ],
+        "power_mw": 2.7100616385107448,
+        "input_cm": 1.5128234493653174,
+        "input_swing_pp": 0.42391678899999996
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.304614685590735e-06,
+            "duty": 0.5000700098013722,
+            "min_high_ps": 248.09866597569402,
+            "min_low_ps": 251.89992314327432,
+            "min": -0.0489496672,
+            "max": 1.7330325
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.5731456457501736e-06,
+            "duty": 0.4999299901986278,
+            "min_high_ps": 248.09722032060364,
+            "min_low_ps": 251.90133409030128,
+            "min": -0.0489488701,
+            "max": 1.73303214
+          }
+        ],
+        "power_mw": 2.7700720904347826,
+        "input_cm": 1.512010926081959,
+        "input_swing_pp": 0.411864362
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.6588274674453913e-06,
+            "duty": 0.4960694497229613,
+            "min_high_ps": 248.54477399082427,
+            "min_low_ps": 251.45382878657185,
+            "min": -0.044995629,
+            "max": 1.72937491
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.5933509153187586e-06,
+            "duty": 0.4959294301202167,
+            "min_high_ps": 248.54352504192227,
+            "min_low_ps": 251.4550629653054,
+            "min": -0.0449952516,
+            "max": 1.72937489
+          }
+        ],
+        "power_mw": 2.8030031467716143,
+        "input_cm": 1.511505821561719,
+        "input_swing_pp": 0.404055508
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.167846075236014e-06,
+            "duty": 0.4960694497229612,
+            "min_high_ps": 248.77940698023832,
+            "min_low_ps": 251.21940584670335,
+            "min": -0.0402607906,
+            "max": 1.72490501
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.3825540310374862e-06,
+            "duty": 0.49592943012021684,
+            "min_high_ps": 248.77821916718253,
+            "min_low_ps": 251.22059366305626,
+            "min": -0.040260454,
+            "max": 1.72490501
+          }
+        ],
+        "power_mw": 2.841644423143428,
+        "input_cm": 1.5108573796751623,
+        "input_swing_pp": 0.393769466
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": -40,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.559286116365911e-10,
+            "duty": 0.48806832956613916,
+            "min_high_ps": 243.0014680782959,
+            "min_low_ps": 256.9985318916315,
+            "min": -0.0818071147,
+            "max": 1.81012103
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.128531264224193e-11,
+            "duty": 0.4879283099633949,
+            "min_high_ps": 243.00146886904167,
+            "min_low_ps": 256.9985310642069,
+            "min": -0.0818071148,
+            "max": 1.81012103
+          }
+        ],
+        "power_mw": 2.8960120592303844,
+        "input_cm": 1.5649605835007498,
+        "input_swing_pp": 0.461164318
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.400837902400866e-07,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 246.05586454803137,
+            "min_low_ps": 253.94405180842082,
+            "min": -0.065363611,
+            "max": 1.79598248
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.3080997391697906e-07,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 246.05583420232992,
+            "min_low_ps": 253.94360212492066,
+            "min": -0.0653636185,
+            "max": 1.79598254
+          }
+        ],
+        "power_mw": 2.985893993738131,
+        "input_cm": 1.5632114861369315,
+        "input_swing_pp": 0.440732593
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.7218374670502357e-07,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 249.41055971483556,
+            "min_low_ps": 250.58931324033992,
+            "min": -0.0366134394,
+            "max": 1.77095681
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.244518885838545e-08,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 249.41068675965874,
+            "min_low_ps": 250.58919004876722,
+            "min": -0.0366134451,
+            "max": 1.77095683
+          }
+        ],
+        "power_mw": 3.1563823493703147,
+        "input_cm": 1.5596583065542229,
+        "input_swing_pp": 0.388542056
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.996096399281555e-08,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 249.5801075824114,
+            "min_low_ps": 250.41988998880967,
+            "min": -0.0331269412,
+            "max": 1.76660886
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.310040435662188e-09,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 249.58010540802735,
+            "min_low_ps": 250.41989209997394,
+            "min": -0.0331269412,
+            "max": 1.76660886
+          }
+        ],
+        "power_mw": 3.195218106246876,
+        "input_cm": 1.5588685025812092,
+        "input_swing_pp": 0.37608968
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 27,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.48570951447854,
+            "min_low_ps": 252.5142904627975,
+            "min": -0.0547591807,
+            "max": 1.7874791
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 8.004041873732604e-11,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.4857749592227,
+            "min_low_ps": 252.51422500075697,
+            "min": -0.054759167,
+            "max": 1.7874791
+          }
+        ],
+        "power_mw": 3.0367739140479757,
+        "input_cm": 1.5621646878085955,
+        "input_swing_pp": 0.426496593
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.439996302429421e-07,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.3794166837252,
+            "min_low_ps": 251.61798235544612,
+            "min": -0.0472717462,
+            "max": 1.781403
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.186678893207784e-06,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.37921557965328,
+            "min_low_ps": 251.62057409184314,
+            "min": -0.047271731,
+            "max": 1.78140305
+          }
+        ],
+        "power_mw": 3.076613981064468,
+        "input_cm": 1.5613331811169415,
+        "input_swing_pp": 0.414359923
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.257850708266346e-09,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 248.81494402369287,
+            "min_low_ps": 251.1850543207576,
+            "min": -0.0433981388,
+            "max": 1.77796345
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.601379778255364e-09,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 248.81494233766387,
+            "min_low_ps": 251.18505597630664,
+            "min": -0.0433981386,
+            "max": 1.77796345
+          }
+        ],
+        "power_mw": 3.101219238490755,
+        "input_cm": 1.5608142433933034,
+        "input_swing_pp": 0.406517896
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.799339784066774e-09,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 249.2199336077627,
+            "min_low_ps": 250.78006473156998,
+            "min": -0.0392096602,
+            "max": 1.7737481
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.7123725487854244e-09,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 249.21989510963715,
+            "min_low_ps": 250.7801031411649,
+            "min": -0.0392096562,
+            "max": 1.7737481
+          }
+        ],
+        "power_mw": 3.1331094553873067,
+        "input_cm": 1.5601454560894552,
+        "input_swing_pp": 0.396179543
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": -40,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49206888964455026,
+            "min_high_ps": 244.5481684176542,
+            "min_low_ps": 255.45183158234445,
+            "min": -0.0787324758,
+            "max": 1.85804265
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.4919288700418059,
+            "min_high_ps": 244.5481684176542,
+            "min_low_ps": 255.4518315823453,
+            "min": -0.0787324758,
+            "max": 1.85804265
+          }
+        ],
+        "power_mw": 3.199010954267866,
+        "input_cm": 1.6143931381084458,
+        "input_swing_pp": 0.463456718
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49206888964455003,
+            "min_high_ps": 247.0665386580512,
+            "min_low_ps": 252.93346134194832,
+            "min": -0.0618498039,
+            "max": 1.84331
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.4919288700418059,
+            "min_high_ps": 247.0665386580512,
+            "min_low_ps": 252.93346132993932,
+            "min": -0.0618498039,
+            "max": 1.84331
+          }
+        ],
+        "power_mw": 3.278714527751125,
+        "input_cm": 1.6126279495052473,
+        "input_swing_pp": 0.442904032
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.085712713650878e-10,
+            "duty": 0.5000700098013724,
+            "min_high_ps": 250.19842635282137,
+            "min_low_ps": 249.80157348049877,
+            "min": -0.0363846614,
+            "max": 1.81986602
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.952349806965685e-11,
+            "duty": 0.4999299901986276,
+            "min_high_ps": 250.19842651949992,
+            "min_low_ps": 249.80157331039405,
+            "min": -0.0363846614,
+            "max": 1.81986602
+          }
+        ],
+        "power_mw": 3.4408584194052976,
+        "input_cm": 1.609006960874563,
+        "input_swing_pp": 0.390673312
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.230914921332101e-10,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 250.48356541417078,
+            "min_low_ps": 249.5164337263434,
+            "min": -0.033289445,
+            "max": 1.81578404
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.1296388531009143e-10,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 250.48356627365612,
+            "min_low_ps": 249.5164329086464,
+            "min": -0.033289445,
+            "max": 1.81578404
+          }
+        ],
+        "power_mw": 3.479717401109445,
+        "input_cm": 1.6081932558445777,
+        "input_swing_pp": 0.378178936
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 27,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.798861473811257e-11,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 248.31437906249295,
+            "min_low_ps": 251.68562090351193,
+            "min": -0.051911568,
+            "max": 1.83518141
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.6206150844673175e-12,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 248.31437909648758,
+            "min_low_ps": 251.68562087940705,
+            "min": -0.0518762052,
+            "max": 1.83518141
+          }
+        ],
+        "power_mw": 3.3257666255322342,
+        "input_cm": 1.6115668404372812,
+        "input_swing_pp": 0.428663958
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.6193490992577608e-11,
+            "duty": 0.5000700098013723,
+            "min_high_ps": 249.12212203267808,
+            "min_low_ps": 250.87787796732144,
+            "min": -0.0454974462,
+            "max": 1.82952239
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.6193490992577608e-11,
+            "duty": 0.4999299901986277,
+            "min_high_ps": 249.12212203267723,
+            "min_low_ps": 250.87787795922418,
+            "min": -0.0454589924,
+            "max": 1.82952239
+          }
+        ],
+        "power_mw": 3.363195811354323,
+        "input_cm": 1.610720892073963,
+        "input_swing_pp": 0.416519136
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.0999539580896e-11,
+            "duty": 0.5000700098013724,
+            "min_high_ps": 249.5347584211324,
+            "min_low_ps": 250.46524154336697,
+            "min": -0.0422162264,
+            "max": 1.8263527
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.015388270303902e-11,
+            "duty": 0.4999299901986276,
+            "min_high_ps": 249.53475845663252,
+            "min_low_ps": 250.46524146339763,
+            "min": -0.0422162264,
+            "max": 1.8263527
+          }
+        ],
+        "power_mw": 3.386768634202899,
+        "input_cm": 1.6101913767991003,
+        "input_swing_pp": 0.40866697
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.75,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.572364626336366e-11,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 249.9602901370056,
+            "min_low_ps": 250.03970984513177,
+            "min": -0.0385393266,
+            "max": 1.82248599
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.436340101359292e-11,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 249.96029015486772,
+            "min_low_ps": 250.0397098158405,
+            "min": -0.0385393266,
+            "max": 1.82248599
+          }
+        ],
+        "power_mw": 3.417714862103948,
+        "input_cm": 1.6095069906846577,
+        "input_swing_pp": 0.398322982
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": -40,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49206888964455026,
+            "min_high_ps": 245.57013430527405,
+            "min_low_ps": 254.42986569472464,
+            "min": -0.0750289828,
+            "max": 1.90522789
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.491928870041806,
+            "min_high_ps": 245.57013430527405,
+            "min_low_ps": 254.42986569472382,
+            "min": -0.0750289828,
+            "max": 1.90522789
+          }
+        ],
+        "power_mw": 3.5010670093403298,
+        "input_cm": 1.6638662795152426,
+        "input_swing_pp": 0.465172762
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.84411513950118,
+            "min_low_ps": 252.1558848604975,
+            "min": -0.0582617873,
+            "max": 1.89106067
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.4959294301202168,
+            "min_high_ps": 247.8447068836855,
+            "min_low_ps": 252.15529311631403,
+            "min": -0.0582619617,
+            "max": 1.89106074
+          }
+        ],
+        "power_mw": 3.5734719375912043,
+        "input_cm": 1.6620895137731135,
+        "input_swing_pp": 0.444576236
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 100,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.5000700098013722,
+            "min_high_ps": 250.8122802438331,
+            "min_low_ps": 249.1877197561656,
+            "min": -0.0362067915,
+            "max": 1.86939474
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.4424906541753444e-15,
+            "duty": 0.4999299901986278,
+            "min_high_ps": 250.81228024383392,
+            "min_low_ps": 249.18771974575137,
+            "min": -0.0362067915,
+            "max": 1.86939474
+          }
+        ],
+        "power_mw": 3.7275224652823584,
+        "input_cm": 1.658416376149425,
+        "input_swing_pp": 0.392526282
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 125,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.448797051916699e-11,
+            "duty": 0.5000700098013723,
+            "min_high_ps": 251.14991003920312,
+            "min_low_ps": 248.85008990103012,
+            "min": -0.0334619901,
+            "max": 1.86545605
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.47915046666958e-11,
+            "duty": 0.4999299901986277,
+            "min_high_ps": 251.1499100989694,
+            "min_low_ps": 248.8500898282829,
+            "min": -0.0334619901,
+            "max": 1.86545605
+          }
+        ],
+        "power_mw": 3.7670403728935535,
+        "input_cm": 1.6575839925987006,
+        "input_swing_pp": 0.38004515
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 27,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.389344526207651e-11,
+            "duty": 0.4960694497229612,
+            "min_high_ps": 248.98180239873966,
+            "min_low_ps": 251.0181975743136,
+            "min": -0.0495640441,
+            "max": 1.88369448
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.98154849659528,
+            "min_low_ps": 251.01845148313086,
+            "min": -0.0495639551,
+            "max": 1.88369445
+          }
+        ],
+        "power_mw": 3.616778895152424,
+        "input_cm": 1.6610176370589704,
+        "input_swing_pp": 0.430385334
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.5000700098013723,
+            "min_high_ps": 249.73399052660997,
+            "min_low_ps": 250.26600947338872,
+            "min": -0.0441049401,
+            "max": 1.87846992
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.4999299901986277,
+            "min_high_ps": 249.73478722043384,
+            "min_low_ps": 250.26521277956567,
+            "min": -0.0441050494,
+            "max": 1.87846996
+          }
+        ],
+        "power_mw": 3.6520353113893056,
+        "input_cm": 1.6601606362043977,
+        "input_swing_pp": 0.41830195400000003
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 65,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.5000700098013721,
+            "min_high_ps": 250.12946310811907,
+            "min_low_ps": 249.87053688351764,
+            "min": -0.0412652539,
+            "max": 1.87553168
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49992999019862794,
+            "min_high_ps": 250.1294631081199,
+            "min_low_ps": 249.87053688351764,
+            "min": -0.0412652539,
+            "max": 1.87553168
+          }
+        ],
+        "power_mw": 3.6746006138730634,
+        "input_cm": 1.6596229538705647,
+        "input_swing_pp": 0.410469662
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.8,
+        "temp": 85,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.4424906541753444e-15,
+            "duty": 0.500070009801372,
+            "min_high_ps": 250.5617487418998,
+            "min_low_ps": 249.43825123748553,
+            "min": -0.0381368507,
+            "max": 1.87189627
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.1862955890128433e-11,
+            "duty": 0.49992999019862805,
+            "min_high_ps": 250.5617487418998,
+            "min_low_ps": 249.4382512254021,
+            "min": -0.0381368507,
+            "max": 1.87189627
+          }
+        ],
+        "power_mw": 3.7047074302348832,
+        "input_cm": 1.6589264526561716,
+        "input_swing_pp": 0.400155556
+      }
+    ],
+    "rx_buffer_temperature_boundary": [
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -10,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999989,
+            "max": 1.65000012
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.32438536e-08,
+            "max": 5.88672488e-08
+          }
+        ],
+        "power_mw": 0.6190141746856572,
+        "input_cm": 1.5142568541979011,
+        "input_swing_pp": 0.442917768
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -12,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999989,
+            "max": 1.65000012
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.01566075e-08,
+            "max": 5.61131767e-08
+          }
+        ],
+        "power_mw": 0.615138280109945,
+        "input_cm": 1.5143398643778114,
+        "input_swing_pp": 0.443943586
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -14,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6499999,
+            "max": 1.65000011
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.81329115e-08,
+            "max": 5.40719085e-08
+          }
+        ],
+        "power_mw": 0.6112243606381809,
+        "input_cm": 1.514423529330335,
+        "input_swing_pp": 0.444966557
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -16,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6499999,
+            "max": 1.65000011
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.55512813e-08,
+            "max": 5.13215005e-08
+          }
+        ],
+        "power_mw": 0.6072874105427287,
+        "input_cm": 1.5145078669090455,
+        "input_swing_pp": 0.44598665299999996
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -18,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6499999,
+            "max": 1.6500001
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.39818994e-08,
+            "max": 4.94634075e-08
+          }
+        ],
+        "power_mw": 0.6032622919195402,
+        "input_cm": 1.5145928892928535,
+        "input_swing_pp": 0.447003364
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -2,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999987,
+            "max": 1.65000015
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -6.30293668e-08,
+            "max": 6.82339284e-08
+          }
+        ],
+        "power_mw": 0.6342773541914043,
+        "input_cm": 1.5139310875187406,
+        "input_swing_pp": 0.438789133
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -20,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6499999,
+            "max": 1.6500001
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.17700036e-08,
+            "max": 4.6540016e-08
+          }
+        ],
+        "power_mw": 0.5992343012068966,
+        "input_cm": 1.5146786144277862,
+        "input_swing_pp": 0.44801634300000004
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -22,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999991,
+            "max": 1.65000009
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.0322041e-08,
+            "max": 4.46138711e-08
+          }
+        ],
+        "power_mw": 0.595149122017991,
+        "input_cm": 1.5147650567141429,
+        "input_swing_pp": 0.44902571
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -24,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999991,
+            "max": 1.65000009
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.84783337e-08,
+            "max": 4.24507976e-08
+          }
+        ],
+        "power_mw": 0.5909783307696153,
+        "input_cm": 1.5148522322413793,
+        "input_swing_pp": 0.45003144
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -26,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999991,
+            "max": 1.65000008
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.71127538e-08,
+            "max": 4.04531573e-08
+          }
+        ],
+        "power_mw": 0.586792989984008,
+        "input_cm": 1.514940158208396,
+        "input_swing_pp": 0.451033042
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -28,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999991,
+            "max": 1.65000008
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.54363573e-08,
+            "max": 3.85344133e-08
+          }
+        ],
+        "power_mw": 0.5825353318715643,
+        "input_cm": 1.5150288520964517,
+        "input_swing_pp": 0.452030202
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -30,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999992,
+            "max": 1.65000007
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.41412398e-08,
+            "max": 3.65245592e-08
+          }
+        ],
+        "power_mw": 0.5782508475337331,
+        "input_cm": 1.5151183295577213,
+        "input_swing_pp": 0.453023046
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -32,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999992,
+            "max": 1.65000007
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.27476139e-08,
+            "max": 3.49322195e-08
+          }
+        ],
+        "power_mw": 0.5738769523923039,
+        "input_cm": 1.515208610622189,
+        "input_swing_pp": 0.454011281
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -34,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999992,
+            "max": 1.65000007
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.12630454e-08,
+            "max": 3.27312992e-08
+          }
+        ],
+        "power_mw": 0.5694792883728136,
+        "input_cm": 1.515299713493253,
+        "input_swing_pp": 0.454994346
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -36,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999992,
+            "max": 1.65000006
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.02299954e-08,
+            "max": 3.12297571e-08
+          }
+        ],
+        "power_mw": 0.5650154018795602,
+        "input_cm": 1.5153916558145926,
+        "input_swing_pp": 0.455972374
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -38,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999992,
+            "max": 1.65000006
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.90350942e-08,
+            "max": 2.93505456e-08
+          }
+        ],
+        "power_mw": 0.5605172691089455,
+        "input_cm": 1.5154844571339334,
+        "input_swing_pp": 0.456945201
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -4,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999988,
+            "max": 1.65000014
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -6.11689457e-08,
+            "max": 6.65466353e-08
+          }
+        ],
+        "power_mw": 0.630461232263868,
+        "input_cm": 1.514011615729635,
+        "input_swing_pp": 0.43982452
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -6,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999988,
+            "max": 1.65000013
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.86319636e-08,
+            "max": 6.42015459e-08
+          }
+        ],
+        "power_mw": 0.6266633922283859,
+        "input_cm": 1.5140927437381309,
+        "input_swing_pp": 0.440857862
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": -8,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999989,
+            "max": 1.65000013
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.60206819e-08,
+            "max": 6.09425388e-08
+          }
+        ],
+        "power_mw": 0.6228749532313843,
+        "input_cm": 1.5141744850074963,
+        "input_swing_pp": 0.44188909099999996
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.65,
+        "temp": 0,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999987,
+            "max": 1.65000015
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -6.5096991e-08,
+            "max": 7.10182892e-08
+          }
+        ],
+        "power_mw": 0.638046372321839,
+        "input_cm": 1.5138511468065967,
+        "input_swing_pp": 0.437751574
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 28,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69915573,
+            "max": 1.70057167
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000972198486,
+            "max": 0.000523699903
+          }
+        ],
+        "power_mw": 1.553832501563718,
+        "input_cm": 1.5621273775987006,
+        "input_swing_pp": 0.425680704
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 30,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69887094,
+            "max": 1.70085303
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000963027211,
+            "max": 0.000532491851
+          }
+        ],
+        "power_mw": 1.5860968544727636,
+        "input_cm": 1.562053310389805,
+        "input_swing_pp": 0.424620186
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 32,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69856464,
+            "max": 1.70120696
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000938557933,
+            "max": 0.000539046922
+          }
+        ],
+        "power_mw": 1.6168606424597702,
+        "input_cm": 1.5619796394327836,
+        "input_swing_pp": 0.423559888
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 34,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6982823,
+            "max": 1.70157107
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000887913334,
+            "max": 0.000544709793
+          }
+        ],
+        "power_mw": 1.646657818145927,
+        "input_cm": 1.5619063556471764,
+        "input_swing_pp": 0.422500135
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 36,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69803171,
+            "max": 1.70188125
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000850011331,
+            "max": 0.000548766019
+          }
+        ],
+        "power_mw": 1.6767038635527236,
+        "input_cm": 1.561833451481759,
+        "input_swing_pp": 0.421441012
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 38,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69780487,
+            "max": 1.70207213
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000816360248,
+            "max": 0.000552599707
+          }
+        ],
+        "power_mw": 1.708001540790105,
+        "input_cm": 1.5617609183233383,
+        "input_swing_pp": 0.42038230600000004
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 40,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69759711,
+            "max": 1.70210335
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.00111477845,
+            "max": 0.000657514847
+          }
+        ],
+        "power_mw": 1.7405908352238881,
+        "input_cm": 1.5616887471289356,
+        "input_swing_pp": 0.419323981
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 42,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69739905,
+            "max": 1.70201378
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.00148200563,
+            "max": 0.000948264453
+          }
+        ],
+        "power_mw": 1.7810192161639182,
+        "input_cm": 1.5616169309670165,
+        "input_swing_pp": 0.418266308
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 44,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.69719314,
+            "max": 1.70232598
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.00164017672,
+            "max": 0.00126350282
+          }
+        ],
+        "power_mw": 1.8300444393553223,
+        "input_cm": 1.5615454609170414,
+        "input_swing_pp": 0.417209822
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 46,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.6969649,
+            "max": 1.70401654
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.00113212548,
+            "max": 0.00167720465
+          }
+        ],
+        "power_mw": 1.9044378267956021,
+        "input_cm": 1.5614743298225886,
+        "input_swing_pp": 0.416157693
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 48,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 7,
+            "period_error_cycles": 0.04581580019431053,
+            "duty": 0.6123357270017801,
+            "min_high_ps": 241.36079739636415,
+            "min_low_ps": 115.03580926106736,
+            "min": -0.043946719,
+            "max": 1.77925837
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 8,
+            "period_error_cycles": 0.050290605275445044,
+            "duty": 0.35716000240033624,
+            "min_high_ps": 104.58615751992744,
+            "min_low_ps": 261.64150912684534,
+            "min": -0.0418667046,
+            "max": 1.779236
+          }
+        ],
+        "power_mw": 2.740305096486756,
+        "input_cm": 1.561403529677661,
+        "input_swing_pp": 0.415106496
+      },
+      {
+        "variant": "baseline",
+        "supply": 1.7,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 0.0076203678043484935,
+            "duty": 0.4865681195367349,
+            "min_high_ps": 240.33070610299185,
+            "min_low_ps": 254.20465217221272,
+            "min": -0.042378968,
+            "max": 1.77897825
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 0.004558877120968474,
+            "duty": 0.4789270497869705,
+            "min_high_ps": 234.7017222279306,
+            "min_low_ps": 259.68758710996843,
+            "min": -0.0416774974,
+            "max": 1.7789289
+          }
+        ],
+        "power_mw": 2.8107855755222393,
+        "input_cm": 1.5613330550999502,
+        "input_swing_pp": 0.41405643599999997
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -10,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.092740577814723e-05,
+            "duty": 0.4760666493309061,
+            "min_high_ps": 239.04729228333122,
+            "min_low_ps": 260.94263135463984,
+            "min": -0.0693668206,
+            "max": 1.75037936
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.2398435467186886e-05,
+            "duty": 0.475926629728162,
+            "min_high_ps": 239.0372659148499,
+            "min_low_ps": 260.9527076676347,
+            "min": -0.069358727,
+            "max": 1.75037837
+          }
+        ],
+        "power_mw": 2.5476328341729135,
+        "input_cm": 1.5142569043753122,
+        "input_swing_pp": 0.443187432
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -12,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 7,
+            "period_error_cycles": 0.09482154650586616,
+            "duty": 0.6248374772468145,
+            "min_high_ps": 238.970698901918,
+            "min_low_ps": 75.92853776495372,
+            "min": -0.0696451129,
+            "max": 1.74981013
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 8,
+            "period_error_cycles": 0.06052643412448111,
+            "duty": 0.3516592322925207,
+            "min_high_ps": 105.52136063099293,
+            "min_low_ps": 264.9522085623639,
+            "min": -0.0685941061,
+            "max": 1.74953739
+          }
+        ],
+        "power_mw": 2.4406318696501748,
+        "input_cm": 1.5143399156021988,
+        "input_swing_pp": 0.44420531100000005
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -14,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64884027,
+            "max": 1.65098623
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000841409485,
+            "max": 0.000462328498
+          }
+        ],
+        "power_mw": 1.4524913124697652,
+        "input_cm": 1.5144235827411294,
+        "input_swing_pp": 0.445221701
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -16,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64976237,
+            "max": 1.65019385
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000607808757,
+            "max": 0.000380793301
+          }
+        ],
+        "power_mw": 1.2765624531274362,
+        "input_cm": 1.5145079220289854,
+        "input_swing_pp": 0.44623413700000003
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -18,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64981476,
+            "max": 1.65023281
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -0.000137139264,
+            "max": 0.000130541367
+          }
+        ],
+        "power_mw": 1.0726730069105448,
+        "input_cm": 1.5145929452023987,
+        "input_swing_pp": 0.4472427
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -2,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.695980221651851e-06,
+            "duty": 0.4840677694877281,
+            "min_high_ps": 242.31474401135964,
+            "min_low_ps": 257.68416343981715,
+            "min": -0.0678971662,
+            "max": 1.74871752
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.2110553976318883e-06,
+            "duty": 0.48392774988498377,
+            "min_high_ps": 242.3132481214881,
+            "min_low_ps": 257.68565710080253,
+            "min": -0.0678967072,
+            "max": 1.74871758
+          }
+        ],
+        "power_mw": 2.6042108489605194,
+        "input_cm": 1.5139311342828587,
+        "input_swing_pp": 0.439075789
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -20,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64990654,
+            "max": 1.65017223
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.63942219e-05,
+            "max": 6.60809306e-05
+          }
+        ],
+        "power_mw": 0.9744363270224887,
+        "input_cm": 1.5146786714417793,
+        "input_swing_pp": 0.448247232
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -22,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64995419,
+            "max": 1.6500777
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.63629756e-05,
+            "max": 3.28814206e-05
+          }
+        ],
+        "power_mw": 0.9105589662993502,
+        "input_cm": 1.5147651167716143,
+        "input_swing_pp": 0.44924944899999997
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -24,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64998051,
+            "max": 1.65003908
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -1.1829194e-05,
+            "max": 1.75047038e-05
+          }
+        ],
+        "power_mw": 0.8576056960734633,
+        "input_cm": 1.5148522975262368,
+        "input_swing_pp": 0.450246453
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -26,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999299,
+            "max": 1.65002809
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.74231418e-06,
+            "max": 1.66178012e-05
+          }
+        ],
+        "power_mw": 0.8202375254627686,
+        "input_cm": 1.5149402294827587,
+        "input_swing_pp": 0.451239754
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -28,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64998743,
+            "max": 1.65002456
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -5.1242693e-06,
+            "max": 1.54393213e-05
+          }
+        ],
+        "power_mw": 0.7958688165002499,
+        "input_cm": 1.5150289289805097,
+        "input_swing_pp": 0.452228677
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -30,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64998932,
+            "max": 1.65002039
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -4.56016907e-06,
+            "max": 1.29186938e-05
+          }
+        ],
+        "power_mw": 0.7765474687001499,
+        "input_cm": 1.515118412716142,
+        "input_swing_pp": 0.45321293900000004
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -32,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999203,
+            "max": 1.65001632
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -3.62511692e-06,
+            "max": 1.02838695e-05
+          }
+        ],
+        "power_mw": 0.7582118709840081,
+        "input_cm": 1.5152086986281859,
+        "input_swing_pp": 0.45419307499999995
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -34,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999388,
+            "max": 1.65001256
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.85041559e-06,
+            "max": 7.80683696e-06
+          }
+        ],
+        "power_mw": 0.7403102240499749,
+        "input_cm": 1.515299804287856,
+        "input_swing_pp": 0.455168286
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -36,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999534,
+            "max": 1.65000918
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -2.19324807e-06,
+            "max": 5.5963869e-06
+          }
+        ],
+        "power_mw": 0.7231051610089956,
+        "input_cm": 1.5153917493303348,
+        "input_swing_pp": 0.456138694
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -38,
+        "qualified_clock": false,
+        "outputs": [
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 1.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": 1.64999662,
+            "max": 1.65000625
+          },
+          {
+            "pass_clock": false,
+            "rise_count": 0,
+            "period_error_cycles": 999.0,
+            "duty": 0.0,
+            "min_high_ps": 0.0,
+            "min_low_ps": 0.0,
+            "min": -1.61339142e-06,
+            "max": 3.72084797e-06
+          }
+        ],
+        "power_mw": 0.7067536032463767,
+        "input_cm": 1.5154845525062468,
+        "input_swing_pp": 0.45710432700000003
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -4,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.445712437599724e-06,
+            "duty": 0.48406776948772823,
+            "min_high_ps": 241.79235493303776,
+            "min_low_ps": 258.2065477189339,
+            "min": -0.0685334637,
+            "max": 1.74932238
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.2615852010844364e-06,
+            "duty": 0.48392774988498377,
+            "min_high_ps": 241.79125081795863,
+            "min_low_ps": 258.20764506696173,
+            "min": -0.0685325572,
+            "max": 1.74932229
+          }
+        ],
+        "power_mw": 2.5928243460319838,
+        "input_cm": 1.5140116631434282,
+        "input_swing_pp": 0.440110444
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -6,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.786316059268714e-06,
+            "duty": 0.4840677694877281,
+            "min_high_ps": 241.17198966087153,
+            "min_low_ps": 258.8265724843524,
+            "min": -0.0690877297,
+            "max": 1.74979327
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.6087643572859633e-06,
+            "duty": 0.4839277498849841,
+            "min_high_ps": 241.17055696755415,
+            "min_low_ps": 258.8280103588198,
+            "min": -0.0690879895,
+            "max": 1.74979325
+          }
+        ],
+        "power_mw": 2.5802858789055474,
+        "input_cm": 1.5140927923013494,
+        "input_swing_pp": 0.44114211
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": -8,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.319877958877896e-06,
+            "duty": 0.48006720940931746,
+            "min_high_ps": 240.3402374532791,
+            "min_low_ps": 259.65740394070446,
+            "min": -0.0692601325,
+            "max": 1.75017373
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.741975416054032e-06,
+            "duty": 0.4799271898065729,
+            "min_high_ps": 240.3378758505292,
+            "min_low_ps": 259.65976258327686,
+            "min": -0.0692608675,
+            "max": 1.75017303
+          }
+        ],
+        "power_mw": 2.565919456571714,
+        "input_cm": 1.5141745342103947,
+        "input_swing_pp": 0.442166616
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.65,
+        "temp": 0,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.0481095344713225e-06,
+            "duty": 0.48406776948772845,
+            "min_high_ps": 242.77818989466834,
+            "min_low_ps": 257.22057190082126,
+            "min": -0.0672826503,
+            "max": 1.74809285
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.3369116144135162e-06,
+            "duty": 0.4839277498849841,
+            "min_high_ps": 242.7769492123232,
+            "min_low_ps": 257.2218101264011,
+            "min": -0.0672828877,
+            "max": 1.74809245
+          }
+        ],
+        "power_mw": 2.61417536956022,
+        "input_cm": 1.5138511920214892,
+        "input_swing_pp": 0.438036954
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 28,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.53043966007775,
+            "min_low_ps": 252.46956031716687,
+            "min": -0.0543931657,
+            "max": 1.7871861
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.53062087205407,
+            "min_low_ps": 252.46937910873913,
+            "min": -0.0543931819,
+            "max": 1.78718611
+          }
+        ],
+        "power_mw": 3.038559106281859,
+        "input_cm": 1.5621275028510744,
+        "input_swing_pp": 0.425967443
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 30,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.121192193589195e-11,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.6177188007521,
+            "min_low_ps": 252.3822811946731,
+            "min": -0.0536682205,
+            "max": 1.78660413
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.6645352591003757e-15,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.6177812822243,
+            "min_low_ps": 252.3822187132009,
+            "min": -0.0536681486,
+            "max": 1.78660411
+          }
+        ],
+        "power_mw": 3.042110463543229,
+        "input_cm": 1.5620534369290353,
+        "input_swing_pp": 0.424909318
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 32,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.948441904659376e-11,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.7036155248382,
+            "min_low_ps": 252.29638445374397,
+            "min": -0.0529531912,
+            "max": 1.78602798
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.6645352591003757e-15,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.70322939786544,
+            "min_low_ps": 252.2967706021324,
+            "min": -0.0529531431,
+            "max": 1.78602793
+          }
+        ],
+        "power_mw": 3.0456509086106944,
+        "input_cm": 1.5619797670289854,
+        "input_swing_pp": 0.423851301
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 34,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.5854140222870683e-10,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.78692221137263,
+            "min_low_ps": 252.21307778179025,
+            "min": -0.0522487292,
+            "max": 1.78545801
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.78664769140983,
+            "min_low_ps": 252.21335230175552,
+            "min": -0.0522486331,
+            "max": 1.78545794
+          }
+        ],
+        "power_mw": 3.049164376156922,
+        "input_cm": 1.5619064847676163,
+        "input_swing_pp": 0.422793415
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 36,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.1195955273990421e-10,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.86745227479622,
+            "min_low_ps": 252.13254772520247,
+            "min": -0.0515553436,
+            "max": 1.78489418
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.86934656989177,
+            "min_low_ps": 252.13065342205016,
+            "min": -0.0515550616,
+            "max": 1.78489442
+          }
+        ],
+        "power_mw": 3.052662815507247,
+        "input_cm": 1.5618335809795103,
+        "input_swing_pp": 0.421735764
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 38,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.885092578874264e-11,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 247.94669148046273,
+            "min_low_ps": 252.05330850578326,
+            "min": -0.0508734519,
+            "max": 1.78434119
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.992007221626409e-16,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 247.9483808427651,
+            "min_low_ps": 252.05161914348173,
+            "min": -0.0508729935,
+            "max": 1.78434128
+          }
+        ],
+        "power_mw": 3.056142126781609,
+        "input_cm": 1.5617610478810593,
+        "input_swing_pp": 0.420678439
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 40,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.3594726172859737e-10,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.02359124668465,
+            "min_low_ps": 251.9764087301596,
+            "min": -0.0502030739,
+            "max": 1.78384031
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 4.345113158166214e-11,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.02534751480593,
+            "min_low_ps": 251.97465246346852,
+            "min": -0.0502026075,
+            "max": 1.78384039
+          }
+        ],
+        "power_mw": 3.059600528685657,
+        "input_cm": 1.5616888772688655,
+        "input_swing_pp": 0.419621543
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 42,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.4778998067566107e-06,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.09758898275544,
+            "min_low_ps": 251.90165857434624,
+            "min": -0.0495699311,
+            "max": 1.78334363
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.982709519898762e-07,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.09854398808187,
+            "min_low_ps": 251.90077627234663,
+            "min": -0.0495696371,
+            "max": 1.78334378
+          }
+        ],
+        "power_mw": 3.0630273282908544,
+        "input_cm": 1.5616170606846578,
+        "input_swing_pp": 0.418565125
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 44,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 2.1371791132374085e-06,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.17205797062493,
+            "min_low_ps": 251.82687343981843,
+            "min": -0.0489804246,
+            "max": 1.78285154
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 8.772946646917745e-08,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.17268742895615,
+            "min_low_ps": 251.82695770260227,
+            "min": -0.0489799976,
+            "max": 1.78285163
+          }
+        ],
+        "power_mw": 3.06643491009995,
+        "input_cm": 1.5615455898875563,
+        "input_swing_pp": 0.417511353
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 46,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 5.3866556770643115e-09,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.24481107995553,
+            "min_low_ps": 251.7551774476395,
+            "min": -0.0484003185,
+            "max": 1.78236394
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 1.8890109254598997e-08,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.24260389233433,
+            "min_low_ps": 251.75738635628855,
+            "min": -0.0483998762,
+            "max": 1.78236394
+          }
+        ],
+        "power_mw": 3.069838568455772,
+        "input_cm": 1.5614744578285857,
+        "input_swing_pp": 0.416460097
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 48,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 7.570175297955117e-06,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.31496508718072,
+            "min_low_ps": 251.67976030538006,
+            "min": -0.0478316652,
+            "max": 1.78188117
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 6.467477067895189e-06,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.30815673439395,
+            "min_low_ps": 251.68459332956584,
+            "min": -0.0478311709,
+            "max": 1.78188124
+          }
+        ],
+        "power_mw": 3.073244114267866,
+        "input_cm": 1.561403657703648,
+        "input_swing_pp": 0.415409634
+      },
+      {
+        "variant": "candidate",
+        "supply": 1.7,
+        "temp": 50,
+        "qualified_clock": true,
+        "outputs": [
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 9.439996302429421e-07,
+            "duty": 0.49606944972296113,
+            "min_high_ps": 248.3794166837252,
+            "min_low_ps": 251.61798235544612,
+            "min": -0.0472717462,
+            "max": 1.781403
+          },
+          {
+            "pass_clock": true,
+            "rise_count": 8,
+            "period_error_cycles": 3.186678893207784e-06,
+            "duty": 0.49592943012021695,
+            "min_high_ps": 248.37921557965328,
+            "min_low_ps": 251.62057409184314,
+            "min": -0.047271731,
+            "max": 1.78140305
+          }
+        ],
+        "power_mw": 3.076613981064468,
+        "input_cm": 1.5613331811169415,
+        "input_swing_pp": 0.414359923
+      }
+    ]
+  },
+  "receiver_long_boundaries": [
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -18,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.6499999,
+          "max": 1.6500001
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -4.39680865e-08,
+          "max": 4.94107472e-08
+        }
+      ],
+      "power_mw": 0.6032223250672416,
+      "input_cm": 1.5145920258367704,
+      "input_swing_pp": 0.447003363
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -18,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.64981446,
+          "max": 1.65023292
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -0.000137222664,
+          "max": 0.000130585267
+        }
+      ],
+      "power_mw": 1.0724069712380955,
+      "input_cm": 1.5145920465660543,
+      "input_swing_pp": 0.447242695
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -16,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.6499999,
+          "max": 1.6500001
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -4.55325649e-08,
+          "max": 5.12785014e-08
+        }
+      ],
+      "power_mw": 0.6072271874459443,
+      "input_cm": 1.5145070077127858,
+      "input_swing_pp": 0.44598665299999996
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -16,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.64976163,
+          "max": 1.65019391
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -0.000607025207,
+          "max": 0.000380265614
+        }
+      ],
+      "power_mw": 1.2762931197799026,
+      "input_cm": 1.514507028337708,
+      "input_swing_pp": 0.44623413700000003
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -14,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.6499999,
+          "max": 1.65000011
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -4.81179044e-08,
+          "max": 5.40154361e-08
+        }
+      ],
+      "power_mw": 0.6111764713560806,
+      "input_cm": 1.5144226746444196,
+      "input_swing_pp": 0.444966556
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -14,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.64883626,
+          "max": 1.65099013
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -0.000844473698,
+          "max": 0.000462325033
+        }
+      ],
+      "power_mw": 1.4525163807218493,
+      "input_cm": 1.5144226944981878,
+      "input_swing_pp": 0.445221698
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -13,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.6499999,
+          "max": 1.65000011
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -4.90947165e-08,
+          "max": 5.51505069e-08
+        }
+      ],
+      "power_mw": 0.613136435392701,
+      "input_cm": 1.5143807604555681,
+      "input_swing_pp": 0.44445542
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -13,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.64798212,
+          "max": 1.65152438
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -0.00058960718,
+          "max": 0.000472719056
+        }
+      ],
+      "power_mw": 1.5530027214593174,
+      "input_cm": 1.5143807802199722,
+      "input_swing_pp": 0.444713834
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.7,
+      "temp": 47,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.68614639,
+          "max": 1.71681181
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -0.00847396393,
+          "max": 0.00914319782
+        }
+      ],
+      "power_mw": 2.051554501528559,
+      "input_cm": 1.5614381129640045,
+      "input_swing_pp": 0.415631929
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.7,
+      "temp": 47,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 1.2086044165471321e-08,
+          "duty": 0.49601736060762097,
+          "min_high_ps": 248.27729170415338,
+          "min_low_ps": 251.72268035250548,
+          "min": -0.0481140799,
+          "max": 1.78212182
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 2.918289074838043e-07,
+          "duty": 0.4959823593825784,
+          "min_high_ps": 248.27834922744492,
+          "min_low_ps": 251.72149525468,
+          "min": -0.0481137026,
+          "max": 1.78212192
+        }
+      ],
+      "power_mw": 3.0713032626271715,
+      "input_cm": 1.5614381538282716,
+      "input_swing_pp": 0.415934776
+    }
+  ],
+  "receiver_nominal_power_mw": {
+    "baseline": 3.493609267986007,
+    "candidate": 3.731953296376812
+  },
+  "receiver_baseline_vco_native": {
+    "run": "native_receiver_ss_hot",
+    "freq_ghz": 1.9981532110990285,
+    "vco_swing_pp": 0.2989309,
+    "buffer_swing_pp": 0.40145833200000003,
+    "buffer_cm": 1.5110626125581397,
+    "power_active_mw": 26.942331972538344,
+    "power_dummy_mw": 16.724626177016326,
+    "full_clock": {
+      "periods": 31,
+      "error_vco_cycles": 0.0001957708491884258,
+      "pass_clock": true,
+      "min": -0.0401883102,
+      "max": 1.72480972,
+      "duty": 0.4977624440611018
+    },
+    "feedback": [
+      {
+        "periods": 0,
+        "error_vco_cycles": 999.0,
+        "pass_clock": false,
+        "min": -2.4183583e-07,
+        "max": 6.75348646e-07,
+        "duty": 0.0
+      },
+      {
+        "periods": 0,
+        "error_vco_cycles": 999.0,
+        "pass_clock": false,
+        "min": 2.59898143e-07,
+        "max": 2.59912466e-07,
+        "duty": 0.0
+      },
+      {
+        "periods": 0,
+        "error_vco_cycles": 999.0,
+        "pass_clock": false,
+        "min": 2.59899135e-07,
+        "max": 2.59912335e-07,
+        "duty": 0.0
+      },
+      {
+        "periods": 0,
+        "error_vco_cycles": 999.0,
+        "pass_clock": false,
+        "min": 2.59900175e-07,
+        "max": 2.59913043e-07,
+        "duty": 0.0
+      }
+    ],
+    "prescalers": [
+      {
+        "divide": 2,
+        "swing_pp": 0.16116138000000002,
+        "edges": 16
+      },
+      {
+        "divide": 4,
+        "swing_pp": 1.1500000001163357e-06,
+        "edges": 34
+      },
+      {
+        "divide": 8,
+        "swing_pp": 0.0,
+        "edges": 0
+      }
+    ],
+    "full_phases": [
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.0001957708491884258,
+        "pass_clock": true,
+        "min": -0.0401883102,
+        "max": 1.72480972,
+        "duty": 0.4977624440611018
+      },
+      {
+        "periods": 31,
+        "error_vco_cycles": 9.87640774430254e-05,
+        "pass_clock": true,
+        "min": -0.0401874142,
+        "max": 1.72480574,
+        "duty": 0.496987424685617
+      },
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.00018532700284512593,
+        "pass_clock": true,
+        "min": -0.0401841939,
+        "max": 1.72479292,
+        "duty": 0.4969124228105705
+      },
+      {
+        "periods": 31,
+        "error_vco_cycles": 0.00012362597957871202,
+        "pass_clock": true,
+        "min": -0.0402146007,
+        "max": 1.72481282,
+        "duty": 0.49826245656141416
+      }
+    ]
+  },
+  "receiver_candidate_template_validation": {
+    "qualified_clock": true,
+    "outputs": [
+      {
+        "pass_clock": true,
+        "rise_count": 16,
+        "period_error_cycles": 4.3298697960381105e-15,
+        "duty": 0.49603472243057006,
+        "min_high_ps": 248.80132016380853,
+        "min_low_ps": 251.19867983618767,
+        "min": -0.0402392377,
+        "max": 1.72486695
+      },
+      {
+        "pass_clock": true,
+        "rise_count": 16,
+        "period_error_cycles": 2.4424906541753444e-15,
+        "duty": 0.49596471753022714,
+        "min_high_ps": 248.80132016380853,
+        "min_low_ps": 251.1986798361893,
+        "min": -0.0402392377,
+        "max": 1.72486695
+      }
+    ],
+    "power_mw": 2.8403651499375155,
+    "input_cm": 1.5110000001462134,
+    "input_swing_pp": 0.40000722
+  },
+  "limitations": [
+    "No full 45-environment grid",
+    "No native closed-loop PLL capture or phase-noise/mismatch/extracted qualification",
+    "Ideal reference current and nominal ideal CML resistors",
+    "SS low-voltage hot prescaler remains unusable",
+    "SS 1.65V candidate cold failure",
+    "1.95V cold CMOS overshoot needs terminal-voltage model-range review"
+  ],
+  "receiver_long_and_lowrate_confirmation": [
+    {
+      "variant": "candidate",
+      "supply": 1.7,
+      "temp": 46,
+      "freq": 2000000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 2.5982206945940334e-06,
+          "duty": 0.49601736060762097,
+          "min_high_ps": 248.24158829354894,
+          "min_low_ps": 251.7542767620653,
+          "min": -0.048400481,
+          "max": 1.78236405
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 2.6398942789551683e-06,
+          "duty": 0.4959823593825784,
+          "min_high_ps": 248.24210973201423,
+          "min_low_ps": 251.7562283592913,
+          "min": -0.0484005224,
+          "max": 1.782364
+        }
+      ],
+      "power_mw": 3.0696080069241347,
+      "input_cm": 1.5614735891713536,
+      "input_swing_pp": 0.416460098
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": 85,
+      "freq": 250000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 3.4343639043754592e-12,
+          "duty": 0.5005175181131338,
+          "min_high_ps": 2002.6200283754013,
+          "min_low_ps": 1997.3799716152544,
+          "min": -0.038760859,
+          "max": 1.72341278
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 6.661338147750939e-16,
+          "duty": 0.5004825168880911,
+          "min_high_ps": 2002.6200283754013,
+          "min_low_ps": 1997.3799716152575,
+          "min": -0.038760859,
+          "max": 1.72341278
+        }
+      ],
+      "power_mw": 0.9425423985084365,
+      "input_cm": 1.510856789465692,
+      "input_swing_pp": 0.387065716
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -40,
+      "freq": 250000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 1.1102230246251565e-16,
+          "duty": 0.4985174481106838,
+          "min_high_ps": 1994.505880136057,
+          "min_low_ps": 2005.4941198639424,
+          "min": -0.0834137847,
+          "max": 1.76211023
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 9.992007221626409e-16,
+          "duty": 0.4984824468856411,
+          "min_high_ps": 1994.505880136057,
+          "min_low_ps": 2005.4941198639392,
+          "min": -0.0834137847,
+          "max": 1.76211023
+        }
+      ],
+      "power_mw": 0.7059388195869266,
+      "input_cm": 1.5155771228952633,
+      "input_swing_pp": 0.449507572
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.7,
+      "temp": 48,
+      "freq": 2000000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 4.198996705895297e-11,
+          "duty": 0.49601736060762097,
+          "min_high_ps": 248.3151630481657,
+          "min_low_ps": 251.68483691999893,
+          "min": -0.0478308226,
+          "max": 1.78188107
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 4.198996705895297e-11,
+          "duty": 0.4959823593825784,
+          "min_high_ps": 248.3151630481657,
+          "min_low_ps": 251.68483691999893,
+          "min": -0.0478308226,
+          "max": 1.78188107
+        }
+      ],
+      "power_mw": 3.072997956446694,
+      "input_cm": 1.561402800151856,
+      "input_swing_pp": 0.415409634
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -12,
+      "freq": 2000000000.0,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.64999989,
+          "max": 1.65000011
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -5.02375971e-08,
+          "max": 5.60688581e-08
+        }
+      ],
+      "power_mw": 0.6150893142075992,
+      "input_cm": 1.5143390145475566,
+      "input_swing_pp": 0.44394358
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": -10,
+      "freq": 2000000000.0,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.64999989,
+          "max": 1.65000012
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -5.3326504e-08,
+          "max": 5.88166519e-08
+        }
+      ],
+      "power_mw": 0.6189645556690414,
+      "input_cm": 1.5142560089638795,
+      "input_swing_pp": 0.442917768
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -12,
+      "freq": 2000000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 6.85298195968187e-09,
+          "duty": 0.4760166605831206,
+          "min_high_ps": 237.01454844848834,
+          "min_low_ps": 262.9854429933599,
+          "min": -0.0686286833,
+          "max": 1.74955793
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 4.7970099004146505e-09,
+          "duty": 0.4759816593580769,
+          "min_high_ps": 237.01454011589766,
+          "min_low_ps": 262.9854514454153,
+          "min": -0.068628684,
+          "max": 1.74955793
+        }
+      ],
+      "power_mw": 2.518421794553181,
+      "input_cm": 1.5143390336270468,
+      "input_swing_pp": 0.444205306
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.65,
+      "temp": 85,
+      "freq": 250000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 1.1102230246251565e-16,
+          "duty": 0.5010175356137464,
+          "min_high_ps": 2003.3559511626702,
+          "min_low_ps": 1996.6440488252426,
+          "min": -0.0386767545,
+          "max": 1.72334043
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 6.661338147750939e-16,
+          "duty": 0.5009825343887037,
+          "min_high_ps": 2003.3559511626734,
+          "min_low_ps": 1996.6440488108728,
+          "min": -0.0386767545,
+          "max": 1.72334043
+        }
+      ],
+      "power_mw": 0.8689554558617673,
+      "input_cm": 1.5108567893044618,
+      "input_swing_pp": 0.387064034
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -10,
+      "freq": 2000000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 8.881784197001252e-15,
+          "duty": 0.4760166605831207,
+          "min_high_ps": 239.04729228333122,
+          "min_low_ps": 260.9527077145193,
+          "min": -0.0693587269,
+          "max": 1.75037837
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 5.736233710251781e-11,
+          "duty": 0.4759816593580773,
+          "min_high_ps": 239.04729230368315,
+          "min_low_ps": 260.9527076676314,
+          "min": -0.069358727,
+          "max": 1.75037837
+        }
+      ],
+      "power_mw": 2.547571605075616,
+      "input_cm": 1.5142560275428072,
+      "input_swing_pp": 0.443187432
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.7,
+      "temp": 46,
+      "freq": 2000000000.0,
+      "qualified_clock": false,
+      "outputs": [
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 1.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": 1.69696419,
+          "max": 1.70403939
+        },
+        {
+          "pass_clock": false,
+          "rise_count": 0,
+          "period_error_cycles": 999.0,
+          "duty": 0.0,
+          "min_high_ps": 0.0,
+          "min_low_ps": 0.0,
+          "min": -0.0011322231,
+          "max": 0.00167812423
+        }
+      ],
+      "power_mw": 1.9051586801947373,
+      "input_cm": 1.561473548080865,
+      "input_swing_pp": 0.416157698
+    },
+    {
+      "variant": "baseline",
+      "supply": 1.7,
+      "temp": 48,
+      "freq": 2000000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 1.950203110112625e-09,
+          "duty": 0.4800168005880209,
+          "min_high_ps": 239.83986619239158,
+          "min_low_ps": 260.1601319272527,
+          "min": -0.0419985516,
+          "max": 1.77915084
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 32,
+          "period_error_cycles": 1.3261401976549791e-09,
+          "duty": 0.47998179936297797,
+          "min_high_ps": 239.8398642355999,
+          "min_low_ps": 260.16013380760296,
+          "min": -0.0419985514,
+          "max": 1.77915084
+        }
+      ],
+      "power_mw": 2.804324745968004,
+      "input_cm": 1.5614027592125983,
+      "input_swing_pp": 0.415106486
+    },
+    {
+      "variant": "candidate",
+      "supply": 1.65,
+      "temp": -40,
+      "freq": 250000000.0,
+      "qualified_clock": true,
+      "outputs": [
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 6.661338147750939e-16,
+          "duty": 0.4985174481106838,
+          "min_high_ps": 1994.3739150177184,
+          "min_low_ps": 2005.6260849822777,
+          "min": -0.0831902915,
+          "max": 1.76203334
+        },
+        {
+          "pass_clock": true,
+          "rise_count": 4,
+          "period_error_cycles": 1.1102230246251565e-16,
+          "duty": 0.4984824468856411,
+          "min_high_ps": 1994.3739150177184,
+          "min_low_ps": 2005.6260849822777,
+          "min": -0.0831902915,
+          "max": 1.76203334
+        }
+      ],
+      "power_mw": 0.7393381681989752,
+      "input_cm": 1.5155771231664792,
+      "input_swing_pp": 0.449508134
+    }
+  ]
+}

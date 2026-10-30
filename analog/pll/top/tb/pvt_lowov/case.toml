@@ -1,0 +1,21 @@
+id = "pll_lowov_native_frontend_PVT"
+status = "selected_native_characterization_completed_with_SS_cold_fullrate_gap"
+level = "native_loaded_frontend"
+testbench = "analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in"
+fixture = "analog/pll/top/spice/clock_frontend_lowov.spice"
+report = "docs/pll_buffered_pvt.md"
+results = "docs/data/pll_buffered_pvt.json"
+external_reference_current_a = 0.00085
+divider_tail_bias = "real_mirror_per_prescaler"
+powered_dummy_prescalers = 3
+VCO_and_receiver_revision = "prior_PVT_refinement_candidates"
+full_monolithic_PLL_capture = false
+full_native_frontend_45_grid = false
+block_prescaler_grid_environment_cells = 45
+working_revision = "lowov_buffered_r3"
+interstage_buffers_per_prescaler = 2
+maximum_step_s = 4e-12
+
+selected_native_environments = 4
+selected_native_clock_feedback_functional = 4
+selected_native_fullrate_cmos_functional = 3

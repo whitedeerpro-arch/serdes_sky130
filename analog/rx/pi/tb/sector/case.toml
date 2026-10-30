@@ -1,0 +1,17 @@
+id = "rx_pi_adjacent_sector"
+corner = "tt"
+temperature_c = 27
+input_clock_hz = 2000000000
+anchor_phase_advance_deg = [0, 45]
+input_differential_pp_v = 0.4
+input_common_mode_v = 1.65
+b_weight_units = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+mix_capacitance_per_leg_f = 2e-13
+load_per_leg_f = 2e-14
+output_restorer_input_width_um = 24
+output_restorer_tail_width_um = 6
+output_restorer_load_ohm = 800
+template = "analog/rx/pi/tb/sector/tb_pi_sector_ngspice.cir.in"
+measurements = ["rising_zero_crossing_phase", "monotonicity", "nominal_step_DNL_INL", "differential_amplitude", "common_mode", "supply_power"]
+scope = "nominal_transistor_sector_with_ideal_correlated_input_clocks"
+pvt_noise_or_silicon_qualified = false

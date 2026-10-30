@@ -1,0 +1,15 @@
+id = "rx_four_phase_CML_samples"
+corner = "tt"
+temperature_c = 27
+ui_s = 2.5e-10
+clock_hz = 2000000000
+clock_delays_s = [-2.5e-11, 0, 2.5e-11, 5e-11, 7.5e-11, 1e-10]
+input_vpp_v = [0.35, 0.08]
+input_common_mode_v = 1.62
+output_load_f_per_leg = 5e-15
+record_stop_s = 1.6e-8
+max_step_s = 2e-12
+data_readout_after_clock_s = [1.8e-10, 3.5e-10]
+template = "analog/rx/sampler/tb/functional/tb_rx_sampler_functional_ngspice.cir.in"
+results = "docs/data/rx_sampler_control.json"
+scope = "7_cases; weak80mVpp_only_at75ps_delay; not_cartesian_sweep; numeric_readout_of_real_CML_Q"

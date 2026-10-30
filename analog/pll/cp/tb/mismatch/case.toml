@@ -1,0 +1,19 @@
+id = "mismatch"
+dut = "analog/pll/cp"
+level = "block"
+status = "planned"
+purpose = "验证局部失配开关后再统计源灌失配，与 PVT 分开。"
+analyses = ["op","statistics"]
+measurements = ["current_mismatch_distribution","net_charge_distribution"]
+shared_stimuli = []
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

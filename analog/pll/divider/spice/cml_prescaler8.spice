@@ -1,0 +1,16 @@
+* Working r3: THREE fixed CML /2 cells with real interstage CML buffers.
+* No /16 cell and no full-rate programmable CML counter on this path.
+* Tap outputs need explicit receiver/fanout loading in the bench.
+.subckt pll_cml_prescaler8 clkp clkn q2p q2n q4p q4n q8p q8n vbias vdd vss
++ params: wsf=80 wsf_sink=4 wtail=72 nftail=24 ref_sink_w=3.333333333
++ wbuf=24 wtbuf=12 rbuf=600
+* Shared real low-overdrive reference, also present in each powered dummy branch.
+Xbias vbias vbias_logic vdd vss pll_cml_tail_bias ref_sink_w={ref_sink_w}
+X2 clkp clkn q2p q2n m2p m2n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink}
+* Regenerate clock amplitude for the next cell; reuse global bias, not logic bias.
+* Dependencies now also include cml_buffer.spice and cml_delay_resistive.spice.
+Xb24 q2p q2n b24p b24n vbias vdd vss serdes_cml_buffer wn={wbuf} wt={wtbuf} rload={rbuf}
+X4 b24p b24n q4p q4n m4p m4n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink}
+Xb48 q4p q4n b48p b48n vbias vdd vss serdes_cml_buffer wn={wbuf} wt={wtbuf} rload={rbuf}
+X8 b48p b48n q8p q8n m8p m8n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink}
+.ends pll_cml_prescaler8

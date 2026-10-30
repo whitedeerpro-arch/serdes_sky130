@@ -1,0 +1,28 @@
+* Independent PVT candidate; frozen and baseline receiver are unchanged.
+* Same topology and source-follower input loading. Tail width 6 -> 8 um,
+* pre-inverter NMOS width 1 -> 1.8 um; output driver unchanged.
+* Requires helpers in cml_to_cmos.spice and sky130_primitives.spice.
+* SS low-voltage cold operation is NOT qualified; see PVT refinement report.
+.subckt serdes_cml_to_cmos_pvt_candidate inp inn outp outn vbias vdd vss
++ params: wsf=20 wsf_sink=2 win=6 wload=8 wtail=8
++ pre_wn=1.8 pre_wp=3.6 out_wn=4 out_wp=8
+
+* Source followers: gates face the VCO, sources drive the gain stages.
+* High input common mode is shifted down before differential gain.
+Xfp vdd inp fp vss serdes_nfet_lvt w={wsf}
+Xfn vdd inn fn vss serdes_nfet_lvt w={wsf}
+Xsp fp vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+Xsn fn vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+
+* Identical reversed-input paths preserve symmetry of complementary outputs.
+Xap fp fn ap vbias vdd vss serdes_rx_diff_to_se
++ win={win} wload={wload} wtail={wtail}
+Xan fn fp an vbias vdd vss serdes_rx_diff_to_se
++ win={win} wload={wload} wtail={wtail}
+Xbp ap bp vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp}
+Xbn an bn vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp}
+Xop bp rawp vdd vss serdes_rx_inverter wn=4 wp=12 nfp=4
+Xon bn rawn vdd vss serdes_rx_inverter wn=4 wp=12 nfp=4
+Xrestore rawp rawn outp outn vdd vss serdes_rx_clock_restorer
++ out_wn={out_wn} out_wp={out_wp}
+.ends serdes_cml_to_cmos_pvt_candidate

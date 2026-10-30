@@ -1,0 +1,28 @@
+{
+  "purpose": "Separate independently measured clock displacement from clock-to-output data latency variation. Does not alter the recorded nominal-UI eye or acceptance result.",
+  "run_id": "20261028T070237Z_ngspice_tt_pll_cml_replay_fixed_phase",
+  "nominal_ui_s": 2.5e-10,
+  "matched_data_transitions": 516,
+  "fast_clock_mean_frequency_hz": 1999955654.1540847,
+  "fast_clock_frequency_error_ppm": -22.17292295769724,
+  "nominal_reference_transition_spread_ui": 0.16942619802223755,
+  "input_clock_displacement_range_over_matched_data_ui": 0.022802286981561313,
+  "clock_to_output_latency_spread_ui": 0.1650805589393874,
+  "clock_to_output_latency_median_ui": 0.31724745424869316,
+  "note": "Peak-to-peak ranges do not add arithmetically; clock contribution is removed eventwise only for this diagnostic, never for eye alignment. All results are deterministic, not random jitter/phase-noise qualification.",
+  "frequency_measurement_window": "Payload interval only, origin+32UI through origin+1056UI",
+  "input_files": [
+    {
+      "path": "results/analog/tx/serializer/pll_clock_replay/20261028T070237Z_ngspice_tt_pll_cml_replay_fixed_phase/raw/waveforms.tsv",
+      "sha256": "a8800308695bf9021aadac0f7541e970644f87089def5105d77db1d9dce1192f"
+    },
+    {
+      "path": "results/analog/tx/serializer/pll_clock_replay/20261028T070237Z_ngspice_tt_pll_cml_replay_fixed_phase/raw/edge_phase_ui.tsv",
+      "sha256": "53548c5bee433aaad6c061e424b49203d14474f11ba2250bec9e8cb97a443236"
+    },
+    {
+      "path": "results/analog/tx/serializer/pll_clock_replay/20261028T070237Z_ngspice_tt_pll_cml_replay_fixed_phase/parameters.json",
+      "sha256": "61658db1d9f8c51c3faefb58e7ab053cffd3aaa65f4e7ba24af8a995bc7d1203"
+    }
+  ]
+}

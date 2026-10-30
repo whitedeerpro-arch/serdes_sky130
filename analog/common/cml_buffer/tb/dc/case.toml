@@ -1,0 +1,19 @@
+id = "dc"
+dut = "analog/common/cml_buffer"
+level = "block"
+status = "planned"
+purpose = "扫描差分输入和共模，验证电流转向。"
+analyses = ["dc"]
+measurements = ["transfer_curve","output_common_mode","differential_swing","tail_current","power"]
+shared_stimuli = []
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

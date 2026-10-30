@@ -1,0 +1,20 @@
+id = "logic_truth"
+dut = "analog/pll/divider"
+level = "block"
+status = "prototype"
+purpose = "对 CMOS 后级组合逻辑穷举 16 个配置码 ×16 个状态，以 PWL 逐向量稳定后采样；实际时钟时序另测。"
+analyses = ["tran_settled_logic"]
+measurements = ["next_state_errors", "zero_errors", "half_period_decode_errors", "minimum_logic_margin"]
+shared_stimuli = []
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_cmos_next_state_settled_ngspice.cir.in"
+historical_dc_exploration = "tb_cmos_next_state_dc_ngspice.cir.in"
+stimuli = "stimuli/cmos_truth_vectors.spice"
+vector_dwell_s = 4e-9
+sample_after_vector_s = 3.5e-9
+
+[requirements]
+status = "unspecified"

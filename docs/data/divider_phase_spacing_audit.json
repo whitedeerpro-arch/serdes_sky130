@@ -1,0 +1,337 @@
+{
+  "source_file": "results/analog/pll/top/clock_harvest/20261028T084345Z_ngspice_tt_native_closed_phase_harvest/raw/checkpoint_002048UI.tsv",
+  "source_sha256": "f69880ab41bfed1e49c44a66addcdb9753a0e043100f7d85ffdb2ba723fa40c2",
+  "window_from_serializer_origin_ui": [
+    64,
+    1088
+  ],
+  "raw_buffer_p_minus_n_phase_mod_2ui": [
+    0.0,
+    1.2500214940835122,
+    0.5000849229359119,
+    1.7499779540300437
+  ],
+  "divider_taps": {
+    "2": {
+      "rise": {
+        "relative_rising_phase_ui": [
+          0.0,
+          1.2500094438790796,
+          0.49991476632658305,
+          1.749846824490774
+        ],
+        "node_order": [
+          "d02",
+          "d22",
+          "d12",
+          "d32"
+        ],
+        "adjacent_gaps_ui": [
+          0.49991476632658305,
+          0.7500946775524966,
+          0.49983738061169447,
+          2.250153175509226
+        ]
+      },
+      "fall": {
+        "relative_rising_phase_ui": [
+          0.0,
+          1.250286072888997,
+          0.5001639185346036,
+          1.750178981614539
+        ],
+        "node_order": [
+          "d02",
+          "d22",
+          "d12",
+          "d32"
+        ],
+        "adjacent_gaps_ui": [
+          0.5001639185346036,
+          0.7501221543543934,
+          0.49989290872554193,
+          2.249821018385461
+        ]
+      }
+    },
+    "4": {
+      "rise": {
+        "relative_rising_phase_ui": [
+          0.0,
+          1.2502730551117622,
+          0.5002548967913469,
+          1.7503330793787768
+        ],
+        "node_order": [
+          "d04",
+          "d24",
+          "d14",
+          "d34"
+        ],
+        "adjacent_gaps_ui": [
+          0.5002548967913469,
+          0.7500181583204153,
+          0.5000600242670146,
+          6.249666920621223
+        ]
+      },
+      "fall": {
+        "relative_rising_phase_ui": [
+          0.0,
+          1.249679684684807,
+          0.5000202819891229,
+          1.7494180919862856
+        ],
+        "node_order": [
+          "d04",
+          "d24",
+          "d14",
+          "d34"
+        ],
+        "adjacent_gaps_ui": [
+          0.5000202819891229,
+          0.7496594026956842,
+          0.49973840730147856,
+          6.250581908013714
+        ]
+      }
+    },
+    "8": {
+      "rise": {
+        "relative_rising_phase_ui": [
+          0.0,
+          1.2495477529801065,
+          8.50009077398272,
+          9.749742699230325
+        ],
+        "node_order": [
+          "d08",
+          "d18",
+          "d28",
+          "d38"
+        ],
+        "adjacent_gaps_ui": [
+          1.2495477529801065,
+          7.250543021002613,
+          1.2496519252476048,
+          6.250257300769675
+        ]
+      },
+      "fall": {
+        "relative_rising_phase_ui": [
+          0.0,
+          1.2495313234874175,
+          8.499541082152916,
+          9.749220023837267
+        ],
+        "node_order": [
+          "d08",
+          "d18",
+          "d28",
+          "d38"
+        ],
+        "adjacent_gaps_ui": [
+          1.2495313234874175,
+          7.250009758665499,
+          1.2496789416843512,
+          6.2507799761627325
+        ]
+      }
+    }
+  },
+  "stage_propagation": [
+    {
+      "branch": 0,
+      "divide_tap": 2,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6524302238653519,
+      "lag_pp_ui": 0.00038962673397691105
+    },
+    {
+      "branch": 0,
+      "divide_tap": 2,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6525795333434559,
+      "lag_pp_ui": 9.39657941501082e-05
+    },
+    {
+      "branch": 0,
+      "divide_tap": 4,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7249992504575857,
+      "lag_pp_ui": 6.121804972281097e-05
+    },
+    {
+      "branch": 0,
+      "divide_tap": 4,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.724737509888115,
+      "lag_pp_ui": 6.522971762024099e-05
+    },
+    {
+      "branch": 0,
+      "divide_tap": 8,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7163817964577248,
+      "lag_pp_ui": 3.206422370283235e-05
+    },
+    {
+      "branch": 0,
+      "divide_tap": 8,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.71639006004294,
+      "lag_pp_ui": 5.894351517099494e-06
+    },
+    {
+      "branch": 1,
+      "divide_tap": 2,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6526539962566531,
+      "lag_pp_ui": 0.00015561195260715976
+    },
+    {
+      "branch": 1,
+      "divide_tap": 2,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6527667827665482,
+      "lag_pp_ui": 0.00027479551393128077
+    },
+    {
+      "branch": 1,
+      "divide_tap": 4,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7247061218618001,
+      "lag_pp_ui": 5.688800291636653e-05
+    },
+    {
+      "branch": 1,
+      "divide_tap": 4,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7243938997102646,
+      "lag_pp_ui": 8.240699912676064e-06
+    },
+    {
+      "branch": 1,
+      "divide_tap": 8,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.716247016379441,
+      "lag_pp_ui": 1.2415400490795037e-05
+    },
+    {
+      "branch": 1,
+      "divide_tap": 8,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7162497393154581,
+      "lag_pp_ui": 1.2977834614957828e-05
+    },
+    {
+      "branch": 2,
+      "divide_tap": 2,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6524897540042502,
+      "lag_pp_ui": 0.00033855726746878645
+    },
+    {
+      "branch": 2,
+      "divide_tap": 2,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6528127914423649,
+      "lag_pp_ui": 0.0002965328171171677
+    },
+    {
+      "branch": 2,
+      "divide_tap": 4,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7249458676831679,
+      "lag_pp_ui": 9.424833675097943e-05
+    },
+    {
+      "branch": 2,
+      "divide_tap": 4,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7247110547634321,
+      "lag_pp_ui": 3.8562416364129604e-05
+    },
+    {
+      "branch": 2,
+      "divide_tap": 8,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.716141608035116,
+      "lag_pp_ui": 6.270678802877683e-06
+    },
+    {
+      "branch": 2,
+      "divide_tap": 8,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7161334797236805,
+      "lag_pp_ui": 6.110243660373271e-06
+    },
+    {
+      "branch": 3,
+      "divide_tap": 2,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6525035766639178,
+      "lag_pp_ui": 6.50548344225399e-05
+    },
+    {
+      "branch": 3,
+      "divide_tap": 2,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.6525755640110589,
+      "lag_pp_ui": 0.0003465116924417089
+    },
+    {
+      "branch": 3,
+      "divide_tap": 4,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7247335390088665,
+      "lag_pp_ui": 7.755617112081836e-05
+    },
+    {
+      "branch": 3,
+      "divide_tap": 4,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7243556755536815,
+      "lag_pp_ui": 7.169537468598719e-06
+    },
+    {
+      "branch": 3,
+      "divide_tap": 8,
+      "output_polarity": "rise",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7164086168773451,
+      "lag_pp_ui": 2.44512708604816e-05
+    },
+    {
+      "branch": 3,
+      "divide_tap": 8,
+      "output_polarity": "fall",
+      "input_trigger": "fall",
+      "median_lag_ui": 0.7164069443614025,
+      "lag_pp_ui": 1.6041197568483767e-05
+    }
+  ],
+  "reference": "Same-polarity zero crossings, nearest circular phase relative to branch0; nonuniform edge spacing is expected for the current raw-polarity four-branch wiring, not a uniform quadrature generator."
+}

@@ -1,0 +1,14 @@
+id = "rx_static_readout_and_common_pair_retiming"
+corner = "tt"
+temperature_c = 27
+pi_codes = [0, 4, 8]
+record_stop_s = 1.6e-8
+max_step_s = 2e-12
+readout_after_common_clock_s = 3.5e-10
+output_load_f = 5e-15
+clock_source = "actual_CML_to_CMOS_receiver; negative_polarity_of_edge_clock; two_real_buffers"
+e0_path = "two_real_CMOS_inverters;20fF_each; no_extra_full_cycle_DFF"
+physical16UI_demux_qualified = false
+pvt_timing_margin_qualified = false
+template = "analog/rx/sampler/tb/cmos_aligned/tb_rx_cmos_aligned_ngspice.cir.in"
+results = "docs/data/rx_cdr_closed_loop.json"

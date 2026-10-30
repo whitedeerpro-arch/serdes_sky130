@@ -1,0 +1,55 @@
+{
+  "completed_analog_runs": [
+    "results/analog/pll/loop_filter/startup_optimization/20261028T114832Z_ngspice_tt_dual_cold_hold",
+    "results/analog/pll/loop_filter/startup_optimization/20261028T114832Z_ngspice_tt_dual_release",
+    "results/analog/pll/top/startup_optimization/20261028T114957Z_ngspice_tt_mixed_cold_handoff"
+  ],
+  "rtl_checks": "results/digital/pll/startup_supervisor/nominal_smoke/checks.json",
+  "native_parse_only": "results/analog/pll/top/startup_optimization/startup_core_parse_only/checks.json",
+  "native_cold_start_transient_tested": false,
+  "rtl_analog_cosimulation_tested": false,
+  "measurement_frontend_implemented": false,
+  "reference_buffer_implemented": false,
+  "input_sha256": [
+    {
+      "path": "digital/pll/rtl/pll_startup_supervisor.sv",
+      "sha256": "c89768eecce56a363049537c51a480333b4bab3c4658734c1dcf4b9a299fd11b"
+    },
+    {
+      "path": "analog/pll/loop_filter/spice/passive_rc_precharge.spice",
+      "sha256": "9be852d7b1252d066315d8899167fc158c9e53a0e1af57e81d6e16ef3ed826f1"
+    },
+    {
+      "path": "analog/pll/cp/spice/charge_pump_enabled.spice",
+      "sha256": "6e176d019338a0358be6790b20ad22e425204976d08ddf178de799fc55398bcb"
+    },
+    {
+      "path": "analog/pll/top/spice/pll_balanced_startup_core.spice",
+      "sha256": "21121636b87c3c3264258c5523316e01f850017a1d20a291af9994b5b0b6d020"
+    },
+    {
+      "path": "config/pll_startup.toml",
+      "sha256": "d9f013c7fe7c401f9fc19b6da282f2fe2c445fd1bd4964f2ded670584625b957"
+    },
+    {
+      "path": "verification/contracts/pll_startup.toml",
+      "sha256": "a204d80b56189acc8f39b13540fac765bc38976a8eb606f352eb20265c6513b8"
+    },
+    {
+      "path": "analog/pll/top/tb/startup/tb_pll_startup_native_ngspice.cir.in",
+      "sha256": "0737ebc7eb5a5a678467db21e0a9e5500c9524e13496231067561795ca4d072c"
+    },
+    {
+      "path": "analog/pll/top/tb/startup/tb_pll_startup_mixed_ngspice.cir.in",
+      "sha256": "6c826b3a08a57579ed4c5cc8cf3ec493fe74813202489f3c8225f311d86bbf93"
+    },
+    {
+      "path": "digital/pll/tb/tb_pll_startup_supervisor.sv",
+      "sha256": "269954c00ff9cc561143254a267fb71244380dc5796c4ca9f1f6fc4899f1476a"
+    },
+    {
+      "path": "digital/pll/tb/tb_pll_startup_default_timing.sv",
+      "sha256": "9976ab9b74b20740bc48884cfe0000fd70ec060429a215acfb98988952844647"
+    }
+  ]
+}

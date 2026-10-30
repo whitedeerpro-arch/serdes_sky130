@@ -1,0 +1,8 @@
+* Passive charge-pump filter: shunt Cfast, series Rzero/Cint integrating branch.
+* Nominal ideal R/C prototype; physical devices/extracted VCO control load pending.
+.subckt pll_loop_filter cp_in vctrl vss params: rz=6.5k cint=40p cfast=2p
+Vlink cp_in vctrl 0
+Cf vctrl vss {cfast}
+Rz vctrl z {rz}
+Ci z vss {cint}
+.ends pll_loop_filter

@@ -1,0 +1,13 @@
+* Static data receiver: source followers + mirrored differential gain + two inverters.
+* Preserves DC data and long runs; never use the edge-only clock restorer for data.
+* Dependencies: sky130_primitives.spice and cml_to_cmos.spice (gain/inverter helpers).
+.subckt serdes_cml_to_cmos_data inp inn out vbias vdd vss
++ params: wsf=20 wsink=2 win=6 wload=8 wtail=6 pre_wn=1 pre_wp=2 out_wn=4 out_wp=8
+Xfp vdd inp fp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd inn fn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp fp vbias vss vss serdes_nfet w={wsink} l=.5 nf=2
+Xsn fn vbias vss vss serdes_nfet w={wsink} l=.5 nf=2
+Xgain fp fn raw vbias vdd vss serdes_rx_diff_to_se win={win} wload={wload} wtail={wtail}
+Xpre raw inv vdd vss serdes_rx_inverter wn={pre_wn} wp={pre_wp}
+Xout inv out vdd vss serdes_rx_inverter wn={out_wn} wp={out_wp}
+.ends serdes_cml_to_cmos_data

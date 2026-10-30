@@ -1,0 +1,45 @@
+status = "functional_RTL_and_nominal_leaf_prototypes; physical_system_closure_pending"
+line_rate_bps = 4000000000
+ui_s = 2.5e-10
+recovered_parallel_bits = 16
+recovered_word_rate_hz = 250000000
+control_clock_domain = "recovered_word_domain; unrelated_system_clock_CDC_not_implemented"
+line_encoding = "raw_NRZ_with_explicit_training; no8b10b_or_scrambler"
+training_word_hex = "b5e3"
+training_repetitions = 4
+recovered_word_bit0 = "earliest_received_bit"
+stage_goal = "fixed4Gbps_TX_channel_RX_functional_link; recovered16bit_output; explicit_frequency_offset_and_training"
+actual_entire_serdes_frozen = false
+shared_clock_source = "existing_TX_PLL"
+new_RX_PLL_or_native_PLL_revalidation_required_in_current_stage = false
+verification_strategy = "hierarchical; isolated_boundaries_and_validated_load_level_slew_latency_contracts; monolithic_transistor_run_not_required"
+
+[completed_scope]
+transistor_static_CMOS_data_readout = "TT3codes; realPI_CTLE_samplers; DC0/1; tested350/425ps_readouts"
+transistor_pair_alignment = "TT3codes; realCMOS_clock_receiver_and4DFFs; E0_physical_inverter_cap_delay;350ps_readout"
+RTL_CDR_loop = "actual_voter_filter_commutator; behavioral_NRZ_sampler_and_clock_plant_using_measured_PI_curve"
+RTL_deserializer_and_training = "all16_initial_bit_offsets;320_directed_payload_words"
+tracking_cases = 10
+tracking_duration_each_s = 0.0001
+tracking_offsets_ppm = [-300, -100, 0, 100, 300]
+transition_jitter_exploration_ps = 5
+edge_aperture_skew_stress_ps = [-20, 20]
+edge_path_imbalance_stress_ps = 5
+skew_stress_is_measured_calibration = false
+no_transition_holdover_bits = 2048
+no_transition_status_timeout_control_ticks = 256
+payload_word_errors = 0
+data_index_slips_after_training = 0
+noise_or_statistical_BER_claim = false
+actual_driver_PCB_CTLE_samples_CMOS_window_s = 2.4e-8
+actual_driver_PCB_CMOS_data_bits_checked = 80
+actual_CMOS_to_RTL_SIPO_payload_words = 3
+actual_CMOS_to_RTL_scope = "numeric_logic_pair_replay_for_word_order; not_physical_shift_register_timing"
+
+[required_before_physical_system_freeze]
+physical_full16UI_demux_parallel_timing_closure = "pending; currentRTL_functional_only"
+physical_PI_control_drive_and_update_timing = "pending; registeredRTL_and_prescribed20ps_port_slew_not_sufficient"
+closed_loop_sample_frontend_model_calibration = "pending; rawNRZ_and_skew_stress_are_not_calibrated_full_RX_model"
+common_system_clock_elastic_buffer_policy = "pending_if_system_domain_output_required; recovered_domain_is_current_boundary"
+PVT_mismatch_phase_noise_layout = "separate_validation_stage; not_requested_in_current_nominal_design_work"
+protocol_encoding_and_interoperability = "separate_stage"

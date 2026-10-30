@@ -1,0 +1,6 @@
+* Ideal deterministic CMOS clock relative to vss.
+* duty is specified at 50-percent crossings.
+* Require positive period/edge times and valid high/low durations.
+.subckt stim_clock_cmos clk vss params: vlo=0 vhi=1.8 period=10n delay=1n trise=100p tfall=100p duty=0.5
+Vclk clk vss PULSE({vlo} {vhi} {delay} {trise} {tfall} {duty*period-(trise+tfall)/2} {period})
+.ends stim_clock_cmos

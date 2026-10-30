@@ -1,0 +1,16 @@
+* Static CML latch with resistive loads and clock-steered track/hold branches.
+* Data and output use the high-common-mode CML domain; the clock pair is LOWER.
+* clk_track > clk_hold: noninverting track; opposite polarity: regenerate/hold.
+* Dependencies: common/devices/spice/sky130_primitives.spice.
+.subckt serdes_cml_data_latch dp dn qp qn clk_track clk_hold vbias vdd vss
++ params: wdata=40 whold=80 wclock=64 wtail=12 rload=400
+Rp vdd qp {rload}
+Rn vdd qn {rload}
+Xdp qn dp track vss serdes_nfet_lvt w={wdata} nf=4
+Xdn qp dn track vss serdes_nfet_lvt w={wdata} nf=4
+Xhp qn qp hold vss serdes_nfet_lvt w={whold} nf=4
+Xhn qp qn hold vss serdes_nfet_lvt w={whold} nf=4
+Xct track clk_track tail vss serdes_nfet_lvt w={wclock} nf=4
+Xch hold clk_hold tail vss serdes_nfet_lvt w={wclock} nf=4
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=0.5 nf=4
+.ends serdes_cml_data_latch

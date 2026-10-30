@@ -1,0 +1,25 @@
+LF cold precharge through actual CMOS transmission gate; both capacitor states start at zero
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc.spice"
+.param supply=1.8 vtarget=1.4
+Vdd vdd 0 {supply}
+Vtarget target 0 {vtarget}
+Ven en 0 {supply}
+Xinv en en_b vdd 0 serdes_cmos_inv
+Xpre target ctrl en en_b vdd 0 serdes_cmos_tgate
+Xlf port ctrl 0 pll_loop_filter
+Rport port 0 1T
+.ic v(ctrl)=0 v(xlf.z)=0
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(ctrl) v(xlf.z) i(Vtarget) v(target) v(en_b)
+.control
+set wr_singlescale
+set wr_vecnames
+tran 1n 4u 0 1n
+wrdata waveforms.tsv v(ctrl) v(xlf.z) i(Vtarget) v(target)
+quit
+.endc
+.end

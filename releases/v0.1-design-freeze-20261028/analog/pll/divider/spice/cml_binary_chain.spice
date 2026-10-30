@@ -1,0 +1,15 @@
+* Historical exploration; not the current baseline. See cml_prescaler8.spice and cmos_divider_programmable.spice.
+* Binary CML divider taps. This file does NOT implement arbitrary integer N.
+* clkp/clkn are /1; the named outputs are /2, /4, /8 and /16.
+* Tap switching must be handled while the feedback path is disabled/reset.
+.subckt pll_cml_binary_chain clkp clkn q2p q2n q4p q4n q8p q8n q16p q16n vbias vdd vss
++ params: wsf=40 wsf_sink=4 wdata=20 whold=80 wclock=64 wtail=12 rload=600
+X2 clkp clkn q2p q2n m2p m2n vbias vdd vss pll_cml_div2
++ wsf={wsf} wsf_sink={wsf_sink} wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+X4 q2p q2n q4p q4n m4p m4n vbias vdd vss pll_cml_div2
++ wsf={wsf} wsf_sink={wsf_sink} wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+X8 q4p q4n q8p q8n m8p m8n vbias vdd vss pll_cml_div2
++ wsf={wsf} wsf_sink={wsf_sink} wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+X16 q8p q8n q16p q16n m16p m16n vbias vdd vss pll_cml_div2
++ wsf={wsf} wsf_sink={wsf_sink} wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} rload={rload}
+.ends pll_cml_binary_chain

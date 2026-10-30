@@ -1,0 +1,19 @@
+id = "load_range"
+dut = "analog/common/cmos_to_cml"
+level = "block"
+status = "planned"
+purpose = "扫描差分负载及输入速率，确定可用范围。"
+analyses = ["tran"]
+measurements = ["swing_vs_load","delay_vs_load","maximum_verified_rate"]
+shared_stimuli = ["verification/stimuli/spice/clock_cmos.spice"]
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

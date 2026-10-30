@@ -1,0 +1,12 @@
+* PVT loop fixture only: piecewise-linear fit to three measured native VCO points.
+* No extrapolated frequency beyond the measured [1.2,1.6]V range.
+* The runner must reject any loop trajectory leaving that range.
+* No physical VCO noise, startup, divider state, loading or power is modeled here.
+.subckt pll_pvt_feedback_model ctrl fb phase f_ghz vdd vss
++ params: f12=1.9G f14=2G f16=2.1G ndiv=8 edge_shape=.02
+Bfreq f_ghz vss V={max(min(f12,min(f14,f16)),min(max(f12,max(f14,f16)),(v(ctrl,vss)<1.4 ? f14+(f14-f12)*(v(ctrl,vss)-1.4)/.2 : f14+(f16-f14)*(v(ctrl,vss)-1.4)/.2)))/1G}
+Bint vss phase I={v(f_ghz,vss)*1G/ndiv*1n}
+Cphase phase vss 1n
+Rphase phase vss 1T
+Bclock fb vss V={v(vdd,vss)*(.5+.5*tanh(sin(6.283185307179586*v(phase,vss))/edge_shape))}
+.ends pll_pvt_feedback_model

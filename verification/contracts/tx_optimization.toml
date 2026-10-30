@@ -1,0 +1,26 @@
+status = "engineering_working_revision_characterization_not_product_signoff"
+report = "docs/tx_optimization.md"
+working_revision = "config/tx_working_revision.toml"
+previous_contract = "verification/contracts/tx_pvt.toml"
+minimum_function = "training valid, marker correct, no payload sign errors, no missing transitions or extra crossings"
+fixed_ui_s = 2.5e-10
+training_bits = 64
+payload_phase_or_UI_fit = false
+minimum_serializer_signed_margin_v = 0.075
+maximum_serializer_deterministic_spread_UI = 0.15
+serializer_budget_source = "same inherited draft as previous TX PVT"
+transition_match_half_width_UI = 0.45
+minimum_training_edges = 20
+far_end_amplitude_acceptance_tolerance_defined = false
+standalone_starts_disabled = true
+enable_start_s = 4e-9
+startup_measurement = "earliest time after4.1ns for which abs(Vgate-Vbias)/Vbias<=1% for remainder of record"
+startup_error_fraction = 0.01
+startup_product_time_budget_defined = false
+SPICE_exit_zero_alone_is_pass = false
+complete_finite_record_and_strict_time_required = true
+power_scope = "time integral over same finite payload window; early AC coupled startup; not complete steady-state SerDes"
+geometry_scope = "MOS total W*L, never W*nf*L; excludes resistor/cap/wells/routing/spacing"
+reference_generator_qualified = false
+r3_native_clock_phase_reintegration_qualified = false
+passive_extremes_layout_noise_mismatch_or_BER_signoff = false

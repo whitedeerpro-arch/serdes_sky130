@@ -1,0 +1,40 @@
+RX CTLE AC/DC characterization; static code @EQ_CODE@, input CM @INPUT_CM@
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/rx/input/spice/rx_input_termination.spice"
+.include "@PROJECT_ROOT@/analog/rx/ctle/spice/rx_ctle_rc.spice"
+Vdd vdd 0 1.8
+Iref vdd vbias 50u
+Xref vbias vbias 0 0 serdes_nfet_lvt w=8 l=0.5 nf=4
+Vcm cm 0 @INPUT_CM@
+Vdm dm 0 DC 0 AC 1
+Eip inp cm dm 0 .5
+Ein inn cm dm 0 -.5
+Veq0 eq0 0 @EQ0_V@
+Veq1 eq1 0 @EQ1_V@
+Xterm inp inn cm serdes_rx_input_termination
+Xeq inp inn op on eq0 eq1 vbias vdd 0 serdes_rx_ctle_rc
+Cop op 0 20f
+Con on 0 20f
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(inp) v(inn) v(op) v(on) v(cm) v(vdd) v(vbias) v(xeq.sp) v(xeq.sn) i(Vdd) i(Eip) i(Ein)
+.control
+set wr_singlescale
+set wr_vecnames
+op
+let cmout=(v(op)+v(on))/2
+let pcore=-v(vdd)*i(Vdd)
+wrdata operating_point.tsv v(vbias) v(xeq.sp) v(xeq.sn) cmout pcore
+ac dec 100 1meg 20g
+let gain=v(op,on)/v(inp,inn)
+let yleg=-i(Eip)/v(inp)
+wrdata ac.tsv gain yleg
+dc Vdm -.2 .2 .002
+let diffout=v(op)-v(on)
+let cmout=(v(op)+v(on))/2
+wrdata dc.tsv diffout cmout v(xeq.sp) v(xeq.sn)
+quit
+.endc
+.end

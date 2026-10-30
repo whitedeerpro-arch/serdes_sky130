@@ -1,0 +1,19 @@
+id = "transient"
+dut = "analog/pll/loop_filter"
+level = "block"
+status = "prototype"
+purpose = "以明确电流阶跃或脉冲验证积分、纹波和恢复。"
+analyses = ["tran"]
+measurements = ["control_voltage_step","ripple","settling_time"]
+shared_stimuli = []
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_lf_charge_ngspice.cir.in"
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

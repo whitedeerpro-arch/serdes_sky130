@@ -1,0 +1,142 @@
+Real TX isolation/driver + C2 PCB + CTLE + PI + CML samplers + static CMOS + pair retiming
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/tx/output_driver/spice/cml_line_driver.spice"
+.include "@PROJECT_ROOT@/verification/models/channel/pcb_family/pcb_foster_cells.spice"
+.include "@PROJECT_ROOT@/verification/models/channel/pcb_family/C2_loss6.spice"
+.include "@PROJECT_ROOT@/analog/rx/input/spice/rx_input_termination.spice"
+.include "@PROJECT_ROOT@/analog/rx/ctle/spice/rx_ctle_rc.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_latch.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_clock_shift.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_sample_dff.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_half_rate_samples.spice"
+.include "@PROJECT_ROOT@/analog/rx/pi/spice/pi_current_unit.spice"
+.include "@PROJECT_ROOT@/analog/rx/pi/spice/pi_sector.spice"
+.include "@PROJECT_ROOT@/analog/rx/pi/spice/pi_clock_mux8.spice"
+.include "@PROJECT_ROOT@/analog/rx/pi/spice/pi_rotator.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos_data.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_cmos_pair_align.spice"
+Vbias vref_tx 0 1.8
+Iref_tx vref_tx vbias_tx 0.85m
+Xbias_tx vbias_tx vbias_tx 0 0 serdes_nfet w=20 l=0.5 nf=4
+Vpre vdd_pre 0 1.8
+Vout vdd_out 0 1.8
+Venable tx_en 0 PWL(0 0 .1n 0 .12n 1.8)
+Xtx tip tin tx_en txp txn vbias_tx vdd_pre vdd_out 0 serdes_tx_cml_line_driver
+* The removed serializer's wire loading does not change an ideal replay source.
+Cwirep tip 0 2f
+Cwiren tin 0 2f
+Cpadp txp 0 200f
+Cpadn txn 0 200f
+Rpkgp txp rpkgp .3
+Rpkgn txn rpkgn .3
+Lpkgp rpkgp apkgp .5n
+Lpkgn rpkgn apkgn .5n
+Cacp apkgp pcbp 10n
+Cacn apkgn pcbn 10n
+Vpcbp pcbp chip 0
+Vpcbn pcbn chin 0
+Xchannel chip chin farp farn 0 pcb_c2_loss6
+Rwirep farp rxp .01
+Rwiren farn rxn .01
+Vcm vcm 0 .9
+Xtermination rxp rxn vcm serdes_rx_input_termination
+* One load block: proxy100fF for boundary check OR actual RX gates + residual wire.
+Cresidual_p rxp 0 2f
+Cresidual_n rxn 0 2f
+Vrx vdd_rx 0 1.8
+Iref_rx vdd_rx vbias_rx 50u
+Xref_rx vbias_rx vbias_rx 0 0 serdes_nfet_lvt w=8 l=0.5 nf=4
+Veq0 eq0 0 1.8
+Veq1 eq1 0 1.8
+Xrx rxp rxn outp outn eq0 eq1 vbias_rx vdd_rx 0 serdes_rx_ctle_rc
+Vdd vdd 0 1.8
+Vref vref 0 1.8
+Iref vref vbias .85m
+Xref vbias vbias 0 0 serdes_nfet w=20 l=.5 nf=4
+Bc0p c0p 0 V=1.65+.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+0.0)/.25)
+Bc0n c0n 0 V=1.65-.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+0.0)/.25)
+Bc1p c1p 0 V=1.65+.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+0.7853981633974483)/.25)
+Bc1n c1n 0 V=1.65-.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+0.7853981633974483)/.25)
+Bc2p c2p 0 V=1.65+.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+1.5707963267948966)/.25)
+Bc2n c2n 0 V=1.65-.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+1.5707963267948966)/.25)
+Bc3p c3p 0 V=1.65+.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+2.356194490192345)/.25)
+Bc3n c3n 0 V=1.65-.1*tanh(sin(12.566370614359172e9*(time-3.4696540445088545e-10)+2.356194490192345)/.25)
+Va0 a0 0 1.8
+Vb0 b0 0 0
+Vf0 f0 0 1.8
+Va1 a1 0 0
+Vb1 b1 0 1.8
+Vf1 f1 0 1.8
+Va2 a2 0 0
+Vb2 b2 0 0
+Vf2 f2 0 1.8
+Va3 a3 0 0
+Vb3 b3 0 0
+Vf3 f3 0 1.8
+Va4 a4 0 0
+Vb4 b4 0 0
+Vf4 f4 0 0
+Va5 a5 0 0
+Vb5 b5 0 0
+Vf5 f5 0 0
+Va6 a6 0 0
+Vb6 b6 0 0
+Vf6 f6 0 0
+Va7 a7 0 0
+Vb7 b7 0 0
+Vf7 f7 0 0
+Xpi c0p c0n c1p c1n c2p c2n c3p c3n a0 a1 a2 a3 a4 a5 a6 a7 b0 b1 b2 b3 b4 b5 b6 b7 f0 f1 f2 f3 f4 f5 f6 f7 dp dn ep en vbias vdd 0 serdes_pi_rotator
+Xdut outp outn dp dn ep en d0p d0n d1p d1n e0p e0n e1p e1n vbias vdd 0 serdes_rx_half_rate_samples 
+Cd0p d0p 0 5f
+Cd0n d0n 0 5f
+Cd1p d1p 0 5f
+Cd1n d1n 0 5f
+Ce0p e0p 0 5f
+Ce0n e0n 0 5f
+Ce1p e1p 0 5f
+Ce1n e1n 0 5f
+Vread readvdd 0 1.8
+Vhi hi 0 1.78
+Vlo lo 0 1.53
+Xdc1 hi lo dc1 vbias readvdd 0 serdes_cml_to_cmos_data
+Xdc0 lo hi dc0 vbias readvdd 0 serdes_cml_to_cmos_data
+Cdc1 dc1 0 10f
+Cdc0 dc0 0 10f
+Vrst rst_b 0 PWL(0 0 1n 0 1.02n 1.8)
+Xalign d0p d0n d1p d1n e0p e0n e1p e1n ep en ad0 ad1 ae0 ae1 ck rst_b vbias readvdd 0 serdes_rx_cmos_pair_align
+Cad0 ad0 0 5f
+Cad1 ad1 0 5f
+Cae0 ae0 0 5f
+Cae1 ae1 0 5f
+.include "@STIMULUS_FILE@"
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu method=gear maxord=2
+.save v(tip) v(tin) v(rxp) v(rxn) v(outp) v(outn) v(dp) v(dn) v(ep) v(en) v(ck) v(ad0) v(ad1) v(ae0) v(ae1)
+.control
+set wr_singlescale
+set wr_vecnames
+stop when time > 8n
+tran 4p 24n 0 4p
+let driver_input=v(tip)-v(tin)
+let rx=v(rxp)-v(rxn)
+let ctle=v(outp)-v(outn)
+let data_clock=v(dp)-v(dn)
+let edge_clock=v(ep)-v(en)
+wrdata checkpoint.tsv driver_input rx ctle data_clock edge_clock v(ck) v(ad0) v(ad1) v(ae0) v(ae1)
+delete all
+resume
+let driver_input=v(tip)-v(tin)
+let rx=v(rxp)-v(rxn)
+let ctle=v(outp)-v(outn)
+let data_clock=v(dp)-v(dn)
+let edge_clock=v(ep)-v(en)
+wrdata waveforms.tsv driver_input rx ctle data_clock edge_clock v(ck) v(ad0) v(ad1) v(ae0) v(ae1)
+quit
+.endc
+.end

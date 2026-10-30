@@ -1,0 +1,35 @@
+status = "synthetic_pcb_exploration_contract"
+line_rate_bps = 4000000000
+ui_s = 2.5e-10
+fold_span_ui = 2
+fit_ui_to_output_edges = false
+primary_medium = "board_intra_or_inter_100ohm_differential"
+port_order = ["TX+", "TX-", "RX+", "RX-"]
+single_ended_reference_ohm = 50
+differential_reference_ohm = 100
+mixed_mode_order = ["differential_TX", "common_TX", "differential_RX", "common_RX"]
+scd21_definition = "common RX output wave / differential TX incident wave"
+pcb_reference_planes = "outside package/pad/AC caps/terminations; all those belong to fixture"
+source_termination_per_leg_ohm = 50
+receiver_termination_per_leg_ohm = 50
+passivity_check = "max singular value of full 4x4 S <= 1 + 1e-10 on declared grid"
+reciprocity_check = "max abs(S - transpose(S)) < 1e-12 on declared grid"
+causality_basis = "positive RLC Foster medium plus distributed passive lines; not sampled passivity alone"
+touchstone_format = "4-port row-major full matrix, Hz, RI, R50; DC through12GHz,5MHz spacing"
+spice_ac_check = "3 frequencies:1MHz,2.0005GHz,4GHz; magnitude error<0.05dB and phase error<1degree vs distributed model"
+spice_wideband_transient_qualified = false
+rx_or_cdr_present = false
+noise_or_ber_qualified = false
+
+[collection]
+frequency = ["Sdd21", "Sdd11", "group_delay_UI", "Scd21", "passivity", "reciprocity"]
+time = ["1UI_pulse_response", "main_cursor", "pre_and_post_cursors", "finite_cursor_ISI_sum", "FFT_wrap_diagnostic"]
+future_integrated = ["2UI_eye_fixed250ps", "fixed_training_phase", "extra_and_missing_transitions", "sample_margin", "common_mode", "source_power"]
+provenance = ["source_model_hashes", "fixture_hashes", "port_map", "reference_impedances", "bandwidth", "stimulus_and_sampling_phase"]
+
+[hierarchy]
+T0 = "model quality and passive AC syntax/agreement; completed nominally"
+T1 = "analytical source plus channel pulse/cursors; completed; not actual TX"
+T2 = "actual serializer/output driver plus C0/C2/C3 completed nominal256bit voltage sampling; other cases and convergence/noise/PVT pending; see docs/data/tx_pcb_channel_integration.json"
+T3 = "RX termination/CTLE nominalDC_AC, C2 voltage replay and reduced driver/PCB/real RX loading completed; physical sampler pending; see verification/contracts/rx_frontend.toml"
+T4 = "RX CDR/deserializer and coding under channel/noise; pending"

@@ -1,0 +1,35 @@
+id = "cml_line_driver_terminated"
+level = "block_plus_channel_fixture"
+status = "initial_design_bringup"
+rate_bps = 4000000000
+ui_s = 2.5e-10
+target_differential_pp_v = 0.4
+source_resistance_per_leg_ohm = 50
+load_resistance_per_leg_ohm = 50
+receiver_common_mode_v = 0.9
+coupling_cap_per_leg_f = 1e-8
+line_impedance_per_leg_ohm = 50
+line_delay_s = 2.5e-10
+pad_cap_per_leg_f = 2e-13
+package_series_inductance_per_leg_h = 5e-10
+source_is_ideal_differential_stimulus = true
+serializer_loading_qualified = false
+real_pcb_or_sparameter_model = false
+esd_pad_model_present = false
+ffe_enabled = false
+testbench = "analog/tx/output_driver/tb/terminated/tb_cml_line_driver_ngspice.cir.in"
+
+channel_model = "verification/models/channel/diff_rlc16.spice"
+channel_is_passive_lumped_rlgc_proxy = true
+
+[input_admittance]
+view = "balanced_input_small_signal"
+template = "analog/tx/output_driver/tb/terminated/tb_cml_line_driver_input_ac_ngspice.cir.in"
+
+[direct_integration]
+status = "TT_256bit_voltage_sampling_observed_not_RX_CDR"
+template = "analog/tx/output_driver/tb/terminated/tb_serializer16_line_driver_ngspice.cir.in"
+input_stimulus_source = "results/analog/tx/serializer/physical_clock/20261028T090856Z_ngspice_tt_native_buffered_clock_64words/raw/stimuli.inc"
+wire_cap_per_leg_f = 2e-15
+pll_source_boundary_idealized = true
+actual_serializer_drives_gate_load = true

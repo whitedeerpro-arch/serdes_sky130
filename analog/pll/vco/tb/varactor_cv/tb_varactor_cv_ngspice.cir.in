@@ -1,0 +1,26 @@
+SKY130 varactor admittance at representative CML common mode
+.lib "@MODEL_LIBRARY@" tt
+Vnode node 0 DC 1.65 AC 1
+Vctrl vctrl 0 DC 1.0
+Xvar node vctrl 0 sky130_fd_pr__cap_var_lvt w=15 l=0.5
+.temp 27
+.control
+set wr_singlescale
+set wr_vecnames
+ac dec 20 1meg 10gig
+let ceff=-imag(i(Vnode))/(2*pi*frequency)
+let g=-real(i(Vnode))
+wrdata varactor_vctrl_1p0.tsv ceff g
+alter Vctrl 1.4
+ac dec 20 1meg 10gig
+let ceff=-imag(i(Vnode))/(2*pi*frequency)
+let g=-real(i(Vnode))
+wrdata varactor_vctrl_1p4.tsv ceff g
+alter Vctrl 1.8
+ac dec 20 1meg 10gig
+let ceff=-imag(i(Vnode))/(2*pi*frequency)
+let g=-real(i(Vnode))
+wrdata varactor_vctrl_1p8.tsv ceff g
+quit
+.endc
+.end

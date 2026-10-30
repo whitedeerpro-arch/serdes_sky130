@@ -2,6 +2,14 @@
 
 按日期倒序。细节见 [history](../history/index.md)。
 
+## 2026-10-31
+
+- I-01：证实分频器启动状态只造成字内固定位重排（8 状态 × 6 工况一致）；新增 3 bit 状态检测器（48/48）与 `tx_word_remap` RTL；调序后 24/24 端到端满足规格，FS 热角 1024 bit 最差 0.127 UI。
+- I-04：定位全速 CML→CMOS SS 冷角根因（PMOS 镜像负载上拉不足）；候选 "big" 尺寸 45/45；交流耦合自偏置方案在 SS 冷热失败。
+- 单链打拍时钟探索归档（未采用）；`serial.bit_mapping` 把眼图健康和位映射分开测。
+- 共享库支持二进制 raw 输出和起始保存时间：TX bench 文件 21.2 → 8.9 MB，仿真时间不变。
+- 规格：名义 BER 1e-12、高低温档 1e-9；400 mVpp 定为上界和驱动目标。
+
 ## 2026-10-30
 
 - 文档重构：README 一页化；新增 overview / design / verification / status；旧实验记录归入 history。

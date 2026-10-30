@@ -47,6 +47,30 @@ r3 的级间 buffer 位于部分抽头之前，各路受影响不同：250 MHz �
 
 1 GHz 的约 2 UI 偏差是分频器启动状态（半个 1 GHz 周期），对调 P/N 只对这一次启动有效。去掉这个粗相位后，1 GHz → 2 GHz 的相对相位只变了约 1.9 ps，但 500 MHz 和 2 GHz 相对 250 MHz 字时钟的位置都变了，旧 trim 不再适用。来源：[相位核对](../history/tx_clock_phase_audit.md)、[数据](../data/tx_clock_phase_audit.json)。
 
+## 启动状态与调序
+
+TX 四路时钟取自三条独立 prescaler，上电状态彼此独立。以 250 MHz（字时钟）为参照，500 MHz 落后 0–3 个 VCO 周期、1 GHz 落后 0–1 个，共 8 种状态。2 GHz 直接取自 VCO，没有状态。
+
+**每种状态只造成字内固定的位重排，眼图不受影响。** 在 r2 bench 上把对应时钟的冻结边沿整体延后整数个 VCO 周期，复现全部 8 种状态，跑 6 个压力工况（[bench](../../analog/tx/serializer/tb/clock_states/run.py)）：
+
+- 串化器眼图 116.6–153.7 mV，散布 0.028–0.120 UI；
+- 8 种状态对应 8 种不同置换，在 6 个工况、3 个观测节点上完全一致；
+- 相邻两位始终一起移动，两个半字各自做同一种 4 对置换，不跨字。
+
+置换表见 [serializer_state_permutations.hex](../../digital/tx/tb/data/serializer_state_permutations.hex)。
+
+**解法：启动检测 + 输入侧调序。**
+
+| 部分 | 内容 | 验证 |
+|---|---|---|
+| 状态检测器 [tx_clock_state_detector](../../analog/tx/clock_distribution/spice/tx_clock_state_detector.spice) | 3 个 CML 触发器：用支路 2 的 ÷4、÷2 和支路 3 的 ÷2 边沿去采样支路 0 的 ÷4/÷2，k500 = 2a + b，k1g = c；采样时钟先经 CML buffer；静态 CMOS 读出 | 6 工况 × 8 状态，48/48 正确且静态；最小采样余量 a 168/283、b 162/299、c 231/225 ps（建立/保持） |
+| 调序 [tx_word_remap](../../digital/tx/README.md) | 3 bit 状态选 8 张表之一，16 个 4 选 1 加一级寄存器 | 8 个实测状态，512 个字全部恢复原序；Verilator lint 无告警 |
+| 端到端 | 输入按逆置换预排后跑整链 | TT/SS 热/FS 热 × 8 状态，24/24 顺序正确且满足规格；FS 热角 1024 bit：500 MHz 滞后偶数周期 0.115 UI、奇数周期 0.127 UI |
+
+调序后，1 GHz 的状态对电气时序没有影响；500 MHz 滞后奇数个周期的状态稍差（它的选择沿与 250 MHz 数据变化错开 2 UI），但仍在规格内。
+
+检测器设计中踩过的两个坑：直接用分频抽头当触发器时钟，摆幅不够，锁存器会变透明；用打拍器的弱保持管（W20），FS 热角会发生主从穿透。现在用 buffer 恢复时钟摆幅，并保留分频器的强保持（W80）。
+
 ## 适用范围
 
 - 源是理想化的 TT 记录，没有实时 PLL；没有逐路时间平移或时钟延拓。
@@ -54,6 +78,6 @@ r3 的级间 buffer 位于部分抽头之前，各路受影响不同：250 MHz �
 
 ## 待解决
 
-- 分频器确定性状态或启动后相位检测/纠正（[问题清单](../status/open_issues.md) I-01）。
+- 接 r3 原生前端时确定检测码到状态的锚点，把检测器接入启动监督 RTL，用后关断（[问题清单](../status/open_issues.md) I-01）。
 - 用 r3 原生时钟重标 trim 并重验 TX 数据流（I-07）。
 - 时钟分发附加抖动进入 TX 抖动预算（I-05）。

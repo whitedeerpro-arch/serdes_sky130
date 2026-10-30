@@ -41,3 +41,12 @@ serializer_draft_pass_cells = 45
 standalone_enabled_from_off_functional = 45
 selected_C2_functional = 4
 long1024_functional = 2
+
+# Divider start-state handling (I-01), 2026-10-31: verified standalone, not yet
+# integrated with the r3 native frontend or the start-up supervisor.
+start_states = 8
+start_state_effect = "fixed in-word bit-pair permutation; eye unchanged"
+start_state_evidence = "analog/tx/serializer/tb/clock_states/run.py"
+start_state_detector = "analog/tx/clock_distribution/spice/tx_clock_state_detector.spice"
+input_remap_rtl = "digital/tx/rtl/tx_word_remap.sv"
+remapped_FS_1v65_85C_1024bit_worst_spread_ui = 0.127

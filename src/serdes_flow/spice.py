@@ -1,8 +1,14 @@
 """Testbench rendering, ngspice batch runs and waveform loading.
 
 A run directory holds exactly what was simulated: tb.cir, any copied include
-files, .spiceinit, simulator.log, the wrdata output and execution.json.  Run
+files, .spiceinit, simulator.log, the waveform output and execution.json.  Run
 directories are created fresh and never overwritten.
+
+Waveform output is either wrdata text (`waveforms.tsv`) or, after
+`binary_output`, an ngspice binary raw file (`waveforms.raw`): full double
+precision, about half the size, and it loads without text parsing.  `Waves`
+reads both.  `skip_output_before` stops ngspice from storing the start-up
+part of a transient; the circuit still evolves from t = 0.
 """
 import gzip
 import hashlib
@@ -21,6 +27,8 @@ from . import project
 
 _PLACEHOLDER = re.compile(r"@([A-Z0-9_]+)@")
 _LOG_FAILURES = ("error", "aborted", "timestep too small", "singular matrix")
+_WRDATA = re.compile(r"^(\s*)wrdata\s+(\S+?)\.tsv\s+(.+)$", re.M)
+_TRAN_ZERO_START = re.compile(r"^(\s*tran\s+\S+\s+\S+\s+)0(?=\s)", re.M)
 
 
 def render(template: str | Path, **values) -> str:
@@ -30,6 +38,27 @@ def render(template: str | Path, **values) -> str:
     if missing:
         raise KeyError(f"unfilled placeholders: {sorted(missing)}")
     return _PLACEHOLDER.sub(lambda m: str(values[m[1]]) if m[1] in values else m[0], text)
+
+
+def binary_output(deck: str) -> str:
+    """Turn every `wrdata name.tsv vecs` into a binary raw `write name.raw vecs`."""
+    out, n = _WRDATA.subn(lambda m: f"{m[1]}set filetype=binary\n{m[1]}write {m[2]}.raw {m[3]}", deck)
+    if not n:
+        raise ValueError("deck has no wrdata line to convert")
+    return out
+
+
+def skip_output_before(deck: str, tstart) -> str:
+    """Set tstart of `tran tstep tstop 0 tmax`: no output points before tstart.
+
+    The solver still runs from t = 0 with the same tmax, so later points are
+    unaffected; only the stored history shrinks.  Analyses that window data
+    (training, power averages) must start after tstart.
+    """
+    out, n = _TRAN_ZERO_START.subn(lambda m: f"{m[1]}{tstart}", deck)
+    if n != 1:
+        raise ValueError(f"expected one 'tran tstep tstop 0 ...' line, found {n}")
+    return out
 
 
 def corner_values(cond) -> dict:
@@ -92,17 +121,57 @@ def run_many(jobs, *, workers: int = 4):
         return [f.result() for f in futures]
 
 
+def read_raw(path: Path):
+    """First plot of an ngspice raw file (binary, real data): (names, array)."""
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rb") as f:
+        header, names = {}, []
+        while True:
+            line = f.readline()
+            if not line:
+                raise ValueError(f"{path}: no Binary: section")
+            text = line.decode("latin-1").rstrip("\n")
+            if text.startswith("Variables:"):
+                for _ in range(int(header["No. Variables"])):
+                    names.append(f.readline().decode("latin-1").split()[1])
+            elif text.startswith("Binary:"):
+                payload = f.read()
+                break
+            elif text.startswith("Values:"):
+                raise ValueError(f"{path}: ASCII raw not supported; use filetype=binary")
+            else:
+                key, _, value = text.partition(":")
+                header[key.strip()] = value.strip()
+    if "complex" in header.get("Flags", ""):
+        raise ValueError(f"{path}: complex raw data not supported")
+    nvar = len(names)
+    values = np.frombuffer(payload, dtype="<f8")
+    # A raw file streamed through a FIFO reports 0 points; use the payload length.
+    npts = int(header.get("No. Points", 0)) or len(values) // nvar
+    return names, values[: npts * nvar].reshape(npts, nvar).copy()
+
+
+def _resolve(path: Path) -> Path:
+    """The given path, its .gz, or the binary .raw (optionally .gz) next to it."""
+    raw = path.with_suffix(".raw")
+    for p in (path, Path(str(path) + ".gz"), raw, Path(str(raw) + ".gz")):
+        if p.exists():
+            return p
+    raise FileNotFoundError(path)
+
+
 class Waves:
-    """wrdata output (single time scale, vector names in the header)."""
+    """Waveform output, single time scale: binary raw or wrdata text with vector names."""
 
     def __init__(self, path: Path):
-        path = Path(path)
-        if not path.exists() and Path(str(path) + ".gz").exists():
-            path = Path(str(path) + ".gz")
-        opener = gzip.open if path.suffix == ".gz" else open
-        with opener(path, "rt") as f:
-            self.names = f.readline().split()
-        self.data = np.loadtxt(path, skiprows=1)
+        path = _resolve(Path(path))
+        if ".raw" in path.suffixes:
+            self.names, self.data = read_raw(path)
+        else:
+            opener = gzip.open if path.suffix == ".gz" else open
+            with opener(path, "rt") as f:
+                self.names = f.readline().split()
+            self.data = np.loadtxt(path, skiprows=1)
         if self.data.ndim != 2 or self.data.shape[1] != len(self.names):
             raise ValueError(f"{path}: header has {len(self.names)} names, data {self.data.shape}")
         if not (np.all(np.isfinite(self.data)) and np.all(np.diff(self.data[:, 0]) > 0)):

@@ -62,3 +62,4 @@
 | 10-30 | [tx_pvt.md](tx_pvt.md) | v0.1 TX 45 条件：串化器草案 36/45；尾管余量与使能接管问题 | 已被 TX r2 取代；定位证据仍有效 |
 | 10-30 | [tx_clock_phase_audit.md](tx_clock_phase_audit.md) | r3 时钟下 TX 抽头相位改变，1 GHz 差约 2 UI | [design/tx_clock_distribution](../design/tx_clock_distribution.md) |
 | 10-30 | [tx_optimization.md](tx_optimization.md) | TX r2：草案 36/45 → 45/45，输出级启动 45/45（脚本生成的报告） | 当前修订证据 |
+| 10-31 | [tx_single_chain_clock_exploration.md](tx_single_chain_clock_exploration.md) | 单链 + VCO 相位打拍可消除分频状态不确定，但状态错误本身只造成位重排，故未采用；记录打拍器尺寸、负载、竞争与大 trim 的教训 | 探索，未采用 |

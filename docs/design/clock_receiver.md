@@ -57,6 +57,21 @@ SS/1.65 V/85 °C 下原接收器的增益节点仍在摆动，但预驱动 `bp` 
 - PLL 反馈只用 ÷8 后的 250 MHz CMOS，不受影响。
 - RX 的 [rx_cmos_pair_align.spice](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice) 把恢复的 EDGE 时钟转成约 2 GHz CMOS 再对齐样本；实时 RTL 桥每 500 ps 读一次 pair。若以后改为 CML 整字保持、低速再转 CMOS，这个依赖可以去掉。见 [尺寸与优先级](../history/divider_size_and_clock_priority.md)。
 
+### 全速 SS 冷角修复候选（2026-10-31）
+
+bench：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 prescaler 负载后进入转换器，与 r3 的 45 条件测试边界一致（[bench](../../analog/common/cml_to_cmos/tb/fullrate_pvt/run.py)）。
+
+**根因。** SS/1.65 V/−40 °C 下，增益级输出 `ap` 最高只到约 1.09 V（TT 下约 1.67 V），预驱动输出 `bp` 只能降到约 0.95 V，后级不翻转。输入加到 550 mVpp 也只降到 0.67 V。问题出在差分转单端级 PMOS 镜像负载的上拉：冷端 PMOS 阈值高、镜像节点慢。这一级输出的直流中心又随 PVT 变化，而后级反相器的翻转点是固定的。
+
+| 变体 | 结果 |
+|---|---|
+| 只加宽负载，或只降低预驱动翻转点 | SS 冷角仍失败 |
+| 负载 W16 + 尾管 W12 + 预驱动 NMOS 3.6 µm | 修好 SS 冷角，但 **SS 热角失败**（上沿不够） |
+| **"big"：输入对 W10、负载 W16、尾管 W16、预驱动 NMOS 3.6 µm** | **45/45**，占空比 0.477–0.511，转换器功耗 2.6–6.2 mW（TT 约 4.8 mW，比原候选多约 1 mW） |
+| 交流耦合 + 自偏置反相器（[cml_to_cmos_acsb](../../analog/common/cml_to_cmos/spice/cml_to_cmos_acsb.spice)） | TT/FF 正常、功耗约 1 mW；SS 冷热都失败：1.65 V 慢工艺下反相器在翻转点几乎没有增益。未采用 |
+
+幅度余量：源降到 200 mVpp 时，"big" 在 SS 冷、FS 热、SF 冷角仍通过，SS 热角（输入 277 mVpp）失败；SS 热角正常输入约 390 mVpp。
+
 ## 适用范围
 
 - 边界温度是确定性仿真在特定激励下的局部结果，不是带噪声/失配的额定值。
@@ -65,6 +80,6 @@ SS/1.65 V/85 °C 下原接收器的增益节点仍在摆动，但预驱动 `bp` 
 
 ## 待解决
 
-- SS/1.65 V/−40 °C 全速转换（[问题清单](../status/open_issues.md) I-04）。
+- 用原生 VCO 复验 "big" 的 SS 冷角，替换进 r3 前端后重跑分频/反馈 45 条件（[问题清单](../status/open_issues.md) I-04）；SS 热角幅度余量约 110 mV。
 - 1.95 V 过冲与器件端电压（I-11）。
 - 恢复级复位/无毛刺门控（随 I-01 的分频同步方案一起考虑）。

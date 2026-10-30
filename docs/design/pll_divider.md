@@ -89,5 +89,5 @@ flowchart LR
 - 确定性复位或多相同步（[问题清单](../status/open_issues.md) I-01）。
 - FS/1.65 V/−40 °C 首级/第二级尾管平均余量约 −5/−4 mV（r2 时约 63% 采样点低于饱和判据）（I-10）。中等难度以上可考虑减少堆叠的结构。
 - 理想负载电阻 → PDK 电阻（I-02）。
-- tap 摆幅与 400 mVpp 目标的关系（I-17）。
+- tap 摆幅最低约 227 mVpp，满足内部 CML 设计目标 ≥ 200 mVpp（I-17 已关闭）；低压工况余量仍需随 I-10 一起改善。
 - Xschem 原理图未同步（I-22）；当前阅读图见 [cml_latch_review.pdf](../schematics/lowov_review/cml_latch_review.pdf)。

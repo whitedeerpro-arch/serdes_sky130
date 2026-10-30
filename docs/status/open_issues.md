@@ -27,7 +27,7 @@
 | I-13 | LF RC 极限角未接入闭环；物理 LF 候选（poly + MIM）未决定是否采用。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-15 | RX 物理 16 UI 降速 / CML 整字保持 bank 未实现；系统时钟域 FIFO/CDC 未设计。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
 | I-16 | 数字 RTL 没有综合映射和 STA（yosys 0.9，无 OpenSTA）。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |
-| I-17 | 400 mVpp 的适用节点未定义。VCO 节点：r2 回接 TT 约 360、SS 85 °C 约 310 mVpp；分频 tap 最低约 227 mVpp；功能筛查线 150 mVpp。 | [规格](../overview/spec.md#待确认) | P3 |
+| I-17 | ~~400 mVpp 的适用节点未定义。~~ **已关闭 2026-10-31**：400 mVpp 是上界与驱动目标；内部 CML 硬下限 150 mVpp、设计目标 ≥ 200 mVpp；VCO 摆幅归 P4 相噪预算（见 I-05）。 | [规格](../overview/spec.md#已确认的取舍2026-10-31) | — |
 | I-19 | TX 没有并行字捕获寄存器，输入字按已知时刻激励；早期试验中提前 1 UI 更新就出错。 | [TX 串化器](../design/tx_serializer.md) | P2 |
 | I-20 | 链路级眼图门槛未定义。75 mV 只约束串化器节点；TX r2 接 C2 时远端最小裕量 54.81 mV（FS/1.65 V/85 °C）。需要定义 RX 输入或 CTLE 后的门槛。 | [信道模型](../design/channel_model.md) | P5 |
 | I-21 | PLL 启动：频率/细相位测量前端、片内预充参考、看门狗、自动粗搜未实现。 | [PLL 环路](../design/pll_loop.md) | P3 |

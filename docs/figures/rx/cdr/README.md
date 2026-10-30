@@ -6,4 +6,4 @@
 
 | 图组 | 用途 | 适用范围／来源 |
 |---|---|---|
-| rx_cdr_tracking_ui [PNG](rx_cdr_tracking_ui.png) | 阶段/设计依据 | 长时实际RTL/行为plant跟踪与独立MOS读出/加载窗口；不是全晶体管长时整机；[报告](../../../rx_cdr_closed_loop.md) |
+| rx_cdr_tracking_ui [PNG](rx_cdr_tracking_ui.png) | 阶段/设计依据 | 长时实际RTL/行为plant跟踪与独立MOS读出/加载窗口；不是全晶体管长时整机；[报告](../../../history/rx_cdr_closed_loop.md) |

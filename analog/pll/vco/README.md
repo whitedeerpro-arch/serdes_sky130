@@ -4,10 +4,10 @@
 最高配置目标为 2 GHz，差分峰峰值约 400 mV；输出留出八个相位抽头。
 
 状态：晶体管级探索原型。已做部分 TT 确定性瞬态与变容管导纳分析；尚未完成完整 PVT、提取或相噪验证。
-真实时钟接收器及可选 CML 缓冲现已做 TT 联调，见 [后续结果](../../../docs/cml_clock_receiver_results.md)；
+真实时钟接收器及可选 CML 缓冲现已做 TT 联调，见 [后续结果](../../../docs/history/cml_clock_receiver_results.md)；
 本模块独立测试仍保留代理电容，供分离观察 VCO 本身。
-首轮数据与波形见 [设计结果](../../../docs/vco_ring4_first_results.md)，输入目标见 [spec.toml](spec.toml)。
-接口与时钟分配见 [串化时钟方案](../../../docs/serdes_clock_plan.md)。
+首轮数据与波形见 [设计结果](../../../docs/history/vco_ring4_first_results.md)，输入目标见 [spec.toml](spec.toml)。
+接口与时钟分配见 [串化时钟方案](../../../docs/history/serdes_clock_plan.md)。
 公共差分单元在 common/cml_buffer/spice/cml_delay_resistive.spice。
 
 spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。

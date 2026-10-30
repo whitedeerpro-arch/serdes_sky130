@@ -2,7 +2,7 @@
 
 用于 VCO 连续差分时钟的接收器：LVT 源跟随输入缓冲、双路差分电平转换、边沿驱动时钟恢复和 CMOS 输出驱动。
 
-状态：已有晶体管级原型及实际 VCO 联调。结果、波形和使用边界见 [设计报告](../../../docs/cml_clock_receiver_results.md)。
+状态：已有晶体管级原型及实际 VCO 联调。结果、波形和使用边界见 [设计报告](../../../docs/history/cml_clock_receiver_results.md)。
 输入/输出约定见 [spec.toml](spec.toml)。输出恢复级有状态，不用于静态数据转换。
 
 spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。
@@ -35,5 +35,5 @@ CMOS 端负载较重时，在转换器之后配置 CMOS 时钟树。
 所有设计判定仍为 ungraded，内部工程检查不代替用户签定的规格。
 # 静态数据接口补充
 
-spice/cml_to_cmos_data.spice为支持DC0/1与长同码的数据接收器，复用source follower、镜像差分级和两级反相器；不经过时钟边沿恢复器。已在真实PI/CTLE/采样器之后表征，结果及350/425 ps读出窗口见[RX闭环/接口记录](../../../docs/rx_cdr_closed_loop.md)。原clock receiver仍用于时钟，不能互换两者的时序验收。
+spice/cml_to_cmos_data.spice为支持DC0/1与长同码的数据接收器，复用source follower、镜像差分级和两级反相器；不经过时钟边沿恢复器。已在真实PI/CTLE/采样器之后表征，结果及350/425 ps读出窗口见[RX闭环/接口记录](../../../docs/history/rx_cdr_closed_loop.md)。原clock receiver仍用于时钟，不能互换两者的时序验收。
 

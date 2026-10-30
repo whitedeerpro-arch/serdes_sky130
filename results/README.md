@@ -19,7 +19,7 @@ results/
 - [阶段审阅与波形](acceptance/20261029-rx-functional/README.md)
 - [按模块／实验索引](catalog/README.md)，[逐运行TSV](catalog/experiments.tsv)
 - [原文件→归档成员索引](catalog/artifacts.tsv)，[完整归档账本](catalog/archive_ledger.json)
-- [清理策略](../verification/results/retention.toml)，[阶段结论](../docs/stage_review_20261029.md)
+- [清理策略](../verification/results/retention.toml)，[阶段结论](../docs/history/stage_review_20261029.md)
 
 被压缩的运行目录有 `ARTIFACTS_ARCHIVED.json`。大文件从常用目录移出前，已完整解压流校验每个成员的 SHA256；相同内容在归档内用硬链接成员去重。原文件可以按历史路径恢复，输入/netlist/source/snapshots、日志、指标和当前验收波形保留在原处。
 
@@ -31,4 +31,4 @@ verification/results/artifact.sh restore results/某个历史运行/raw/waveform
 
 `cat` 可直接读取压缩中的文件。`restore` 校验哈希后恢复到原路径，已存在文件不覆盖。重做旧分析或仿真前，先恢复所需大文件；通用读取脚本不会自动识别归档。历史证据中的哈希指向原始字节，归档后的存放位置由上述索引补充。
 
-运行产物由 .gitignore 排除，本说明除外。需要长期随设计保存的归档定位表在 [docs/data/results_archive_manifest.json](../docs/data/results_archive_manifest.json)。冻结的 `releases/v0.1-design-freeze-20261028` 未修改。详见 [测试与结果约定](../docs/verification.md)。
+运行产物由 .gitignore 排除，本说明除外。需要长期随设计保存的归档定位表在 [docs/data/results_archive_manifest.json](../docs/data/results_archive_manifest.json)。冻结的 `releases/v0.1-design-freeze-20261028` 未修改。详见 [测试与结果约定](../docs/verification/methods.md)。

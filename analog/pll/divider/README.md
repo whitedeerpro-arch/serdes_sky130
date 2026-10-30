@@ -1,14 +1,14 @@
 # 反馈分频器
 
-当前定义以 [时钟域修正](../../../docs/clock_domain_clarification.md) 为准：默认反馈 CML ÷8；
+当前定义以 [时钟域修正](../../../docs/history/clock_domain_clarification.md) 为准：默认反馈 CML ÷8；
 自由 CMOS 分频另接多相 CML 转换后的最高 2 GHz CMOS 时钟。
 下面的 250 MHz CMOS 后级实现和结果属于已有实验，不能作为 2 GHz 自由分频的时序证明。
 
 此前实验路径是 **三级固定 CML ÷8 → CML/CMOS 接收器 → 250 MHz CMOS M=1–16**，默认 M=1。
 2 GHz 输入时，CML 保留 1 GHz、500 MHz、250 MHz 抽头；默认反馈走 250 MHz，
 不再使用全速 CML 可编程计数器，也没有默认活动的第四级 CML ÷16。
-当前结果见 [混合分频记录](../../../docs/hybrid_divider_results.md)，
-之前的全 CML 探索保留在 [历史记录](../../../docs/cml_divider_results.md)。
+当前结果见 [混合分频记录](../../../docs/history/hybrid_divider_results.md)，
+之前的全 CML 探索保留在 [历史记录](../../../docs/history/cml_divider_results.md)。
 
 | 实现 | 用途 |
 |---|---|
@@ -38,6 +38,6 @@ spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schemat
 | [input_range](tb/input_range/case.toml) | block | maximum_verified_input_frequency, minimum_input_swing, input_common_mode_range |
 | [logic_truth](tb/logic_truth/case.toml) | block | 16 配置 ×16 状态的 next-state / zero / half-period 译码 |
 
-测试台中的 @...@ 标记按 [测试约定](../../../docs/verification.md) 替换，使用 ngspice 47。
+测试台中的 @...@ 标记按 [测试约定](../../../docs/verification/methods.md) 替换，使用 ngspice 47。
 MHz 在 SPICE 中写作 `Meg`；`M` 表示 milli。具体参数和输入快照保存在每个运行目录。
 结果：`results/analog/pll/divider/<case>/<run_id>/`，最终规格判定仍为 ungraded。

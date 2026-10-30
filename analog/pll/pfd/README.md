@@ -3,7 +3,7 @@
 UP/DN 高有效，rst_b 低有效；分别测相差、频差及复位。
 
 状态：已建立 SKY130 静态 CMOS 晶体管级原型，结果见
-[PFD 测试记录](../../../docs/pfd_cmos_results.md)。
+[PFD 测试记录](../../../docs/history/pfd_cmos_results.md)。
 
 反馈路径为 CML 分频器 → CML/CMOS 时钟接收器 → PFD；参考端按 1.8 V CMOS 输入。
 PFD 使用两个上升沿触发、异步低有效复位的静态主从 DFF，D 固定为 1，

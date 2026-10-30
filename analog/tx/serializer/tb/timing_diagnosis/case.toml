@@ -10,6 +10,6 @@ training_latency_reference = "fixed_parent_training"
 cases = ["baseline_probe", "advance_r3_clock", "local_clock_drive_2x", "final_latch_current_2x"]
 permanent_design_parameters_changed = false
 default_design_promoted = false
-report = "docs/serializer_timing_root_cause.md"
+report = "docs/history/serializer_timing_root_cause.md"
 results = "docs/data/serializer_timing_diagnosis.json"
 notes = "Archived generated benches include internal observations. No checked-in automation script or new acceptance threshold."

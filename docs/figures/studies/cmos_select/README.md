@@ -6,5 +6,5 @@
 
 | 图组 | 用途 | 适用范围／来源 |
 |---|---|---|
-| mux2_cmos_select_transient [PNG](mux2_cmos_select_transient.png) / [SVG](mux2_cmos_select_transient.svg) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../../../cmos_select_trial.md) |
-| serializer16_cmos_select_comparison [PNG](serializer16_cmos_select_comparison.png) / [SVG](serializer16_cmos_select_comparison.svg) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../../../cmos_select_trial.md) |
+| mux2_cmos_select_transient [PNG](mux2_cmos_select_transient.png) / [SVG](mux2_cmos_select_transient.svg) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../../../history/cmos_select_trial.md) |
+| serializer16_cmos_select_comparison [PNG](serializer16_cmos_select_comparison.png) / [SVG](serializer16_cmos_select_comparison.svg) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../../../history/cmos_select_trial.md) |

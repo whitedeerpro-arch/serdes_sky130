@@ -12,10 +12,10 @@ bbpd_window_vote接受**已降速、重定时并按时间排序**的16个数据�
 
 RTL输出轨迹截取后驱动真实MOS PI/采样器的正反向短窗，端口20 ps斜率为夹具假设，物理控制驱动器/重定时未实现。
 
-cdr_phase_frequency实现频率积分和相位债务，按实际applied/done反馈执行±1码；rx_cdr_loop连接投票器、滤波器与交接器。控制运行在恢复字域，标称250 MHz。无跳变时保持频率预测，超时清质量标志；range_limited需要离线复位后重新捕获。参数、质量迟滞和10组长时结果见[闭环记录](../../docs/rx_cdr_closed_loop.md)。
+cdr_phase_frequency实现频率积分和相位债务，按实际applied/done反馈执行±1码；rx_cdr_loop连接投票器、滤波器与交接器。控制运行在恢复字域，标称250 MHz。无跳变时保持频率预测，超时清质量标志；range_limited需要离线复位后重新捕获。参数、质量迟滞和10组长时结果见[闭环记录](../../docs/history/rx_cdr_closed_loop.md)。
 
 rx_deserializer16消费已重定时的顺序pair，bit0较早。重复4个可编程b5e3训练字确定字边界，16位输出bit0仍最早。数据连续移位，不能用瞬时locked静默丢弃pair；word_valid是恢复pair时钟域的使能，不是异步系统时钟。2 GHz库映射、训练比较路径与时钟树尚无STA结果；公共系统接口需要单独时序/CDC。
 
 tb_rx_cdr_closed_loop用既有PI实测曲线驱动行为采样事件，运行实际RTL，100 µs检查多圈、频偏、时延、确定抖动、同码和字流。它不包含真实晶体管/PCB/PLL长闭环。tb_rx_deserializer16覆盖16种bit偏移，tb_cdr_status检查保持、超时、恢复与限幅。失败探索快照保留在results，最终批次由结果文档指定。
 
-结果入口：[采样器与PI控制](../../docs/rx_sampler_control.md)。
+结果入口：[采样器与PI控制](../../docs/history/rx_sampler_control.md)。

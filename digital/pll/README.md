@@ -29,4 +29,4 @@ verilator --lint-only --top-module pll_startup_supervisor digital/pll/rtl/pll_st
 ```
 
 Icarus行为检查、Verilator lint、Yosys通用综合检查不等于SKY130映射后的时序/CDC验证。
-模拟电路、结果、接口边界和其他模型接手的测试模板见[启动优化](../../docs/pll_startup_optimization.md)。
+模拟电路、结果、接口边界和其他模型接手的测试模板见[启动优化](../../docs/history/pll_startup_optimization.md)。

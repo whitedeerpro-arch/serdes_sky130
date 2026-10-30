@@ -1,12 +1,12 @@
 # 第一轮探索范围；不是已确认的产品环境规格，也不代表扫描已运行。
 status = "PLL_r3_selected_hierarchical_loop_tracking_complete_not_native_signoff"
 priority = "PVT_functional_screen_before_phase_noise_qualification"
-plan_note = "docs/pvt_noise_plan.md"
+plan_note = "docs/history/pvt_noise_plan.md"
 
 [buffered_working_revision]
 status = "block45_and_selected_native_completed_not_release_signoff"
 campaign = "results/analog/pll/pvt_buffered/20261029T152825Z"
-report = "docs/pll_buffered_pvt.md"
+report = "docs/history/pll_buffered_pvt.md"
 results = "docs/data/pll_buffered_pvt.json"
 minimum_requirement_policy = "verification/corners/clocking_acceptance.toml"
 block_environment_cells_planned = 45
@@ -24,7 +24,7 @@ closed_loop_PLL_grid_completed = false
 lifecycle = "historical_r2; superseded_by_buffered_working_revision"
 status = "applied_not_release_signoff"
 campaign = "results/analog/pll/pvt_lowov/20261029T114507Z"
-report = "docs/pll_lowov_pvt.md"
+report = "docs/history/pll_lowov_pvt.md"
 results = "docs/data/pll_lowov_pvt.json"
 working_entry = "config/pll_working_revision.toml"
 block_environment_cells = 45
@@ -33,13 +33,13 @@ block_feedback_functional = 45
 block_fullrate_cmos_functional = 44
 native_FS_2GHz_qualified = false
 closed_loop_PLL_grid_completed = false
-topology_review = "docs/cml_latch_topology_review.md"
+topology_review = "docs/history/cml_latch_topology_review.md"
 
 [refinement]
 lifecycle = "historical_independent_candidates"
 status = "independent_VCO_receiver_candidates; SS_prescaler_gap_remains"
 campaign = "results/analog/pll/pvt_refinement/20261029T100030Z"
-report = "docs/pll_pvt_refinement.md"
+report = "docs/history/pll_pvt_refinement.md"
 results = "docs/data/pll_pvt_refinement.json"
 frontend = "analog/pll/top/spice/clock_frontend_pvt_candidate.spice"
 baseline_promoted = false
@@ -158,7 +158,7 @@ seeds = []
 # 需验证具体模型入口及 mc_pr_switch / mc_mm_switch 等配置。
 
 [PLL_selected_loop_PVT]
-report = "docs/pll_loop_pvt.md"
+report = "docs/history/pll_loop_pvt.md"
 results = "docs/data/pll_loop_pvt.json"
 component_CP_DC_environments = 45
 component_PFD_CP_phase_cases = 135
@@ -174,7 +174,7 @@ native_r3_sustained_lock_qualified = false
 
 [TX_characterization]
 status = "grid_complete_with_margin_enable_and_unequalized_link_gaps"
-report = "docs/tx_pvt.md"
+report = "docs/history/tx_pvt.md"
 results = "docs/data/tx_pvt.json"
 standalone_driver_cells = 45
 standalone_functional = 45

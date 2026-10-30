@@ -13,4 +13,4 @@ tx_en=0断开线尾管偏置并下拉其栅；预驱动仍有静态功耗。两�
 
 用户确认的初版接口为AC耦合、100Ω差分、远端400mVpp。配置见config/tx_line_driver.toml。
 通道是16段被动RLC代理，不是PCIe规范或实测板线。FFE目前旁路，未实现1UI延迟数据或自适应系数。
-设计边界和结果见[输出级与路线](../../../docs/tx_output_stage_and_link_plan.md)。
+设计边界和结果见[输出级与路线](../../../docs/history/tx_output_stage_and_link_plan.md)。

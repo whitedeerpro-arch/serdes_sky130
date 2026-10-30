@@ -1,6 +1,6 @@
 # VCO / CML→CMOS PVT修整
 
-[报告](../../../../pll_pvt_refinement.md) · [数值入口](../../../../data/pll_pvt_refinement.json)。独立候选，不替换冻结基线。
+[报告](../../../../history/pll_pvt_refinement.md) · [数值入口](../../../../data/pll_pvt_refinement.json)。独立候选，不替换冻结基线。
 
 - [pvt_vco_tuning_margin PNG](pvt_vco_tuning_margin.png) / [SVG](pvt_vco_tuning_margin.svg)：VCO尺寸/节点MIM扫描及五环境2GHz覆盖；TT相邻码局部重叠；非全码/全角签核。
 - [pvt_receiver_internal_margin PNG](pvt_receiver_internal_margin.png) / [SVG](pvt_receiver_internal_margin.svg)：SS低压热角转换器内部动态裕量：原版与独立候选比较。

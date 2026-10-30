@@ -21,4 +21,4 @@
 该理想边界按本轮要求隔开PLL端口反作用；buffer之后的真实时钟负载和数据耦合参与仿真。
 电阻和微调电容仍是理想无源值，未映射到提取版图。
 
-结果见[实际时钟分发结果](../../../docs/physical_clock_distribution_results.md)；测试记录在results/analog/tx/clock_distribution/calibration/。
+结果见[实际时钟分发结果](../../../docs/history/physical_clock_distribution_results.md)；测试记录在results/analog/tx/clock_distribution/calibration/。

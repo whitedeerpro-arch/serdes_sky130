@@ -2,7 +2,7 @@
 
 先表征电流、顺从范围、启动及失配，再供其他电路复用。
 
-状态：待设计。接口草案见 [architecture.md](../../../docs/architecture.md)。
+状态：待设计。接口草案见 [架构](../../../docs/overview/architecture.md)。
 
 spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。
 

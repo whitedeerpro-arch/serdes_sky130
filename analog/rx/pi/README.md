@@ -1,6 +1,6 @@
 # RX相位插值器
 
-共享2 GHz多相PLL、每RX独立PI-CDR的模拟时钟原型。本目录记录PI独立外部控制测试；后续已新增[真实采样器与交接RTL](../../../docs/rx_sampler_control.md)，物理重定时和数字CDR闭环仍未实现。
+共享2 GHz多相PLL、每RX独立PI-CDR的模拟时钟原型。本目录记录PI独立外部控制测试；后续已新增[真实采样器与交接RTL](../../../docs/history/rx_sampler_control.md)，物理重定时和数字CDR闭环仍未实现。
 
 - `spice/pi_current_unit.spice`：A/B两对LVT输入管，一个真实NMOS尾电流，MOS开关选择该单位电流的输入相位。
 - `spice/pi_sector.spice`：8个等权电流单元、600 Ω负载、每腿200 fF混合电容及CML恢复buffer；权重0..8。
@@ -18,4 +18,4 @@
 
 晶体管DUT没有理想相位旋转器或理想输出增益。测试输入为理想相关2 GHz时钟，参考偏置使用外部理想850 µA电流及真实二极管连接MOS；R/C为名义理想元件。PLL加载、实际相位误差、采样器负载及kickback、失配/PVT/噪声不在当前结果内。每输出腿20 fF只是负载代理。
 
-结果见[PI首版](../../../docs/rx_pi_first_design.md)，系统架构见[CDR方案](../../../docs/rx_cdr_architecture.md)。
+结果见[PI首版](../../../docs/history/rx_pi_first_design.md)，系统架构见[CDR方案](../../../docs/history/rx_cdr_architecture.md)。

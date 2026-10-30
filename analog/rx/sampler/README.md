@@ -13,8 +13,8 @@
 
 两个SPICE模板为本次已运行夹具，替换工程路径/PDK/corner即可复现。functional模板包含确定PRBS7和理想时钟；pi_loaded模板包含真实PI、真实CTLE及20 fF参考CTLE，理想源位于CTLE输入，尚无PCB/原生PLL。所有R/C为名义理想元件，尚无PVT/噪声/失配测试。
 
-结果：[采样器与PI控制](../../../docs/rx_sampler_control.md)。
+结果：[采样器与PI控制](../../../docs/history/rx_sampler_control.md)。
 
 静态数据转换器为common/cml_to_cmos/spice/cml_to_cmos_data.spice，保留DC状态；rx_cmos_pair_align.spice包含真实时钟接收/缓冲、四个CMOS DFF和E0延迟，两级反相器各20 fF。公共时钟选边沿相位的反极性，以配合实际转换与DFF关闭延迟；本方案只做了TT名义短窗，不能据此保证PVT下周期对应。
 
-新增cmos_readout和cmos_aligned模板及[当前闭环/接口结果](../../../docs/rx_cdr_closed_loop.md)。数字CDR与串转并已做实际RTL长时闭环，采样/时钟plant为行为模型，不是整个模拟接收机闭环。
+新增cmos_readout和cmos_aligned模板及[当前闭环/接口结果](../../../docs/history/rx_cdr_closed_loop.md)。数字CDR与串转并已做实际RTL长时闭环，采样/时钟plant为行为模型，不是整个模拟接收机闭环。

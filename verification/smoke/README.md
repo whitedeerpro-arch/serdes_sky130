@@ -6,4 +6,4 @@ PFD/CP 源已实例化并检查基础时序，更完整的边界随后在模块�
 
 预期：CMOS 高电平 1.8 V，差分极值 ±0.4 V，共模 1.2 V，周期 10 ns，斜坡终值 1.0 V。
 另检查参考到反馈延迟 1 ns、UP/DN 的 50% 脉宽各 550 ps、UP 到 DN 延迟 5 ns，共十项。
-命令及归档方式见 [verification.md](../../docs/verification.md)。
+命令及归档方式见 [验证方法](../../docs/verification/methods.md)。

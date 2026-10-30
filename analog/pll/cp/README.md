@@ -6,7 +6,7 @@ UP 向滤波器注入电荷，DN 抽取电荷；固定输出夹具与真实滤�
 长沟道电流镜配串联开关，外部独立 N/P 参考暂取 50 µA；参考电路本身尚未实现。
 UP 驱动做了 TT、1.3 V 下的名义脉宽补偿，不能视为跨 PVT 或输出范围的匹配保证。
 源端开关替代方案保留为探索，未被选为当前原型。
-实现、净电荷与边界见 [PFD/CP/LF 记录](../../../docs/pfd_cp_lf_results.md)。
+实现、净电荷与边界见 [PFD/CP/LF 记录](../../../docs/history/pfd_cp_lf_results.md)。
 
 spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。
 

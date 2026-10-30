@@ -4,7 +4,7 @@
 
 已有静态数据转换原型 `spice/cmos_to_cml_data.spice`，用于串化夹具中的250MHz并行输入。
 当前完成指定集成向量测试；独立输入范围和负载表征仍待完成。
-结果见 [16:1串化器](../../../docs/serializer16_first_results.md)，接口见 [architecture.md](../../../docs/architecture.md)。
+结果见 [16:1串化器](../../../docs/history/serializer16_first_results.md)，接口见 [架构](../../../docs/overview/architecture.md)。
 
 spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。
 

@@ -47,7 +47,7 @@ frozen_PLL_fixed_phase_extra_crossings = 0
 frozen_PLL_fixed_phase_minimum_margin_v = 0.08732727147515335
 frozen_PLL_fixed_phase_transition_spread_ui = 0.16942619802223755
 frozen_PLL_fixed_phase_draft_screen_passed = false
-frozen_PLL_clock_replay_report = "docs/pll_clock_replay_results.md"
+frozen_PLL_clock_replay_report = "docs/history/pll_clock_replay_results.md"
 
 physical_clock_distribution_simulated = true
 physical_clock_buffer_stages = 8
@@ -62,7 +62,7 @@ physical_clock_min_signed_margin_v = 0.0943814427393918
 physical_clock_transition_spread_ui = 0.1624760780610257
 physical_clock_distribution_power_w = 0.014422426599388935
 physical_clock_draft_screen_passed = false
-physical_clock_result = "docs/physical_clock_distribution_results.md"
+physical_clock_result = "docs/history/physical_clock_distribution_results.md"
 
 [design_freeze]
 release = "v0.1-design-freeze-20261028"
@@ -78,7 +78,7 @@ legacy_metrics_above_are_historical = true
 selected_version_long_vector_and_pvt_pending = true
 
 [pvt_characterization_20261030]
-report = "docs/tx_pvt.md"
+report = "docs/history/tx_pvt.md"
 results = "docs/data/tx_pvt.json"
 loaded_functional_cells = 45
 cells_meeting_inherited_draft_margin = 36

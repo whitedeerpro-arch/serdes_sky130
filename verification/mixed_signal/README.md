@@ -49,6 +49,6 @@ results/verification/mixed_signal/build/Vmixed_cdr_top \
 
 闭环场景检查到达终点、无数据 unknown、无错字、至少两个 payload 字、RTL 发生更新、模拟控制脚实际翻转且时钟相位移动 >5 ps；固定控制端对照要求 RTL 仍更新，但模拟脚不翻转、相位漂移 <1 ps。边界测试另查阈值/未知区、NRZ 完整边沿、D/A 延迟/斜率和源的乱序查询。
 
-具体记录、图和适用范围见 [联调结果](../../docs/mixed_signal_cosim.md) 与 [case.toml](case.toml)。
+具体记录、图和适用范围见 [联调结果](../../docs/history/mixed_signal_cosim.md) 与 [case.toml](case.toml)。
 
-已归集GTKWave会话和VCD/FST，运行 `verification/mixed_signal/view.sh`；查看[阶段波形说明](../../results/acceptance/20261029-rx-functional/README.md)。大文件保留策略与10ns成本估算见[阶段审阅](../../docs/stage_review_20261029.md)。
+已归集GTKWave会话和VCD/FST，运行 `verification/mixed_signal/view.sh`；查看[阶段波形说明](../../results/acceptance/20261029-rx-functional/README.md)。大文件保留策略与10ns成本估算见[阶段审阅](../../docs/history/stage_review_20261029.md)。

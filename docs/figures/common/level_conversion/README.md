@@ -6,4 +6,4 @@
 
 | 图组 | 用途 | 适用范围／来源 |
 |---|---|---|
-| cml_clock_receiver_waveforms [PNG](cml_clock_receiver_waveforms.png) / [SVG](cml_clock_receiver_waveforms.svg) | 接口表征 | 时钟接收器及VCO/分频接口；不能用作静态数据转换验收；[报告](../../../cml_clock_receiver_results.md) |
+| cml_clock_receiver_waveforms [PNG](cml_clock_receiver_waveforms.png) / [SVG](cml_clock_receiver_waveforms.svg) | 接口表征 | 时钟接收器及VCO/分频接口；不能用作静态数据转换验收；[报告](../../../history/cml_clock_receiver_results.md) |

@@ -6,7 +6,7 @@
 
 | 图组 | 用途 | 适用范围／来源 |
 |---|---|---|
-| pcb_channel_family_frequency [PNG](pcb_channel_family_frequency.png) / [SVG](pcb_channel_family_frequency.svg) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../../../pcb_channel_family.md) |
-| pcb_channel_family_pulses_ui [PNG](pcb_channel_family_pulses_ui.png) / [SVG](pcb_channel_family_pulses_ui.svg) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../../../pcb_channel_family.md) |
-| tx_pcb_channel_2ui [PNG](tx_pcb_channel_2ui.png) / [SVG](tx_pcb_channel_2ui.svg) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../../../tx_pcb_channel_integration.md) |
-| tx_pcb_channel_effects_ui [PNG](tx_pcb_channel_effects_ui.png) / [SVG](tx_pcb_channel_effects_ui.svg) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../../../tx_pcb_channel_integration.md) |
+| pcb_channel_family_frequency [PNG](pcb_channel_family_frequency.png) / [SVG](pcb_channel_family_frequency.svg) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../../../history/pcb_channel_family.md) |
+| pcb_channel_family_pulses_ui [PNG](pcb_channel_family_pulses_ui.png) / [SVG](pcb_channel_family_pulses_ui.svg) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../../../history/pcb_channel_family.md) |
+| tx_pcb_channel_2ui [PNG](tx_pcb_channel_2ui.png) / [SVG](tx_pcb_channel_2ui.svg) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../../../history/tx_pcb_channel_integration.md) |
+| tx_pcb_channel_effects_ui [PNG](tx_pcb_channel_effects_ui.png) / [SVG](tx_pcb_channel_effects_ui.svg) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../../../history/tx_pcb_channel_integration.md) |

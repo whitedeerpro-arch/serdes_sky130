@@ -5,9 +5,11 @@ supply_v = 1.8
 primary_channel = "C2_loss6"
 challenge_channel = "C3_loss10"
 termination_per_leg_ohm = 50
-input_common_mode_design_focus_v = [0.8, 0.9]
+input_common_mode_v = 1.05                       # AC-coupled link: RX vcm is free; 2026-11-01 PVT choice
+input_common_mode_range_v = [1.0, 1.15]          # tail Vds - Vdsat >= 50 mV (low end); EQ peaking at hot SS/FS (high end)
+input_common_mode_history_v = [0.8, 0.9]         # first design focus; tail sink out of saturation at slow corners
 input_common_mode_nominal_dc_ac_exploration_v = [0.75, 0.8, 0.9, 1.0]
-input_common_mode_range_qualified = false
+input_common_mode_range_qualified = "ac_dc_45_conditions"   # transient/eye at 45 pending
 input_differential_pp_design_reference_v = 0.4
 input_pair_width_um = 24
 input_pair_length_um = 0.15

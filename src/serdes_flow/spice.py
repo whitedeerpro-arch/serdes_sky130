@@ -100,13 +100,16 @@ def run(deck: str, run_dir: Path, *, files: dict[str, Path] | None = None,
     """
     run_dir = Path(run_dir)
     run_dir.mkdir(parents=True, exist_ok=False)
-    (run_dir / ".spiceinit").write_text("set ngbehavior=hsa\n")
+    # Single-threaded device evaluation: ngspice otherwise starts one OpenMP thread per core,
+    # and four parallel jobs oversubscribe the 8 vCPUs (DC sweeps 30x slower, VM frozen).
+    (run_dir / ".spiceinit").write_text("set ngbehavior=hsa\nset num_threads=1\n")
     for name, src in (files or {}).items():
         shutil.copy2(src, run_dir / name)
     (run_dir / "tb.cir").write_text(deck)
     start = time.time()
     try:
         proc = subprocess.run([project.ngspice(), "-b", "-o", "simulator.log", "tb.cir"], cwd=run_dir,
+                              env={**os.environ, "OMP_NUM_THREADS": "1"},
                               stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, timeout=timeout_s,
                               preexec_fn=_limit_child)
         exit_code = proc.returncode

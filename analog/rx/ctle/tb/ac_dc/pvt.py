@@ -1,6 +1,9 @@
 """RX CTLE operating point / AC / DC transfer over PVT (ideal inputs, no boundary condition).
 
-    uv run python analog/rx/ctle/tb/ac_dc/pvt.py [stress | all | tags...] [--cm 0.8,0.9]
+    uv run python analog/rx/ctle/tb/ac_dc/pvt.py [stress | all | tags...] [--cm 0.8,0.9] [--resume CAMPAIGN]
+
+--resume: reuse a campaign directory; runs with execution.json are kept, unfinished
+ones are deleted and rerun, then the whole campaign is summarised.
 
 Per condition x EQ code x input common mode: tail and input-pair headroom
 (Vds - Vdsat), output common mode, low-frequency gain, gain and peaking at
@@ -10,6 +13,7 @@ AC numbers are characterization (ungraded).
 """
 import argparse
 import json
+import shutil
 import time
 from pathlib import Path
 
@@ -26,16 +30,18 @@ HEADROOM_GATE = 0.05
 
 
 def read_tsv(path):
+    """wrdata text with vector names; a complex vector appears as two equal names (re, im)."""
     lines = path.read_text().split("\n")
     names = lines[0].split()
-    data = np.loadtxt(lines[1:])
-    data = np.atleast_2d(data)
-    if data.shape[1] == len(names):
-        return {n: data[:, i] for i, n in enumerate(names)}
-    # complex vectors: scale, then re/im per vector
-    out = {names[0]: data[:, 0]}
-    for k, n in enumerate(names[1:]):
-        out[n] = data[:, 1 + 2 * k] + 1j * data[:, 2 + 2 * k]
+    data = np.atleast_2d(np.loadtxt(lines[1:]))
+    out, i = {}, 0
+    while i < len(names):
+        if i + 1 < len(names) and names[i + 1] == names[i]:
+            out[names[i]] = data[:, i] + 1j * data[:, i + 1]
+            i += 2
+        else:
+            out[names[i]] = data[:, i]
+            i += 1
     return out
 
 
@@ -68,14 +74,24 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("conds", nargs="*", default=["stress"])
     ap.add_argument("--cm", default="0.8,0.9")
+    ap.add_argument("--resume", help="existing campaign directory to complete")
+    ap.add_argument("--analyse-only", action="store_true", help="with --resume: summarise without running")
     a = ap.parse_args()
     conds = grid45() if a.conds == ["all"] else STRESS if a.conds == ["stress"] else [Condition.parse(x) for x in a.conds]
     cms = [float(x) for x in a.cm.split(",")]
-    camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = (ROOT / a.resume) if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     keys = [(c, code, cm) for c in conds for cm in cms for code in range(4)]
     jobs = [(deck(c, code, cm), camp / f"{c.tag}_cm{round(cm * 1000)}_eq{code}", dict(meta=dict(condition=c.tag, eq=code, cm=cm)))
             for c, code, cm in keys]
-    for ex in spice.run_many(jobs, workers=4, smoke=False):     # no transient: nothing to smoke-test
+    todo = []
+    for j in jobs:
+        if (j[1] / "execution.json").exists():
+            continue
+        if j[1].exists() and not a.analyse_only:
+            shutil.rmtree(j[1])                                 # interrupted run
+        todo.append(j)
+    print(f"{len(jobs) - len(todo)} runs kept, {len(todo)} to run", flush=True)
+    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=4, smoke=False)):     # no transient: nothing to smoke-test
         assert ex.ok, (ex.run_dir, ex.log_failures)
     rows = []
     for (c, code, cm), (_, d, _) in zip(keys, jobs):

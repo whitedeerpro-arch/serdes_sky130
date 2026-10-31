@@ -83,6 +83,8 @@ verification/results/artifact.sh restore results/某运行/raw/waveforms.tsv
 
 索引见 [results/catalog](../../results/catalog/README.md)，规则见 [retention.toml](../../verification/results/retention.toml)。
 
+2026-10-31 起，结果目录内的大波形就地 gzip（`spice.Waves` 直接读 `.gz`）。已被后续版本取代的探索轮次可以删除波形本体：删除前先用脚本把需要的数提成图和紧凑数据，保留每个运行的 `tb.cir`、日志、`execution.json`、激励和汇总，并把删除清单存在提取结果旁边。登记过的边界条件录制和被代码固定引用的运行不删。第一次清理：TX 选择时钟的 r2/v1/v2/v2b 回放、单链打拍探索与 clock_states 的非标定轮次（约 5 GB），提取见 [retrospective.py](../../analog/tx/serializer/tb/clock_replay/retrospective.py)，清单在 `results/analog/tx/serializer/clock_replay/retrospective/20261031T155741Z/deleted_waveforms.txt`。
+
 ## 结构时序平衡分析
 
 结构层面的问题先在理论层面回答，不跑电路：路径上放哪些元件，各条路径之间的时序关系能否在 45 个 PVT 点上同时成立，每类元件还能变差多少。库是 [`serdes_flow.balance`](../../src/serdes_flow/balance.py)，元件库是 [`config/timing_elements.json`](../../config/timing_elements.json)。

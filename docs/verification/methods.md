@@ -22,6 +22,24 @@
 
 每种边界都要写明被裁掉的反向耦合（共享电源、偏置、回流），以及截断误差的验证方法。
 
+### 边界条件管理
+
+从别的仿真复制或推导来的激励（以下称边界条件）一律登记在 [config/boundary_conditions.json](../../config/boundary_conditions.json)，由 [serdes_flow.boundary](../../src/serdes_flow/boundary.py) 读写。
+
+- **按 id 引用，不找"最新"。** 下游脚本用 `boundary.point_run(id, point)` 取来源 run，运行记录里写 `bc` 和激励文件哈希。新录制要么登记成新 id，要么在同一 id 下补新的工作点（已有工作点不允许改）。
+- **登记内容。** 类型、上游模块与工作修订、各工作点（工况、码、Vctrl、VCO 频率、来源 run、git 版本、deck 哈希）、录制时的下游负载、处理方式、对照验证、失效条件。
+- **负载签名。** 录制电压会受下游输入级负载影响。签名取下游单元中直接接在输入端口上的实例，去掉实例名和内部节点名，保留单元名和参数后做哈希；不包含这些级的输出侧负载（Miller）。回放前比较签名，不一致就拒绝运行；探索时可以显式放行，运行记录会标为 `MISMATCH (allowed)`，结论只能作为参考。
+- **开跑前冒烟。** `spice.run_many` 默认先把第一个 job 跑到第一个保存点后 1 ns，确认 ngspice 无报错并写出波形，再放整批。bench 模板直接引用 DUT 内部节点（`let`、`.save`）时，换 DUT 变体最容易在这一步暴露问题。
+
+当前登记：
+
+| id | 类型 | 内容 | 失效条件 |
+|---|---|---|---|
+| `tx_clk_ideal_tt_v01` | 理想化边沿记录 | v0.1 TT 闭环 PLL 的四路时钟过零时刻，400 mVpp、20 ps 边沿；理想 CMOS 数据 | 只代表 TT；r2 的 45 条件都用它，所以 r2 的 45/45 不含源端随工况的变化（I-07） |
+| `pll_r4_taps@tx_in_r2` | 电压回放 | PLL r4 前端送给 TX 分发的 8 个单端抽头，VCO 开环固定 Vctrl，5 个工作点 | PLL 修订改变；TX 分发输入级与 r2 不同 |
+
+旧脚本（`clock_states`、`swing_trial`、`waveform_view`）仍直接读 `r2_stimuli.inc` 或按"最新"取结果，只在登记表里记录了来源，没有接入检查。
+
 ## 测试定义与测试台
 
 - `tb/<case>/case.toml` 是测试定义，没有通用执行器。`planned` 表示尚未实现，`prototype` 表示已有探索测试但条件/视图未全覆盖。

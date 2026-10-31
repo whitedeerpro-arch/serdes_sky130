@@ -17,18 +17,22 @@ data:  word k is applied 78.3 ps after the k-th 250 MHz fall after settling, as
        the words are pre-permuted for state s of the measured r2 tables.
        Checks the in-order contract and the order-free eye/mapping.
 record: as probe, plus the single-ended frontend taps feeding the TX
-       distribution (TAPS), for tb/clock_replay.
+       distribution (TAPS), for tb/clock_replay.  --dist/--trims select the
+       distribution present during recording; --bc registers the result as a
+       boundary condition (serdes_flow.boundary) keyed by its input stage.
+register: register existing recordings (--runs point=dir,...) under --bc.
 Environment: TRIMS="250,500,1g,2g" in fF (default r2: 100,500,160,270).
 """
 import json
 import os
 import sys
 import time
+import tomllib
 from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import clock, serial, spice
+from serdes_flow import boundary, clock, serial, spice
 from serdes_flow.corners import Condition
 from serdes_flow.project import ROOT
 
@@ -50,28 +54,39 @@ WORD_DELAY = 78.3e-12
 WORDS = 13                       # 4 training + 8 payload + 1 guard
 
 
-def trims():
-    v = [float(x) * 1e-15 for x in os.environ.get("TRIMS", "100,500,160,270").split(",")]
-    return dict(TRIM250=v[0], TRIM500=v[1], TRIM1G=v[2], TRIM2G=v[3])
+def trims(override=None):
+    v = override or [float(x) for x in os.environ.get("TRIMS", "100,500,160,270").split(",")]
+    return dict(TRIM250=v[0] * 1e-15, TRIM500=v[1] * 1e-15, TRIM1G=v[2] * 1e-15, TRIM2G=v[3] * 1e-15)
 
 
 TAPS = ("p08p", "p08n", "p24p", "p24n", "p32p", "p32n", "pb0p", "pb0n")   # frontend -> TX distribution
+R2_DIST = ROOT / "analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice"
+DIST_CELL = "serdes_cml_clock_distribution_tx_lowov"
+DIST_INPUTS = ("s250p", "s250n", "s500p", "s500n", "s1gp", "s1gn", "s2gp", "s2gn")
 
 
-def deck(name, stop, tstart, extra=()):
+def deck(name, stop, tstart, extra=(), dist=None, trim_ff=None):
+    """dist: file defining serdes_cml_clock_distribution_tx_lowov in place of r2's."""
     tag, code, vctrl = POINTS[name]
     c = Condition.parse(tag)
     d = spice.render(HERE / "tb_native_tx_ngspice.cir.in", **spice.corner_values(c), CODE=code, VCTRL=vctrl,
                      STOP=stop, MAX_STEP="4p", INITIAL_STATE="", TAIL_SCALE=6, WSF=80, WSELECT=96,
                      DRIVER_FILE="cml_line_driver_lowvt_enable.spice",
-                     DRIVER_CELL="serdes_tx_cml_line_driver_lowvt_enable", DRIVER_PARAMS="wgatep=32", **trims())
+                     DRIVER_CELL="serdes_tx_cml_line_driver_lowvt_enable", DRIVER_PARAMS="wgatep=32",
+                     **trims(trim_ff))
+    if dist:
+        assert str(R2_DIST) in d
+        d = d.replace(str(R2_DIST), str(Path(dist).resolve()))
     if extra:
         d = d.replace("wrdata waveforms.tsv ", "wrdata waveforms.tsv " + " ".join(f"v({x})" for x in extra) + " ", 1)
     return spice.skip_output_before(spice.binary_output(d), tstart), c
 
 
-def record(names):
-    """Static data; also writes the single-ended frontend taps (TAPS) for clock replay."""
+def record(names, dist=None, trim_ff=None, bc_id=None):
+    """Static data; also writes the single-ended frontend taps (TAPS) for clock replay.
+
+    The taps depend on what the TX distribution input presents to them, so the
+    recording is registered as a boundary condition keyed by that input stage."""
     camp = RESULTS / f"record_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
     static = stimuli([0.0], json.loads(EXPECTED.read_text())["bits"])
     jobs = []
@@ -79,13 +94,53 @@ def record(names):
         d = camp / n
         d.mkdir(parents=True)
         (d / "stimuli.inc").write_text(static)
+        if dist:
+            (d / "dist.spice").write_text(Path(dist).read_text())
         settle = SETTLE.get(n, 30e-9)
-        dk, _ = deck(n, f"{(settle + 12e-9) * 1e9:.0f}n", f"{(settle - 2e-9) * 1e9:.0f}n", TAPS)
+        dk, _ = deck(n, f"{(settle + 12e-9) * 1e9:.0f}n", f"{(settle - 2e-9) * 1e9:.0f}n", TAPS,
+                     d / "dist.spice" if dist else None, trim_ff)
         jobs.append((dk, d / "run", dict(files={"stimuli.inc": d / "stimuli.inc"},
-                                         meta=dict(point=n, trims=trims(), settle_s=settle))))
+                                         meta=dict(point=n, trims=trims(trim_ff), settle_s=settle,
+                                                   dist=str(dist) if dist else "r2"))))
     for ex in spice.run_many(jobs, workers=4):
         assert ex.ok, (ex.run_dir, ex.log_failures)
     print(camp.relative_to(ROOT))
+    if bc_id:
+        register_bc(bc_id, {n: camp / n / "run" for n in names}, dist)
+    return camp
+
+
+def register_bc(bc_id, runs, dist=None, validation=None):
+    """Register (or extend) the boundary condition for recorded taps."""
+    pll = tomllib.loads((ROOT / "config/pll_working_revision.toml").read_text())["revision"]
+    dist_text = Path(dist).read_text() if dist else R2_DIST.read_text()
+    load = boundary.input_stage_signature(dist_text, DIST_CELL, DIST_INPUTS)
+    points = {}
+    for n, run in runs.items():
+        tag, code, vctrl = POINTS[n]
+        ex = json.loads((Path(run) / "execution.json").read_text())
+        w = spice.Waves(Path(run) / "waveforms.raw")
+        f = clock.period_stats(w.t, w["pb0p"] - w["pb0n"], ex["settle_s"], w.t[-1])["frequency_hz"]
+        points[n] = boundary.run_record(run, condition=tag, code=code, vctrl_v=vctrl, settle_s=ex["settle_s"],
+                                        vco_hz=f, trims_f=ex["trims"])
+    entry = dict(
+        id=bc_id, kind="voltage_replay", points=points,
+        description="PLL r4 frontend taps feeding the TX clock distribution, VCO open loop at fixed Vctrl, "
+                    "static data; recorded with the TX r2 serializer/driver as the rest of the load",
+        upstream=dict(module="pll", revision=pll, netlist="analog/pll/top/spice/clock_frontend_r4.spice",
+                      bench="analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in"),
+        nodes=dict(p08="250 MHz (branch 0 /8) -> s250", p24="500 MHz (branch 2 /4) -> s500",
+                   p32="1 GHz (branch 3 /2) -> s1g", pb0="buffered VCO phase 0, inverted -> s2g"),
+        load=dict(cell=DIST_CELL, inputs=list(DIST_INPUTS), source=str(dist or R2_DIST.relative_to(ROOT)), **load),
+        processing="clock_replay/run.py: one steady-state 250 MHz period cut at a p08 falling crossing >= 3 ns "
+                   "after settle, time-scaled to exactly 4 ns, periodic PWL (r=0), Douglas-Peucker 0.3 mV",
+        validation=validation,
+        valid_while=[f"PLL working revision == {pll}",
+                     f"consumer {DIST_CELL} input-stage signature == load.sha",
+                     "open loop, fixed Vctrl: no loop dynamics, no noise; consumer must not change the frontend"],
+    )
+    boundary.register(entry, extend=True)
+    print(f"registered boundary condition {bc_id} ({sorted(boundary.get(bc_id)['points'])})")
 
 
 def stimuli(edges, bits, remap=None):
@@ -212,15 +267,28 @@ def data(names, remap_state=None):
 
 
 if __name__ == "__main__":
-    step, names = sys.argv[1], sys.argv[2:] or list(POINTS)
-    if step == "probe":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("step", choices=("probe", "record", "register", "reanalyse_probe", "data"))
+    ap.add_argument("points", nargs="*")
+    ap.add_argument("--dist", help="record: file defining the TX distribution (default r2)")
+    ap.add_argument("--trims", help="record: fF 250,500,1g,2g (default TRIMS env or r2 100,500,160,270)")
+    ap.add_argument("--bc", help="record/register: boundary-condition id to register the taps under")
+    ap.add_argument("--runs", help="register: comma-separated point=run_dir of existing recordings")
+    ap.add_argument("--validation", help="register: JSON validation note")
+    a = ap.parse_args()
+    names = a.points or list(POINTS)
+    trim_ff = [float(x) for x in a.trims.split(",")] if a.trims else None
+    if a.step == "probe":
         probe(names)
-    elif step == "record":
-        record(names)
-    elif step == "reanalyse_probe":
+    elif a.step == "record":
+        record(names, a.dist, trim_ff, a.bc)
+    elif a.step == "register":
+        runs = dict(x.split("=", 1) for x in a.runs.split(","))
+        register_bc(a.bc, {k: ROOT / v for k, v in runs.items()}, a.dist,
+                    json.loads(a.validation) if a.validation else None)
+    elif a.step == "reanalyse_probe":
         analyse_probe(sorted(RESULTS.glob("probe_*"))[-1], names)
-    elif step == "data":
+    elif a.step == "data":
         rs = os.environ.get("REMAP")
         data(names, int(rs) if rs else None)
-    else:
-        sys.exit(f"unknown step {step}")

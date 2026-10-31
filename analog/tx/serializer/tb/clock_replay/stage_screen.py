@@ -11,10 +11,11 @@ crossing slope at every stage output, tap -> output delay, and the supply
 current of the chain.  Tail current of a stage is 0.85 mA * wt / 20 (mirror of
 the 20 um bias diode), so its largest differential swing is 2 * I * R.
 
-    uv run python analog/tx/serializer/tb/clock_replay/stage_screen.py
+    uv run python analog/tx/serializer/tb/clock_replay/stage_screen.py [bc id]
 """
 import importlib.util
 import itertools
+import sys
 import json
 import time
 from pathlib import Path
@@ -22,7 +23,6 @@ from pathlib import Path
 import numpy as np
 
 from serdes_flow import spice
-from serdes_flow.corners import Condition
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
 
@@ -93,23 +93,25 @@ def measure(w, nstages, period):
     return res, float(-np.mean(w["i(vdd)"][sel]))
 
 
-def screen(points, clocks, chains):
+def screen(points, clocks, chains, bc):
+    """Screening only: the candidate chains change the input stage, so the load check
+    is not applied; the BC id is recorded in summary.json."""
     camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs, keys = [], []
     for pt, clk, (name, ch) in itertools.product(points, clocks, chains.items()):
         if "only" in ch and clk not in ch["only"]:
             continue
         ch = dict(R2[clk], **{k: v for k, v in ch.items() if k != "only"})
-        taps, _ = replay.point_taps(pt)
+        taps, _ = replay.point_taps(pt, bc)
         d = camp / f"{pt}_{clk}_{name}"
-        jobs.append((deck(Condition.parse(replay.POINTS[pt]), clk, ch, taps), d, {}))
+        jobs.append((deck(replay.condition(bc, pt), clk, ch, taps), d, {}))
         keys.append((pt, clk, name, ch))
     for ex in spice.run_many(jobs, workers=4):
         assert ex.ok, (ex.run_dir, ex.log_failures)
     rows = []
     for (pt, clk, name, ch), (_, d, _) in zip(keys, jobs):
         st, idd = measure(spice.Waves(d / "waveforms.raw"), 2 + len(ch["extra"]), replay.PERIOD[clk])
-        rows.append(dict(point=pt, clock=clk, chain=name, spec=ch, stages=st, supply_current_a=idd))
+        rows.append(dict(point=pt, clock=clk, chain=name, spec=ch, stages=st, supply_current_a=idd, bc=bc))
         print(f"{pt:8s} {clk:3s} {name:14s} " + " -> ".join(f"{s['pp_v']*1e3:4.0f}" for s in st)
               + f" mVpp | out slope {st[-1]['slope_v_per_s']*1e-9:.2f} mV/ps | delay {st[-1]['delay_s']*1e12:6.1f} ps"
               f" | I {idd*1e3:.2f} mA", flush=True)
@@ -129,4 +131,4 @@ CHAINS = {
 }
 
 if __name__ == "__main__":
-    screen(["tt", "ss_hot", "fs_hot"], ["500", "1g"], CHAINS)
+    screen(["tt", "ss_hot", "fs_hot"], ["500", "1g"], CHAINS, sys.argv[1] if len(sys.argv) > 1 else "pll_r4_taps@tx_in_r2")

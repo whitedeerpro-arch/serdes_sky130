@@ -1,6 +1,8 @@
 """VCO tuning curves of the PLL r4 frontend from one Vctrl ramp per coarse code.
 
     uv run python analog/pll/top/tb/pvt_r4/tuning.py <condition tag> <code> [code...]
+    uv run python analog/pll/top/tb/pvt_r4/tuning.py batch <tag:code> [tag:code...]
+    uv run python analog/pll/top/tb/pvt_r4/tuning.py analyse <campaign dir>
 
 Same frontend bench as run.py (all four branches loaded as in the PLL), open
 loop.  Vctrl is held at V0 for 8 ns, then ramped linearly to V1 over 60 ns
@@ -75,8 +77,32 @@ def analyse(camp, tag, codes):
     print(camp.relative_to(ROOT))
 
 
+def batch(pairs):
+    """Several (condition, code) curves in one <=4-wide batch: args like tt_v1800_t85:5."""
+    camp = RESULTS / f"batch_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    jobs = []
+    for tag, code in pairs:
+        jobs.append((deck(Condition.parse(tag), code), camp / f"{tag}_code{code}",
+                     dict(meta=dict(condition=tag, code=code, ramp=[V0, V1, T0, T1]))))
+    for ex in spice.run_many(jobs, workers=4):
+        assert ex.ok, (ex.run_dir, ex.log_failures)
+    out = []
+    for tag, code in pairs:
+        v, f = curve(camp / f"{tag}_code{code}")
+        ramp = v > V0 + 1e-3
+        v, f = v[ramp], f[ramp]
+        cross = float(v[int(np.argmin(abs(f - TARGET_HZ)))]) if f.min() <= TARGET_HZ <= f.max() else None
+        out.append(dict(condition=tag, code=code, vctrl_at_2ghz=cross, f_min=float(f.min()), f_max=float(f.max())))
+        print(f"{tag} code {code}: {f.min()/1e9:.3f}-{f.max()/1e9:.3f} GHz; "
+              + (f"2 GHz at Vctrl {cross:.3f} V" if cross else "2 GHz not covered"), flush=True)
+    (camp / "summary.json").write_text(json.dumps(out, indent=1))
+    print(camp.relative_to(ROOT))
+
+
 if __name__ == "__main__":
-    if sys.argv[1] == "analyse":                      # analyse <campaign dir>
+    if sys.argv[1] == "batch":
+        batch([(a.split(":")[0], int(a.split(":")[1])) for a in sys.argv[2:]])
+    elif sys.argv[1] == "analyse":                      # analyse <campaign dir>
         camp = Path(sys.argv[2]).resolve()
         tag = json.loads((sorted(camp.glob("code*"))[0] / "execution.json").read_text())["condition"]
         analyse(camp, tag, sorted(int(p.name[4:]) for p in camp.glob("code*")))

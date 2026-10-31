@@ -1,0 +1,169 @@
+[
+ {
+  "id": "pll_r4_taps@tx_in_r2",
+  "kind": "voltage_replay",
+  "points": {
+   "tt": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T045031Z/tt/run",
+    "git_revision": "fd5c792-dirty",
+    "deck_sha256": "bb2607559e6b827130fae15d8b0e209f5d57abd02f20c9e9f3e0ddf1111acd64",
+    "condition": "tt_v1800_t27",
+    "code": 5,
+    "vctrl_v": 1.1791930525417336,
+    "settle_s": 3e-08,
+    "vco_hz": 2001972186.6598182,
+    "trims_f": {
+     "TRIM250": 1e-13,
+     "TRIM500": 5e-13,
+     "TRIM1G": 1.6000000000000003e-13,
+     "TRIM2G": 2.7e-13
+    }
+   },
+   "ss_cold": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T045031Z/ss_cold/run",
+    "git_revision": "fd5c792-dirty",
+    "deck_sha256": "df37975f8a543fa5c9529ea98bad958b0d789c9f68e53b6a118c5c8405a70f03",
+    "condition": "ss_v1650_t-40",
+    "code": 5,
+    "vctrl_v": 1.112,
+    "settle_s": 3e-08,
+    "vco_hz": 2004352526.1304266,
+    "trims_f": {
+     "TRIM250": 1e-13,
+     "TRIM500": 5e-13,
+     "TRIM1G": 1.6000000000000003e-13,
+     "TRIM2G": 2.7e-13
+    }
+   },
+   "ss_hot": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T045031Z/ss_hot/run",
+    "git_revision": "fd5c792-dirty",
+    "deck_sha256": "e709a9724470341bc1613eaa163a6eaf6a1b9eee7ce87840828e0d944fb7bd6f",
+    "condition": "ss_v1650_t85",
+    "code": 6,
+    "vctrl_v": 1.32,
+    "settle_s": 3e-08,
+    "vco_hz": 2014793920.7517595,
+    "trims_f": {
+     "TRIM250": 1e-13,
+     "TRIM500": 5e-13,
+     "TRIM1G": 1.6000000000000003e-13,
+     "TRIM2G": 2.7e-13
+    }
+   },
+   "fs_hot": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T045031Z/fs_hot/run",
+    "git_revision": "fd5c792-dirty",
+    "deck_sha256": "e1a07bf1ceaadab2720066cbb7fbc0f55d731da8873ead94fae88ca6a35810d3",
+    "condition": "fs_v1650_t85",
+    "code": 5,
+    "vctrl_v": 1.1,
+    "settle_s": 4.5e-08,
+    "vco_hz": 1994207251.267741,
+    "trims_f": {
+     "TRIM250": 1e-13,
+     "TRIM500": 5e-13,
+     "TRIM1G": 1.6000000000000003e-13,
+     "TRIM2G": 2.7e-13
+    }
+   },
+   "ff_cold": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T072216Z/ff_cold/run",
+    "git_revision": "43301a1-dirty",
+    "deck_sha256": "b8275d894f9be3d1e3d0cc22e6eea3b53edc360b600a56e3f0f8a3d7dd42147e",
+    "condition": "ff_v1950_t-40",
+    "code": 5,
+    "vctrl_v": 1.174,
+    "settle_s": 3e-08,
+    "vco_hz": 2001593833.767901,
+    "trims_f": {
+     "TRIM250": 1e-13,
+     "TRIM500": 5e-13,
+     "TRIM1G": 1.6000000000000003e-13,
+     "TRIM2G": 2.7e-13
+    }
+   }
+  },
+  "description": "PLL r4 frontend taps feeding the TX clock distribution, VCO open loop at fixed Vctrl, static data; recorded with the TX r2 serializer/driver as the rest of the load",
+  "upstream": {
+   "module": "pll",
+   "revision": "lowov_buffered_r4_20261031",
+   "netlist": "analog/pll/top/spice/clock_frontend_r4.spice",
+   "bench": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in"
+  },
+  "nodes": {
+   "p08": "250 MHz (branch 0 /8) -> s250",
+   "p24": "500 MHz (branch 2 /4) -> s500",
+   "p32": "1 GHz (branch 3 /2) -> s1g",
+   "pb0": "buffered VCO phase 0, inverted -> s2g"
+  },
+  "load": {
+   "cell": "serdes_cml_clock_distribution_tx_lowov",
+   "inputs": [
+    "s250p",
+    "s250n",
+    "s500p",
+    "s500n",
+    "s1gp",
+    "s1gn",
+    "s2gp",
+    "s2gn"
+   ],
+   "source": "analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice",
+   "stages": [
+    "X s1gp s1gn _ _ _ _ _ serdes_cml_buffer rload=400 wn=20 wt=12",
+    "X s250p s250n _ _ _ _ _ serdes_cml_buffer rload=400 wn=20 wt=12",
+    "X s2gp s2gn _ _ _ _ _ serdes_cml_buffer rload=400 wn=20 wt=12",
+    "X s500p s500n _ _ _ _ _ serdes_cml_buffer rload=400 wn=20 wt=12"
+   ],
+   "sha": "3ebb373376dcf98d"
+  },
+  "processing": "clock_replay/run.py: one steady-state 250 MHz period cut at a p08 falling crossing >= 3 ns after settle, time-scaled to exactly 4 ns, periodic PWL (r=0), Douglas-Peucker 0.3 mV",
+  "validation": {
+   "method": "clock_replay native mode vs full co-simulation (native_clock data, r2 distribution)",
+   "tt": "eye 152.6 vs 152.8 mV, spread 0.067 vs 0.068 UI",
+   "ss_hot": "100.9 vs 107.1 mV, 0.186 vs 0.188 UI",
+   "ss_cold": "both fail: 6.1 vs 7.1 mV",
+   "runs": [
+    "results/analog/tx/serializer/clock_replay/native_20261031T050022Z",
+    "results/analog/tx/serializer/native_clock/data_20261030T222316Z"
+   ]
+  },
+  "valid_while": [
+   "PLL working revision == lowov_buffered_r4_20261031",
+   "consumer serdes_cml_clock_distribution_tx_lowov input-stage signature == load.sha",
+   "open loop, fixed Vctrl: no loop dynamics, no noise; consumer must not change the frontend"
+  ]
+ },
+ {
+  "id": "tx_clk_ideal_tt_v01",
+  "kind": "ideal_edge_record",
+  "description": "Four TX select clocks (250M/500M/1G/2G) from the v0.1 closed-loop TT PLL record: every crossing time kept, sources idealised to 400 mVpp differential, 20 ps edges, CM VDD-0.17 V ({supply-0.07}/{supply-0.27}); plus ideal CMOS data sources (0/VDD, 20 ps).",
+  "upstream": {
+   "module": "pll",
+   "revision": "v0.1 (releases/v0.1-design-freeze-20261028)",
+   "provenance": "docs/history/physical_clock_distribution_results.md"
+  },
+  "nodes": {
+   "Vsrc250": "s250",
+   "Vsrc500": "s500",
+   "Vsrc1g": "s1g",
+   "Vsrc2g": "s2g",
+   "Vd0_15": "d0..d15 (CMOS data)"
+  },
+  "load": null,
+  "points": {
+   "all": {
+    "run": "analog/tx/serializer/tb/clock_states/r2_stimuli.inc",
+    "sha256": "65b6e8f24974026a511a19e125676919594ecd4bd18fc7163c5e2af48dc2075c",
+    "first_use": "results/analog/tx/optimization/20261030T100258Z (same file at every corner)"
+   }
+  },
+  "processing": "Used verbatim; clock_states shifts whole edge records (start states, timing windows).",
+  "validation": null,
+  "valid_while": [
+   "TT timing and amplitude only: corner use keeps TT source timing, amplitude and edge rate (this is why r2's 45/45 did not survive native clocks, I-07)",
+   "no PLL revision after v0.1 reproduces it (r3/r4 moved the tap phases)"
+  ]
+ }
+]

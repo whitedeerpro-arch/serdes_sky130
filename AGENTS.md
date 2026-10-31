@@ -42,6 +42,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - 新 bench 用 `spice.binary_output` 输出二进制 raw，并用 `spice.skip_output_before` 不保存分析窗口之前的启动段；`spice.Waves` 两种格式都能读。瓶颈在求解器，不在波形量（TX bench 文件小 58%，仿真时间不变）。
 - 并发 ngspice 不超过 4 个：并发时单个仿真会慢约 25%，但总吞吐仍是串行的约 2.6–3 倍。
 - 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。
+- 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。
 
 **历史脚本隐患：** 旧 campaign 的 `execution/*.txt` 从 `/tmp/serdes_*_campaign` 读路径，而这些文件指向原项目 `../simple_serdes`；旧 `tb.cir` 里也是原项目的绝对路径。不要直接运行它们，参照 `results/analog/tx/optimization/20261030T100258Z/execution/fork1_finalize.py` 的方式在内存里重定向，并且不要改写共享的 `/tmp` 文件。
 

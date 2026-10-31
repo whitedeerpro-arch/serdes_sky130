@@ -114,8 +114,54 @@ def run(deck: str, run_dir: Path, *, files: dict[str, Path] | None = None,
     return ex
 
 
-def run_many(jobs, *, workers: int = 4):
-    """Run (deck, run_dir, kwargs) jobs with at most `workers` concurrent ngspice."""
+_SUFFIX = {"f": 1e-15, "p": 1e-12, "n": 1e-9, "u": 1e-6, "m": 1e-3, "k": 1e3, "meg": 1e6, "g": 1e9}
+_TRAN = re.compile(r"^([ \t]*tran[ \t]+)(\S+)[ \t]+(\S+)((?:[ \t]+\S+)*)[ \t]*$", re.M)
+
+
+def spice_number(text: str) -> float:
+    """'72n' -> 7.2e-08, '4p' -> 4e-12, '1.5meg' -> 1.5e6."""
+    m = re.fullmatch(r"([-+0-9.eE]+)(meg|[fpnumkg])?[a-z]*", text.strip().lower())
+    if not m:
+        raise ValueError(f"not a SPICE number: {text!r}")
+    return float(m[1]) * _SUFFIX.get(m[2] or "", 1.0)
+
+
+def smoke_deck(deck: str, after: float = 1e-9) -> str:
+    """The same deck stopped `after` past its first stored point (tstart, or 0).
+
+    Runs the whole start-up, every .save/let/write line and the output step,
+    so missing nodes, invalid vectors and include errors show up before a batch.
+    """
+    m = _TRAN.search(deck)
+    if not m:
+        raise ValueError("deck has no tran line")
+    rest = m[4].split()
+    tstart = spice_number(rest[0]) if rest else 0.0
+    stop = min(spice_number(m[3]), tstart + after)
+    return deck[:m.start()] + f"{m[1]}{m[2]} {stop:.6e}{(' ' + ' '.join(rest)) if rest else ''}" + deck[m.end():]
+
+
+class SmokeTestFailed(RuntimeError):
+    pass
+
+
+def run_many(jobs, *, workers: int = 4, smoke: bool = True):
+    """Run (deck, run_dir, kwargs) jobs with at most `workers` concurrent ngspice.
+
+    smoke: first run job 0 only to 1 ns past its first stored point (in a
+    sibling `<run_dir>.smoke` directory, removed when it passes) and stop with
+    SmokeTestFailed if ngspice reports errors or writes no waveform file.
+    """
+    jobs = list(jobs)
+    if smoke and jobs:
+        deck, run_dir, kw = jobs[0]
+        sdir = Path(str(run_dir) + ".smoke")
+        ex = run(smoke_deck(deck), sdir, **{k: v for k, v in kw.items() if k == "files"})
+        written = any(sdir.glob("waveforms.*")) or any(sdir.glob("*.raw")) or any(sdir.glob("*.tsv"))
+        if not ex.ok or not written:
+            raise SmokeTestFailed(f"{sdir}: exit {ex.exit_code}, output {'yes' if written else 'missing'}, "
+                                  f"log: {ex.log_failures[:5]}")
+        shutil.rmtree(sdir)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = [pool.submit(run, deck, run_dir, **kw) for deck, run_dir, kw in jobs]
         return [f.result() for f in futures]

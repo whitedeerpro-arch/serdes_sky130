@@ -1,0 +1,24 @@
+* Variant of rx_cmos_pair_align with the PLL r4 full-speed CML->CMOS clock converter (I-04 fix).
+* Nominal TT common-clock pair alignment after four CML samplers.
+* Clock path uses opposite polarity of the EDGE clock to compensate real readout delay.
+* E0 has a real capacitive inverter delay to hold the desired previous edge sample.
+* This nominal timing choice requires PVT/aperture verification, not an ideal delay.
+* Raw converter nodes remain internal; no numerical sampling or ideal delay elements.
+.subckt serdes_rx_cmos_pair_align_r4 d0p d0n d1p d1n e0p e0n e1p e1n ep en
++ ad0 ad1 ae0 ae1 ck rst_b vbias vdd vss
+Xrd0 d0p d0n rd0 vbias vdd vss serdes_cml_to_cmos_data
+Xrd1 d1p d1n rd1 vbias vdd vss serdes_cml_to_cmos_data
+Xre0 e0p e0n re0 vbias vdd vss serdes_cml_to_cmos_data
+Xre1 e1p e1n re1 vbias vdd vss serdes_cml_to_cmos_data
+Xclock ep en ckp ckn vbias vdd vss serdes_cml_to_cmos_r4
+Xckb1 ckn cki vdd vss serdes_cmos_inv wn=2 wp=4
+Xckb2 cki ck vdd vss serdes_cmos_inv wn=8 wp=16
+Xd0 rd0 ck rst_b ad0 vdd vss serdes_cmos_dff_reset
+Xd1 rd1 ck rst_b ad1 vdd vss serdes_cmos_dff_reset
+Xe0i0 re0 de0n vdd vss serdes_cmos_inv wn=1 wp=2
+Cde0n de0n vss 20f
+Xe0i1 de0n me0 vdd vss serdes_cmos_inv wn=1 wp=2
+Cme0 me0 vss 20f
+Xe0 me0 ck rst_b ae0 vdd vss serdes_cmos_dff_reset
+Xe1 re1 ck rst_b ae1 vdd vss serdes_cmos_dff_reset
+.ends serdes_rx_cmos_pair_align_r4

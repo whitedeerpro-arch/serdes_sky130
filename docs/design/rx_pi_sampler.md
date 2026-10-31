@@ -2,7 +2,7 @@
 
 > **当前修订**：首版 64 码 PI [pi_rotator](../../analog/rx/pi/spice/pi_rotator.spice)、四相静态 CML 采样 [rx_half_rate_samples](../../analog/rx/sampler/spice/rx_half_rate_samples.spice)、静态 CMOS 读出与 pair 对齐 [rx_cmos_pair_align](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice)（[配置](../../config/rx_cdr.toml)）。
 > **关键数字**：PI 64 码全部单调前进，DNL −0.134…+0.122 LSB，最大 |INL| 0.0096 UI；真实 PI + CTLE + 采样器在码 0/4/8 下 51 位比较全部正确，早晚票方向与负反馈一致。
-> **主要缺口**：只有 TT；锚点是理想相关多相源，没接原生 PLL；pair 对齐依赖全速 CML→CMOS（SS 冷角失效）；孔径/失调/亚稳态未表征。
+> **主要缺口**：PI 压力角已过（下文），采样器 / 读出 PVT 进行中；锚点是理想相关多相源，没接原生 PLL；pair 对齐依赖全速 CML→CMOS（SS 冷角失效）；孔径/失调/亚稳态未表征。
 
 ## 电路
 
@@ -49,6 +49,23 @@ flowchart LR
 | 8 | 0/51 | 190.6 mV | 22/0 |
 
 采样组功耗约 9.3 mW（含输入 buffer、时钟移位、四个 DFF）。RTL 交接器的正/反向回卷轨迹驱动真实 PI/CTLE/采样器，144 位比较全部正确。来源：[采样与控制](../history/rx_sampler_control.md)。
+
+### PI 64 码 PVT（压力角，理想锚点）
+
+**结论：6 个压力角全部单调，|INL| ≤ 0.011 UI（门槛 0.02 UI），正交误差 0.001 UI；热慢角输出摆幅降到 233–263 mVpp。**
+
+[rotation/pvt.py](../../analog/rx/pi/tb/rotation/pvt.py)：每个工艺角一个 ngspice，64 码各 4 ns，后 2 ns 量相位；锚点共模随电源（VDD − 0.15 V），控制电平随电源。
+
+| 条件 | 步长（LSB） | DNL（LSB） | \|INL\|（UI） | 正交误差（UI） | 最小摆幅（mVpp） | 功耗 |
+|---|---|---|---|---|---|---|
+| TT 1.8 V 27 °C | 0.87–1.12 | 0.14 | 0.0090 | 0.001 | 366 | 5.04 mW |
+| SS 1.65 V −40 °C | 0.85–1.16 | 0.16 | 0.0110 | 0.001 | 352 | 4.29 mW |
+| SS 1.65 V 85 °C | 0.87–1.17 | 0.17 | 0.0112 | 0.001 | **233** | 4.44 mW |
+| FS 1.65 V −40 °C | 0.84–1.13 | 0.17 | 0.0098 | 0.001 | 392 | 4.24 mW |
+| FS 1.65 V 85 °C | 0.87–1.16 | 0.16 | 0.0109 | 0.001 | **263** | 4.40 mW |
+| FF 1.95 V −40 °C | 0.92–1.03 | 0.08 | 0.0031 | 0.001 | 475 | 5.64 mW |
+
+64 码跨度 1.97 UI（= 2 UI − 1 LSB）。摆幅是数据、边沿两路时钟中的较小者；它经源跟随器驱动采样器时钟对，是否够用由采样器 PVT 检验。
 
 ### CMOS 读出与 PCB 短窗
 

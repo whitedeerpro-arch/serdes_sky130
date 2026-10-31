@@ -467,6 +467,45 @@
   ]
  },
  {
+  "id": "rx_c2_far_weak@ctle_rc",
+  "kind": "recorded_node_voltage",
+  "description": "Far-end differential voltage of C2_loss6 driven by the ideal 'weak' TX ({'oc_pp': 0.6, 'ramp': 6e-11}), terminated 2 x 50 ohm to vcm 1.05 V and loaded by the real CTLE input at tt_v1800_t27, EQ code 2; PRBS7, 167 bits from t0 = 1e-09 s.",
+  "upstream": {
+   "module": "verification/models/channel C2_loss6 + rx termination",
+   "revision": "link_eye/pvt.py",
+   "provenance": "results/analog/rx/ctle/link_eye_pvt/weak_20261031T182228Z"
+  },
+  "nodes": {
+   "rx_diff": "CTLE inputs rxp/rxn (legs vcm +- rx_diff/2)"
+  },
+  "load": {
+   "stages": [
+    "X _ inn _ _ serdes_nfet_lvt nf={nfin} w={win}",
+    "X _ inp _ _ serdes_nfet_lvt nf={nfin} w={win}"
+   ],
+   "sha": "624029c653372f50"
+  },
+  "points": {
+   "tt_v1800_t27": {
+    "condition": "tt_v1800_t27",
+    "run": "results/analog/rx/ctle/link_eye_pvt/weak_20261031T182228Z/tt",
+    "case": "tt_v1800_t27_eq2",
+    "vcm": 1.05,
+    "git_revision": "551d71d",
+    "deck_sha256": "068aa44b769658f507f835b95cede0872c385a8d1149d44582be04e7a312674b"
+   }
+  },
+  "processing": "rx_diff resampled, Douglas-Peucker 0.2 mV, held at its first saved value before 8e-09 s; common mode taken as vcm (AC-coupled link, CM noise dropped).",
+  "validation": {
+   "method": "same recording and replay processing as rx_c2_far_nominal@ctle_rc (validated there: height -0.2..+0.1 mV, width -0.01..0 UI vs the full link); not re-validated for the weak source"
+  },
+  "valid_while": [
+   "CTLE input stage == load.sha (serdes_rx_ctle_rc inp/inn)",
+   "termination 2 x 50 ohm to the same vcm",
+   "channel C2_loss6 and the ideal TX model unchanged"
+  ]
+ },
+ {
   "id": "tx_clk_ideal_tt_v01",
   "kind": "ideal_edge_record",
   "description": "Four TX select clocks (250M/500M/1G/2G) from the v0.1 closed-loop TT PLL record: every crossing time kept, sources idealised to 400 mVpp differential, 20 ps edges, CM VDD-0.17 V ({supply-0.07}/{supply-0.27}); plus ideal CMOS data sources (0/VDD, 20 ps).",

@@ -2,7 +2,7 @@
 
 > **当前修订**：首版 [rx_input_termination](../../analog/rx/input/spice/rx_input_termination.spice) + 四档 RC 退化 CTLE [rx_ctle_rc](../../analog/rx/ctle/spice/rx_ctle_rc.spice)（[配置](../../config/rx_frontend.toml)）。
 > **关键数字**：0.8 V 输入共模时 2 GHz 相对峰化 −0.03 / 2.90 / 3.76 / 4.59 dB；真实 TX + C2 + 真实 RX 加载下，EQ11 把采样眼高从约 155 提到约 352 mV、散布从 0.211 降到 0.077 UI。
-> **主要缺口**：输入共模改为 1.05 V 后 AC/DC 在 45 条件满足（下文 PVT 节）；眼图/采样器的 PVT 未做；vcm 参考/缓冲未设计；默认档位与自适应未定。
+> **主要缺口**：输入共模改为 1.05 V 后，AC/DC 与 C2 眼图在 45 条件满足（下文 PVT 两节），C2 默认档 EQ3；采样器 PVT、C3 未做；vcm 参考/缓冲未设计；档位自适应未定。
 
 ## 电路
 
@@ -61,6 +61,19 @@ flowchart LR
 
 1.05 V、45 条件：最高档 2 GHz 峰化 4.17（SF 1.65 V 85 °C）– 5.96 dB（TT 1.95 V −40 °C）；输入对余量 ≥ 845 mV；输出共模 1.43–1.76 V；功耗 1.11–1.54 mW。TT 0.8 V 下四档峰化 −0.03 / 2.90 / 3.76 / 4.59 dB 与首版记录一致。vcm 可用范围约 1.0–1.15 V，对 vcm 参考/缓冲的要求即 1.05 V ± 50 mV（含 PVT）。
 
+### PVT：C2 信道眼图（采样器输入）
+
+**结论：vcm 1.05 V 下，名义和弱 TX 经 C2，45 个条件全部满足门槛（75 mV / 0.6 UI）；最高档 EQ3 在每个条件下都最好，定为 C2 的默认档。**
+
+方法：TX 用理想 Thevenin 源（每腿 50 Ω，PRBS7，40 位预热 + 一个周期）、pad 200 fF、0.5 nH 封装，接 C2_loss6 Foster 模型、2 × 50 Ω 端接、CTLE 和每腿 20 fF 采样器负载；RX 的工艺角与 TX 解耦（[link_eye/pvt.py](../../analog/rx/ctle/tb/link_eye/pvt.py)，每例约 2 分钟）。快速路径把 TT 全链路的远端电压登记为边界条件（`rx_c2_far_nominal@ctle_rc`、`rx_c2_far_weak@ctle_rc`，负载为 CTLE 输入级签名），只仿 CTLE 回放（[replay.py](../../analog/rx/ctle/tb/link_eye/replay.py)）；6 个压力角 × 4 档与全链路相比眼高差 −0.2 ~ +0.1 mV、眼宽差 ≤ 0.01 UI，速度约 40 倍（45 条件 × 4 档 107 s）。眼图用 `serdes_flow.eye` 的有符号眼：已知码序列、搜索延迟与最佳相位，眼宽取判决门限处。
+
+| TX 源（开路摆幅 / 边沿） | RX 输入（无 CTLE） | EQ0 | EQ1 | EQ2 | EQ3 |
+|---|---|---|---|---|---|
+| 名义 800 mVpp / 40 ps | 99 mV / 0.75 UI（TT） | 45/45，最差 88 mV | 45/45，129 mV | 45/45，148 mV | 45/45，**159 mV / 0.80 UI** |
+| 弱 600 mVpp / 60 ps | — | 15/45，最差 65 mV | 45/45，97 mV | 45/45，111 mV | 45/45，**119 mV / 0.82 UI** |
+
+各档最差点都是 SF 1.65 V 85 °C。EQ3 时 CTLE 输出共模 1.43–1.76 V，摆幅 391–554 mVpp（名义 TX）。C3（挑战信道）尚未覆盖。
+
 ## 适用范围
 
 - 只有 TT；输入为确定码型，无噪声/失调；采样是 0 V 门限的数值采样。
@@ -69,5 +82,5 @@ flowchart LR
 ## 待解决
 
 - RX 前端 PVT、噪声、失调（[问题清单](../status/open_issues.md) I-14）。
-- 信道回放与采样器在 1.05 V 共模下的 PVT 眼图；vcm 参考/缓冲（1.05 V ± 50 mV）；CMFB；默认 EQ 码与自适应选择（I-28）。
+- 采样器在 1.05 V 共模下的 PVT；C3 信道；vcm 参考/缓冲（1.05 V ± 50 mV）；CMFB；档位自适应（I-28）。
 - C3/C4/C5 覆盖（I-14）。

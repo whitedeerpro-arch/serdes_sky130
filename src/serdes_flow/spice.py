@@ -13,7 +13,9 @@ part of a transient; the circuit still evolves from t = 0.
 import gzip
 import hashlib
 import json
+import os
 import re
+import resource
 import shutil
 import subprocess
 import time
@@ -79,6 +81,18 @@ class Execution:
         return self.exit_code == 0 and not self.log_failures
 
 
+# Every ngspice runs at low priority with an address-space cap, so a runaway job cannot
+# starve or swap out the desktop of this 8-core / 7.7 GB VM.  SERDES_NGSPICE_MEM_GB overrides.
+NICE = 10
+MEM_LIMIT_GB = float(os.environ.get("SERDES_NGSPICE_MEM_GB", "3"))
+
+
+def _limit_child():
+    os.nice(NICE)
+    cap = int(MEM_LIMIT_GB * 2**30)
+    resource.setrlimit(resource.RLIMIT_AS, (cap, cap))
+
+
 def run(deck: str, run_dir: Path, *, files: dict[str, Path] | None = None,
         timeout_s: float = 3600, meta: dict | None = None) -> Execution:
     """Run one ngspice batch job in a new directory.
@@ -95,7 +109,8 @@ def run(deck: str, run_dir: Path, *, files: dict[str, Path] | None = None,
     start = time.time()
     try:
         proc = subprocess.run([project.ngspice(), "-b", "-o", "simulator.log", "tb.cir"], cwd=run_dir,
-                              stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, timeout=timeout_s)
+                              stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, timeout=timeout_s,
+                              preexec_fn=_limit_child)
         exit_code = proc.returncode
     except subprocess.TimeoutExpired:
         exit_code = None

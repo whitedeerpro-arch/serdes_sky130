@@ -46,6 +46,7 @@ from pathlib import Path
 
 import numpy as np
 
+from serdes_flow.spice import spice_number
 from serdes_flow import boundary, serial, spice
 from serdes_flow.corners import Condition
 from serdes_flow.project import ROOT
@@ -185,9 +186,23 @@ def simplify(t, y, tol=PWL_TOL):
     return np.where(keep)[0]
 
 
-def stimuli(taps, shift):
+def _delay_pwl(line, dt):
+    head, body = line.split("PWL(", 1)
+    body, tail = body.rsplit(")", 1)
+    tok = body.split()
+    for i in range(0, len(tok), 2):
+        tok[i] = f"{spice_number(tok[i]) + dt:.6e}"
+    return head + "PWL(" + " ".join(tok) + ")" + tail
+
+
+def stimuli(taps, shift, data_delay=0.0):
+    """Clock sources from the recorded taps; data words from the r2 record, optionally
+    delayed (word mode: the data follows the word clock, as a CMOS launch would)."""
     clock_lines, info = replay_sources(taps, shift)
     data = [l for l in R2_STIMULI.read_text().splitlines() if re.match(r"Vd\d+ ", l)]
+    if data_delay:
+        data = [_delay_pwl(l, data_delay) for l in data]
+        info = dict(info, data_delay_s=data_delay)
     return "\n".join(data + clock_lines) + "\n", info
 
 
@@ -241,10 +256,10 @@ def target_centroids(tag):
     return serializer_centroids(spice.Waves(run / "waveforms.tsv"), 20e-9, 60e-9)
 
 
-def _run(camp, names, shifts, taps, stop, infos, opts, bc):
+def _run(camp, names, shifts, taps, stop, infos, opts, bc, data_delay=None):
     jobs = []
     for n in names:
-        text, info = stimuli(taps[n], shifts[n])
+        text, info = stimuli(taps[n], shifts[n], (data_delay or {}).get(n, 0.0))
         d = camp / n
         d.mkdir(parents=True)
         (d / "stimuli.inc").write_text(text)
@@ -310,7 +325,10 @@ def fixed_shifts(target_campaigns, names, ideal, opts, bc, late=None, fit=None):
 
 def campaign(mode, names, bc, target_campaigns=None, late=None, fit=None, allow_load_mismatch=False, **opts):
     """mode: calibrated | native | target (serializer-input positions = r2 calibration run)
-    | fixed (one delay per clock for all corners, from target campaigns).
+    | fixed (one delay per clock for all corners, from target campaigns)
+    | word (native sources; the data words are delayed so that they sit against the
+      serializer-input 250M clock as in the TT r2 calibration run, i.e. the data follows
+      the word clock.  Needed when 250M is generated inside the distribution).
 
     bc: registered boundary condition (recorded taps).  The replay refuses to run
     when the distribution input stage differs from the one present at recording,
@@ -342,7 +360,16 @@ def campaign(mode, names, bc, target_campaigns=None, late=None, fit=None, allow_
             err = {k: wrap(got[k] - want[k], PERIOD[k]) for k in CLOCKS}
             infos[n]["pass1_error_s"] = err
             shifts[n] = {k: (shifts[n][k] - err[k]) % WORD for k in CLOCKS}
-    _run(camp, names, shifts, taps, "72n", infos, opts, bc)
+    data_delay = None
+    if mode == "word":
+        _run(camp / "pass1", names, shifts, taps, "28n", {n: dict(infos[n]) for n in names}, opts, bc)
+        want = target_centroids("tt_v1800_t27")["250"]
+        data_delay = {}
+        for n in names:
+            got = serializer_centroids(spice.Waves(camp / "pass1" / n / "run/waveforms.raw"), 14e-9, 28e-9)["250"]
+            data_delay[n] = (got - want) % WORD
+            infos[n]["pass1_250_s"] = got
+    _run(camp, names, shifts, taps, "76n" if mode == "word" else "72n", infos, opts, bc, data_delay)
     rows = []
     for n in names:
         w = spice.Waves(camp / n / "run/waveforms.raw")
@@ -369,7 +396,7 @@ def campaign(mode, names, bc, target_campaigns=None, late=None, fit=None, allow_
 if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=("calibrated", "native", "target", "fixed"))
+    ap.add_argument("mode", choices=("calibrated", "native", "target", "fixed", "word"))
     ap.add_argument("points", nargs="*")
     ap.add_argument("--dist", help="file defining serdes_cml_clock_distribution_tx_lowov")
     ap.add_argument("--trims", help="fF for 250,500,1g,2g (default r2 100,500,160,270)")

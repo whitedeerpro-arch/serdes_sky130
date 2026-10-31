@@ -8,7 +8,8 @@ drops into the r2 bench via clock_replay --dist.
                                                        |  optionally inverted, then NCK
                                                        |  dedicated buffers -> k<clk>
                                               r<clk> -> POST stages -> c<clk>
-    2G:  s2g -> a2g -> e1 -> e2 -> c2g (v1 chain, no trims)
+    2G:  spine of buffers from s2g (cfg "chain"); c2g is the output, retimer clocks tap
+         spine nodes (v2 default: s2g -> a2g -> e1 -> e2 -> c2g, the v1 chain, no trims)
 
 After retiming every divided clock is "a 2G-chain edge + one clk-to-q", so
 the divider delays (which drift ~25-75 ps per stage over PVT) drop out of the
@@ -26,8 +27,36 @@ DEFAULT = dict(
     ck={"250": ("c2g", False, 2), "500": ("e1", False, 1), "1g": ("c2g", False, 1)},
     ckbuf=(24, 16, 400),
     retimer=dict(whold=20),
+    # 2G spine: (node, driven from, size).  c2g is the 2G output to the serializer; the
+    # retimer clocks tap any spine node.
+    chain=(("a2g", "s2g", (20, 12, 400)), ("e1", "a2g", (24, 16, 400)), ("e2", "e1", (24, 16, 400)),
+           ("c2g", "e2", (32, 24, 300))),
 )
-CHAIN = (("a2g", (20, 12, 400)), ("e1", (24, 16, 400)), ("e2", (24, 16, 400)), ("c2g", (32, 24, 300)))
+# Named configurations (overrides of DEFAULT).  One CML buffer stage is ~37 ps (0.15 UI) at TT.
+PRESETS = {
+    "v2": {},
+    # v2 left 500M/1G ~0.45 UI early against 250M/2G (serializer-input positions vs the r2
+    # calibration).  2G output one stage earlier (driver from e1), 250 retimer one stage earlier,
+    # 500/1G retimers two stages later; each move stays inside its retimer's setup/hold window.
+    "v2b": dict(
+        chain=(("a2g", "s2g", (20, 12, 400)), ("e1", "a2g", (24, 16, 400)), ("c2g", "e1", (32, 24, 300)),
+               ("e2", "e1", (24, 16, 400)), ("e3", "e2", (24, 16, 400))),
+        ck={"250": ("e3", False, 1), "500": ("e3", False, 1), "1g": ("e3", False, 3)},
+    ),
+}
+
+
+def resolve(cfg):
+    """Preset name, JSON text or dict -> overrides dict (JSON lists turned back into tuples)."""
+    import json
+    if isinstance(cfg, str):
+        cfg = dict(PRESETS[cfg]) if cfg in PRESETS else json.loads(cfg)
+    cfg = dict(cfg or {})
+    if "ck" in cfg:
+        cfg["ck"] = {k: tuple(v) for k, v in cfg["ck"].items()}
+    if "chain" in cfg:
+        cfg["chain"] = tuple((n, f, tuple(z)) for n, f, z in cfg["chain"])
+    return cfg
 
 
 def _buf(name, a, b, size):
@@ -45,10 +74,8 @@ def netlist(cfg=None):
               "+ c250p c250n c500p c500n c1gp c1gn c2gp c2gn vbias vdd vss",
               "+ params: trim250=0 trim500=0 trim1g=0 trim2g=0",
               "Xrtbias vbias vbias_rt vdd vss pll_cml_tail_bias"]
-    prev = "s2g"
-    for node, size in CHAIN:
-        lines.append(_buf(f"ch_{node}", prev, node, size))
-        prev = node
+    for node, src, size in cfg["chain"]:
+        lines.append(_buf(f"ch_{node}", src, node, size))
     for clk in ("250", "500", "1g"):
         # First gain stage output is a<clk> (the bench's pre<clk> probes read it); D input is d<clk>.
         prev = f"s{clk}"
@@ -90,11 +117,8 @@ def probe_vectors():
 if __name__ == "__main__":
     import json
     import sys
-    # dist_v2.py [out.spice [json overrides]]: print or write the netlist
-    over = json.loads(sys.argv[2]) if len(sys.argv) > 2 else {}
-    if "ck" in over:
-        over["ck"] = {k: tuple(v) for k, v in over["ck"].items()}
-    text = netlist(over)
+    # dist_v2.py [out.spice [preset name | json overrides]]: print or write the netlist
+    text = netlist(resolve(sys.argv[2] if len(sys.argv) > 2 else {}))
     if len(sys.argv) > 1:
         Path(sys.argv[1]).write_text(text)
     else:

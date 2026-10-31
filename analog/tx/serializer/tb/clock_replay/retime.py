@@ -111,11 +111,8 @@ if __name__ == "__main__":
     ap.add_argument("step", choices=("probe",))
     ap.add_argument("points", nargs="*")
     ap.add_argument("--bc", required=True)
-    ap.add_argument("--cfg", default="{}", help="JSON overrides of variants/dist_v2.DEFAULT")
+    ap.add_argument("--cfg", default="v2", help="preset name in variants/dist_v2.PRESETS or JSON overrides of DEFAULT")
     ap.add_argument("--label", default="probe")
     ap.add_argument("--allow-load-mismatch", action="store_true")
     a = ap.parse_args()
-    over = json.loads(a.cfg)
-    if "ck" in over:                             # JSON lists -> tuples
-        over["ck"] = {k: tuple(v) for k, v in over["ck"].items()}
-    probe(over, a.bc, a.points or None, a.label, a.allow_load_mismatch)
+    probe(dist_v2.resolve(a.cfg), a.bc, a.points or None, a.label, a.allow_load_mismatch)

@@ -140,7 +140,7 @@ PLL仍保留原生VCO/变容管、四路匹配抽出buffer、完整接收/分频
 
 完整长码流运行：
 
-`/home/host/Desktop/workspace/simple_serdes/results/analog/tx/serializer/physical_clock/20261028T090856Z_ngspice_tt_native_buffered_clock_64words`
+`results/analog/tx/serializer/physical_clock/20261028T090856Z_ngspice_tt_native_buffered_clock_64words`
 
 源、电路、元件配置、预期字序列、原始波形、逐位/逐字判决、标记对齐和2UI眼图均有快照及输入SHA256。
 

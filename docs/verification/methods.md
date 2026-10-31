@@ -120,4 +120,4 @@ Xyce 版本为 `verification/smoke/tb_stimuli_xyce.cir`。十项检查值见 [sm
 
 ## 历史脚本
 
-旧 campaign 的分析代码存放在各自的 `execution/*.txt`，从 `/tmp/serdes_*_campaign` 读路径，而这些文件指向原项目 `../simple_serdes`。不要直接运行，参照 [AGENTS.md](../../AGENTS.md) 的说明重定向。新代码写成正常的 `.py`。
+旧 campaign 的分析代码存放在各自的 `execution/*.txt`，路径指向已停用的原项目 `../simple_serdes`（经 `/tmp/serdes_*_campaign` 指针）。只作记录；复跑按 [AGENTS.md](../../AGENTS.md) 的说明在内存里重定向。结果目录的大波形以 gzip 存放（`spice.Waves` 直接读 `.gz`，判断用 `spice.has_waves`）。新代码写成正常的 `.py`。

@@ -3,7 +3,7 @@
 if {[info exists env(SERDES_PROJECT_ROOT)]} {
   set serdes_project_root [file normalize $env(SERDES_PROJECT_ROOT)]
 } else {
-  set serdes_project_root /home/host/Desktop/workspace/simple_serdes
+  set serdes_project_root /home/host/Desktop/workspace/simple_serdes_fork1
 }
 set XSCHEM_LIBRARY_PATH "${serdes_project_root}/schematic_lib:/usr/share/xschem/xschem_library"
 set XSCHEM_DESIGN_PATH $serdes_project_root

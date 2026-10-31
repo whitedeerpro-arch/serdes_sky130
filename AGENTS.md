@@ -45,7 +45,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。
 - 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。
 
-**历史脚本隐患：** 旧 campaign 的 `execution/*.txt` 从 `/tmp/serdes_*_campaign` 读路径，而这些文件指向原项目 `../simple_serdes`；旧 `tb.cir` 里也是原项目的绝对路径。不要直接运行它们，参照 `results/analog/tx/optimization/20261030T100258Z/execution/fork1_finalize.py` 的方式在内存里重定向，并且不要改写共享的 `/tmp` 文件。
+**历史脚本：** 原项目 `../simple_serdes` 已停用，本仓库不依赖它。旧 campaign 的 `execution/*.txt` 通过 `/tmp/serdes_*_campaign` 指针读原项目路径，旧 `tb.cir`/`run.json` 里也是原项目的绝对路径；这些文件只作记录，不能直接运行。需要复跑时参照 `results/analog/tx/optimization/20261030T100258Z/execution/fork1_finalize.py`，在内存里把原项目路径换成本仓库路径。
 
 ## 文档
 

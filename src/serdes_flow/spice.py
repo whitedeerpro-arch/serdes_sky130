@@ -81,14 +81,12 @@ class Execution:
         return self.exit_code == 0 and not self.log_failures
 
 
-# Every ngspice runs at low priority with an address-space cap, so a runaway job cannot
-# starve or swap out the desktop of this 8-core / 7.7 GB VM.  SERDES_NGSPICE_MEM_GB overrides.
-NICE = 10
+# Every ngspice gets an address-space cap, so a runaway job cannot swap out this 7.7 GB VM.
+# SERDES_NGSPICE_MEM_GB overrides.  No priority change: throughput first.
 MEM_LIMIT_GB = float(os.environ.get("SERDES_NGSPICE_MEM_GB", "3"))
 
 
 def _limit_child():
-    os.nice(NICE)
     cap = int(MEM_LIMIT_GB * 2**30)
     resource.setrlimit(resource.RLIMIT_AS, (cap, cap))
 

@@ -136,6 +136,293 @@
   ]
  },
  {
+  "id": "pll_r4_taps@tx_in_v1",
+  "kind": "voltage_replay",
+  "points": {
+   "ff_v1650_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/ff_v1650_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "1e02e3e6007bf86136a23b7415cfb570e66f1625bf58aa7e6554c0d4f182aed9",
+    "condition": "ff_v1650_t85",
+    "code": 6,
+    "vctrl_v": 1.03,
+    "settle_s": 3e-08,
+    "vco_hz": 2007695835.8660145,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "ff_v1950_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/ff_v1950_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "44010d241e55ec27888a44c7f541e183eb932ae8e25c3a8955ee3f067d71b181",
+    "condition": "ff_v1950_t-40",
+    "code": 5,
+    "vctrl_v": 1.174,
+    "settle_s": 3e-08,
+    "vco_hz": 2001742009.100599,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "ff_v1950_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/ff_v1950_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "0bf0cadc4f1c70390ad308550865ca7d6101d4f0d879f8f0eb1e2845f11f401c",
+    "condition": "ff_v1950_t85",
+    "code": 6,
+    "vctrl_v": 1.404,
+    "settle_s": 3e-08,
+    "vco_hz": 2003902820.9703627,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "fs_v1650_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/fs_v1650_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "41997785fb5333285de795de7cb55a6dbcfc0cf1372574eddc10f2593eaf1df5",
+    "condition": "fs_v1650_t-40",
+    "code": 5,
+    "vctrl_v": 1.433,
+    "settle_s": 4.5e-08,
+    "vco_hz": 2005422415.0689154,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/fs_v1650_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "6be196a2cde3981cc22fcda5aa05f3c5c6ec997abad3914274c511c4a64ea4de",
+    "condition": "fs_v1650_t85",
+    "code": 5,
+    "vctrl_v": 1.1,
+    "settle_s": 4.5e-08,
+    "vco_hz": 1994554682.2167835,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "sf_v1650_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/sf_v1650_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "3daf0ad4ace0900145a788c4fdc99a5c32f628f4fcfc2bd7be675f61ecafcc9b",
+    "condition": "sf_v1650_t85",
+    "code": 7,
+    "vctrl_v": 1.083,
+    "settle_s": 3e-08,
+    "vco_hz": 1997298844.8673785,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "sf_v1950_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/sf_v1950_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "2e429c7d6fc2c421ef7dc9a98d1e96b020a6898a8002ccb7267c58d82c1c23cf",
+    "condition": "sf_v1950_t-40",
+    "code": 6,
+    "vctrl_v": 1.179,
+    "settle_s": 3e-08,
+    "vco_hz": 2003681957.1385064,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "ss_v1650_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/ss_v1650_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "8a5f49e487f9caebe5b66351205cac35c5ff5f194f6bc3d4139d1b51bb24755f",
+    "condition": "ss_v1650_t-40",
+    "code": 5,
+    "vctrl_v": 1.112,
+    "settle_s": 3e-08,
+    "vco_hz": 2004530180.136384,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "ss_v1650_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/ss_v1650_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "d0f2d9e1f25d8198803193c1f62197f3d8728a97744ed439c3a62d3079a1341c",
+    "condition": "ss_v1650_t85",
+    "code": 6,
+    "vctrl_v": 1.32,
+    "settle_s": 3e-08,
+    "vco_hz": 2015047481.9959328,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "ss_v1950_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/ss_v1950_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "a9478ed14e5ec9307f63cb3b5b04b3a72ae559fbfc2ee856cd8d501cee19655c",
+    "condition": "ss_v1950_t-40",
+    "code": 5,
+    "vctrl_v": 1.465,
+    "settle_s": 3e-08,
+    "vco_hz": 2005058164.839641,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "tt_v1650_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/tt_v1650_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "eb688b6735540ca79855ae74fe8579fc921d94f5b151e65463a2382ac737a628",
+    "condition": "tt_v1650_t85",
+    "code": 6,
+    "vctrl_v": 1.373,
+    "settle_s": 3e-08,
+    "vco_hz": 2003642808.3815954,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/tt_v1800_t27/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "69bcf8c0c7b7a5593fe0d702d838d9a5533f36bd7056eb3183775e69ca547e4b",
+    "condition": "tt_v1800_t27",
+    "code": 5,
+    "vctrl_v": 1.1791930525417336,
+    "settle_s": 3e-08,
+    "vco_hz": 2002208460.7663314,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "tt_v1800_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/tt_v1800_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "0760e98d484b6cf4862501ebd9c785a82948a808c4e6ae31a3c5ffa138e4370c",
+    "condition": "tt_v1800_t-40",
+    "code": 5,
+    "vctrl_v": 1.265,
+    "settle_s": 3e-08,
+    "vco_hz": 2002982943.685661,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "tt_v1800_t85": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/tt_v1800_t85/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "fb3d435790e88bb90a20f04eff3f96c0e1898f9105462e8896cc29fe5ee563fd",
+    "condition": "tt_v1800_t85",
+    "code": 5,
+    "vctrl_v": 1.038,
+    "settle_s": 3e-08,
+    "vco_hz": 2004177972.5989728,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   },
+   "tt_v1950_t-40": {
+    "run": "results/analog/tx/serializer/native_clock/record_20261031T091246Z/tt_v1950_t-40/run",
+    "git_revision": "f30d372-dirty",
+    "deck_sha256": "93a4323b506f6fc4b0959a5aa2a115379f9242ea8a4d711c5c0e439f1c23eae5",
+    "condition": "tt_v1950_t-40",
+    "code": 5,
+    "vctrl_v": 1.422,
+    "settle_s": 3e-08,
+    "vco_hz": 2004229653.9738293,
+    "trims_f": {
+     "TRIM250": 0.0,
+     "TRIM500": 0.0,
+     "TRIM1G": 0.0,
+     "TRIM2G": 0.0
+    }
+   }
+  },
+  "description": "PLL r4 frontend taps feeding the TX clock distribution, VCO open loop at fixed Vctrl, static data; recorded with the TX r2 serializer/driver as the rest of the load",
+  "upstream": {
+   "module": "pll",
+   "revision": "lowov_buffered_r4_20261031",
+   "netlist": "analog/pll/top/spice/clock_frontend_r4.spice",
+   "bench": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in"
+  },
+  "nodes": {
+   "p08": "250 MHz (branch 0 /8) -> s250",
+   "p24": "500 MHz (branch 2 /4) -> s500",
+   "p32": "1 GHz (branch 3 /2) -> s1g",
+   "pb0": "buffered VCO phase 0, inverted -> s2g"
+  },
+  "load": {
+   "cell": "serdes_cml_clock_distribution_tx_lowov",
+   "inputs": [
+    "s250p",
+    "s250n",
+    "s500p",
+    "s500n",
+    "s1gp",
+    "s1gn",
+    "s2gp",
+    "s2gn"
+   ],
+   "source": "analog/tx/serializer/tb/clock_replay/variants/dist_v1.spice",
+   "stages": [
+    "X s1gp s1gn _ _ _ _ _ serdes_cml_buffer rload=600 wn=20 wt=12",
+    "X s250p s250n _ _ _ _ _ serdes_cml_buffer rload=400 wn=20 wt=12",
+    "X s2gp s2gn _ _ _ _ _ serdes_cml_buffer rload=400 wn=20 wt=12",
+    "X s500p s500n _ _ _ _ _ serdes_cml_buffer rload=600 wn=20 wt=12"
+   ],
+   "sha": "e109d94c2e2ac28d"
+  },
+  "processing": "clock_replay/run.py: one steady-state 250 MHz period cut at a p08 falling crossing >= 3 ns after settle, time-scaled to exactly 4 ns, periodic PWL (r=0), Douglas-Peucker 0.3 mV",
+  "validation": null,
+  "valid_while": [
+   "PLL working revision == lowov_buffered_r4_20261031",
+   "consumer serdes_cml_clock_distribution_tx_lowov input-stage signature == load.sha",
+   "open loop, fixed Vctrl: no loop dynamics, no noise; consumer must not change the frontend"
+  ]
+ },
+ {
   "id": "tx_clk_ideal_tt_v01",
   "kind": "ideal_edge_record",
   "description": "Four TX select clocks (250M/500M/1G/2G) from the v0.1 closed-loop TT PLL record: every crossing time kept, sources idealised to 400 mVpp differential, 20 ps edges, CM VDD-0.17 V ({supply-0.07}/{supply-0.27}); plus ideal CMOS data sources (0/VDD, 20 ps).",

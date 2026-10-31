@@ -88,4 +88,14 @@ def probe_vectors():
 
 
 if __name__ == "__main__":
-    print(netlist())
+    import json
+    import sys
+    # dist_v2.py [out.spice [json overrides]]: print or write the netlist
+    over = json.loads(sys.argv[2]) if len(sys.argv) > 2 else {}
+    if "ck" in over:
+        over["ck"] = {k: tuple(v) for k, v in over["ck"].items()}
+    text = netlist(over)
+    if len(sys.argv) > 1:
+        Path(sys.argv[1]).write_text(text)
+    else:
+        print(text)

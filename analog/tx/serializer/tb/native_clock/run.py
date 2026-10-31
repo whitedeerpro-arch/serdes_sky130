@@ -35,6 +35,7 @@ import numpy as np
 from serdes_flow import boundary, clock, serial, spice
 from serdes_flow.corners import Condition
 from serdes_flow.project import ROOT
+from serdes_flow.waves import crossings
 
 HERE = Path(__file__).resolve().parent
 RESULTS = ROOT / "results/analog/tx/serializer/native_clock"
@@ -48,8 +49,26 @@ POINTS = {  # name: (condition, coarse code, Vctrl) from the r3/r4 native operat
     # FF 1.95 V -40 C: from the pll/top/tb/pvt_r4/tuning.py ramp (code 5, 2 GHz at 1.174 V).
     "ff_cold": ("ff_v1950_t-40", 5, 1.174),
 }
+# V/T operating points keyed by condition tag (a chip has one process; supply and
+# temperature move).  Code / Vctrl for ~2 GHz from pll/top/tb/pvt_r4/tuning.py ramps
+# (results/analog/pll/top/tuning_r4/), the first five from the r3/r4 native checks.
+for _name in ("tt", "ss_cold", "ss_hot", "fs_hot", "ff_cold"):
+    POINTS[POINTS[_name][0]] = POINTS[_name]
+POINTS.update({
+    "tt_v1800_t-40": ("tt_v1800_t-40", 5, 1.265),
+    "tt_v1800_t85": ("tt_v1800_t85", 5, 1.038),
+    "tt_v1950_t-40": ("tt_v1950_t-40", 5, 1.422),
+    "fs_v1650_t-40": ("fs_v1650_t-40", 5, 1.433),
+    "fs_v1950_t-40": ("fs_v1950_t-40", 4, 1.463),
+    "ff_v1950_t85": ("ff_v1950_t85", 6, 1.404),
+    "ss_v1950_t-40": ("ss_v1950_t-40", 5, 1.465),
+    "sf_v1650_t85": ("sf_v1650_t85", 7, 1.083),
+    "sf_v1950_t-40": ("sf_v1950_t-40", 6, 1.179),
+    "ff_v1650_t85": ("ff_v1650_t85", 6, 1.030),
+    "tt_v1650_t85": ("tt_v1650_t85", 6, 1.373),
+})
 # The FS 1.65 V 85 C /8 settles late (r3: final /8 only after ~34-38 ns).
-SETTLE = {"fs_hot": 45e-9}
+SETTLE = {"fs_hot": 45e-9, "fs_v1650_t85": 45e-9, "fs_v1650_t-40": 45e-9}
 WORD_DELAY = 78.3e-12
 WORDS = 13                       # 4 training + 8 payload + 1 guard
 
@@ -121,6 +140,11 @@ def register_bc(bc_id, runs, dist=None, validation=None):
         ex = json.loads((Path(run) / "execution.json").read_text())
         w = spice.Waves(Path(run) / "waveforms.raw")
         f = clock.period_stats(w.t, w["pb0p"] - w["pb0n"], ex["settle_s"], w.t[-1])["frequency_hz"]
+        e8, p8 = crossings(w.t, w["p08p"] - w["p08n"])
+        rises = e8[(p8 > 0) & (e8 > ex["settle_s"])]
+        f250 = 1 / float(np.median(np.diff(rises))) if len(rises) >= 2 else 0.0
+        if abs(f / f250 / 8 - 1) > 0.005:          # divider not settled or not dividing by 8
+            raise RuntimeError(f"{n}: VCO {f/1e9:.4f} GHz vs 250 MHz tap {f250/1e6:.2f} MHz (ratio {f/f250:.3f})")
         points[n] = boundary.run_record(run, condition=tag, code=code, vctrl_v=vctrl, settle_s=ex["settle_s"],
                                         vco_hz=f, trims_f=ex["trims"])
     entry = dict(

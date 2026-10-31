@@ -2,6 +2,7 @@
 
     uv run python analog/tx/serializer/tb/native_clock/run.py probe [points...]
     uv run python analog/tx/serializer/tb/native_clock/run.py data [points...]
+    uv run python analog/tx/serializer/tb/native_clock/run.py record [points...]
 
 The VCO runs open loop at a fixed Vctrl near 2 GHz (operating points of the
 r3/r4 native checks).  The four serializer clocks come straight from the
@@ -15,6 +16,8 @@ data:  word k is applied 78.3 ps after the k-th 250 MHz fall after settling, as
        in the r2 bench; the UI is the measured VCO half period.  With REMAP=s
        the words are pre-permuted for state s of the measured r2 tables.
        Checks the in-order contract and the order-free eye/mapping.
+record: as probe, plus the single-ended frontend taps feeding the TX
+       distribution (TAPS), for tb/clock_replay.
 Environment: TRIMS="250,500,1g,2g" in fF (default r2: 100,500,160,270).
 """
 import json
@@ -50,14 +53,37 @@ def trims():
     return dict(TRIM250=v[0], TRIM500=v[1], TRIM1G=v[2], TRIM2G=v[3])
 
 
-def deck(name, stop, tstart):
+TAPS = ("p08p", "p08n", "p24p", "p24n", "p32p", "p32n", "pb0p", "pb0n")   # frontend -> TX distribution
+
+
+def deck(name, stop, tstart, extra=()):
     tag, code, vctrl = POINTS[name]
     c = Condition.parse(tag)
     d = spice.render(HERE / "tb_native_tx_ngspice.cir.in", **spice.corner_values(c), CODE=code, VCTRL=vctrl,
                      STOP=stop, MAX_STEP="4p", INITIAL_STATE="", TAIL_SCALE=6, WSF=80, WSELECT=96,
                      DRIVER_FILE="cml_line_driver_lowvt_enable.spice",
                      DRIVER_CELL="serdes_tx_cml_line_driver_lowvt_enable", DRIVER_PARAMS="wgatep=32", **trims())
+    if extra:
+        d = d.replace("wrdata waveforms.tsv ", "wrdata waveforms.tsv " + " ".join(f"v({x})" for x in extra) + " ", 1)
     return spice.skip_output_before(spice.binary_output(d), tstart), c
+
+
+def record(names):
+    """Static data; also writes the single-ended frontend taps (TAPS) for clock replay."""
+    camp = RESULTS / f"record_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    static = stimuli([0.0], json.loads(EXPECTED.read_text())["bits"])
+    jobs = []
+    for n in names:
+        d = camp / n
+        d.mkdir(parents=True)
+        (d / "stimuli.inc").write_text(static)
+        settle = SETTLE.get(n, 30e-9)
+        dk, _ = deck(n, f"{(settle + 12e-9) * 1e9:.0f}n", f"{(settle - 2e-9) * 1e9:.0f}n", TAPS)
+        jobs.append((dk, d / "run", dict(files={"stimuli.inc": d / "stimuli.inc"},
+                                         meta=dict(point=n, trims=trims(), settle_s=settle))))
+    for ex in spice.run_many(jobs, workers=4):
+        assert ex.ok, (ex.run_dir, ex.log_failures)
+    print(camp.relative_to(ROOT))
 
 
 def stimuli(edges, bits, remap=None):
@@ -187,6 +213,8 @@ if __name__ == "__main__":
     step, names = sys.argv[1], sys.argv[2:] or list(POINTS)
     if step == "probe":
         probe(names)
+    elif step == "record":
+        record(names)
     elif step == "reanalyse_probe":
         analyse_probe(sorted(RESULTS.glob("probe_*"))[-1], names)
     elif step == "data":

@@ -41,6 +41,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - 新代码写成正常的 `.py`。公共测量函数（边沿、眼图裕量、频率/相位、PVT 网格）收进共享库，不在每个 campaign 里重写。
 - 新 bench 用 `spice.binary_output` 输出二进制 raw，并用 `spice.skip_output_before` 不保存分析窗口之前的启动段；`spice.Waves` 两种格式都能读。瓶颈在求解器，不在波形量（TX bench 文件小 58%，仿真时间不变）。
 - 并发 ngspice 不超过 4 个：并发时单个仿真会慢约 25%，但总吞吐仍是串行的约 2.6–3 倍。
+- 每次启动 ngspice 加载 SKY130 模型库约 15 s。短分析（工作点/AC/DC、短瞬态）按工艺角合并成一个 deck，在控制段里用 `option temp=…`、`alter V… dc=…` 循环电压、温度和控制位（例：`analog/rx/ctle/tb/ac_dc/pvt.py`，45 条件 × 4 档从约 13 min 降到 39 s，结果逐位相同）。`spice.run` 对所有任务设单线程（`num_threads=1`）。
 - 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。
 - 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。
 - 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。

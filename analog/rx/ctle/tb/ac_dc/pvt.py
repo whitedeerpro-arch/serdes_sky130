@@ -2,7 +2,10 @@
 
     uv run python analog/rx/ctle/tb/ac_dc/pvt.py [stress | all | tags...] [--cm 0.8,0.9] [--resume CAMPAIGN]
 
---resume: reuse a campaign directory; runs with execution.json are kept, unfinished
+One ngspice run per process corner: supply, temperature, EQ code and input CM are changed
+inside the control block (`option temp`, `alter`), so the PDK library loads 5 times for
+the 45-condition grid instead of once per case.
+--resume: reuse a campaign directory; decks with execution.json are kept, unfinished
 ones are deleted and rerun, then the whole campaign is summarised.
 
 Per condition x EQ code x input common mode: tail and input-pair headroom
@@ -45,16 +48,40 @@ def read_tsv(path):
     return out
 
 
-def deck(c, code, cm):
-    eq0, eq1 = code & 1, code >> 1
-    return spice.render(TEMPLATE, **spice.corner_values(c), EQ_CODE=code, INPUT_CM=cm,
-                        EQ0_V=c.supply * eq0, EQ1_V=c.supply * eq1)
+def case_name(c, code, cm):
+    return f"{c.tag}_cm{round(cm * 1000)}_eq{code}"
 
 
-def analyse(d):
-    op = read_tsv(d / "operating_point.tsv")
+def deck(cases):
+    """One deck for one process corner: the template's control body repeated per case, each
+    preceded by temperature / supply / EQ / CM changes and writing <case>_*.tsv.  The PDK
+    library is loaded once instead of once per case (~15 s each)."""
+    c0, code0, cm0 = cases[0]
+    assert all(c.process == c0.process for c, _, _ in cases)
+    text = spice.render(TEMPLATE, **spice.corner_values(c0), EQ_CODE=code0, INPUT_CM=cm0,
+                        EQ0_V=c0.supply * (code0 & 1), EQ1_V=c0.supply * (code0 >> 1))
+    head, ctl = text.split(".control\n", 1)
+    body, tail = ctl.split("quit\n", 1)
+    setup = [l for l in body.splitlines() if l.startswith("set ")]
+    work = "\n".join(l for l in body.splitlines() if not l.startswith("set "))
+    blocks = []
+    for c, code, cm in cases:
+        name = case_name(c, code, cm)
+        blocks.append("\n".join([f"* case {name}", f"option temp={c.temp}", f"alter Vdd dc={c.supply}",
+                                  f"alter Veq0 dc={c.supply * (code & 1)}", f"alter Veq1 dc={c.supply * (code >> 1)}",
+                                  f"alter Vcm dc={cm}",
+                                  work.replace("wrdata operating_point.tsv", f"wrdata {name}_operating_point.tsv")
+                                      .replace("wrdata ac.tsv", f"wrdata {name}_ac.tsv")
+                                      .replace("wrdata dc.tsv", f"wrdata {name}_dc.tsv"),
+                                  "destroy all"]))
+    return head + ".control\n" + "\n".join(setup) + "\n" + "\n".join(blocks) + "\nquit\n" + tail
+
+
+def analyse(d, name):
+    d = Path(d)
+    op = read_tsv(d / f"{name}_operating_point.tsv")
     g = {k: float(np.real(v[0])) for k, v in op.items()}
-    ac = read_tsv(d / "ac.tsv")
+    ac = read_tsv(d / f"{name}_ac.tsv")
     f = np.real(ac[list(ac)[0]])
     gain = np.abs(ac["gain"])
     db = 20 * np.log10(gain)
@@ -81,8 +108,11 @@ def main():
     cms = [float(x) for x in a.cm.split(",")]
     camp = (ROOT / a.resume) if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     keys = [(c, code, cm) for c in conds for cm in cms for code in range(4)]
-    jobs = [(deck(c, code, cm), camp / f"{c.tag}_cm{round(cm * 1000)}_eq{code}", dict(meta=dict(condition=c.tag, eq=code, cm=cm)))
-            for c, code, cm in keys]
+    by_proc = {}
+    for k in keys:
+        by_proc.setdefault(k[0].process, []).append(k)
+    jobs = [(deck(cases), camp / proc, dict(meta=dict(process=proc, cases=[case_name(*k) for k in cases])))
+            for proc, cases in by_proc.items()]
     todo = []
     for j in jobs:
         if (j[1] / "execution.json").exists():
@@ -90,13 +120,12 @@ def main():
         if j[1].exists() and not a.analyse_only:
             shutil.rmtree(j[1])                                 # interrupted run
         todo.append(j)
-    print(f"{len(jobs) - len(todo)} runs kept, {len(todo)} to run", flush=True)
-    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=4, smoke=False)):     # no transient: nothing to smoke-test
+    print(f"{len(keys)} cases in {len(jobs)} decks: {len(jobs) - len(todo)} kept, {len(todo)} to run", flush=True)
+    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=4, smoke=False)):   # no transient
         assert ex.ok, (ex.run_dir, ex.log_failures)
     rows = []
-    for (c, code, cm), (_, d, _) in zip(keys, jobs):
-        r = dict(condition=c.tag, eq=code, cm=cm, **analyse(d))
-        rows.append(r)
+    for c, code, cm in keys:
+        rows.append(dict(condition=c.tag, eq=code, cm=cm, **analyse(camp / c.process, case_name(c, code, cm))))
     (camp / "summary.json").write_text(json.dumps(rows, indent=1, default=float))
     print(f"{'condition':15s} cm   eq | Vsrc  head_tail head_in | CMout | LF dB  2G dB  peak | BW GHz | P mW")
     for r in rows:

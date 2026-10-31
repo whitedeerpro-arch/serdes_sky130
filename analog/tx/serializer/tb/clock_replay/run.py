@@ -54,7 +54,8 @@ R2_STIMULI = ROOT / "analog/tx/serializer/tb/clock_states/r2_stimuli.inc"
 EXPECTED = ROOT / "analog/tx/serializer/tb/clock_states/serializer_expected.json"
 RECORDS = ROOT / "results/analog/tx/serializer/native_clock"
 RESULTS = ROOT / "results/analog/tx/serializer/clock_replay"
-POINTS = {"tt": "tt_v1800_t27", "ss_cold": "ss_v1650_t-40", "ss_hot": "ss_v1650_t85", "fs_hot": "fs_v1650_t85"}
+POINTS = {"tt": "tt_v1800_t27", "ss_cold": "ss_v1650_t-40", "ss_hot": "ss_v1650_t85", "fs_hot": "fs_v1650_t85",
+          "ff_cold": "ff_v1950_t-40"}
 WORD = 4e-9
 PERIOD = {"250": 4e-9, "500": 2e-9, "1g": 1e-9, "2g": 0.5e-9}
 # clock -> (recorded p tap, recorded n tap, replayed p source/node, replayed n source/node)
@@ -94,8 +95,18 @@ def ideal_centroids():
     return out
 
 
-def latest_record():
-    return sorted(RECORDS.glob("record_2*"))[-1]
+def latest_record(point=None):
+    """Latest native_clock record campaign (containing `point`, if given)."""
+    camps = sorted(RECORDS.glob("record_2*"))
+    if point is not None:
+        camps = [c for c in camps if (c / point / "run" / "waveforms.raw").exists()]
+    return camps[-1]
+
+
+def point_taps(point):
+    rec = latest_record(point)
+    taps, cut = cut_period(rec / point / "run")
+    return taps, dict(cut=cut, record=str(rec.relative_to(ROOT)))
 
 
 def cut_period(run_dir):
@@ -236,54 +247,67 @@ def _run(camp, names, shifts, taps, stop, infos, opts):
 VCO_CYCLE = 500e-12
 
 
-def fixed_shifts(target_label, names, taps, ideal, opts, late=None):
-    """One fixed delay per clock, the same at every corner, from a target campaign.
+def target_rows(label_prefix):
+    """Latest target-campaign row per point among campaigns whose name starts with label_prefix."""
+    rows = {}
+    for camp in sorted(RESULTS.glob(f"{label_prefix}*_2*")):
+        f = camp / "summary.json"
+        if f.exists():
+            for r in json.loads(f.read_text()):
+                if r.get("mode") == "target":
+                    rows[r["point"]] = dict(r, campaign=str(camp.relative_to(ROOT)))
+    return rows
+
+
+def fixed_shifts(target_label, names, ideal, opts, late=None, fit=None):
+    """One fixed delay per clock, the same at every corner, from target campaigns.
 
     d[n][k]: extra delay clock k needs at corner n relative to the native routing
     (all clocks moved by the 250 MHz alignment), taken modulo a VCO cycle for the
     divided clocks (whole cycles are divider start states, handled by the remap).
-    F[k] is the minimax centre over the corners; the residual d - F is the position
-    error a fixed setting leaves.  Sources are placed at target - residual, i.e.
-    state (0, 0) with the fixed-setting position error, so bits stay in order.
+    F[k] is the minimax centre over the `fit` corners (default: names); the
+    residual d - F is the position error a fixed setting leaves.  Sources are
+    placed at target - residual, i.e. state (0, 0) with the fixed-setting
+    position error, so bits stay in order.
     """
-    tcamp = sorted(RESULTS.glob(f"{target_label}_2*"))[-1]
-    rows = {r["point"]: r for r in json.loads((tcamp / "summary.json").read_text())}
+    fit = fit or names
+    rows = target_rows(target_label)
     want = {k: str(v) for k, v in opts.items()}
-    for n in names:
-        assert rows[n]["opts"] == want, f"{tcamp.name} was run with {rows[n]['opts']}, not {want}"
     mod = {k: WORD if k == "250" else VCO_CYCLE for k in CLOCKS}
     d = {}
-    for n in names:
-        s_nat = source_shifts(taps[n], "native", ideal)["250"]
+    for n in set(names) | set(fit):
+        assert n in rows, f"no target run for {n} under {target_label}"
+        assert rows[n]["opts"] == want, f"{rows[n]['campaign']} was run with {rows[n]['opts']}, not {want}"
+        s_nat = source_shifts(point_taps(n)[0], "native", ideal)["250"]
         d[n] = {k: wrap(rows[n]["replay"]["shift_s"][k] - s_nat, mod[k]) for k in CLOCKS}
     F = {}
     for k in CLOCKS:
-        ph = np.array([d[n][k] for n in names]) / mod[k]
+        ph = np.array([d[n][k] for n in fit]) / mod[k]
         c = float(np.angle(np.mean(np.exp(2j * np.pi * ph))) / (2 * np.pi)) * mod[k]
-        r = [wrap(d[n][k] - c, mod[k]) for n in names]
+        r = [wrap(d[n][k] - c, mod[k]) for n in fit]
         F[k] = c + (max(r) + min(r)) / 2 + (late or {}).get(k, 0.0)
     shifts, residual = {}, {}
     for n in names:
         residual[n] = {k: wrap(d[n][k] - F[k], mod[k]) for k in CLOCKS}
         shifts[n] = {k: (rows[n]["replay"]["shift_s"][k] - residual[n][k]) % WORD for k in CLOCKS}
-    info = dict(target_campaign=str(tcamp.relative_to(ROOT)), fixed_delay_vs_native_s=F, late_s=late or {})
+    info = dict(target_campaigns=sorted({rows[n]["campaign"] for n in d}), fit_points=list(fit),
+                fixed_delay_vs_native_s=F, late_s=late or {})
     return shifts, residual, info
 
 
-def campaign(mode, names, target_label=None, late=None, **opts):
+def campaign(mode, names, target_label=None, late=None, fit=None, **opts):
     """mode: calibrated | native | target (serializer-input positions = r2 calibration run)
     | fixed (one delay per clock for all corners, from a target campaign)."""
-    rec = latest_record()
     ideal = ideal_centroids()
     label = opts.pop("label", None) or mode
     camp = RESULTS / f"{label}_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
     taps, infos, shifts = {}, {}, {}
     for n in names:
-        taps[n], cut = cut_period(rec / n / "run")
-        infos[n] = dict(record=str(rec.relative_to(ROOT)), cut=cut, mode=mode)
+        taps[n], src = point_taps(n)
+        infos[n] = dict(src, mode=mode)
         shifts[n] = source_shifts(taps[n], "native" if mode == "native" else "calibrated", ideal)
     if mode == "fixed":
-        shifts, residual, info = fixed_shifts(target_label, names, taps, ideal, opts, late)
+        shifts, residual, info = fixed_shifts(target_label, names, ideal, opts, late, fit)
         for n in names:
             infos[n].update(info, position_residual_s=residual[n])
             print(f"{n:8s} fixed-setting residual " + "  ".join(f"{k} {residual[n][k] / 250e-12:+.3f}" for k in CLOCKS)
@@ -332,6 +356,7 @@ if __name__ == "__main__":
     ap.add_argument("--trims", help="fF for 250,500,1g,2g (default r2 100,500,160,270)")
     ap.add_argument("--label")
     ap.add_argument("--from", dest="target_label", help="fixed: label of the target campaign to derive from")
+    ap.add_argument("--fit", help="fixed: comma-separated points that set the fixed delays (default: all run points)")
     ap.add_argument("--late", action="append", default=[],
                     help="fixed: CLK=UI extra delay of one clock at every corner (e.g. 2g=0.1)")
     a = ap.parse_args()
@@ -341,4 +366,5 @@ if __name__ == "__main__":
         opts["dist"] = a.dist
     if a.trims:
         opts["trims"] = tuple(float(x) for x in a.trims.split(","))
-    campaign(a.mode, a.points or list(POINTS), target_label=a.target_label, late=late, **opts)
+    campaign(a.mode, a.points or list(POINTS), target_label=a.target_label, late=late,
+             fit=a.fit.split(",") if a.fit else None, **opts)

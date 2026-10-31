@@ -94,14 +94,13 @@ def measure(w, nstages, period):
 
 
 def screen(points, clocks, chains):
-    rec = replay.latest_record()
     camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs, keys = [], []
     for pt, clk, (name, ch) in itertools.product(points, clocks, chains.items()):
         if "only" in ch and clk not in ch["only"]:
             continue
         ch = dict(R2[clk], **{k: v for k, v in ch.items() if k != "only"})
-        taps, _ = replay.cut_period(rec / pt / "run")
+        taps, _ = replay.point_taps(pt)
         d = camp / f"{pt}_{clk}_{name}"
         jobs.append((deck(Condition.parse(replay.POINTS[pt]), clk, ch, taps), d, {}))
         keys.append((pt, clk, name, ch))

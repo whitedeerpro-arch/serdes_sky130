@@ -41,6 +41,8 @@ POINTS = {  # name: (condition, coarse code, Vctrl) from the r3/r4 native operat
     "ss_cold": ("ss_v1650_t-40", 5, 1.112),
     "ss_hot": ("ss_v1650_t85", 6, 1.32),
     "fs_hot": ("fs_v1650_t85", 5, 1.10),
+    # FF 1.95 V -40 C: from the pll/top/tb/pvt_r4/tuning.py ramp (code 5, 2 GHz at 1.174 V).
+    "ff_cold": ("ff_v1950_t-40", 5, 1.174),
 }
 # The FS 1.65 V 85 C /8 settles late (r3: final /8 only after ~34-38 ns).
 SETTLE = {"fs_hot": 45e-9}

@@ -76,7 +76,7 @@ def campaign_runs(camp):
     runs = []
     for d in sorted(camp.iterdir()):
         r = d / "run"
-        if (r / "waveforms.raw").exists() and (r / "execution.json").exists():
+        if spice.has_waves(r) and (r / "execution.json").exists():
             runs.append((d.name, r))
     return runs
 

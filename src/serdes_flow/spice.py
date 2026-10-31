@@ -197,6 +197,12 @@ def read_raw(path: Path):
     return names, values[: npts * nvar].reshape(npts, nvar).copy()
 
 
+def has_waves(run_dir, name="waveforms") -> bool:
+    """A run directory holds waveform output (raw or wrdata text, optionally gzip-compressed)."""
+    d = Path(run_dir)
+    return any((d / f"{name}{ext}").exists() for ext in (".raw", ".raw.gz", ".tsv", ".tsv.gz"))
+
+
 def _resolve(path: Path) -> Path:
     """The given path, its .gz, or the binary .raw (optionally .gz) next to it."""
     raw = path.with_suffix(".raw")

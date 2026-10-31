@@ -74,7 +74,7 @@ def divider_drift():
 
 
 def main():
-    runs = {p.name: p / "run" for p in sorted(PROBE.iterdir()) if (p / "run/waveforms.raw").exists()}
+    runs = {p.name: p / "run" for p in sorted(PROBE.iterdir()) if spice.has_waves(p / "run")}
     meas = {pt: probe_delays(r) for pt, r in runs.items()}
     series = {
         "Q": ({pt: m["1g"]["q"] for pt, m in meas.items()}, "打拍触发器 clk→q（W20 保持，轻载：一个 24/16/400 buffer）"),

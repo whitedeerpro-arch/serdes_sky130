@@ -4,7 +4,7 @@ RX CTLE AC/DC characterization; static code @EQ_CODE@, input CM @INPUT_CM@
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
 .include "@PROJECT_ROOT@/analog/rx/input/spice/rx_input_termination.spice"
 .include "@PROJECT_ROOT@/analog/rx/ctle/spice/rx_ctle_rc.spice"
-Vdd vdd 0 1.8
+Vdd vdd 0 @SUPPLY@
 Iref vdd vbias 50u
 Xref vbias vbias 0 0 serdes_nfet_lvt w=8 l=0.5 nf=4
 Vcm cm 0 @INPUT_CM@
@@ -17,7 +17,7 @@ Xterm inp inn cm serdes_rx_input_termination
 Xeq inp inn op on eq0 eq1 vbias vdd 0 serdes_rx_ctle_rc
 Cop op 0 20f
 Con on 0 20f
-.temp 27
+.temp @TEMP_C@
 .options reltol=1e-4 abstol=1p vntol=1u klu
 .save v(inp) v(inn) v(op) v(on) v(cm) v(vdd) v(vbias) v(xeq.sp) v(xeq.sn) i(Vdd) i(Eip) i(Ein)
 .control
@@ -26,7 +26,11 @@ set wr_vecnames
 op
 let cmout=(v(op)+v(on))/2
 let pcore=-v(vdd)*i(Vdd)
-wrdata operating_point.tsv v(vbias) v(xeq.sp) v(xeq.sn) cmout pcore
+let vdsat_tail=@m.xeq.xtp.xmos.msky130_fd_pr__nfet_01v8_lvt[vdsat]
+let vds_in=v(on)-v(xeq.sp)
+let vdsat_in=@m.xeq.xip.xmos.msky130_fd_pr__nfet_01v8_lvt[vdsat]
+let id_tail=@m.xeq.xtp.xmos.msky130_fd_pr__nfet_01v8_lvt[id]
+wrdata operating_point.tsv v(vbias) v(xeq.sp) v(xeq.sn) cmout pcore vdsat_tail vds_in vdsat_in id_tail
 ac dec 100 1meg 20g
 let gain=v(op,on)/v(inp,inn)
 let yleg=-i(Eip)/v(inp)

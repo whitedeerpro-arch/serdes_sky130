@@ -1,0 +1,43 @@
+RX CTLE link eye: ideal TX source -> pad/package -> C2 PCB -> RX termination -> CTLE -> sampler load
+* The TX is an ideal Thevenin source (stimuli.inc: per-leg PWL around the RX vcm, 50 ohm each),
+* so the RX corner can be swept independently of the TX corner.  No AC-coupling capacitor:
+* the source common mode equals vcm, equivalent for a DC-balanced PRBS.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/verification/models/channel/pcb_family/pcb_foster_cells.spice"
+.include "@PROJECT_ROOT@/verification/models/channel/pcb_family/C2_loss6.spice"
+.include "@PROJECT_ROOT@/analog/rx/input/spice/rx_input_termination.spice"
+.include "@PROJECT_ROOT@/analog/rx/ctle/spice/rx_ctle_rc.spice"
+.include "stimuli.inc"
+Rsrcp txs_p txp 50
+Rsrcn txs_n txn 50
+Cpadp txp 0 200f
+Cpadn txn 0 200f
+Rpkgp txp rpkgp .3
+Rpkgn txn rpkgn .3
+Lpkgp rpkgp chip .5n
+Lpkgn rpkgn chin .5n
+Xchannel chip chin farp farn 0 pcb_c2_loss6
+Rwirep farp rxp .01
+Rwiren farn rxn .01
+Vcm vcm 0 @VCM@
+Xtermination rxp rxn vcm serdes_rx_input_termination
+Vdd vdd 0 @SUPPLY@
+Iref vdd vbias 50u
+Xref vbias vbias 0 0 serdes_nfet_lvt w=8 l=0.5 nf=4
+Veq0 eq0 0 @EQ0_V@
+Veq1 eq1 0 @EQ1_V@
+Xeq rxp rxn op on eq0 eq1 vbias vdd 0 serdes_rx_ctle_rc
+* future sampler load budget per leg (config/rx_frontend.toml)
+Cop op 0 20f
+Con on 0 20f
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(rxp) v(rxn) v(op) v(on) v(vdd) i(Vdd)
+.control
+set filetype=binary
+@CASES@
+quit
+.endc
+.end

@@ -228,6 +228,34 @@ def _resolve(path: Path) -> Path:
     raise FileNotFoundError(path)
 
 
+def _rerun_index(d: Path, deck: str) -> int:
+    return 1 if d.name == deck else int(d.name.rsplit(".r", 1)[1])
+
+
+def case_output(campaign: Path, deck: str, name: str) -> Path | None:
+    """A readable waveform `name` of a case in campaign/<deck> or a rerun campaign/<deck>.rN (newest first).
+
+    Case-level resume: a deck that timed out or was killed keeps its finished cases; a truncated
+    file (killed while writing) fails to load and counts as missing.
+    """
+    campaign = Path(campaign)
+    dirs = [d for d in campaign.glob(f"{deck}.r*") if d.name.rsplit(".r", 1)[1].isdigit()] + [campaign / deck]
+    for d in sorted(dirs, key=lambda d: _rerun_index(d, deck), reverse=True):
+        try:
+            return Waves(d / name).path
+        except (FileNotFoundError, ValueError):
+            continue
+    return None
+
+
+def next_run_dir(campaign: Path, deck: str) -> Path:
+    """campaign/<deck>, or campaign/<deck>.rN (first free N >= 2) when earlier attempts exist."""
+    d, n = Path(campaign) / deck, 2
+    while d.exists():
+        d, n = Path(campaign) / f"{deck}.r{n}", n + 1
+    return d
+
+
 class Waves:
     """Waveform output, single time scale: binary raw or wrdata text with vector names."""
 

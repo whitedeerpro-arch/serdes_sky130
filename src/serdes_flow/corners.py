@@ -52,3 +52,14 @@ STRESS = [
     Condition("fs", 1.65, 85),
     Condition("ff", 1.95, -40),
 ]
+
+
+def boundary_first(conds: list[Condition]) -> list[Condition]:
+    """Expected-weakest first: STRESS members, then low supply, slow-NMOS corners, extreme temperatures.
+
+    Run order only (a long campaign that stops early has its boundary answers); results are
+    independent of the order.
+    """
+    proc = {"fs": 0, "ss": 1, "sf": 2, "tt": 3, "ff": 4}
+    temp = {85: 0, -40: 1, 27: 2}
+    return sorted(conds, key=lambda c: (c not in STRESS, c.supply, proc[c.process], temp.get(c.temp, 3)))

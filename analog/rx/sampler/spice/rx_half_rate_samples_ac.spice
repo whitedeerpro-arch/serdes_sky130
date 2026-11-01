@@ -1,0 +1,29 @@
+* Half-rate CML samplers, variant AC (2026-11-01): low-overdrive latch tails + AC-coupled clocks.
+* Same ports, sampling order and internal node names (bp/bn, cdp/cdn, cep/cen) as
+* serdes_rx_half_rate_samples; differences:
+*  - latch tails W72 x 24 fingers on a local low-overdrive reference (PLL r2 pll_cml_tail_bias,
+*    ~510 uA nominal, Vdsat ~0.18 V instead of ~0.38 V);
+*  - clocks: CML gain stage + series cc + rb to vck = k*VDD (serdes_rx_clock_ac/_ref) instead of
+*    the LVT source followers; the gate common mode no longer depends on the PI output level.
+* Dependencies: cml_buffer.spice, cml_delay_resistive.spice, pll/divider cml_latch.spice and
+* cml_div2.spice (pll_cml_tail_bias), rx_sample_dff.spice, rx_clock_ac.spice.
+.subckt serdes_rx_half_rate_samples_ac ip in dp dn ep en
++ d0p d0n d1p d1n e0p e0n e1p e1n vbias vdd vss
++ params: wdata=16 whold=48 wclock=32 wtail=72 nftail=24 rload=600
++ ck_wn=40 ck_nfin=8 ck_wt=24 ck_rload=300 cc=0.6p rb=50k k=0.634
+Xinput ip in bp bn vbias vdd vss serdes_cml_buffer wn=24 wt=12 rload=600
+Xlb vbias vbias_logic vdd vss pll_cml_tail_bias
+Xref vck vdd vss serdes_rx_clock_ref k={k}
+Xcd dp dn cdp cdn vck vbias vdd vss serdes_rx_clock_ac
++ wn={ck_wn} nfin={ck_nfin} wt={ck_wt} rload={ck_rload} cc={cc} rb={rb}
+Xce ep en cep cen vck vbias vdd vss serdes_rx_clock_ac
++ wn={ck_wn} nfin={ck_nfin} wt={ck_wt} rload={ck_rload} cc={cc} rb={rb}
+Xd0 bp bn cdp cdn d0p d0n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xd1 bp bn cdn cdp d1p d1n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xe0 bp bn cep cen e0p e0n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xe1 bp bn cen cep e1p e1n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+.ends serdes_rx_half_rate_samples_ac

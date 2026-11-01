@@ -281,10 +281,10 @@ class Waves:
 
     def _column(self, name: str) -> int:
         # Binary `write` lower-cases names and labels a plain copy of a node
-        # voltage (let x=v(n)) and @m...[param] vectors as v(x); wrdata keeps
-        # x as written.  Accept either spelling.
-        bare = name[2:-1] if name.startswith("v(") and name.endswith(")") else name
-        for key in (name, f"v({bare})", bare):
+        # voltage (let x=v(n)) and @m...[param] vectors as v(x), and current-type
+        # vectors (let x=@m[id]) as i(x); wrdata keeps x as written.  Accept any spelling.
+        bare = name[2:-1] if name[:2] in ("v(", "i(") and name.endswith(")") else name
+        for key in (name, f"v({bare})", f"i({bare})", bare):
             for k in (key, key.lower()):
                 if k in self._col:
                     return self._col[k]

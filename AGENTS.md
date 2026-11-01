@@ -44,7 +44,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - 长 campaign：每组（deck）一个条件、超时按工况数计（`spice.run(timeout_s=…)`）；中断后按工况续跑（`spice.case_output` / `next_run_dir`，只补缺的工况）；运行顺序用 `corners.boundary_first`（先边界）；运行中用 `uv run python -m serdes_flow.watch <campaign> --every 600` 探健康（正常 / 停滞 / 报错 / 进程消失 / 失败），只读文件，不影响仿真。
 - 每次启动 ngspice 加载 SKY130 模型库约 15 s。短分析（工作点/AC/DC、短瞬态）按工艺角合并成一个 deck，在控制段里用 `option temp=…`、`alter V… dc=…` 循环电压、温度和控制位（例：`analog/rx/ctle/tb/ac_dc/pvt.py`，45 条件 × 4 档从约 13 min 降到 39 s，结果逐位相同）。`spice.run` 对所有任务设单线程（`num_threads=1`）。
 - 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。
-- 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。
+- 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。参数选择按 [尺寸设计流程](docs/verification/sizing.md)：约束 + 粗模型求解，仿真校准迭代。
 - 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。
 
 **历史脚本：** 原项目 `../simple_serdes` 已停用，本仓库不依赖它。旧 campaign 的 `execution/*.txt` 通过 `/tmp/serdes_*_campaign` 指针读原项目路径，旧 `tb.cir`/`run.json` 里也是原项目的绝对路径；这些文件只作记录，不能直接运行。需要复跑时参照 `results/analog/tx/optimization/20261030T100258Z/execution/fork1_finalize.py`，在内存里把原项目路径换成本仓库路径。

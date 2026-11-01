@@ -1,0 +1,21 @@
+SKY130 device card: DC sweep of single devices for gm/ID lookup tables
+* All instances share gate / drain / body sources; PMOS see the negated voltages (source at 0).
+* Finger width @FINGER_W@ um, @NF@ fingers; geometry estimate as in sky130_primitives.spice.
+.lib "@MODEL_LIBRARY@" @CORNER@
+Vg g 0 0
+Vd d 0 0.6
+Vb bn 0 0
+Bgp gp 0 V=-v(g)
+Bdp dp 0 V=-v(d)
+Bbp bp 0 V=-v(bn)
+@DEVICES@
+.temp @TEMP_C@
+.options reltol=1e-5 abstol=1e-15 vntol=1e-7 klu
+@SAVES@
+.control
+set wr_singlescale
+set wr_vecnames
+@CASES@
+quit
+.endc
+.end

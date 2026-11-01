@@ -17,7 +17,7 @@
 
 TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。恒流下 VGS 本来就随器件和温度变化，所以偏置不应稳成固定栅电压。同名 `vbias` 在不同夹具里可能对应不同器件与参考电流，CTLE 的 LVT 偏置不能接 CML 全局栅偏置。
 
-电压目标另列：RX 端接共模名义约 0.9 V；LF 预充目标名义约 1.40 V（可校准，峰值电流约 2.6 mA）。`Vctrl` 是 PLL 动态输出，不是基准。
+电压目标另列：RX 端接共模 1.05 V ± 50 mV（含 PVT，见 [RX 前端](rx_frontend.md)；早期为 0.9 V）；LF 预充目标名义约 1.40 V（可校准，峰值电流约 2.6 mA）。`Vctrl` 是 PLL 动态输出，不是基准。
 
 来源：[偏置与 buffer](../history/serdes_bias_inventory.md)、[数据](../data/ss_buffer_bias.json)。
 
@@ -25,6 +25,8 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 
 - 只对分频级间 buffer 的栅偏置加 ±50 mV，SS 冷热四个测点仍正确 ÷4（离散点，不是已签核容差）。
 - 全局 Iref 改为 0.68 / 0.85 / 1.02 mA 会同时改变上游 buffer、源跟随器和本地尾源：SS 热角 0.68 mA 时上游 ÷2 已失去摆幅；1.02 mA 时 SS 冷角后级尾管平均余量只剩约 +14 mV。增流不是免费的。
+
+误差放大器与参考缓冲的指标分解见 [参考放大器](ref_amp.md)。
 
 ## 建议结构
 

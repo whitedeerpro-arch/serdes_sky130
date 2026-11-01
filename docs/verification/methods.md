@@ -99,6 +99,8 @@ verification/results/artifact.sh restore results/某运行/raw/waveforms.tsv
 
 第一个用例是 TX 选择时钟构造，见 [TX 时钟分发](../design/tx_clock_distribution.md#时钟构造结构比较)。
 
+时序平衡是尺寸设计流程中的一类约束；完整流程（输入、输出、迭代、拓扑判据）见 [尺寸设计流程](sizing.md)。
+
 ## 有效性约定
 
 - 每次记录稳定等待时间、测量窗口、最大步长、输出采样间隔、边沿阈值。启动段与稳态分开，启动短周期不能记成随机抖动。

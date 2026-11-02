@@ -12,7 +12,7 @@
 * a regular pfet needs ~1.3 V there, beyond the amplifier output range at 1.65 V).
 
 .subckt serdes_bg_amp inp inn out vbn vdd vss
-+ params: win=24 lin=5 wl=48 ll=12 wt=8 lt=4 w2=2 l2=2 wp2=48 lp2=4 cc=1p rz=20k
++ params: win=24 lin=5 wl=48 ll=12 wt=8 lt=4 w2=2 l2=2 wp2=48 lp2=4 cc=6p rz=20k
 * out = +A (inp - inn).  First stage: NMOS pair (gates inn on the diode side, inp on the output side o1)
 * with an LVT PMOS mirror.  Second stage: NMOS common source (gate o1) with an LVT PMOS load on the
 * first-stage diode voltage: if the first stage collapses (inputs above its common-mode range) o1
@@ -32,8 +32,19 @@ Rz o1 cz {rz}
 Cc cz out {cc}
 .ends serdes_bg_amp
 
+.subckt serdes_bg_ota inp inn out vbn vdd vss
++ params: win=24 lin=5 wl=48 ll=12 wt=1 lt=8
+* Single-stage OTA, out = +A (inp - inn) (diode side gate = inp, output side gate = inn).  Low current
+* (tail ~1/8 of the bias diode's): the output node with its load capacitance is the dominant pole.
+Xt tail vbn vss vss serdes_nfet w={wt} l={lt}
+Xa da inp tail vss serdes_nfet w={win} l={lin}
+Xb out inn tail vss serdes_nfet w={win} l={lin}
+Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll}
+Xlb out da vdd vdd serdes_pfet_lvt w={wl} l={ll}
+.ends serdes_bg_ota
+
 .subckt serdes_bandgap vbg iout0 iout1 iout2 iout3 vg vgi vdd vss
-+ params: r1=11k r2=106.5k rs=50k r_ref=124.5k n=8 wp=24 lp=8 wv=24 lv=4 wo=24 lo=4
++ params: r1=11k r2=106.5k rs=50k r_ref=124.5k n=8 wp=24 lp=8 wv=24 lv=4 wo=24 lo=4 cvgi=10p
 * core PMOS sources: A, B, vbg branch, amplifier biases
 Xm1 ta vg vdd vdd serdes_pfet_lvt w={wp} l={lp}
 Xm2 tb vg vdd vdd serdes_pfet_lvt w={wp} l={lp}
@@ -54,9 +65,17 @@ Xamp tb ta vg nb vdd vss serdes_bg_amp
 Xsp st vss vdd vdd serdes_pfet w=0.42 l=20
 Xsn st nb vss vss serdes_nfet w=2 l=1
 Xsu vg st vss vss serdes_nfet w=1 l=1
-* V->I: Mv drives r_ref; amplifier 2 holds its top (s) at vbg; outputs are copies of Mv
+* V->I: Mv drives r_ref; a single-stage OTA holds its top (s) at vbg; outputs are copies of Mv.  The
+* loop has an extra gain beta = gm(Mv) r_ref = (gm/Id) vbg ~ 10 (independent of the current): a
+* two-stage amplifier put the crossing at 10-30 MHz beyond the s-node pole (oscillation).  The OTA
+* runs at ~0.6 uA with cvgi (to vdd) as the dominant pole: crossing ~1 MHz below the s pole (~4 MHz).
 Xbd2 nb2 nb2 vss vss serdes_nfet w=4 l=4
-Xamp2 s vbg vgi nb2 vdd vss serdes_bg_amp
+Xamp2 s vbg vgi nb2 vdd vss serdes_bg_ota
+Cvgi vgi vdd {cvgi}
+* slew helper: the OTA slews vgi at ~0.06 V/us (I_tail / cvgi, fixed by the stability choice), >10 us
+* from Mv off at power-up.  Xk (gate vbg, source s) pulls vgi down while s < vbg - Vth; off (Vgs ~ 0)
+* in regulation.
+Xk vgi vbg s vss serdes_nfet w=1 l=4
 Xmv s vgi vdd vdd serdes_pfet_lvt w={wv} l={lv}
 Xrref s vss vss sky130_fd_pr__res_high_po w=1 l={r_ref/317}
 Xo0 iout0 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}
@@ -64,3 +83,20 @@ Xo1 iout1 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}
 Xo2 iout2 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}
 Xo3 iout3 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}
 .ends serdes_bandgap
+
+* Voltage reference from the constant-swing current: v = I * r (high_po, so v = vbg * r / r_ref, a pure
+* ratio) buffered by a single-stage OTA in unity gain whose output pole is the external decap (stable
+* for any large load capacitance; ~40 dB gain -> ~10 mV systematic error).  For the RX termination
+* centre tap (DC load ~0; charging the external AC-coupling capacitors at start-up is slow: ~10 uA).
+* iin: a bandgap current copy (I ~10 uA); ibias: a second copy for the OTA tail.
+.subckt serdes_ref_vbuf iin ibias out vdd vss
++ params: r=105.2k win=24 lin=5 wl=48 ll=12
+Xr iin vss vss sky130_fd_pr__res_high_po w=1 l={r/317}
+Xbd ibias ibias vss vss serdes_nfet w=4 l=4
+Xt tail ibias vss vss serdes_nfet w=4 l=4
+* follower: out = -a (V(output-side gate) - V(diode-side gate)) -> input on the diode side, out fed back
+Xa da iin tail vss serdes_nfet w={win} l={lin}
+Xb out out tail vss serdes_nfet w={win} l={lin}
+Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll}
+Xlb out da vdd vdd serdes_pfet_lvt w={wl} l={ll}
+.ends serdes_ref_vbuf

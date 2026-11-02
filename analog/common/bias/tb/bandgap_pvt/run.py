@@ -22,7 +22,7 @@ from serdes_flow.project import ROOT
 HERE = Path(__file__).resolve().parent
 TEMPLATE = HERE / "tb_bandgap_pvt_ngspice.cir.in"
 RESULTS = ROOT / "results/analog/common/bias/bandgap_pvt"
-VEC = {"vbg": "v(vbg)", "iref": "i(Vi0)", "ir": "v(i1)", "err_core": "v(xbg.ta)-v(xbg.tb)", "err_vi": "v(xbg.s)-v(vbg)",
+VEC = {"vcm": "v(vcm)", "vbg": "v(vbg)", "iref": "i(Vi0)", "ir": "v(i1)", "err_core": "v(xbg.ta)-v(xbg.tb)", "err_vi": "v(xbg.s)-v(vbg)",
        "cm": "v(xbg.ta)", "vg": "v(vg)", "vgi": "v(vgi)",
        "m3_margin": "(v(vdd)-v(vbg))-@m.xbg.xm3.xmos.msky130_fd_pr__pfet_01v8_lvt[vdsat]",
        "mv_margin": "(v(vdd)-v(xbg.s))-@m.xbg.xmv.xmos.msky130_fd_pr__pfet_01v8_lvt[vdsat]"}
@@ -74,7 +74,7 @@ def main():
     (camp / "summary.json").write_text(json.dumps(rows, indent=1))
     col = lambda k, sel=None: np.array([r[k] for r in rows if sel is None or sel(r)])
     print(f"{len(rows)} conditions")
-    for k, scale, unit in (("vbg", 1, "V"), ("iref", 1e6, "uA"), ("ir", 1e3, "mV"), ("err_core", 1e3, "mV"), ("err_vi", 1e3, "mV"),
+    for k, scale, unit in (("vcm", 1, "V"), ("vbg", 1, "V"), ("iref", 1e6, "uA"), ("ir", 1e3, "mV"), ("err_core", 1e3, "mV"), ("err_vi", 1e3, "mV"),
                            ("cm", 1, "V"), ("vg", 1, "V"), ("vgi", 1, "V"), ("m3_margin", 1e3, "mV"), ("mv_margin", 1e3, "mV")):
         x = col(k) * scale
         print(f"  {k:10s} {x.min():9.4f} .. {x.max():9.4f} {unit}")

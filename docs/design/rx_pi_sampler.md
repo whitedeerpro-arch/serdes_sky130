@@ -191,6 +191,21 @@ flowchart LR
 
 PI 工作中步进：实时联调（TT，[RX 数字](rx_cdr_digital.md#实时数模联调)）中 PI 0→14 码（跨扇区 7→8）和 0→63 回卷都发生在训练释放后，payload 22 / 17 字全部正确，÷2 与计数器没有错计。未覆盖：PI 步进的 PVT、真实 TX 背靠背的 PVT（TT 已过，见下）；版图寄生（移位寄存器同沿保持余量 42 ps 是版图时钟偏斜预算）。
 
+### 失配（2026-11-03）
+
+[offset_mc](../../analog/rx/sampler/tb/offset_mc/run.py)（采样器 ac：输入 buffer + 时钟接口 + 4 个 DFF，理想时钟，慢斜坡输入，`--pdk-r` 把单元电阻换成 high_po）、[CTLE offset_mc](../../analog/rx/ctle/tb/offset_mc/run.py)、[PI 传播模型](../../analog/rx/pi/theory/pi_mismatch.py)；200 样本：
+
+| 量 | TT | SS 1.65 V 85 °C |
+|---|---|---|
+| 采样器输入失调 σ（单路，PDK 电阻） | 5.7–6.7 mV | 6.3–7.3 mV |
+| 四路中最大 \|失调\| 的 99.7 分位 | 19.0 mV（仅 MOS 失配 17.7） | 21.3 mV（19.4） |
+| 四路相关（共用输入 buffer） | 0.50 | 0.42 |
+| CTLE 输入失调 σ（EQ3，PDK 电阻 / 理想电阻） | 6.1 / 4.8 mV | — |
+| 时钟占空比、D→E 间距 σ | ≈ 0.2 / 0.35 ps | 同 |
+| PI 失配附加的 max\|INL\|（99.7 分位，单元 σ 2 %） | +0.0025 UI，始终单调，D→E 间距 1–3 ps | — |
+
+CTLE 与采样器失调合计每路 σ 约 9 mV，3σ 约 27–30 mV，要从 75 mV 的位中心裕量门槛里扣掉。常规做法是每个采样器加失调校准（如 ±32 mV、5 bit 的电流 DAC）；未设计。时钟与 PI 的失配可忽略。
+
 ### 背靠背字流（TT，deser16，2026-11-03）
 
 真实 TX r2 → C2 → RX 端接 + CTLE，连续 29 个字（不插空），远端电压登记为边界条件后回放进 ac_rk 采样器 + deser16，32 位读数经实际 RTL（映射、投票、训练对齐）解出：**16/16 个 payload 字按序正确、无缺无重**，TX 入字到 RX 出字 16.9 ns；PI 码 22（开环）。入口、方法和看图见 [analog/rx/top](../../analog/rx/top/README.md#背靠背字流-tbb2b_stream2026-11-03)。

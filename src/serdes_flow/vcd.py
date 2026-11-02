@@ -5,8 +5,8 @@
 
 Real signals are written when they move by more than `tol` (default 1 mV); bits are thresholded at
 VDD/2 with +-10 % hysteresis; buses take one integer per time point.  Time unit 1 ps.  GTKWave shows
-real variables as analog traces (Data Format > Analog); `tcl_view` builds a startup script that adds
-signals in groups and sets the formats.
+real variables as analog traces; `gtkw` writes a save file with the trace order and per-trace display
+formats, `tcl_markers` a startup script for named markers.
 """
 from __future__ import annotations
 
@@ -94,22 +94,33 @@ def write(path, t, signals, scope="tb"):
     return path
 
 
-def tcl_view(groups, scope="tb", markers=()):
-    """GTKWave startup script: groups = [(comment, [(signal, format)])], format in
-    'analog' | 'hex' | 'bin' | 'dec' | 'signed' | None; markers = [(name letter, time_ps, label)] in the dump's unit (ps)."""
-    fmt = {"analog": "/Edit/Data_Format/Analog/Interpolated", "hex": "/Edit/Data_Format/Hex",
-           "bin": "/Edit/Data_Format/Binary", "dec": "/Edit/Data_Format/Decimal",
-           "signed": "/Edit/Data_Format/Signed_Decimal"}
-    lines = []
+# GTKWave trace flags (gtkwave analyzer.h): RJUSTIFY 0x20, HEX 0x2, DEC 0x4, BIN 0x8, BLANK 0x200
+# (comment rows), SIGNED 0x400, ANALOG_INTERPOLATED 0x10000.
+_FLAGS = {"hex": "22", "dec": "24", "bin": "28", "signed": "420", "analog": "10020"}
+
+
+def gtkw(path, dump, signals, groups, scope="tb"):
+    """GTKWave save file: groups = [(comment, [(signal name, format)])], format 'analog' | 'hex' |
+    'dec' | 'signed' | 'bin' | None (buses hex, bits binary).  Every trace carries its own display
+    flags, so nothing depends on GTKWave's highlight state (menu actions from a startup script act
+    on whatever is highlighted and a script cannot reliably clear it: per-group formatting leaked
+    into other traces and reordered them in v3.3.103)."""
+    kind = {s.name: (s.width if isinstance(s, Bus) else 1, isinstance(s, Real)) for s in signals}
+    out = [f'[dumpfile] "{Path(dump).resolve()}"', "[size] 1600 1000", "[sst_width] 160", "[signals_width] 330",
+           "[sst_expanded] 1"]
     for comment, sigs in groups:
-        lines.append(f'catch {{gtkwave::/Edit/Insert_Comment "{comment}"}}')
-        names = " ".join(f"{scope}.{n}" for n, _ in sigs)
-        lines.append(f"gtkwave::addSignalsFromList [list {names}]")
-        for f in sorted({f for _, f in sigs if f}):
-            sel = " ".join(f"{scope}.{n}" for n, g in sigs if g == f)
-            lines += [f"gtkwave::highlightSignalsFromList [list {sel}]", f"catch {{gtkwave::{fmt[f]}}}",
-                      "gtkwave::/Edit/UnHighlight_All"]
-    for letter, tps, label in markers:
-        lines.append(f'gtkwave::setNamedMarker {letter} {int(tps)} "{label}"')
-    lines.append("gtkwave::/Time/Zoom/Zoom_Full")
+        out += ["@200", f"-{comment}"]
+        for n, f in sigs:
+            width, real = kind[n]
+            f = f or ("analog" if real else "bin" if width == 1 else "hex")
+            out += [f"@{_FLAGS[f]}", f"{scope}.{n}" + (f"[{width - 1}:0]" if width > 1 else "")]
+    Path(path).write_text("\n".join(out) + "\n")
+    return path
+
+
+def tcl_markers(markers=(), zoom_full=True):
+    """GTKWave startup script: named markers [(letter, time_ps, label)] (dump unit ps) and full zoom."""
+    lines = [f'gtkwave::setNamedMarker {letter} {int(tps)} "{label}"' for letter, tps, label in markers]
+    if zoom_full:
+        lines.append("gtkwave::/Time/Zoom/Zoom_Full")
     return "\n".join(lines) + "\n"

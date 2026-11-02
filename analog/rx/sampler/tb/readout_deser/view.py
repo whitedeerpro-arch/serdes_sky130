@@ -82,10 +82,11 @@ def main():
               ("words: bit0 oldest", [("data", "hex"), ("edge_after", "hex"), ("word_at_w", "hex"),
                                       ("word_expected", "hex"), ("mismatch", None)]),
               ("raw outputs <lane>_<k>", [(o, None) for o in outs])]
+    save = vcd.gtkw(d / f"{name}.gtkw", path, sig, groups)
     tcl = d / "view.tcl"
-    tcl.write_text(vcd.tcl_view(groups, markers=[("A", t_from * 1e12, "analysis window")]))
+    tcl.write_text(vcd.tcl_markers([("A", t_from * 1e12, "analysis window")]))
     print(f"{path.relative_to(ROOT)}  ({path.stat().st_size / 1e6:.1f} MB)  data/edge errors {r['data_errors']}/{r['edge_errors']}")
-    cmd = ["gtkwave", str(path), "--script", str(tcl)]
+    cmd = ["gtkwave", str(path), str(save), "--script", str(tcl)]
     print("view: env -u GTK_PATH GTK_MODULES= GTK2_RC_FILES=/dev/null " + " ".join(cmd))
     if a.open:
         env = {k: v for k, v in os.environ.items() if k != "GTK_PATH"}

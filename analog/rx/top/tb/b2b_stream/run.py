@@ -324,15 +324,15 @@ def view(camp, open_=False):
               ("RX readout: word clock, 16-UI window (bit0 oldest)", [("w", None), ("rx_data_window", "hex")]),
               ("RTL: aligner, vote, aligned word vs TX payload", [("rtl_aligned", None), ("rtl_offset", "dec"), ("rtl_vote", "signed"),
                                                                    ("rtl_word", "hex"), ("expected_word", "hex"), ("match", None)])]
+    save = vcd.gtkw(d / "b2b_stream.gtkw", path, sig, groups)
     tcl = d / "view.tcl"
-    tcl.write_text(vcd.tcl_view(groups, markers=[("A", first_tx, "first payload word into TX"),
-                                                 ("B", first_rx, "first payload word out of RX")]))
+    tcl.write_text(vcd.tcl_markers([("A", first_tx, "first payload word into TX"), ("B", first_rx, "first payload word out of RX")]))
     print(f"{path.relative_to(ROOT)} ({path.stat().st_size / 1e6:.1f} MB)", flush=True)
     if open_:
         env = {k: v for k, v in os.environ.items() if k != "GTK_PATH"}
         env.update(GTK_MODULES="", GTK2_RC_FILES="/dev/null")
         with open(d / "gtkwave.log", "w") as log:
-            subprocess.Popen(["gtkwave", str(path), "--script", str(tcl)], env=env, stdout=log, stderr=subprocess.STDOUT,
+            subprocess.Popen(["gtkwave", str(path), str(save), "--script", str(tcl)], env=env, stdout=log, stderr=subprocess.STDOUT,
                              start_new_session=True)
 
 

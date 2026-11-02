@@ -2,6 +2,10 @@
 
 按日期倒序。细节见 [history](../history/index.md)。
 
+## 2026-11-03
+
+- 实时联调接物理读出（`cosim_words.cpp`、`receiver_words.cir.in`、`mixed_cdr_words_top.sv`，`make build-words`）：w 上升沿后读 deser16 的 32 位，全部 RTL 在 w 上运行，去掉行为打包。TT 下 PI 0→14 码（跨扇区 7→8）与 0→63 回卷都在训练释放后发生，payload 22 / 17 字全部正确，无重新对齐；原 pair 版保留。
+
 ## 2026-11-02
 
 - RX 采样器候选 ac（低过驱尾管 + 隔直时钟）与时钟 buffer c2（尺寸设计第二轮）：45 条件采样窗口 ≥ 0.5 UI，栅极时钟 325–866 mVpp。

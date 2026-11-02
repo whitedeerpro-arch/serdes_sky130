@@ -1,7 +1,7 @@
 # RX 数字 CDR 与 16 位解串
 
 > **当前修订**：首版 RTL（[digital/rx/rtl](../../digital/rx/rtl/)，[说明](../../digital/rx/README.md)，[配置](../../config/rx_cdr.toml)）。
-> **关键数字**：实际 RTL + 行为采样 plant 的 10 组 100 µs 场景（0/±100/±300 ppm、确定扰动、孔径偏移）共 199360 个字全部正确；实时 Verilator ↔ ngspice 闭环 192 UI 恢复 5 个字无误。
+> **关键数字**：实际 RTL + 行为采样 plant 的 10 组 100 µs 场景（0/±100/±300 ppm、确定扰动、孔径偏移）共 199360 个字全部正确；实时 Verilator ↔ ngspice 闭环接物理读出 deser16（TT）：PI 工作中步进 0→14 码（含跨扇区 7→8）和 0→63 回卷，训练释放后 22 / 17 个 payload 字全部正确、无重新对齐。
 > **主要缺口**：无综合/STA；16 UI 降速/打包在混合仿真中是行为实现；到系统时钟域的 FIFO/CDC 未设计。
 
 ## 结构
@@ -51,17 +51,27 @@
 
 ### 实时数模联调
 
-SystemVerilog → Verilator C++ 与 shared ngspice 47 连续瞬态双向连接：模拟端为真实 PI、CTLE、采样器、CMOS 转换与 pair 重定时，数字端运行上述 RTL。真实 CMOS 电压 ≤ 0.54 V 判 0、≥ 1.26 V 判 1（随 VDD 按 0.3/0.7 缩放）。RTL 控制位经 50 ps 发射延迟、20 ps 边沿、两级真实 CMOS 反相器驱动 PI。192 UI 内相位更新 5 次，恢复字 1200/1337/146e/15a5/16dc 全对。快速接口测试用 KP = 65536，生产 KP 不变。来源：[实时联调](../history/mixed_signal_cosim.md)，运行入口见 [verification/mixed_signal](../../verification/mixed_signal/README.md)。
+**物理读出版（2026-11-03，当前）。** [cosim_words.cpp](../../verification/mixed_signal/cpp/cosim_words.cpp) + [receiver_words.cir.in](../../verification/mixed_signal/tb/receiver_words.cir.in) + [mixed_cdr_words_top](../../verification/mixed_signal/rtl/mixed_cdr_words_top.sv)：模拟端为真实 PI、CTLE（输入共模 1.05 V）、采样器 ac_rk、读出 deser16；每个 w 上升沿后 100 ps 读 32 个输出，全部 RTL（`rx_word_map` → 投票 → 环路 → 交接器，`rx_word_align16`）在 w 上运行，没有行为打包。训练 10 个字后接 payload，释放训练时要求已对齐。TT、KP = 65536（快速冒烟值）：
+
+| 运行 | TX 相位 | 时长 | PI 码 | 跨扇区（释放后） | payload | 结果 |
+|---|---|---|---|---|---|---|
+| live140 | 0 | 140 ns | 0 → 14，时钟 −110 ps | 7→8 约 80 ns | 22 字 0 错 | 通过 |
+| boundary_tx74 | 74 ps | 120 ns | 0→1→0→63…60…63 | 0→63（回卷）约 58 ns | 17 字 0 错 | 通过 |
+| live80 | 0 | 80 ns | 0 → 8 | 7→8 在最后一次读数 | 7 字 0 错 | 通过 |
+
+释放在 51.7 ns；所有读数无未知区；没有重新对齐。PI 步进（含跨扇区与回卷）没有让读出 ÷2 分频器和 Johnson 计数器错计。另用 `--hold-controls`（PI 脚不动）在码 0 扫 TX 相位找锁定点：62.5 ps 全票偏晚、78 ps 部分偏早、≥ 94 ps 全票偏早。KP = 65536 时每字欠债最多 8 步而交接器每 8 ns 执行 1 步，投票变号后码还要走几步（压摆受限过冲）；锁定动态按生产 KP 另行验证。数据：[mixed_signal_cosim_words.json](../data/mixed_signal_cosim_words.json)，运行目录 `results/verification/mixed_signal/20261102T17*_words_*`。
+
+**原版（2026-10-29，旧读出）。** SystemVerilog → Verilator C++ 与 shared ngspice 47 连续瞬态双向连接：模拟端为真实 PI、CTLE、采样器、CMOS 转换与 pair 重定时，数字端运行上述 RTL。真实 CMOS 电压 ≤ 0.54 V 判 0、≥ 1.26 V 判 1（随 VDD 按 0.3/0.7 缩放）。RTL 控制位经 50 ps 发射延迟、20 ps 边沿、两级真实 CMOS 反相器驱动 PI。192 UI 内相位更新 5 次，恢复字 1200/1337/146e/15a5/16dc 全对。快速接口测试用 KP = 65536，生产 KP 不变。来源：[实时联调](../history/mixed_signal_cosim.md)，运行入口见 [verification/mixed_signal](../../verification/mixed_signal/README.md)。
 
 ## 适用范围
 
 - 长时闭环的采样是行为 plant（用 PI 实测曲线），不是 100 µs 晶体管仿真；5 ps 是确定扰动幅值，不是随机抖动。
-- 实时联调中 16 UI 打包和 pair 读取（每 500 ps）是 C++ 行为实现；无频偏/噪声；时长不足以触发 locked。
+- 原版实时联调中 16 UI 打包和 pair 读取（每 500 ps）是 C++ 行为实现；物理读出版去掉了这一层。两版都只有 TT、理想 NRZ 源、无频偏/噪声，时长不足以触发 locked。
 - RTL 只做过 Verilator lint 与 yosys proc/opt/check，没有库映射或时序。
 
 ## 待解决
 
-- 物理 16 UI 降速：读出 [rx_readout_deser16](../../analog/rx/sampler/spice/rx_readout_deser16.spice) + `rx_word_map` / `rx_word_align16` 已有（I-15 的读出部分）；长时闭环和实时联调仍用行为打包，需改接物理字路径。
+- 物理 16 UI 降速：读出 [rx_readout_deser16](../../analog/rx/sampler/spice/rx_readout_deser16.spice) + `rx_word_map` / `rx_word_align16` 已有并接入实时联调（TT）；长时闭环（行为 plant）仍用 pair 流；联调只有 TT、无频偏。
 - 综合与 STA（I-16）。
 - 系统时钟域弹性 FIFO、空闲补偿（I-15）。
 - 鉴相零点校准（I-23）。

@@ -2,6 +2,22 @@
 
 运行实际 SystemVerilog 投票器、CDR 滤波器、PI 交接器和 16 位串转并；真实 SKY130 PI、CTLE、CML 采样器、CMOS 转换/重定时及 PI 控制缓冲由 ngspice 连续求解。C++ 在两者之间调度，控制结果会影响后续模拟采样。
 
+## 物理读出版（2026-11-03，当前）
+
+[cpp/cosim_words.cpp](cpp/cosim_words.cpp) + [tb/receiver_words.cir.in](tb/receiver_words.cir.in) + [rtl/mixed_cdr_words_top.sv](rtl/mixed_cdr_words_top.sv)。桥接机制与原版相同（一个连续瞬态、按已接受时间点推进 RTL、控制脚 50 ps 发射 + 20 ps 边沿 + 两级真实反相器）；模拟端换成采样器 ac_rk（rb = 2 kΩ、rk W8）+ 读出 [rx_readout_deser16](../../analog/rx/sampler/spice/rx_readout_deser16.spice)，输入共模 1.05 V。模→数边界：每个字时钟 w 上升沿（0.9 V）后 100 ps 读 32 个输出（≤ 0.54 V 判 0、≥ 1.26 V 判 1）；数据位落在中间区记为未知并判失败，边沿位落在中间区则该包不投票。全部 RTL（`rx_word_map` → 投票 → 环路 → 交接器、`rx_word_align16`）在 w 上运行，**没有行为打包**。
+
+激励：理想 NRZ，`--train-ui`（默认 160 UI = 10 字）个 b5e3 后接 payload `0x1200 + n·0x137`；`--release-ns`（默认 50 ns）之后、对齐器已对齐时释放 training，此后输出字逐个对 payload。
+
+```bash
+make -C verification/mixed_signal build-words
+results/verification/mixed_signal/build_words/Vmixed_cdr_words_top --root "$PWD" \
+  --out "$PWD/results/verification/mixed_signal/<run>" --stop-ns 140 [--tx-phase-ps 74] [--hold-controls] [--wall-s 5400]
+```
+
+通过条件：到达终点、无致命错误、无数据未知、payload ≥ 4 字且零错、释放时已对齐、RTL 有调相、（非 hold 时）模拟控制脚实际翻转。summary 另记跨扇区次数、走过的码、重新对齐次数。80 ns 在本机约 6.5 min（单线程）。结果见 [RX 数字](../../docs/design/rx_cdr_digital.md#实时数模联调)、[数据](../../docs/data/mixed_signal_cosim_words.json)。
+
+以下为原版（旧 pair 对齐读出 + 行为 16 UI 打包，2026-10-29 验证记录）。
+
 ## 运行
 
 已验证 Verilator 4.028、g++、make 和本机新安装的 shared ngspice 47。默认库路径为 `$HOME/.local/opt/ngspice47-shared`，可用 `NGSPICE_PREFIX` 覆盖。

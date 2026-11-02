@@ -5,6 +5,7 @@
 ## 2026-11-03
 
 - 实时联调接物理读出（`cosim_words.cpp`、`receiver_words.cir.in`、`mixed_cdr_words_top.sv`，`make build-words`）：w 上升沿后读 deser16 的 32 位，全部 RTL 在 w 上运行，去掉行为打包。TT 下 PI 0→14 码（跨扇区 7→8）与 0→63 回卷都在训练释放后发生，payload 22 / 17 字全部正确，无重新对齐；原 pair 版保留。
+- 背靠背字流（`analog/rx/top/tb/b2b_stream`）：真实 TX r2 → C2 → RX 端接 + CTLE 连续 29 个字，远端登记为边界条件后回放进 deser16，实际 RTL 解出 16/16 个 payload 字按序正确，TX→RX 16.9 ns（TT，开环码 22）。`view.sh` 一条命令打开 GTKWave（TX 字、线、远端、CTLE、采样、w、RTL 字与期望）。RTL 测试台复位改为显式复位沿（时刻 0 竞争）。
 
 ## 2026-11-02
 

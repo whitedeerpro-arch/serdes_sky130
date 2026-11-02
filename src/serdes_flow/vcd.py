@@ -96,9 +96,10 @@ def write(path, t, signals, scope="tb"):
 
 def tcl_view(groups, scope="tb", markers=()):
     """GTKWave startup script: groups = [(comment, [(signal, format)])], format in
-    'analog' | 'hex' | 'bin' | None; markers = [(name letter, time_ps, label)] in the dump's unit (ps)."""
+    'analog' | 'hex' | 'bin' | 'dec' | 'signed' | None; markers = [(name letter, time_ps, label)] in the dump's unit (ps)."""
     fmt = {"analog": "/Edit/Data_Format/Analog/Interpolated", "hex": "/Edit/Data_Format/Hex",
-           "bin": "/Edit/Data_Format/Binary"}
+           "bin": "/Edit/Data_Format/Binary", "dec": "/Edit/Data_Format/Decimal",
+           "signed": "/Edit/Data_Format/Signed_Decimal"}
     lines = []
     for comment, sigs in groups:
         lines.append(f'catch {{gtkwave::/Edit/Insert_Comment "{comment}"}}')

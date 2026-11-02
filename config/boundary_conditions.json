@@ -467,6 +467,43 @@
   ]
  },
  {
+  "id": "rx_c2_far_txr2_stream_20261102T181556Z@ctle_rc",
+  "kind": "recorded_node_voltage",
+  "description": "Far-end differential voltage of C2_loss6 driven by the real TX r2 (clock_replay r2 configuration, recorded TT PLL edges) with the b2b word stream of results/analog/rx/top/b2b_stream/20261102T181556Z (29 words), terminated 2 x 50 ohm to 1.05 V and loaded by the real CTLE input (EQ3) at tt_v1800_t27.",
+  "upstream": {
+   "module": "TX r2 + verification/models/channel C2_loss6 + rx termination",
+   "revision": "b2b_stream/run.py",
+   "provenance": "results/analog/rx/top/b2b_stream/20261102T181556Z/tx"
+  },
+  "nodes": {
+   "rx_diff": "CTLE inputs rxp/rxn (legs vcm +- rx_diff/2)"
+  },
+  "load": {
+   "stages": [
+    "X _ inn _ _ serdes_nfet_lvt nf={nfin} w={win}",
+    "X _ inp _ _ serdes_nfet_lvt nf={nfin} w={win}"
+   ],
+   "sha": "624029c653372f50"
+  },
+  "points": {
+   "tt_v1800_t27": {
+    "condition": "tt_v1800_t27",
+    "run": "results/analog/rx/top/b2b_stream/20261102T181556Z/tx",
+    "case": "waveforms",
+    "vcm": 1.05,
+    "git_revision": "89bb06d-dirty",
+    "deck_sha256": "59749c0721b3c12ed5fbc9eeaca595e898ccbec80370ddc649a63563dc25cf8f"
+   }
+  },
+  "processing": "rx_diff resampled, Douglas-Peucker 0.2 mV (link_eye/replay.stimuli); output saved from 12 ns, held at its first saved value before; common mode taken as vcm.",
+  "validation": null,
+  "valid_while": [
+   "CTLE input stage == load.sha (serdes_rx_ctle_rc inp/inn)",
+   "termination 2 x 50 ohm to 1.05 V",
+   "TX r2 sources/trims and channel C2_loss6 unchanged"
+  ]
+ },
+ {
   "id": "rx_c2_far_weak@ctle_rc",
   "kind": "recorded_node_voltage",
   "description": "Far-end differential voltage of C2_loss6 driven by the ideal 'weak' TX ({'oc_pp': 0.6, 'ramp': 6e-11}), terminated 2 x 50 ohm to vcm 1.05 V and loaded by the real CTLE input at tt_v1800_t27, EQ code 2; PRBS7, 167 bits from t0 = 1e-09 s.",

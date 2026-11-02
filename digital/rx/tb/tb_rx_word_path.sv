@@ -5,7 +5,7 @@
 // late" (edge = next bit) and "clock early" (edge = previous bit) per word.  Checks every vote
 // against a direct computation on the stream and every aligned output word against the payload.
 module tb_rx_word_path;
-    reg clk=0, rst_n=0, training=1;
+    reg clk=0, rst_n=1, training=1;
     reg [31:0] phys=0;
     wire [15:0] data, edges, word;
     wire prev_d, bvalid, vvalid, wvalid, aligned;
@@ -53,7 +53,7 @@ module tb_rx_word_path;
     endfunction
     initial begin
         for(P=0;P<16;P=P+1) begin
-            rst_n=0; training=1; checks_v=0; checks_w=0; expect_m=-1;
+            rst_n=1; #0.1 rst_n=0; training=1; checks_v=0; checks_w=0; expect_m=-1;   // explicit reset edge
             @(negedge clk); rst_n=1;
             for(J=0;J<NWORDS;J=J+1) begin
                 @(negedge clk);

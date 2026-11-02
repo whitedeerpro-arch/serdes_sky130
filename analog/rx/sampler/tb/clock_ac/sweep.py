@@ -47,6 +47,21 @@ def _load(name, path):
 sp = _load("sampler_pvt", ROOT / "analog/rx/sampler/tb/link_pvt/pvt.py")
 
 
+def dut_defaults(subckt="serdes_rx_half_rate_samples_ac"):
+    """Default parameters of the DUT subcircuit as written in its .spice file (recorded per campaign,
+    so variants given as overrides stay interpretable after the defaults change)."""
+    path = ROOT / "analog/rx/sampler/spice/rx_half_rate_samples_ac.spice"
+    out, on = {}, False
+    for line in path.read_text().splitlines():
+        if line.startswith(f".subckt {subckt}"):
+            on = True
+        elif on and line.startswith("+"):
+            out.update(kv.split("=", 1) for kv in line[1:].split() if "=" in kv)
+        elif on:
+            break
+    return out
+
+
 def parse_variant(text):
     """NAME=DUT[:k=v,k=v] -> (name, dut, params)."""
     name, rest = text.split("=", 1)
@@ -136,7 +151,8 @@ def main():
     for ex in ([] if a.analyse_only else spice.run_many(todo, workers=4)):
         assert ex.ok, (ex.run_dir, ex.log_failures)
     rows = [analyse(camp / f"{c.process}_{var}" / f"{case_name(c, var)}.raw", c, var) for var, _, _ in variants for c in conds]
-    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, variants=[dict(name=v, dut=sp.dut(d, p)) for v, d, p in variants],
+    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, dut_defaults=dut_defaults(),
+                                                       variants=[dict(name=v, dut=sp.dut(d, p)) for v, d, p in variants],
                                                        rows=rows), indent=1))
     print(f"{'variant':10s} {'condition':15s} | pi / buf / gate mVpp | gate cm V | duty | steering | tail uA | P mW")
     for r in rows:

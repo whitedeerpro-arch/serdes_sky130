@@ -2,7 +2,7 @@
 
 > **当前修订**：首版 64 码 PI [pi_rotator](../../analog/rx/pi/spice/pi_rotator.spice)、四相静态 CML 采样 [rx_half_rate_samples](../../analog/rx/sampler/spice/rx_half_rate_samples.spice)、静态 CMOS 读出与 pair 对齐 [rx_cmos_pair_align](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice)（[配置](../../config/rx_cdr.toml)）。
 > **关键数字**：PI 64 码全部单调前进，DNL −0.134…+0.122 LSB，最大 |INL| 0.0096 UI；真实 PI + CTLE + 采样器在码 0/4/8 下 51 位比较全部正确，早晚票方向与负反馈一致。
-> **采样器候选 ac**（2026-11-01）：[rx_half_rate_samples_ac](../../analog/rx/sampler/spice/rx_half_rate_samples_ac.spice)，低过驱动尾管 + 隔直时钟；45 条件采样窗口 ≥ 0.75 UI（原设计 SS/FS 1.65 V 85 °C 为 0.06 UI）。栅极时钟 ≥ 300 mVpp 的中间指标在 19/45 条件未达，时钟 buffer 待重做；读出尚未接到 ac。
+> **采样器候选 ac**（2026-11-02，时钟 buffer c2）：[rx_half_rate_samples_ac](../../analog/rx/sampler/spice/rx_half_rate_samples_ac.spice)，低过驱动尾管 + 隔直时钟；45 条件采样窗口 ≥ 0.5 UI（压力角完整扫描 0.88–1.00 UI；原设计 SS/FS 1.65 V 85 °C 为 0.06 UI），栅极时钟 325–866 mVpp（≥ 300 mVpp）。读出尚未接到 ac。
 > **主要缺口**：PI 压力角已过（下文），读出 PVT 失败（原设计）；锚点是理想相关多相源，没接原生 PLL；pair 对齐依赖全速 CML→CMOS（SS 冷角失效）；孔径/失调/亚稳态未表征。
 
 ## 电路
@@ -98,6 +98,21 @@ flowchart LR
 
 **时钟幅度。** buffer 在 2 GHz 下增益约 1.27（TT：PI 331 → buffer 421 → 栅极 330 mVpp；SS 85 °C：207 → 260 → 200），器件卡显示直流 gm·R = 2.24，损失来自输出极点和大信号压缩。300 mVpp 是保留的中间指标（为寄生、失配、噪声和隔离电阻缩小留余量），需重做 buffer。时钟通路测试台 [clock_ac/sweep.py](../../analog/rx/sampler/tb/clock_ac/sweep.py)（真实 PI、静态数据，每组约 1 分钟）在压力角上与链路结果一致：ac 栅极 197–408 mVpp，占空比 0.500；D0 主锁存器的时钟导向比例在 SS/FS 85 °C 只有 0.67–0.71（其余约 1.0–1.1）。原设计 SS/FS 低温的锁存器尾电流只有 131–173 µA（TT 418 µA），即尾管线性区。
 
+**时钟 buffer c2**（尺寸设计第二轮，见 [sizing](../verification/sizing.md#第二轮时钟-buffer同日)）：输入管 40 µm 不变，负载 300 → 600 Ω，尾电流 1 → 1.53 mA（`ck_wt` 24 → 36），Cc 0.6 → 0.45 pF；2026-11-02 起为单元默认值（无覆盖参数复跑压力角，结果与覆盖参数运行逐项相同）。工作点 45/45，buffer 尾管余量 ≥ 293 mV。压力角（1/16 UI）：
+
+| 条件 | 窗口（基点 → c2） | c2 栅极时钟 |
+|---|---|---|
+| TT 1.8 V 27 °C | 0.94 → 1.00 UI | 600 mVpp |
+| SS 1.65 V −40 °C | 0.94 → 0.94 | 610 |
+| SS 1.65 V 85 °C | 0.81 → **0.88** | **325** |
+| FS 1.65 V −40 °C | 0.94 → 0.94 | 660 |
+| FS 1.65 V 85 °C | 0.81 → **0.88** | **359** |
+| FF 1.95 V −40 °C | 1.00 → 1.00 | 866 |
+
+栅极 ≥ 300 mVpp 在压力角全部满足；FF 冷角 866 mVpp（单端约 0.22 V）仍在共模窗口内（窗口卡扩到单端 0.3 V，该点余量约 0.33 V）。测试台功耗 +1.8–3.1 mW。
+
+45 条件（压力角完整扫描、1/8 UI；其余 39 个条件门槛模式，码 12/20/28 = 中心 ± 0.25 UI，见 [link_pvt/pvt.py](../../analog/rx/sampler/tb/link_pvt/pvt.py) `--gate-codes`）：压力角窗口 0.88–1.00 UI，其余 39 个条件门槛码全部无错（窗口 ≥ 0.5 UI，前提是无错码连续，所有完整扫描都满足）。栅极时钟 325–866 mVpp，最低 SS 1.65 V 85 °C，其余 ≥ 357 mVpp；测试台功耗 16.2–22.6 mW。
+
 ### CMOS 读出与 PCB 短窗
 
 CMOS 读出后码 0/4/8 各 48 位对齐数据零错位；读出后的鉴相零点在码 4–8 之间，与 CML 符号判读的码 4 不同。真实 TX 驱动/封装/C2/端接/CTLE EQ11/PI/采样/CMOS 读出串联 24 ns：80 位零错误，3 个 payload 字经解串 RTL 正确。来源：[RX 闭环](../history/rx_cdr_closed_loop.md)。
@@ -110,7 +125,7 @@ CMOS 读出后码 0/4/8 各 48 位对齐数据零错位；读出后的鉴相零�
 
 ## 待解决
 
-- RX PVT（[问题清单](../status/open_issues.md) I-14）：采样器候选 ac 已过 45 条件窗口；时钟 buffer 达到 300 mVpp；读出（CML→CMOS + pair 对齐）接 ac 后重做 PVT；本地偏置比例校准；隔直电容/电阻换成实际器件。
+- RX PVT（[问题清单](../status/open_issues.md) I-14）：采样器候选 ac（c2）已过 45 条件窗口和 300 mVpp 栅极时钟；读出（CML→CMOS + pair 对齐）接 ac 后重做 PVT；本地偏置比例校准；隔直电容/电阻换成实际器件。
 - pair 对齐对全速 CML→CMOS 的依赖（I-04）；物理 16 UI 降速/整字保持（I-15）。
 - 鉴相零点与孔径偏移校准（I-23）。
 - 接原生 PLL 八相，确认扇出与相位顺序（I-30）。

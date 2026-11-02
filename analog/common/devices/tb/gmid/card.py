@@ -5,7 +5,7 @@
 Devices nfet_01v8, nfet_01v8_lvt, pfet_01v8 at L = 0.15 / 0.25 / 0.5 / 1 / 2 um and pfet_01v8_lvt at
 0.35 / 0.5 / 1 / 2 / 4 um (its model has no bin below 0.35 um),
 finger width 5 um x 2 fingers, source at 0 (PMOS see negated voltages).  Per corner one deck:
-for every temperature and |Vsb| in (0, 0.3, 0.6) V a nested DC sweep |Vgs| 0..1.8 V (10 mV) x
+for every temperature and |Vsb| in (0, 0.3, 0.6, 0.9) V a nested DC sweep |Vgs| 0..1.8 V (10 mV) x
 |Vds| 0.1..1.8 V (0.1 V).  Saved per point: id gm gds gmbs vth vdsat cgg cgs cgd (BSIM4 operating
 point values, so gm and gds are not finite differences).
 
@@ -34,7 +34,7 @@ LS = {"nfet": (0.15, 0.25, 0.5, 1.0, 2.0), "nfet_lvt": (0.15, 0.25, 0.5, 1.0, 2.
 FINGER_W, NF = 5.0, 2
 VG = (0.0, 1.8, 0.01)
 VD = (0.1, 1.8, 0.1)
-VSB = (0.0, 0.3, 0.6)
+VSB = (0.0, 0.3, 0.6, 0.9)
 PARAMS = ("id", "gm", "gds", "gmbs", "vth", "vdsat", "cgg", "cgs", "cgd")
 
 

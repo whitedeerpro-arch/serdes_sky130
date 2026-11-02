@@ -5,12 +5,14 @@
 *    ~510 uA nominal, Vdsat ~0.18 V instead of ~0.38 V);
 *  - clocks: CML gain stage + series cc + rb to vck = k*VDD (serdes_rx_clock_ac/_ref) instead of
 *    the LVT source followers; the gate common mode no longer depends on the PI output level.
+* Clock buffer c2 (2026-11-02, sizing iteration 2): 600 ohm, 1.53 mA (wt 36), cc 0.45 pF, gate clock
+* >= 300 mVpp over 45 conditions; r1 (2026-11-01) was 300 ohm, 1.02 mA (wt 24), cc 0.6 pF.
 * Dependencies: cml_buffer.spice, cml_delay_resistive.spice, pll/divider cml_latch.spice and
 * cml_div2.spice (pll_cml_tail_bias), rx_sample_dff.spice, rx_clock_ac.spice.
 .subckt serdes_rx_half_rate_samples_ac ip in dp dn ep en
 + d0p d0n d1p d1n e0p e0n e1p e1n vbias vdd vss
 + params: wdata=16 whold=48 wclock=32 wtail=72 nftail=24 rload=600
-+ ck_wn=40 ck_nfin=8 ck_wt=24 ck_rload=300 cc=0.6p rb=50k k=0.634
++ ck_wn=40 ck_nfin=8 ck_wt=36 ck_rload=600 cc=0.45p rb=50k k=0.634
 Xinput ip in bp bn vbias vdd vss serdes_cml_buffer wn=24 wt=12 rload=600
 Xlb vbias vbias_logic vdd vss pll_cml_tail_bias
 Xref vck vdd vss serdes_rx_clock_ref k={k}

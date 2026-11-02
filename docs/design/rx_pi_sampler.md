@@ -3,7 +3,7 @@
 > **当前修订**：首版 64 码 PI [pi_rotator](../../analog/rx/pi/spice/pi_rotator.spice)、四相静态 CML 采样 [rx_half_rate_samples](../../analog/rx/sampler/spice/rx_half_rate_samples.spice)、静态 CMOS 读出与 pair 对齐 [rx_cmos_pair_align](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice)（[配置](../../config/rx_cdr.toml)）。
 > **关键数字**：PI 64 码全部单调前进，DNL −0.134…+0.122 LSB，最大 |INL| 0.0096 UI；真实 PI + CTLE + 采样器在码 0/4/8 下 51 位比较全部正确，早晚票方向与负反馈一致。
 > **采样器候选 ac**（2026-11-02，时钟 buffer c2）：[rx_half_rate_samples_ac](../../analog/rx/sampler/spice/rx_half_rate_samples_ac.spice)，低过驱动尾管 + 隔直时钟；45 条件采样窗口 ≥ 0.5 UI（压力角完整扫描 0.88–1.00 UI；原设计 SS/FS 1.65 V 85 °C 为 0.06 UI），栅极时钟 325–866 mVpp（≥ 300 mVpp）。
-> **读出候选 demux2**（2026-11-02）：[rx_readout_demux2](../../analog/rx/sampler/spice/rx_readout_demux2.spice)，CML 1:2 分路（÷2 的 q/m 两个 1 GHz 域）+ 匹配 CML→CMOS 转换；45 条件数据逐位正确、边沿判定正确，数据 CML 余量 ≥ 183 ps、CMOS 采样余量 354–454 ps；功耗偏高（测试台 40–67 mW），待优化。
+> **读出候选 demux2**（2026-11-02）：[rx_readout_demux2](../../analog/rx/sampler/spice/rx_readout_demux2.spice)，CML 1:2 分路（÷2 的 q/m 两个 1 GHz 域）+ 匹配 CML→CMOS 转换；45 条件数据逐位正确、边沿判定正确；默认尺寸 p2（恒定 τ 半尺寸）数据 CML 余量 ≥ 170 ps、CMOS 采样余量 334–452 ps，读出约 10 mA（测试台 31–51 mW）。
 > **主要缺口**：PI 压力角已过（下文），读出 PVT 失败（原设计）；锚点是理想相关多相源，没接原生 PLL；pair 对齐依赖全速 CML→CMOS（SS 冷角失效）；孔径/失调/亚稳态未表征。
 
 ## 电路
@@ -146,7 +146,9 @@ flowchart LR
 
 45 条件（每条件一个工况，码 20）：全部数据子通道逐位正确、边沿判定无错；数据 CML 余量 183–244 ps（最差 FS 1.65 V 85 °C），数据 CMOS 余量 354–454 ps，测试台功耗 39.8–66.6 mW。
 
-待做：功耗优化（分路锁存器沿用了 2 GHz 分频器尺寸：保持对 W80、尾电流 510 µA，负载检查显示自身保持对占节点电容的大部分）；CMOS 侧 1:4 到 250 MHz 字时钟与数字侧接口（两域合并、通道映射、分频初相，I-15）。
+**功耗：p2 为默认尺寸。** 首版分路锁存器沿用了 2 GHz 分频器的尺寸（保持对 W80、尾电流 510 µA），负载检查显示保持对自身占锁存器节点电容的大部分。按恒定 τ 缩放到一半（管宽、尾电流减半，负载 600 → 1200 Ω，节点电容 133 → 66–73 fF，极点仍约 1.8–2.0 GHz）；时钟源跟随器和下拉减半；转换器（数据和时钟同步）减半；隔离 buffer 电流减半。读出电流约 18 → 10 mA。压力角 p1（不缩转换器）和 p2 都通过，p2 在 45 条件：数据和边沿零错误，数据 CML 余量 170–245 ps（最差 FS 1.65 V 85 °C），数据 CMOS 余量 334–452 ps，测试台功耗 31.1–50.5 mW（首版 39.8–66.6 mW）。
+
+待做：CMOS 侧 1:4 到 250 MHz 字时钟与数字侧接口（两域合并、通道映射、分频初相，I-15）。
 
 ### CMOS 读出与 PCB 短窗（TT，原读出）
 

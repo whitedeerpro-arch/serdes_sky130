@@ -1,7 +1,7 @@
 """RX readout with CML 1:2 demux + matched conversion over PVT (real PRBS data).
 
     uv run python analog/rx/sampler/tb/readout_demux/run.py [stress | all | tags...] [--code 20]
-        [--param K=V ...] [--demux serdes_rx_readout_demux2] [--workers 4] [--resume C] [--analyse-only]
+        [--param K=V ...] [--demux serdes_rx_readout_demux2] [--demux-param K=V ...] [--workers 4] [--resume C] [--analyse-only]
 
 C2 far-end replay -> CTLE EQ3 -> PI (code) -> serdes_rx_half_rate_samples_ac_rk -> demux block
 (rx_readout_demux2.spice).  One deck per condition.
@@ -169,6 +169,7 @@ def main():
     ap.add_argument("--code", type=int, default=20)
     ap.add_argument("--param", action="append", default=["rk_wn=8", "rk_nfin=2"])
     ap.add_argument("--demux", default="serdes_rx_readout_demux2")
+    ap.add_argument("--demux-param", action="append", default=[])
     ap.add_argument("--bc", default="rx_c2_far_nominal@ctle_rc")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--resume")
@@ -176,6 +177,7 @@ def main():
     a = ap.parse_args()
     conds = grid45() if a.conds == ["all"] else STRESS if a.conds == ["stress"] else [Condition.parse(x) for x in a.conds]
     params = dict(p.split("=", 1) for p in a.param)
+    demux = " ".join([a.demux] + a.demux_param)
     boundary.check_load(a.bc, sp.replay.signature())
     camp = (ROOT / a.resume) if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     camp.mkdir(parents=True, exist_ok=True)
@@ -186,9 +188,9 @@ def main():
     todo = []
     for c in order:
         if spice.case_output(camp, c.tag, f"{case_name(c, a.code)}.raw") is None and not a.analyse_only:
-            todo.append((deck(c, a.code, params, a.demux), spice.next_run_dir(camp, c.tag),
+            todo.append((deck(c, a.code, params, demux), spice.next_run_dir(camp, c.tag),
                          dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=CASE_TIMEOUT_S,
-                              meta=dict(condition=c.tag, code=a.code, dut=dut_text(params), demux=a.demux, bc=a.bc))))
+                              meta=dict(condition=c.tag, code=a.code, dut=dut_text(params), demux=demux, bc=a.bc))))
     print(f"{len(order)} cases: {len(todo)} to run", flush=True)
     for ex in spice.run_many(todo, workers=a.workers, smoke=False):
         if not ex.ok:
@@ -201,7 +203,7 @@ def main():
             print(f"{c.tag:15s} | missing")
             continue
         rows.append(analyse(p, c, a.code, bits))
-    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, dut=dut_text(params), demux=a.demux, bc=a.bc, rows=rows),
+    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, dut=dut_text(params), demux=demux, bc=a.bc, rows=rows),
                                                   indent=1, default=float))
     f = lambda x: f"{x:4.0f}" if x is not None else "   -"
     print(f"{'condition':15s} | data err a0 b0 a1 b1 | edge err ae1 be1 ae0 be0 (determinate) | data CML slack min | "

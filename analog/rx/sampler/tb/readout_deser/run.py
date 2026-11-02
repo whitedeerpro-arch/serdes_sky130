@@ -28,7 +28,7 @@ from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import boundary, eye, spice
+from serdes_flow import boundary, eye, rcorner, spice
 from serdes_flow.corners import STRESS, Condition, boundary_first, grid45
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -144,6 +144,7 @@ def main():
     ap.add_argument("--deser-param", action="append", default=[])
     ap.add_argument("--bc", default="rx_c2_far_nominal@ctle_rc")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--rcorner", help="emulate a resistor corner (hh | ll | scale) with constant-swing reference currents (serdes_flow.rcorner)")
     ap.add_argument("--resume")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
@@ -161,7 +162,7 @@ def main():
     todo = []
     for c in order:
         if spice.case_output(camp, c.tag, f"{rd.case_name(c, a.code)}.raw") is None and not a.analyse_only:
-            todo.append((deck(c, a.code, params, deser), spice.next_run_dir(camp, c.tag),
+            todo.append(((rcorner.emulate(deck(c, a.code, params, deser), camp, a.rcorner) if a.rcorner else deck(c, a.code, params, deser)), spice.next_run_dir(camp, c.tag),
                          dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=CASE_TIMEOUT_S,
                               meta=dict(condition=c.tag, code=a.code, dut=rd.dut_text(params), deser=deser, bc=a.bc))))
     print(f"{len(order)} cases: {len(todo)} to run", flush=True)

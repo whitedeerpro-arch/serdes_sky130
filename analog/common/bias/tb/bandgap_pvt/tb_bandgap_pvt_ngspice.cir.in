@@ -1,0 +1,17 @@
+Bandgap + constant-swing reference over PVT (operating point)
+* iout0 into 0.7 V (a block's NMOS diode level): reference current; iout1 into a high_po resistor of the
+* CML-load type (6 kOhm): I * R, the swing proxy that should not move with the resistor corner.
+.lib "@MODEL_LIBRARY@" @SECTION@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/bias/spice/bandgap.spice"
+Vdd vdd 0 @SUPPLY@
+Xbg vbg i0 i1 i2 i3 vg vgi vdd 0 serdes_bandgap
+Vi0 i0 0 0.7
+Xrl i1 0 0 sky130_fd_pr__res_high_po w=1 l=18
+Vi2 i2 0 0.7
+Vi3 i3 0 0.7
+* operating-point guess for the multi-loop circuit (the physical state is checked by the power-up transient)
+.nodeset v(vbg)=1.23 v(xbg.s)=1.23 v(vg)=0.9 v(vgi)=0.9 v(xbg.ta)=0.95 v(xbg.tb)=0.95
+.temp @TEMP_C@
+.options reltol=1e-5 abstol=1p vntol=1u klu

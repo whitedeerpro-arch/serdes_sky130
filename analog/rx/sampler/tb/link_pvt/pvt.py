@@ -30,7 +30,7 @@ from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import boundary, eye, spice
+from serdes_flow import boundary, eye, rcorner, spice
 from serdes_flow.corners import STRESS, Condition, boundary_first, grid45
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -151,6 +151,7 @@ def main():
     ap.add_argument("--gate-codes", help="comma list; conditions outside --full only run these codes")
     ap.add_argument("--full", default="stress", help="conditions with the full code sweep: stress | all | tags")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--rcorner", help="emulate a resistor corner (hh | ll | scale) with constant-swing reference currents (serdes_flow.rcorner)")
     ap.add_argument("--resume")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
@@ -185,7 +186,7 @@ def main():
     for deck_name, cases in sorted(by_deck.items(), key=lambda kv: order.index(kv[0])):
         missing = [k for k in cases if out(*k) is None]
         if missing and not a.analyse_only:
-            todo.append((deck(missing, dut_text), spice.next_run_dir(camp, deck_name),
+            todo.append(((rcorner.emulate(deck(missing, dut_text), camp, a.rcorner) if a.rcorner else deck(missing, dut_text)), spice.next_run_dir(camp, deck_name),
                          dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=CASE_TIMEOUT_S * len(missing),
                               meta=dict(process=missing[0][0].process, bc=a.bc, eq=EQ, codes=codes, dut=dut_text,
                                         conditions=sorted({c.tag for c, _ in missing}),

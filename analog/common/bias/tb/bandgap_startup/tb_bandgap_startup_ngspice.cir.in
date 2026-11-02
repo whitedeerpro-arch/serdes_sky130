@@ -1,0 +1,16 @@
+Bandgap power-up and supply step (transient, no nodeset: the state the circuit reaches by itself)
+* vdd = vsup * min(time / tramp, 1), then +50 mV at tstep (10 ps edge).
+.lib "@MODEL_LIBRARY@" @SECTION@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/bias/spice/bandgap.spice"
+Vsup sup 0 @SUPPLY@
+.param tramp=@TRAMP@ tstep=@TSTEP@
+Bdd vdd 0 V=v(sup)*min(time/tramp,1)+0.05*min(max((time-tstep)/1e-11,0),1)
+Xbg vbg i0 i1 i2 i3 vg vgi vdd 0 serdes_bandgap
+Vi0 i0 0 0.7
+Xrl i1 0 0 sky130_fd_pr__res_high_po w=1 l=18
+Vi2 i2 0 0.7
+Vi3 i3 0 0.7
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu

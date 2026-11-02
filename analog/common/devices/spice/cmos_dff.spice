@@ -1,0 +1,19 @@
+* Lean static positive-edge DFF without reset (transmission-gate master-slave, clocked feedback).
+* For high-rate datapaths that flush themselves (shift registers, word registers): no reset, no
+* interlocked enables, 18 transistors.  serdes_cmos_dff_reset (cmos_dff_reset.spice) keeps the
+* reset and the interlock for control state.  One local clock inverter: the master closes and the
+* slave opens on clk rising (hold requirement ~ one inverter delay).  Widths in micrometres.
+* Timing card: analog/common/devices/tb/cmos_dff_card (--cell dff).
+.subckt serdes_cmos_dff d clk q vdd vss params: wn=1 wp=2 wfb=0.42 wtg=1
+Xcb clk clkb vdd vss serdes_cmos_inv wn={wn} wp={wp}
+* master: transparent while clk low
+Xt1 d m1 clkb clk vdd vss serdes_cmos_tgate wn={wtg} wp={2*wtg}
+Xi1 m1 m2 vdd vss serdes_cmos_inv wn={wn} wp={wp}
+Xf1 m2 mf vdd vss serdes_cmos_inv wn={wfb} wp={wfb}
+Xt2 mf m1 clk clkb vdd vss serdes_cmos_tgate wn={wfb} wp={wfb}
+* slave: transparent while clk high
+Xt3 m2 s1 clk clkb vdd vss serdes_cmos_tgate wn={wtg} wp={2*wtg}
+Xi3 s1 q vdd vss serdes_cmos_inv wn={wn} wp={wp}
+Xf3 q sf vdd vss serdes_cmos_inv wn={wfb} wp={wfb}
+Xt4 sf s1 clkb clk vdd vss serdes_cmos_tgate wn={wfb} wp={wfb}
+.ends serdes_cmos_dff

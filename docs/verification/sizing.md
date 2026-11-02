@@ -83,6 +83,8 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 | 粗模型 + 求解 | [clock_interface_plan.py](../../analog/rx/sampler/theory/clock_interface_plan.py)：隔直时钟接口的行为模型，网格穷举驱动方式 × Cc × 时钟对宽度 × 分压比 |
 | 评估器 | [link_pvt/pvt.py](../../analog/rx/sampler/tb/link_pvt/pvt.py)（`--dut stock|ac`、`--param`），readout_pvt，CTLE/PI 的 PVT 测试台 |
 | 单元卡：CMOS DFF | [cmos_dff_card/card.py](../../analog/common/devices/tb/cmos_dff_card/card.py)：1 GHz 时钟，数据跳变从沿前 400 ps 扫到沿后 250 ps（10 ps 步），给出 clk→q（上升/下降）、建立、保持、两级反相器延迟；`--cell reset|dff`，45 条件约 3 分钟 |
+| 无源 / 双极卡 | [passive_card/card.py](../../analog/common/devices/tb/passive_card/card.py)：high_po / xhigh_po / generic_po 电阻、MIM、PNP（VBE、ΔVBE）随 tt/ll/hh/ss/ff 与 −40…85 °C；温度系数、角偏差、一阶带隙估计；约 1 分钟 |
+| 失配卡与 MC | [mismatch_card/card.py](../../analog/common/devices/tb/mismatch_card/card.py)（`<corner>_mm`，200 样本约 30 s）：MOS 对的 A_VT、电阻对 σ(ΔR/R)、PNP（模型无失配）；运行器 [`serdes_flow.mc`](../../src/serdes_flow/mc.py)（`mc_source` 每样本约 0.2 s，可复现种子）；统计 [`serdes_flow.stats`](../../src/serdes_flow/stats.py)（容差区间 k 系数、Clopper–Pearson 良率区间、Pelgrom 拟合、平方和预算） |
 | 器件卡 | [gmid/card.py](../../analog/common/devices/tb/gmid/card.py)：nfet / nfet_lvt / pfet（L 0.15–2 µm）、pfet_lvt（L 0.35–4 µm，模型最小 0.35 µm），\|Vgs\| × \|Vds\| × \|Vsb\| 0/0.3/0.6 V × 温度，BSIM4 工作点值（gm、gds 不是差分）；一个工艺角约 25 s。`DeviceCard.at_gmid(dev, L, gmid, vds)` 给 Id/W、gm/gds、ft、Cgg/W、Vgs、Vdsat |
 | 负载 / 扇出检查 | [`serdes_flow.loading`](../../src/serdes_flow/loading.py)（读网表 [`serdes_flow.netlist`](../../src/serdes_flow/netlist.py)，不仿真）：展开子电路，按器件卡的单位宽度栅电容和显式电容汇总每个节点的负载，带电阻负载的 CML 节点给出 R·C 极点，并列出最大的几个负载来自哪个实例。经验规则：时钟节点极点 ≥ 2 倍时钟频率；环路内部节点（分频器主从、锁存器）不直接带外部负载。`uv run python -m serdes_flow.loading <subckt>` |
 | 运行设施 | `spice.run_many`；`spice.case_output` / `next_run_dir`（按工况续跑：超时或被杀的仿真只补缺的工况）；[`serdes_flow.watch`](../../src/serdes_flow/watch.py)（健康探针：正常 / 停滞 / 报错 / 进程消失 / 失败）；`serdes_flow.boundary` |
@@ -133,7 +135,7 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 
 ## 缺口
 
-- **器件卡的其余部分。** TT 已建；其他 4 个工艺角（同一脚本 `--corners`）、噪声（1/f 系数）、失配（Pelgrom 系数，SKY130 库的 `*_mm` 段）、电阻工艺角（`ll/hh/hl/lh` 段）未建。
+- **器件卡的其余部分。** gm/ID 四角、失配（Pelgrom）、电阻 / MIM / PNP 角与温度已建；噪声（1/f 系数）未建；PNP 模型没有失配项，带隙的 VBE 失配只能按文献估计。
 - **消费方需求卡。** 例如采样窗口随时钟幅度的变化、锁存器需要的时钟导向比例。用来量化余量（指标与实测最低需求之差），不用来自动下调指标。
 - **方法有效性验证。** 拿一个小模块完整走一遍流程，不限于本 SerDes。最好选有公开参考设计的基准电路，例如两级 Miller 运放（几何规划尺寸设计文献的标准例子）。记录迭代次数、每轮模型误差、是否收敛，以及与参考结果的差距。
 - **统一接口。** 计划 `serdes_flow.sizing`：指标（带来源）、约束、模型（带校正因子和适用范围）、求解器（穷举 / scipy）、评估器适配、校准记录、放松与收敛判断。`balance` 作为时序约束接入，不重写。

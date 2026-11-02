@@ -16,6 +16,8 @@ cdr_phase_frequency实现频率积分和相位债务，按实际applied/done反�
 
 rx_deserializer16消费已重定时的顺序pair，bit0较早。重复4个可编程b5e3训练字确定字边界，16位输出bit0仍最早。数据连续移位，不能用瞬时locked静默丢弃pair；word_valid是恢复pair时钟域的使能，不是异步系统时钟。2 GHz库映射、训练比较路径与时钟树尚无STA结果；公共系统接口需要单独时序/CDC。
 
+rx_word_map把物理读出（analog/rx/sampler/spice/rx_readout_deser16.spice，8通道×4级=32位，字时钟w）按结构决定的位映射排成时间顺序的16数据+16边沿，edge[0]与previous_data取自上一字，直接接投票器。rx_word_align16在{上一字,本字}中按训练字0xb5e3找字边界（同一偏移连续4次），输出比输入晚一字。tb_rx_word_path覆盖16种窗口起点、早/晚边沿和训练→payload切换。
+
 tb_rx_cdr_closed_loop用既有PI实测曲线驱动行为采样事件，运行实际RTL，100 µs检查多圈、频偏、时延、确定抖动、同码和字流。它不包含真实晶体管/PCB/PLL长闭环。tb_rx_deserializer16覆盖16种bit偏移，tb_cdr_status检查保持、超时、恢复与限幅。失败探索快照保留在results，最终批次由结果文档指定。
 
 结果入口：[采样器与PI控制](../../docs/history/rx_sampler_control.md)。

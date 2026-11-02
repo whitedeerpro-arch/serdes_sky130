@@ -1,14 +1,17 @@
 """RX CMOS readout over PVT: C2 replay -> CTLE -> PI-clocked samplers -> CMOS pair alignment.
 
     uv run python analog/rx/sampler/tb/readout_pvt/pvt.py [stress | tags...] --codes-from SAMPLER_CAMPAIGN
-        [--cells old,r4] [--bc ID] [--resume C] [--analyse-only]
+        [--cells old,r4] [--dut stock|ac] [--param K=V ...] [--code N] [--bc ID] [--resume C] [--analyse-only]
 
 The PI code per condition is the centre of the sampler window measured by sampler/tb/link_pvt
 (SAMPLER_CAMPAIGN summary).  Two alignment cells: the current serdes_rx_cmos_pair_align (clock
 through serdes_cml_to_cmos) and the r4 variant (serdes_cml_to_cmos_r4, the PLL I-04 fix).
 Decoding: the aligned CMOS outputs ad0/ad1 are read just before each next rising edge of the
 CMOS clock `ck`; the pairs are concatenated (either order) and compared with the PRBS7 at the
-best bit offset.  Pass = no error.
+best bit offset.  Pass = no error.  --dut / --param select the sampler variant as in link_pvt (default
+stock); --code N uses one PI code for every condition instead of the campaign centres (a sampler
+window that passes at every code reports centre 0, which sits next to the eye crossing; code 20
+is the centre of every full sweep so far).
 """
 import argparse
 import importlib.util
@@ -33,11 +36,11 @@ RESULTS = ROOT / "results/analog/rx/sampler/readout_pvt"
 CELLS = {"old": "serdes_rx_cmos_pair_align", "r4": "serdes_rx_cmos_pair_align_r4"}
 
 
-def deck(cases, cell):
+def deck(cases, cell, dut_text=sp.DUTS["stock"]):
     c0, code0 = cases[0]
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in sp.pi.bits(code0, c0.supply).items())
     text = spice.render(TEMPLATE, **spice.corner_values(c0), EQ0_V=c0.supply, EQ1_V=c0.supply,
-                        CONTROL_SOURCES=ctl, ALIGN_CELL=CELLS[cell], CASES="@CASES@")
+                        CONTROL_SOURCES=ctl, ALIGN_CELL=CELLS[cell], DUT=dut_text, CASES="@CASES@")
     blocks = []
     for c, code in cases:
         n = sp.case_name(c, code)
@@ -75,14 +78,21 @@ def analyse_case(d, c, code, bits):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("conds", nargs="*", default=["stress"])
-    ap.add_argument("--codes-from", required=True)
+    ap.add_argument("--codes-from")
+    ap.add_argument("--code", type=int)
+    ap.add_argument("--dut", choices=sorted(sp.DUTS), default="stock")
+    ap.add_argument("--param", action="append", default=[])
     ap.add_argument("--cells", default="old,r4")
     ap.add_argument("--bc", default="rx_c2_far_nominal@ctle_rc")
     ap.add_argument("--resume")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
     conds = STRESS if a.conds == ["stress"] else [Condition.parse(x) for x in a.conds]
-    centre = {r["condition"]: r["centre_code"] for r in json.loads((ROOT / a.codes_from / "summary.json").read_text())["rows"]}
+    if a.code is not None:
+        centre = {c.tag: a.code for c in conds}
+    else:
+        centre = {r["condition"]: r["centre_code"] for r in json.loads((ROOT / a.codes_from / "summary.json").read_text())["rows"]}
+    dut_text = sp.dut(a.dut, dict(p.split("=", 1) for p in a.param))
     cells = a.cells.split(",")
     boundary.check_load(a.bc, sp.replay.signature())
     camp = (ROOT / a.resume) if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
@@ -96,8 +106,8 @@ def main():
         by_proc = {}
         for k in keys:
             by_proc.setdefault(k[0].process, []).append(k)
-        jobs += [(deck(cases, cell), camp / f"{cell}_{proc}", dict(files={"stimuli.inc": camp / "stimuli.inc"},
-                                                                     meta=dict(cell=CELLS[cell], bc=a.bc, cases=[sp.case_name(*k) for k in cases])))
+        jobs += [(deck(cases, cell, dut_text), camp / f"{cell}_{proc}", dict(files={"stimuli.inc": camp / "stimuli.inc"},
+                                                                     meta=dict(cell=CELLS[cell], bc=a.bc, dut=dut_text, cases=[sp.case_name(*k) for k in cases])))
                  for proc, cases in by_proc.items()]
     todo = []
     for j in jobs:
@@ -116,7 +126,7 @@ def main():
         rows.append(dict(condition=c.tag, code=code, cells=rs))
         print(f"{c.tag:15s} {code:4d} | " + " | ".join(
             f"{r['errors']:2d}/{r['pairs']}, {r['ck_low_v']:.2f}..{r['ck_high_v']:.2f}, {r["conv_out_pp"]*1e3:.0f}" for r in rs.values()))
-    (camp / "summary.json").write_text(json.dumps(dict(bc=a.bc, codes_from=a.codes_from, rows=rows), indent=1, default=float))
+    (camp / "summary.json").write_text(json.dumps(dict(bc=a.bc, codes_from=a.codes_from, code=a.code, dut=dut_text, rows=rows), indent=1, default=float))
     print(camp.relative_to(ROOT))
 
 

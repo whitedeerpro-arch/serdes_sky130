@@ -26,3 +26,15 @@ Rtop vdd vck {(1-k)*rtot}
 Rbot vck vss {k*rtot}
 Cdec vck vss {cdec}
 .ends serdes_rx_clock_ref
+
+* Same interface with the buffer outputs bp/bn brought out (readout clock tap, 2026-11-02).
+.subckt serdes_rx_clock_ac_tap cp cn gp gn bp bn vck vbias vdd vss
++ params: wn=40 nfin=8 wt=24 rload=300 cc=0.6p rb=50k
+Xbuf cp cn bn bp vbias vdd vss serdes_cml_delay wn={wn} nfin={nfin} wt={wt} lt=0.5 rload={rload}
+Ccp bp gp {cc}
+Ccn bn gn {cc}
+Cbp bp vss {0.1*cc}
+Cbn bn vss {0.1*cc}
+Rbp gp vck {rb}
+Rbn gn vck {rb}
+.ends serdes_rx_clock_ac_tap

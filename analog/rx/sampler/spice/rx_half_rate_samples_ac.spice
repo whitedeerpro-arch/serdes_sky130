@@ -29,3 +29,30 @@ Xe0 bp bn cep cen e0p e0n vbias_logic vdd vss serdes_rx_sample_dff
 Xe1 bp bn cen cep e1p e1n vbias_logic vdd vss serdes_rx_sample_dff
 + wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
 .ends serdes_rx_half_rate_samples_ac
+
+* Variant ac_rk (2026-11-02): serdes_rx_half_rate_samples_ac plus a CML readout clock rkp/rkn.
+* A small CML buffer taps the edge-clock buffer output (large swing, VDD - I R / 2 common mode) and
+* restores the PLL standard clock input: common mode VDD - 0.15 V, swing limited by its I R (the
+* boundary at which serdes_cml_to_cmos_r4 and pll_cml_div2 were verified).  Same internal names.
+.subckt serdes_rx_half_rate_samples_ac_rk ip in dp dn ep en
++ d0p d0n d1p d1n e0p e0n e1p e1n rkp rkn vbias vdd vss
++ params: wdata=16 whold=48 wclock=32 wtail=72 nftail=24 rload=600
++ ck_wn=40 ck_nfin=8 ck_wt=36 ck_rload=600 cc=0.45p rb=50k k=0.634
++ rk_wn=16 rk_nfin=4 rk_wt=24 rk_rload=300
+Xinput ip in bp bn vbias vdd vss serdes_cml_buffer wn=24 wt=12 rload=600
+Xlb vbias vbias_logic vdd vss pll_cml_tail_bias
+Xref vck vdd vss serdes_rx_clock_ref k={k}
+Xcd dp dn cdp cdn vck vbias vdd vss serdes_rx_clock_ac
++ wn={ck_wn} nfin={ck_nfin} wt={ck_wt} rload={ck_rload} cc={cc} rb={rb}
+Xce ep en cep cen tbp tbn vck vbias vdd vss serdes_rx_clock_ac_tap
++ wn={ck_wn} nfin={ck_nfin} wt={ck_wt} rload={ck_rload} cc={cc} rb={rb}
+Xrk tbp tbn rkp rkn vbias vdd vss serdes_cml_buffer wn={rk_wn} nfin={rk_nfin} wt={rk_wt} rload={rk_rload}
+Xd0 bp bn cdp cdn d0p d0n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xd1 bp bn cdn cdp d1p d1n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xe0 bp bn cep cen e0p e0n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xe1 bp bn cen cep e1p e1n vbias_logic vdd vss serdes_rx_sample_dff
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+.ends serdes_rx_half_rate_samples_ac_rk

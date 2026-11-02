@@ -49,7 +49,8 @@ def tail(path, n=20000):
 
 def deck_state(d, alive, stall, now):
     total = sum(1 for l in (d / "tb.cir").read_text(errors="replace").splitlines() if l.startswith("* case "))
-    outs = sorted((p.stat().st_mtime for p in d.iterdir() if p.suffix in (".raw", ".tsv") or p.name.endswith(".raw.gz")))
+    outs = sorted((p.stat().st_mtime for p in d.iterdir()
+                   if (p.suffix in (".raw", ".tsv") or p.name.endswith(".raw.gz")) and p.stat().st_size > 0))
     done = len(outs)
     start = (d / "tb.cir").stat().st_mtime
     marks = [start] + outs
@@ -57,8 +58,13 @@ def deck_state(d, alive, stall, now):
     last = marks[-1]
     ex = d / "execution.json"
     errs = [l.strip() for l in tail(d / "simulator.log").splitlines() if ERR.search(l)]
+    e = None
     if ex.exists():
-        e = json.loads(ex.read_text())
+        try:
+            e = json.loads(ex.read_text())
+        except ValueError:                 # truncated by a crash while being written
+            e = None
+    if e is not None:
         bad = e.get("exit_code") != 0 or e.get("timed_out")
         why = "timeout" if e.get("timed_out") else f"exit {e.get('exit_code')}"
         return ("FAIL" if bad else "done"), done, total, (why if bad else "")
@@ -98,7 +104,8 @@ def probe(camp, stall):
         last = max(q.stat().st_mtime for q in att[-1][1].iterdir())
         if s == "DEAD" and last < plan_t:      # interrupted before the current driver started: rerun pending
             s, pending = "pending", pending + 1
-        outs = {q.name for _, d in att for q in d.iterdir() if q.suffix in (".raw", ".tsv") or q.name.endswith(".raw.gz")}
+        outs = {q.name for _, d in att for q in d.iterdir()
+                if (q.suffix in (".raw", ".tsv") or q.name.endswith(".raw.gz")) and q.stat().st_size > 0}
         n_total = planned.get(b, deck_state(att[0][1], alive, stall, now)[2])
         states[b] = (s, why)
         done += len(outs)

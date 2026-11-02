@@ -126,7 +126,11 @@ def run(deck: str, run_dir: Path, *, files: dict[str, Path] | None = None,
         inputs_sha256={n: hashlib.sha256((run_dir / n).read_bytes()).hexdigest() for n in (files or {})},
         **(meta or {}),
     )
-    (run_dir / "execution.json").write_text(json.dumps(record, indent=2, default=str))
+    # atomic: a crash leaves either the complete record or none (a truncated record was seen after
+    # a reboot on 2026-11-02); waveforms are written by ngspice and checked on resume instead
+    tmp = run_dir / "execution.json.tmp"
+    tmp.write_text(json.dumps(record, indent=2, default=str))
+    os.replace(tmp, run_dir / "execution.json")
     return ex
 
 

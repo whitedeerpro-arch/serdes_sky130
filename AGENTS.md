@@ -41,6 +41,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - 新代码写成正常的 `.py`。公共测量函数（边沿、眼图裕量、频率/相位、PVT 网格）收进共享库，不在每个 campaign 里重写。
 - 新 bench 用 `spice.binary_output` 输出二进制 raw，并用 `spice.skip_output_before` 不保存分析窗口之前的启动段；`spice.Waves` 两种格式都能读。瓶颈在求解器，不在波形量（TX bench 文件小 58%，仿真时间不变）。
 - 并发 ngspice 不超过 4 个：并发时单个仿真会慢约 25%，但总吞吐仍是串行的约 2.6–3 倍。
+- 本机近期会意外重启（2026-11-01 两次，与仿真负载无关），长 campaign 必须能按工况断点续跑（见下一条）。窗口类测量先在压力角做完整扫描，其余条件用门槛模式只查门槛跨度两端和中心（例：`link_pvt/pvt.py --gate-codes`），减工作量不减条件覆盖。
 - 长 campaign：每组（deck）一个条件、超时按工况数计（`spice.run(timeout_s=…)`）；中断后按工况续跑（`spice.case_output` / `next_run_dir`，只补缺的工况）；运行顺序用 `corners.boundary_first`（先边界）；运行中用 `uv run python -m serdes_flow.watch <campaign> --every 600` 探健康（正常 / 停滞 / 报错 / 进程消失 / 失败），只读文件，不影响仿真。
 - 每次启动 ngspice 加载 SKY130 模型库约 15 s。短分析（工作点/AC/DC、短瞬态）按工艺角合并成一个 deck，在控制段里用 `option temp=…`、`alter V… dc=…` 循环电压、温度和控制位（例：`analog/rx/ctle/tb/ac_dc/pvt.py`，45 条件 × 4 档从约 13 min 降到 39 s，结果逐位相同）。`spice.run` 对所有任务设单线程（`num_threads=1`）。
 - 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。

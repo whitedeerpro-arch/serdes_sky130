@@ -145,7 +145,8 @@ def main():
     stim, _ = sp.replay.stimuli(a.bc)
     (camp / "stimuli.inc").write_text(stim)
     keys = [(c, ch) for c in boundary_first(conds) for ch in chains]
-    (camp / "plan.json").write_text(json.dumps(dict(decks={f"{c.tag}_{ch}": 1 for c, ch in keys}), indent=1))
+    if not a.analyse_only:                     # a partial re-analysis must not shrink the campaign plan
+        (camp / "plan.json").write_text(json.dumps(dict(decks={f"{c.tag}_{ch}": 1 for c, ch in keys}), indent=1))
     todo = []
     for c, ch in keys:
         name = f"{c.tag}_{ch}"

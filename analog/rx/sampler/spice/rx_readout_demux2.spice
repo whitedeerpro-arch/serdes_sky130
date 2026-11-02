@@ -36,11 +36,12 @@ Xslave mp mn qp qn ckn ckp vbias_logic vdd vss pll_cml_latch
 + wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
 .ends serdes_rx_demux_dff
 
-.subckt serdes_rx_readout_demux2 d0p d0n d1p d1n e0p e0n e1p e1n rkp rkn
-+ qa0 qb0 qa1 qb1 qae0 qbe0 qae1 qbe1 ckq ckm rst_b vbias vdd vss
+.subckt serdes_rx_readout_front d0p d0n d1p d1n e0p e0n e1p e1n rkp rkn
++ ra0 rb0 rae1 rbe1 ra1 rb1 rae0 rbe0 ckq ckqb ckm ckmb vbias vdd vss
 + params: dd_wsf=20 dd_wclock=16 cb_wn=24 cb_nfin=4 cb_wt=12 cb_rload=600
 + dd_wsf_sink=2 dd_wdata=10 dd_whold=40 dd_wtail=36 dd_nftail=12 dd_rload=1200
 + cv_wsf=10 cv_wsink=1 cv_win=3 cv_wload=4 cv_wtail=3
++ ck1_wn=2 ck1_wp=4 ck2_wn=4 ck2_wp=8 ck3_wn=4 ck3_wp=8
 Xlb vbias vbias_logic vdd vss pll_cml_tail_bias
 Xdiv rkp rkn dqp dqn dmp dmn vbias vdd vss pll_cml_div2
 * divider isolation buffers (non-inverting): qp/qn, mp/mn are the domain clocks
@@ -86,12 +87,23 @@ Xcq qp qn rq vbias vdd vss serdes_cml_to_cmos_data
 Xcm mp mn rm vbias vdd vss serdes_cml_to_cmos_data
 + wsf={cv_wsf} wsink={cv_wsink} win={cv_win} wload={cv_wload} wtail={cv_wtail}
 * domain clock buffers: ck* follows the CML clock p side, ck*b is its complement
-Xiq1 rq nq vdd vss serdes_cmos_inv wn=2 wp=4
-Xiq2 nq ckq vdd vss serdes_cmos_inv wn=4 wp=8
-Xiq3 ckq ckqb vdd vss serdes_cmos_inv wn=4 wp=8
-Xim1 rm nm vdd vss serdes_cmos_inv wn=2 wp=4
-Xim2 nm ckm vdd vss serdes_cmos_inv wn=4 wp=8
-Xim3 ckm ckmb vdd vss serdes_cmos_inv wn=4 wp=8
+Xiq1 rq nq vdd vss serdes_cmos_inv wn={ck1_wn} wp={ck1_wp}
+Xiq2 nq ckq vdd vss serdes_cmos_inv wn={ck2_wn} wp={ck2_wp}
+Xiq3 ckq ckqb vdd vss serdes_cmos_inv wn={ck3_wn} wp={ck3_wp}
+Xim1 rm nm vdd vss serdes_cmos_inv wn={ck1_wn} wp={ck1_wp}
+Xim2 nm ckm vdd vss serdes_cmos_inv wn={ck2_wn} wp={ck2_wp}
+Xim3 ckm ckmb vdd vss serdes_cmos_inv wn={ck3_wn} wp={ck3_wp}
+.ends serdes_rx_readout_front
+
+.subckt serdes_rx_readout_demux2 d0p d0n d1p d1n e0p e0n e1p e1n rkp rkn
++ qa0 qb0 qa1 qb1 qae0 qbe0 qae1 qbe1 ckq ckm rst_b vbias vdd vss
++ params: dd_wsf=20 dd_wclock=16 cb_wn=24 cb_nfin=4 cb_wt=12 cb_rload=600
++ dd_wsf_sink=2 dd_wdata=10 dd_whold=40 dd_wtail=36 dd_nftail=12 dd_rload=1200
++ cv_wsf=10 cv_wsink=1 cv_win=3 cv_wload=4 cv_wtail=3
+Xf d0p d0n d1p d1n e0p e0n e1p e1n rkp rkn ra0 rb0 rae1 rbe1 ra1 rb1 rae0 rbe0 ckq ckqb ckm ckmb vbias vdd vss
++ serdes_rx_readout_front dd_wsf={dd_wsf} dd_wclock={dd_wclock} cb_wn={cb_wn} cb_nfin={cb_nfin} cb_wt={cb_wt} cb_rload={cb_rload}
++ dd_wsf_sink={dd_wsf_sink} dd_wdata={dd_wdata} dd_whold={dd_whold} dd_wtail={dd_wtail} dd_nftail={dd_nftail} dd_rload={dd_rload}
++ cv_wsf={cv_wsf} cv_wsink={cv_wsink} cv_win={cv_win} cv_wload={cv_wload} cv_wtail={cv_wtail}
 * CMOS capture mid-window: "a" lanes (changed on the clock falling edge) on the rising edge, "b" lanes on the falling
 Xfa0 ra0 ckq rst_b qa0 vdd vss serdes_cmos_dff_reset
 Xfb0 rb0 ckqb rst_b qb0 vdd vss serdes_cmos_dff_reset

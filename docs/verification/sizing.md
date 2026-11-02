@@ -82,6 +82,7 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 | 实测卡：PI 摆幅 | [PI rotation](../../analog/rx/pi/tb/rotation/pvt.py) 的 summary |
 | 粗模型 + 求解 | [clock_interface_plan.py](../../analog/rx/sampler/theory/clock_interface_plan.py)：隔直时钟接口的行为模型，网格穷举驱动方式 × Cc × 时钟对宽度 × 分压比 |
 | 评估器 | [link_pvt/pvt.py](../../analog/rx/sampler/tb/link_pvt/pvt.py)（`--dut stock|ac`、`--param`），readout_pvt，CTLE/PI 的 PVT 测试台 |
+| 单元卡：CMOS DFF | [cmos_dff_card/card.py](../../analog/common/devices/tb/cmos_dff_card/card.py)：1 GHz 时钟，数据跳变从沿前 400 ps 扫到沿后 250 ps（10 ps 步），给出 clk→q（上升/下降）、建立、保持、两级反相器延迟；`--cell reset|dff`，45 条件约 3 分钟 |
 | 器件卡 | [gmid/card.py](../../analog/common/devices/tb/gmid/card.py)：nfet / nfet_lvt / pfet（L 0.15–2 µm）、pfet_lvt（L 0.35–4 µm，模型最小 0.35 µm），\|Vgs\| × \|Vds\| × \|Vsb\| 0/0.3/0.6 V × 温度，BSIM4 工作点值（gm、gds 不是差分）；一个工艺角约 25 s。`DeviceCard.at_gmid(dev, L, gmid, vds)` 给 Id/W、gm/gds、ft、Cgg/W、Vgs、Vdsat |
 | 负载 / 扇出检查 | [`serdes_flow.loading`](../../src/serdes_flow/loading.py)（读网表 [`serdes_flow.netlist`](../../src/serdes_flow/netlist.py)，不仿真）：展开子电路，按器件卡的单位宽度栅电容和显式电容汇总每个节点的负载，带电阻负载的 CML 节点给出 R·C 极点，并列出最大的几个负载来自哪个实例。经验规则：时钟节点极点 ≥ 2 倍时钟频率；环路内部节点（分频器主从、锁存器）不直接带外部负载。`uv run python -m serdes_flow.loading <subckt>` |
 | 运行设施 | `spice.run_many`；`spice.case_output` / `next_run_dir`（按工况续跑：超时或被杀的仿真只补缺的工况）；[`serdes_flow.watch`](../../src/serdes_flow/watch.py)（健康探针：正常 / 停滞 / 报错 / 进程消失 / 失败）；`serdes_flow.boundary` |
@@ -114,6 +115,21 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 | 收敛 | 链路 45 条件：窗口 ≥ 0.5 UI（压力角 0.88–1.00 UI），栅极 325–866 mVpp，全部达标；c2 写为单元默认值。见 [RX 采样器](../design/rx_pi_sampler.md#采样器-pvtc2-回放--ctle-eq3--pi--四相采样) |
 
 方法验证小结（两轮）：第一轮模型缺物理项（极点、压缩），误差约 1.6 倍；补上物理结构后，第二轮在扫描范围内留出误差 ≤ 4 %，外推误差 5–7 %。保护带取留出误差、验证点覆盖模型判定的边界，能把外推风险暴露出来。
+
+## 实例：RX CMOS 1:4（2026-11-02）
+
+结构层面的一次完整流程：单元卡决定拓扑，时序模型在仿真前发现结构错误。
+
+| 步骤 | 内容 |
+|---|---|
+| 指标 | 32 位逐位正确；位映射在 45 条件相同且是一个连续 16 UI 窗口；每条路径建立/保持余量为正（按该条件的 tcq / tsu / th） |
+| 单元卡 | [cmos_dff_card](../../analog/common/devices/tb/cmos_dff_card/card.py)：原复位 DFF clk→q 171–635 ps，大于半个 1 GHz 周期 → 半周期路径在 SS 冷角不可行（结构判定，不是尺寸问题）。换拓扑：精简 TG 主从 DFF，clk→q 37–159 ps |
+| 粗模型 | [readout_deser_plan.py](../../analog/rx/sampler/theory/readout_deser_plan.py)：每类路径（同沿移位、计数器、选通重定时、装载、输出对 w）的余量公式，输入为卡片和 p2 实测时钟半周期 |
+| 结构检查 | 手推每个字寄存器装载的位：原选通方案 16 位不连续（ckqb 路少移一拍）→ 改用 J1 选通。仿真前发现 |
+| 验证 | TT 映射与预测逐位一致；输出对 w 预测 1577 / 1578 ps，实测（扣孔径）1580 / 1619 ps；45 条件 4960 个数据位与 2466 个确定边沿全部正确，映射处处相同，输出对 w ≥ 1518 / 1565 ps（模型最差 1447 / 1521，偏保守） |
+| 剩余风险 | 同沿移位寄存器保持余量 42 ps（FF 冷），版图时钟偏斜预算 |
+
+教训：单元卡里的时间参数（clk→q 的 PVT 跨度、孔径位置）决定哪些路径类型可用，应先于电路确定；多相位、多选通的结构要先在纸面上推一遍位映射。
 
 ## 缺口
 

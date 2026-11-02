@@ -2,6 +2,14 @@
 
 按日期倒序。细节见 [history](../history/index.md)。
 
+## 2026-11-02
+
+- RX 采样器候选 ac（低过驱尾管 + 隔直时钟）与时钟 buffer c2（尺寸设计第二轮）：45 条件采样窗口 ≥ 0.5 UI，栅极时钟 325–866 mVpp。
+- RX 读出 demux2：2 GHz 直转 CMOS 是结构性失败；改为 PI 时钟 ÷2 的 CML 1:2 分路 + 匹配转换，45 条件逐位正确；p2 恒定 τ 半尺寸，读出约 18 → 10 mA。静态负载检查 `serdes_flow.loading`。
+- RX 读出 deser16（I-15 读出部分）：CMOS DFF 单元卡（`devices/tb/cmos_dff_card`）显示原复位 DFF clk→q 171–635 ps 超过半个 1 GHz 周期，新增精简 TG 主从 DFF `serdes_cmos_dff`（37–159 ps）；时序规划 `theory/readout_deser_plan.py` 在仿真前发现选通方案的位映射不连续（ckqb 路改用 J1）；45 条件 4960 数据位、2466 确定边沿全部正确，映射处处相同，字时钟窗口 ≥ 1.5 ns，功耗与 demux2 持平。demux2 拆为 `serdes_rx_readout_front` + 捕获 DFF（展平逐器件相同）。
+- RX 数字：`rx_word_map`（物理 32 位 → 时间顺序 16 数据 + 16 边沿）、`rx_word_align16`（训练字找字边界）；`tb_rx_word_path` 16 种窗口起点、928 次投票、767 个字全部正确。
+- 工具：`serdes_flow.vcd`（raw → VCD，GTKWave 分组脚本）；`--analyse-only` 不再改写 campaign 的 plan.json（部分重分析曾让健康探针总数变小）。
+
 ## 2026-11-01
 
 - 虚拟机三次卡死的原因：ngspice 默认按核数开 OpenMP 线程，RX 等模板没有限制，4 个并发任务把 8 个 vCPU 超额占满（CTLE DC 扫描 > 10 min，单线程 13.6 s）。`spice.run` 现在对所有任务设单线程。

@@ -60,16 +60,16 @@ def case_name(c, code):
 
 def deck(c, code, params, demux):
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in sp.pi.bits(code, c.supply).items())
-    cml = ["d0p", "d0n", "d1p", "d1n", "e0p", "e0n", "e1p", "e1n", "xro.qp", "xro.qn", "xro.mp", "xro.mn"]
+    cml = ["d0p", "d0n", "d1p", "d1n", "e0p", "e0n", "e1p", "e1n", "xro.xf.qp", "xro.xf.qn", "xro.xf.mp", "xro.xf.mn"]
     for s in SUB:
-        cml += [f"xro.{s}p", f"xro.{s}n"]
+        cml += [f"xro.xf.{s}p", f"xro.xf.{s}n"]
     cmos = [f"xro.r{s}" for s in SUB] + [f"q{s}" for s in SUB] + ["ckq", "xro.ckqb", "ckm", "xro.ckmb", "vdd"]
     saves = ".save " + " ".join(f"v({n})" for n in cml + cmos) + " i(Vdd)"
     text = spice.render(TEMPLATE, **spice.corner_values(c), EQ0_V=c.supply, EQ1_V=c.supply, CONTROL_SOURCES=ctl,
                         DUT=dut_text(params), DEMUX=demux, SAVES=saves, CASES="@CASES@")
     lets = [f"let {l}=v({l}p)-v({l}n)" for l in ("d0", "d1", "e0", "e1")]
-    lets += ["let ckq_cml=v(xro.qp)-v(xro.qn)", "let ckm_cml=v(xro.mp)-v(xro.mn)"]
-    lets += [f"let s_{s}=v(xro.{s}p)-v(xro.{s}n)" for s in SUB]
+    lets += ["let ckq_cml=v(xro.xf.qp)-v(xro.xf.qn)", "let ckm_cml=v(xro.xf.mp)-v(xro.xf.mn)"]
+    lets += [f"let s_{s}=v(xro.xf.{s}p)-v(xro.xf.{s}n)" for s in SUB]
     vecs = ["d0", "d1", "e0", "e1", "ckq_cml", "ckm_cml"] + [f"s_{s}" for s in SUB] + [f"v(xro.r{s})" for s in SUB] \
         + [f"v(q{s})" for s in SUB] + ["v(ckq)", "v(xro.ckqb)", "v(ckm)", "v(xro.ckmb)", "v(vdd)", "power"]
     n = case_name(c, code)
@@ -184,7 +184,8 @@ def main():
     stim, _ = sp.replay.stimuli(a.bc)
     (camp / "stimuli.inc").write_text(stim)
     order = boundary_first(conds)
-    (camp / "plan.json").write_text(json.dumps(dict(decks={c.tag: 1 for c in order}), indent=1))
+    if not a.analyse_only:                     # a partial re-analysis must not shrink the campaign plan
+        (camp / "plan.json").write_text(json.dumps(dict(decks={c.tag: 1 for c in order}), indent=1))
     todo = []
     for c in order:
         if spice.case_output(camp, c.tag, f"{case_name(c, a.code)}.raw") is None and not a.analyse_only:

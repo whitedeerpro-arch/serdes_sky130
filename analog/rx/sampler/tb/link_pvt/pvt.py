@@ -176,7 +176,8 @@ def main():
     by_deck = {}
     for k in keys:
         by_deck.setdefault(k[0].tag, []).append(k)
-    (camp / "plan.json").write_text(json.dumps(dict(decks={d: len(v) for d, v in by_deck.items()}), indent=1))
+    if not a.analyse_only:                     # a partial re-analysis must not shrink the campaign plan
+        (camp / "plan.json").write_text(json.dumps(dict(decks={d: len(v) for d, v in by_deck.items()}), indent=1))
     # case-level resume: only cases without a readable waveform are (re)run, in <deck> or <deck>.rN
     out = lambda c, code: case_path(camp, c, code)
     todo = []

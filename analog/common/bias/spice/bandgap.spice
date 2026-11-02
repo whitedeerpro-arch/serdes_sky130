@@ -44,7 +44,7 @@ Xlb out da vdd vdd serdes_pfet_lvt w={wl} l={ll}
 .ends serdes_bg_ota
 
 .subckt serdes_bandgap vbg iout0 iout1 iout2 iout3 vg vgi vdd vss
-+ params: r1=11k r2=106.5k rs=50k r_ref=124.5k n=8 wp=24 lp=8 wv=24 lv=4 wo=24 lo=4 cvgi=10p
++ params: r1=11k r2=106.5k rs=50k n=8 wp=24 lp=8 wv=24 lv=4 wo=24 lo=4 cvgi=10p trim=15 lsb=780
 * core PMOS sources: A, B, vbg branch, amplifier biases
 Xm1 ta vg vdd vdd serdes_pfet_lvt w={wp} l={lp}
 Xm2 tb vg vdd vdd serdes_pfet_lvt w={wp} l={lp}
@@ -77,7 +77,28 @@ Cvgi vgi vdd {cvgi}
 * in regulation.
 Xk vgi vbg s vss serdes_nfet w=1 l=4
 Xmv s vgi vdd vdd serdes_pfet_lvt w={wv} l={lv}
-Xrref s vss vss sky130_fd_pr__res_high_po w=1 l={r_ref/317}
+* r_ref with a 5-bit trim at its grounded end: 112 k fixed + binary segments lsb * 2^k, each shorted
+* by an NMOS switch when its bit is 1 (gate at vdd; the segments sit below ~0.3 V, so Vgs is large).
+* r_ref = 112k + sum (1 - b_k) lsb 2^k: code 31 -> 112 k (-10 %), code 0 -> 136.2 k (+9.4 %),
+* code 15 -> 124.5 k (nominal).  (Bit gates: plain parentheses; braces inside a B-source expression
+* lose their grouping once the parameter is substituted.)  Trimming r_ref sets the reference current and vcm (= vbg r_vcm / r_ref)
+* without touching the vbg temperature coefficient (a PTAT-gain trim on R2 would).
+Xrref s rt5 vss sky130_fd_pr__res_high_po w=1 l={(112k-378)/317}
+Xrt4 rt5 rt4 vss sky130_fd_pr__res_high_po w=1 l={(16*lsb-378)/317}
+Xrt3 rt4 rt3 vss sky130_fd_pr__res_high_po w=1 l={(8*lsb-378)/317}
+Xrt2 rt3 rt2 vss sky130_fd_pr__res_high_po w=1 l={(4*lsb-378)/317}
+Xrt1 rt2 rt1 vss sky130_fd_pr__res_high_po w=1 l={(2*lsb-378)/317}
+Xrt0 rt1 vss vss sky130_fd_pr__res_high_po w=1 l={(lsb-378)/317}
+Bg4 g4 vss V=(floor(trim/16)-2*floor(trim/32))*v(vdd)
+Bg3 g3 vss V=(floor(trim/8)-2*floor(trim/16))*v(vdd)
+Bg2 g2 vss V=(floor(trim/4)-2*floor(trim/8))*v(vdd)
+Bg1 g1 vss V=(floor(trim/2)-2*floor(trim/4))*v(vdd)
+Bg0 g0 vss V=(trim-2*floor(trim/2))*v(vdd)
+Xs4 rt5 g4 rt4 vss serdes_nfet w=20 l=0.15
+Xs3 rt4 g3 rt3 vss serdes_nfet w=20 l=0.15
+Xs2 rt3 g2 rt2 vss serdes_nfet w=20 l=0.15
+Xs1 rt2 g1 rt1 vss serdes_nfet w=20 l=0.15
+Xs0 rt1 g0 vss vss serdes_nfet w=20 l=0.15
 Xo0 iout0 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}
 Xo1 iout1 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}
 Xo2 iout2 vgi vdd vdd serdes_pfet_lvt w={wo} l={lo}

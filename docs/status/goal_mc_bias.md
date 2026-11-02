@@ -19,7 +19,6 @@
 
 ## 剩余
 
-- 带隙修调实现（R2 分段开关，5 bit）与修调后的 PVT / MC 复核；vcm 随之进入 ±50 mV。
 - 采样器失调校准（结构 + 范围）；与 CTLE 失调一起回到裕量预算。
 - 电阻角：用真实偏置 + `rcorner.to_pdk` 重验 CML 关键路径（含 SS 85 °C 栅极时钟 280 mVpp 的处理）。
 - PSRR 改进；LF 预充缓冲 B2；偏置分配与去耦。
@@ -31,4 +30,5 @@
 | 11-03 | 卡片：passive_card、mismatch_card；`serdes_flow.mc` / `stats`；架构草案写入 [偏置](../design/bias.md) |
 | 11-03 | 阶段 1 完成：[统计与蒙特卡洛](../verification/statistics.md)，`mc` 分块（ngspice 内存泄漏）、`rcorner.to_pdk`（单元电阻换 high_po）/ `emulate` |
 | 11-03 | 阶段 2：采样器失调 σ 约 6–7 mV（四路最大 99.7 分位约 19–21 mV）、CTLE 6.1 mV → 每路合计 3σ 约 27–30 mV，建议采样器失调校准；时钟、PI 失配可忽略（[RX 采样器](../design/rx_pi_sampler.md#失配2026-11-03)）。电阻 hh 角（模拟）：采样窗口仍过，但 SS 85 °C 栅极时钟 280 mVpp < 300 |
+| 11-03 | 修调：r_ref 5 bit（−8.5…+11 %），修调后 vcm 约 ±26 mV |
 | 11-03 | 阶段 3：带隙 + 恒摆幅参考 + vcm 缓冲；135 条件 I·R ±0.7 %、vcm 1.044–1.068 V；上电 135/135；MC vbg σ 2.2 % → 需修调（约 ±10 %，5 bit）；PSRR 约 −27 dB（已知局限） |

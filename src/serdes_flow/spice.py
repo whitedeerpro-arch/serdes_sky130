@@ -236,19 +236,24 @@ def _rerun_index(d: Path, deck: str) -> int:
     return 1 if d.name == deck else int(d.name.rsplit(".r", 1)[1])
 
 
-def case_output(campaign: Path, deck: str, name: str) -> Path | None:
+def case_output(campaign: Path, deck: str, name: str, t_end: float | None = None) -> Path | None:
     """A readable waveform `name` of a case in campaign/<deck> or a rerun campaign/<deck>.rN (newest first).
 
     Case-level resume: a deck that timed out or was killed keeps its finished cases; a truncated
-    file (killed while writing) fails to load and counts as missing.
+    file (killed while writing) fails to load and counts as missing.  t_end: the case's tran stop
+    time; a waveform that ends earlier counts as missing too (a transient aborted by "timestep too
+    small" still lets the control block `write` the partial vectors; seen 2026-11-03).
     """
     campaign = Path(campaign)
     dirs = [d for d in campaign.glob(f"{deck}.r*") if d.name.rsplit(".r", 1)[1].isdigit()] + [campaign / deck]
     for d in sorted(dirs, key=lambda d: _rerun_index(d, deck), reverse=True):
         try:
-            return Waves(d / name).path
+            w = Waves(d / name)
         except (FileNotFoundError, ValueError):
             continue
+        if t_end is not None and (len(w.t) == 0 or w.t[-1] < t_end * (1 - 1e-6)):
+            continue
+        return w.path
     return None
 
 

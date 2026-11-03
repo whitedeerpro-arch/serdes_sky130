@@ -89,7 +89,7 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 | 失配卡与 MC | [mismatch_card/card.py](../../analog/common/devices/tb/mismatch_card/card.py)（`<corner>_mm`，200 样本约 30 s）：MOS 对的 A_VT、电阻对 σ(ΔR/R)、PNP（模型无失配）；运行器 [`serdes_flow.mc`](../../src/serdes_flow/mc.py)（`mc_source` 每样本约 0.2 s，可复现种子）；统计 [`serdes_flow.stats`](../../src/serdes_flow/stats.py)（容差区间 k 系数、Clopper–Pearson 良率区间、Pelgrom 拟合、平方和预算） |
 | 器件卡 | [gmid/card.py](../../analog/common/devices/tb/gmid/card.py)：nfet / nfet_lvt / pfet（L 0.15–2 µm）、pfet_lvt（L 0.35–4 µm，模型最小 0.35 µm），\|Vgs\| × \|Vds\| × \|Vsb\| 0/0.3/0.6 V × 温度，BSIM4 工作点值（gm、gds 不是差分）；一个工艺角约 25 s。`DeviceCard.at_gmid(dev, L, gmid, vds)` 给 Id/W、gm/gds、ft、Cgg/W、Vgs、Vdsat |
 | 负载 / 扇出检查 | [`serdes_flow.loading`](../../src/serdes_flow/loading.py)（读网表 [`serdes_flow.netlist`](../../src/serdes_flow/netlist.py)，不仿真）：展开子电路，按器件卡的单位宽度栅电容和显式电容汇总每个节点的负载，带电阻负载的 CML 节点给出 R·C 极点，并列出最大的几个负载来自哪个实例。经验规则：时钟节点极点 ≥ 2 倍时钟频率；环路内部节点（分频器主从、锁存器）不直接带外部负载。`uv run python -m serdes_flow.loading <subckt>` |
-| 运行设施 | `spice.run_many`；`spice.case_output` / `next_run_dir`（按工况续跑：超时或被杀的仿真只补缺的工况）；[`serdes_flow.watch`](../../src/serdes_flow/watch.py)（健康探针：正常 / 停滞 / 报错 / 进程消失 / 失败）；`serdes_flow.boundary` |
+| 运行设施 | `spice.run_many`；`spice.case_output` / `next_run_dir`（按工况续跑：超时或被杀的仿真只补缺的工况；`t_end` 把提前中止写出的截断波形算作缺失）；[`serdes_flow.watch`](../../src/serdes_flow/watch.py)（健康探针：正常 / 停滞 / 报错 / 进程消失 / 失败）；`serdes_flow.boundary` |
 
 ## 实例：RX 采样器时钟接口（2026-11-01）
 

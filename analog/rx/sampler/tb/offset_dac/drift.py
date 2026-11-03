@@ -34,6 +34,8 @@ def offsets(camp):
     legacy chunks are NaN."""
     camp = ROOT / camp
     s = json.loads((camp / "summary.json").read_text())
+    if "offsets_mv" in s:          # padded per sample index (offset_mc after 2026-11-03)
+        return s["condition"], np.array([[np.nan if x is None else x for x in s["offsets_mv"][l]] for l in LANES])
     n0 = s["nominal"]
     off = []
     for ch in sorted((camp / "mc").glob("chunk*")):

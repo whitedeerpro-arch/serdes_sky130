@@ -35,13 +35,17 @@ def main():
         curve = np.interp(allc, [k for k, _ in meas], [v for _, v in meas])
         shift = curve - curve[32]
         off = np.array([np.nan if x is None else x for x in s["offsets_mv"][l]])
+        if l in s.get("hold", []):
+            codes[l] = [63] * len(off)
+            continue
         c = np.array([32 if not np.isfinite(o) else int(np.argmin(np.abs(o + shift))) for o in off])
         codes[l] = c.tolist()
         resid.append(off + shift[c])
     r = np.concatenate(resid)
-    sat = sum(int(np.sum((np.array(codes[l]) == 0) | (np.array(codes[l]) == 63))) for l in LANES)
-    print(f"{cond}: predicted residual |max| {np.nanmax(np.abs(r)):.2f} mV, sigma {np.nanstd(r):.2f} mV; "
-          f"codes {min(min(v) for v in codes.values())}..{max(max(v) for v in codes.values())}, saturated lanes {sat}")
+    act = [l for l in LANES if l not in s.get("hold", [])]
+    sat = sum(int(np.sum((np.array(codes[l]) == 0) | (np.array(codes[l]) == 63))) for l in act)
+    print(f"{cond}: predicted residual |max| {np.nanmax(np.abs(r)):.2f} mV, sigma {np.nanstd(r):.2f} mV; lanes {','.join(act)} "
+          f"codes {min(min(codes[l]) for l in act)}..{max(max(codes[l]) for l in act)}, saturated {sat}")
     Path(out).write_text(json.dumps(codes))
     print(out)
 

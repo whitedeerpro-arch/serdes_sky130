@@ -4,6 +4,10 @@
 
 ## 2026-11-03
 
+- RX 采样器失调修调（`ac_trim`，[rx_offset_trim.spice](../../analog/rx/sampler/spice/rx_offset_trim.spice) + [rx_offset_cal.sv](../../digital/rx/rtl/rx_offset_cal.sv)）：主锁存器辅助对（共用尾管，2/4 指）+ 6 bit DAC 推电阻 T 网络 + 四路同时 SAR 前台校准；主尾管 +8 指。45 条件窗口与 ac 相同（压力角 0.875–1.0 UI、门槛 39/39、栅极时钟 ≥ 328 mVpp），测试台 +1.3–2 mW。校准后 MC：每路（采样器 + CTLE）3σ 2.2 / 3.4 / 4.4 mV（27 °C 校准，27 / 85 / −40 °C 工作），不修调约 27–30 mV。先做的电流型 DAC（`ac_cal`）步长随温度变 1.8 倍，放弃。
+- MC 方法与工具（[统计与蒙特卡洛](../verification/statistics.md)）：`serdes_flow.mc` / `stats` / `rcorner`；配对 MC（同一种子换条件）——修复 `mc`：读网表时抽的第一个样本不受种子控制，现在丢弃；失配与工艺角的组合方法。失配分析：采样器 σ 6–7 mV、CTLE 6.1 mV，时钟、PI 可忽略。
+- 偏置：带隙 + 恒摆幅参考 + vcm 缓冲，5 bit 修调；135 条件（MOS × 电阻角）I·R ±0.7 %、修调后 vcm 约 ±26 mV，上电 135/135（[偏置](../design/bias.md)）。
+- 工具：`spice.case_output(t_end=…)` 把"timestep too small"中止后写出的截断波形算作缺失（此前 `link_pvt` 会把它当成完整结果；扫描 1324 个已有波形，只有当天 4 个 ac_trim 工况受影响，已重跑）；`link_pvt --dut ac_trim --cal-code --reltol`。
 - 实时联调接物理读出（`cosim_words.cpp`、`receiver_words.cir.in`、`mixed_cdr_words_top.sv`，`make build-words`）：w 上升沿后读 deser16 的 32 位，全部 RTL 在 w 上运行，去掉行为打包。TT 下 PI 0→14 码（跨扇区 7→8）与 0→63 回卷都在训练释放后发生，payload 22 / 17 字全部正确，无重新对齐；原 pair 版保留。
 - 背靠背字流（`analog/rx/top/tb/b2b_stream`）：真实 TX r2 → C2 → RX 端接 + CTLE 连续 29 个字，远端登记为边界条件后回放进 deser16，实际 RTL 解出 16/16 个 payload 字按序正确，TX→RX 16.9 ns（TT，开环码 22）。`view.sh` 一条命令打开 GTKWave（TX 字、线、远端、CTLE、采样、w、RTL 字与期望）。RTL 测试台复位改为显式复位沿（时刻 0 竞争）。
 

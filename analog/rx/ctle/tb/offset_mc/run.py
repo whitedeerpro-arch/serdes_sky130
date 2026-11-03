@@ -55,7 +55,7 @@ def main():
     s = stats.summary(vin)
     lo, hi = stats.tolerance(vin)
     out = dict(condition=c.tag, eq=a.eq, pdk_resistors=not a.ideal_r, dc_gain=gain, samples=len(rows),
-               input_offset_mv=s, tol3_mv=[lo, hi])
+               input_offset_mv=s, tol3_mv=[lo, hi], offsets_mv=[float(x) for x in vin])   # per sample (paired runs: same seed)
     print(f"{c.tag} EQ{a.eq} {'ideal R' if a.ideal_r else 'PDK R'}: DC gain {gain:.3f}; input offset sigma {s['std']:.2f} mV "
           f"(mean {s['mean']:+.2f}, 3-sigma tolerance {lo:+.1f}..{hi:+.1f} mV, n {len(rows)})")
     (camp / "summary.json").write_text(json.dumps(out, indent=1))

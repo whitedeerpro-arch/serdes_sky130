@@ -125,7 +125,7 @@ def errors(dec, bits):
 
 def case_path(camp, c, code):
     name = f"{case_name(c, code)}.raw"
-    return spice.case_output(camp, c.tag, name) or spice.case_output(camp, c.process, name)
+    return spice.case_output(camp, c.tag, name, link.STOP) or spice.case_output(camp, c.process, name, link.STOP)
 
 
 def analyse_case(path, c, code, bits):

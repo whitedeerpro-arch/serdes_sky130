@@ -59,7 +59,9 @@ Cvbd vbd vss 0.2p
 .ends serdes_rx_offset_trim_bias
 
 * Sample DFF with the trimmed master latch.  dtail: extra master tail fingers (same finger width) to
-* give the input pair back the current the auxiliary pair takes in the track phase.
+* give the input pair back the current the auxiliary pair takes in the track phase.  In the sampler
+* block (24 tail fingers) dtail 8 is the default: the C2 window edge at TT / FS 1.65 V 85 / -40 C is
+* then as for the untrimmed block (1/16 UI edge sweep; dtail 0 loses ~1/16 UI at FS 85 C), +0.9 mW.
 .subckt serdes_rx_sample_dff_trim dp dn cp cn qp qn b0 b1 b2 b3 b4 b5 vbd vbias vdd vss
 + params: wdata=16 waux=8 nfaux=2 whold=48 wclock=32 wtail=12 nftail=4 rload=600 rt=2.45k rc=1.21k dtail=0
 Xm dp dn tp tn mp mn cn cp vbias vdd vss serdes_rx_cml_latch_trim

@@ -4,6 +4,7 @@
 
 ## 2026-11-04
 
+- 偏置分配（[bias_dist.spice](../../analog/common/bias/spice/bias_dist.spice)）：各模块从带隙 V→I 器件取 PMOS 电流拷贝（每指 W 6 / L 4），CML 一路 212.5 µA 进 nfet 5/0.5（原理想 0.85 mA 进 20/0.5，功耗 1/4），CTLE、CP 各 50 µA。135 条件摆幅代理 407–426 mV（三个电阻角相同），拷贝余量 ≥ 214 mV；上电 135/135（7–15 µs）；修调后摆幅失配 σ 1.6–1.9 %。[`serdes_flow.bias`](../../src/serdes_flow/bias.py)：把测试台的理想参考换成真实参考，并选 MOS × 电阻库段；RX link_pvt 加 `--bias real --rpdk`，TT 冒烟与理想源一致（vbias 纹波 0.32 mV）。
 - RX 失调校准：空闲输入下采样器有迟滞，判决依赖本路上一次判决（[idle_sweep.py](../../analog/rx/sampler/tb/offset_dac/idle_sweep.py)：TT ±2.4–3 mV、SS 1.65 V 85 °C ±4 mV）。单次 SAR 落在迟滞带内的任意位置；第一版联调（TT，四路同时 / 顺序）残差达 2–3 mV，单路斜坡与原位（CTLE + PI，PI 码 0/4/8，相差 ≤ 0.5 mV）两种核对一致，排除了环境差异。[rx_offset_cal.sv](../../digital/rx/rtl/rx_offset_cal.sv) 改为两边沿 SAR：每次试探前分别以码 0 / 63 预置，找上下沿后取中点。行为模型加迟滞后，残差 2.08 → 0.92 LSB（无噪声）、1.53 → 1.19 LSB（0.5 mV 噪声）。顺序校准约 1.34 µs。两边沿版联调（顺序）：TT 码 21/38/27/49，数据模式残差 ≤ 1.22 mV，12 个 payload 字 0 错；SS 1.65 V 85 °C 码 20/39/28/49，残差 ≤ 0.33 mV（160 UI 训练内 CDR 未对齐，加长训练复跑中）。
 - 斜坡核对加下降斜坡（`offset_mc` `falling`，`cal_check.py --falling`）：两向阈值差（迟滞）零修调 TT 9.3–9.5 mV、SS 10.0–10.5 mV，注入下窄 0.3–1.5 mV；只用上升斜坡的残差偏 (h_ref − h)/2，数据模式残差改取两向平均。第一版算法按此重算为 1.9–2.4 mV。`cal_check.py` 改为并行、每次新目录、`--reuse` 可给多个旧目录。
 - 联调码判据：`--cal-expect`（斜坡台平衡码）+ `--cal-tol`，否则只查未饱和；`estimate`（31.5 ∓ k/2）只作参考。

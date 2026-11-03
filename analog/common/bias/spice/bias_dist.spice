@@ -1,0 +1,39 @@
+* Bias distribution from the constant-swing reference (bandgap.spice), 2026-11-04.
+* The modules get currents, not gate voltages: PMOS copies of the V->I device Mv (gate vgi; pfet_lvt
+* fingers of W 6 / L 4, Mv = 4 fingers, I_unit = vbg / r_ref / 4 = 2.5 uA) drive each module's own
+* diode.  Nominal (r_ref code 15, 10 uA):
+*   ocml  85 fingers  212.5 uA -> CML diode nfet 5 / 0.5 (one finger of the former 20 / 0.5 nf 4 diode
+*                                at 0.85 mA: same current density, same vbias, 1/4 of the power)
+*   octle 20 fingers   50 uA   -> CTLE diode nfet_lvt 8 / 0.5 nf 4 (unchanged)
+*   ocp   20 fingers   50 uA   -> CP vbn diode nfet 5 / 1; serdes_bias_cp mirrors it to sink 50 uA from
+*                                the vbp diode (pfet 20 / 1 nf 4)
+* serdes_bias_ref is the bandgap with its V->I gate line vgi exported; every module copy is a
+* serdes_bias_pcopy on vgi.  The copies' gate capacitance adds to cvgi, the dominant pole of the V->I
+* loop: with the CML + CTLE + CP copies (~24 pF) cvgi is 2 pF instead of 10 pF; more copies only lower
+* the crossing further (power-up: bandgap_startup --dist, 7-15 us over 135 conditions).
+.subckt serdes_bias_ref vbg i0 i1 i2 i3 vgi vdd vss params: trim=15 cvgi=2p
+Xbg vbg i0 i1 i2 i3 vg vgi vdd vss serdes_bandgap trim={trim} cvgi={cvgi}
+.ends serdes_bias_ref
+
+* One module copy: n fingers of the unit (W 6 / L 4), I = n * vbg / r_ref / 4.
+.subckt serdes_bias_pcopy out vgi vdd params: n=4
+Xp out vgi vdd vdd serdes_pfet_lvt w={6*n} l=4 nf={n}
+.ends serdes_bias_pcopy
+
+* Module-side diodes.  CML: the global tail-bias line (vbias) of a module.
+.subckt serdes_bias_cml iin vss
+Xd iin iin vss vss serdes_nfet w=5 l=0.5
+.ends serdes_bias_cml
+
+* CTLE LVT branch bias.
+.subckt serdes_bias_ctle iin vss
+Xd iin iin vss vss serdes_nfet_lvt w=8 l=0.5 nf=4
+.ends serdes_bias_ctle
+
+* Charge pump: the current into vbn sets the pull-down bias (diode); a copy of it sinks the same
+* current from the vbp PMOS diode (pull-up bias, on the CP supply vcp).
+.subckt serdes_bias_cp vbn vbp vcp vss
+Xdn vbn vbn vss vss serdes_nfet w=5 l=1
+Xmn vbp vbn vss vss serdes_nfet w=5 l=1
+Xdp vbp vbp vcp vcp serdes_pfet w=20 l=1 nf=4
+.ends serdes_bias_cp

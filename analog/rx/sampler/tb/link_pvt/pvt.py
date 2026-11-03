@@ -24,6 +24,10 @@ given codes, chosen to span the 0.5 UI window gate around the eye centre (codes 
 centre 20 +- 0.25 UI for the C2 replay: every full sweep so far had its errors at codes 0-6 only).
 PASS = no error at any gate code, i.e. an error-free window >= the span, assuming the error-free
 codes are contiguous (true in every full sweep).  Full-sweep conditions report the window width.
+
+Real bias (--bias real): the ideal 0.85 mA / 50 uA references become the bandgap reference and its
+module copies on vdd (serdes_flow.bias); the bias line v(vbias) is saved.  --rpdk tt|ll|hh: project
+resistors as PDK high_po (rcorner.to_pdk) and the library section MOS corner x resistor corner.
 """
 import argparse
 import importlib.util
@@ -33,7 +37,7 @@ from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import boundary, eye, rcorner, spice
+from serdes_flow import bias, boundary, eye, rcorner, spice
 from serdes_flow.corners import STRESS, Condition, boundary_first, grid45
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -79,7 +83,7 @@ def case_name(c, code):
     return f"{c.tag}_c{code:02d}"
 
 
-def deck(cases, dut_text=DUTS["stock"], extra_sources=""):
+def deck(cases, dut_text=DUTS["stock"], extra_sources="", save_bias=False):
     c0, code0 = cases[0]
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in pi.bits(code0, c0.supply).items())
     if extra_sources:
@@ -94,8 +98,13 @@ def deck(cases, dut_text=DUTS["stock"], extra_sources=""):
                                 + [f"alter {k} dc={v}" for k, v in pi.bits(code, c.supply).items()]
                                 + [f"tran 2p {link.STOP:.4e} {link.SAVE_FROM:.4e} 4p",
                                    "let ctle=v(op)-v(on)", "let ck=v(xdut.cdp)-v(xdut.cdn)", "let d0=v(d0p)-v(d0n)",
-                                   "let d1=v(d1p)-v(d1n)", "let inbuf=v(xdut.bp)-v(xdut.bn)", "let power=-v(vdd)*i(Vdd)",
-                                   f"write {n}.raw ctle ck d0 d1 inbuf power", "destroy all"]))
+                                   "let d1=v(d1p)-v(d1n)", "let inbuf=v(xdut.bp)-v(xdut.bn)", "let power=-v(vdd)*i(Vdd)"]
+                                + (["let vb=v(vbias)"] if save_bias else [])
+                                + [f"write {n}.raw ctle ck d0 d1 inbuf power" + (" vb" if save_bias else ""), "destroy all"]))
+    if save_bias:
+        sv = ".save v(op) v(on)"
+        assert text.count(sv) == 1
+        text = text.replace(sv, sv + " v(vbias)")
     return text.replace("@CASES@", "\n".join(blocks))
 
 
@@ -167,11 +176,15 @@ def main():
     ap.add_argument("--full", default="stress", help="conditions with the full code sweep: stress | all | tags")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--rcorner", help="emulate a resistor corner (hh | ll | scale) with constant-swing reference currents (serdes_flow.rcorner)")
+    ap.add_argument("--bias", choices=("ideal", "real"), default="ideal", help="real: bandgap reference and module copies (serdes_flow.bias)")
+    ap.add_argument("--rpdk", choices=("tt", "ll", "hh"), help="project resistors as PDK high_po, library section MOS x this resistor corner")
     ap.add_argument("--resume")
     ap.add_argument("--reltol", type=float, help="numerics for a resume of failed cases: option reltol=X itl4=200 before each tran "
                     "(bench default 1e-4; ac_trim at FS 1.65 V -40 C: timestep collapses at the master hold node)")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
+    if a.rpdk and a.rcorner:
+        ap.error("--rpdk and --rcorner (emulation) exclude each other")
     lo, hi, st = (int(x) for x in a.codes.split(":"))
     codes = list(range(lo, hi, st))
     conds = grid45() if a.conds == ["all"] else STRESS if a.conds == ["stress"] else [Condition.parse(x) for x in a.conds]
@@ -179,6 +192,7 @@ def main():
     params = dict(p.split("=", 1) for p in a.param)
     dut_text = dut(a.dut, params)
     tag = a.bc.split('@')[0] + ("" if a.dut == "stock" else f"_{a.dut}") + (f"{a.cal_code}" if a.dut in ("ac_cal", "ac_trim") else "")
+    tag += ("_realbias" if a.bias == "real" else "") + (f"_r{a.rpdk}" if a.rpdk else "")
     extra = cal_sources(a.cal_code) if a.dut in ("ac_cal", "ac_trim") else ""
     camp = (ROOT / a.resume) if a.resume else RESULTS / f"{tag}_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
     camp.mkdir(parents=True, exist_ok=True)
@@ -204,12 +218,16 @@ def main():
     for deck_name, cases in sorted(by_deck.items(), key=lambda kv: order.index(kv[0])):
         missing = [k for k in cases if out(*k) is None]
         if missing and not a.analyse_only:
-            dk = deck(missing, dut_text, extra)
+            dk = deck(missing, dut_text, extra, save_bias=a.bias == "real")
             if a.reltol:
                 dk = dk.replace("\ntran ", f"\noption reltol={a.reltol} itl4=200\ntran ")
+            if a.bias == "real":
+                dk = bias.real(dk)
+            if a.rpdk:
+                dk = bias.section(rcorner.to_pdk(dk, camp), missing[0][0].process, a.rpdk)
             todo.append(((rcorner.emulate(dk, camp, a.rcorner) if a.rcorner else dk), spice.next_run_dir(camp, deck_name),
                          dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=CASE_TIMEOUT_S * len(missing),
-                              meta=dict(process=missing[0][0].process, bc=a.bc, eq=EQ, codes=codes, dut=dut_text, reltol=a.reltol, cal_code=(a.cal_code if a.dut in ("ac_cal", "ac_trim") else None),
+                              meta=dict(process=missing[0][0].process, bias=a.bias, rpdk=a.rpdk, bc=a.bc, eq=EQ, codes=codes, dut=dut_text, reltol=a.reltol, cal_code=(a.cal_code if a.dut in ("ac_cal", "ac_trim") else None),
                                         conditions=sorted({c.tag for c, _ in missing}),
                                         cases=[case_name(*k) for k in missing]))))
     print(f"{len(keys)} cases, {len(by_deck)} decks: {sum(len(j[2]['meta']['cases']) for j in todo)} cases to run "

@@ -34,10 +34,10 @@ flowchart LR
 | [TX 串化器](docs/design/tx_serializer.md) | TX r2 | 45/45 满足 75 mV / 0.15 UI（128 bit） | FS 热角 1024 bit 散布 0.115–0.147 UI |
 | [TX 输出级](docs/design/tx_output_driver.md) | TX r2 | 45 条件从禁用态启动正常 | 焊盘/ESD 代理；无 FFE |
 | [信道模型](docs/design/channel_model.md) | RLC16 + PCB 族 | C0–C5 构造与 TX 接入 | 链路级眼图门槛未定义 |
-| [RX 前端](docs/design/rx_frontend.md) | 首版 | TT 实际加载联调 | 无 PVT；共模参考 |
-| [RX PI 与采样](docs/design/rx_pi_sampler.md) | 首版 | TT 64 码 PI；真实采样/读出短窗 | 无 PVT；依赖全速 CMOS |
+| [RX 前端](docs/design/rx_frontend.md) | vcm 1.05 V | AC/DC 45 条件 × 4 档；C2 眼图 45 条件（默认 EQ3） | C3 未做；档位自适应；输入失调 σ 6.1 mV |
+| [RX PI 与采样](docs/design/rx_pi_sampler.md) | 采样 ac + 时钟 buffer c2；读出 deser16 | 45 条件窗口 ≥ 0.5 UI（压力角 0.88–1.00 UI）、栅极时钟 ≥ 300 mVpp；deser16 45/45 逐位正确；TT 背靠背 16/16 字 | 采样器失调 σ 6–7 mV（需校准）；电阻 hh 角 SS 85 °C 栅极时钟 280 mVpp |
 | [RX 数字](docs/design/rx_cdr_digital.md) | 首版 RTL | 10 组 100 µs 闭环零错字；实时数模联调 | 无综合/STA；物理 16 UI 降速 |
-| [偏置](docs/design/bias.md) | — | 镜像与本地偏置为真实 MOS | 上游参考理想，无基准 |
+| [偏置](docs/design/bias.md) | 带隙 + 恒摆幅参考 + vcm 缓冲（5 bit 修调） | 45 条件 × 3 电阻角：I·R ±0.7 %、修调后 vcm 约 ±26 mV；上电 135/135；MC | 未接入 CML 单元；PSRR 约 −27 dB；LF 预充缓冲 |
 
 全部问题、优先级和阶段见 [待解决问题](docs/status/open_issues.md)；版本线见 [版本与基线](docs/overview/revisions.md)。
 

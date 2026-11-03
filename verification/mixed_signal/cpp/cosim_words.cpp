@@ -10,8 +10,11 @@
 // counted word starts rx_offset_cal; its 24 code bits drive the trim code pins like the PI controls
 // (launch delay + slew); the CDR loop runs after cal_done; training starts at --cal-end-ns and
 // --release-ns counts from there.  --inject-ua sets the per-lane sink currents on the trim nodes
-// (a sink of k unit currents on tp acts like code + k/2, on tn like code - k/2), so the code the SAR
-// must reach is known: 31.5 -+ k/2 (+-1 accepted).  --corner/--supply/--temp select the condition.
+// (a sink of k unit currents on tp acts like code + k/2, on tn like code - k/2 to first order; the
+// injection compresses the step, so 31.5 -+ k/2 is reported as `estimate` only).  Pass criterion per
+// lane: |code - expected| <= --cal-tol (default 1) with --cal-expect d0=..,d1=..,e0=..,e1=.. (balance
+// codes measured on the ramp bench, analog/rx/sampler/tb/offset_dac/cal_check.py), otherwise the code
+// must not be saturated (1..62).  --corner/--supply/--temp select the condition.
 #ifdef COSIM_CAL
 #include "Vmixed_cdr_cal_top.h"
 using Top=Vmixed_cdr_cal_top;
@@ -68,6 +71,8 @@ struct Options {
     double supply=1.8,temp=27,cal_end=0,iu_ua=0.996;
     std::string corner="tt";
     std::map<std::string,double> inject_ua;   // d0p d0n d1p ... -> uA
+    std::map<std::string,double> cal_expect;  // d0 d1 e0 e1 -> balance code
+    double cal_tol=1.0;
 };
 struct Ramp {double start,end,from,to;};
 struct Pin {
@@ -294,9 +299,12 @@ struct Bridge {
          calj<<"  \"cal_start_s\": "<<cal_start_t<<",\n  \"cal_done_s\": "<<cal_done_t<<",\n  \"cal_end_s\": "<<o.cal_end<<",\n  \"cal_code_changes\": "<<cal_changes<<",\n  \"cal_lanes\": {";
          for(int l=0;l<4;++l){std::string lp=std::string(L[l])+"p",ln=std::string(L[l])+"n";
             double kp=(o.inject_ua.count(lp)?o.inject_ua.at(lp):0)/o.iu_ua,kn=(o.inject_ua.count(ln)?o.inject_ua.at(ln):0)/o.iu_ua;
-            double expected=31.5-kp/2+kn/2;unsigned code=(cc>>(6*l))&63u;bool ok=std::abs(double(code)-expected)<=1.0;cal_ok=cal_ok&&ok;
-            calj<<(l?", ":"")<<"\""<<L[l]<<"\": {\"code\": "<<code<<", \"expected\": "<<expected<<", \"ok\": "<<(ok?"true":"false")<<"}";}
-         calj<<"},\n  \"cal_passed\": "<<(cal_ok?"true":"false")<<",\n  \"corner\": \""<<o.corner<<"\",\n  \"supply_v\": "<<o.supply<<",\n  \"temp_c\": "<<o.temp<<",\n  \"iu_ua\": "<<o.iu_ua<<",\n";}
+            double estimate=31.5-kp/2+kn/2;unsigned code=(cc>>(6*l))&63u;bool has=o.cal_expect.count(L[l]);
+            bool ok=has?std::abs(double(code)-o.cal_expect.at(L[l]))<=o.cal_tol:(code>=1&&code<=62);cal_ok=cal_ok&&ok;
+            calj<<(l?", ":"")<<"\""<<L[l]<<"\": {\"code\": "<<code<<", \"estimate\": "<<estimate<<", \"expected\": ";
+            if(has)calj<<o.cal_expect.at(L[l]);else calj<<"null";
+            calj<<", \"ok\": "<<(ok?"true":"false")<<"}";}
+         calj<<"},\n  \"cal_passed\": "<<(cal_ok?"true":"false")<<",\n  \"corner\": \""<<o.corner<<"\",\n  \"supply_v\": "<<o.supply<<",\n  \"temp_c\": "<<o.temp<<",\n  \"iu_ua\": "<<o.iu_ua<<",\n  \"cal_tol\": "<<o.cal_tol<<",\n";}
         good=good&&cal_ok;
 #endif
         std::ostringstream codes;bool first=true;for(unsigned c:codes_seen){codes<<(first?"":",")<<c;first=false;}
@@ -332,6 +340,8 @@ int main(int argc,char** argv){
         else if(k=="--wall-s")o.wall=std::stod(val());else if(k=="--hold-controls")o.hold=true;
         else if(k=="--corner")o.corner=val();else if(k=="--supply")o.supply=std::stod(val());else if(k=="--temp")o.temp=std::stod(val());
         else if(k=="--cal-end-ns")o.cal_end=std::stod(val())*NS;else if(k=="--iu-ua")o.iu_ua=std::stod(val());
+        else if(k=="--cal-tol")o.cal_tol=std::stod(val());
+        else if(k=="--cal-expect"){std::istringstream in(val());std::string item;while(std::getline(in,item,',')){auto e=item.find('=');if(e==std::string::npos)throw std::runtime_error("--cal-expect lane=code,...");o.cal_expect[lower(item.substr(0,e))]=std::stod(item.substr(e+1));}}
         else if(k=="--inject-ua"){std::istringstream in(val());std::string item;while(std::getline(in,item,',')){auto e=item.find('=');if(e==std::string::npos)throw std::runtime_error("--inject-ua lane=uA,...");o.inject_ua[lower(item.substr(0,e))]=std::stod(item.substr(e+1));}}
         else throw std::runtime_error("unknown argument "+k);}
 #ifdef COSIM_CAL

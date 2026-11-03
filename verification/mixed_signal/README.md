@@ -24,8 +24,10 @@ results/verification/mixed_signal/build_words/Vmixed_cdr_words_top --root "$PWD"
 - `--inject-ua d0p=…,e1n=…` 在修调节点 t<p|n> 上加吸收电流，代替失配。
 - `--corner/--supply/--temp` 选择条件。
 - 输出 `cal.tsv`（码随时间变化）；summary 的 `cal_lanes` 列出各路最终码。
+- 码判据：`--cal-expect d0=…,d1=…,e0=…,e1=…`（斜坡台测的平衡码）配 `--cal-tol`（默认 1），要求 |码 − 平衡码| ≤ 容差；不给 `--cal-expect` 时只检查码没有饱和（1…62）。
+- `estimate`（31.5 ∓ k/2）按注入灵敏度估算，只作参考：注入会压缩步长。
 
-summary 里的 `expected`（31.5 ∓ k/2）按注入灵敏度估算，不准：注入会压缩步长。校准结果以 [cal_check.py](../../analog/rx/sampler/tb/offset_dac/cal_check.py) 或 [insitu.py](../../analog/rx/sampler/tb/offset_dac/insitu.py) 的核对为准。
+校准结果以 [cal_check.py](../../analog/rx/sampler/tb/offset_dac/cal_check.py) `--falling` 的 mV 残差为准（数据模式取两向斜坡平均）。
 
 ```bash
 make -C verification/mixed_signal build-cal            # CAL_NW=2 CAL_SETTLE=4
@@ -33,13 +35,17 @@ results/verification/mixed_signal/build_cal/Vmixed_cdr_cal_top --root "$PWD" --o
   --stop-ns 1500 --cal-end-ns 1400 --inject-ua d0p=19.92,d1n=13.944,e0p=5.976,e1n=29.88 --wall-s 20000
 ```
 
-结果和结论见 [RX 采样器 · 失调修调](../../docs/design/rx_pi_sampler.md#失调修调2026-11-03)。第一版算法（单次 SAR）：
-- 四路同时：173 ns 完成；
-- 顺序：677 ns 完成；
-- 两者之后 payload 都是 12 字 0 错；
-- 但采样器在空闲输入下有迟滞，残差达 2–3 mV，因此改成两边沿 SAR。
+结果和结论见 [RX 采样器 · 失调修调](../../docs/design/rx_pi_sampler.md#失调修调2026-11-03)。
 
-TT 下 820 ns 的运行约 1.8 h。
+第一版算法（单次 SAR）：
+- 四路同时 173 ns 完成，顺序 677 ns 完成，之后 payload 都是 12 字 0 错；
+- 但采样器有迟滞，数据模式残差达 1.9–2.4 mV，因此改成两边沿 SAR。
+
+两边沿 SAR（顺序）：
+- TT：1349 ns 完成，残差 ≤ 1.22 mV，12 个 payload 字 0 错；
+- SS 1.65 V 85 °C：1356 ns 完成，残差 ≤ 0.33 mV。默认 160 UI 训练不够 CDR 找相位，SS 要加 `--train-ui 1600 --stop-ns 2000`。
+
+运行时间：TT 1500 ns 约 3.0 h，SS 1.65 V 85 °C 约 2.7 h。
 
 以下为原版（旧 pair 对齐读出 + 行为 16 UI 打包，2026-10-29 验证记录）。
 

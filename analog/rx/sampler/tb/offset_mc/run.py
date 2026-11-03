@@ -52,9 +52,10 @@ def ramp_stop(ramp_mv):
     return RAMP_T0 + 2 * ramp_mv * 1e-3 / SLOPE + 1e-9
 
 
-def netlist(c, section, dut="ac", ramp_mv=25.0, code=None, hold=(), hold_code=63):
+def netlist(c, section, dut="ac", ramp_mv=25.0, code=None, hold=(), hold_code=63, falling=False):
     """Bench deck; trimmed variants get their code nodes and sources (all lanes at `code`, altered
-    per sample by the analysis when codes come from a file)."""
+    per sample by the analysis when codes come from a file).  falling: the ramp runs +ramp_mv ->
+    -ramp_mv (the lanes decide 1 before the crossing; pair with analysis(falling=True))."""
     vals = spice.corner_values(c)
     vals["SECTION"] = section
     text = spice.render(TEMPLATE, **vals)
@@ -63,7 +64,8 @@ def netlist(c, section, dut="ac", ramp_mv=25.0, code=None, hold=(), hold_code=63
     old_ramp = "Vramp ramp 0 PWL(0 -0.025 5n -0.025 45n 0.025)"
     old_dut = "Xdut ip in dp dn ep en d0p d0n d1p d1n e0p e0n e1p e1n vbias vdd 0 serdes_rx_half_rate_samples_ac rb=2k"
     assert text.count(old_ramp) == 1 and text.count(old_dut) == 1
-    text = text.replace(old_ramp, f"Vramp ramp 0 PWL(0 {-a} {RAMP_T0:.4e} {-a} {RAMP_T0 + 2 * a / SLOPE:.4e} {a})")
+    a0 = -a if not falling else a
+    text = text.replace(old_ramp, f"Vramp ramp 0 PWL(0 {a0} {RAMP_T0:.4e} {a0} {RAMP_T0 + 2 * a / SLOPE:.4e} {-a0})")
     if incs:
         text = text.replace(old_dut, old_dut.replace("serdes_rx_half_rate_samples_ac rb=2k", " ".join(CAL_NODES) + f" {sub} rb=2k"))
         inc_line = f'.include "{ROOT}/analog/rx/sampler/spice/rx_half_rate_samples_ac.spice"'
@@ -92,11 +94,11 @@ def code_alters(supply, hold=()):
     return out
 
 
-def analysis(ramp_mv=25.0, alters=()):
+def analysis(ramp_mv=25.0, alters=(), falling=False):
     # control-mode meas takes vector names, not v(a,b): form the differences first
     lines = list(alters) + [f"tran 2p {ramp_stop(ramp_mv):.4e} 0 4p"] + [f"let s_{l} = v({l}p) - v({l}n)" for l in LANES]
     lines += ["let s_cd = v(xdut.cdp) - v(xdut.cdn)", "let s_ce = v(xdut.cep) - v(xdut.cen)"]
-    lines += [f"meas tran t_{l} when s_{l}=0 rise=1 from=6n" for l in LANES]
+    lines += [f"meas tran t_{l} when s_{l}=0 {'fall' if falling else 'rise'}=1 from=6n" for l in LANES]
     lines += ["meas tran cd_r when s_cd=0 rise=1 from=20n", "meas tran cd_f when s_cd=0 fall=1 from=20n",
               "meas tran ce_r when s_ce=0 rise=1 from=20n", "meas tran ce_f when s_ce=0 fall=1 from=20n"]
     return "\n".join(lines)

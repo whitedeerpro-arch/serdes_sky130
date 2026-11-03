@@ -9,7 +9,11 @@
 (mc_pr_switch = 1).  Per sample: the analysis, the `let` expressions, one `wrdata` row appended to
 mc.tsv, then `mc_source`, which re-sources the circuit and re-evaluates every agauss (a new sample)
 without reloading the model files (~0.2 s per sample for a few tens of devices; the first model
-load is ~15 s).  setseed makes a run reproducible.  The loop counter lives in the const plot and every
+load is ~15 s).  setseed makes a run reproducible: the agauss values drawn while the netlist is read
+come before setseed (not reproducible from run to run), so the deck discards them with one
+mc_source right after setseed; every recorded sample k of a run is then fixed by (seed, k), the
+basis for paired comparisons (the same mismatch at another temperature / supply).  Runs before
+2026-11-03 recorded that load-time draw as sample 0 of every chunk.  The loop counter lives in the const plot and every
 analysis plot is destroyed after its row is written, so long runs do not accumulate plots.
 Memory: every `mc_source` keeps some memory (ngspice leak, ~45 MB per sample for a 40 ns transient of
 ~100 devices); spice.run caps an ngspice at 3 GB, so long runs are split with `chunks` into separate
@@ -32,13 +36,17 @@ MC_FILE = "mc.tsv"
 SENTINEL = -1e30
 
 
-def deck(netlist: str, samples: int, *, seed: int = 1, analysis: str = "op", lets: dict[str, str]) -> str:
+def deck(netlist: str, samples: int, *, seed: int = 1, analysis: str = "op", lets: dict[str, str],
+         setup: str = "") -> str:
+    """`setup`: control lines run once before the sample loop (const plot), e.g. `compose` vectors that
+    the analysis indexes with mc_k (per-sample settings: `let x = v[mc_k]` then `alter ... dc=$&x`;
+    alters belong in the analysis, because mc_source re-reads the circuit)."""
     names = list(lets)
     body = [f"  let {k} = {v}" for k, v in lets.items()]
     ana = ["  " + l.strip() for l in analysis.strip().splitlines()]
     ctl = ["", ".control", "set num_threads=1", "set wr_vecnames", "set wr_singlescale", "set appendwrite",
-           f"setseed {int(seed)}"] + [f"let {k} = {SENTINEL}" for k in names] + [
-           "let mc_k = 0", f"dowhile mc_k < {int(samples)}"] + ana + body + [
+           f"setseed {int(seed)}", "mc_source"] + [f"let {k} = {SENTINEL}" for k in names] + [
+           l.strip() for l in setup.strip().splitlines()] + ["let mc_k = 0", f"dowhile mc_k < {int(samples)}"] + ana + body + [
            f"  wrdata {MC_FILE} " + " ".join(names), "  destroy all", "  setplot const", "  let mc_k = mc_k + 1",
            "  mc_source", "end", "quit", ".endc", ".end", ""]
     return netlist.rstrip() + "\n" + "\n".join(ctl)

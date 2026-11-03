@@ -11,7 +11,10 @@ Sampler eye width = the longest circular run of codes with zero errors (aperture
 PI non-linearity and CTLE output all included); its centre is the code a CDR would settle near.
 
 DUT variants (--dut): stock = serdes_rx_half_rate_samples (source-follower clock shift, global-bias
-tails); ac = serdes_rx_half_rate_samples_ac (low-overdrive tails, AC-coupled CML clock buffers).
+tails); ac = serdes_rx_half_rate_samples_ac (low-overdrive tails, AC-coupled CML clock buffers);
+ac_cal = ac plus the 6-bit offset trim DACs (rx_offset_dac.spice), ac_trim = ac with the voltage-mode
+trim (rx_offset_trim.spice); all four lanes at --cal-code (default 32; 31 / 32 are the two codes next
+to zero trim, +-0.5 LSB).
 Bench setting for ac: rb = 2 kohm instead of 50 kohm, so the coupling capacitors settle in ~1.5 ns
 instead of ~40 ns (the bench is 45 ns).  The mean gate level is v(vck) for any rb (no DC path); the
 2 GHz clock amplitude through rb differs by < 0.2 %.  --param overrides DUT parameters.
@@ -53,23 +56,34 @@ RESULTS = ROOT / "results/analog/rx/sampler/link_pvt"
 EQ = 3
 CODE_UI = 2.0 / 64               # one PI code = 1/32 UI
 CASE_TIMEOUT_S = 600             # per case (normal 1.4-2.2 min); a deck's timeout scales with its cases
-DUTS = {"stock": "serdes_rx_half_rate_samples", "ac": "serdes_rx_half_rate_samples_ac"}
-BENCH_PARAMS = {"ac": {"rb": "2k"}}
+DUTS = {"stock": "serdes_rx_half_rate_samples", "ac": "serdes_rx_half_rate_samples_ac",
+        "ac_cal": "serdes_rx_half_rate_samples_ac_cal", "ac_trim": "serdes_rx_half_rate_samples_ac_trim"}
+BENCH_PARAMS = {"ac": {"rb": "2k"}, "ac_cal": {"rb": "2k"}, "ac_trim": {"rb": "2k"}}
+CAL_NODES = [f"{l}b{k}" for l in ("d0", "d1", "e0", "e1") for k in range(6)]
 
 
 def dut(variant="stock", params=None):
-    """Subcircuit name plus parameter overrides for the Xdut line."""
+    """Subcircuit name plus parameter overrides for the Xdut line (ac_cal: its code nodes first,
+    they follow vss in its port list)."""
     p = {**BENCH_PARAMS.get(variant, {}), **(params or {})}
-    return " ".join([DUTS[variant]] + [f"{k}={v}" for k, v in p.items()])
+    nodes = CAL_NODES if variant in ("ac_cal", "ac_trim") else []
+    return " ".join(nodes + [DUTS[variant]] + [f"{k}={v}" for k, v in p.items()])
+
+
+def cal_sources(code):
+    """Static trim code on all four lanes: each bit node tied to vdd or ground (follows the supply)."""
+    return "\n".join(f"Vcal{n} {n} {'vdd' if (code >> int(n[-1])) & 1 else '0'} 0" for n in CAL_NODES)
 
 
 def case_name(c, code):
     return f"{c.tag}_c{code:02d}"
 
 
-def deck(cases, dut_text=DUTS["stock"]):
+def deck(cases, dut_text=DUTS["stock"], extra_sources=""):
     c0, code0 = cases[0]
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in pi.bits(code0, c0.supply).items())
+    if extra_sources:
+        ctl += "\n" + extra_sources
     text = spice.render(TEMPLATE, **spice.corner_values(c0), EQ0_V=c0.supply, EQ1_V=c0.supply,
                         CONTROL_SOURCES=ctl, DUT=dut_text, CASES="@CASES@")
     blocks = []
@@ -148,11 +162,14 @@ def main():
     ap.add_argument("--codes", default="0:32:2")
     ap.add_argument("--dut", choices=sorted(DUTS), default="stock")
     ap.add_argument("--param", action="append", default=[])
+    ap.add_argument("--cal-code", type=int, default=32, help="ac_cal: trim code of all four lanes")
     ap.add_argument("--gate-codes", help="comma list; conditions outside --full only run these codes")
     ap.add_argument("--full", default="stress", help="conditions with the full code sweep: stress | all | tags")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--rcorner", help="emulate a resistor corner (hh | ll | scale) with constant-swing reference currents (serdes_flow.rcorner)")
     ap.add_argument("--resume")
+    ap.add_argument("--reltol", type=float, help="numerics for a resume of failed cases: option reltol=X itl4=200 before each tran "
+                    "(bench default 1e-4; ac_trim at FS 1.65 V -40 C: timestep collapses at the master hold node)")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
     lo, hi, st = (int(x) for x in a.codes.split(":"))
@@ -161,7 +178,8 @@ def main():
     boundary.check_load(a.bc, replay.signature())
     params = dict(p.split("=", 1) for p in a.param)
     dut_text = dut(a.dut, params)
-    tag = a.bc.split('@')[0] + ("" if a.dut == "stock" else f"_{a.dut}")
+    tag = a.bc.split('@')[0] + ("" if a.dut == "stock" else f"_{a.dut}") + (f"{a.cal_code}" if a.dut in ("ac_cal", "ac_trim") else "")
+    extra = cal_sources(a.cal_code) if a.dut in ("ac_cal", "ac_trim") else ""
     camp = (ROOT / a.resume) if a.resume else RESULTS / f"{tag}_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
     camp.mkdir(parents=True, exist_ok=True)
     stim, _ = replay.stimuli(a.bc)
@@ -186,9 +204,12 @@ def main():
     for deck_name, cases in sorted(by_deck.items(), key=lambda kv: order.index(kv[0])):
         missing = [k for k in cases if out(*k) is None]
         if missing and not a.analyse_only:
-            todo.append(((rcorner.emulate(deck(missing, dut_text), camp, a.rcorner) if a.rcorner else deck(missing, dut_text)), spice.next_run_dir(camp, deck_name),
+            dk = deck(missing, dut_text, extra)
+            if a.reltol:
+                dk = dk.replace("\ntran ", f"\noption reltol={a.reltol} itl4=200\ntran ")
+            todo.append(((rcorner.emulate(dk, camp, a.rcorner) if a.rcorner else dk), spice.next_run_dir(camp, deck_name),
                          dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=CASE_TIMEOUT_S * len(missing),
-                              meta=dict(process=missing[0][0].process, bc=a.bc, eq=EQ, codes=codes, dut=dut_text,
+                              meta=dict(process=missing[0][0].process, bc=a.bc, eq=EQ, codes=codes, dut=dut_text, reltol=a.reltol, cal_code=(a.cal_code if a.dut in ("ac_cal", "ac_trim") else None),
                                         conditions=sorted({c.tag for c, _ in missing}),
                                         cases=[case_name(*k) for k in missing]))))
     print(f"{len(keys)} cases, {len(by_deck)} decks: {sum(len(j[2]['meta']['cases']) for j in todo)} cases to run "

@@ -52,13 +52,15 @@ def outputs():
     return [f"{lane}_{k}" for lane in LANES for k in range(4)]
 
 
-def deck(c, code, params, deser):
+def deck(c, code, dut_text, deser, extra=""):
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in sp.pi.bits(code, c.supply).items())
+    if extra:
+        ctl += "\n" + extra
     nodes = outputs() + ["w", "vdd", "xro.ckq", "xro.ckqb", "xro.ckm", "xro.ckmb", "xro.st_q", "xro.st_qb", "xro.st_m",
                          "xro.st_mb", "xro.xwc.j0", "xro.xwc.j1"] + [f"xro.r{lane}" for lane in LANES]
     saves = ".save " + " ".join(f"v({n})" for n in nodes) + " i(Vdd)"
     text = spice.render(TEMPLATE, **spice.corner_values(c), EQ0_V=c.supply, EQ1_V=c.supply,
-                        CONTROL_SOURCES=ctl, DUT=rd.dut_text(params), DEMUX=deser, SAVES=saves, CASES="@CASES@")
+                        CONTROL_SOURCES=ctl, DUT=dut_text, DEMUX=deser, SAVES=saves, CASES="@CASES@")
     vecs = [f"v({n})" for n in nodes] + ["power"]
     n = rd.case_name(c, code)
     block = "\n".join([f"* case {n}", f"option temp={c.temp}", f"alter Vdd dc={c.supply}", f"alter Vref dc={c.supply}",
@@ -140,19 +142,29 @@ def main():
     ap.add_argument("conds", nargs="*", default=["stress"])
     ap.add_argument("--code", type=int, default=20)
     ap.add_argument("--param", action="append", default=["rk_wn=8", "rk_nfin=2"])
+    ap.add_argument("--dut", choices=("ac_rk", "ac_trim_rk"), default="ac_rk", help="sampler block: ac_trim_rk = with the offset trim (all lanes at --cal-code)")
+    ap.add_argument("--cal-code", type=int, default=32)
     ap.add_argument("--deser", default="serdes_rx_readout_deser16")
     ap.add_argument("--deser-param", action="append", default=[])
     ap.add_argument("--bc", default="rx_c2_far_nominal@ctle_rc")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--rcorner", help="emulate a resistor corner (hh | ll | scale) with constant-swing reference currents (serdes_flow.rcorner)")
     ap.add_argument("--resume")
+    ap.add_argument("--reltol", type=float, help="numerics for a resume of failed cases: option reltol=X itl4=200 before tran")
+    ap.add_argument("--op-steps", type=int, help="operating point of a resume: .options gminsteps=N srcsteps=N "
+                    "(ac_trim_rk TT 1.65 V -40 C: default stepping fails, transient op hangs; 100 converges in ~3 min)")
+    ap.add_argument("--case-timeout", type=float, default=CASE_TIMEOUT_S, help="seconds per case (ac_trim_rk needs ~2x the ac_rk time)")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
     conds = grid45() if a.conds == ["all"] else STRESS if a.conds == ["stress"] else [Condition.parse(x) for x in a.conds]
     params = dict(p.split("=", 1) for p in a.param)
     deser = " ".join([a.deser] + a.deser_param)
+    trim = a.dut == "ac_trim_rk"
+    dut_text = (" ".join(sp.CAL_NODES + ["serdes_rx_half_rate_samples_ac_trim_rk"] + [f"{k}={v}" for k, v in {**rd.BENCH, **params}.items()])
+                if trim else rd.dut_text(params))
+    extra = sp.cal_sources(a.cal_code) if trim else ""
     boundary.check_load(a.bc, sp.replay.signature())
-    camp = (ROOT / a.resume) if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = (ROOT / a.resume) if a.resume else RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + (f"_ac_trim{a.cal_code}" if trim else ""))
     camp.mkdir(parents=True, exist_ok=True)
     stim, _ = sp.replay.stimuli(a.bc)
     (camp / "stimuli.inc").write_text(stim)
@@ -161,10 +173,17 @@ def main():
         (camp / "plan.json").write_text(json.dumps(dict(decks={c.tag: 1 for c in order}), indent=1))
     todo = []
     for c in order:
-        if spice.case_output(camp, c.tag, f"{rd.case_name(c, a.code)}.raw") is None and not a.analyse_only:
-            todo.append(((rcorner.emulate(deck(c, a.code, params, deser), camp, a.rcorner) if a.rcorner else deck(c, a.code, params, deser)), spice.next_run_dir(camp, c.tag),
-                         dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=CASE_TIMEOUT_S,
-                              meta=dict(condition=c.tag, code=a.code, dut=rd.dut_text(params), deser=deser, bc=a.bc))))
+        if spice.case_output(camp, c.tag, f"{rd.case_name(c, a.code)}.raw", sp.link.STOP) is None and not a.analyse_only:
+            dk = deck(c, a.code, dut_text, deser, extra)
+            if a.reltol:
+                dk = dk.replace("\ntran ", f"\noption reltol={a.reltol} itl4=200\ntran ")
+            if a.op_steps:
+                if dk.count("\n.options ") != 1:
+                    raise ValueError("expected one .options line")
+                dk = dk.replace("\n.options ", f"\n.options gminsteps={a.op_steps} srcsteps={a.op_steps} ")
+            todo.append(((rcorner.emulate(dk, camp, a.rcorner) if a.rcorner else dk), spice.next_run_dir(camp, c.tag),
+                         dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=a.case_timeout,
+                              meta=dict(condition=c.tag, code=a.code, dut=dut_text, cal_code=(a.cal_code if trim else None), deser=deser, bc=a.bc, reltol=a.reltol, op_steps=a.op_steps))))
     print(f"{len(order)} cases: {len(todo)} to run", flush=True)
     for ex in spice.run_many(todo, workers=a.workers, smoke=True):
         if not ex.ok:
@@ -173,7 +192,7 @@ def main():
     rows = []
     print(f"{'condition':15s} | words data/edge err (det) | map | w setup/hold ps | capture min ps | P mW | toggles")
     for c in order:
-        p = spice.case_output(camp, c.tag, f"{rd.case_name(c, a.code)}.raw")
+        p = spice.case_output(camp, c.tag, f"{rd.case_name(c, a.code)}.raw", sp.link.STOP)
         if p is None:
             print(f"{c.tag:15s} | missing")
             continue
@@ -184,7 +203,7 @@ def main():
         print(f"{c.tag:15s} | {r['words']} {r['data_errors']}/{r['edge_errors']} ({r['edge_determinate']}) | "
               f"{'ok' if r['map_ok'] else 'DIFF ' + str(bad)} | {f(r['w_setup_ps'])}/{f(r['w_hold_ps'])} | "
               f"{f(r['capture_data_slack_min_ps'])} | {r['power_mw']:.1f} | {r['toggles']}", flush=True)
-    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, dut=rd.dut_text(params), deser=deser, bc=a.bc,
+    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, dut=dut_text, cal_code=(a.cal_code if trim else None), deser=deser, bc=a.bc,
                                                        expected=EXPECTED, rows=rows), indent=1))
     print(camp.relative_to(ROOT))
 

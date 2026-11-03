@@ -252,15 +252,16 @@ def codes_deck(process, variant, cases):
 def run_codes(a, camp):
     codes = [int(x) for x in a.codes.split(",")]
     assert 31 in codes and 32 in codes and 0 in codes and 63 in codes
-    cases = [(v, t, code) for v in SUPPLY_V for t in TEMP_C for code in codes]
-    jobs = [(codes_deck(p, a.dut, cases), camp / p, dict(timeout_s=90 * len(cases), meta=dict(process=p, dut=a.dut, codes=codes)))
-            for p in a.corners.split(",")]
+    # one deck per MOS corner and supply (15 decks keep the workers busy; 3 temperatures x codes each)
+    decks = [(p, v, [(v, t, code) for t in TEMP_C for code in codes]) for p in a.corners.split(",") for v in SUPPLY_V]
+    jobs = [(codes_deck(p, a.dut, cases), camp / f"{p}_v{round(v * 1000)}", dict(timeout_s=150 * len(cases), meta=dict(process=p, supply=v, dut=a.dut, codes=codes)))
+            for p, v, cases in decks]
     t0 = time.time()
     spice.run_many(jobs, workers=a.workers, smoke=False)
     out = dict(dut=a.dut, codes=codes, slope_v_per_s=SLOPE, conditions={})
     n = len(codes)
-    for p in a.corners.split(","):
-        f = camp / p / "xing.tsv"
+    for p, v0, cases in decks:
+        f = camp / f"{p}_v{round(v0 * 1000)}" / "xing.tsv"
         rows = read_rows(f) if f.exists() else {}
         for i in range(0, len(cases), n):
             v, temp = cases[i][0], cases[i][1]

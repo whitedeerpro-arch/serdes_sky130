@@ -18,6 +18,8 @@ RX readout CML 1:2 demux: C2 replay -> CTLE -> PI -> sampler ac_rk -> serdes_rx_
 .include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_div2.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_clock_ac.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_half_rate_samples_ac.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_offset_dac.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_offset_trim.spice"
 .include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
 .include "@PROJECT_ROOT@/analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_readout_clock.spice"

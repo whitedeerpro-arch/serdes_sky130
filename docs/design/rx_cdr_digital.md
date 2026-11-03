@@ -61,6 +61,8 @@
 
 释放在 51.7 ns；所有读数无未知区；没有重新对齐。PI 步进（含跨扇区与回卷）没有让读出 ÷2 分频器和 Johnson 计数器错计。另用 `--hold-controls`（PI 脚不动）在码 0 扫 TX 相位找锁定点：62.5 ps 全票偏晚、78 ps 部分偏早、≥ 94 ps 全票偏早。KP = 65536 时每字欠债最多 8 步而交接器每 8 ns 执行 1 步，投票变号后码还要走几步（压摆受限过冲）；锁定动态按生产 KP 另行验证。数据：[mixed_signal_cosim_words.json](../data/mixed_signal_cosim_words.json)，运行目录 `results/verification/mixed_signal/20261102T17*_words_*`。
 
+**失调校准启动（2026-11-03）。** `make build-cal`：在物理读出版上加 [rx_offset_cal](../../digital/rx/rtl/rx_offset_cal.sv)，采样器换成 ac_trim_rk，修调码由 RTL 驱动。启动顺序为输入电气空闲 → `cal_start` → `cal_done` → CDR 使能 → 训练。空闲输入上 CDR 必须关闭：打开时伪投票把 PI 推到 61。算法、迟滞与核对见 [RX 采样器 · 失调修调](rx_pi_sampler.md#失调修调2026-11-03)，运行说明见 [联调 README](../../verification/mixed_signal/README.md#失调校准启动版2026-11-03)。
+
 **原版（2026-10-29，旧读出）。** SystemVerilog → Verilator C++ 与 shared ngspice 47 连续瞬态双向连接：模拟端为真实 PI、CTLE、采样器、CMOS 转换与 pair 重定时，数字端运行上述 RTL。真实 CMOS 电压 ≤ 0.54 V 判 0、≥ 1.26 V 判 1（随 VDD 按 0.3/0.7 缩放）。RTL 控制位经 50 ps 发射延迟、20 ps 边沿、两级真实 CMOS 反相器驱动 PI。192 UI 内相位更新 5 次，恢复字 1200/1337/146e/15a5/16dc 全对。快速接口测试用 KP = 65536，生产 KP 不变。来源：[实时联调](../history/mixed_signal_cosim.md)，运行入口见 [verification/mixed_signal](../../verification/mixed_signal/README.md)。
 
 ## 适用范围

@@ -16,6 +16,31 @@ results/verification/mixed_signal/build_words/Vmixed_cdr_words_top --root "$PWD"
 
 通过条件：到达终点、无致命错误、无数据未知、payload ≥ 4 字且零错、释放时已对齐、RTL 有调相、（非 hold 时）模拟控制脚实际翻转。summary 另记跨扇区次数、走过的码、重新对齐次数。80 ns 在本机约 6.5 min（单线程）。结果见 [RX 数字](../../docs/design/rx_cdr_digital.md#实时数模联调)、[数据](../../docs/data/mixed_signal_cosim_words.json)。
 
+## 失调校准启动版（2026-11-03）
+
+同一桥接编译时加 `COSIM_CAL`：[rtl/mixed_cdr_cal_top.sv](rtl/mixed_cdr_cal_top.sv)（mixed_cdr_words_top + [rx_offset_cal](../../digital/rx/rtl/rx_offset_cal.sv)，CDR 由 `enable & cal_done` 门控）+ [tb/receiver_cal.cir.in](tb/receiver_cal.cir.in)（采样器 ac_trim_rk，24 个修调码脚由 RTL 驱动，与控制脚同样的发射延迟和边沿）。
+
+- 输入在 `--cal-end-ns` 之前保持电气空闲（差分 0），第一个计数字时发 `cal_start`；之后训练和 payload 与物理读出版相同。
+- `--inject-ua d0p=…,e1n=…` 在修调节点 t<p|n> 上加吸收电流，代替失配。
+- `--corner/--supply/--temp` 选择条件。
+- 输出 `cal.tsv`（码随时间变化）；summary 的 `cal_lanes` 列出各路最终码。
+
+summary 里的 `expected`（31.5 ∓ k/2）按注入灵敏度估算，不准：注入会压缩步长。校准结果以 [cal_check.py](../../analog/rx/sampler/tb/offset_dac/cal_check.py) 或 [insitu.py](../../analog/rx/sampler/tb/offset_dac/insitu.py) 的核对为准。
+
+```bash
+make -C verification/mixed_signal build-cal            # CAL_NW=2 CAL_SETTLE=4
+results/verification/mixed_signal/build_cal/Vmixed_cdr_cal_top --root "$PWD" --out "$PWD/results/verification/mixed_signal/<run>" \
+  --stop-ns 1500 --cal-end-ns 1400 --inject-ua d0p=19.92,d1n=13.944,e0p=5.976,e1n=29.88 --wall-s 20000
+```
+
+结果和结论见 [RX 采样器 · 失调修调](../../docs/design/rx_pi_sampler.md#失调修调2026-11-03)。第一版算法（单次 SAR）：
+- 四路同时：173 ns 完成；
+- 顺序：677 ns 完成；
+- 两者之后 payload 都是 12 字 0 错；
+- 但采样器在空闲输入下有迟滞，残差达 2–3 mV，因此改成两边沿 SAR。
+
+TT 下 820 ns 的运行约 1.8 h。
+
 以下为原版（旧 pair 对齐读出 + 行为 16 UI 打包，2026-10-29 验证记录）。
 
 ## 运行

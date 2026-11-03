@@ -2,6 +2,12 @@
 
 按日期倒序。细节见 [history](../history/index.md)。
 
+## 2026-11-04
+
+- RX 失调校准：空闲输入下采样器有迟滞，判决依赖本路上一次判决（[idle_sweep.py](../../analog/rx/sampler/tb/offset_dac/idle_sweep.py)：TT ±2.4–3 mV、SS 1.65 V 85 °C ±4 mV）。单次 SAR 落在迟滞带内的任意位置；第一版联调（TT，四路同时 / 顺序）残差达 2–3 mV，单路斜坡与原位（CTLE + PI，PI 码 0/4/8，相差 ≤ 0.5 mV）两种核对一致，排除了环境差异。[rx_offset_cal.sv](../../digital/rx/rtl/rx_offset_cal.sv) 改为两边沿 SAR：每次试探前分别以码 0 / 63 预置，找上下沿后取中点。行为模型加迟滞后，残差 2.08 → 0.92 LSB（无噪声）、1.53 → 1.19 LSB（0.5 mV 噪声）。顺序校准约 1.34 µs。两边沿版 TT 联调运行中。
+- 联调校准版（`make build-cal`，`mixed_cdr_cal_top`、`receiver_cal.cir.in`）：ac_trim_rk、24 个码脚、启动顺序为空闲 → 校准 → CDR，`cal_done` 之前 CDR 关闭。核对脚本 [cal_check.py](../../analog/rx/sampler/tb/offset_dac/cal_check.py)、[insitu.py](../../analog/rx/sampler/tb/offset_dac/insitu.py)。
+- RX 读出接修调采样器（ac_trim_rk + deser16，码 32）：45 条件 4880 个数据位、2433 个边沿全部正确，余量与 ac_rk 相同，功耗 +1–2 mW。数值处理：`readout_deser --reltol`、`--op-steps`（TT 1.65 V −40 °C 工作点不收敛，`gminsteps=srcsteps=100` 后约 3 min 收敛）、`--case-timeout`。
+
 ## 2026-11-03
 
 - RX 采样器失调修调（`ac_trim`，[rx_offset_trim.spice](../../analog/rx/sampler/spice/rx_offset_trim.spice) + [rx_offset_cal.sv](../../digital/rx/rtl/rx_offset_cal.sv)）：主锁存器辅助对（共用尾管，2/4 指）+ 6 bit DAC 推电阻 T 网络 + 四路同时 SAR 前台校准；主尾管 +8 指。45 条件窗口与 ac 相同（压力角 0.875–1.0 UI、门槛 39/39、栅极时钟 ≥ 328 mVpp），测试台 +1.3–2 mW。校准后 MC：每路（采样器 + CTLE）3σ 2.2 / 3.4 / 4.4 mV（27 °C 校准，27 / 85 / −40 °C 工作），不修调约 27–30 mV。先做的电流型 DAC（`ac_cal`）步长随温度变 1.8 倍，放弃。

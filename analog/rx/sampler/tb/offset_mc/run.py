@@ -52,7 +52,7 @@ def ramp_stop(ramp_mv):
     return RAMP_T0 + 2 * ramp_mv * 1e-3 / SLOPE + 1e-9
 
 
-def netlist(c, section, dut="ac", ramp_mv=25.0, code=None, hold=()):
+def netlist(c, section, dut="ac", ramp_mv=25.0, code=None, hold=(), hold_code=63):
     """Bench deck; trimmed variants get their code nodes and sources (all lanes at `code`, altered
     per sample by the analysis when codes come from a file)."""
     vals = spice.corner_values(c)
@@ -70,7 +70,7 @@ def netlist(c, section, dut="ac", ramp_mv=25.0, code=None, hold=()):
         assert text.count(inc_line) == 1
         text = text.replace(inc_line, inc_line + "".join(f'\n.include "{ROOT}/analog/rx/sampler/spice/{f}"' for f in incs))
         code = 32 if code is None else code
-        cc = lambda n: 63 if n[:2] in hold else code
+        cc = lambda n: hold_code if n[:2] in hold else code
         text += "\n" + "\n".join(f"Vc{n} {n} 0 dc {c.supply * ((cc(n) >> int(n[-1])) & 1)}" for n in CAL_NODES)
     saves = ".save " + " ".join(f"v({l}p) v({l}n)" for l in LANES) + " v(xdut.cdp) v(xdut.cdn) v(xdut.cep) v(xdut.cen)"
     return text + "\n" + saves

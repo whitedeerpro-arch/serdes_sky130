@@ -145,7 +145,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 [serdes_ref_pbuf](../../analog/common/bias/spice/bias_dist.spice)：把 LF 两个状态节点（Cf 2 pF、Ci 40 pF）从 0 V 充到目标电压，窗口 128 个参考周期 = 512 ns。环路从 ±40 mV 初值能捕获，所以设计目标 ±10 mV。
 
 - 目标电压 = 10 µA 拷贝 × high_po 电阻串，16 档（0.95–1.35 V），与 r_ref 同类电阻，随电阻角不变。
-- 单级 LVT 输入 OTA 跟随器，负载电容就是主极点，任何负载都稳定；尾电流 300 µA（10 µA 二极管 × 30），en 只开关尾管。
+- 单级 LVT 输入 OTA 跟随器，负载电容就是主极点，任何负载都稳定；尾电流 300 µA（10 µA 二极管 × 30），en 只开关尾管（开关管 L 0.18：L 0.15 这组指宽落在 FS 下 Pclm < 0 的模型分档）。
 - **两路拷贝常通（静态约 20 µA）。** 第一版连二极管支路一起关断：拷贝漏极摆动约 1 V，经 Cgd 踢 vgi，慢的 V→I 环要约 1 µs 才恢复。测试台里参考电流和目标电压摆动约 10 %（只挂了两路拷贝，片上 vgi 电容更大，会小一些），但所有模块都共用这条线。
 - **LF 预充门改为普通 NMOS + LVT PMOS（`pll_lf_tgate_lvt`）。** 普通 CMOS 门在目标电压附近有死区：1.65 V −40 °C 下 PMOS |Vth| 约 1.1 V，NMOS 过驱动接近零，SS / SF 上 Ci 要 1 µs 以上才充到。
 
@@ -160,9 +160,9 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 到 10 mV 全部在窗口内。44 个工况误差超过 ±10 mV（两端码：码 15 是 1.65 V 下 PMOS 负载余量不足），都在 ±40 mV 内；锁定目标 1.11–1.29 V 在码 7–13 附近。预充期间电流 0.39–0.55 mA（含参考本身）。
 
 - 释放扰动（[release.py](../../analog/pll/loop_filter/tb/precharge/release.py)，500 Ω 参考源）：目标 1.1 V 时 ctrl 1 ns 后 +1.7…+2.3 mV，50 ns 后 +0.5 mV；1.4 V 时 +5.2 / +1.4 mV（原普通门 1 ns 后 +1.04 mV）。LVT PMOS 最小沟长 0.35 µm，栅电容大一倍多。
-- 关断漏电（`pbuf_pvt --leak`，en 低，z 固定）：最差 186 nA（FS 85 °C），FF 69 nA、TT 8 nA、SS 1 nA；FF 1.95 V 85 °C 下等于两个关断 LVT PMOS 的漏极电流之和。折算静态相差 15 ps（50 µA、250 MHz）。估算参考杂散的抖动约 20 fs，进 I-05 预算时核对。
+- 关断漏电（`pbuf_pvt --leak`，en 低，z 固定）：最差 186 nA（FS 85 °C），FF 70 nA、TT 9 nA、SS 1 nA。路径：vdd → B2 负载管 Xlb（关断的 LVT，W 96 µm）→ pref → 两个关断的 LVT 预充门 → z；FS 1.95 V 85 °C 下三处电流都是 185 nA。普通 PMOS 负载在 1.65 V −40 °C 没有余量，所以先留着。折算静态相差 15 ps（50 µA、250 MHz）。估算参考杂散的抖动约 20 fs，进 I-05 预算时核对。
 
-结果：`results/analog/common/bias/pbuf_pvt/20261104T061421Z`、`20261104T060540Z_leak`；`dist_psrr/20261104T053255Z`（无去耦）、`20261104T063254Z`（有去耦）；`bandgap_startup/20261104T063625Z_ramp1u_dist`、`20261104T064156Z_ramp1u_dist`（SS、FS，30 µs，15 µs 窗口内没建立完的 4 个条件在这里到达工作点）。
+结果：`results/analog/common/bias/pbuf_pvt/20261104T061421Z`（尾管开关 L 0.15）、`20261104T072912Z`（L 0.18 回归：码 7，电阻 tt/hh，结果相同）、`20261104T073305Z_leak`；`dist_psrr/20261104T053255Z`（无去耦）、`20261104T063254Z`（有去耦）；`bandgap_startup/20261104T063625Z_ramp1u_dist`、`20261104T064156Z_ramp1u_dist`（SS、FS，30 µs，15 µs 窗口内没建立完的 4 个条件在这里到达工作点）。
 
 ## 待解决
 

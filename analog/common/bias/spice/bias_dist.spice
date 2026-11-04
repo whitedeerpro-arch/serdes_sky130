@@ -124,7 +124,9 @@ Xg15 t15 tap s15 sb15 vdd vss serdes_cmos_tgate
 * OTA: diode side gate = tap (input), output side gate = out (feedback)
 Xbd ibias ibias vss vss serdes_nfet w=1 l=1
 Xt tail ibias ts vss serdes_nfet w={5*ntail} l=1 nf={ntail}
-Xst ts en vss vss serdes_nfet w={5*ntail} l=0.15 nf={ntail}
+* L 0.18: at L 0.15 these fingers fall in a model bin with Pclm < 0 at FS (ngspice stops if the first
+* analysis is at 27 C or above; later temperatures run on without the check)
+Xst ts en vss vss serdes_nfet w={5*ntail} l=0.18 nf={ntail}
 Xa da tap tail vss serdes_nfet_lvt w={win} l={lin}
 Xb out out tail vss serdes_nfet_lvt w={win} l={lin}
 Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll}

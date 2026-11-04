@@ -20,7 +20,7 @@
 ## 剩余
 
 - 电阻角：用真实偏置 + `rcorner.to_pdk` 重验 CML 关键路径（含 SS 85 °C 栅极时钟 280 mVpp 的处理）。RX link_pvt 已接入，电阻三角运行中；TX、PLL 测试台待接。
-- PSRR；LF 预充缓冲 B2；偏置线去耦（RX vbias 纹波 0.32 mV，暂不需要）。
+- PSRR 门槛（等 I-05）；CTLE、CP 偏置线去耦。
 
 ## 进展
 

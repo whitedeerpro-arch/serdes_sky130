@@ -3,6 +3,15 @@
 * pre_ref is a separately supplied, qualified reference, not an internal DAC.
 * External controller must hold CP disabled while pre_en is high and through
 * the break-before-make interval. Off-switch parasitics remain in the loop.
+* Precharge gates: regular nfet + LVT pfet (needs sky130_pfet_lvt.spice).  With a regular pfet they have a
+* dead zone around the 0.95-1.35 V target at low supply and -40 C: pfet |Vth| ~1.1 V, nfet overdrive ~0 at
+* Vgs = VDD - 1.1 V, so at SS / SF 1.65 V -40 C the 40 pF node needed > 1 us (window 512 ns;
+* analog/common/bias/tb/pbuf_pvt).  An LVT nfet is not needed: the LVT pfet takes over above ~0.75 V.
+.subckt pll_lf_tgate_lvt a b en en_b vdd vss params: wn=1 wp=2
+Xn a en b vss serdes_nfet w={wn}
+Xp a en_b b vdd serdes_pfet_lvt w={wp}
+.ends pll_lf_tgate_lvt
+
 .subckt pll_loop_filter_precharge cp_in ctrl z pre_ref pre_en vdd vss
 + params: rz=6.5k cint=40p cfast=2p wn_fast=4 wp_fast=8 wn_int=16 wp_int=32
 Vlink cp_in ctrl 0
@@ -10,6 +19,6 @@ Cf ctrl vss {cfast}
 Rz ctrl z {rz}
 Ci z vss {cint}
 Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
-Xfast pre_ref ctrl pre_en pre_b vdd vss serdes_cmos_tgate wn={wn_fast} wp={wp_fast}
-Xint pre_ref z pre_en pre_b vdd vss serdes_cmos_tgate wn={wn_int} wp={wp_int}
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
 .ends pll_loop_filter_precharge

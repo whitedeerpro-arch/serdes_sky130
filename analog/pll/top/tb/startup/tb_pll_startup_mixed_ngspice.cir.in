@@ -1,6 +1,7 @@
 Startup sequence electrical integration: real PFD / gated CP / dual precharge, local phase-domain VCO
 .lib "@MODEL_LIBRARY@" @CORNER@
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
 .include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"

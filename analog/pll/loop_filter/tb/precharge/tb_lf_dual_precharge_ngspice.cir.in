@@ -1,6 +1,7 @@
 Cold LF comparison: same 500 ohm reference source impedance, old single gate versus dual-node precharge
 .lib "@MODEL_LIBRARY@" @CORNER@
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
 .include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc.spice"
 .include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc_precharge.spice"

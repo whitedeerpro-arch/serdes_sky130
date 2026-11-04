@@ -367,7 +367,7 @@ TT 的错误区不到 1/16 UI（码 30、2 都无错），三者实际相同；F
 所以残差不是 CTLE、PI 时钟与理想时钟环境不同造成的，而是上面所说的迟滞。
 
 结果：
-- 联调：`results/verification/mixed_signal/cal_tt_20261103T115131Z`、`cal_tt_seq_20261103T124407Z`、`cal_tt_seq2e_20261103T173352Z`、`cal_ss165h_seq2e_20261103T180342Z`；
+- 联调：`results/verification/mixed_signal/cal_tt_20261103T115131Z`、`cal_tt_seq_20261103T124407Z`、`cal_tt_seq2e_20261103T173352Z`、`cal_ss165h_seq2e_20261103T180342Z`、`cal_ss165h_seq2e_long_20261103T210934Z`（1600 UI 训练，运行到 1907 ns 时机器重启，结果由 [vcd_words.py](../../verification/mixed_signal/vcd_words.py) 从波形还原：码 20/39/28/49，CDR 1464 ns 对齐，22 个载荷字 0 错）；
 - 核对：`results/analog/rx/sampler/offset_dac/` 下的 `20261103T145520Z_calcheck`、`20261103T204042Z_calcheck`（上升）、`20261103T204543Z_calcheck`（TT 两向）、`20261103T205502Z_calcheck`（SS 两向）、`20261103T154514Z_insitu`；
 - 迟滞：`20261103T171243Z_idle`、`20261103T174226Z_idle`（SS）。
 
@@ -397,13 +397,12 @@ CMOS 读出后码 0/4/8 各 48 位对齐数据零错位；读出后的鉴相零�
 - RX PVT（[问题清单](../status/open_issues.md) I-14）：采样器候选 ac（c2）已过 45 条件窗口和 300 mVpp 栅极时钟；读出（CML→CMOS + pair 对齐）接 ac 后重做 PVT；本地偏置比例校准；隔直电容/电阻换成实际器件。
 - 读出 deser16 的未覆盖项：PI 步进与背靠背字流的 PVT（两者只有 TT）、版图寄生；旧的 pair 对齐（全速 CML→CMOS，I-04）只剩联调夹具在用。
 - 失调修调（ac_trim）的剩余项：
-  - SS 1.65 V 85 °C 加长训练的启动顺序联调（运行中）；
   - 用真实失配样本代替注入电流的联调；
   - 背靠背链路换成 ac_trim 后复跑；
   - 修调电路引起的数值问题定位（`--reltol`、`--op-steps`，见上）；
   - 迟滞的机理、PVT 与失配分布：MC 只用了上升斜坡，已测 TT 与 SS 1.65 V 85 °C；
   - 空闲迟滞带与数据模式阈值不同心：TT 0.6–1.2 mV。
 
-  两边沿 SAR 的 TT 与 SS 联调已做（残差 ≤ 1.22 / 0.33 mV）。校准接口要求（TX 电气空闲、`cal_done` 前 CDR 关闭）交给链路层；输入短接开关不做。
+  两边沿 SAR 的 TT 与 SS 联调已做（残差 ≤ 1.22 / 0.33 mV），SS 跑到了载荷（22 字 0 错，未跑完 2000 ns，无 summary）。校准接口要求（TX 电气空闲、`cal_done` 前 CDR 关闭）交给链路层；输入短接开关不做。
 - 鉴相零点与孔径偏移校准（I-23）。
 - 接原生 PLL 八相，确认扇出与相位顺序（I-30）。

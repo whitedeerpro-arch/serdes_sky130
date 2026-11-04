@@ -1,9 +1,10 @@
 """Bandgap power-up over PVT x resistor corner: does it reach the intended state, how fast, how does it
 answer a supply step.
 
-    uv run python analog/common/bias/tb/bandgap_startup/run.py --op CAMPAIGN [--tramp 1u] [--rcorners tt,ll,hh] [--dist]
+    uv run python analog/common/bias/tb/bandgap_startup/run.py --op CAMPAIGN [--tramp 1u] [--tsettle 15u]
+        [--process tt,ss] [--rcorners tt,ll,hh] [--dist]
 
-No nodeset: the supply ramps from 0 to the condition's value in tramp; at tramp + 15 us it steps by
+No nodeset: the supply ramps from 0 to the condition's value in tramp; at tramp + tsettle it steps by
 +50 mV.  Per condition, against the operating points of a bandgap_pvt campaign (--op):
   ok         vbg within 2 mV and the reference current within 1 % of the operating point before the step
   t_settle   time from the end of the ramp until vbg stays within 1 mV of its pre-step value
@@ -45,8 +46,8 @@ Xdctle octle 0 serdes_bias_ctle
 Xdcp ocp vbp vdd 0 serdes_bias_cp"""
 
 
-def deck(proc, rc, tramp, dist=False):
-    tstep = tramp + 15e-6
+def deck(proc, rc, tramp, dist=False, tsettle=15e-6):
+    tstep = tramp + tsettle
     stop = tstep + 5e-6
     vals = spice.corner_values(Condition(proc, 1.8, 27))
     text = spice.render(TEMPLATE, **vals, SECTION=section(proc, rc), TRAMP=f"{tramp:.3e}", TSTEP=f"{tstep:.3e}")
@@ -92,6 +93,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--op", required=True, help="bandgap_pvt campaign with the operating points")
     ap.add_argument("--tramp", default="1u")
+    ap.add_argument("--tsettle", default="15u", help="from the end of the ramp to the supply step; the operating-point check is just before it")
+    ap.add_argument("--process", default=",".join(PROCESS))
     ap.add_argument("--rcorners", default="tt,ll,hh")
     ap.add_argument("--dist", action="store_true", help="serdes_bias_ref with the module copies (bias_dist.spice)")
     ap.add_argument("--workers", type=int, default=4)
@@ -99,17 +102,18 @@ def main():
     tramp = spice.spice_number(a.tramp)
     ops = {(r["process"], r["rcorner"], r["supply"], r["temp"]): r for r in json.loads((ROOT / a.op / "summary.json").read_text())}
     rcs = a.rcorners.split(",")
+    procs = a.process.split(",")
     camp = RESULTS / f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}_ramp{a.tramp}{'_dist' if a.dist else ''}"
     jobs, tstep = [], None
-    for p in PROCESS:
+    for p in procs:
         for rc in rcs:
-            d, tstep = deck(p, rc, tramp, a.dist)
+            d, tstep = deck(p, rc, tramp, a.dist, spice.spice_number(a.tsettle))
             jobs.append((d, camp / f"{p}_{rc}", dict(timeout_s=3600, meta=dict(process=p, rcorner=rc, tramp=tramp))))
     for ex in spice.run_many(jobs, workers=a.workers, smoke=False):
         if not ex.ok:
             print(f"FAILED {ex.run_dir.relative_to(ROOT)}: {ex.log_failures[:3]}")
     rows = []
-    for p in PROCESS:
+    for p in procs:
         for rc in rcs:
             for v in SUPPLY_V:
                 for t in TEMP_C:

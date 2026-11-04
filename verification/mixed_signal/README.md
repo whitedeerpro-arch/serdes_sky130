@@ -43,7 +43,8 @@ results/verification/mixed_signal/build_cal/Vmixed_cdr_cal_top --root "$PWD" --o
 
 两边沿 SAR（顺序）：
 - TT：1349 ns 完成，残差 ≤ 1.22 mV，12 个 payload 字 0 错；
-- SS 1.65 V 85 °C：1356 ns 完成，残差 ≤ 0.33 mV。默认 160 UI 训练不够 CDR 找相位，SS 要加 `--train-ui 1600 --stop-ns 2000`。
+- SS 1.65 V 85 °C：1356 ns 完成，残差 ≤ 0.33 mV。默认 160 UI 训练不够 CDR 找相位，SS 要加 `--train-ui 1600 --stop-ns 2000`；这样跑到 1907 ns（机器重启）时 22 个载荷字 0 错。
+- 被杀的运行没有 summary.json，words.tsv 也是空的；`digital.vcd`、`cal.tsv` 还在，`uv run python verification/mixed_signal/vcd_words.py <运行目录> --write` 从波形还原载荷字。
 
 运行时间：TT 1500 ns 约 3.0 h，SS 1.65 V 85 °C 约 2.7 h。
 

@@ -1,7 +1,8 @@
 """RX sampler clock path over PVT and clock-interface sizing: PI -> clock interface -> latch clock pairs.
 
     uv run python analog/rx/sampler/tb/clock_ac/sweep.py [stress | all | tags...] [--code 12]
-        [--variant NAME=DUT[:k=v,k=v...] ...] [--resume C] [--analyse-only]
+        [--variant NAME=DUT[:k=v,k=v...] ...] [--bias ideal|real] [--rpdk tt|ll|hh] [--workers 4]
+        [--resume C] [--reltol 1e-3] [--analyse-only]
 
 Ideal anchors drive the real PI; the PI drives the real sampler DUT (sampler/tb/link_pvt
 variants), whose data input is static.  14 ns per case, measured over the last 2 ns (4 clock
@@ -12,18 +13,22 @@ duty error, at 12 ns the residue is < 0.1 %.
 Per case: PI output swing, clock-buffer output swing (ac), gate swing and common mode, duty cycle of
 the gate clock, and the clock steering of the D0 master latch: the fraction of the tail current
 the clock moves between track and hold, (max - min of I_track) / mean(I_track + I_hold).
-Default variants: stock and ac (as in rx_half_rate_samples_ac.spice).
+Default variants: stock and ac (as in rx_half_rate_samples_ac.spice).  ac_trim runs at trim code 32.
+Variant keys pi_<name> go to the PI rotator as <name> (pi_cmix=150f), the others to the DUT.
+--bias real: bandgap reference and module copies (serdes_flow.bias); --rpdk: project resistors as PDK
+high_po, library section MOS corner x this resistor corner (as link_pvt).
+Resume: only the cases without a waveform run again, in <deck>.rN (--reltol for the ac_trim cases whose
+time step collapses at the default 1e-4, see link_pvt); a case still missing is reported, not fatal.
 """
 import argparse
 import importlib.util
 import json
-import shutil
 import time
 from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import spice
+from serdes_flow import bias, rcorner, spice
 from serdes_flow.corners import STRESS, Condition, grid45
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -73,13 +78,17 @@ def case_name(c, var):
     return f"{c.tag}_{var}"
 
 
-def deck(conds, code, dut, params, var):
+def deck(conds, code, dut, params, var, real_bias=False, rpdk=None, camp=None, reltol=None):
     c0 = conds[0]
     ac = dut != "stock"
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in sp.pi.bits(code, c0.supply).items())
+    if dut in ("ac_cal", "ac_trim"):
+        ctl += "\n" + sp.cal_sources(32)
     nodes = ["dp", "dn", "xdut.cdp", "xdut.cdn", "vdd"] + (["xdut.xcd.bp", "xdut.xcd.bn"] if ac else [])
     saves = ".save " + " ".join(f"v({n})" for n in nodes) + f" i(Vdd) {CT} {CH}"
-    text = spice.render(TEMPLATE, **spice.corner_values(c0), DUT=sp.dut(dut, params), CONTROL_SOURCES=ctl,
+    pi_params = " ".join(f"{k[3:]}={v}" for k, v in params.items() if k.startswith("pi_"))
+    params = {k: v for k, v in params.items() if not k.startswith("pi_")}
+    text = spice.render(TEMPLATE, **spice.corner_values(c0), DUT=sp.dut(dut, params), PI_PARAMS=pi_params, CONTROL_SOURCES=ctl,
                         SAVES=saves, CASES="@CASES@")
     vecs = ["piout", "buf", "gate", "gcm", "ict", "ich", "power"] if ac else ["piout", "gate", "gcm", "ict", "ich", "power"]
     blocks = []
@@ -87,12 +96,18 @@ def deck(conds, code, dut, params, var):
         blocks.append("\n".join(
             [f"* case {case_name(c, var)}", f"option temp={c.temp}", f"alter Vdd dc={c.supply}", f"alter Vref dc={c.supply}"]
             + [f"alter {k} dc={v}" for k, v in sp.pi.bits(code, c.supply).items()]
+            + ([f"option reltol={reltol} itl4=200"] if reltol else [])
             + [f"tran 2p {STOP:.4e} {SAVE_FROM:.4e} 4p",
                "let piout=v(dp)-v(dn)", "let gate=v(xdut.cdp)-v(xdut.cdn)", "let gcm=(v(xdut.cdp)+v(xdut.cdn))/2",
                f"let ict={CT}", f"let ich={CH}", "let power=-v(vdd)*i(Vdd)"]
             + (["let buf=v(xdut.xcd.bp)-v(xdut.xcd.bn)"] if ac else [])
             + [f"write {case_name(c, var)}.raw " + " ".join(vecs), "destroy all"]))
-    return text.replace("@CASES@", "\n".join(blocks))
+    text = text.replace("@CASES@", "\n".join(blocks))
+    if real_bias:
+        text = bias.real(text)
+    if rpdk:
+        text = bias.section(rcorner.to_pdk(text, camp), c0.process, rpdk)
+    return text
 
 
 def duty(t, y):
@@ -127,7 +142,11 @@ def main():
     ap.add_argument("conds", nargs="*", default=["stress"])
     ap.add_argument("--code", type=int, default=12)
     ap.add_argument("--variant", action="append", default=[])
+    ap.add_argument("--bias", choices=("ideal", "real"), default="ideal")
+    ap.add_argument("--rpdk", choices=("tt", "ll", "hh"))
+    ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--resume")
+    ap.add_argument("--reltol", type=float)
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
     conds = grid45() if a.conds == ["all"] else STRESS if a.conds == ["stress"] else [Condition.parse(x) for x in a.conds]
@@ -137,23 +156,34 @@ def main():
     by_proc = {}
     for c in conds:
         by_proc.setdefault(c.process, []).append(c)
-    jobs = [(deck(cs, a.code, dut, params, var), camp / f"{proc}_{var}",
-             dict(meta=dict(process=proc, variant=var, dut=sp.dut(dut, params), code=a.code, conditions=[c.tag for c in cs])))
-            for var, dut, params in variants for proc, cs in by_proc.items()]
+    raw = lambda c, var: next(iter(sorted(camp.glob(f"{c.process}_{var}*/{case_name(c, var)}.raw"))), None)
     todo = []
-    for j in jobs:
-        if (j[1] / "execution.json").exists():
-            continue
-        if j[1].exists() and not a.analyse_only:
-            shutil.rmtree(j[1])
-        todo.append(j)
-    print(f"{len(conds)} conditions x {len(variants)} variants in {len(jobs)} decks: {len(todo)} to run", flush=True)
-    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=4)):
-        assert ex.ok, (ex.run_dir, ex.log_failures)
-    rows = [analyse(camp / f"{c.process}_{var}" / f"{case_name(c, var)}.raw", c, var) for var, _, _ in variants for c in conds]
-    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, dut_defaults=dut_defaults(),
-                                                       variants=[dict(name=v, dut=sp.dut(d, p)) for v, d, p in variants],
-                                                       rows=rows), indent=1))
+    for var, dut, params in variants:
+        for proc, cs in by_proc.items():
+            missing = [c for c in cs if raw(c, var) is None]
+            if missing and not a.analyse_only:
+                pi = {k[3:]: v for k, v in params.items() if k.startswith("pi_")}
+                meta = dict(process=proc, variant=var, dut=sp.dut(dut, {k: v for k, v in params.items() if not k.startswith("pi_")}),
+                            pi=pi, code=a.code, bias=a.bias, rpdk=a.rpdk, reltol=a.reltol, conditions=[c.tag for c in missing])
+                todo.append((deck(missing, a.code, dut, params, var, a.bias == "real", a.rpdk, camp, a.reltol),
+                             spice.next_run_dir(camp, f"{proc}_{var}"), dict(meta=meta)))
+    print(f"{len(conds)} conditions x {len(variants)} variants: {len(todo)} decks to run", flush=True)
+    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=a.workers)):
+        if not ex.ok:
+            print(f"FAILED {ex.run_dir.relative_to(ROOT)}: {ex.log_failures[:2]}", flush=True)
+    rows, absent = [], []
+    for var, _, _ in variants:
+        for c in conds:
+            p = raw(c, var)
+            if p is None:
+                absent.append(case_name(c, var))
+            else:
+                rows.append(analyse(p, c, var))
+    (camp / "summary.json").write_text(json.dumps(dict(code=a.code, bias=a.bias, rpdk=a.rpdk, dut_defaults=dut_defaults(),
+                                                       variants=[dict(name=v, dut=d, params=p) for v, d, p in variants],
+                                                       missing=absent, rows=rows), indent=1))
+    if absent:
+        print(f"missing (rerun with --resume, --reltol): {absent}")
     print(f"{'variant':10s} {'condition':15s} | pi / buf / gate mVpp | gate cm V | duty | steering | tail uA | P mW")
     for r in rows:
         buf = f"{r['buf_pp']*1e3:4.0f}" if r["buf_pp"] is not None else "   -"

@@ -2,6 +2,11 @@
 
 按日期倒序。细节见 [history](../history/index.md)。
 
+## 2026-11-05
+
+- RX 时钟：PI 混合器 cmix 200 → 120 fF，SS 1.65 V 85 °C R hh 栅极时钟 264 → 323 mVpp。真实偏置 + PDK 电阻下链路窗口 45 × 电阻 tt/ll/hh 全部通过，最差 0.81 UI；PI 64 码 6 个压力角 × R hh/ll 单调，|INL| ≤ 0.0101 UI。
+- 读出接真实偏置和 PDK 电阻（`readout_deser --bias --rpdk`）：压力角 × R hh/ll 中 FS 1.65 V 85 °C R hh 失败，÷2 输出只有 76 mVpp、不持续翻转（I-33）；FF 1.95 V −40 °C R hh 工作点不收敛。其余 0 错。测试台在 ÷2 上加约 20 aC 的电荷，避免无噪声仿真停在平衡态。
+
 ## 2026-11-04
 
 - LF 预充缓冲 B2（`serdes_ref_pbuf`）：16 档目标（0.95–1.35 V），单级 OTA 跟随，尾 300 µA 只在预充窗口开；405 工况到 10 mV ≤ 360 ns（窗口 512 ns），常用码误差 ±10 mV 内。拷贝不能开关（踢 vgi，约 1 µs 恢复），改常通。LF 预充门改普通 NMOS + LVT PMOS（原门在 SS / SF 1.65 V −40 °C 有死区，Ci > 1 µs）；关断漏电最差 186 nA，释放扰动约 +2 mV。PLL 闭环未复验。

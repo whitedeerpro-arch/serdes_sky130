@@ -2,10 +2,12 @@
 
     uv run python analog/rx/sampler/tb/readout_deser/run.py [stress | all | tags...] [--code 20]
         [--param K=V ...] [--deser serdes_rx_readout_deser16] [--deser-param K=V ...] [--workers 4]
-        [--resume C] [--analyse-only]
+        [--bias ideal|real] [--rpdk tt|ll|hh] [--resume C] [--analyse-only]
 
 C2 far-end replay -> CTLE EQ3 -> PI (code) -> serdes_rx_half_rate_samples_ac_rk -> rx_readout_deser16.spice.
 One deck per condition.  The 32 outputs are read at every rising edge of the word clock w.
+A 20 aC kick (about the thermal charge of the node) on the read divider at t = 0: without noise the divider can sit
+at its balanced state for a long time (17 ns at SS 1.65 V 85 C R hh, words before that fail the check).
 
 Per case:
   word map   EXPECTED gives the chronological position (0 = oldest) in the 16-UI word of every data
@@ -28,7 +30,7 @@ from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import boundary, eye, rcorner, spice
+from serdes_flow import bias, boundary, eye, rcorner, spice
 from serdes_flow.corners import STRESS, Condition, boundary_first, grid45
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -56,6 +58,7 @@ def deck(c, code, dut_text, deser, extra=""):
     ctl = "\n".join(f"{k} {k[1]}{k[2]} 0 {v}" for k, v in sp.pi.bits(code, c.supply).items())
     if extra:
         ctl += "\n" + extra
+    ctl += "\nIkick xro.xf.dqp xro.xf.dqn PWL(0 1u 20p 1u 21p 0)"
     nodes = outputs() + ["w", "vdd", "xro.ckq", "xro.ckqb", "xro.ckm", "xro.ckmb", "xro.st_q", "xro.st_qb", "xro.st_m",
                          "xro.st_mb", "xro.xwc.j0", "xro.xwc.j1"] + [f"xro.r{lane}" for lane in LANES]
     saves = ".save " + " ".join(f"v({n})" for n in nodes) + " i(Vdd)"
@@ -131,6 +134,8 @@ def analyse(path, c, code, bits):
     out["capture"] = {k: list(v) for k, v in cap.items()}
     ds = [min(v) for k, v in cap.items() if k in ("a0", "b0", "a1", "b1") and None not in v]
     out["capture_data_slack_min_ps"] = min(ds) if ds else None
+    start = crossings(w.t, w["v(xro.ckq)"], level=vdd / 2)[0]
+    out["ck_start_ns"] = float(start[0] * 1e9) if len(start) else None
     tog = lambda k: int(len(crossings(t, g(k), level=vdd / 2)[0]))
     out["toggles"] = dict(w=tog("v(w)"), j0=tog("v(xro.xwc.j0)"), st_q=tog("v(xro.st_q)"), st_m=tog("v(xro.st_m)"),
                           ckq=tog("v(xro.ckq)"))
@@ -149,6 +154,8 @@ def main():
     ap.add_argument("--bc", default="rx_c2_far_nominal@ctle_rc")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--rcorner", help="emulate a resistor corner (hh | ll | scale) with constant-swing reference currents (serdes_flow.rcorner)")
+    ap.add_argument("--bias", choices=("ideal", "real"), default="ideal", help="real: bandgap reference and module copies (serdes_flow.bias)")
+    ap.add_argument("--rpdk", choices=("tt", "ll", "hh"), help="project resistors as PDK high_po, library section MOS x this resistor corner")
     ap.add_argument("--resume")
     ap.add_argument("--reltol", type=float, help="numerics for a resume of failed cases: option reltol=X itl4=200 before tran")
     ap.add_argument("--op-steps", type=int, help="operating point of a resume: .options gminsteps=N srcsteps=N "
@@ -164,7 +171,7 @@ def main():
                 if trim else rd.dut_text(params))
     extra = sp.cal_sources(a.cal_code) if trim else ""
     boundary.check_load(a.bc, sp.replay.signature())
-    camp = (ROOT / a.resume) if a.resume else RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + (f"_ac_trim{a.cal_code}" if trim else ""))
+    camp = (ROOT / a.resume) if a.resume else RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + (f"_ac_trim{a.cal_code}" if trim else "") + ("_realbias" if a.bias == "real" else "") + (f"_r{a.rpdk}" if a.rpdk else ""))
     camp.mkdir(parents=True, exist_ok=True)
     stim, _ = sp.replay.stimuli(a.bc)
     (camp / "stimuli.inc").write_text(stim)
@@ -181,9 +188,13 @@ def main():
                 if dk.count("\n.options ") != 1:
                     raise ValueError("expected one .options line")
                 dk = dk.replace("\n.options ", f"\n.options gminsteps={a.op_steps} srcsteps={a.op_steps} ")
+            if a.bias == "real":
+                dk = bias.real(dk)
+            if a.rpdk:
+                dk = bias.section(rcorner.to_pdk(dk, camp), c.process, a.rpdk)
             todo.append(((rcorner.emulate(dk, camp, a.rcorner) if a.rcorner else dk), spice.next_run_dir(camp, c.tag),
                          dict(files={"stimuli.inc": camp / "stimuli.inc"}, timeout_s=a.case_timeout,
-                              meta=dict(condition=c.tag, code=a.code, dut=dut_text, cal_code=(a.cal_code if trim else None), deser=deser, bc=a.bc, reltol=a.reltol, op_steps=a.op_steps))))
+                              meta=dict(condition=c.tag, bias=a.bias, rpdk=a.rpdk, code=a.code, dut=dut_text, cal_code=(a.cal_code if trim else None), deser=deser, bc=a.bc, reltol=a.reltol, op_steps=a.op_steps))))
     print(f"{len(order)} cases: {len(todo)} to run", flush=True)
     for ex in spice.run_many(todo, workers=a.workers, smoke=True):
         if not ex.ok:

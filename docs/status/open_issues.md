@@ -45,6 +45,7 @@
 | I-24 | 三个 PLL 前端 SPICE 文件的注释仍引用旧路径 `docs/pll_first_debug.md`（现为 `docs/history/pll_first_debug.md`），v0.1 发布快照中也有同样引用；按约定未改源码。 | `analog/pll/top/spice/clock_frontend_*.spice` | — |
 | I-29 | TX 输出级焊盘/ESD/封装为代理参数；电源、回流、PSRR 未建模；FFE 未实现。 | [TX 输出级](../design/tx_output_driver.md) | P5 |
 | I-30 | RX PI 锚点是理想源，没有接原生 PLL 八相；共享 PLL 能支持多少路 PI 扇出未验证。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
+| I-33 | **读出 ÷2 在 FS 1.65 V 85 °C R hh 不持续翻转，读出失败。** ÷2 输出 76 mVpp（SS 1.65 V 85 °C R hh 148 mVpp，都低于 150 mVpp 硬下限）：源跟随器后时钟只有约 220 mVpp、共模 0.85 V，尾节点约 0.2 V。同一单元在 PLL ÷8 第一级也偏弱。另有 FF 1.95 V −40 °C R hh 工作点不收敛，没有结果。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05) | P5 |
 
 ## 文档整理时发现的冲突（已按最新记录处理）
 

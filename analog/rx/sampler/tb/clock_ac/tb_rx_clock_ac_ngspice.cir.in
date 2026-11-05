@@ -17,6 +17,8 @@ RX sampler clock path: ideal PI anchors -> PI -> sampler DUT with static data
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_clock_shift.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_clock_ac.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_sample_dff.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_offset_dac.spice"
+.include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_offset_trim.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_half_rate_samples.spice"
 .include "@PROJECT_ROOT@/analog/rx/sampler/spice/rx_half_rate_samples_ac.spice"
 Vdd vdd 0 @SUPPLY@
@@ -34,7 +36,7 @@ Bc2n c2n 0 V=v(vdd)-0.15-.1*tanh(sin(12.566370614359172e9*time+1.570796326794896
 Bc3p c3p 0 V=v(vdd)-0.15+.1*tanh(sin(12.566370614359172e9*time+2.356194490192345)/.25)
 Bc3n c3n 0 V=v(vdd)-0.15-.1*tanh(sin(12.566370614359172e9*time+2.356194490192345)/.25)
 @CONTROL_SOURCES@
-Xpi c0p c0n c1p c1n c2p c2n c3p c3n a0 a1 a2 a3 a4 a5 a6 a7 b0 b1 b2 b3 b4 b5 b6 b7 f0 f1 f2 f3 f4 f5 f6 f7 dp dn ep en vbias vdd 0 serdes_pi_rotator
+Xpi c0p c0n c1p c1n c2p c2n c3p c3n a0 a1 a2 a3 a4 a5 a6 a7 b0 b1 b2 b3 b4 b5 b6 b7 f0 f1 f2 f3 f4 f5 f6 f7 dp dn ep en vbias vdd 0 serdes_pi_rotator @PI_PARAMS@
 Xdut op on dp dn ep en d0p d0n d1p d1n e0p e0n e1p e1n vbias vdd 0 @DUT@
 Cd0p d0p 0 5f
 Cd0n d0n 0 5f

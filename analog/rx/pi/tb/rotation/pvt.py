@@ -1,6 +1,7 @@
 """RX PI 64-code rotation over PVT (ideal anchors, no boundary condition).
 
-    uv run python analog/rx/pi/tb/rotation/pvt.py [stress | all | tags...] [--codes 0..63] [--resume C] [--analyse-only]
+    uv run python analog/rx/pi/tb/rotation/pvt.py [stress | all | tags...] [--codes 0..63] [--pi cmix=120f ...]
+        [--bias ideal|real] [--rpdk tt|ll|hh] [--workers 4] [--resume C] [--analyse-only]
 
 Anchors: four ideal 2 GHz differential clocks, 0/45/90/135 deg, 400 mVpp diff, common mode
 VDD - 0.15 V (follows the supply).  Code c = 8q + f (README): even sector A = q, B = q+1,
@@ -12,6 +13,7 @@ Per condition: data-clock phase vs code (unwrapped, in UI of 4 Gb/s; one 2 GHz p
 LSB = 2/64 UI), monotonicity, DNL / INL (INL against the straight line through the 64 codes
 with the mean step), output swing, edge-clock offset from data + 0.5 UI (quadrature).
 Gate (agreed 2026-11-01): monotonic over 64 codes, |INL| <= 0.02 UI.
+--pi: rotator parameters; --bias real / --rpdk: real reference and PDK resistors, as sampler/tb/link_pvt.
 """
 import argparse
 import json
@@ -21,7 +23,7 @@ from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import spice
+from serdes_flow import bias, rcorner, spice
 from serdes_flow.corners import STRESS, Condition, grid45
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -50,10 +52,10 @@ def case_name(c, code):
     return f"{c.tag}_c{code:02d}"
 
 
-def deck(cases):
+def deck(cases, pi_params="", real_bias=False, rpdk=None, camp=None):
     c0, code0 = cases[0]
     b0 = bits(code0, c0.supply)
-    text = spice.render(TEMPLATE, **spice.corner_values(c0), CASES="@CASES@",
+    text = spice.render(TEMPLATE, **spice.corner_values(c0), CASES="@CASES@", PI_PARAMS=pi_params,
                         **{f"{k[1].upper()}{k[2]}_V": v for k, v in b0.items()})
     blocks = []
     for c, code in cases:
@@ -64,7 +66,12 @@ def deck(cases):
                                    "let data_clock=v(dp)-v(dn)", "let edge_clock=v(ep)-v(en)", "let anchor=v(c0p)-v(c0n)",
                                    "let power=-v(vdd)*i(Vdd)",
                                    f"write {n}.raw data_clock edge_clock anchor power", "destroy all"]))
-    return text.replace("@CASES@", "\n".join(blocks))
+    text = text.replace("@CASES@", "\n".join(blocks))
+    if real_bias:
+        text = bias.real(text)
+    if rpdk:
+        text = bias.section(rcorner.to_pdk(text, camp), c0.process, rpdk)
+    return text
 
 
 def phase(t, y, ref):
@@ -109,6 +116,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("conds", nargs="*", default=["stress"])
     ap.add_argument("--codes", default="0..63")
+    ap.add_argument("--pi", action="append", default=[])
+    ap.add_argument("--bias", choices=("ideal", "real"), default="ideal")
+    ap.add_argument("--rpdk", choices=("tt", "ll", "hh"))
+    ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--resume")
     ap.add_argument("--analyse-only", action="store_true")
     a = ap.parse_args()
@@ -121,7 +132,9 @@ def main():
     by_proc = {}
     for k in keys:
         by_proc.setdefault(k[0].process, []).append(k)
-    jobs = [(deck(cases), camp / proc, dict(meta=dict(process=proc, conditions=sorted({c.tag for c, _ in cases}), codes=codes)))
+    pi_params = " ".join(a.pi)
+    jobs = [(deck(cases, pi_params, a.bias == "real", a.rpdk, camp), camp / proc,
+             dict(meta=dict(process=proc, conditions=sorted({c.tag for c, _ in cases}), codes=codes, pi=a.pi, bias=a.bias, rpdk=a.rpdk)))
             for proc, cases in by_proc.items()]
     todo = []
     for j in jobs:
@@ -131,7 +144,7 @@ def main():
             shutil.rmtree(j[1])
         todo.append(j)
     print(f"{len(keys)} cases in {len(jobs)} decks: {len(jobs) - len(todo)} kept, {len(todo)} to run", flush=True)
-    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=4, smoke=False)):
+    for ex in ([] if a.analyse_only else spice.run_many(todo, workers=a.workers, smoke=False)):
         assert ex.ok, (ex.run_dir, ex.log_failures)
     rows = [analyse_condition(camp / c.process, c, codes) for c in conds]
     (camp / "summary.json").write_text(json.dumps(rows, indent=1, default=float))

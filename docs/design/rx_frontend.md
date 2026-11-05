@@ -2,7 +2,7 @@
 
 > **当前修订**：首版 [rx_input_termination](../../analog/rx/input/spice/rx_input_termination.spice) + 四档 RC 退化 CTLE [rx_ctle_rc](../../analog/rx/ctle/spice/rx_ctle_rc.spice)（[配置](../../config/rx_frontend.toml)）。
 > **关键数字**：0.8 V 输入共模时 2 GHz 相对峰化 −0.03 / 2.90 / 3.76 / 4.59 dB；真实 TX + C2 + 真实 RX 加载下，EQ11 把采样眼高从约 155 提到约 352 mV、散布从 0.211 降到 0.077 UI。
-> **主要缺口**：输入共模改为 1.05 V 后，AC/DC 与 C2 眼图在 45 条件满足（下文 PVT 两节），C2 默认档 EQ3；采样器 PVT、C3 未做；vcm 参考/缓冲未设计；档位自适应未定。
+> **主要缺口**：输入共模改为 1.05 V 后，AC/DC 与 C2 眼图在 45 条件满足（下文 PVT 两节），C2 默认档 EQ3。采样器 PVT 和真实偏置链路结果见 [PI/采样器](rx_pi_sampler.md)，vcm 参考/缓冲见 [bias](bias.md)；仍需独立核对真实偏置/RC 的 CTLE 特性、目标信道覆盖和档位策略。
 
 ## 电路
 
@@ -76,11 +76,11 @@ flowchart LR
 
 ## 适用范围
 
-- 只有 TT；输入为确定码型，无噪声/失调；采样是 0 V 门限的数值采样。
-- 电阻/电容为理想元件；vcm 参考、pad/ESD、实际回流未建模。
+- 首版 DC/AC 与真实加载联调为 TT；后两节分别是 45 条件 DC/AC 和 C2 眼图。输入为确定码型，无噪声/失调；眼图采用 0 V 门限数值采样，不能代表 BER。
+- 本页独立 CTLE PVT 的 R/C、vcm 为理想边界，pad/封装为代理，实际回流未建模。真实偏置与 PDK R 的接收链路覆盖见 [PI/采样器](rx_pi_sampler.md)，不要混用两套边界。
 
 ## 待解决
 
-- RX 前端 PVT、噪声、失调（[问题清单](../status/open_issues.md) I-14）。
-- 采样器在 1.05 V 共模下的 PVT；C3 信道；vcm 参考/缓冲（1.05 V ± 50 mV）；CMFB；档位自适应（I-28）。
-- C3/C4/C5 覆盖（I-14）。
+- 真实偏置/RC 的 CTLE 增益、零极点和共模特性；实际端接与 vcm 的动态加载（I-14/I-28）。
+- CTLE 与采样器的联合噪声、失配及校准；已有失调结果见 [PI/采样器](rx_pi_sampler.md)。
+- 明确目标信道后补 C3/C4/C5 覆盖、档位选择；是否需要 CMFB 由实际共模接口余量决定（I-14/I-28）。

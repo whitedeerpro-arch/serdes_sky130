@@ -2,6 +2,8 @@
 
 > 编号稳定，关闭时保留条目并写明结论与日期。阶段：P2 正确性修复，P3 PVT 补全，P4 相位噪声与抖动，P5 RX PVT 与数字实现。优先级按对"45 条件满足规格"的影响排序。
 
+2026-11-06 的跨模块评估建议先做 I-33 共用分频单元、I-07 TX v3 与 I-09/I-32 PLL 工作区，见[分批结论](../history/design_coupling_review_20261106.md)。评估里的 P0/P1 表示执行优先级，与本表的项目阶段编号不同。
+
 ## 高优先级
 
 | 编号 | 问题 | 证据 | 阶段 |
@@ -21,14 +23,14 @@
 
 | 编号 | 问题 | 证据 | 阶段 |
 |---|---|---|---|
-| I-09 | VCO 45 条件 × 全码调谐映射与相邻码重叠未做。r5 候选 3 bit 量程到头（慢端码 0、快端码 7、1.475 V），码步 10–13 %，改 4 bit 后再做映射。 | [VCO](../design/pll_vco.md) | P3 |
+| I-09 | VCO 45 条件 × RC 角调谐工作区与相邻码重叠未做。FF 1.95 V −40 °C ll 补测：码 6 在 1.20–1.35 V 内跨过 2 GHz，旧码 7 / 1.475 V 不能证明量程到头。先按 CP/B2 和捕获余量选码；4 bit 保留为改善重叠/失配的候选，是否必要由映射决定。 | [VCO](../design/pll_vco.md) | P3 |
 | I-10 | FS/1.65 V/−40 °C 分频首级/第二级 master 尾管平均 VDS − VDSAT 约 −5/−4 mV（r3）；r2 时约 63% 采样点低于饱和判据。功能正常但无裕量；修补困难时考虑减少堆叠的结构。 | [分频器](../design/pll_divider.md) | P3 |
 | I-11 | 1.95 V 条件 CMOS 上冲（FF/FS 冷角峰值约 2.022–2.026 V），15 个 1.95 V 条件都有；器件端电压未核对。r4 接收器最高约 2.049 V（SS/1.95 V/−40 °C）。 | [时钟接收器](../design/clock_receiver.md) | P3 |
 | I-12 | CP 高 Vctrl 处 UP/DN 失配：SS/1.65 V/85 °C、1.4 V 时 40.8/49.3 µA；PFD→CP 零电荷相位 −79.4 … +93.1 ps；三点不足以证明无死区。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-13 | LF RC 极限角未接入闭环；物理 LF 候选（poly + MIM）未决定是否采用。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-15 | RX 物理 16 UI 降速：读出 deser16（CML 1:2 + CMOS 1:4，45 条件逐位正确）与 `rx_word_map` / `rx_word_align16` 已有，实时联调（TT）中 PI 步进、跨扇区与回卷下 payload 全部正确；PI 步进的 PVT 未做；系统时钟域 FIFO/CDC 未设计。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
 | I-16 | 数字 RTL 没有综合映射和 STA（yosys 0.9，无 OpenSTA）。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |
-| I-17 | ~~400 mVpp 的适用节点未定义。~~ **已关闭 2026-10-31**：400 mVpp 是上界与驱动目标；内部 CML 硬下限 150 mVpp、设计目标 ≥ 200 mVpp；VCO 摆幅归 P4 相噪预算（见 I-05）。 | [规格](../overview/spec.md#已确认的取舍2026-10-31) | — |
+| I-17 | **政策已确认 2026-10-31，实测符合性待核对（2026-11-06）**：400 mVpp 是上界与驱动目标；内部硬下限 150 mVpp、设计目标 ≥200 mVpp；VCO 由相噪预算决定。现有内部时钟实测可到约 1.01 Vpp 差分；规格共模公式混用单端/差分的问题已修正。需列出逐节点符合性，尚未放宽原上界。 | [规格](../overview/spec.md#已确认的取舍2026-10-31)、[评估](../history/design_coupling_review_20261106.md) | P3 |
 | I-19 | TX 没有并行字捕获寄存器，输入字按已知时刻激励；早期试验中提前 1 UI 更新就出错。 | [TX 串化器](../design/tx_serializer.md) | P2 |
 | I-20 | 链路级眼图门槛未定义。75 mV 只约束串化器节点；TX r2 接 C2 时远端最小裕量 54.81 mV（FS/1.65 V/85 °C）。需要定义 RX 输入或 CTLE 后的门槛。 | [信道模型](../design/channel_model.md) | P5 |
 | I-21 | PLL 启动：频率/细相位测量前端、片内预充参考、看门狗、自动粗搜未实现。 | [PLL 环路](../design/pll_loop.md) | P3 |
@@ -46,7 +48,7 @@
 | I-29 | TX 输出级焊盘/ESD/封装为代理参数；电源、回流、PSRR 未建模；FFE 未实现。 | [TX 输出级](../design/tx_output_driver.md) | P5 |
 | I-30 | RX PI 锚点是理想源，没有接原生 PLL 八相；共享 PLL 能支持多少路 PI 扇出未验证。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
 | I-33 | **读出 ÷2 在 FS 1.65 V 85 °C R hh 不持续翻转，读出失败。** ÷2 输出 76 mVpp（SS 1.65 V 85 °C R hh 148 mVpp，都低于 150 mVpp 硬下限）：源跟随器后时钟只有约 220 mVpp、共模 0.85 V，尾节点约 0.2 V。同一单元在 PLL ÷8 第一级也偏弱。另有 FF 1.95 V −40 °C R hh 工作点不收敛，没有结果。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05) | P5 |
-| I-32 | VCO r5 候选还没接回 PLL：环路改 k = 4（Rz、Cf 按角重定，PM 现在最差 44°），LF 电容约 0.7 : 0.3 分接 VDD 和地（全接地 k = 4 只容忍约 3.3 mV 纹波），4 bit 电容阵列，B2 范围（2 GHz 落点 0.98–1.475 V，B2 只到 1.35 V），CP 高 Vctrl 余量（I-12），PLL 级 bench 的码选择（还是 r3 的），闭环重验证。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md) | P3 |
+| I-32 | VCO r5 候选还没接回 PLL：比较 k=2/3/4 的实际 CP/LF（k=2 已过抖动模型门槛，k=4 最小 PM 约 44°）；验证 LF 分接 VDD 的宽带效果；逐角统一 VCO/CP/B2 工作区和捕获误差；按 I-09 决定阵列是否扩位。PLL 级 bench 仍用 r3 码，需更新并做原生闭环。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md) | P3 |
 
 ## 文档整理时发现的冲突（已按最新记录处理）
 

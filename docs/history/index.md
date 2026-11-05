@@ -1,6 +1,6 @@
 # 实验记录（历史）
 
-这里是 2026-10-27 至 10-30 按时间写下的实验记录，正文保持原样，只修正了移动后的相对链接。当前设计以 [design](../design/) 下的文档为准；这些记录保留完整的测试边界、失败对照和中间推理，需要细节时再读。
+这里保存按时间写下的实验与评估记录。10-27 至 10-30 的原始记录迁入时保持正文原样，只修正了相对链接；后续评估继续按日期追加。当前设计以 [design](../design/) 下的文档为准；这些记录保留测试边界、失败对照和中间推理，需要细节时再读。
 
 注意：
 
@@ -9,6 +9,8 @@
 
 | 日期 | 记录 | 一句话结论 | 现行文档 / 状态 |
 |---|---|---|---|
+| 11-06 | [design_coupling_review_20261106.md](design_coupling_review_20261106.md) | 三批设计结论：RX ÷2/TX 时序优先，VCO 相邻码核验，PLL/bias 耦合与约束口径 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md)、[RX](../design/rx_pi_sampler.md) |
+| 11-05 | [workflow_review_20261105.md](workflow_review_20261105.md) | MC 内存实测、读出扫描收敛成本、共同续跑与输入身份、分层架构改进顺序 | [统计方法](../verification/statistics.md)、[验证方法](../verification/methods.md) |
 | 10-27 | [verification.md](verification.md) | 分层测试、结果路径、执行与判定分离 | [verification/methods](../verification/methods.md) |
 | 10-27 | [architecture.md](architecture.md) | 电路层次、目录所有权、接口草案 | [overview/architecture](../overview/architecture.md) |
 | 10-27 | [serdes_clock_plan.md](serdes_clock_plan.md) | 4 Gb/s 目标、2:1 × 4 串化分配、四级环振方案 | [overview/architecture](../overview/architecture.md) |

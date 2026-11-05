@@ -2,7 +2,7 @@
 
 > **当前状态**（2026-11-04）：带隙 + 恒摆幅 V→I 参考（5 bit r_ref 修调）、vcm 缓冲、到各模块的电流分配（[bias_dist.spice](../../analog/common/bias/spice/bias_dist.spice)）已设计并过 135 条件（MOS 角 × 电阻角 × 电压 × 温度）。测试台用 [`serdes_flow.bias`](../../src/serdes_flow/bias.py) 把理想参考源换成真实参考（RX link_pvt `--bias real --rpdk`）；此前的 PVT 结果都是理想源。
 > **关键数字**：参考电流 10 µA（vbg / r_ref）；每个 CML 域一路 212.5 µA 拷贝进 nfet 5/0.5 二极管（原来是理想 0.85 mA 进 20/0.5，电流密度相同，功耗 1/4）；CTLE、CP 各 50 µA。摆幅代理 I·R 在 135 条件内 407–426 mV（理想源 405–409 mV）；修调后每个模块的摆幅失配 σ 1.6–1.9 %。
-> **主要缺口**：TX、PLL 测试台接真实偏置；PSRR 门槛只定到 VCO 整体（[规格](../overview/spec.md#抖动与相位噪声预算)：20 MHz 下电源到频率 ≤ 150 MHz/V），偏置单独的门槛没有拆。LF 预充缓冲 B2 和偏置线去耦已设计，见[下文](#lf-预充缓冲-b2)。
+> **主要缺口**：TX 与 PLL 整链测试台接真实偏置（VCO 开环/相噪测试已接入）；PSRR 门槛只定到 VCO 整体（[规格](../overview/spec.md#抖动与相位噪声预算)：20 MHz 下电源到频率 ≤ 150 MHz/V），偏置单独的门槛没有拆。LF 预充缓冲 B2 和偏置线去耦已设计，见[下文](#lf-预充缓冲-b2)。恒 I·R、启动及共享参考耦合的评估见[设计审查](../history/design_coupling_review_20261106.md)。
 
 ## 偏置清单
 

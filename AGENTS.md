@@ -44,6 +44,8 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - 本机近期会意外重启（2026-11-01 两次，与仿真负载无关），长 campaign 必须能按工况断点续跑（见下一条）。窗口类测量先在压力角做完整扫描，其余条件用门槛模式只查门槛跨度两端和中心（例：`link_pvt/pvt.py --gate-codes`），减工作量不减条件覆盖。
 - 长 campaign：每组（deck）一个条件、超时按工况数计（`spice.run(timeout_s=…)`）；中断后按工况续跑（`spice.case_output` / `next_run_dir`，只补缺的工况；传 `t_end`＝tran 结束时间，否则"timestep too small"中止的工况仍会写出截断波形并被当成完整结果）；运行顺序用 `corners.boundary_first`（先边界）；运行中用 `uv run python -m serdes_flow.watch <campaign> --every 600` 探健康（正常 / 停滞 / 报错 / 进程消失 / 失败），只读文件，不影响仿真。
 - 每次启动 ngspice 加载 SKY130 模型库约 15 s。短分析（工作点/AC/DC、短瞬态）按工艺角合并成一个 deck，在控制段里用 `option temp=…`、`alter V… dc=…` 循环电压、温度和控制位（例：`analog/rx/ctle/tb/ac_dc/pvt.py`，45 条件 × 4 档从约 13 min 降到 39 s，结果逐位相同）。`spice.run` 对所有任务设单线程（`num_threads=1`）。
+- MC 用 `mc.run_many` 按输入身份和完整样本数续跑；瞬态 `mc.deck` 传 `t_end`，不能只凭 execution.json 判完成。采样器默认 8 样本/块、3 worker；配对旧运行/校准码必须显式传原 `--chunk`，改变分块会改变样本身份。内存增量按 DUT 实测，不沿用旧的 45 MB/样本估计；见 [统计方法](docs/verification/statistics.md#执行续跑与成本)。
+- 扫描异常慢时先用 `uv run python -m serdes_flow.audit <campaign>` 区分收敛超时、截断输出、中断和未启动条件，再决定是否扩展长扫描；不要把所有耗时归为 MC。电阻替换快照与当前源码不一致时使用新 campaign。
 - 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。
 - 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。参数选择按 [尺寸设计流程](docs/verification/sizing.md)：约束 + 粗模型求解，仿真校准迭代。
 - 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。

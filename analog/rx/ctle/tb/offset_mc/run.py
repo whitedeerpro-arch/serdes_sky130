@@ -39,18 +39,18 @@ def main():
     ap.add_argument("--eq", type=int, default=3)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--ideal-r", action="store_true")
+    ap.add_argument("--reuse", help="resume the same campaign with unchanged inputs, seeds and sample count")
     a = ap.parse_args()
     c = Condition.parse(a.cond)
-    camp = RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + ("_idealr" if a.ideal_r else ""))
+    camp = ROOT / a.reuse if a.reuse else RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + ("_idealr" if a.ideal_r else ""))
     # DC gain without mismatch: +-5 mV
     g = mc.deck(netlist(c, c.process, a.eq, camp, a.ideal_r), 1, analysis="dc Vdm -0.005 0.005 0.01\nlet dif=v(op)-v(on)",
                 lets={"gain": "(dif[1]-dif[0])/0.01"})
-    spice.run(g, camp / "gain", timeout_s=600)
-    gain = mc.read(camp / "gain")[0]["gain"]
+    gain_dir = mc.run_many([(g, camp / "gain", dict(timeout_s=600))], workers=1)[0]
+    gain = mc.read(gain_dir)[0]["gain"]
     jobs = [(mc.deck(netlist(c, f"{c.process}_mm", a.eq, camp, a.ideal_r), n, seed=s, analysis="op", lets={"vos": "v(op)-v(on)"}),
              camp / f"chunk{k:02d}", dict(timeout_s=1200)) for k, s, n in mc.chunks(a.samples, a.seed, per=100)]
-    spice.run_many(jobs, workers=4, smoke=False)
-    rows = mc.read_all([j[1] for j in jobs])
+    rows = mc.read_all(mc.run_many(jobs, workers=4))
     vin = mc.column(rows, "vos") / gain * 1e3
     s = stats.summary(vin)
     lo, hi = stats.tolerance(vin)

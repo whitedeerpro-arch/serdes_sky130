@@ -24,6 +24,8 @@ import re
 import time
 from pathlib import Path
 
+from . import mc
+
 ERR = re.compile(r"error|timestep too small|singular matrix|aborted", re.I)
 
 
@@ -48,10 +50,19 @@ def tail(path, n=20000):
 
 
 def deck_state(d, alive, stall, now):
-    total = sum(1 for l in (d / "tb.cir").read_text(errors="replace").splitlines() if l.startswith("* case "))
+    deck = (d / "tb.cir").read_text(errors="replace")
+    is_mc = bool(re.search(r"wrdata\s+mc.tsv", deck))
+    total = sum(1 for l in deck.splitlines() if l.startswith("* case "))
     outs = sorted((p.stat().st_mtime for p in d.iterdir()
                    if (p.suffix in (".raw", ".tsv") or p.name.endswith(".raw.gz")) and p.stat().st_size > 0))
     done = len(outs)
+    if is_mc:
+        m = re.search(r"dowhile mc_k < (\d+)", deck)
+        total = int(m[1]) if m else 0
+        try:
+            done = len(mc.read(d))
+        except (OSError, ValueError):
+            done = 0
     start = (d / "tb.cir").stat().st_mtime
     marks = [start] + outs
     typical = (marks[-1] - start) / done if done else None
@@ -65,8 +76,12 @@ def deck_state(d, alive, stall, now):
         except ValueError:                 # truncated by a crash while being written
             e = None
     if e is not None:
-        bad = e.get("exit_code") != 0 or e.get("timed_out")
+        bad = e.get("exit_code") != 0 or e.get("timed_out") or (total > 0 and done < total)
+        if is_mc and "* mc_contract " in deck:
+            bad = bad or not mc.complete(d, deck)
         why = "timeout" if e.get("timed_out") else f"exit {e.get('exit_code')}"
+        if bad and e.get("exit_code") == 0 and not e.get("timed_out"):
+            why = "incomplete output (run audit for details)"
         return ("FAIL" if bad else "done"), done, total, (why if bad else "")
     if errs:
         return "ERROR", done, total, errs[-1][:80]
@@ -89,10 +104,11 @@ def probe(camp, stall):
     the state, finished cases are counted once over all attempts."""
     now = time.time()
     alive = ngspice_cwds()
-    decks = sorted(p.parent for p in Path(camp).glob("*/tb.cir"))
+    decks = sorted(p.parent for p in Path(camp).rglob("tb.cir")
+                   if not re.search(r"\.(pilot|smoke)(\.r\d+)?$", p.parent.name))
     groups = {}
     for d in decks:
-        b, i = _base(d.name)
+        b, i = _base(str(d.relative_to(camp)))
         groups.setdefault(b, []).append((i, d))
     plan = Path(camp) / "plan.json"
     planned = json.loads(plan.read_text())["decks"] if plan.exists() else {}
@@ -100,7 +116,7 @@ def probe(camp, stall):
     states, done, total, pending = {}, 0, 0, 0
     for b, att in groups.items():
         att.sort()
-        s, _, n, why = deck_state(att[-1][1], alive, stall, now)
+        s, ndone, n, why = deck_state(att[-1][1], alive, stall, now)
         last = max(q.stat().st_mtime for q in att[-1][1].iterdir())
         if s == "DEAD" and last < plan_t:      # interrupted before the current driver started: rerun pending
             s, pending = "pending", pending + 1
@@ -108,7 +124,8 @@ def probe(camp, stall):
                 if (q.suffix in (".raw", ".tsv") or q.name.endswith(".raw.gz")) and q.stat().st_size > 0}
         n_total = planned.get(b, deck_state(att[0][1], alive, stall, now)[2])
         states[b] = (s, why)
-        done += len(outs)
+        is_mc = bool(re.search(r"wrdata\s+mc.tsv", (att[-1][1] / "tb.cir").read_text()))
+        done += ndone if is_mc else len(outs)
         total += n_total
     bad = {k: v for k, v in states.items() if v[0] in ("STALL", "ERROR", "DEAD", "FAIL")}
     running = sum(v[0] == "run" for v in states.values())

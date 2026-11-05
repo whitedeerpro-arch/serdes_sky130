@@ -71,8 +71,12 @@ def _swap_includes(deck: str, dest: Path, rewrite) -> str:
             return m[0]
         new = dest / src.relative_to(ROOT)
         new.parent.mkdir(parents=True, exist_ok=True)
-        if not new.exists():
-            new.write_text(rewrite(src.read_text()))
+        rewritten = rewrite(src.read_text())
+        if new.exists():
+            if new.read_text() != rewritten:
+                raise ValueError(f"resistor snapshot differs from current source: {src}; use a new campaign")
+        else:
+            new.write_text(rewritten)
         return f'.include "{new}"'
 
     return _INC.sub(swap, deck)

@@ -38,21 +38,22 @@ def main():
     ap.add_argument("--section", default="tt")
     ap.add_argument("--temps", default="27,-40,85")
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--reuse", help="resume the same campaign with unchanged inputs, seeds and sample count")
     a = ap.parse_args()
     temps = [int(x) for x in a.temps.split(",")]
-    camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = ROOT / a.reuse if a.reuse else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs = []
     for t in temps:
         jobs.append((mc.deck(netlist(a.section, t), 1, seed=a.seed, lets=LETS), camp / f"nominal_t{t}", dict(timeout_s=600)))
         # same seed at every temperature: sample k is the same chip at each temperature
         for k, s, n in mc.chunks(a.samples, a.seed, per=100):
             jobs.append((mc.deck(netlist(f"{a.section}_mm", t), n, seed=s, lets=LETS), camp / f"mc_t{t}_c{k:02d}", dict(timeout_s=1800)))
-    spice.run_many(jobs, workers=4, smoke=False)
+    resolved = dict(zip((j[1] for j in jobs), mc.run_many(jobs, workers=4)))
     out = dict(section=a.section, samples=a.samples, temps=temps, per_temp={})
     data = {}
     for t in temps:
-        nom = mc.read(camp / f"nominal_t{t}")[0]
-        rows = mc.read_all(sorted(camp.glob(f"mc_t{t}_c*")))
+        nom = mc.read(resolved[camp / f"nominal_t{t}"])[0]
+        rows = mc.read_all([resolved[j[1]] for j in jobs if j[1].name.startswith(f"mc_t{t}_c")])
         data[t] = {k: mc.column(rows, k) for k in LETS}
         res = {}
         for k, scale in (("vcm", 1e3), ("vbg", 1e3), ("iref", 1e6), ("ir", 1e3), ("err_core", 1e3), ("err_vi", 1e3)):

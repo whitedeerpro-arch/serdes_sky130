@@ -35,19 +35,20 @@ def main():
     ap.add_argument("--temps", default="27")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--reuse", help="resume the same campaign with unchanged inputs, seeds and sample count")
     a = ap.parse_args()
     temps = [int(x) for x in a.temps.split(",")]
-    camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = ROOT / a.reuse if a.reuse else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs = []
     for t in temps:
         jobs.append((mc.deck(netlist("tt", t), 1, seed=a.seed, lets=LETS), camp / f"nominal_t{t}", dict(timeout_s=600)))
         for k, s, n in mc.chunks(a.samples, a.seed, per=40):          # ngspice leaks per sample; 100 ran out of memory
             jobs.append((mc.deck(netlist("tt_mm", t), n, seed=s, lets=LETS), camp / f"mc_t{t}_c{k:02d}", dict(timeout_s=1800)))
-    spice.run_many(jobs, workers=a.workers, smoke=False)
+    resolved = dict(zip((j[1] for j in jobs), mc.run_many(jobs, workers=a.workers)))
     out = dict(samples=a.samples, temps=temps, per_temp={})
     for t in temps:
-        nom = mc.read(camp / f"nominal_t{t}")[0]
-        rows = mc.read_all(sorted(camp.glob(f"mc_t{t}_c*")))
+        nom = mc.read(resolved[camp / f"nominal_t{t}"])[0]
+        rows = mc.read_all([resolved[j[1]] for j in jobs if j[1].name.startswith(f"mc_t{t}_c")])
         d = {k: mc.column(rows, k) for k in LETS}
         trim = d["iref"] / nom["iref"]          # the per-chip reference error the trim removes
         res = {}

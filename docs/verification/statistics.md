@@ -55,7 +55,26 @@
 | [`serdes_flow.stats`](../../src/serdes_flow/stats.py) | summary、k_factor、tolerance、yield_ci、pelgrom、budget_rss |
 | 卡片 | [mismatch_card](../../analog/common/devices/tb/mismatch_card/card.py)、[passive_card](../../analog/common/devices/tb/passive_card/card.py) |
 
-## 局限
+## 执行、续跑与成本
+
+采样器、CTLE、带隙和偏置分配的 MC 入口统一使用 `mc.run_many`。完成条件包括退出状态、计划行数和列结构；瞬态 deck 传 `t_end`，每行写实际结束时间，避免截断瞬态被早期 crossing 误判为完成。测量未找到 crossing 是 NaN 观测，需要分析量程/功能原因；有意保持不翻转的路可以有 NaN。求解完整、测量完整、满足规格是三件不同的事。
+
+`--reuse CAMPAIGN` 保持原参数、种子和分块大小，已完成且输入一致的块直接使用，缺失/失败块在 `.rN` 新目录重跑。输入哈希清单覆盖 deck、递归 include、复制激励与 PDK 安装标识；旧结果没有清单时重跑到新尝试。PDK 按安装标识视为不可变。采样器最差路只统计参与路均有测量的样本，另报不完整样本数；存在缺失时不能当作全部样本的良率证据。
+
+**采样器的新默认值为 `--chunk 8 --workers 3`。** 修调采样器三样本实测进程大小增量约 115–144 MB/样本，旧默认 50 可能超出 3 GB 限制。默认变动会改变分块后续样本身份：配对旧 MC 或加载旧修调码必须显式指定原 `--chunk`，例如原来为 16 就继续用 16。不同拓扑/随机实例顺序之间，同种子不保证同一组物理失配。
+
+```bash
+# 只读：样本进度；深查成本和输出完整性
+uv run python -m serdes_flow.watch results/analog/rx/sampler/offset_mc/RUN_ID --every 600
+uv run python -m serdes_flow.audit results/analog/rx/sampler/offset_mc/RUN_ID
+
+# 小规模、相同随机样本对照，rusage 保存每样本求解/内存指标
+uv run python verification/mc_profile.py --samples 3
+```
+
+`mc.deck(..., profile=True)` 输出 `rusage all`。分块大小应由当前 DUT/时间窗的内存增量决定；并发最多 4 个，多个 campaign 合计也不得超过 4。默认是保守起点，不是任意机器上不会 OOM 的保证。详见 [2026-11-05 成本与架构评估](../history/workflow_review_20261105.md)。
+
+## 模型局限
 
 - SKY130 的 PNP 模型没有失配项；带隙中 VBE 失配只能按文献估计。
 - 测试台的负载电阻多为理想电阻，电阻失配和电阻角只有换成 PDK 电阻后才进入仿真。

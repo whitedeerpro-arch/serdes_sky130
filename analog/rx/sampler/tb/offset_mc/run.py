@@ -107,8 +107,8 @@ def analysis(ramp_mv=25.0, alters=(), falling=False):
 LETS = {f"t_{l}": f"t_{l}" for l in LANES} | {k: k for k in ("cd_r", "cd_f", "ce_r", "ce_f")}
 
 
-def run(c, section, samples, seed, d, workers=4, pdk_r=False, dut="ac", ramp_mv=25.0, code=None, codes=None, per=50, hold=()):
-    """samples split into chunks of 50 (one ngspice each, see serdes_flow.mc), run in parallel.
+def run(c, section, samples, seed, d, workers=3, pdk_r=False, dut="ac", ramp_mv=25.0, code=None, codes=None, per=8, hold=()):
+    """Samples split into bounded chunks (one ngspice each, see serdes_flow.mc), run in parallel.
     pdk_r: the cells' ideal resistors become high_po devices (their mismatch enters, serdes_flow.rcorner).
     codes: per-lane lists of per-sample trim codes (sample index over the whole run)."""
     parts = mc.chunks(samples, seed, per)
@@ -120,20 +120,15 @@ def run(c, section, samples, seed, d, workers=4, pdk_r=False, dut="ac", ramp_mv=
     for k, s, n in parts:
         setup = code_setup(codes, lo, n, hold) if codes else ""
         ana = analysis(ramp_mv, code_alters(c.supply, hold) if codes else ())
-        jobs.append((mc.deck(net, n, seed=s, analysis=ana, lets=LETS, setup=setup), d / f"chunk{k:02d}",
+        jobs.append((mc.deck(net, n, seed=s, analysis=ana, lets=LETS, setup=setup, t_end=ramp_stop(ramp_mv)), d / f"chunk{k:02d}",
                      dict(timeout_s=max(600, int(n * 60 * ramp_stop(ramp_mv) / 46e-9)),
                           meta=dict(condition=c.tag, section=section, samples=n, seed=s, dut=dut, code=code,
                                     per_sample_codes=bool(codes)))))
         lo += n
     t0 = time.time()
-    # --reuse: chunks already run (execution.json present) are read back, not rerun
-    spice.run_many([j for j in jobs if not (j[1] / "execution.json").exists()], workers=workers, smoke=False)
-    # sample index = chunk start + index in the chunk: a chunk that stops early (ngspice memory cap)
-    # leaves NaN rows, so per-sample codes and paired runs stay aligned
-    rows = []
-    for (k, s, n), (_, rd, _) in zip(parts, jobs):
-        got = mc.read(rd) if (rd / mc.MC_FILE).exists() else []
-        rows += got[:n] + [{key: float("nan") for key in LETS}] * (n - len(got))
+    # Full sample count + transient end time + input identity, not just an execution record.
+    dirs = mc.run_many(jobs, workers=workers)
+    rows = mc.read_all(dirs)
     if not any(np.isfinite(r["t_d0"]) for r in rows):
         raise SystemExit(f"no MC rows in {d}")
     return rows, time.time() - t0
@@ -144,7 +139,7 @@ def main():
     ap.add_argument("--samples", type=int, default=200)
     ap.add_argument("--cond", default="tt_v1800_t27")
     ap.add_argument("--seed", type=int, default=1)
-    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--pdk-r", action="store_true", help="cell resistors as high_po devices (their mismatch included)")
     ap.add_argument("--dut", choices=sorted(VARIANTS), default="ac")
     ap.add_argument("--ramp-mv", type=float, default=25.0)
@@ -153,14 +148,20 @@ def main():
     ap.add_argument("--hold", help="trimmed variants: lanes held at code 63 (threshold beyond the ramp, they never flip), e.g. d1,e0,e1: "
                     "isolates the measured lanes from the kickback of lanes deciding near the same input")
     ap.add_argument("--reuse", help="campaign directory: analyse its finished runs again (same options), run only what is missing")
-    ap.add_argument("--chunk", type=int, default=50, help="samples per ngspice (the sample set depends on it: keep it equal for paired runs)")
+    ap.add_argument("--chunk", type=int, default=8, help="samples per ngspice; default reduced from 50 after memory profiling. "
+                    "Sample identities depend on it: specify the ORIGINAL value for paired runs and --reuse")
     a = ap.parse_args()
     c = Condition.parse(a.cond)
     trimmed = a.dut != "ac"
     codes = json.loads(Path(a.codes).read_text()) if a.codes else None
+    if codes and any(l not in codes or len(codes[l]) != a.samples or
+                     any(not isinstance(x, int) or not 0 <= x <= 63 for x in codes[l]) for l in LANES):
+        raise ValueError("codes must contain exactly --samples integer codes (0..63) for each lane")
     camp = (ROOT / a.reuse) if a.reuse else RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + ("_pdkr" if a.pdk_r else "")
                                                          + (f"_{a.dut}" if trimmed else "") + ("_cal" if codes else ""))
     hold = tuple(a.hold.split(",")) if a.hold else ()
+    if set(hold) - set(LANES) or len(set(hold)) == len(LANES):
+        raise ValueError("--hold must name a proper subset of d0,d1,e0,e1")
     kw = dict(pdk_r=a.pdk_r, dut=a.dut, ramp_mv=a.ramp_mv, hold=hold)
     if trimmed and (codes or a.code is None):
         # zero-trim reference: mismatch-free block at codes 31 and 32 (+-0.5 LSB)
@@ -171,6 +172,9 @@ def main():
         nom, _ = run(c, c.process, 1, a.seed, camp / "nominal", code=a.code, **kw)
     rows, elapsed = run(c, f"{c.process}_mm", a.samples, a.seed, camp / "mc", a.workers, code=a.code, codes=codes, per=a.chunk, **kw)
     n0 = nom[0]
+    required_nominal = [f"t_{l}" for l in LANES if l not in hold] + ["cd_r", "cd_f", "ce_r", "ce_f"]
+    if any(not np.isfinite(n0[k]) for k in required_nominal):
+        raise RuntimeError("nominal reference has missing measurements; inspect ramp/clock before statistical analysis")
     col = lambda k: mc.column(rows, k)
     out = dict(condition=c.tag, pdk_resistors=a.pdk_r, samples=len(rows), seed=a.seed, slope_v_per_s=SLOPE, nominal=n0,
                dut=a.dut, ramp_mv=a.ramp_mv, code=a.code, codes_file=a.codes, chunk=a.chunk, hold=list(hold), lanes={}, clocks={})
@@ -183,29 +187,48 @@ def main():
         offs[l] = off
         if l in hold:
             continue
+        if ok.sum() < 2:
+            out["lanes"][l] = dict(n=int(ok.sum()), missing=int((~ok).sum()), status="insufficient_measurements")
+            print(f"  offset {l}: insufficient measurements ({int(ok.sum())}/{len(ok)})")
+            continue
         s = stats.summary(off[ok])
         lo, hi = stats.tolerance(off[ok])
         out["lanes"][l] = dict(s, missing=int((~ok).sum()), tol3_mv=[lo, hi])
         print(f"  offset {l}: mean {s['mean']:+.2f} sigma {s['std']:.2f} mV  (3-sigma tolerance {lo:+.1f}..{hi:+.1f} mV, skew {s['skew']:+.2f}, missing {int((~ok).sum())})")
     out["offsets_mv"] = {l: [None if not np.isfinite(x) else float(x) for x in offs[l]] for l in LANES}   # per sample
-    worst = np.nanmax(np.abs(np.vstack([offs[l] for l in lanes])), axis=0)
-    out["worst_lane_abs_mv"] = stats.summary(worst[np.isfinite(worst)])
+    stack = np.vstack([offs[l] for l in lanes])
+    full = np.isfinite(stack).all(axis=0)
+    worst = np.max(np.abs(stack[:, full]), axis=0)
+    out["complete_lane_samples"] = int(full.sum())
+    out["incomplete_lane_samples"] = int((~full).sum())
+    out["measurement_status"] = "complete" if full.all() else "incomplete_not_yield_evidence"
+    out["worst_lane_abs_mv"] = stats.summary(worst) if len(worst) >= 2 else None
     if len(lanes) > 1:
-        stack = np.vstack([offs[l] for l in lanes])
-        corr = np.corrcoef(stack[:, np.isfinite(stack).all(axis=0)])
+        corr = np.corrcoef(stack[:, full]) if full.sum() >= 2 else np.full((len(lanes), len(lanes)), np.nan)
         out["lane_correlation"] = corr.tolist()
-        print(f"  worst of {len(lanes)} per sample |offset|: mean {np.nanmean(worst):.2f}, 99.7th pct {np.nanpercentile(worst, 99.7):.1f} mV; "
-              f"lane correlation {np.mean(corr[np.triu_indices(len(lanes), 1)]):.2f}")
+        if len(worst):
+            print(f"  worst of {len(lanes)} per complete sample |offset|: mean {np.mean(worst):.2f}, empirical 99.7th pct {np.percentile(worst, 99.7):.1f} mV; "
+                  f"complete {int(full.sum())}/{len(full)}, lane correlation {np.mean(corr[np.triu_indices(len(lanes), 1)]):.2f}")
     duty = lambda r, f: ((col(f) - col(r)) % (2 * UI)) / (2 * UI)
+    clock_complete = np.isfinite(np.vstack([col(k) for k in ("cd_r", "cd_f", "ce_r", "ce_f")])).all(axis=0)
+    out["incomplete_clock_samples"] = int((~clock_complete).sum())
+    if not clock_complete.all():
+        out["measurement_status"] = "incomplete_not_yield_evidence"
     for name, (r, f) in (("cd", ("cd_r", "cd_f")), ("ce", ("ce_r", "ce_f"))):
         dc = duty(r, f) - (((n0[f] - n0[r]) % (2 * UI)) / (2 * UI))
+        if np.isfinite(dc).sum() < 2:
+            out["clocks"][f"{name}_duty_error_ps"] = dict(status="insufficient_measurements", n=int(np.isfinite(dc).sum()))
+            continue
         s = stats.summary(dc[np.isfinite(dc)] * 2 * UI * 1e12)
         out["clocks"][f"{name}_duty_error_ps"] = s
         print(f"  {name} duty error vs nominal: sigma {s['std']:.2f} ps (mean {s['mean']:+.2f})")
     sp = ((col("ce_r") - col("cd_r")) % (2 * UI)) - ((n0["ce_r"] - n0["cd_r"]) % (2 * UI))
-    s = stats.summary(sp[np.isfinite(sp)] * 1e12)
-    out["clocks"]["d_to_e_spacing_error_ps"] = s
-    print(f"  D->E clock spacing error vs nominal: sigma {s['std']:.2f} ps (nominal {((n0['ce_r'] - n0['cd_r']) % (2 * UI)) * 1e12:.1f} ps)")
+    if np.isfinite(sp).sum() >= 2:
+        s = stats.summary(sp[np.isfinite(sp)] * 1e12)
+        out["clocks"]["d_to_e_spacing_error_ps"] = s
+        print(f"  D->E clock spacing error vs nominal: sigma {s['std']:.2f} ps (nominal {((n0['ce_r'] - n0['cd_r']) % (2 * UI)) * 1e12:.1f} ps)")
+    else:
+        out["clocks"]["d_to_e_spacing_error_ps"] = dict(status="insufficient_measurements", n=int(np.isfinite(sp).sum()))
     (camp / "summary.json").write_text(json.dumps(out, indent=1))
     print(camp.relative_to(ROOT))
 

@@ -1,5 +1,6 @@
-* Independent candidate: modest varactor increase, larger programmable MIM
-* unit and 2.5 x 2.5 um fixed MIM on all eight nodes. No current increase.
+* PLL r5 candidate VCO: same delay cell and current as r3.  Loss at the nodes cut, swing at the hot corners goes up:
+* varactor 4 fingers of 4.5 um (the PDK model's poly resistance goes with W/L of a finger) and cap bank switches W 5
+* (W 1 had a Q near 1.5 at the slow corners).  The fixed MIM of r3 only made up for the capacitance those losses hid.
 * Changes deliberately do not overwrite the v0.1 baseline.
 * Four differential inverting CML cells, with ONE differential cross-connection.
 * The cross-connection gives negative DC loop feedback for an even-stage ring.
@@ -8,7 +9,7 @@
 .subckt pll_vco_ring4_pvt_candidate q0p q0n q1p q1n q2p q2n q3p q3n
 + vctrl b0 b1 b2 vbias vdd vss
 + params: wn=40 nfin=8 wt=20 lt=0.5 rload=400
-+ varw=18 varl=0.5 capw=2.35 capl=5 sw=1 fixed_side=2.5
++ varw=4.5 varl=0.5 varvm=4 capw=2.35 capl=5 sw=5
 
 X0 q3n q3p q0p q0n vbias vdd vss serdes_cml_delay
 + wn={wn} nfin={nfin} wt={wt} lt={lt} rload={rload}
@@ -21,14 +22,14 @@ X3 q2p q2n q3p q3n vbias vdd vss serdes_cml_delay
 
 * Accumulation varactor: gate at oscillator output, well/control at vctrl,
 * substrate at vss. Increasing vctrl reduces gate-to-well bias.
-Xv0p q0p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv0n q0n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv1p q1p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv1n q1n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv2p q2p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv2n q2n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv3p q3p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
-Xv3n q3n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl}
+Xv0p q0p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv0n q0n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv1p q1p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv1n q1n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv2p q2p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv2n q2n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv3p q3p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv3n q3n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
 
 Xc0p q0p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw}
 Xc0n q0n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw}
@@ -38,13 +39,4 @@ Xc2p q2p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw}
 Xc2n q2n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw}
 Xc3p q3p b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw}
 Xc3n q3n b0 b1 b2 vss pll_vco_cap_bank capw={capw} capl={capl} sw={sw}
-* Identical extra physical MIM capacitor on EVERY oscillator output leg.
-Xfixed0p q0p vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed0n q0n vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed1p q1p vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed1n q1n vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed2p q2p vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed2n q2n vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed3p q3p vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
-Xfixed3n q3n vss sky130_fd_pr__cap_mim_m3_1 w={fixed_side} l={fixed_side}
 .ends pll_vco_ring4_pvt_candidate

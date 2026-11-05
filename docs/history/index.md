@@ -63,3 +63,4 @@
 | 10-30 | [tx_clock_phase_audit.md](tx_clock_phase_audit.md) | r3 时钟下 TX 抽头相位改变，1 GHz 差约 2 UI | [design/tx_clock_distribution](../design/tx_clock_distribution.md) |
 | 10-30 | [tx_optimization.md](tx_optimization.md) | TX r2：草案 36/45 → 45/45，输出级启动 45/45（脚本生成的报告） | 当前修订证据 |
 | 10-31 | [tx_single_chain_clock_exploration.md](tx_single_chain_clock_exploration.md) | 单链 + VCO 相位打拍可消除分频状态不确定，但状态错误本身只造成位重排，故未采用；记录打拍器尺寸、负载、竞争与大 trim 的教训 | 探索，未采用 |
+| 11-05 | [i05_phase_noise.md](i05_phase_noise.md) | ISF + 线性 PLL + CDR 模型；VCO 节点损耗是低摆幅主因，r5 候选后 k = 4 时余量约 0.41 UI；LF 电容约 0.7 : 0.3 分接 VDD 和地 | [spec](../overview/spec.md#抖动与相位噪声预算)、[design/pll_vco](../design/pll_vco.md) |

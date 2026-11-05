@@ -13,7 +13,7 @@
 
 | 模块组 | 当前修订 | 配置 | 上一版 |
 |---|---|---|---|
-| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r3 `lowov_buffered_r3_20261029` | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r2 低过驱动（2026-10-29），v0.1 |
+| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r5 候选 `r5_candidate_20261105`（只改 VCO 节点无源件，闭环未重验证，I-32） | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r4 `lowov_buffered_r4_20261031`（全速接收器） |
 | PFD/CP/LF/启动 | v0.1 电路，r3 工况下复测 | [pll_startup.toml](../../config/pll_startup.toml)、[pll_loop_prototype.toml](../../config/pll_loop_prototype.toml) | — |
 | TX 时钟分发、串化器、输出级 | r2 `tx_lowov_retimed_r2_20261030` | [tx_working_revision.toml](../../config/tx_working_revision.toml) | v0.1 |
 | RX 前端、PI、采样、CDR | 首版 | [rx_frontend.toml](../../config/rx_frontend.toml)、[rx_cdr.toml](../../config/rx_cdr.toml) | — |

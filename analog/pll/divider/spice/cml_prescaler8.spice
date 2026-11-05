@@ -3,14 +3,16 @@
 * Tap outputs need explicit receiver/fanout loading in the bench.
 .subckt pll_cml_prescaler8 clkp clkn q2p q2n q4p q4n q8p q8n vbias vdd vss
 + params: wsf=80 wsf_sink=4 wtail=72 nftail=24 ref_sink_w=3.333333333
-+ wbuf=24 wtbuf=12 rbuf=600
++ wbuf=24 wtbuf=12 rbuf=600 whold2=40 whold=80
+* The first stage's hold pair is smaller than the others': a hold pair sets the self-oscillation frequency, which should sit near half the
+* input frequency.  At FS 1.65 V 85 C hh f_SO is 1.4 GHz with W 40 and 0.8 GHz with W 80, for a 1 GHz output (tb/div2_map).
 * Shared real low-overdrive reference, also present in each powered dummy branch.
 Xbias vbias vbias_logic vdd vss pll_cml_tail_bias ref_sink_w={ref_sink_w}
-X2 clkp clkn q2p q2n m2p m2n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink}
+X2 clkp clkn q2p q2n m2p m2n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink} whold={whold2}
 * Regenerate clock amplitude for the next cell; reuse global bias, not logic bias.
 * Dependencies now also include cml_buffer.spice and cml_delay_resistive.spice.
 Xb24 q2p q2n b24p b24n vbias vdd vss serdes_cml_buffer wn={wbuf} wt={wtbuf} rload={rbuf}
-X4 b24p b24n q4p q4n m4p m4n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink}
+X4 b24p b24n q4p q4n m4p m4n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink} whold={whold}
 Xb48 q4p q4n b48p b48n vbias vdd vss serdes_cml_buffer wn={wbuf} wt={wtbuf} rload={rbuf}
-X8 b48p b48n q8p q8n m8p m8n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink}
+X8 b48p b48n q8p q8n m8p m8n vbias vbias_logic vdd vss pll_cml_div2_biased wtail={wtail} nftail={nftail} wsf={wsf} wsf_sink={wsf_sink} whold={whold}
 .ends pll_cml_prescaler8

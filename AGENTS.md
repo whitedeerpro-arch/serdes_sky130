@@ -47,7 +47,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 - MC 用 `mc.run_many` 按输入身份和完整样本数续跑；瞬态 `mc.deck` 传 `t_end`，不能只凭 execution.json 判完成。采样器默认 8 样本/块、3 worker；配对旧运行/校准码必须显式传原 `--chunk`，改变分块会改变样本身份。内存增量按 DUT 实测，不沿用旧的 45 MB/样本估计；见 [统计方法](docs/verification/statistics.md#执行续跑与成本)。
 - 扫描异常慢时先用 `uv run python -m serdes_flow.audit <campaign>` 区分收敛超时、截断输出、中断和未启动条件，再决定是否扩展长扫描；不要把所有耗时归为 MC。电阻替换快照与当前源码不一致时使用新 campaign。
 - 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。
-- 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。参数选择按 [尺寸设计流程](docs/verification/sizing.md)：约束 + 粗模型求解，仿真校准迭代。
+- 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。参数选择按 [尺寸设计流程](docs/verification/sizing.md)：约束 + 粗模型求解，仿真校准迭代。难角上先在单元上画可行区图（例：`analog/pll/divider/tb/div2_map`），校准后再用全链确认，不在全链上手动试。
 - 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。
 
 **历史脚本：** 原项目 `../simple_serdes` 已停用，本仓库不依赖它。旧 campaign 的 `execution/*.txt` 通过 `/tmp/serdes_*_campaign` 指针读原项目路径，旧 `tb.cir`/`run.json` 里也是原项目的绝对路径；这些文件只作记录，不能直接运行。需要复跑时参照 `results/analog/tx/optimization/20261030T100258Z/execution/fork1_finalize.py`，在内存里把原项目路径换成本仓库路径。

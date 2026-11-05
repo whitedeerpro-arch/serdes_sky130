@@ -3,6 +3,7 @@ status = "VCO r5 candidate (node loss cut); noise at 7 corners, open loop; PLL b
 r5_change = "VCO only: cap bank switch W 1 -> 5, varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
 r5_report = "docs/design/pll_vco.md"
 r5_open = "I-32"
+prescaler_first_stage_whold_um = 40.0  # others 80; docs/design/pll_divider.md
 last_closed_revision = "lowov_buffered_r4_20261031"
 r4_change = "full-rate CML-to-CMOS receivers on all four branches -> serdes_cml_to_cmos_r4 (feedback receivers unchanged)"
 r4_report = "docs/design/clock_receiver.md"

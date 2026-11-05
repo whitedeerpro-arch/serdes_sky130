@@ -41,9 +41,10 @@ Xslave mp mn qp qn ckn ckp vbias_logic vdd vss pll_cml_latch
 + params: dd_wsf=20 dd_wclock=16 cb_wn=24 cb_nfin=4 cb_wt=12 cb_rload=600
 + dd_wsf_sink=2 dd_wdata=10 dd_whold=40 dd_wtail=36 dd_nftail=12 dd_rload=1200
 + cv_wsf=10 cv_wsink=1 cv_win=3 cv_wload=4 cv_wtail=3
-+ ck1_wn=2 ck1_wp=4 ck2_wn=4 ck2_wp=8 ck3_wn=4 ck3_wp=8
++ ck1_wn=2 ck1_wp=4 ck2_wn=4 ck2_wp=8 ck3_wn=4 ck3_wp=8 div_whold=40
 Xlb vbias vbias_logic vdd vss pll_cml_tail_bias
-Xdiv rkp rkn dqp dqn dmp dmn vbias vdd vss pll_cml_div2
+* Hold pair W 40: this divider only ever sees 2 GHz, see pll_cml_prescaler8.  With W 80 it stops at FS 1.65 V 85 C hh.
+Xdiv rkp rkn dqp dqn dmp dmn vbias vdd vss pll_cml_div2 whold={div_whold}
 * divider isolation buffers (non-inverting): qp/qn, mp/mn are the domain clocks
 Xbq dqp dqn qp qn vbias vdd vss serdes_cml_buffer wn={cb_wn} nfin={cb_nfin} wt={cb_wt} rload={cb_rload}
 Xbm dmp dmn mp mn vbias vdd vss serdes_cml_buffer wn={cb_wn} nfin={cb_nfin} wt={cb_wt} rload={cb_rload}

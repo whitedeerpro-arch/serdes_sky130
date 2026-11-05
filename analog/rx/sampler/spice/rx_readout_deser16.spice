@@ -59,12 +59,12 @@ Xbw j1b w vdd vss serdes_rx_cmos_buf wn1=2 wp1=4 wn2=6 wp2=12
 + params: dd_wsf=20 dd_wclock=16 cb_wn=24 cb_nfin=4 cb_wt=12 cb_rload=600
 + dd_wsf_sink=2 dd_wdata=10 dd_whold=40 dd_wtail=36 dd_nftail=12 dd_rload=1200
 + cv_wsf=10 cv_wsink=1 cv_win=3 cv_wload=4 cv_wtail=3
-+ ck1_wn=2 ck1_wp=4 ck2_wn=8 ck2_wp=16 ck3_wn=6 ck3_wp=12
++ ck1_wn=2 ck1_wp=4 ck2_wn=8 ck2_wp=16 ck3_wn=6 ck3_wp=12 div_whold=40
 Xf d0p d0n d1p d1n e0p e0n e1p e1n rkp rkn ra0 rb0 rae1 rbe1 ra1 rb1 rae0 rbe0 ckq ckqb ckm ckmb vbias vdd vss
 + serdes_rx_readout_front dd_wsf={dd_wsf} dd_wclock={dd_wclock} cb_wn={cb_wn} cb_nfin={cb_nfin} cb_wt={cb_wt} cb_rload={cb_rload}
 + dd_wsf_sink={dd_wsf_sink} dd_wdata={dd_wdata} dd_whold={dd_whold} dd_wtail={dd_wtail} dd_nftail={dd_nftail} dd_rload={dd_rload}
 + cv_wsf={cv_wsf} cv_wsink={cv_wsink} cv_win={cv_win} cv_wload={cv_wload} cv_wtail={cv_wtail}
-+ ck1_wn={ck1_wn} ck1_wp={ck1_wp} ck2_wn={ck2_wn} ck2_wp={ck2_wp} ck3_wn={ck3_wn} ck3_wp={ck3_wp}
++ ck1_wn={ck1_wn} ck1_wp={ck1_wp} ck2_wn={ck2_wn} ck2_wp={ck2_wp} ck3_wn={ck3_wn} ck3_wp={ck3_wp} div_whold={div_whold}
 Xwc ckq ckqb ckm ckmb st_q st_qb st_m st_mb w vdd vss serdes_rx_cmos_wordclk
 Xla0 ra0 ckq st_q a0_0 a0_1 a0_2 a0_3 vdd vss serdes_rx_cmos_lane4
 Xlae1 rae1 ckq st_q ae1_0 ae1_1 ae1_2 ae1_3 vdd vss serdes_rx_cmos_lane4

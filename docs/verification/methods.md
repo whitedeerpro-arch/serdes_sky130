@@ -101,6 +101,22 @@ verification/results/artifact.sh restore results/某运行/raw/waveforms.tsv
 
 时序平衡是尺寸设计流程中的一类约束；完整流程（输入、输出、迭代、拓扑判据）见 [尺寸设计流程](sizing.md)。
 
+## 相位噪声
+
+ngspice 没有 PSS/PNOISE，所以用 ISF：瞬态里在噪声点注入小电荷脉冲，由前后相位跳变得到 h(x)，再和器件噪声谱合成 L(f)。工具都在 [phase_noise](../../analog/pll/vco/tb/phase_noise/)，公式在 [pnoise.py](../../src/serdes_flow/pnoise.py)。
+
+- 白噪声：L = (S/2)⟨(hα)²⟩/(2πΔf)²；慢噪声：L = (S(Δf)/2)⟨hα⟩²/(2πΔf)²。α(x) 是噪声随工作点的调制（gm、Id）。
+- 一键跑一个角：[corner.py](../../analog/pll/vco/tb/phase_noise/corner.py)（调谐 → ISF → 器件噪声 → L(f) → Kb/Kvdd/Kvco → CP、偏置线噪声 → [PLL 合成](../../analog/pll/top/theory/pll_noise.py)），按步骤断点续跑。之后 [cdr_jitter.py](../../analog/pll/top/theory/cdr_jitter.py) 算 CDR 后抖动，[psrr_tone.py](../../analog/pll/vco/tb/phase_noise/psrr_tone.py) 测电源到频率的相量增益。
+- 核对：直接瞬态噪声（[direct.py](../../analog/pll/vco/tb/phase_noise/direct.py)）÷ ISF 预测，TT 理想偏置（r3）0.85–1.14，差 ≤ 0.7 dB；SF 1.65 V 85 °C R hh、真实偏置（r5），两个种子平均后 m = 4 / 8 / 16 为负载 R 0.97 / 0.98 / 0.90、输入管 0.88 / 0.94 / 0.92，ISF 略偏保守，差 ≤ 0.6 dB。DC 电流引起的频移（[slow.py](../../analog/pll/vco/tb/phase_noise/slow.py)）和 ⟨h⟩ 预测差 1.4 %（TT）。
+
+三个容易出错的地方：
+
+1. **相位覆盖。** 脉冲间隔 = K 周期 + 步进，周期误差会累积：K = 10 时 0.1 % 的周期误差就是每脉冲 5 ps（步进约 20 ps）。环比假设的周期慢时扫不满一周，⟨h⟩ 和 rms 在缺口上插值。`isf.py` 现在名义扫 1.25 周，缺口 > 0.08 周时报错。
+2. **振幅建立。** 热、慢角振幅建立约 14 ns，之前测的频率偏高约 1.4 %。ISF 从 `--settle` 开始加脉冲（r5 用 12 ns）；`slow.py` 的窗口要在建立之后。
+3. **直流灵敏度不等于高频灵敏度。** 偏置线有去耦，VDD 到偏置线这条路只在低频起作用，FS 1.65 V 热角直流 Kvdd −782 MHz/V，20 MHz 下只有 −584。电源门槛用 `psrr_tone.py`，不用 `slow.py --site vdd`。
+
+没有进预算的：变容管串联电阻和电容阵列开关的热噪声（手算约 +0.15 dB，SF 热角 r5）。
+
 ## 失配与蒙特卡洛
 
 工艺角管全局偏差，MC（`<corner>_mm`）管局部失配；判据分串联（每个实例都必须过）和传播（平方和），器件参数和模块预算超出都不算失败，只看系统判据。方法、样本数、修调与工具见 [统计与蒙特卡洛](statistics.md)。

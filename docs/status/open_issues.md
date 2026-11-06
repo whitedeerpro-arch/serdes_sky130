@@ -23,10 +23,10 @@
 
 | 编号 | 问题 | 证据 | 阶段 |
 |---|---|---|---|
-| I-09 | VCO 45 条件 × RC 角调谐工作区与相邻码重叠未做。FF 1.95 V −40 °C ll 补测：码 6 在 1.20–1.35 V 内跨过 2 GHz，旧码 7 / 1.475 V 不能证明量程到头。先按 CP/B2 和捕获余量选码；4 bit 保留为改善重叠/失配的候选，是否必要由映射决定。 | [VCO](../design/pll_vco.md) | P3 |
+| I-09 | VCO 工作区（2026-11-06）：3 bit 在 0.95–1.35 V 内 10 / 135 无解，固定码跨全温 16 / 45；0.85 V 到实测 CP 上沿 4 / 135、28 / 45。按拟合，15 个半单元可到 2 / 135、42 / 45，待网表和半码仿真验证。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06) | P3 |
 | I-10 | FS/1.65 V/−40 °C 分频首级/第二级 master 尾管平均 VDS − VDSAT 约 −5/−4 mV（r3）；r2 时约 63% 采样点低于饱和判据。功能正常但无裕量；修补困难时考虑减少堆叠的结构。 | [分频器](../design/pll_divider.md) | P3 |
 | I-11 | 1.95 V 条件 CMOS 上冲（FF/FS 冷角峰值约 2.022–2.026 V），15 个 1.95 V 条件都有；器件端电压未核对。r4 接收器最高约 2.049 V（SS/1.95 V/−40 °C）。 | [时钟接收器](../design/clock_receiver.md) | P3 |
-| I-12 | CP 高 Vctrl 处 UP/DN 失配：SS/1.65 V/85 °C、1.4 V 时 40.8/49.3 µA；PFD→CP 零电荷相位 −79.4 … +93.1 ps；三点不足以证明无死区。 | [PLL 环路](../design/pll_loop.md) | P3 |
+| I-12 | CP 输出窗口（2026-11-06，45 × tt/hh/ll，真实偏置）：1.8 V 上沿 ≥ 1.42 V、1.95 V ≥ 1.59 V；1.65 V 冷角低得多，SF −40 °C ll 0.82 V（中点 UP/DN 已差 > 10 %）、SF −40 °C tt 0.93 V、SS −40 °C ll 1.00 V。PFD→CP 零电荷相位 −79.4 … +93.1 ps；三点不足以证明无死区。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06)、[PLL 环路](../design/pll_loop.md) | P3 |
 | I-13 | LF RC 极限角未接入闭环；物理 LF 候选（poly + MIM）未决定是否采用。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-15 | RX 物理 16 UI 降速：读出 deser16（CML 1:2 + CMOS 1:4，45 条件逐位正确）与 `rx_word_map` / `rx_word_align16` 已有，实时联调（TT）中 PI 步进、跨扇区与回卷下 payload 全部正确；PI 步进的 PVT 未做；系统时钟域 FIFO/CDC 未设计。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
 | I-16 | 数字 RTL 没有综合映射和 STA（yosys 0.9，无 OpenSTA）。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |

@@ -105,7 +105,8 @@ def extend(camp, passive, conds, extra, workers, cp=None, bank=3):
     for rc in passive:
         for c in conds:
             f = base["rows"][f"{c.tag}:{rc}"]["f"]
-            ks = [int(k) for k, x in f.items() if max(x) >= 1.6e9 and min(x) <= 2.5e9]
+            near = (1.85e9, 2.2e9) if bank == 4 else (1.6e9, 2.5e9)      # half codes are close together: fewer are worth a point
+            ks = [int(k) for k, x in f.items() if max(x) >= near[0] and min(x) <= near[1]]
             todo += [(rc, c, k, v) for k in ks for v in extra if v <= c.supply - 0.4]
     run_points(camp, todo, workers, bank)
     vall = sorted(set(base["vs"]) | set(extra))

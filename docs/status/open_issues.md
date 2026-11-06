@@ -23,7 +23,7 @@
 
 | 编号 | 问题 | 证据 | 阶段 |
 |---|---|---|---|
-| I-09 | VCO 工作区（2026-11-06）：3 bit 在 0.95–1.35 V 内 10 / 135 无解，固定码跨全温 16 / 45；0.85 V 到 CP 上沿 3 / 135、28 / 45。按拟合，15 个半单元可到 0 / 135、44 / 45，待半码仿真验证。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06) | P3 |
+| I-09 | VCO 工作区（2026-11-06，仿真）：4 bit 配 0.85 V 到 CP 上沿，135 个条件全部能到 2 GHz；一个码跨全温 42 / 45 个芯片（FF 1.95 V tt、FF / FS 1.95 V ll 不行），跨相邻两档温度 45 / 45。局部 Kvco 跨 191–1122 MHz/V。hl / lh 未跑。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06) | P3 |
 | I-10 | FS/1.65 V/−40 °C 分频首级/第二级 master 尾管平均 VDS − VDSAT 约 −5/−4 mV（r3）；r2 时约 63% 采样点低于饱和判据。功能正常但无裕量；修补困难时考虑减少堆叠的结构。 | [分频器](../design/pll_divider.md) | P3 |
 | I-11 | 1.95 V 条件 CMOS 上冲（FF/FS 冷角峰值约 2.022–2.026 V），15 个 1.95 V 条件都有；器件端电压未核对。r4 接收器最高约 2.049 V（SS/1.95 V/−40 °C）。 | [时钟接收器](../design/clock_receiver.md) | P3 |
 | I-12 | CP 输出窗口（2026-11-06，45 × tt/hh/ll，真实偏置，电流下垂 5 %）：上沿约 VDD − 0.39 V，下沿 ≤ 0.41 V，够用。UP / DN 失配最大 11 %（SF 1.65 V −40 °C ll，来自偏置拷贝，随输出基本不变），造成静态相差和纹波，影响待按实际 CP 评估。PFD→CP 零电荷相位 −79.4 … +93.1 ps；三点不足以证明无死区。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06)、[PLL 环路](../design/pll_loop.md) | P3 |
@@ -48,7 +48,7 @@
 | I-29 | TX 输出级焊盘/ESD/封装为代理参数；电源、回流、PSRR 未建模；FFE 未实现。 | [TX 输出级](../design/tx_output_driver.md) | P5 |
 | I-30 | RX PI 锚点是理想源，没有接原生 PLL 八相；共享 PLL 能支持多少路 PI 扇出未验证。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
 | I-33 | **读出 ÷2：功能已修复，全链未全覆盖（2026-11-06）。** 根因是保持管 W 80 过大，f_SO 在 hh 热角低于 1 GHz；W 40 后 FS 1.65 V 85 °C hh 输出 76 → 297 mVpp，单元级 45 × hh / ll 最低 281 mVpp。读出全链压力角通过，缺 FS 1.65 V −40 °C hh、FF 1.95 V −40 °C hh（工作点不收敛）和其余条件，随 RX 收口做。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05)、[PLL 分频器](../design/pll_divider.md#保持管和自激频率2026-11-06) | P5 |
-| I-32 | VCO r5 候选还没接回 PLL：比较 k=2/3/4 的实际 CP/LF（k=2 已过抖动模型门槛，k=4 最小 PM 约 44°）；验证 LF 分接 VDD 的宽带效果；逐角统一 VCO/CP/B2 工作区和捕获误差；按 I-09 决定阵列是否扩位。PLL 级 bench 仍用 r3 码，需更新并做原生闭环。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md) | P3 |
+| I-32 | VCO r5 候选还没接回 PLL：比较 k=2/3/4 的实际 CP/LF（k=2 已过抖动模型门槛，k=4 最小 PM 约 44°）；验证 LF 分接 VDD 的宽带效果；把 B2 目标范围对到 0.85 V 到 CP 上沿，核实预充偏差的捕获；`pll_vco_ring4_4b` 接进 PLL 前端，选码时兼顾 Kvco；更新 bench 的码，做原生闭环。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md) | P3 |
 
 ## 文档整理时发现的冲突（已按最新记录处理）
 

@@ -1,0 +1,19 @@
+* Fifteen identical half-size MIM units grouped 1:2:4:8, for a finer step and about 7 % more maximum capacitance than cap_bank_3b.
+* Uses pll_vco_cap_unit of cap_bank_3b.spice.  Both output legs and all four cells must use identical codes.
+.subckt pll_vco_cap_bank4 node b0 b1 b2 b3 vss params: capw=2.35 capl=2.5 sw=2.5
+X00 node b0 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X10 node b1 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X11 node b1 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X20 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X21 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X22 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X23 node b2 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X30 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X31 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X32 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X33 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X34 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X35 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X36 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+X37 node b3 vss pll_vco_cap_unit capw={capw} capl={capl} sw={sw}
+.ends pll_vco_cap_bank4

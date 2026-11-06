@@ -1,7 +1,7 @@
 """VCO working region over 45 conditions x passive corners: which code reaches 2 GHz inside the CP / B2 control range.
 
     uv run python analog/pll/vco/tb/tuning/workmap.py [--passive tt,hh,ll] [--conds tags] [--vmin 0.95 --vmax 1.35] [--workers 4] [--resume C]
-        [--extend 0.7,0.85,1.5 --cp-window <cp/tb/dc/window.py summary.json>]
+        [--extend 0.7,0.85,1.5 --cp-window <cp/tb/dc/window.py summary.json>] [--bank 4]
 
 Coarse model, then check.  Pass 1 simulates codes 0, 3, 7 at Vctrl vmin, mid, vmax; 1 / f is fitted against the code with a parabola
 at each Vctrl (the ring's period goes with its capacitance).  Pass 2 simulates, at every condition, the codes the fit says bracket
@@ -12,6 +12,7 @@ supply, temperature, code, Vctrl; 24 ns per point, frequency over the last 5 ns 
 Resume: only points without a complete waveform run again.
 
 --cp-window: also the windows bounded by each condition's measured CP upper edge.
+--bank 4: pll_vco_ring4_4b, codes 0..15 in half units (fit from codes 0, 6, 15).
 --extend 0.7,0.85,1.5 --resume C: more Vctrl points for the codes near 2 GHz (within 1.6-2.5 GHz at some point), skipping points above
 VDD - 0.4 V (the CP's headroom), then for each control window: conditions with a code at 2 GHz, and chips (MOS, supply, passive) with one
 code that holds 2 GHz from -40 to 85 C, which is what a code frozen after calibration needs.
@@ -37,23 +38,31 @@ TEMPLATE = ROOT / "analog/pll/vco/tb/phase_noise/tb_vco_isf_ngspice.cir.in"
 RESULTS = ROOT / "results/analog/pll/vco/workmap"
 STOP, START = 24e-9, 14e-9
 TARGET = 2e9
+BANKS = {3: dict(codes=8, coarse=(0, 3, 7)), 4: dict(codes=16, coarse=(0, 6, 15))}
 
 
 def name(c, code, v):
     return f"{c.tag}_c{code}_v{round(v * 1000)}.raw"
 
 
-def deck(process, rc, points, camp):
+def deck(process, rc, points, camp, bank=3):
     """points: list of (condition, code, vctrl)."""
     c0 = points[0][0]
     text = spice.render(TEMPLATE, **spice.corner_values(c0), VCTRL=1.2, INJECT="", PROBES="", TSTEP="2p", STOP=f"{STOP:.4e}", SAVE_FROM=f"{START:.4e}", OUT="x.raw", CFG0=0, CFG1=0, CFG2=0)
     text = re.sub(r"\.control.*?\.endc\n", "", text, flags=re.S).replace("reltol=1e-5", "reltol=1e-4")
+    if bank == 4:
+        old = "ctrl cfg0 cfg1 cfg2 vbias vdd 0 pll_vco_ring4_pvt_candidate"
+        assert text.count(old) == 1
+        text = text.replace(old, "ctrl cfg0 cfg1 cfg2 cfg3 vbias vdd 0 pll_vco_ring4_4b").replace("Vb2 cfg2 0 0\n", "Vb2 cfg2 0 0\nVb3 cfg3 0 0\n")
+        inc = '.include "' + str(ROOT / "analog/pll/vco/spice/vco_ring4_pvt_candidate.spice") + '"'
+        assert text.count(inc) == 1
+        text = text.replace(inc, inc.replace("vco_ring4_pvt_candidate", "cap_bank_4b") + "\n" + inc.replace("vco_ring4_pvt_candidate", "vco_ring4_4b"))
     camp.mkdir(parents=True, exist_ok=True)
     text = bias.section(rcorner.to_pdk(bias.real(text), camp), process, rc)
     lines = [".control", "set num_threads=1", "set filetype=binary"]
     for c, code, v in points:
         lines += [f"option temp={c.temp}", f"alter Vdd dc={c.supply}", f"alter Vref dc={c.supply}"]
-        lines += [f"alter Vb{k} dc={c.supply if (code >> k) & 1 else 0}" for k in range(3)]
+        lines += [f"alter Vb{k} dc={c.supply if (code >> k) & 1 else 0}" for k in range(bank)]
         lines += [f"alter Vctrl dc={v}", f"tran 2p {STOP:.4e} {START:.4e}", f"write {name(c, code, v)} v(v0p) v(v0n)", "destroy all"]
     text = text[: text.rindex(".end")]
     return text + "\n".join(lines + ["quit", ".endc", ".end", ""])
@@ -70,7 +79,7 @@ def measure(p):
     return float((len(r) - 1) / (r[-1] - r[0])), float(np.ptp(y[sel]))
 
 
-def run_points(camp, todo, workers):
+def run_points(camp, todo, workers, bank=3):
     """Simulate what has no complete waveform, one deck per MOS x passive corner."""
     groups = {}
     for rc, c, code, v in todo:
@@ -78,7 +87,7 @@ def run_points(camp, todo, workers):
             groups.setdefault((c.process, rc), []).append((c, code, v))
     n = sum(len(x) for x in groups.values())
     print(f"{len(todo)} points, {n} to run in {len(groups)} decks", flush=True)
-    jobs = [(deck(p, rc, pts, camp / "snap" / f"{p}_{rc}"), spice.next_run_dir(camp, f"{p}_{rc}"), dict(timeout_s=60 * len(pts) + 600, meta=dict(process=p, passive=rc, points=len(pts))))
+    jobs = [(deck(p, rc, pts, camp / "snap" / f"{p}_{rc}", bank), spice.next_run_dir(camp, f"{p}_{rc}"), dict(timeout_s=60 * len(pts) + 600, meta=dict(process=p, passive=rc, points=len(pts))))
             for (p, rc), pts in groups.items()]
     for ex in spice.run_many(jobs, workers=workers, smoke=False):
         if not ex.ok:
@@ -90,7 +99,7 @@ def read(camp, rc, c, code, v):
     return measure(p) if p else None
 
 
-def extend(camp, passive, conds, extra, workers, cp=None):
+def extend(camp, passive, conds, extra, workers, cp=None, bank=3):
     base = json.loads((camp / "summary.json").read_text())
     todo = []
     for rc in passive:
@@ -98,7 +107,7 @@ def extend(camp, passive, conds, extra, workers, cp=None):
             f = base["rows"][f"{c.tag}:{rc}"]["f"]
             ks = [int(k) for k, x in f.items() if max(x) >= 1.6e9 and min(x) <= 2.5e9]
             todo += [(rc, c, k, v) for k in ks for v in extra if v <= c.supply - 0.4]
-    run_points(camp, todo, workers)
+    run_points(camp, todo, workers, bank)
     vall = sorted(set(base["vs"]) | set(extra))
     table = {}
     for rc in passive:
@@ -150,8 +159,8 @@ def extend(camp, passive, conds, extra, workers, cp=None):
     temps = sorted({c.temp for (_, c) in table})
     for (rc, c), t in table.items():
         chips.setdefault((rc, c.process, c.supply), []).append((c, t))
-    for bank, view in (("3 bit, simulated", lambda t: t), ("15 half units, from the fit", finer)):
-      print(f"\n{bank}\n{'control window':16s} {'no code':>8s} of {len(table)} | one code for all T | one code for cold and room | for room and hot   (of 45 chips)")
+    for bank_name, view in ((("4 bit, simulated", lambda t: t),) if bank == 4 else (("3 bit, simulated", lambda t: t), ("15 half units, from the fit", finer))):
+      print(f"\n{bank_name}\n{'control window':16s} {'no code':>8s} of {len(table)} | one code for all T | one code for cold and room | for room and hot   (of 45 chips)")
       views = {key: view(t) for key, t in table.items()}
       for name_, lim in windows.items():
         none = [f"{c.tag}:{rc}" for (rc, c), t in views.items() if not reach(t, *lim(c, rc))]
@@ -164,7 +173,7 @@ def extend(camp, passive, conds, extra, workers, cp=None):
                 bad.append(f"{key[1]}_{round(key[2] * 1000)}_{key[0]}")
             low += bool(sets[temps[0]] & sets[temps[1]])
             high += bool(sets[temps[1]] & sets[temps[2]])
-        summary[f"{bank}: {name_}"] = dict(none=none, frozen_ok=good, frozen_bad=bad, cold_room=low, room_hot=high, chips=len(chips))
+        summary[f"{bank_name}: {name_}"] = dict(none=none, frozen_ok=good, frozen_bad=bad, cold_room=low, room_hot=high, chips=len(chips))
         print(f"{name_:16s} {len(none):8d}        | {good:18d} | {low:26d} | {high:16d}   {none[:4]}", flush=True)
     (camp / "extend.json").write_text(json.dumps(summary, indent=1))
 
@@ -179,16 +188,17 @@ def main():
     ap.add_argument("--resume")
     ap.add_argument("--extend", help="more Vctrl points, see above; needs --resume")
     ap.add_argument("--cp-window")
+    ap.add_argument("--bank", type=int, default=3, choices=sorted(BANKS))
     a = ap.parse_args()
     camp = ROOT / a.resume if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     conds = [Condition.parse(x) for x in a.conds.split(",")] if a.conds else grid45()
     passive = a.passive.split(",")
     if a.extend:
-        extend(camp, passive, conds, [float(x) for x in a.extend.split(",")], a.workers, ROOT / a.cp_window if a.cp_window else None)
+        extend(camp, passive, conds, [float(x) for x in a.extend.split(",")], a.workers, ROOT / a.cp_window if a.cp_window else None, a.bank)
         return
     vs = (a.vmin, round((a.vmin + a.vmax) / 2, 3), a.vmax)
-    coarse = (0, 3, 7)
-    run_points(camp, [(rc, c, k, v) for rc in passive for c in conds for k in coarse for v in vs], a.workers)
+    coarse, ncode = BANKS[a.bank]["coarse"], BANKS[a.bank]["codes"]
+    run_points(camp, [(rc, c, k, v) for rc in passive for c in conds for k in coarse for v in vs], a.workers, a.bank)
     # fit: 1 / f parabola in the code at each Vctrl; codes whose 0.95-1.35 V range is predicted to hold 2 GHz, with one neighbour each side
     want, fits = [], {}
     for rc in passive:
@@ -203,19 +213,19 @@ def main():
             if len(fit) < 3:
                 print(f"{c.tag} {rc}: pass 1 incomplete", flush=True)
                 continue
-            pred = {k: [1 / np.polyval(fit[v], k) for v in vs] for k in range(8)}
-            inside = [k for k in range(8) if pred[k][0] <= TARGET <= pred[k][-1]]
+            pred = {k: [1 / np.polyval(fit[v], k) for v in vs] for k in range(ncode)}
+            inside = [k for k in range(ncode) if pred[k][0] <= TARGET <= pred[k][-1]]
             if not inside:
-                inside = [min(range(8), key=lambda k: min(abs(f - TARGET) for f in pred[k]))]
-            for k in sorted(set(inside) | {max(min(inside) - 1, 0), min(max(inside) + 1, 7)}):
+                inside = [min(range(ncode), key=lambda k: min(abs(f - TARGET) for f in pred[k]))]
+            for k in sorted(set(inside) | {max(min(inside) - 1, 0), min(max(inside) + 1, ncode - 1)}):
                 want += [(rc, c, k, v) for v in vs]
-    run_points(camp, want, a.workers)
+    run_points(camp, want, a.workers, a.bank)
     rows, err = {}, []
     for rc in passive:
         print(f"\n== passive {rc}: 2 GHz inside {a.vmin}-{a.vmax} V; code / Vctrl / Kvco MHz/V / mVpp for the code nearest mid range; all codes that reach it")
         for c in conds:
             pts = {}
-            for k in range(8):
+            for k in range(ncode):
                 got = {v: read(camp, rc, c, k, v) for v in vs}
                 if all(g is not None for g in got.values()):
                     pts[k] = got

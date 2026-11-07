@@ -1,6 +1,8 @@
 # TX 末级重定时与 2 GHz 时钟改进
 
-**FS 热角的两个异常半字起点存在建立时间不足：g3_0 过零晚于本地 A 保持关闭约5–6 ps。** 保持节点随后缓慢翻转。末级原样切片复现了该行为；推迟关闭可恢复这两个事件。采用实际中间缓冲级的局部实验也确认改善，extra2g=3已在完整TX的TT/FS/SS三点恢复眼图门槛，尚未采用为全角工作修订。
+**当前候选为extra2g=5、最终输出WT16/R240；实际加载切片已在TT/FS受检八位恢复，完整TX确认正在推进，尚未采用。** 原extra3已在完整TX的TT/FS/SS三点恢复眼图，但内部摆幅超上界；只把输出改为WT16/R240后，完整FS散布0.18025UI失败。针对当前减幅边界重新校准相位，实际extra5取得FS局部105.92mV/0.10522UI、c2g351mVpp。整体45PVT、内部幅度、物理控制及统计仍开。[完整确认运行索引](../../results/catalog/tx_reduced_clock_full_confirmation.json)给出具体来源。
+
+根因追踪始于原FS异常半字：g3_0过零晚于本地A保持关闭约5–6ps，保持节点随后缓慢翻转。下文依次给出原样校准、相位卡、实际缓冲级及完整链边界，区分各次证据的参数和适用范围。
 
 ## 观察与校准
 
@@ -110,7 +112,7 @@ FS新全局极端在同一B半字：bit302/slot14的0→1最早，bit296/slot8�
 
 来源为`reduced_phase_window/20261107T163519.276862Z_6d47b1a8`，前缀`results/analog/tx/`；边界`tx_reduced_final_word18_phase_v1`。[独立复算数据](../data/tx_reduced_phase_window.json)、[索引](../../results/catalog/tx_reduced_phase_window.json)、[测试台](../../analog/tx/input_register/tb/final_retime/native_window.py)保存完整来源/负载身份、输入及执行快照，按工况续跑；每角一个deck合并偏移点，冒烟单独缩短一个瞬态。
 
-后移20ps在本局部开始满足门槛，40ps的散布余量更大但位中心裕量有所下降；当前只将这两档作为实际缓冲级实验的目标，不把电压源平移当作已实现的电路。下一步对相同r2g输入负载比较实际extra3/4/5及WT16/R240输出，先原样校准，再确认真实相位增量、幅度/共模及八位时序，最后才回完整TX。
+后移20ps在本局部开始满足门槛，40ps的散布余量更大但位中心裕量有所下降；两档作为实际缓冲级实验的目标，电压源平移本身不代表电路已实现。同一r2g输入负载下的实际extra3/4/5确认见下一节。
 
 ## 减幅下的实际缓冲级确认
 
@@ -134,6 +136,8 @@ FS新全局极端在同一B半字：bit302/slot14的0→1最早，bit296/slot8�
 将前述相位卡按实际时钟增量分段线性插值，FS的extra4/5预测散布为0.13561/0.10668UI，实测0.13455/0.10522UI，偏差约−0.26/−0.37ps。预测未使用输出载荷拟合，也没有超出相位卡范围；这仅校准本码型和加载边界上的相位模型，不扩大PVT/码型覆盖。
 
 [独立复算数据](../data/tx_native_reduced_clock.json)、[索引](../../results/catalog/tx_native_reduced_clock.json)来自`native_reduced_clock/20261107T164517.822006Z_16514531`，前缀`results/analog/tx/`，子边界`tx_reduced_final_word18_clock_stages_v1`。原求解完整，但汇总的NumPy布尔值导致JSON序列化失败；错误另记`analysis_error.json`，原plan、源码/执行快照和波形不变。独立采集器用归档测量代码重算并仅归一化标量类型；修正后的脚本与原归档所有科学指标逐项一致，没有重跑仿真。较早两个仅准备目录因源码变化失效，没有执行，不作证据。
+
+extra5已经分别完成TT/FS的48ns时钟探针：23次计数采样连续、末段字时钟1ps稳定性门满足；按各自记录重新登记事件并运行RTL生产者后，120ns动态确认分别为`parallel_serializer/20261107T170534.584797Z_533f8f18`和`20261107T170534.588144Z_51e1e33e`。当前仍待评价，不补成完整TX通过；[运行索引](../../results/catalog/tx_reduced_clock_full_confirmation.json)与新四运行比较采集器保留extra3的原失败。
 
 ## 范围与下一步
 

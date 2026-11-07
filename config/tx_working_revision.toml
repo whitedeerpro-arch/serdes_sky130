@@ -305,3 +305,15 @@ end_bit_exclusive = 304
 full_TX_qualified = false
 adopted = false
 status = "actual_loaded_chain_local_TT_FS_recovery; extra5_candidate_for_full_TX_confirmation"
+
+[retime_clock_iteration.output_sizing.extra5_full_confirmation]
+status = "probe_complete_RTL_sources_prepared; dynamic_120ns_pending_analysis"
+index = "results/catalog/tx_reduced_clock_full_confirmation.json"
+TT_probe = "results/analog/tx/parallel_serializer/20261107T165725.817031Z_575dba1f"
+FS_probe = "results/analog/tx/parallel_serializer/20261107T165727.025236Z_73f1c87d"
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T170534.584797Z_533f8f18"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T170534.588144Z_51e1e33e"
+extra_2g = 5
+tail_w_um = 16
+load_ohm = 240
+full_TX_qualified = false

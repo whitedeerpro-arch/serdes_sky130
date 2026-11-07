@@ -44,6 +44,8 @@ FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完
 | I-27 | TX 串化器内部节点码型相关 ISI 明显（孤立位峰值远低于长连码），远端经输出级限幅后才干净；内部带宽仍是限制。2026-10-31 补测：孤立位/长连码中心电平比 r2 0.82、v0.1 0.80，ISI 没有变差；r2 末级比特中心前下垂约 18 mV，与下一比特和摆幅无关。降低末级负载（400→330→270 Ω）裕量近比例下降、尾管余量不变，末级摆幅不宜降低。 | [TX 串化器](../design/tx_serializer.md) | P3 |
 | I-28 | CTLE：原0.8–0.9 V在SS/FS慢角尾sink掉入线性区；vcm改1.05 V后，独立AC/DC MOS45×4档满足，尾余量≥103 mV；C2名义/弱TX回放45点，EQ3为C2默认。vcm缓冲已独立设计，但实际端接加载启动、真实偏置/RC的独立增益/零极点、目标信道/自适应仍缺；是否CMFB由接口余量决定。 | [RX前端](../design/rx_frontend.md)、[偏置](../design/bias.md) | P5 |
 
+| I-34 | 公共多瞬态deck的冒烟仍只截短首个tran，其余段继续完整求解；`run_many`只要求至少一个输出文件。新减幅相位/时钟链bench已显式构造单tran冒烟并检查完整终点。公共`smoke_deck`需统一处理多段并验证相应输出；修改后回归旧单tran语义。 | [公共实现](../../src/serdes_flow/spice.py)、[局部处理](../../analog/tx/input_register/tb/final_retime/native_window.py) | P2 |
+
 ## 低优先级
 
 | 编号 | 问题 | 证据 | 阶段 |

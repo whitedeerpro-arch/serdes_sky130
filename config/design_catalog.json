@@ -1684,8 +1684,8 @@
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "实际extra5局部恢复",
-      "summary": "WT16/R240原extra3完整FS散布失败；实际extra5切片把FS八位恢复至105.92mV/0.10522UI，c2g351mVpp。extra5作为完整字流确认候选，尚未采用；其他超幅及统计仍开。",
+      "state": "完整TX动态确认中",
+      "summary": "实际extra5在TT/FS受检八位恢复，FS105.92mV/0.10522UI、c2g351mVpp。两角探针已通过并重新登记激励，120ns动态确认待评价；extra3原完整FS失败保留，尚未采用。",
       "facts": {
         "设计": "WN32/WT16/R240；extra5局部候选",
         "PVT": "TT/FS八位局部；extra5完整TX待确认",
@@ -1750,6 +1750,10 @@
         {
           "title": "实际缓冲与模型校准数据",
           "path": "docs/data/tx_native_reduced_clock.json"
+        },
+        {
+          "title": "完整确认运行索引",
+          "path": "results/catalog/tx_reduced_clock_full_confirmation.json"
         }
       ],
       "iterations": []

@@ -1,5 +1,5 @@
 revision = "tx_lowov_retimed_r2_20261030"
-status = "r2_baseline_retained; capture_v3_candidate_TT_pass_FS_hot_fail; guard_STA_SS_open"
+status = "r2_baseline_retained; capture_extra3_TT_FS_SS_eye_pass; reduced_swing_FS_spread_fail; guard_STA_SS_open"
 v3_candidate_native_static_report = "docs/history/clocking_progress_20261106.md"
 v3_candidate_native_static_scope = "r5 4-bit frontend, real bias/PDK R; 8 complete count correctly, 2 FF cold missing; static data, no joint eye/bit-map acceptance"
 report = "docs/history/tx_optimization.md"
@@ -54,7 +54,7 @@ input_remap_rtl = "digital/tx/rtl/tx_word_remap.sv"
 remapped_FS_1v65_85C_1024bit_worst_spread_ui = 0.127
 
 [ingress_candidate]
-status = "full_TX_candidate_TT_pass_FS_hot_fail; diagnose_halfword_boundary; not_45pvt_qualified"
+status = "full_TX_extra3_three_pressure_eye_pass; reduced_swing_FS_fail; not_45pvt_qualified"
 preferred_data_cell = "analog/common/devices/spice/cmos_dff.spice:serdes_cmos_dff"
 comparison_cell = "analog/common/devices/spice/cmos_dff_reset.spice:serdes_cmos_dff_reset"
 report = "docs/design/tx_ingress.md"
@@ -198,7 +198,7 @@ SS_cold_dynamic_status = "complete; 256bit_training_mapping_capture_hold_counter
 
 [retime_clock_iteration.output_sizing]
 module = "tx.clocking.output2g"
-status = "calibrated_local_W16_R240_candidate; not_adopted_or_full_TX_qualified"
+status = "full_TX_W16_R240_TT_eye_pass_FS_spread_fail; not_adopted"
 boundary = "tx_final_clock_output_sizing_v1"
 campaign = "results/analog/tx/final_clock_swing/20261107T103804.761471Z"
 evidence = "docs/data/tx_final_clock_swing.json"
@@ -232,3 +232,34 @@ short_diagnostic = "results/analog/tx/clock_epoch/20261107T153055.310765Z"
 short_repeat_common_voltage_error_v = 0.0
 metadata_topology_match_counts_and_phase = true
 force_all_master_zero_adopted = false
+
+[retime_clock_iteration.output_sizing.full_confirmation]
+evidence = "docs/data/tx_clock_output_confirmation.json"
+index = "results/catalog/tx_clock_output_confirmation.json"
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T155507.514155Z_71459865"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T155507.523830Z_505b46a3"
+source_graph_sha256 = "29f4e71489c902dd15d0a2e9452faa330dec3812d7d53c65a3d390831285efce"
+TT_c2g_payload_pp_mv = 369.312
+FS_c2g_payload_pp_mv = 349.271
+TT_c2g_weakest_cycle_pp_mv = 365.769
+FS_c2g_weakest_cycle_pp_mv = 342.782
+TT_serializer_margin_mv = 132.383692
+TT_serializer_spread_ui = 0.050470600
+FS_serializer_margin_mv = 106.345083
+FS_serializer_spread_ui = 0.180251911
+TT_serializer_eye_pass = true
+FS_serializer_eye_pass = false
+counter_capture_hold_tag_mapping_ok_each = true
+payload_bits_each = 256
+payload_errors_each = 0
+c2g_observed_amplitude_period_edge_screens_pass_each = true
+status = "FS_failed_0.15UI_spread; no_full_PVT_or_noise_qualification; not_adopted"
+
+[internal_cml_amplitude]
+evidence = "docs/data/tx_cml_envelope.json"
+report = "docs/design/tx_cml_amplitude.md"
+window_s = [4e-8, 1e-7]
+baseline_pressure_conditions = 3
+reduced_output_conditions = 2
+I17_closed = false
+status = "observed_over_400mV_in_counter_clocks_converters_tree_and_held; data_lower_bound_ungraded"

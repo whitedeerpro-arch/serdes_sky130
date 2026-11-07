@@ -93,16 +93,24 @@ def collect(camps):
 
 def draw(data):
     fig,axes=plt.subplots(2,2,figsize=(11,7),layout='constrained')
+    margin_top=max(100,max(c['serializer']['check']['minimum_signed_margin_v']*1000 for c in data['cases'])*1.2)
+    spread_top=max(.18,max(c['serializer']['check']['transition_spread_ui'] or 0 for c in data['cases'])*1.25)
     for col,tag in enumerate(('tt_v1800_t27','fs_v1650_t85')):
         cases=sorted((c for c in data['cases'] if c['condition']==tag),key=lambda c:-c['clock_output_wt'])
         labels=[f"wt {c['clock_output_wt']:g} / R {c['clock_output_r']:g}" for c in cases];x=np.arange(2)
         a=axes[0,col];a.bar(x,[c['clock']['difference_pp_v']*1000 for c in cases],color=['#436f94','#499d86'])
+        a.scatter(x,[c['clock']['cycle_amplitudes']['min_pp_v']*1000 for c in cases],marker='_',s=220,color='black',label='Weakest complete cycle')
+        for i,c in enumerate(cases):
+            a.text(i,c['clock']['difference_pp_v']*1000+12,f"{c['clock']['difference_pp_v']*1000:.1f}",ha='center',fontsize=9)
         for val in (150,200,400):a.axhline(val,color='#b45a3c',ls='--',lw=.7);a.text(1.55,val,str(val),fontsize=7,va='bottom')
-        a.set(title=tag+' — c2g payload-window amplitude',ylabel='Differential peak-to-peak (mV)',xticks=x,xticklabels=labels);a.grid(axis='y',alpha=.2)
+        a.set(title=tag+' — c2g payload-window amplitude',ylabel='Differential peak-to-peak (mV)',xticks=x,xticklabels=labels,ylim=(0,800));a.grid(axis='y',alpha=.2);a.legend(fontsize=7,loc='upper right')
         a=axes[1,col];a.bar(x-.18,[c['serializer']['check']['minimum_signed_margin_v']*1000 for c in cases],.36,color='#296d98',label='Signed margin (mV)')
-        a.axhline(75,color='#296d98',ls='--',lw=.8);a.set_ylabel('Signed margin (mV)',color='#296d98')
+        a.axhline(75,color='#296d98',ls='--',lw=.8);a.set_ylabel('Signed margin (mV)',color='#296d98');a.set_ylim(0,margin_top)
         b=a.twinx();b.bar(x+.18,[c['serializer']['check']['transition_spread_ui'] or 0 for c in cases],.36,color='#cc7843',label='Spread (UI)')
-        b.axhline(.15,color='#cc7843',ls='--',lw=.8);b.set_ylabel('Edge spread (UI)',color='#a75320')
+        b.axhline(.15,color='#cc7843',ls='--',lw=.8);b.set_ylabel('Edge spread (UI)',color='#a75320');b.set_ylim(0,spread_top)
+        for i,c in enumerate(cases):
+            if not c['serializer']['meets_spec']:
+                b.text(i+.18,(c['serializer']['check']['transition_spread_ui'] or 0)+.008,'FAIL',ha='center',color='#a32d28',fontsize=9,fontweight='bold')
         a.set(title='Serializer eye gates',xticks=x,xticklabels=labels);a.grid(axis='y',alpha=.2)
     fig.suptitle('Full TX: loaded 2 GHz output sizing at TT and FS',fontsize=13)
     FIG.parent.mkdir(parents=True,exist_ok=True)

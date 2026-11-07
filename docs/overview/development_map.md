@@ -41,6 +41,8 @@
 | RX 物理 CDR 冒烟 | `ac_rk`＋deser16＋实际 RTL；TT、理想锚点/数据/参考、KP=65536 | 120–140 ns 中跨扇区/回卷，17/22 个 payload 字正确 | 生产 KP=8192、ppm 频偏、真实偏置/RC 未验证 |
 | RX 校准联调 | `ac_trim_rk`＋deser16＋两边沿顺序 SAR；注入电流代替失配 | TT、SS 低压热的 mV 残差与短 payload | 不是实际随机失配下的完整校准 MC；不是 135 点启动 |
 
+TX的[内部摆幅逐节点观察](../design/tx_cml_amplitude.md)已独立建立：extra3三个压力点眼图通过仍有多层超幅。T02.1输出WT16/R240的完整TT/FS把c2g降至369/349mVpp，但FS散布0.18025UI失败、不采用；捕获/保持/位序正确不能替代该门槛。新结论挂在T02.1，T03树/保持的超幅另行校准。
+
 **近期改进的归属**：VCO 为 r5/4 bit 工作区改进，TX 分发为 v3 同步时钟结构，RX 为 CTLE EQ3＋PI120f＋ac_trim/c2＋W40/deser16 的局部改进。已有 PLL 顶层及其闭环记录继续保留；每项改进附上自己的模型、参数和回归证据。配置入口：[PLL](../../config/pll_working_revision.toml)、[TX](../../config/tx_working_revision.toml)、[RX](../../config/rx_working_revision.toml)、[偏置](../../config/bias_working_revision.toml)。
 
 ## 3. 时钟与偏置：逐框状态

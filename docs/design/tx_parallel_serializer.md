@@ -61,6 +61,8 @@ SS低压冷角也完成120 ns动态验证：`parallel_serializer/20261107T103131
 
 随后安排其余MOS、长码型、hh/ll、源阻抗/失配/噪声和45 PVT。同一改进尚未成为全角资格结论。内部时钟摆幅I-17保持开；guard需完成实际接口参数与SS时序迭代，之后接驱动blank和有效字启动协议。原生PLL时钟采用已登记负载边界单独复核。
 
+随后为降低c2g超幅而测试输出WT16/R240（extra3不变）：TT/FS均完成120ns，捕获/保持/计数、自然位序、训练和256bit载荷正确；TT眼图132.38mV/0.05047UI满足，FS为106.35mV/**0.18025UI**而失败，不采用该尺寸。c2g载荷窗峰峰值约369/349mV，其余内部超幅仍开。见[缩摆幅完整对照](tx_final_retime.md#缩摆幅的完整tx确认)和[逐节点幅度图](tx_cml_amplitude.md)。
+
 ## 复跑入口
 
 电路：[capture_serializer16.spice](../../analog/tx/input_register/spice/capture_serializer16.spice)。测试：[full_serializer/run.py](../../analog/tx/input_register/tb/full_serializer/run.py)。每点 `probe → prepare → RTL producer → run`；probe 和 run 的源、负载、布线与计数器初态签名必须一致。`run --resume <campaign>` 保持已渲染快照，只补缺失或截断的运行；完整波形只生成新的分析记录，不再启动仿真。

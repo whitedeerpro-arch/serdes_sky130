@@ -2106,11 +2106,11 @@ window.DESIGN_CATALOG = {
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "局部尺寸验证",
-      "summary": "extra3保持不变，输出WT16/R240在TT/FS四事件的c2g为344–369mVpp；关闭提前约10–13ps、输出仍正。完整TX待验证，其他超幅节点仍开。",
+      "state": "FS散布失败",
+      "summary": "extra3、WT16/R240完整TT/FS的c2g为369/349mVpp，捕获/保持/计数和256bit位序正确；TT眼图满足，FS散布0.18025UI失败，不采用。其他内部超幅仍开。",
       "facts": {
-        "设计": "Wn32固定；WT16/R240候选",
-        "PVT": "TT/FS两事件；PDK R tt",
+        "设计": "Wn32固定；WT16/R240未采用",
+        "PVT": "完整TT/FS两点；FS散布失败，非全角",
         "失配": "未做",
         "噪声": "未做"
       },
@@ -2130,7 +2130,7 @@ window.DESIGN_CATALOG = {
         "question": "减小尾流和R能否同时满足幅度、共模与数据建立？",
         "model": "I·R粗估排序，实际加载瞬态校准；RC/gm权重尚未拟合。",
         "parameters": "extra3；Wn32；WT/R：24/300、18/240、16/240。",
-        "verification": "4个原样校准最大5.56µV；检查c2g、实际sap关闭、g3/保持/固定训练样点，下一步完整TX。"
+        "verification": "局部四基线5.56µV；完整120ns独立确认字流及位序；FS散布超过0.15UI，需要减幅后的本地时序/再生校准。"
       },
       "references": [
         {
@@ -2144,6 +2144,22 @@ window.DESIGN_CATALOG = {
         {
           "title": "局部数据",
           "path": "docs/data/tx_final_clock_swing.json"
+        },
+        {
+          "title": "完整TX尺寸对照",
+          "path": "docs/figures/tx/ingress/tx_clock_output_full_confirmation.png"
+        },
+        {
+          "title": "完整确认数据",
+          "path": "docs/data/tx_clock_output_confirmation.json"
+        },
+        {
+          "title": "边沿散布复核",
+          "path": "docs/work_packages/deliveries/tx-clock-output-edge-review.md"
+        },
+        {
+          "title": "最差边沿内部波形",
+          "path": "docs/figures/tx/ingress/tx_clock_output_edge_detail.png"
         }
       ],
       "iterations": [
@@ -2171,6 +2187,33 @@ window.DESIGN_CATALOG = {
             {
               "title": "tx_final_clock_output_sizing.png",
               "path": "docs/figures/tx/ingress/tx_final_clock_output_sizing.png"
+            }
+          ]
+        },
+        {
+          "id": "20261107T161954Z_5be2dfa5b2",
+          "module": "tx.clocking.output2g",
+          "date": "2026-11-08",
+          "timestamp": "2026-11-07T16:19:54.605075+00:00",
+          "title": "缩摆幅完整TX：TT通过、FS散布失败",
+          "phase": "validation",
+          "problem": "局部WT16/R240减幅后，需核对完整字流、位序和所有载荷边沿。",
+          "model": "探针与动态源图一致，重新登记字时钟事件、保留原IC。训练相位固定，UI为250ps。",
+          "changes": "extra3与数据树不变，2GHz末级尾宽24降至16µm，负载300降至240Ω；TT/FS各120ns。",
+          "validation": "c2g约369/349mVpp；捕获、保持、标签、175计数与256bit自然位序正确。TT眼图132.38mV/0.05047UI；FS106.35mV/0.18025UI失败。",
+          "conclusion": "尺寸不采用；先校准减幅后的本地时钟、再生和数据相关延迟。其他节点超幅、45PVT、物理guard及统计仍开。",
+          "attachments": [
+            {
+              "title": "完整对照",
+              "path": "docs/figures/tx/ingress/tx_clock_output_full_confirmation.png"
+            },
+            {
+              "title": "边界与判定",
+              "path": "docs/design/tx_final_retime.md"
+            },
+            {
+              "title": "逐边沿复核",
+              "path": "docs/work_packages/deliveries/tx-clock-output-edge-review.md"
             }
           ]
         }

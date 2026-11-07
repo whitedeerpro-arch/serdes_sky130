@@ -1,0 +1,231 @@
+{
+  "scope": "FS 1.65 V 85 \u00b0C two native runs; aligned to their own actual B halfword edge; no causal claim or full PVT qualification.",
+  "definitions": "Bit296 g3 crossing uses 0\u2013500 ps after B edge. A closes are four observed sap-san falls in the B halfword; slot14 uses the fourth, three cycles after slot8. Slot14 and preceding even slot12 both carry 1, so the 1000\u20131500 ps g3 crossing is associated with prior slot12, not a new slot14 transition. Output residuals use each run\u2019s training phase.",
+  "analysis_sources": {
+    "analog/tx/input_register/tb/full_serializer/edge_spread_detail.py": "9def3ba9658be574d8e281e7e614d7cb2bc0c4fb2838bc902da92eb89af5c738",
+    "analog/tx/input_register/tb/full_serializer/edge_spread_review.py": "8455524f72f625a2459d221825fd90c8909cc1730f4c4d0e845d70267aa48b27",
+    "verification/plotting/tx_parallel_serializer.py": "9da6727421dcfaab6b9d32b1ec67f8e1508d02cebf7136f8d9b6d9a926cc759a",
+    "src/serdes_flow/serial.py": "0bf1bd6d0b2f50f64791e56ed5844a738d642bc240fb5db965479fbcc41d8858",
+    "src/serdes_flow/clock.py": "5b23a947c3dcd7a76f41ed25901c02cc3e12ac1a42d9e6b38aa7ad8b0b326673",
+    "src/serdes_flow/spice.py": "fe1546e3d4fd04e32615ea47d2d44f9ddcb0d6fb711bfd316500c20dddf73aa1",
+    "src/serdes_flow/waves.py": "ab95f2173e70bb3480949bf67f77f8436b3c84b5b02083fb70549a790e9950da",
+    "src/serdes_flow/project.py": "5dc69e2b6505f4f370a28635065642052839e54eacdf6789149864039fd2dda6",
+    "src/serdes_flow/corners.py": "5fb8159aa428e05efddbf08ee574499353b0d64884bab57181fafc07b116d62b"
+  },
+  "cases": [
+    {
+      "condition": "fs_v1650_t85",
+      "campaign": "results/analog/tx/parallel_serializer/20261107T100515.224129Z_ed0ba659",
+      "clock_output_wt": 24,
+      "clock_output_r": 300,
+      "hashes": {
+        "waveform_sha256": "3cc67febd0b5025f1eee605564d8a97ccf0639f859c43675e46e45df3fbe2f11",
+        "plan_sha256": "3249373b61991b41a6fdfcf74f528746d9d08918c861add03dfd392961101957",
+        "summary_sha256": "ba42904018e6f54c6b680a705ece29dcdfd268404181f01fb920e82dbf9ad6f7",
+        "manifest_sha256": "90ab5dd7377dffbba06f7b11554dff2367ff7e434b45d39a03d7dc73e6c59d64",
+        "boundary_sha256": "328bd7c26c7ccf4d7c2a12e8cafd32c0e935b368fb0ae1c3a5f55a18b53ef466",
+        "probe_raw_sha256": "bafa7a6b95602c71a22d4d75cf1252b4a4dbf413f6bba23fe629533401ba1c7f",
+        "schedule_sha256": "6134e459cc2da626f107821f22c8b3c584db0ae3b8f11533512301e53895d2eb",
+        "deck_sha256": "ebcacd0bad4b4db6750f82082efd7b1bafd99673080ababaca99c208826382e4"
+      },
+      "word_index": 18,
+      "source_word": 56025,
+      "halfword_b_edge_s": 1.0059991253346993e-07,
+      "serializer_training_delay_ui": 1.5972033568086426,
+      "events": [
+        {
+          "bit": 296,
+          "slot": 8,
+          "expected_bit": 0,
+          "previous_even_bit": 294,
+          "previous_even_slot": 6,
+          "previous_even_value": 1,
+          "g3_input_changes": true,
+          "actual_a_close_ps": 306.64475160099727,
+          "output_transition": {
+            "bit": 296,
+            "payload_bit": 232,
+            "word": 18,
+            "slot": 8,
+            "halfword": "B",
+            "previous_bit": 1,
+            "expected_bit": 0,
+            "source_word": 56025,
+            "residual_ui": 0.03799000184240935,
+            "crossing_s": 1.0101123996145042e-07
+          },
+          "signed_g3_at_close_mv": 81.14215422590026,
+          "signed_held_200ps_after_close_mv": 266.11304829789947,
+          "target_crossing_search_ps": [
+            0,
+            500
+          ],
+          "target_crossings_ps": [
+            266.1347976520715
+          ],
+          "target_crossing_ps": 266.1347976520715,
+          "cross_minus_close_ps": -40.5099539489258,
+          "held_target_crossing_candidates_ps": [
+            325.0917028183589
+          ],
+          "g3_to_held_crossing_ps": 58.956905166287434
+        },
+        {
+          "bit": 302,
+          "slot": 14,
+          "expected_bit": 1,
+          "previous_even_bit": 300,
+          "previous_even_slot": 12,
+          "previous_even_value": 1,
+          "g3_input_changes": false,
+          "actual_a_close_ps": 1808.4713016019098,
+          "output_transition": {
+            "bit": 302,
+            "payload_bit": 238,
+            "word": 18,
+            "slot": 14,
+            "halfword": "B",
+            "previous_bit": 0,
+            "expected_bit": 1,
+            "source_word": 56025,
+            "residual_ui": -0.0416140191173457,
+            "crossing_s": 1.0249133895621049e-07
+          },
+          "signed_g3_at_close_mv": 204.0337740048596,
+          "signed_held_200ps_after_close_mv": 274.3834412762097,
+          "g3_crossings_since_previous_even_close_ps": [],
+          "g3_target_crossing_ps": null,
+          "g3_to_held_crossing_ps": null,
+          "g3_transition_status": "unchanged from slot12; no attributable new slot14 transition",
+          "held_transition_status": "ungraded for slot14: earlier slot12 response can overlap prior close",
+          "previous_even_slot12_expected_crossing_candidates_ps": [
+            1243.7560953419982
+          ]
+        }
+      ],
+      "c2g_window_s": [
+        1.0059991253346993e-07,
+        1.0259991253346993e-07
+      ],
+      "c2g_complete_cycle_amplitudes": {
+        "complete_cycles": 3,
+        "min_pp_v": 0.6167123397077734,
+        "max_pp_v": 0.6191883434665892,
+        "mean_pp_v": 0.6180214853032421
+      },
+      "c2g_differential_overall_pp_v": 0.6197030972920614,
+      "c2g_cm_v": {
+        "min": 1.4851594895996367,
+        "max": 1.5052199858781394,
+        "mean": 1.4958991479238628
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "campaign": "results/analog/tx/parallel_serializer/20261107T155507.523830Z_505b46a3",
+      "clock_output_wt": 16,
+      "clock_output_r": 240,
+      "hashes": {
+        "waveform_sha256": "efc6e47c3fe66679ce3bb51081fb777d216aa21bb9b8f5d4f5bf07245ddfe065",
+        "plan_sha256": "2820c2660d6f0d926d5317632b0b431fdf7926fecbd09bac83023cd0fe0baa5a",
+        "summary_sha256": "0ff203ac545027a6c503cefb018cfaef52c9a7f49d70981316e2c7dd816088c8",
+        "manifest_sha256": "1145910af6dbd002e1d856d78d42ad427ea91cb64d89a9d6b27ae679a387e77a",
+        "boundary_sha256": "cfc9da2a84199da2670e9c815627b2be414da6d4494e164f66fc7923f3db4ae4",
+        "probe_raw_sha256": "08cf9a014c5a109212dbb5c4ee55e25e3268653b2d873893052071bcbd408f58",
+        "schedule_sha256": "3bbcb2b7ea893f8db30308bb54b27a290fa19399be38b31653a3e2cb9000d0a5",
+        "deck_sha256": "83b018d150ca342894de8dfe494ef3469520169a6df33ebdf0bc19779eb5aed3"
+      },
+      "word_index": 18,
+      "source_word": 56025,
+      "halfword_b_edge_s": 9.85999292159515e-08,
+      "serializer_training_delay_ui": 1.5324236702809095,
+      "events": [
+        {
+          "bit": 296,
+          "slot": 8,
+          "expected_bit": 0,
+          "previous_even_bit": 294,
+          "previous_even_slot": 6,
+          "previous_even_value": 1,
+          "g3_input_changes": true,
+          "actual_a_close_ps": 293.0824256894384,
+          "output_transition": {
+            "bit": 296,
+            "payload_bit": 232,
+            "word": 18,
+            "slot": 8,
+            "halfword": "B",
+            "previous_bit": 1,
+            "expected_bit": 0,
+            "source_word": 56025,
+            "residual_ui": 0.09291877820171976,
+            "crossing_s": 9.900938855934002e-08
+          },
+          "signed_g3_at_close_mv": 55.070168948190194,
+          "signed_held_200ps_after_close_mv": 247.7520726383277,
+          "target_crossing_search_ps": [
+            0,
+            500
+          ],
+          "target_crossings_ps": [
+            266.1773581218019
+          ],
+          "target_crossing_ps": 266.1773581218019,
+          "cross_minus_close_ps": -26.905067567636554,
+          "held_target_crossing_candidates_ps": [
+            333.72154487256677
+          ],
+          "g3_to_held_crossing_ps": 67.54418675076488
+        },
+        {
+          "bit": 302,
+          "slot": 14,
+          "expected_bit": 1,
+          "previous_even_bit": 300,
+          "previous_even_slot": 12,
+          "previous_even_value": 1,
+          "g3_input_changes": false,
+          "actual_a_close_ps": 1794.9869001642926,
+          "output_transition": {
+            "bit": 302,
+            "payload_bit": 238,
+            "word": 18,
+            "slot": 14,
+            "halfword": "B",
+            "previous_bit": 0,
+            "expected_bit": 1,
+            "source_word": 56025,
+            "residual_ui": -0.08733313274013094,
+            "crossing_s": 1.0046432558160457e-07
+          },
+          "signed_g3_at_close_mv": 198.55160497454852,
+          "signed_held_200ps_after_close_mv": 265.08763635370957,
+          "g3_crossings_since_previous_even_close_ps": [],
+          "g3_target_crossing_ps": null,
+          "g3_to_held_crossing_ps": null,
+          "g3_transition_status": "unchanged from slot12; no attributable new slot14 transition",
+          "held_transition_status": "ungraded for slot14: earlier slot12 response can overlap prior close",
+          "previous_even_slot12_expected_crossing_candidates_ps": [
+            1243.8504222582917
+          ]
+        }
+      ],
+      "c2g_window_s": [
+        9.85999292159515e-08,
+        1.0059992921595151e-07
+      ],
+      "c2g_complete_cycle_amplitudes": {
+        "complete_cycles": 3,
+        "min_pp_v": 0.3472774301341208,
+        "max_pp_v": 0.34865520480824497,
+        "mean_pp_v": 0.347829188422674
+      },
+      "c2g_differential_overall_pp_v": 0.34903952956987183,
+      "c2g_cm_v": {
+        "min": 1.565243872116644,
+        "max": 1.578664759939433,
+        "mean": 1.5706541869035686
+      }
+    }
+  ]
+}

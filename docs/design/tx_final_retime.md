@@ -64,9 +64,32 @@ W18/R240在TT仍414.60–417.12 mVpp，未满足400上界，保留作趋势对�
 
 ![输出尾宽与负载的局部比较](../figures/tx/ingress/tx_final_clock_output_sizing.png)
 
-[数据](../data/tx_final_clock_swing.json)、[索引](../../results/catalog/tx_final_clock_swing.json)来自`final_clock_swing/20261107T103804.761471Z`，显式边界`tx_final_clock_output_sizing_v1`。源为旧两条件事件的理想电压，忽略上游阻抗/反馈；W16/R240进入完整链候选后，两条120ns波形完成，但实际捕获时钟比probe事件偏约1ns，入口边界检查拒绝评分；不能写为完整TX通过。18ns短对照复现原动态波形，静态probe补齐四个独立元数据源后计数和相位匹配；额外强制master零态则出现两次无效递增，不采用。详见[初态与图拓扑诊断](../work_packages/deliveries/tx-sizing-clock-epoch.md)。probe源拓扑修复已提交7386cde，原IC与电路保持不变；两新48ns探针通过，已重新登记事件并启动完整TT/FS。当前[运行索引](../../results/catalog/tx_clock_output_confirmation.json)只记待评价，不记通过。上游缓冲及其余节点的超幅问题仍开，不能用一个c2g端口的局部改善关闭I-17。
+[数据](../data/tx_final_clock_swing.json)、[索引](../../results/catalog/tx_final_clock_swing.json)来自`final_clock_swing/20261107T103804.761471Z`，显式边界`tx_final_clock_output_sizing_v1`。源为旧两条件事件的理想电压，忽略上游阻抗/反馈。首次完整链尝试虽然两条120ns完成，但实际捕获时钟比probe事件偏约1ns，入口边界检查拒绝评分。18ns短对照复现原动态波形，静态probe补齐四个独立元数据源后计数和相位匹配；额外强制master零态则出现两次无效递增，不采用。详见[初态与图拓扑诊断](../work_packages/deliveries/tx-sizing-clock-epoch.md)。probe源拓扑修复7386cde保持原IC和电路，两新48ns探针通过后重新登记事件。
 
 输出样点为原训练中心，加“本次候选c2g下降沿−源切片count1下降沿”，包含原extra1→3的31–39 ps改进；不得漏加这段延时，也不使用载荷拟合。交越必须在固定窗口中唯一，交越间隔不是完整建立裕量。先前未经校准的RC/gm各半模型仅为敏感性示例；选参依据是此次实际加载与关闭沿测量。
+
+## 缩摆幅的完整TX确认
+
+**WT16/R240的c2g满足观察窗幅度筛查，但FS热角串化边沿散布失败，尺寸不采用。** 修复源图拓扑后，TT/FS均完成120ns并通过捕获、两组保持、RTL事件标签及175个计数采样；22个有效字、256载荷零错，训练/marker/缺失或额外交越均为0，位映射为自然0–15。这些功能结果不能覆盖0.15UI散布门槛。
+
+| 条件 | c2g窗口峰峰值 / mV | c2g最弱完整周期 / mV | 串化器裕量 / mV | 串化器散布 / UI | 眼图判定 |
+|---|---:|---:|---:|---:|---|
+| TT 1.8 V 27°C | 369.31 | 365.77 | 132.38 | 0.05047 | 满足 |
+| FS 1.65 V 85°C | 349.27 | 342.78 | 106.35 | **0.18025** | **失败** |
+
+![完整TX输出尺寸与眼图对照](../figures/tx/ingress/tx_clock_output_full_confirmation.png)
+
+时钟测量为实际序列起点+64UI至+320UI的载荷窗，UI固定250ps；两种极性边沿数、周期误差<1%及200–400mVpp观察筛查均满足。输出训练相位不拟合载荷。TT三测点眼图满足；FS焊盘/远端的比较screen散布为0.21195/0.23129UI，同样失败。
+
+运行固定为`parallel_serializer/20261107T155507.514155Z_71459865`和`20261107T155507.523830Z_505b46a3`，前缀`results/analog/tx/`。[独立四运行对照数据](../data/tx_clock_output_confirmation.json)、[索引](../../results/catalog/tx_clock_output_confirmation.json)核对原样WT24/R300与新候选，保留所有通过和失败。
+
+FS新全局极端在同一B半字：bit302/slot14的0→1最早，bit296/slot8的1→0最晚（位号含训练，载荷内分别为238/232）。原WT24/R300同位残差约−0.0416/+0.0380UI，新候选为−0.0873/+0.0929UI；不仅是一个半字起点整体延迟。见[逐边沿复核](../work_packages/deliveries/tx-clock-output-edge-review.md)。下一步须在减幅边界上校准本地时钟/再生及数据相关延迟，再选相位和尺寸，不能直接外推原大摆幅切片。
+
+![最差字的内部路径与本地时钟](../figures/tx/ingress/tx_clock_output_edge_detail.png)
+
+按各自实际B沿对齐，slot8的g3目标交越新旧约266.18/266.13ps，本地A关闭约293.08/306.64ps；输入过零基本不变，关闭提前约13.6ps，g3到held的目标交越间隔增加约8.6ps。slot14关闭也提前约13.5ps，但slot12/14同为1，不能将此前slot12的g3上升误作slot14的新事件；slot14独立输入到保持的交越传播时间不评分。[数据与测量定义](../data/tx_clock_output_edge_detail.json)保留两事件与实际关闭沿的对应关系。这些观察尚不足以单独归因全部散布，后续局部切片必须同时覆盖半字起点和沿用偶支路值的选择事件。
+
+其他内部节点仍大量超幅，见[逐节点摆幅与分层尺寸约束](tx_cml_amplitude.md)。这组确认既不关闭I-17，也不成为全角工作修订。
 
 ## 范围与下一步
 

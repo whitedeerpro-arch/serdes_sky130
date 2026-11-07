@@ -47,6 +47,26 @@ def equal(a, b):
     return a == b
 
 
+def stimulus_graph_signature(text):
+    nodes=[]
+    for raw in text.split('.control',1)[0].splitlines():
+        words=raw.split()
+        if words and re.fullmatch(r'V(?:d\d+|guard_(?:a|b|ready|valid))',words[0],re.I):
+            if len(words)<4:raise ValueError('malformed stimulus voltage source')
+            nodes.append(' '.join(words[:3]).lower())
+    return hashlib.sha256('\n'.join(nodes).encode()).hexdigest()
+
+
+def check_stimulus_graph(plan, entry, text):
+    graph=stimulus_graph_signature(text)
+    if plan.get('numerical_source_graph_sha256') is not None and entry.get('upstream',{}).get('numerical_source_graph_sha256') is None:
+        raise ValueError('new campaign requires a source-graph-bound probe')
+    for expected in (plan.get('numerical_source_graph_sha256'),entry.get('upstream',{}).get('numerical_source_graph_sha256')):
+        if expected is not None and graph!=expected:
+            raise ValueError('stimulus source graph differs from archive identity')
+    return graph
+
+
 def clock_extra_2g(plan, entry, deck_text):
     """Check metadata against the actual archived v3 2 GHz chain."""
     declared_plan = plan.get('clock_extra_2g', 1)
@@ -139,7 +159,9 @@ def collect(camp):
         raise ValueError('simulation execution reports failure')
     if digest(wave.parent / 'tb.cir') != ex['deck_sha256'] or ex['deck_sha256'] != plan['deck_sha256']:
         raise ValueError('executed deck hash mismatch')
-    extra_2g = clock_extra_2g(plan, entry, (wave.parent / 'tb.cir').read_text())
+    deck_text=(wave.parent / 'tb.cir').read_text()
+    graph_sha=check_stimulus_graph(plan,entry,deck_text)
+    extra_2g = clock_extra_2g(plan, entry, deck_text)
     output_wt, output_r = clock_output_parameters(plan, entry)
     w = spice.Waves(wave)
     c = Condition.parse(plan['condition'])
@@ -181,7 +203,7 @@ def collect(camp):
         indices=np.unique(np.r_[indices,worst])
         traces = [np.interp(seq.start_s + (i + metrics['training_delay_ui'] + x) * seq.ui_s, w.t, y).round(6).tolist() for i in indices]
         outputs[label] = dict(**result,grading_scope='serializer_spec' if label=='serializer' else 'comparison_screen_not_link_spec', eye_trace_bit_indices=indices.tolist(),eye_ui=x.round(4).tolist(), eye_v=traces)
-    return dict(campaign=str(camp.relative_to(ROOT)), condition=plan['condition'], clock_extra_2g=extra_2g, clock_output_wt=output_wt, clock_output_r=output_r, waveform=str(wave.relative_to(ROOT)),
+    return dict(campaign=str(camp.relative_to(ROOT)), condition=plan['condition'], clock_extra_2g=extra_2g, clock_output_wt=output_wt, clock_output_r=output_r, numerical_source_graph_sha256=graph_sha, waveform=str(wave.relative_to(ROOT)),
                 hashes=dict(waveform_sha256=digest(wave), plan_sha256=digest(camp/'plan.json'),
                             summary_sha256=digest(camp/'summary.json'), manifest_sha256=digest(camp/'execution/stimulus_manifest.json'),
                             boundary_sha256=plan['boundary_sha256'], probe_raw_sha256=point['raw_sha256'],

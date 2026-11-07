@@ -81,6 +81,37 @@ def fixture_signature(text):
     return hashlib.sha256('\n'.join(keep).encode()).hexdigest()
 
 
+def static_probe_sources():
+    """Match the dynamic producer's independent source graph at zero volts."""
+    return '\n'.join([f'Vd{i} d{i} 0 0' for i in range(16)] +
+                     [f'Vguard_{name} guard_{name} 0 0' for name in ('a','b','ready','valid')])
+
+
+def stimulus_graph_signature(text):
+    """Hash ordered independent data/metadata source names and terminals, excluding values."""
+    nodes=[]
+    for raw in text.split('.control',1)[0].splitlines():
+        words=raw.split()
+        if words and re.fullmatch(r'V(?:d\d+|guard_(?:a|b|ready|valid))',words[0],re.I):
+            if len(words)<4:raise ValueError('malformed stimulus voltage source')
+            nodes.append(' '.join(words[:3]).lower())
+    return hashlib.sha256('\n'.join(nodes).encode()).hexdigest()
+
+
+def check_stimulus_graph(plan, entry, deck_text):
+    """Legacy plans without graph metadata retain their original validation."""
+    actual=stimulus_graph_signature(deck_text)
+    planned=plan.get('numerical_source_graph_sha256')
+    registered=entry['upstream'].get('numerical_source_graph_sha256') if entry else None
+    if entry and planned is not None and registered is None:
+        raise ValueError('registered probe lacks stimulus source graph identity; record a new probe')
+    if planned is not None and actual!=planned:raise ValueError('stimulus source graph differs from plan')
+    if entry and registered is not None and actual!=registered:raise ValueError('stimulus source graph differs from registered probe')
+    if entry and planned is not None and registered is not None and planned!=registered:
+        raise ValueError('stimulus source graph plan/boundary mismatch')
+    return actual
+
+
 def check_runtime_includes(text,camp,plan):
     """Old checkpoints may reference a source outside the archived deck tree."""
     for name in re.findall(r'^\.include\s+"([^"]+)"',text,re.M|re.I):
@@ -171,6 +202,7 @@ def prepare(camp):
     wave=spice.case_output(camp,'run','waveforms.raw',plan['stop_s'])
     if wave is None:raise ValueError('probe incomplete')
     m=probe_metrics(wave)
+    check_stimulus_graph(plan,None,(wave.parent/'tb.cir').read_text())
     for rel in PHYSICAL:
         if sha(ROOT/rel)!=plan['sources'][rel]:raise ValueError('physical circuit changed after probe')
     c=Condition.parse(plan['condition']);run=wave.parent
@@ -208,6 +240,8 @@ def prepare(camp):
         valid_while=['same physical modules, clock source, loads, counter initialization and PDK',
                      'data activity may modulate clock phase; actual second run must verify the producer interface',
                      'RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification'])
+    if 'numerical_source_graph_sha256' in plan:
+        entry['upstream']['numerical_source_graph_sha256']=plan['numerical_source_graph_sha256']
     boundary.register(entry)
     print(bc_id,schedule_path,flush=True)
     return entry
@@ -285,6 +319,7 @@ def execute(camp,plan,manifest,entry):
         raise ValueError('clock sources, physical loads or wiring differ from schedule probe')
     original=(camp/'execution/physical_tb.cir').read_text()
     if hashlib.sha256(original.encode()).hexdigest()!=plan['deck_sha256']:raise ValueError('physical deck changed')
+    check_stimulus_graph(plan,entry,original)
     wave=spice.case_output(camp,'run','waveforms.raw',plan['stop_s'])
     print(camp,flush=True)
     if wave is None:
@@ -350,7 +385,7 @@ def main():
     if a.mode=='probe':
         extra_2g=a.clock_extra_2g if a.clock_extra_2g is not None else 1
         wt,resistance=output_parameters(a.clock_output_wt if a.clock_output_wt is not None else 24,a.clock_output_r if a.clock_output_r is not None else 300)
-        data='\n'.join(f'Vd{i} d{i} 0 0' for i in range(16));stop=48e-9
+        data=static_probe_sources();stop=48e-9
     else:
         if not a.bc or a.stimulus is None:p.error('--bc and --stimulus required')
         entry=boundary.get(a.bc);boundary.check_load(a.bc,boundary.input_stage_signature(DUT,'serdes_tx_capture_serializer16',SELECTS))
@@ -397,6 +432,7 @@ def main():
     (camp/'execution/physical_tb.cir').write_text(full);(camp/'execution/smoke_tb.cir').write_text(smoke)
     checkpoints=[x for root in (camp/'snap',camp/'execution') for x in root.rglob('*') if x.is_file()]
     plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,clock_output_wt=wt,clock_output_r=resistance,
+              numerical_source_graph_sha256=stimulus_graph_signature(full),
               fixture_sha256=fixture_signature(full),deck_sha256=hashlib.sha256(full.encode()).hexdigest(),
               boundary_sha256=hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest() if entry else None,
               pdk_installation_id=project.pdk_installation_id(),snapshot_files={str(x.relative_to(camp)):sha(x) for x in checkpoints},

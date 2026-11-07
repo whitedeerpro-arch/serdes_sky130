@@ -83,3 +83,52 @@ def test_probe_boundary_output_identity_rejects_parameter_changes():
     assert flow.check_output_identity({'clock_output_wt':16,'clock_output_r':240},candidate)==(16,240)
     with pytest.raises(ValueError,match='registered probe'):
         flow.check_output_identity({'clock_output_wt':24,'clock_output_r':300},candidate)
+
+
+def test_probe_and_dynamic_stimulus_graph_identity():
+    probe=flow.static_probe_sources()
+    dynamic='\n'.join([f'Vd{i} d{i} 0 PWL(0 0 20n 1.8)' for i in range(16)]+[
+        f'Vguard_{name} guard_{name} 0 PWL(0 0 12n 1.8)' for name in ('a','b','ready','valid')])
+    assert flow.stimulus_graph_signature(probe)==flow.stimulus_graph_signature(dynamic)
+    assert flow.stimulus_graph_signature(dynamic)!=flow.stimulus_graph_signature(dynamic.replace('Vguard_b guard_b 0 PWL(0 0 12n 1.8)\n',''))
+    assert flow.stimulus_graph_signature(dynamic)==flow.stimulus_graph_signature(dynamic.replace('20n 1.8','30n 1.2'))
+    assert flow.fixture_signature('title\n'+probe+'\n.control')==flow.fixture_signature('title\n'+dynamic+'\n.control')
+
+
+def test_mismatched_graph_rejected_before_spice():
+    good=flow.static_probe_sources()
+    planned={'numerical_source_graph_sha256':flow.stimulus_graph_signature(good)}
+    entry={'upstream':{'numerical_source_graph_sha256':planned['numerical_source_graph_sha256']}}
+    assert flow.check_stimulus_graph(planned,entry,good)==planned['numerical_source_graph_sha256']
+    bad=good.replace('Vguard_b guard_b 0 0\n','')
+    with pytest.raises(ValueError,match='source graph'):
+        flow.check_stimulus_graph(planned,entry,bad)
+    # Historical archives without graph metadata remain readable.
+    flow.check_stimulus_graph({}, {'upstream':{}}, bad)
+
+
+def test_execute_rejects_bad_graph_before_spice(tmp_path, monkeypatch):
+    import json
+    good='title\n'+flow.static_probe_sources()+'\n.control\n.endc\n'
+    bad=good.replace('Vguard_b guard_b 0 0\n','')
+    expected=flow.stimulus_graph_signature(good)
+    fixture=flow.fixture_signature(bad)
+    entry={'upstream':{'fixture_sha256':fixture,'numerical_source_graph_sha256':expected}}
+    plan={'snapshot_files':{},'pdk_installation_id':'fake',
+          'boundary_sha256':hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest(),
+          'fixture_sha256':fixture,'deck_sha256':hashlib.sha256(bad.encode()).hexdigest(),
+          'numerical_source_graph_sha256':expected}
+    (tmp_path/'execution').mkdir();(tmp_path/'execution/physical_tb.cir').write_text(bad)
+    monkeypatch.setattr(flow.project,'pdk_installation_id',lambda:'fake')
+    called=[]
+    monkeypatch.setattr(flow.spice,'run',lambda *args,**kwargs:called.append(True))
+    with pytest.raises(ValueError,match='stimulus source graph'):
+        flow.execute(tmp_path,plan,None,entry)
+    assert not called
+
+
+def test_new_run_cannot_reuse_an_unbound_legacy_probe():
+    data=flow.static_probe_sources()
+    plan={'numerical_source_graph_sha256':flow.stimulus_graph_signature(data)}
+    with pytest.raises(ValueError,match='record a new probe'):
+        flow.check_stimulus_graph(plan,{'upstream':{}},data)

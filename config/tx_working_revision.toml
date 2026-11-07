@@ -263,3 +263,21 @@ baseline_pressure_conditions = 3
 reduced_output_conditions = 2
 I17_closed = false
 status = "observed_over_400mV_in_counter_clocks_converters_tree_and_held; data_lower_bound_ungraded"
+
+[retime_clock_iteration.output_sizing.local_phase_recovery]
+boundary_id = "tx_reduced_final_word18_phase_v1"
+campaign = "results/analog/tx/reduced_phase_window/20261107T163519.276862Z_6d47b1a8"
+evidence = "docs/data/tx_reduced_phase_window.json"
+offsets_ps = [-20, 0, 10, 20, 40, 60]
+first_bit = 296
+end_bit_exclusive = 304
+baseline_max_voltage_error_mv = 0.055873
+baseline_max_edge_error_ps = 0.009337
+FS_plus20_margin_mv = 108.934
+FS_plus20_spread_ui = 0.134138
+FS_plus40_margin_mv = 104.714
+FS_plus40_spread_ui = 0.104541
+phase_fitted_to_payload = false
+physical_clock_implemented = false
+full_TX_qualified = false
+status = "local_8bit_recovery_at_plus20_to_plus60ps; physical_clock_chain_confirmation_next"

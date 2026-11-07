@@ -14,5 +14,6 @@
 | [各层CML摆幅图](tx_cml_amplitude_map.png) | 超过400mVpp的节点分布在哪些模块？ | 完整120ns来源的40–100ns观察；数据下限不评分；[尺寸边界](../../../design/tx_cml_amplitude.md) |
 | [输出尺寸完整TX对照](tx_clock_output_full_confirmation.png) | 缩摆幅是否保住完整字流和眼图？ | TT/FS、extra3、WT24/R300与16/R240；新候选FS散布失败，不采用 |
 | [最差字内部波形](tx_clock_output_edge_detail.png) | 新旧尺寸的g3、本地关闭、保持和输出分别怎样变？ | FS实际B沿对齐；slot8有新输入交越，slot14沿用slot12，不能混用事件 |
+| [减幅后相位扫描](tx_reduced_phase_window.png) | 在当前减幅边界上后移选择时钟能否恢复散布？ | TT/FS、原样校准后12点、word18八位；+20ps开始局部满足，非完整TX/实际延迟单元验证 |
 
 图名按对象与用途命名，UTC运行身份在对应数据索引中。当前结论见[完整字入口](../../../design/tx_word_capture.md)、[关闭切片](../../../design/tx_launch_hold.md)。图脚本与来源哈希放在各自小数据中，`.svg`可用于导出。

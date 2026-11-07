@@ -2106,8 +2106,8 @@ window.DESIGN_CATALOG = {
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "FS散布失败",
-      "summary": "extra3、WT16/R240完整TT/FS的c2g为369/349mVpp，捕获/保持/计数和256bit位序正确；TT眼图满足，FS散布0.18025UI失败，不采用。其他内部超幅仍开。",
+      "state": "减幅后时序迭代",
+      "summary": "WT16/R240完整TT满足，FS散布0.18025UI失败；word18八位在当前减幅边界后移20/40ps恢复至0.134/0.105UI。正在确认实际缓冲级，尚未完整TX采用。",
       "facts": {
         "设计": "Wn32固定；WT16/R240未采用",
         "PVT": "完整TT/FS两点；FS散布失败，非全角",
@@ -2160,6 +2160,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "最差边沿内部波形",
           "path": "docs/figures/tx/ingress/tx_clock_output_edge_detail.png"
+        },
+        {
+          "title": "减幅后的局部相位图",
+          "path": "docs/figures/tx/ingress/tx_reduced_phase_window.png"
         }
       ],
       "iterations": [
@@ -2214,6 +2218,33 @@ window.DESIGN_CATALOG = {
             {
               "title": "逐边沿复核",
               "path": "docs/work_packages/deliveries/tx-clock-output-edge-review.md"
+            }
+          ]
+        },
+        {
+          "id": "20261107T164329Z_3d76f4edbc",
+          "module": "tx.clocking.output2g",
+          "date": "2026-11-08",
+          "timestamp": "2026-11-07T16:43:29.888398+00:00",
+          "title": "减幅后的末级相位重配",
+          "phase": "validation",
+          "problem": "缩摆幅后FS完整链散布失败，需要在当前幅度与共模下重新校准末级相位。",
+          "model": "已记录完整波形切出word18 B半字，4ns历史加2.5ns后继；沿用完整运行训练相位，加命令偏移，不拟合这八位。",
+          "changes": "只移动记录c2g两极；保持末级/驱动/RLC16，六个偏移乘TT/FS。",
+          "validation": "原样最大误差0.056mV/0.01ps；FS局部散布在0/+10/+20/+40ps为0.18025/0.15438/0.13414/0.10454UI，c2g仍349mVpp。",
+          "conclusion": "局部后移可恢复；接下来实际extra3/4/5缓冲比较。完整TX原FS失败、其他超幅及统计仍开。",
+          "attachments": [
+            {
+              "title": "局部相位图",
+              "path": "docs/figures/tx/ingress/tx_reduced_phase_window.png"
+            },
+            {
+              "title": "边界与结果",
+              "path": "docs/design/tx_final_retime.md"
+            },
+            {
+              "title": "校准数据",
+              "path": "docs/data/tx_reduced_phase_window.json"
             }
           ]
         }

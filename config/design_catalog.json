@@ -1684,8 +1684,8 @@
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "FS散布失败",
-      "summary": "extra3、WT16/R240完整TT/FS的c2g为369/349mVpp，捕获/保持/计数和256bit位序正确；TT眼图满足，FS散布0.18025UI失败，不采用。其他内部超幅仍开。",
+      "state": "减幅后时序迭代",
+      "summary": "WT16/R240完整TT满足，FS散布0.18025UI失败；word18八位在当前减幅边界后移20/40ps恢复至0.134/0.105UI。正在确认实际缓冲级，尚未完整TX采用。",
       "facts": {
         "设计": "Wn32固定；WT16/R240未采用",
         "PVT": "完整TT/FS两点；FS散布失败，非全角",
@@ -1738,6 +1738,10 @@
         {
           "title": "最差边沿内部波形",
           "path": "docs/figures/tx/ingress/tx_clock_output_edge_detail.png"
+        },
+        {
+          "title": "减幅后的局部相位图",
+          "path": "docs/figures/tx/ingress/tx_reduced_phase_window.png"
         }
       ],
       "iterations": []

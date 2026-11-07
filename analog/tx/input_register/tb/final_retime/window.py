@@ -58,25 +58,25 @@ def joined_lines(text):
     return [' '.join(x.lower().split()) for x in out]
 
 
-def validate_source_cell(camp, plan):
+def validate_source_cell(camp, plan, snapshot_root='execution/source_snapshot'):
     tree_rel = 'analog/tx/serializer/spice/serializer16_retimed_lowov.spice'
     library_rel = 'analog/common/cml_mux/spice/cml_lowov_cells.spice'
     identities = {}
     capture_rel = 'analog/tx/input_register/spice/capture_serializer16.spice'
     for rel in (tree_rel, library_rel, capture_rel):
-        key = 'execution/source_snapshot/'+rel
+        key = snapshot_root+'/'+rel
         expected = plan['snapshot_files'][key]
         if sha(camp/key) != expected or sha(ROOT/rel) != expected:
             raise ValueError(f'source cell changed: {rel}')
         identities[rel] = expected
-    capture = joined_lines((camp/'execution/source_snapshot'/capture_rel).read_text())
+    capture = joined_lines((camp/snapshot_root/capture_rel).read_text())
     tree_instance = next(x for x in capture if x.startswith('xtree '))
     expected_ports = ' '.join(f'p{i} n{i}' for i in range(16))
     expected_tree = ('xtree '+expected_ports+' c250p c250n c500p c500n c1gp c1gn c2gp c2gn qp qn vbias vdd vdd vss '
                      'serdes16_cml_tree_retimed_lowov wdata=40 wselect=96 wtail=12 rload=500 rout=400 tail_scale=6 wsf=80')
     if tree_instance != expected_tree:
         raise ValueError('source tree instance or parameters changed')
-    tree = joined_lines((camp/'execution/source_snapshot'/tree_rel).read_text())
+    tree = joined_lines((camp/snapshot_root/tree_rel).read_text())
     target = next(x for x in tree if x.startswith('xr4_0 '))
     expected = ('xr4_0 g3_0p g3_0n g3_1p g3_1n c2gp c2gn qp qn vbias vbias_logic vdd vss '
                 'serdes_cml_latched_mux2_lowov wdata={wdata} wselect={wselect} wtail={tail_scale*wtail} '
@@ -88,7 +88,7 @@ def validate_source_cell(camp, plan):
     canonical = ('xfinal ap an bp bn sp sn qp qn vbias vbias_logic vdd vss serdes_cml_latched_mux2_lowov '
                  'wdata=40 wselect=96 wtail=72 nftail=24 rload=400 whold=40 wsf=80 wsf_sink=4 '
                  'latch_tail_scale=2 latch_load_scale=.75')
-    library = joined_lines((camp/'execution/source_snapshot'/library_rel).read_text())
+    library = joined_lines((camp/snapshot_root/library_rel).read_text())
     latch_header = next(x for x in library if x.startswith('.subckt serdes_cml_latched_mux2_lowov '))
     if target != expected or defaults not in header or wrapped != canonical or 'whold=40' not in latch_header or 'latch_tail_scale=2' not in latch_header or 'latch_load_scale=0.75' not in latch_header:
         raise ValueError('source final-rank instance or parameter mapping changed')

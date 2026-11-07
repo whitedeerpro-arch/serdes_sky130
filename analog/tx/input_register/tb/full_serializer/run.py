@@ -9,6 +9,7 @@ from datetime import datetime,timezone
 import hashlib
 import importlib.util
 import json
+import math
 from pathlib import Path
 import re
 import shutil
@@ -105,12 +106,31 @@ def vectors():
     return list(dict.fromkeys(names+trace_vectors.internal_vectors()))
 
 
-def distribution(extra_2g=1):
+def output_parameters(wt=24, resistance=300):
+    values=[]
+    for name,value in (('clock output wt',wt),('clock output resistance',resistance)):
+        if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or value<=0:
+            raise ValueError(f'{name} must be positive and finite')
+        values.append(int(value) if float(value).is_integer() else float(value))
+    return tuple(values)
+
+
+def check_output_identity(plan, entry):
+    planned=output_parameters(plan.get('clock_output_wt',24),plan.get('clock_output_r',300))
+    upstream=entry['upstream']
+    registered=output_parameters(upstream.get('clock_output_wt',24),upstream.get('clock_output_r',300))
+    if planned!=registered:raise ValueError('clock output parameters differ from registered probe')
+    return planned
+
+
+def distribution(extra_2g=1,output_wt=24,output_r=300):
     if extra_2g not in (1,2,3):raise ValueError('unsupported 2GHz extra-stage count')
-    return dist.netlist({'extra':{**dist.DEFAULT['extra'],'2g':extra_2g}})
+    wt,resistance=output_parameters(output_wt,output_r)
+    return dist.netlist({'extra':{**dist.DEFAULT['extra'],'2g':extra_2g},
+                         'out':{**dist.DEFAULT['out'],'2g':(32,wt,resistance)}})
 
 
-def deck(c,data,stop,snap,smoke=False,extra_2g=1):
+def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300):
     lines=[]
     for name,period in (('250',4e-9),('500',2e-9),('1g',1e-9),('2g',.5e-9)):
         lines += [f'V{name} u{name} 0 PULSE(0 1 1n 30p 30p {period/2-30e-12:.12e} {period:.12e})',
@@ -123,7 +143,7 @@ def deck(c,data,stop,snap,smoke=False,extra_2g=1):
     if 'Vguard_a ' in data:vec+=['v(guard_a)','v(guard_b)','v(guard_ready)','v(guard_valid)']
     tran='tran 2p 1.001n 0 2p' if smoke else spice.skip_output_before(f'tran 2p {stop:.12e} 0 2p','8n')
     txt=spice.render(HERE/'tb_full_ngspice.cir.in',**spice.corner_values(c),INCLUDES=include,
-        DISTRIBUTION='\n'.join(l for l in distribution(extra_2g).splitlines() if not l.startswith('.include ')),CLOCK_SOURCES='\n'.join(lines),DATA=data,WIRE_LOADS='\n'.join(loads),
+        DISTRIBUTION='\n'.join(l for l in distribution(extra_2g,output_wt,output_r).splitlines() if not l.startswith('.include ')),CLOCK_SOURCES='\n'.join(lines),DATA=data,WIRE_LOADS='\n'.join(loads),
         VECTORS=' '.join(vec),TRAN=tran)
     return bias.section(rcorner.to_pdk(bias.real(txt),snap),c.process,'tt')
 
@@ -175,9 +195,10 @@ def prepare(camp):
     schedule=dict(**edges,updates=updates,reset_release_ps=8000,permit_ps=12000,stop_ps=round(DATA_STOP*1e12),supply_v=c.supply,boundary_id=bc_id)
     folder=camp/'prepared';folder.mkdir(exist_ok=False)
     schedule_path=folder/'schedule.json';schedule_path.write_text(json.dumps(schedule,indent=2)+'\n')
+    output_wt,output_r=output_parameters(plan.get('clock_output_wt',24),plan.get('clock_output_r',300))
     entry=dict(id=bc_id,kind='loaded_word_clock_event_schedule',
         description='Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.',
-        upstream=dict(module='tx.capture',revision='capture_serializer16_candidate',clock_extra_2g=plan.get('clock_extra_2g',1),physical_sources={p:plan['sources'][p] for p in PHYSICAL},fixture_sha256=fixture_signature((run/'tb.cir').read_text())),
+        upstream=dict(module='tx.capture',revision='capture_serializer16_candidate',clock_extra_2g=plan.get('clock_extra_2g',1),clock_output_wt=output_wt,clock_output_r=output_r,physical_sources={p:plan['sources'][p] for p in PHYSICAL},fixture_sha256=fixture_signature((run/'tb.cir').read_text())),
         nodes=dict(clock='xtx.word_clk',producer_data='d0..d15'),
         load=boundary.input_stage_signature(DUT,'serdes_tx_capture_serializer16',SELECTS),
         points={c.tag:boundary.run_record(run,condition=c.tag,raw=str(wave.relative_to(ROOT)),raw_sha256=sha(wave),pdk_installation_id=ex['pdk_installation_id'])},
@@ -256,6 +277,10 @@ def execute(camp,plan,manifest,entry):
     if plan['pdk_installation_id']!=project.pdk_installation_id():raise ValueError('PDK changed')
     if entry and hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest()!=plan['boundary_sha256']:
         raise ValueError('registered producer boundary changed')
+    if entry:
+        check_output_identity(plan,entry)
+        if plan.get('clock_extra_2g',1)!=entry['upstream'].get('clock_extra_2g',1):
+            raise ValueError('clock stage count differs from registered probe')
     if entry and plan['fixture_sha256']!=entry['upstream']['fixture_sha256']:
         raise ValueError('clock sources, physical loads or wiring differ from schedule probe')
     original=(camp/'execution/physical_tb.cir').read_text()
@@ -296,14 +321,26 @@ def main():
     p.add_argument('--condition',default='tt_v1800_t27');p.add_argument('--probe',type=Path)
     p.add_argument('--bc');p.add_argument('--stimulus',type=Path);p.add_argument('--resume',type=Path)
     p.add_argument('--clock-extra-2g',type=int,choices=(1,2,3),help='extra buffer stages before the final 2GHz output driver; baseline=1')
+    p.add_argument('--clock-output-wt',type=float,help='2GHz output tail width; baseline=24')
+    p.add_argument('--clock-output-r',type=float,help='2GHz output nominal load resistance; baseline=300')
     a=p.parse_args()
+    for value,name in ((a.clock_output_wt,'clock output wt'),(a.clock_output_r,'clock output resistance')):
+        if value is not None and (not math.isfinite(value) or value<=0):p.error(f'{name} must be positive and finite')
     if a.mode=='prepare':
         if a.probe is None:p.error('--probe required')
+        probe_plan=json.loads((a.probe/'plan.json').read_text())
+        wt,resistance=output_parameters(probe_plan.get('clock_output_wt',24),probe_plan.get('clock_output_r',300))
+        if a.clock_extra_2g is not None and a.clock_extra_2g!=probe_plan.get('clock_extra_2g',1):raise ValueError('probe clock stage count differs')
+        if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('probe clock output wt differs')
+        if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('probe clock output resistance differs')
         prepare(a.probe.resolve());return
     if a.resume:
         camp=a.resume.resolve();plan=json.loads((camp/'plan.json').read_text())
         if plan['mode']!=a.mode:raise ValueError('resume mode differs from original')
         if a.clock_extra_2g is not None and a.clock_extra_2g!=plan.get('clock_extra_2g',1):raise ValueError('resume clock stage count differs')
+        wt,resistance=output_parameters(plan.get('clock_output_wt',24),plan.get('clock_output_r',300))
+        if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('resume clock output wt differs')
+        if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('resume clock output resistance differs')
         if 'snapshot_files' not in plan:raise ValueError('legacy campaign has no rendered checkpoint; keep it as evidence')
         manifest=json.loads((camp/'execution/stimulus_manifest.json').read_text()) if a.mode=='run' else None
         entry=boundary.get(plan['boundary_id']) if a.mode=='run' else None
@@ -312,11 +349,15 @@ def main():
     entry=None;manifest=None
     if a.mode=='probe':
         extra_2g=a.clock_extra_2g if a.clock_extra_2g is not None else 1
+        wt,resistance=output_parameters(a.clock_output_wt if a.clock_output_wt is not None else 24,a.clock_output_r if a.clock_output_r is not None else 300)
         data='\n'.join(f'Vd{i} d{i} 0 0' for i in range(16));stop=48e-9
     else:
         if not a.bc or a.stimulus is None:p.error('--bc and --stimulus required')
         entry=boundary.get(a.bc);boundary.check_load(a.bc,boundary.input_stage_signature(DUT,'serdes_tx_capture_serializer16',SELECTS))
         extra_2g=entry['upstream'].get('clock_extra_2g',1)
+        wt,resistance=output_parameters(entry['upstream'].get('clock_output_wt',24),entry['upstream'].get('clock_output_r',300))
+        if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('requested clock output wt differs from registered probe')
+        if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('requested clock output resistance differs from registered probe')
         if a.clock_extra_2g is not None and a.clock_extra_2g!=extra_2g:raise ValueError('requested clock count differs from registered probe')
         if c.tag not in entry['points']:raise ValueError('no matching probe condition')
         for rel,digest in entry['upstream']['physical_sources'].items():
@@ -352,10 +393,10 @@ def main():
         out=camp/'execution/producer';out.mkdir()
         for name in manifest['outputs']:shutil.copyfile(a.stimulus/name,out/name)
         (camp/'execution/boundary.json').write_text(json.dumps(entry,indent=2)+'\n')
-    full=deck(c,data,stop,camp/'snap/run',extra_2g=extra_2g);smoke=deck(c,data,stop,camp/'snap/smoke',True,extra_2g=extra_2g)
+    full=deck(c,data,stop,camp/'snap/run',extra_2g=extra_2g,output_wt=wt,output_r=resistance);smoke=deck(c,data,stop,camp/'snap/smoke',True,extra_2g=extra_2g,output_wt=wt,output_r=resistance)
     (camp/'execution/physical_tb.cir').write_text(full);(camp/'execution/smoke_tb.cir').write_text(smoke)
     checkpoints=[x for root in (camp/'snap',camp/'execution') for x in root.rglob('*') if x.is_file()]
-    plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,
+    plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,clock_output_wt=wt,clock_output_r=resistance,
               fixture_sha256=fixture_signature(full),deck_sha256=hashlib.sha256(full.encode()).hexdigest(),
               boundary_sha256=hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest() if entry else None,
               pdk_installation_id=project.pdk_installation_id(),snapshot_files={str(x.relative_to(camp)):sha(x) for x in checkpoints},

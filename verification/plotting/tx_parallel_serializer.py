@@ -6,6 +6,7 @@ No simulation is performed. Repeated --collect arguments add conditions.
 import argparse
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 
@@ -68,15 +69,34 @@ def clock_extra_2g(plan, entry, deck_text):
         src = 'i2g' if i == 0 else f'e2g_{i-1}'
         if by_name[f'xe2g_{i}'] != expected(f'xe2g_{i}',src,f'e2g_{i}',small):
             raise ValueError('clock extra stage connectivity differs from v3')
+    wt, resistance = clock_output_parameters(plan, entry)
     out = next((line.split() for line in lines if line.startswith('xout2g ')), None)
-    if out != expected('xout2g',f'e2g_{declared_plan-1}','c2g',['wn=32','wt=24','rload=300']):
-        raise ValueError('clock output stage differs from v3')
+    prefix = expected('xout2g',f'e2g_{declared_plan-1}','c2g',[])
+    if out is None or out[:len(prefix)] != prefix or len(out) != len(prefix)+3:
+        raise ValueError('clock output stage connectivity differs from v3')
+    try:
+        parameters = dict(token.split('=',1) for token in out[len(prefix):])
+        valid = set(parameters)=={'wn','wt','rload'} and float(parameters['wn'])==32 and float(parameters['wt'])==wt and float(parameters['rload'])==resistance
+    except (ValueError,KeyError):
+        valid = False
+    if not valid:raise ValueError('clock output parameters differ from archived metadata')
     return declared_plan
+
+
+def clock_output_parameters(plan, entry):
+    def checked(obj):
+        values=(obj.get('clock_output_wt',24),obj.get('clock_output_r',300))
+        if any(isinstance(x,bool) or not isinstance(x,(int,float)) or not math.isfinite(x) or x<=0 for x in values):
+            raise ValueError('clock output parameters must be positive finite numbers')
+        return values
+    planned=checked(plan); registered=checked(entry.get('upstream',{}))
+    if planned!=registered:raise ValueError('clock output parameters differ from boundary')
+    return planned
 
 
 def case_label(case):
     c = Condition.parse(case['condition'])
-    return f"{c.process.upper()} {c.supply:g}V {c.temp}°C / extra2g={case.get('clock_extra_2g', 1)}"
+    return f"{c.process.upper()} {c.supply:g}V {c.temp}°C / extra2g={case.get('clock_extra_2g', 1)} / wt={case.get('clock_output_wt',24):g} R={case.get('clock_output_r',300):g}"
 
 
 def collect(camp):
@@ -120,6 +140,7 @@ def collect(camp):
     if digest(wave.parent / 'tb.cir') != ex['deck_sha256'] or ex['deck_sha256'] != plan['deck_sha256']:
         raise ValueError('executed deck hash mismatch')
     extra_2g = clock_extra_2g(plan, entry, (wave.parent / 'tb.cir').read_text())
+    output_wt, output_r = clock_output_parameters(plan, entry)
     w = spice.Waves(wave)
     c = Condition.parse(plan['condition'])
     actual = clock.edges(w.t, w['xtx.word_clk'] - c.supply / 2, 1, 12e-9, w.t[-1] - 1.2e-9)
@@ -160,7 +181,7 @@ def collect(camp):
         indices=np.unique(np.r_[indices,worst])
         traces = [np.interp(seq.start_s + (i + metrics['training_delay_ui'] + x) * seq.ui_s, w.t, y).round(6).tolist() for i in indices]
         outputs[label] = dict(**result,grading_scope='serializer_spec' if label=='serializer' else 'comparison_screen_not_link_spec', eye_trace_bit_indices=indices.tolist(),eye_ui=x.round(4).tolist(), eye_v=traces)
-    return dict(campaign=str(camp.relative_to(ROOT)), condition=plan['condition'], clock_extra_2g=extra_2g, waveform=str(wave.relative_to(ROOT)),
+    return dict(campaign=str(camp.relative_to(ROOT)), condition=plan['condition'], clock_extra_2g=extra_2g, clock_output_wt=output_wt, clock_output_r=output_r, waveform=str(wave.relative_to(ROOT)),
                 hashes=dict(waveform_sha256=digest(wave), plan_sha256=digest(camp/'plan.json'),
                             summary_sha256=digest(camp/'summary.json'), manifest_sha256=digest(camp/'execution/stimulus_manifest.json'),
                             boundary_sha256=plan['boundary_sha256'], probe_raw_sha256=point['raw_sha256'],

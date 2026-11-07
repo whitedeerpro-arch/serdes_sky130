@@ -52,3 +52,34 @@ def test_concurrent_campaigns_keep_both_runs_when_timestamp_is_identical(tmp_pat
     for i,directory in enumerate(directories):
         (directory/'input.txt').write_text(str(i))
     assert [(d/'input.txt').read_text() for d in directories]==['0','1']
+
+
+def test_output_stage_candidate_changes_only_output_instance_and_fixture():
+    before=flow.distribution(3)
+    after=flow.distribution(3,16,240)
+    old=before.splitlines(); new=after.splitlines()
+    assert len(old)==len(new)
+    # Configuration comment also states the resolved parameters; the only
+    # changed circuit statement is the output buffer instance.
+    differences=[(a,b) for a,b in zip(old,new) if a!=b]
+    changed=[(a,b) for a,b in differences if not a.startswith('*')]
+    assert len(changed)==1
+    assert changed[0][0].startswith('Xout2g ') and 'wn=32 wt=24 rload=300' in changed[0][0]
+    assert 'wn=32 wt=16 rload=240' in changed[0][1]
+    assert flow.fixture_signature(before)!=flow.fixture_signature(after)
+    assert flow.distribution(1,24.0,300.0)==flow.dist.netlist()
+
+
+@pytest.mark.parametrize('wt,resistance',[(0,300),(-1,300),(float('nan'),300),(24,float('inf')),(24,0)])
+def test_invalid_clock_output_parameters_rejected(wt,resistance):
+    with pytest.raises(ValueError,match='positive and finite'):
+        flow.distribution(1,wt,resistance)
+
+
+def test_probe_boundary_output_identity_rejects_parameter_changes():
+    original={'upstream':{}}
+    assert flow.check_output_identity({},original)==(24,300)
+    candidate={'upstream':{'clock_output_wt':16,'clock_output_r':240}}
+    assert flow.check_output_identity({'clock_output_wt':16,'clock_output_r':240},candidate)==(16,240)
+    with pytest.raises(ValueError,match='registered probe'):
+        flow.check_output_identity({'clock_output_wt':24,'clock_output_r':300},candidate)

@@ -161,7 +161,19 @@ def distribution(extra_2g=1,output_wt=24,output_r=300):
                          'out':{**dist.DEFAULT['out'],'2g':(32,wt,resistance)}})
 
 
-def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300):
+DRIVER_LINE='Xdriver qp qn tx_en lqp lqn vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32'
+
+
+def driver_parameters(text):
+    """Normalised 'k=v k=v' of line-driver overrides (analog/tx/output_driver/tb/ddj maps them); None for the r2 sizes."""
+    if not text:return None
+    pairs=dict(x.split('=',1) for x in text.replace(',',' ').split())
+    allowed={'wiso','wtiso','riso','wpre','wtpre','rpre','wout','wtout','rterm'}
+    if set(pairs)-allowed:raise ValueError(f'unknown driver parameters {sorted(set(pairs)-allowed)}')
+    return ' '.join(f'{k}={pairs[k]}' for k in sorted(pairs))
+
+
+def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300,driver=None):
     lines=[]
     for name,period in (('250',4e-9),('500',2e-9),('1g',1e-9),('2g',.5e-9)):
         lines += [f'V{name} u{name} 0 PULSE(0 1 1n 30p 30p {period/2-30e-12:.12e} {period:.12e})',
@@ -176,6 +188,9 @@ def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300):
     txt=spice.render(HERE/'tb_full_ngspice.cir.in',**spice.corner_values(c),INCLUDES=include,
         DISTRIBUTION='\n'.join(l for l in distribution(extra_2g,output_wt,output_r).splitlines() if not l.startswith('.include ')),CLOCK_SOURCES='\n'.join(lines),DATA=data,WIRE_LOADS='\n'.join(loads),
         VECTORS=' '.join(vec),TRAN=tran)
+    if driver:
+        if txt.count(DRIVER_LINE)!=1:raise ValueError('driver instance line not found once')
+        txt=txt.replace(DRIVER_LINE,f'{DRIVER_LINE} {driver}')
     return bias.section(rcorner.to_pdk(bias.real(txt),snap),c.process,'tt')
 
 
@@ -242,6 +257,8 @@ def prepare(camp):
                      'RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification'])
     if 'numerical_source_graph_sha256' in plan:
         entry['upstream']['numerical_source_graph_sha256']=plan['numerical_source_graph_sha256']
+    if plan.get('driver_params'):
+        entry['upstream']['driver_params']=plan['driver_params']
     boundary.register(entry)
     print(bc_id,schedule_path,flush=True)
     return entry
@@ -358,7 +375,9 @@ def main():
     p.add_argument('--clock-extra-2g',type=int,choices=(1,2,3,4,5),help='extra buffer stages before the final 2GHz output driver; baseline=1')
     p.add_argument('--clock-output-wt',type=float,help='2GHz output tail width; baseline=24')
     p.add_argument('--clock-output-r',type=float,help='2GHz output nominal load resistance; baseline=300')
+    p.add_argument('--driver-params',help="line-driver overrides for probe, e.g. 'rpre=120 wtpre=60 wout=192'; run inherits them from the probe boundary")
     a=p.parse_args()
+    a.driver_params=driver_parameters(a.driver_params)
     for value,name in ((a.clock_output_wt,'clock output wt'),(a.clock_output_r,'clock output resistance')):
         if value is not None and (not math.isfinite(value) or value<=0):p.error(f'{name} must be positive and finite')
     if a.mode=='prepare':
@@ -376,6 +395,7 @@ def main():
         wt,resistance=output_parameters(plan.get('clock_output_wt',24),plan.get('clock_output_r',300))
         if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('resume clock output wt differs')
         if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('resume clock output resistance differs')
+        if a.driver_params is not None and a.driver_params!=plan.get('driver_params'):raise ValueError('resume driver parameters differ')
         if 'snapshot_files' not in plan:raise ValueError('legacy campaign has no rendered checkpoint; keep it as evidence')
         manifest=json.loads((camp/'execution/stimulus_manifest.json').read_text()) if a.mode=='run' else None
         entry=boundary.get(plan['boundary_id']) if a.mode=='run' else None
@@ -385,7 +405,7 @@ def main():
     if a.mode=='probe':
         extra_2g=a.clock_extra_2g if a.clock_extra_2g is not None else 1
         wt,resistance=output_parameters(a.clock_output_wt if a.clock_output_wt is not None else 24,a.clock_output_r if a.clock_output_r is not None else 300)
-        data=static_probe_sources();stop=48e-9
+        data=static_probe_sources();stop=48e-9;driver=a.driver_params
     else:
         if not a.bc or a.stimulus is None:p.error('--bc and --stimulus required')
         entry=boundary.get(a.bc);boundary.check_load(a.bc,boundary.input_stage_signature(DUT,'serdes_tx_capture_serializer16',SELECTS))
@@ -395,6 +415,8 @@ def main():
         if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('requested clock output resistance differs from registered probe')
         if a.clock_extra_2g is not None and a.clock_extra_2g!=extra_2g:raise ValueError('requested clock count differs from registered probe')
         if c.tag not in entry['points']:raise ValueError('no matching probe condition')
+        driver=entry['upstream'].get('driver_params')
+        if a.driver_params is not None and a.driver_params!=driver:raise ValueError('requested driver parameters differ from registered probe')
         for rel,digest in entry['upstream']['physical_sources'].items():
             if sha(ROOT/rel)!=digest:raise ValueError('physical probe circuit changed')
         manifest=json.loads((a.stimulus/'manifest.json').read_text())
@@ -428,10 +450,10 @@ def main():
         out=camp/'execution/producer';out.mkdir()
         for name in manifest['outputs']:shutil.copyfile(a.stimulus/name,out/name)
         (camp/'execution/boundary.json').write_text(json.dumps(entry,indent=2)+'\n')
-    full=deck(c,data,stop,camp/'snap/run',extra_2g=extra_2g,output_wt=wt,output_r=resistance);smoke=deck(c,data,stop,camp/'snap/smoke',True,extra_2g=extra_2g,output_wt=wt,output_r=resistance)
+    full=deck(c,data,stop,camp/'snap/run',extra_2g=extra_2g,output_wt=wt,output_r=resistance,driver=driver);smoke=deck(c,data,stop,camp/'snap/smoke',True,extra_2g=extra_2g,output_wt=wt,output_r=resistance,driver=driver)
     (camp/'execution/physical_tb.cir').write_text(full);(camp/'execution/smoke_tb.cir').write_text(smoke)
     checkpoints=[x for root in (camp/'snap',camp/'execution') for x in root.rglob('*') if x.is_file()]
-    plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,clock_output_wt=wt,clock_output_r=resistance,
+    plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,clock_output_wt=wt,clock_output_r=resistance,driver_params=driver,
               numerical_source_graph_sha256=stimulus_graph_signature(full),
               fixture_sha256=fixture_signature(full),deck_sha256=hashlib.sha256(full.encode()).hexdigest(),
               boundary_sha256=hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest() if entry else None,

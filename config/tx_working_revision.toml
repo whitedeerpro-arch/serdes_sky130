@@ -322,3 +322,24 @@ extra_2g = 5
 tail_w_um = 16
 load_ohm = 240
 full_TX_qualified = false
+
+[output_driver_iteration]
+status = "pre120_out192_working_candidate; full_TX_TT_FS_SS_pad_pass; 45_condition_clean_stage_45of45; TX_45_PVT_open; netlist_defaults_still_r2"
+cause = "serializer-output amplitude ISI accumulated by the near-linear isolation buffer and predriver; stage own DDJ with clean input 0.010 UI (FS hot)"
+report = "docs/design/tx_output_driver.md"
+bench = "analog/tx/output_driver/tb/ddj/run.py"
+boundary = "tx_extra5_serializer_output_v1"
+index = "results/catalog/tx_output_driver_ddj.json"
+data = "docs/data/tx_output_driver_ddj.json"
+overrides = "rpre=120 wtpre=60 wout=192"  # instance parameters (full_serializer/run.py --driver-params); isolation buffer and serializer load unchanged
+pad_spread_ui = { TT = 0.0763, FS = 0.1379, SS = 0.0545 }  # r2: 0.0776 / 0.1584 / 0.0562
+pad_margin_mv = { TT = 192.4, FS = 136.0, SS = 205.9 }
+pad_pp_mv = { TT = 428, FS = 376, SS = 482 }  # r2 FS 385
+remote_spread_ui = { TT = 0.0705, FS = 0.1601, SS = 0.0493 }  # comparison only (channel)
+stage_power_mw_FS_replay = { r2 = 16.6, candidate = 17.4 }
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T191815.971080Z_4478c5e0"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T191812.302165Z_70bed8e9"
+SS_campaign = "results/analog/tx/parallel_serializer/20261107T191809.308741Z_fc64e6a1"
+TT_probe = "results/analog/tx/parallel_serializer/20261107T190834.490889Z_6f3a9e94"
+FS_probe = "results/analog/tx/parallel_serializer/20261107T190832.443952Z_50390fa5"
+SS_probe = "results/analog/tx/parallel_serializer/20261107T190836.513627Z_d12721c4"

@@ -1,0 +1,36 @@
+{
+  "data": "docs/data/tx_output_driver_ddj.json",
+  "data_sha256": "270bbe38594168a4363dc9d0953115505b6cea90f9995b6459ff52727a9bde9e",
+  "scope": "TX line driver alone with the full-TX pad/package/AC/RLC16 load; clean, timed and replayed (tx_extra5_serializer_output_v1) inputs; FS-hot sizing map; 45-condition clean check r2 vs candidate; full-TX extra5 confirmation of rpre=120 wtpre=60 wout=192 at TT/FS hot/SS cold. Replay valid for timing only (level error 5-17 mV). Not TX 45-PVT, mismatch, noise or startup qualification.",
+  "figures": [
+    "docs/figures/tx/output_driver/tx_output_driver_ddj.png"
+  ],
+  "bench": "analog/tx/output_driver/tb/ddj/run.py",
+  "boundary": "tx_extra5_serializer_output_v1",
+  "stage_campaigns": [
+    "results/analog/tx/output_driver/ddj/20261107T184906Z_replay",
+    "results/analog/tx/output_driver/ddj/20261107T185235Z_clean_cm75",
+    "results/analog/tx/output_driver/ddj/20261107T185235Z_clean_e100",
+    "results/analog/tx/output_driver/ddj/20261107T185235Z_timed_cm75",
+    "results/analog/tx/output_driver/ddj/20261107T185235Z_timed_cm75_e100",
+    "results/analog/tx/output_driver/ddj/20261107T185416Z_replay_map_fs",
+    "results/analog/tx/output_driver/ddj/20261107T185727Z_replay_cand_ttss",
+    "results/analog/tx/output_driver/ddj/20261107T185727Z_replay_out_fs",
+    "results/analog/tx/output_driver/ddj/20261107T190136Z_replay_wout_fs",
+    "results/analog/tx/output_driver/ddj/20261107T190136Z_replay_wout_ttss",
+    "results/analog/tx/output_driver/ddj/20261107T190931Z_clean_pvt45"
+  ],
+  "full_tx_campaigns": [
+    "results/analog/tx/parallel_serializer/20261107T170534.584797Z_533f8f18",
+    "results/analog/tx/parallel_serializer/20261107T170534.588144Z_51e1e33e",
+    "results/analog/tx/parallel_serializer/20261107T182054.943768Z_e576538e",
+    "results/analog/tx/parallel_serializer/20261107T191815.971080Z_4478c5e0",
+    "results/analog/tx/parallel_serializer/20261107T191812.302165Z_70bed8e9",
+    "results/analog/tx/parallel_serializer/20261107T191809.308741Z_fc64e6a1"
+  ],
+  "full_tx_probes": [
+    "results/analog/tx/parallel_serializer/20261107T190834.490889Z_6f3a9e94",
+    "results/analog/tx/parallel_serializer/20261107T190832.443952Z_50390fa5",
+    "results/analog/tx/parallel_serializer/20261107T190836.513627Z_d12721c4"
+  ]
+}

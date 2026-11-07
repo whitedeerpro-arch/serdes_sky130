@@ -248,11 +248,13 @@ def plot(cases):
         ax.set_xticks(pos, [case_label(c).replace(' / ', '\n') for c in cases], rotation=0, ha='center', fontsize=7)
         for j, case in enumerate(cases):
             out=case['outputs'][label]
-            status=('EYE\nPASS' if out['meets_spec'] else 'EYE\nFAIL') if label=='serializer' else ('SCREEN\nPASS' if out['meets_spec'] else 'SCREEN\nFAIL')
+            # the pad is a gate from 2026-11-08 (docs/overview/spec.md); the remote stays a comparison screen
+            kind='EYE' if label=='serializer' else 'GATE' if label=='pad' else 'SCREEN'
+            status=f"{kind}\n{'PASS' if out['meets_spec'] else 'FAIL'}"
             ax.text(j, .97, status, transform=ax.get_xaxis_transform(), ha='center', va='top', fontsize=7,
                     color='#287748' if out['meets_spec'] else '#b22222', fontweight='bold')
     fig.suptitle('Full TX dynamic serialization: training-aligned payload eyes', fontsize=15)
-    fig.supxlabel('Serializer gates: ±75 mV, 0.15 UI. Pad/remote: same comparison screen; link acceptance remains separate.\nTraining-only phase; 250 ps/UI; weakest payload bits retained in displayed traces.', fontsize=9)
+    fig.supxlabel('Serializer and pad gates: ±75 mV, 0.15 UI (pad gate from 2026-11-08). Remote: same comparison screen; link acceptance remains separate.\nTraining-only phase; 250 ps/UI; weakest payload bits retained in displayed traces.', fontsize=9)
     FIG.parent.mkdir(parents=True, exist_ok=True)
     for ext in ('png', 'svg'): fig.savefig(FIG.with_suffix('.' + ext), dpi=180)
     plt.close(fig)

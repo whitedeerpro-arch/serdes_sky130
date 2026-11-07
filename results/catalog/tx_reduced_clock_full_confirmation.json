@@ -1,33 +1,30 @@
 {
-  "stage": "dynamic_confirmation_pending",
-  "candidate": {
-    "extra_2g": 5,
-    "output_tail_w_um": 16,
-    "output_load_ohm": 240
-  },
-  "scope": "TT/FS, extra5 WT16/R240: probes complete, RTL source generation complete, full 120 ns dynamic runs started; no dynamic acceptance yet",
-  "qualification": false,
-  "local_evidence": "docs/data/tx_native_reduced_clock.json",
-  "cases": [
+  "data": "docs/data/tx_reduced_clock_full_confirmation.json",
+  "data_sha256": "5d4fccdb4f747a8dd6d1eabd4599e286f9fb63633bc4a65a0e1d4396b0460313",
+  "scope": "Two extra-stage settings at TT/FS, WT16/R240, native full-TX dynamic cases. Not 45 PVT, mismatch, noise, PLL or startup qualification.",
+  "figures": [
+    "docs/figures/tx/ingress/tx_reduced_clock_full_confirmation.png",
+    "docs/figures/tx/ingress/tx_reduced_clock_full_confirmation.svg"
+  ],
+  "campaigns": [
+    "results/analog/tx/parallel_serializer/20261107T155507.514155Z_71459865",
+    "results/analog/tx/parallel_serializer/20261107T155507.523830Z_505b46a3",
+    "results/analog/tx/parallel_serializer/20261107T170534.584797Z_533f8f18",
+    "results/analog/tx/parallel_serializer/20261107T170534.588144Z_51e1e33e"
+  ],
+  "additional_cases": [
     {
-      "condition": "tt_v1800_t27",
-      "probe_campaign": "results/analog/tx/parallel_serializer/20261107T165725.817031Z_575dba1f",
-      "probe_plan_sha256": "8d9393e784802206d9d7b67bea2c0759125271bbf8d24e5d5ad7b175f115b337",
-      "numerical_source_graph_sha256": "29f4e71489c902dd15d0a2e9452faa330dec3812d7d53c65a3d390831285efce",
-      "dynamic_campaign": "results/analog/tx/parallel_serializer/20261107T170534.584797Z_533f8f18",
-      "dynamic_plan_sha256": "c14562649b128cf59ef63f7b8888b468f8d3eda376dec8b6d068db217dacf250",
-      "boundary_id": "tx_capture_serializer_word_schedule_20261107T165725.817031Z_575dba1f",
-      "probe_status": "counter_and_word_clock_stability_pass"
-    },
-    {
-      "condition": "fs_v1650_t85",
-      "probe_campaign": "results/analog/tx/parallel_serializer/20261107T165727.025236Z_73f1c87d",
-      "probe_plan_sha256": "e15f9188d1d4519139d1cbf3478ba7c10604dca148a214d7e6f03db832b3d67d",
-      "numerical_source_graph_sha256": "29f4e71489c902dd15d0a2e9452faa330dec3812d7d53c65a3d390831285efce",
-      "dynamic_campaign": "results/analog/tx/parallel_serializer/20261107T170534.588144Z_51e1e33e",
-      "dynamic_plan_sha256": "3330ce962e983e60081766cfa35f0335fa4d17c78307cc74d1493a0687d74bfa",
-      "boundary_id": "tx_capture_serializer_word_schedule_20261107T165727.025236Z_73f1c87d",
-      "probe_status": "counter_and_word_clock_stability_pass"
+      "condition": "ss_v1650_t-40",
+      "clock_extra_2g": 5,
+      "clock_output_wt": 16,
+      "clock_output_r": 240,
+      "probe_campaign": "results/analog/tx/parallel_serializer/20261107T181342.431277Z_826110f5",
+      "dynamic_campaign": "results/analog/tx/parallel_serializer/20261107T182054.943768Z_e576538e",
+      "boundary_id": "tx_capture_serializer_word_schedule_20261107T181342.431277Z_826110f5",
+      "serializer_margin_mv": 124.08,
+      "serializer_spread_ui": 0.0437,
+      "c2g_payload_pp_mv": 391.8,
+      "note": "outside the four-run TT/FS comparison data; values from its summary.json"
     }
   ]
 }

@@ -307,7 +307,12 @@ adopted = false
 status = "actual_loaded_chain_local_TT_FS_recovery; extra5_candidate_for_full_TX_confirmation"
 
 [retime_clock_iteration.output_sizing.extra5_full_confirmation]
-status = "probe_complete_RTL_sources_prepared; dynamic_120ns_pending_analysis"
+status = "TT_FS_SS_serializer_pass; working_candidate; 45_conditions_pad_remote_and_I17_open"
+SS_probe = "results/analog/tx/parallel_serializer/20261107T181342.431277Z_826110f5"
+SS_campaign = "results/analog/tx/parallel_serializer/20261107T182054.943768Z_e576538e"
+serializer_margin_mv = { TT = 135.75, FS = 102.73, SS = 124.08 }
+serializer_spread_ui = { TT = 0.0600, FS = 0.1151, SS = 0.0437 }
+c2g_payload_pp_mv = { TT = 369.9, FS = 351.4, SS = 391.8 }
 index = "results/catalog/tx_reduced_clock_full_confirmation.json"
 TT_probe = "results/analog/tx/parallel_serializer/20261107T165725.817031Z_575dba1f"
 FS_probe = "results/analog/tx/parallel_serializer/20261107T165727.025236Z_73f1c87d"

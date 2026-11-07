@@ -85,7 +85,7 @@ verification/results/artifact.sh restore results/某运行/raw/waveforms.tsv
 
 索引见 [results/catalog](../../results/catalog/README.md)，规则见 [retention.toml](../../verification/results/retention.toml)。
 
-2026-10-31 起，结果目录内的大波形就地 gzip（`spice.Waves` 直接读 `.gz`）。已被后续版本取代的探索轮次可以删除波形本体：删除前先用脚本把需要的数提成图和紧凑数据，保留每个运行的 `tb.cir`、日志、`execution.json`、激励和汇总，并把删除清单存在提取结果旁边。登记过的边界条件录制和被代码固定引用的运行不删。第一次清理：TX 选择时钟的 r2/v1/v2/v2b 回放、单链打拍探索与 clock_states 的非标定轮次（约 5 GB），提取见 [retrospective.py](../../analog/tx/serializer/tb/clock_replay/retrospective.py)，清单在 `results/analog/tx/serializer/clock_replay/retrospective/20261031T155741Z/deleted_waveforms.txt`。
+2026-10-31 起，结果目录内的大波形就地 gzip（`spice.Waves` 直接读 `.gz`）；批量处理用 [compress_waveforms.py](../../verification/maintenance/compress_waveforms.py)（跳过入库文件引用的波形、24 h 内的和运行中的目录，解压核对 SHA-256 后才删原件，清单在 `results/maintenance/compress_waveforms/`）。磁盘按固定分区划分，`/home` 只有 47 GB；`results/` 迁到 `/opt` 并 bind mount 回原路径用 [results_on_opt.sh](../../verification/maintenance/results_on_opt.sh)（需 root，无仿真运行时执行）。已被后续版本取代的探索轮次可以删除波形本体：删除前先用脚本把需要的数提成图和紧凑数据，保留每个运行的 `tb.cir`、日志、`execution.json`、激励和汇总，并把删除清单存在提取结果旁边。登记过的边界条件录制和被代码固定引用的运行不删。第一次清理：TX 选择时钟的 r2/v1/v2/v2b 回放、单链打拍探索与 clock_states 的非标定轮次（约 5 GB），提取见 [retrospective.py](../../analog/tx/serializer/tb/clock_replay/retrospective.py)，清单在 `results/analog/tx/serializer/clock_replay/retrospective/20261031T155741Z/deleted_waveforms.txt`。
 
 ## 结构时序平衡分析
 

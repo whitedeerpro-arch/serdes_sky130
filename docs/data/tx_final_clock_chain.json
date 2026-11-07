@@ -1,0 +1,295 @@
+{
+  "campaign": "results/analog/tx/final_clock_chain/20261107T094939Z",
+  "plan_sha256": "dc25288296262e81e0883d012884a14524eba4c54c8acca2be00306cbfbd0810",
+  "summary_sha256": "0792fef9463cfae1d338a3acf3ce49095542812a0a3b8243549dc9b53053745d",
+  "boundary_sha256": "175eb2ccad1b5daa229db2e9b7da479cfb8d4b38d19d0afc948abfdecdfbee2f",
+  "collector_sha256": "a849496f868dbd12413a0cbfdece740b0f46fb40423df56cffc1c879d5dc49a6",
+  "events": [
+    {
+      "condition": "fs_v1650_t85",
+      "bit": 48,
+      "slot": 0,
+      "source_word": 27806,
+      "expected_bit": 0,
+      "source_trace": "results/analog/tx/parallel_trace/20261107T054507Z/run/waveforms.raw",
+      "source_trace_sha256": "d7c8dc860880c3295b8319476733de9cb174f484eefe79ebb37193441750115d",
+      "waveform": "results/analog/tx/final_clock_chain/20261107T094939Z/fs/fs_v1650_t85_bit48.raw",
+      "waveform_sha256": "c6c9e973513add601a38d6c1c8d9915821d8bc9a3f66573be7f256d930071cba",
+      "count1_baseline_matches": true,
+      "count1_baseline_error_v": {
+        "sp": 3.1982229046656485e-05,
+        "sn": 3.205020490182342e-05,
+        "qp": 5.0178438583570184e-05,
+        "qn": 4.459084133334734e-05,
+        "ahp": 6.642975986848043e-05,
+        "ahn": 3.991669411429477e-05,
+        "bhp": 4.298612552178227e-05,
+        "bhn": 4.259912562121215e-05
+      },
+      "input_max_error_v": {
+        "ap": 4.9952983949275165e-06,
+        "an": 4.996702456683266e-06,
+        "bp": 4.9906212271633166e-06,
+        "bn": 4.976419975433188e-06,
+        "vbias": 4.99913522489237e-06,
+        "vbias_logic": 4.977270785300192e-06,
+        "vdd": 2.220446049250313e-16,
+        "rp": 4.9853668777632976e-06,
+        "rn": 4.843771301388244e-06
+      },
+      "original_local_a_close_relative_s": 4.267750278915345e-09,
+      "source_training_sample_relative_s": 4.485532171862093e-09,
+      "stages": [
+        {
+          "extra_stage_count": 1,
+          "total_buffers": 3,
+          "c2g_fall_s": 4.22608247254124e-09,
+          "c2g_fall_shift_ps": 0.0,
+          "c2g_differential_pp_mv": 583.1059200701436,
+          "shifted_training_sample_s": 4.485532171862093e-09,
+          "signed_output_at_shifted_training_center_mv": 19.293592114410394,
+          "estimated_a_close_plus_200ps_s": 4.467750278915345e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 47.871661569756526
+        },
+        {
+          "extra_stage_count": 2,
+          "total_buffers": 4,
+          "c2g_fall_s": 4.245651487567498e-09,
+          "c2g_fall_shift_ps": 19.569015026258043,
+          "c2g_differential_pp_mv": 600.7767525361014,
+          "shifted_training_sample_s": 4.505101186888351e-09,
+          "signed_output_at_shifted_training_center_mv": 118.89485122995347,
+          "estimated_a_close_plus_200ps_s": 4.4873192939416034e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 183.4100705138746
+        },
+        {
+          "extra_stage_count": 3,
+          "total_buffers": 5,
+          "c2g_fall_s": 4.265146914105753e-09,
+          "c2g_fall_shift_ps": 39.064441564513274,
+          "c2g_differential_pp_mv": 610.2070173469439,
+          "shifted_training_sample_s": 4.524596613426606e-09,
+          "signed_output_at_shifted_training_center_mv": 136.8889502421933,
+          "estimated_a_close_plus_200ps_s": 4.506814720479859e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 238.36832630673598
+        }
+      ],
+      "interpretation": "ungraded local comparison"
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "bit": 104,
+      "slot": 8,
+      "source_word": 17156,
+      "expected_bit": 1,
+      "source_trace": "results/analog/tx/parallel_trace/20261107T054507Z/run/waveforms.raw",
+      "source_trace_sha256": "d7c8dc860880c3295b8319476733de9cb174f484eefe79ebb37193441750115d",
+      "waveform": "results/analog/tx/final_clock_chain/20261107T094939Z/fs/fs_v1650_t85_bit104.raw",
+      "waveform_sha256": "7e9b09cd6d67ca2b7f54bf3b1c57ba031f82549aae2b69baad5f7eab2c1ed572",
+      "count1_baseline_matches": true,
+      "count1_baseline_error_v": {
+        "sp": 3.3102986741084806e-05,
+        "sn": 3.3303434016085376e-05,
+        "qp": 4.576783871801382e-05,
+        "qn": 5.337624391676954e-05,
+        "ahp": 3.996180958720785e-05,
+        "ahn": 6.637929984676383e-05,
+        "bhp": 4.6414733475552694e-05,
+        "bhn": 3.9119124729758425e-05
+      },
+      "input_max_error_v": {
+        "ap": 4.997011624041647e-06,
+        "an": 4.99373648188417e-06,
+        "bp": 4.997593515687626e-06,
+        "bn": 4.985464413964635e-06,
+        "vbias": 4.9622314197694806e-06,
+        "vbias_logic": 4.988730998856106e-06,
+        "vdd": 2.220446049250313e-16,
+        "rp": 4.945835239800189e-06,
+        "rn": 4.9061937203997985e-06
+      },
+      "original_local_a_close_relative_s": 4.2673031092934835e-09,
+      "source_training_sample_relative_s": 4.4861405378382635e-09,
+      "stages": [
+        {
+          "extra_stage_count": 1,
+          "total_buffers": 3,
+          "c2g_fall_s": 4.225825861461222e-09,
+          "c2g_fall_shift_ps": 0.0,
+          "c2g_differential_pp_mv": 590.2451620434537,
+          "shifted_training_sample_s": 4.4861405378382635e-09,
+          "signed_output_at_shifted_training_center_mv": 67.97834087017706,
+          "estimated_a_close_plus_200ps_s": 4.467303109293484e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 54.292997671233856
+        },
+        {
+          "extra_stage_count": 2,
+          "total_buffers": 4,
+          "c2g_fall_s": 4.2453481831900566e-09,
+          "c2g_fall_shift_ps": 19.522321728834722,
+          "c2g_differential_pp_mv": 607.5527638426763,
+          "shifted_training_sample_s": 4.505662859567098e-09,
+          "signed_output_at_shifted_training_center_mv": 168.66505423128487,
+          "estimated_a_close_plus_200ps_s": 4.486825431022318e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 192.17552433108008
+        },
+        {
+          "extra_stage_count": 3,
+          "total_buffers": 5,
+          "c2g_fall_s": 4.264802717315285e-09,
+          "c2g_fall_shift_ps": 38.97685585406352,
+          "c2g_differential_pp_mv": 616.9711260863027,
+          "shifted_training_sample_s": 4.525117393692327e-09,
+          "signed_output_at_shifted_training_center_mv": 186.0777372556368,
+          "estimated_a_close_plus_200ps_s": 4.506279965147547e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 244.60424331092236
+        }
+      ],
+      "interpretation": "ungraded local comparison"
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "bit": 48,
+      "slot": 0,
+      "source_word": 27806,
+      "expected_bit": 0,
+      "source_trace": "results/analog/tx/parallel_trace/20261107T054616Z/run/waveforms.raw",
+      "source_trace_sha256": "e1dee8e3ac54e9714969406f7c224ff86717f61b82798de4089f625879f28872",
+      "waveform": "results/analog/tx/final_clock_chain/20261107T094939Z/tt/tt_v1800_t27_bit48.raw",
+      "waveform_sha256": "dbc71148cd6023cc3342308ed063de9cd3c06b146ad9042ec4802ff9f0bb4744",
+      "count1_baseline_matches": true,
+      "count1_baseline_error_v": {
+        "sp": 9.307876678210647e-05,
+        "sn": 9.390818443821836e-05,
+        "qp": 9.337600505143762e-05,
+        "qn": 9.864353906752221e-05,
+        "ahp": 8.507295760540323e-05,
+        "ahn": 8.896377289602242e-05,
+        "bhp": 0.0001036381504952999,
+        "bhn": 0.00010087577483774979
+      },
+      "input_max_error_v": {
+        "ap": 4.999371813863007e-06,
+        "an": 4.998887655371931e-06,
+        "bp": 4.981382574431592e-06,
+        "bn": 4.983222967602785e-06,
+        "vbias": 4.919576092721201e-06,
+        "vbias_logic": 4.982131899367026e-06,
+        "vdd": 0.0,
+        "rp": 4.996744088270333e-06,
+        "rn": 4.991678826504753e-06
+      },
+      "original_local_a_close_relative_s": 4.2485496661884805e-09,
+      "source_training_sample_relative_s": 4.447831813258855e-09,
+      "stages": [
+        {
+          "extra_stage_count": 1,
+          "total_buffers": 3,
+          "c2g_fall_s": 4.219579638217235e-09,
+          "c2g_fall_shift_ps": 0.0,
+          "c2g_differential_pp_mv": 680.9726781693466,
+          "shifted_training_sample_s": 4.447831813258855e-09,
+          "signed_output_at_shifted_training_center_mv": 170.10131580447353,
+          "estimated_a_close_plus_200ps_s": 4.448549666188481e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 313.01934880632996
+        },
+        {
+          "extra_stage_count": 2,
+          "total_buffers": 4,
+          "c2g_fall_s": 4.235284875849023e-09,
+          "c2g_fall_shift_ps": 15.705237631788144,
+          "c2g_differential_pp_mv": 683.9523221923191,
+          "shifted_training_sample_s": 4.4635370508906435e-09,
+          "signed_output_at_shifted_training_center_mv": 169.36517869168765,
+          "estimated_a_close_plus_200ps_s": 4.464254903820269e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 313.81603964366
+        },
+        {
+          "extra_stage_count": 3,
+          "total_buffers": 5,
+          "c2g_fall_s": 4.250873960167839e-09,
+          "c2g_fall_shift_ps": 31.294321950603983,
+          "c2g_differential_pp_mv": 685.6098569320739,
+          "shifted_training_sample_s": 4.479126135209459e-09,
+          "signed_output_at_shifted_training_center_mv": 168.69503840594845,
+          "estimated_a_close_plus_200ps_s": 4.479843988139085e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 314.103946297634
+        }
+      ],
+      "interpretation": "ungraded local comparison"
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "bit": 104,
+      "slot": 8,
+      "source_word": 17156,
+      "expected_bit": 1,
+      "source_trace": "results/analog/tx/parallel_trace/20261107T054616Z/run/waveforms.raw",
+      "source_trace_sha256": "e1dee8e3ac54e9714969406f7c224ff86717f61b82798de4089f625879f28872",
+      "waveform": "results/analog/tx/final_clock_chain/20261107T094939Z/tt/tt_v1800_t27_bit104.raw",
+      "waveform_sha256": "eaee983ec9717eaa6d0293f7a8cb8e0d4a97ef4c839f44c37301765ff58d6fe7",
+      "count1_baseline_matches": true,
+      "count1_baseline_error_v": {
+        "sp": 9.451573205576658e-05,
+        "sn": 9.537037347628896e-05,
+        "qp": 0.00010545722450783224,
+        "qn": 0.00011147612296680265,
+        "ahp": 9.018728546750232e-05,
+        "ahn": 8.542005356138027e-05,
+        "bhp": 0.00010323484159391327,
+        "bhn": 0.00010490176592892198
+      },
+      "input_max_error_v": {
+        "ap": 4.997287949670692e-06,
+        "an": 4.968880670919162e-06,
+        "bp": 4.987448867233013e-06,
+        "bn": 4.9826879413572556e-06,
+        "vbias": 4.999025862595374e-06,
+        "vbias_logic": 4.980291247513868e-06,
+        "vdd": 0.0,
+        "rp": 4.95180088422309e-06,
+        "rn": 4.989857731230174e-06
+      },
+      "original_local_a_close_relative_s": 4.248408545586425e-09,
+      "source_training_sample_relative_s": 4.448230845879833e-09,
+      "stages": [
+        {
+          "extra_stage_count": 1,
+          "total_buffers": 3,
+          "c2g_fall_s": 4.219549362931514e-09,
+          "c2g_fall_shift_ps": 0.0,
+          "c2g_differential_pp_mv": 685.2116566846667,
+          "shifted_training_sample_s": 4.448230845879833e-09,
+          "signed_output_at_shifted_training_center_mv": 218.4174524711151,
+          "estimated_a_close_plus_200ps_s": 4.4484085455864255e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 315.1463336320379
+        },
+        {
+          "extra_stage_count": 2,
+          "total_buffers": 4,
+          "c2g_fall_s": 4.235228856062123e-09,
+          "c2g_fall_shift_ps": 15.679493130608641,
+          "c2g_differential_pp_mv": 687.7225383908245,
+          "shifted_training_sample_s": 4.463910339010441e-09,
+          "signed_output_at_shifted_training_center_mv": 217.6745372846045,
+          "estimated_a_close_plus_200ps_s": 4.464088038717034e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 315.96529340398473
+        },
+        {
+          "extra_stage_count": 3,
+          "total_buffers": 5,
+          "c2g_fall_s": 4.250765262535948e-09,
+          "c2g_fall_shift_ps": 31.21589960443371,
+          "c2g_differential_pp_mv": 689.4279916611686,
+          "shifted_training_sample_s": 4.4794467454842664e-09,
+          "signed_output_at_shifted_training_center_mv": 217.21594142029653,
+          "estimated_a_close_plus_200ps_s": 4.479624445190859e-09,
+          "signed_held_a_at_estimated_close_plus_200ps_mv": 316.27301260861304
+        }
+      ],
+      "interpretation": "ungraded local comparison"
+    }
+  ],
+  "scope": "Two events each at TT and FS; ideal voltage sources omit upstream impedance and feedback. Ungraded local study; no full-bit, 45-PVT, mismatch or noise qualification.",
+  "method": "Count1/2/3 means 1/2/3 extra buffers before output buffer. Phase is measured first falling c2g within 4\u20134.5ns minus count1. Output sample is original fixed training center plus measured phase; held-A time uses original actual close plus phase plus 200ps and is estimated, not measured candidate close. Last 200ps excluded."
+}

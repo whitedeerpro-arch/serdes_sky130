@@ -1,0 +1,12 @@
+* Characterization slice cut from the word bank: one B latch and its actual
+* converter / first-MUX branch, including the partner converter. Clock and
+* partner voltages are registered recordings of the fully loaded word bank.
+* Wire and downstream load proxies belong to the bench, as in the source.
+.subckt serdes_tx_launch_hold_slice data partner clk clk_b sp sn
++ q cp cn zp zn vbias vbias_logic vdd vss
+Xlaunch data clk_b clk q vdd vss serdes_tx_launch_latch
+Xconvert q cp cn vbias vdd vss serdes_cmos_to_cml_data
+Xpartner partner ap an vbias vdd vss serdes_cmos_to_cml_data
+Xmux ap an cp cn sp sn zp zn vbias vbias_logic vdd vss
++ serdes_cml_mux2_lowov wdata=40 wselect=96 wtail=72 nftail=24 wsf=80 rload=500
+.ends serdes_tx_launch_hold_slice

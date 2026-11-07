@@ -1,0 +1,34 @@
+{
+  "diagnostic": "results/analog/tx/parallel_diagnostic/20261107T054040Z/diagnostic.json",
+  "diagnostic_sha256": "a2217a65cb45083d7344feeb6b31bd2f0fba27e2ffc79b507c5974786f8761fd",
+  "review": "docs/history/tx_parallel_integration.md",
+  "scope": "Existing raw only. Event-model tags, ideal 2 GHz, real bias and PDK tt resistors, initialized counter; no simulation or optimization. CML converter output and tree internal nodes not saved.",
+  "cases": [
+    {
+      "condition": "tt_v1800_t27",
+      "campaign": "results/analog/tx/parallel_serializer/20261107T044921Z",
+      "worst_serializer_bit": {
+        "index": 219,
+        "slot": 11,
+        "word": 13,
+        "expected": 0,
+        "signed_margin_v": 0.153709997388977
+      },
+      "marker_error_positions": []
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "campaign": "results/analog/tx/parallel_serializer/20261107T051545Z",
+      "worst_serializer_bit": {
+        "index": 232,
+        "slot": 8,
+        "word": 14,
+        "expected": 1,
+        "signed_margin_v": 0.0005171054682985999
+      },
+      "marker_error_positions": [
+        48
+      ]
+    }
+  ]
+}

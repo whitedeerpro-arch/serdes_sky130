@@ -11,6 +11,18 @@ module tx_word_remap(
     input wire [15:0] data_in,
     output reg [15:0] data_out
 );
+    wire [15:0] mapped;
+    tx_word_remap_comb comb(.data_in(data_in), .state(state), .data_out(mapped));
+    always @(posedge word_clk or negedge rst_n)
+        if (!rst_n) data_out <= 16'b0; else data_out <= mapped;
+endmodule
+
+/* verilator lint_off DECLFILENAME */
+module tx_word_remap_comb(
+    input wire [15:0] data_in,
+    input wire [2:0] state,
+    output reg [15:0] data_out
+);
     // Slot pair p is carried by input pair src[2p+1:2p] in each half-word.
     function automatic [7:0] src(input [2:0] s);
         case(s)
@@ -24,15 +36,13 @@ module tx_word_remap(
             default: src={2'd0,2'd3,2'd2,2'd1};
         endcase
     endfunction
-    reg [15:0] mapped;
     reg [7:0] map;
     integer h,p;
     always @* begin
-        map=src(state);mapped=16'b0;
+        map=src(state);data_out=16'b0;
         for(h=0;h<2;h=h+1)
             for(p=0;p<4;p=p+1)
-                mapped[8*h+2*map[2*p+:2]+:2]=data_in[8*h+2*p+:2];
+                data_out[8*h+2*map[2*p+:2]+:2]=data_in[8*h+2*p+:2];
     end
-    always @(posedge word_clk or negedge rst_n)
-        if(!rst_n)data_out<=16'b0;else data_out<=mapped;
 endmodule
+/* verilator lint_on DECLFILENAME */

@@ -1,0 +1,198 @@
+{
+  "scope": "Loaded ingress component card only; ideal 30ps clock pins, 2fF q wire, real bias/PDK R tt, 5fF first-mux output proxy; no setup/hold, fanout, mismatch or full serializer acceptance",
+  "summary": {
+    "path": "results/analog/tx/ingress_card/20261106T193201Z/summary.json",
+    "sha256": "7fed09e91708e59bf5a1a88febdf3ab6a7aaad11761f47f1fbc6082717aee8b0"
+  },
+  "plan": {
+    "path": "results/analog/tx/ingress_card/20261106T193201Z/plan.json",
+    "sha256": "0c878cb0564e2d7dbc32e41d8852b45b00e6c2d1cd5828907fe5fa3487118fed"
+  },
+  "waveforms": [
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/fs/fs_v1650_t85_selected.raw",
+      "sha256": "9900c4241c618d8b93e096fa86ed04336976f914decf84276a9588ad8df3ac89"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/fs/fs_v1650_t85_unselected.raw",
+      "sha256": "c0bdb404d8014247220cb3c201321259348575fa50e5ed59e879796a60c1b0c7"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/fs/fs_v1650_t-40_selected.raw",
+      "sha256": "99146ac88c8df5022309091af684472d8099b7f5756cafcff00e807588935ad8"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/fs/fs_v1650_t-40_unselected.raw",
+      "sha256": "02709175d56727165723f3ba4971786f475a789efa67d6698232dda1254be36f"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/ss/ss_v1650_t85_selected.raw",
+      "sha256": "32456e07f7fda016e57cea62f2036e14ed7890444cbad5b377365535ed98b9aa"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/ss/ss_v1650_t85_unselected.raw",
+      "sha256": "eea4fd95a48eea201c6432d603e097e239b4e7f1021ac0a25944ca594795869b"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/ss/ss_v1650_t-40_selected.raw",
+      "sha256": "88d868cc80346ec4271249f6fc2ae15bd128e21ddafbfb91d6bc29344f59121c"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/ss/ss_v1650_t-40_unselected.raw",
+      "sha256": "89f148e2483035de10fa3f69421816628dcc07c048bfdacd6625180adeb29b88"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/tt/tt_v1800_t27_selected.raw",
+      "sha256": "9b0cff9500e60e4b9316640d369b1234dba364886f8754bd0f897f86eedd3d69"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/tt/tt_v1800_t27_unselected.raw",
+      "sha256": "f3e976988989639286788f8b9de1fa864657ef62a12241178b250dc818732bbf"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/ff/ff_v1950_t-40_selected.raw",
+      "sha256": "85dc284e4b0445b2226724a3e96fa22803b9842666b2d1d0b0278a83fc93fe4d"
+    },
+    {
+      "path": "results/analog/tx/ingress_card/20261106T193201Z/ff/ff_v1950_t-40_unselected.raw",
+      "sha256": "2550bef7114c8b9bd14239d4f276f072ad17b8212329866ea8a196e990f0dfb0"
+    }
+  ],
+  "envelopes": [
+    {
+      "condition": "fs_v1650_t85",
+      "cell": "lean",
+      "functional": true,
+      "tcq_min_ps": 103.84659541561487,
+      "tcq_max_ps": 145.58843009214704,
+      "clock_to_cml_min_ps": 166.54669771024845,
+      "clock_to_cml_max_ps": 200.7821705855795,
+      "clock_cap_min_ff": 5.824249326063422,
+      "clock_cap_max_ff": 8.05419402328529
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "cell": "reset",
+      "functional": true,
+      "tcq_min_ps": 366.7585327180538,
+      "tcq_max_ps": 384.2242276175,
+      "clock_to_cml_min_ps": 421.0903343128464,
+      "clock_to_cml_max_ps": 449.2170421794293,
+      "clock_cap_min_ff": 9.157149982995495,
+      "clock_cap_max_ff": 9.157482206907215
+    },
+    {
+      "condition": "fs_v1650_t-40",
+      "cell": "lean",
+      "functional": true,
+      "tcq_min_ps": 90.6983943774313,
+      "tcq_max_ps": 123.10984103847078,
+      "clock_to_cml_min_ps": 147.43335539288302,
+      "clock_to_cml_max_ps": 180.26488012653815,
+      "clock_cap_min_ff": 5.6931110761576695,
+      "clock_cap_max_ff": 7.620833793406396
+    },
+    {
+      "condition": "fs_v1650_t-40",
+      "cell": "reset",
+      "functional": true,
+      "tcq_min_ps": 314.91927605192575,
+      "tcq_max_ps": 352.84538421670925,
+      "clock_to_cml_min_ps": 371.2226746657875,
+      "clock_to_cml_max_ps": 412.4704904607076,
+      "clock_cap_min_ff": 8.650376394612847,
+      "clock_cap_max_ff": 8.650423890535643
+    },
+    {
+      "condition": "ss_v1650_t85",
+      "cell": "lean",
+      "functional": true,
+      "tcq_min_ps": 140.14548042814238,
+      "tcq_max_ps": 176.8376563419748,
+      "clock_to_cml_min_ps": 215.9934031939516,
+      "clock_to_cml_max_ps": 262.3538398470036,
+      "clock_cap_min_ff": 6.549049140532811,
+      "clock_cap_max_ff": 8.709784419991554
+    },
+    {
+      "condition": "ss_v1650_t85",
+      "cell": "reset",
+      "functional": true,
+      "tcq_min_ps": 489.19181493618214,
+      "tcq_max_ps": 567.3548583170124,
+      "clock_to_cml_min_ps": 572.166022793607,
+      "clock_to_cml_max_ps": 646.0705555054592,
+      "clock_cap_min_ff": 10.472777731331721,
+      "clock_cap_max_ff": 10.472889569812713
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "cell": "lean",
+      "functional": true,
+      "tcq_min_ps": 166.32313702728268,
+      "tcq_max_ps": 183.1188952559907,
+      "clock_to_cml_min_ps": 253.91200563540804,
+      "clock_to_cml_max_ps": 280.78436897626534,
+      "clock_cap_min_ff": 6.361879434372782,
+      "clock_cap_max_ff": 8.154440128261543
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "cell": "reset",
+      "functional": true,
+      "tcq_min_ps": 497.6614991839716,
+      "tcq_max_ps": 696.5650831546462,
+      "clock_to_cml_min_ps": 589.5048930938293,
+      "clock_to_cml_max_ps": 787.940286378482,
+      "clock_cap_min_ff": 9.758403611822454,
+      "clock_cap_max_ff": 9.758459990780167
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "cell": "lean",
+      "functional": true,
+      "tcq_min_ps": 91.50921122882791,
+      "tcq_max_ps": 107.06934487209926,
+      "clock_to_cml_min_ps": 138.5515220632294,
+      "clock_to_cml_max_ps": 158.35350738494512,
+      "clock_cap_min_ff": 6.195868417725754,
+      "clock_cap_max_ff": 8.314642309599575
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "cell": "reset",
+      "functional": true,
+      "tcq_min_ps": 294.8534249615828,
+      "tcq_max_ps": 343.3774123930413,
+      "clock_to_cml_min_ps": 344.12959415289146,
+      "clock_to_cml_max_ps": 392.57417856990816,
+      "clock_cap_min_ff": 9.757351415054647,
+      "clock_cap_max_ff": 9.75740059476243
+    },
+    {
+      "condition": "ff_v1950_t-40",
+      "cell": "lean",
+      "functional": true,
+      "tcq_min_ps": 60.43634033079168,
+      "tcq_max_ps": 68.3962071953347,
+      "clock_to_cml_min_ps": 91.09290973476317,
+      "clock_to_cml_max_ps": 100.43300768874632,
+      "clock_cap_min_ff": 5.8714938036033795,
+      "clock_cap_max_ff": 7.947518844773129
+    },
+    {
+      "condition": "ff_v1950_t-40",
+      "cell": "reset",
+      "functional": true,
+      "tcq_min_ps": 185.67894383368142,
+      "tcq_max_ps": 212.54721043767475,
+      "clock_to_cml_min_ps": 216.31990435718495,
+      "clock_to_cml_max_ps": 245.32196736813177,
+      "clock_cap_min_ff": 9.071933045114084,
+      "clock_cap_max_ff": 9.072185801431539
+    }
+  ],
+  "extra_crossing_anomalies": [],
+  "captures": 120,
+  "units": "ps and fF; per-condition envelopes combine two static mux states and rising/falling data; not jitter or full-PVT qualification"
+}

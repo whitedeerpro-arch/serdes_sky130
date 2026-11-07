@@ -34,6 +34,12 @@ version = "7.10.0"
 build = "serial"
 sky130_verified = false
 
+[timing.opensta]
+executable = "/home/host/.local/opt/opensta-focal-20191111/usr/bin/sta"
+version = "2.0.17"
+flow = "verification/digital/tx_ingress_timing.py"
+status = "local_guard_feasibility_only; not_signoff; see_archived_constraints_and_tool_warnings"
+
 [layout]
 magic = "/home/host/.local/bin/magic"
 klayout = "/home/host/.local/bin/klayout"

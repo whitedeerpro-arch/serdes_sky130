@@ -423,6 +423,71 @@
   ]
  },
  {
+  "id": "pll_r5_cold_prebiased_state_v1",
+  "kind": "initial_state_estimate",
+  "description": "FF cold r5 frontend working-state initial voltages from same-condition receiver and prescaler OP; not physical startup",
+  "upstream": {
+   "module": "pll",
+   "revision": "r5_candidate_20261105",
+   "report": "docs/history/pll_cold_convergence.md"
+  },
+  "nodes": "Approximate initial node voltages of the frontend and real bias; .ic with uic, no persistent forcing",
+  "load": null,
+  "consumer_sources": {
+   "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+   "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+   "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+   "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+   "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+   "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+   "analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice": "7350cd73834f9adc29890520f2f14a74fb981024d0002e6424d208ea0c8531a9",
+   "analog/common/devices/spice/cmos_dff_reset.spice": "2f4b6cb4497236e2c3687d5546b53e8bfced7f6226c6203827bb2beac4cba124",
+   "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+   "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+   "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+   "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+   "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+   "analog/pll/divider/spice/cml_prescaler8.spice": "4d53a4afb30a346e1172e6489b0cb4e1801931144cadb506a26da4c418e5e839",
+   "analog/pll/top/spice/clock_frontend_r5.spice": "104ced34d95ce5dbf624553eb8e2fefcbf3accdedc3a77482bae5d1c0c0bd49a",
+   "analog/pll/vco/spice/cap_bank_3b.spice": "3939c05be2e6105318b77a76267cbfc0f836abee12226c0cd9c0350ec2bb476d",
+   "analog/pll/vco/spice/cap_bank_4b.spice": "387f1163de4e6b154c72cbcb2fa8b5224cf29d9e3706992c76db4fc3c09881e8",
+   "analog/pll/vco/spice/vco_ring4_4b.spice": "ddb1acb24a541cba270f1be723283cbf5bd6bec093f6bbfaf672722535d751b5"
+  },
+  "points": {
+   "ff_v1950_t-40:ll": {
+    "run": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native",
+    "condition": "ff_v1950_t-40",
+    "passive": "ll",
+    "code": 12,
+    "vctrl_v": 1.25,
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf",
+    "initial_state_file": "results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/operating_guesses.json",
+    "initial_state_sha256": "18f470c04275403b3a2c83b563f32c6b56083a0bde3c9c2c5e965b014d63946c",
+    "validated_until_s": 2.4e-08
+   },
+   "ff_v1950_t-40:hh": {
+    "run": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native",
+    "condition": "ff_v1950_t-40",
+    "passive": "hh",
+    "code": 4,
+    "vctrl_v": 1.205,
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333",
+    "initial_state_file": "results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/operating_guesses.json",
+    "initial_state_sha256": "d8f20c6fea1bc0e4c509a9d38122e48ccfd0c35753afdbbcb47e8674a45316b0",
+    "validated_until_s": 2.4e-08
+   }
+  },
+  "processing": "Compose same-PVT receiver/VCO/bias OP and four mapped copies of a prescaler OP; reuse identical restorer helper state only for feedback; see probe.py assembled_seed",
+  "validation": "Native PDK SPARSE, 1 ns smoke and 24 ns complete at both passive corners; divider and four full-rate/feedback functional checks",
+  "valid_while": [
+   "Exact consumer_sources hashes and unchanged code/control per point",
+   "Only the isolated four-branch r5 clock frontend boundary, not a TX or RX complete fixture",
+   "Prebiased working-state analysis only; no power-up, capture, noise or mismatch qualification"
+  ]
+ },
+ {
   "id": "rx_c2_far_nominal@ctle_rc",
   "kind": "recorded_node_voltage",
   "description": "Far-end differential voltage of C2_loss6 driven by the ideal 'nominal' TX ({'oc_pp': 0.8, 'ramp': 4e-11}), terminated 2 x 50 ohm to vcm 1.05 V and loaded by the real CTLE input at tt_v1800_t27, EQ code 2; PRBS7, 167 bits from t0 = 1e-09 s.",
@@ -543,6 +608,898 @@
   ]
  },
  {
+  "id": "tx_capture_serializer_word_schedule_20261107T044215Z",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "physical_sources": {
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5"
+   },
+   "fixture_sha256": "63ffceada2e282454ded17e4eb56953970a8b29797e2a5824ee0de5210e949a2"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/parallel_serializer/20261107T044215Z/run",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "0b5388f28b748f2ad3ff654fe6ebe54a6bab41dfb461995d53edbf8b32d1d71d",
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/parallel_serializer/20261107T044215Z/run/waveforms.raw",
+    "raw_sha256": "1c3634cb38b2b554f14958585cf3d3431811ca0d4fc68ed474becdfa55dca8fa",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T044215Z/prepared/schedule.json",
+   "schedule_sha256": "e10c68403d49a2b6afc47a1639f86e1e8415c4183dde6fbee080c4c64aa182bc",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "sample_times_s": [
+      3.4633135577083563e-08,
+      3.513307335868906e-08,
+      3.5633038300420806e-08,
+      3.6133057837337006e-08,
+      3.663305156271658e-08,
+      3.713299491749468e-08,
+      3.763296375745513e-08,
+      3.8132986507943884e-08,
+      3.8632983835163664e-08,
+      3.9132930711297097e-08,
+      3.9632903057243155e-08,
+      4.013292845195085e-08,
+      4.063292872899538e-08,
+      4.113287848785975e-08,
+      4.163285389520021e-08,
+      4.2132881457047096e-08,
+      4.2632884082051286e-08,
+      4.3132836185463224e-08,
+      4.363281366453529e-08,
+      4.413284299609866e-08,
+      4.463284754213476e-08,
+      4.513280157029298e-08,
+      4.5632780745838085e-08
+     ]
+    },
+    "rises_s": [
+     3.798770730481029e-08,
+     4.1987298133669905e-08,
+     4.598702300529969e-08
+    ],
+    "falls_s": [
+     3.598841125217833e-08,
+     3.998791555130914e-08,
+     4.398758490049005e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
+  "id": "tx_capture_serializer_word_schedule_20261107T045646Z",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "physical_sources": {
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148"
+   },
+   "fixture_sha256": "03415e8894b85bd716aaba281c97e1a46d8877272d076a947918c45daeecdedb"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/parallel_serializer/20261107T045646Z/run",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "720acfa955e6c2ba6443416cf8c1c101dd84a807491c7bd2db12611570451434",
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/parallel_serializer/20261107T045646Z/run/waveforms.raw",
+    "raw_sha256": "33144f84058c2bc987a008e5ecb2531783dcae68a5382efb57c1f7864ce088c6",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T045646Z/prepared/schedule.json",
+   "schedule_sha256": "4b10dca895f22be68b276d30b7c0e649b7c349ea1c7fdfc79f7918a659db28e1",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "sample_times_s": [
+      3.466458705502412e-08,
+      3.516473055791201e-08,
+      3.56646737394866e-08,
+      3.6164482607322915e-08,
+      3.6664493008182886e-08,
+      3.716464024667756e-08,
+      3.76645880109249e-08,
+      3.816440055140056e-08,
+      3.866441355063096e-08,
+      3.916456411421607e-08,
+      3.9664515741519654e-08,
+      4.0164331203619254e-08,
+      4.066434641848676e-08,
+      4.1164499599182445e-08,
+      4.1664454476713545e-08,
+      4.216427259899553e-08,
+      4.266428969972965e-08,
+      4.316444526893554e-08,
+      4.3664402886876016e-08,
+      4.416422307724475e-08,
+      4.466424177879864e-08,
+      4.516439917904169e-08,
+      4.5664359107241964e-08
+     ]
+    },
+    "rises_s": [
+     3.71746727388527e-08,
+     4.1174062371680005e-08,
+     4.5173639756581236e-08
+    ],
+    "falls_s": [
+     3.517437985983603e-08,
+     3.917365289831061e-08,
+     4.317315597583144e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
+  "id": "tx_capture_serializer_word_schedule_20261107T051615Z",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "physical_sources": {
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb"
+   },
+   "fixture_sha256": "5ed43c3a73d3c31d3bf00198f5665b544d3f1c7a4fcf5e58b899bcb532a7eed7"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "ss_v1650_t-40": {
+    "run": "results/analog/tx/parallel_serializer/20261107T051615Z/run.r2",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "7d8037df143c89a0ae64fbc67e8637885ac1057e2a37f68278da4efb6a121d4e",
+    "condition": "ss_v1650_t-40",
+    "raw": "results/analog/tx/parallel_serializer/20261107T051615Z/run.r2/waveforms.raw",
+    "raw_sha256": "c5a50731191722aa242cbd18d0ea1e0c23c23b21f65f4c342ca0d1c4c869d049",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T051615Z/prepared/schedule.json",
+   "schedule_sha256": "394b7aa7a285f568abf64695880594c965ff08bd7c83dd57f176e0ae45b70802",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2
+     ],
+     "sample_times_s": [
+      3.4638481599507546e-08,
+      3.513854682331509e-08,
+      3.563853274747966e-08,
+      3.6138436963587377e-08,
+      3.663842187817735e-08,
+      3.713849042991046e-08,
+      3.763847956604356e-08,
+      3.813838677460786e-08,
+      3.863837451602838e-08,
+      3.91384456308683e-08,
+      3.963843731471796e-08,
+      4.0138346982132396e-08,
+      4.063833696798466e-08,
+      4.113841019411418e-08,
+      4.1638403926312635e-08,
+      4.2138315465468766e-08,
+      4.2638307201239176e-08,
+      4.313838202047415e-08,
+      4.3638377352108024e-08,
+      4.413829045360987e-08,
+      4.4638283602025676e-08,
+      4.5138359763803135e-08,
+      4.563835636490326e-08
+     ]
+    },
+    "rises_s": [
+     3.5380011341618105e-08,
+     3.937984583095358e-08,
+     4.337974402829007e-08
+    ],
+    "falls_s": [
+     3.737509291212807e-08,
+     4.137496614191121e-08,
+     4.537488672354376e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
+  "id": "tx_capture_serializer_word_schedule_20261107T095618Z",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "clock_extra_2g": 3,
+   "physical_sources": {
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9"
+   },
+   "fixture_sha256": "6eb467d6cea8492f783ab293fcb0a0e18a6f7eaad1bbecc71d8ad6b43d76b6a9"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/parallel_serializer/20261107T095618Z/run",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "00114944b053b3a8e7cdfde4b0a1876d144d2ed88f654b38c95321644fc338aa",
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/parallel_serializer/20261107T095618Z/run/waveforms.raw",
+    "raw_sha256": "a3c0c0b2d35a2657e9619ba2bf282e370fcdf5431f142b8ac54478eda66a252d",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T095618Z/prepared/schedule.json",
+   "schedule_sha256": "29e4ac44815009c55db7b9ee4c6035016997064b965acca15178361798329baa",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "sample_times_s": [
+      3.463313622612039e-08,
+      3.513307389530638e-08,
+      3.5633038678520975e-08,
+      3.61330582003151e-08,
+      3.663305193063766e-08,
+      3.71329951352671e-08,
+      3.76329637900305e-08,
+      3.813298650396749e-08,
+      3.86329838235843e-08,
+      3.9132930545666044e-08,
+      3.963290268596528e-08,
+      4.013292801869596e-08,
+      4.0632928277007105e-08,
+      4.1132877880262955e-08,
+      4.163285307259005e-08,
+      4.21328805480013e-08,
+      4.263288315049255e-08,
+      4.31328351066876e-08,
+      4.363281236860512e-08,
+      4.4132841609187526e-08,
+      4.4632846134197796e-08,
+      4.513280002161334e-08,
+      4.563277898223289e-08
+     ]
+    },
+    "rises_s": [
+     3.798770679429072e-08,
+     4.1987295012819085e-08,
+     4.598701666228616e-08
+    ],
+    "falls_s": [
+     3.5988411727808977e-08,
+     3.9987914021513955e-08,
+     4.3987580397857756e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
+  "id": "tx_capture_serializer_word_schedule_20261107T095655Z",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "clock_extra_2g": 3,
+   "physical_sources": {
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517"
+   },
+   "fixture_sha256": "a7cd8866aa3bdd36a7a8ddb896eddb7e4b4c04aaa07006ed174246ced7b33c62"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/parallel_serializer/20261107T095655Z/run",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "f2635976f252f5f312e9e3ca43c98ca85343f134229d21a511ba144120329771",
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/parallel_serializer/20261107T095655Z/run/waveforms.raw",
+    "raw_sha256": "bafa7a6b95602c71a22d4d75cf1252b4a4dbf413f6bba23fe629533401ba1c7f",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T095655Z/prepared/schedule.json",
+   "schedule_sha256": "6134e459cc2da626f107821f22c8b3c584db0ae3b8f11533512301e53895d2eb",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "sample_times_s": [
+      3.4664614326355034e-08,
+      3.516475763023767e-08,
+      3.566470010624482e-08,
+      3.616450851053678e-08,
+      3.666451876079614e-08,
+      3.716466580818209e-08,
+      3.7664613076226387e-08,
+      3.8164425162792126e-08,
+      3.866443806298273e-08,
+      3.9164588454302126e-08,
+      3.9664539563473395e-08,
+      4.0164354586723e-08,
+      4.0664369700659805e-08,
+      4.1164522726927115e-08,
+      4.1664477122062455e-08,
+      4.2164294824201334e-08,
+      4.266431183334665e-08,
+      4.316446726456365e-08,
+      4.3664424428501616e-08,
+      4.4164244221435875e-08,
+      4.466426284132323e-08,
+      4.516442012400055e-08,
+      4.5664379628487657e-08
+     ]
+    },
+    "rises_s": [
+     3.717473187454576e-08,
+     4.117410955431067e-08,
+     4.517367723236904e-08
+    ],
+    "falls_s": [
+     3.5174446565586456e-08,
+     3.9173705784531385e-08,
+     4.31731980112695e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
+  "id": "tx_capture_serializer_word_schedule_20261107T102256.665455Z_13ffdb28",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "clock_extra_2g": 3,
+   "physical_sources": {
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba"
+   },
+   "fixture_sha256": "21ea050e0b816d8590e2c0b2603ada168394186408ae0771e66bbf8db67f84df"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "ss_v1650_t-40": {
+    "run": "results/analog/tx/parallel_serializer/20261107T102256.665455Z_13ffdb28/run",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "8de2c1244cc023a2d622d2852434e966efd047ecf064b9f15763bcd48e0deb8a",
+    "condition": "ss_v1650_t-40",
+    "raw": "results/analog/tx/parallel_serializer/20261107T102256.665455Z_13ffdb28/run/waveforms.raw",
+    "raw_sha256": "22806726ca00b1d4efe88b309e75c14eaa9efc0b6324113a41c943988c33b59d",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T102256.665455Z_13ffdb28/prepared/schedule.json",
+   "schedule_sha256": "f3564ebfa55c880df14ff840b22440b6d76e4bd6a5c9a51050a48e34566b033c",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "sample_times_s": [
+      3.4636476441363e-08,
+      3.513646446856038e-08,
+      3.563637566803724e-08,
+      3.6136362803427456e-08,
+      3.6636428464941595e-08,
+      3.713641957165426e-08,
+      3.763633378166667e-08,
+      3.813632369297434e-08,
+      3.863639198270693e-08,
+      3.9136385542884956e-08,
+      3.963630203037623e-08,
+      4.013629412434296e-08,
+      4.063636432887164e-08,
+      4.113635982750026e-08,
+      4.1636278216240886e-08,
+      4.2136272040449994e-08,
+      4.263634389086191e-08,
+      4.313634095904599e-08,
+      4.363626074855658e-08,
+      4.4136255903187305e-08,
+      4.463632892035301e-08,
+      4.5136327200485806e-08,
+      4.5636248233695026e-08
+     ]
+    },
+    "rises_s": [
+     3.68778572755188e-08,
+     4.0877774203322435e-08,
+     4.4877726616095163e-08
+    ],
+    "falls_s": [
+     3.4873131500303196e-08,
+     3.887302501210068e-08,
+     4.2872963177085315e-08,
+     4.687292836844976e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
   "id": "tx_clk_ideal_tt_v01",
   "kind": "ideal_edge_record",
   "description": "Four TX select clocks (250M/500M/1G/2G) from the v0.1 closed-loop TT PLL record: every crossing time kept, sources idealised to 400 mVpp differential, 20 ps edges, CM VDD-0.17 V ({supply-0.07}/{supply-0.27}); plus ideal CMOS data sources (0/VDD, 20 ps).",
@@ -571,6 +1528,1092 @@
   "valid_while": [
    "TT timing and amplitude only: corner use keeps TT source timing, amplitude and edge rate (this is why r2's 45/45 did not survive native clocks, I-07)",
    "no PLL revision after v0.1 reproduces it (r3/r4 moved the tap phases)"
+  ]
+ },
+ {
+  "id": "tx_final_clock_chain_recorded_v1",
+  "kind": "loaded_internal_port_voltage_replay",
+  "description": "r2g recorded input into iso/extra/out clock chain and final retimed mux.",
+  "base_boundary_id": "tx_final_retime_recorded_v1",
+  "base_boundary_sha256": "5908e1a5a558da12935b4c0ac5d67c604dc0df22cf81dac124479f908eba2e9b",
+  "nodes": {
+   "ap": "xtx.xtree.g3_0p",
+   "an": "xtx.xtree.g3_0n",
+   "bp": "xtx.xtree.g3_1p",
+   "bn": "xtx.xtree.g3_1n",
+   "vbias": "vbias",
+   "vbias_logic": "xtx.xtree.vbias_logic",
+   "vdd": "vdd",
+   "rp": "xclocks.r2gp",
+   "rn": "xclocks.r2gn"
+  },
+  "load": {
+   "stages": [
+    "X rp rn _ _ _ _ _ serdes_cml_buffer rload=400 wn=24 wt=16"
+   ],
+   "sha": "a82ae2a392a87c9e"
+  },
+  "downstream_load": {
+   "direct_downstream_lines": [
+    "cqp qp 0 2f",
+    "cqn qn 0 2f",
+    "xdriver qp qn tx_en lqp lqn vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32",
+    "clpp lqp 0 200f",
+    "clpn lqn 0 200f",
+    "rlpp lqp llp .3",
+    "rlpn lqn lln .3",
+    "llpp llp lap .5n",
+    "llpn lln lan .5n",
+    "clacp lap ltp 10n",
+    "clacn lan ltn 10n",
+    "xchannel ltp ltn lxp lxn 0 serdes_diff_rlc16",
+    "rlc0 lxp lrp .01",
+    "rlc1 lxn lrn .01",
+    "clc0 lrp 0 100f",
+    "clc1 lrn 0 100f",
+    "vlcm lcm 0 .9",
+    "rlterm0 lrp lcm 50",
+    "rlterm1 lrn lcm 50"
+   ],
+   "sha256": "3e981442426de91982832def630ddecdc67b69544cddbd1bc6e4c1bf850d4112",
+   "source_cell": "serdes_cml_latched_mux2_lowov",
+   "parameters": "wdata=40 wselect=96 wtail=72 nftail=24 rload=400 whold=40 wsf=80 wsf_sink=4 latch_tail_scale=2 latch_load_scale=.75"
+  },
+  "independent_mathematical_replicas": 3,
+  "points": {
+   "fs_v1650_t85": {
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/parallel_trace/20261107T054507Z/run/waveforms.raw",
+    "raw_sha256": "d7c8dc860880c3295b8319476733de9cb174f484eefe79ebb37193441750115d",
+    "trace_campaign": "results/analog/tx/parallel_trace/20261107T054507Z",
+    "trace_plan_sha256": "8db78d7d690bbdf1f97ca87ba5816613a7326f2b84567c4bb5ed0784f22e18fa",
+    "trace_summary_sha256": "cbe3dc28720159405046e93117fee8ed17cd9a3eae31bdedd9cd22483fe407aa",
+    "source_campaign": "results/analog/tx/parallel_serializer/20261107T051545Z",
+    "source_plan_sha256": "725a4d195ccab801124f23f6ad16c8cea5f27dee0eb1fc1322b74e89e1cf7f7c",
+    "source_summary_sha256": "de128bccd61695da1ed8ebba2bf87d9f6af76c3d17dac36177ae100b20e15d92",
+    "circuit_sha256": "02f53911329d250c767f8302620dba3c4701fe185b2d8c16ab80476341dabea6",
+    "source_cells": {
+     "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+     "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+     "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384"
+    },
+    "events": {
+     "48": {
+      "bit": 48,
+      "word": 3,
+      "slot": 0,
+      "source_word": 27806,
+      "selection": "A_fall",
+      "selection_edge_s": 3.860070270156948e-08,
+      "origin_s": 3.4600702701569475e-08,
+      "stop_s": 6.000000000000001e-09
+     },
+     "104": {
+      "bit": 104,
+      "word": 6,
+      "slot": 8,
+      "source_word": 17156,
+      "selection": "B_rise",
+      "selection_edge_s": 5.260009433559331e-08,
+      "origin_s": 4.8600094335593304e-08,
+      "stop_s": 6.000000000000001e-09
+     }
+    }
+   },
+   "tt_v1800_t27": {
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/parallel_trace/20261107T054616Z/run/waveforms.raw",
+    "raw_sha256": "e1dee8e3ac54e9714969406f7c224ff86717f61b82798de4089f625879f28872",
+    "trace_campaign": "results/analog/tx/parallel_trace/20261107T054616Z",
+    "trace_plan_sha256": "0decb9e76f25d509cf177ae0da139b639afe7ad1b192734576b0cd8412d32db1",
+    "trace_summary_sha256": "f571420f68d7cd8a8d6c3ea92ccfe764276ab6e8a054c9ec5ca329225b209c33",
+    "source_campaign": "results/analog/tx/parallel_serializer/20261107T044921Z",
+    "source_plan_sha256": "8ffa395f0cd60e45c177d678b221cd94f89ccc2984168147ef385af56e8d85c2",
+    "source_summary_sha256": "ea25462990e3501a1bf01285bc359f438a521b57375e4f14fd449111f0ce965e",
+    "circuit_sha256": "c30afb878d33f17e1903211634f9b1419caf48c8a9d5d0b0115190e970b2d34d",
+    "source_cells": {
+     "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+     "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+     "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384"
+    },
+    "events": {
+     "48": {
+      "bit": 48,
+      "word": 3,
+      "slot": 0,
+      "source_word": 27806,
+      "selection": "A_fall",
+      "selection_edge_s": 3.9537119637289074e-08,
+      "origin_s": 3.553711963728907e-08,
+      "stop_s": 6.000000000000001e-09
+     },
+     "104": {
+      "bit": 104,
+      "word": 6,
+      "slot": 8,
+      "source_word": 17156,
+      "selection": "B_rise",
+      "selection_edge_s": 5.3536720604668096e-08,
+      "origin_s": 4.9536720604668094e-08,
+      "stop_s": 6.000000000000001e-09
+     }
+    }
+   }
+  },
+  "chain_sha256": "a47cf774d01b858a2f285f78d2db1bf63259c433ca8077e7854488b1be950d2c",
+  "template_sha256": "b7e122009f97372abd5499e31250860399463fc62ae95f94c201989d446adb24",
+  "helper_sha256": "cae42c983a017f043e30c733ec4e5033e9e98f701f7a97f04e7b3d43dae02c8d",
+  "processing": "4 ns history plus 2 ns after selected halfword edge; fixed 3.5–5.8 ns evaluation.",
+  "validation": {
+   "state": "pending_count1_baseline",
+   "waveform_error_gate_v": 0.005
+  },
+  "valid_while": [
+   "source and actual first iso load unchanged",
+   "ideal source has no upstream impedance or feedback",
+   "count1 must match c2g, output and held nodes before interpreting count2/3",
+   "local TT/FS events only; no full-PVT, noise or mismatch qualification"
+  ]
+ },
+ {
+  "id": "tx_final_clock_output_sizing_v1",
+  "kind": "loaded_internal_port_voltage_replay",
+  "description": "Three independent extra3 clock chains differing only in final stage tail width and load resistance.",
+  "parent_boundary_id": "tx_final_clock_chain_recorded_v1",
+  "parent_boundary_sha256": "175eb2ccad1b5daa229db2e9b7da479cfb8d4b38d19d0afc948abfdecdfbee2f",
+  "source_campaign": "results/analog/tx/final_clock_chain/20261107T094939Z",
+  "source_plan_sha256": "dc25288296262e81e0883d012884a14524eba4c54c8acca2be00306cbfbd0810",
+  "source_summary_sha256": "0792fef9463cfae1d338a3acf3ce49095542812a0a3b8243549dc9b53053745d",
+  "source_waveforms": {
+   "fs_v1650_t85_bit48": "c6c9e973513add601a38d6c1c8d9915821d8bc9a3f66573be7f256d930071cba",
+   "fs_v1650_t85_bit104": "7e9b09cd6d67ca2b7f54bf3b1c57ba031f82549aae2b69baad5f7eab2c1ed572",
+   "tt_v1800_t27_bit48": "dbc71148cd6023cc3342308ed063de9cd3c06b146ad9042ec4802ff9f0bb4744",
+   "tt_v1800_t27_bit104": "eaee983ec9717eaa6d0293f7a8cb8e0d4a97ef4c839f44c37301765ff58d6fe7"
+  },
+  "load": {
+   "stages": [
+    "X rp rn _ _ _ _ _ serdes_cml_buffer rload=400 wn=24 wt=16"
+   ],
+   "sha": "a82ae2a392a87c9e"
+  },
+  "downstream_load": {
+   "direct_downstream_lines": [
+    "cqp qp 0 2f",
+    "cqn qn 0 2f",
+    "xdriver qp qn tx_en lqp lqn vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32",
+    "clpp lqp 0 200f",
+    "clpn lqn 0 200f",
+    "rlpp lqp llp .3",
+    "rlpn lqn lln .3",
+    "llpp llp lap .5n",
+    "llpn lln lan .5n",
+    "clacp lap ltp 10n",
+    "clacn lan ltn 10n",
+    "xchannel ltp ltn lxp lxn 0 serdes_diff_rlc16",
+    "rlc0 lxp lrp .01",
+    "rlc1 lxn lrn .01",
+    "clc0 lrp 0 100f",
+    "clc1 lrn 0 100f",
+    "vlcm lcm 0 .9",
+    "rlterm0 lrp lcm 50",
+    "rlterm1 lrn lcm 50"
+   ],
+   "sha256": "3e981442426de91982832def630ddecdc67b69544cddbd1bc6e4c1bf850d4112",
+   "source_cell": "serdes_cml_latched_mux2_lowov",
+   "parameters": "wdata=40 wselect=96 wtail=72 nftail=24 rload=400 whold=40 wsf=80 wsf_sink=4 latch_tail_scale=2 latch_load_scale=.75"
+  },
+  "independent_mathematical_replicas": 3,
+  "params": [
+   {
+    "wn": 32,
+    "wt": 24,
+    "rload": 300
+   },
+   {
+    "wn": 32,
+    "wt": 18,
+    "rload": 240
+   },
+   {
+    "wn": 32,
+    "wt": 16,
+    "rload": 240
+   }
+  ],
+  "generated_sha256": "87a7436546db7a7683f50a1c728cf3fd8550ddaf41ad18a15f8b8dbef8338f8b",
+  "valid_while": [
+   "ideal voltage sources omit upstream impedance and feedback",
+   "same direct downstream load and same source identity",
+   "branch1 c2g, qp/qn and held A/B must match parent extra3 to 5mV before interpreting other branches",
+   "local ungraded study; no full-TX or PVT qualification"
+  ]
+ },
+ {
+  "id": "tx_final_retime_recorded_v1",
+  "kind": "loaded_internal_port_voltage_replay",
+  "description": "Recorded full-TX final rank ports; local replay prototype.",
+  "upstream": {
+   "module": "tx.serializer",
+   "revision": "retimed_lowov",
+   "campaigns": [
+    "results/analog/tx/parallel_trace/20261107T054507Z",
+    "results/analog/tx/parallel_trace/20261107T054616Z"
+   ]
+  },
+  "nodes": {
+   "ap": "xtx.xtree.g3_0p",
+   "an": "xtx.xtree.g3_0n",
+   "bp": "xtx.xtree.g3_1p",
+   "bn": "xtx.xtree.g3_1n",
+   "sp": "c2gp",
+   "sn": "c2gn",
+   "vbias": "vbias",
+   "vbias_logic": "xtx.xtree.vbias_logic",
+   "vdd": "vdd"
+  },
+  "load": {
+   "direct_downstream_lines": [
+    "cqp qp 0 2f",
+    "cqn qn 0 2f",
+    "xdriver qp qn tx_en lqp lqn vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32",
+    "clpp lqp 0 200f",
+    "clpn lqn 0 200f",
+    "rlpp lqp llp .3",
+    "rlpn lqn lln .3",
+    "llpp llp lap .5n",
+    "llpn lln lan .5n",
+    "clacp lap ltp 10n",
+    "clacn lan ltn 10n",
+    "xchannel ltp ltn lxp lxn 0 serdes_diff_rlc16",
+    "rlc0 lxp lrp .01",
+    "rlc1 lxn lrn .01",
+    "clc0 lrp 0 100f",
+    "clc1 lrn 0 100f",
+    "vlcm lcm 0 .9",
+    "rlterm0 lrp lcm 50",
+    "rlterm1 lrn lcm 50"
+   ],
+   "sha256": "3e981442426de91982832def630ddecdc67b69544cddbd1bc6e4c1bf850d4112",
+   "source_cell": "serdes_cml_latched_mux2_lowov",
+   "parameters": "wdata=40 wselect=96 wtail=72 nftail=24 rload=400 whold=40 wsf=80 wsf_sink=4 latch_tail_scale=2 latch_load_scale=.75"
+  },
+  "consumer_sha256": "d0264bc6f3da7369b21150b9914e031eff8e765ae873b85596010fa6da3431b4",
+  "template_sha256": "5f55333e1f5ce3ddffd3feb6c9eed096b47e2f9172dcecc6d54ba0220ba170c7",
+  "points": {
+   "fs_v1650_t85": {
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/parallel_trace/20261107T054507Z/run/waveforms.raw",
+    "raw_sha256": "d7c8dc860880c3295b8319476733de9cb174f484eefe79ebb37193441750115d",
+    "trace_campaign": "results/analog/tx/parallel_trace/20261107T054507Z",
+    "trace_plan_sha256": "8db78d7d690bbdf1f97ca87ba5816613a7326f2b84567c4bb5ed0784f22e18fa",
+    "trace_summary_sha256": "cbe3dc28720159405046e93117fee8ed17cd9a3eae31bdedd9cd22483fe407aa",
+    "source_campaign": "results/analog/tx/parallel_serializer/20261107T051545Z",
+    "source_plan_sha256": "725a4d195ccab801124f23f6ad16c8cea5f27dee0eb1fc1322b74e89e1cf7f7c",
+    "source_summary_sha256": "de128bccd61695da1ed8ebba2bf87d9f6af76c3d17dac36177ae100b20e15d92",
+    "circuit_sha256": "02f53911329d250c767f8302620dba3c4701fe185b2d8c16ab80476341dabea6",
+    "source_cells": {
+     "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+     "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+     "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384"
+    },
+    "events": {
+     "48": {
+      "bit": 48,
+      "word": 3,
+      "slot": 0,
+      "source_word": 27806,
+      "selection": "A_fall",
+      "selection_edge_s": 3.860070270156948e-08,
+      "origin_s": 3.4600702701569475e-08,
+      "stop_s": 6.000000000000001e-09
+     },
+     "104": {
+      "bit": 104,
+      "word": 6,
+      "slot": 8,
+      "source_word": 17156,
+      "selection": "B_rise",
+      "selection_edge_s": 5.260009433559331e-08,
+      "origin_s": 4.8600094335593304e-08,
+      "stop_s": 6.000000000000001e-09
+     }
+    }
+   },
+   "tt_v1800_t27": {
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/parallel_trace/20261107T054616Z/run/waveforms.raw",
+    "raw_sha256": "e1dee8e3ac54e9714969406f7c224ff86717f61b82798de4089f625879f28872",
+    "trace_campaign": "results/analog/tx/parallel_trace/20261107T054616Z",
+    "trace_plan_sha256": "0decb9e76f25d509cf177ae0da139b639afe7ad1b192734576b0cd8412d32db1",
+    "trace_summary_sha256": "f571420f68d7cd8a8d6c3ea92ccfe764276ab6e8a054c9ec5ca329225b209c33",
+    "source_campaign": "results/analog/tx/parallel_serializer/20261107T044921Z",
+    "source_plan_sha256": "8ffa395f0cd60e45c177d678b221cd94f89ccc2984168147ef385af56e8d85c2",
+    "source_summary_sha256": "ea25462990e3501a1bf01285bc359f438a521b57375e4f14fd449111f0ce965e",
+    "circuit_sha256": "c30afb878d33f17e1903211634f9b1419caf48c8a9d5d0b0115190e970b2d34d",
+    "source_cells": {
+     "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+     "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+     "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384"
+    },
+    "events": {
+     "48": {
+      "bit": 48,
+      "word": 3,
+      "slot": 0,
+      "source_word": 27806,
+      "selection": "A_fall",
+      "selection_edge_s": 3.9537119637289074e-08,
+      "origin_s": 3.553711963728907e-08,
+      "stop_s": 6.000000000000001e-09
+     },
+     "104": {
+      "bit": 104,
+      "word": 6,
+      "slot": 8,
+      "source_word": 17156,
+      "selection": "B_rise",
+      "selection_edge_s": 5.3536720604668096e-08,
+      "origin_s": 4.9536720604668094e-08,
+      "stop_s": 6.000000000000001e-09
+     }
+    }
+   }
+  },
+  "processing": "4 ns history and 2 ns after actual halfword edge; only c2g pair shifted together; bounded voltage PWL.",
+  "validation": {
+   "state": "pending_baseline_comparison",
+   "waveform_error_gate_v": 0.005
+  },
+  "valid_while": [
+   "identical cells, downstream load, PDK, source traces and recorded condition",
+   "ideal voltage replay omits upstream source impedance and feedback",
+   "zero-shift qp/qn and both held pairs must match source within 5 mV before shifted conclusions",
+   "local event study only, no mismatch, noise, full PVT or real buffer claim"
+  ]
+ },
+ {
+  "id": "tx_staggered_b_launch_cut_v1",
+  "kind": "loaded_internal_port_voltage_replay",
+  "description": "Cut one B latch/converter/MUX branch from the recorded 16-bit bank; select minimum observed data-close separation of each data direction per PVT.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "staggered_candidate_20261107",
+   "campaign": "results/analog/tx/staggered_ingress/20261106T202607Z",
+   "plan_sha256": "fcd74f528ecf88955df09a6e83fbaeed2e8db874c98ebd0013239c832a5b64de",
+   "physical_sources": {
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59"
+   }
+  },
+  "nodes": {
+   "clk": "clk",
+   "clk_b": "xcap.clk_b",
+   "data": "xcap.h<lane>",
+   "partner": "q<lane-8>",
+   "select": [
+    "sp",
+    "sn"
+   ]
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ sp sn _ _ _ _ _ _ serdes_cml_mux2_lowov nftail=24 rload=500 wdata=40 wselect=96 wsf=80 wtail=72",
+    "X data clk_b clk _ _ _ serdes_tx_launch_latch",
+    "X partner _ _ _ _ _ serdes_cmos_to_cml_data"
+   ],
+   "sha": "72ea883ec9470e9e"
+  },
+  "consumer_sha256": "f5a839f3066ff1df8e20da220cfea1484bb580b53ad681869a397d4b94fc7a41",
+  "points": {
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/fs",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d7363ba665be5bb87aeeada85dd0db9166b40a626e9074885e5346b88b55a508",
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/fs/fs_v1650_t85.raw",
+    "raw_sha256": "dfef9252357db57e59e5c8ed4a09dc532e69919ae2e340e32153ee6bb3180fb1",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.4634561100141424e-09,
+      "original_data_s": 1.602783415448852e-09,
+      "original_separation_ps": 139.32730543470953
+     },
+     "rise": {
+      "word": 6,
+      "lane": 10,
+      "polarity": 1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 3.2215e-08,
+      "close_s": 1.465361565336867e-09,
+      "original_data_s": 1.5769184627723365e-09,
+      "original_separation_ps": 111.55689743546942
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "fs_v1650_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/fs",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d7363ba665be5bb87aeeada85dd0db9166b40a626e9074885e5346b88b55a508",
+    "condition": "fs_v1650_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/fs/fs_v1650_t-40.raw",
+    "raw_sha256": "77303fc98bb3fd899c61408a92710162ab5dd7dc3f7c2df2f0ed33123783d158",
+    "events": {
+     "fall": {
+      "word": 6,
+      "lane": 12,
+      "polarity": -1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 3.2215e-08,
+      "close_s": 1.7277078291332054e-09,
+      "original_data_s": 1.8507146575953547e-09,
+      "original_separation_ps": 123.00682846214936
+     },
+     "rise": {
+      "word": 2,
+      "lane": 9,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 1.7290534100670352e-09,
+      "original_data_s": 1.8241145694926133e-09,
+      "original_separation_ps": 95.06115942557815
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ss_v1650_t85": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ss",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "a2812e02b548099854ae0d82b393b74df84f5d8e2a8a3a92e0baecf8ff1d649e",
+    "condition": "ss_v1650_t85",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ss/ss_v1650_t85.raw",
+    "raw_sha256": "18e083e67a4e94c3622537700afc313d835d8a10a0773ee9978d981ac0dd1b86",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 11,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.6825623666471864e-09,
+      "original_data_s": 1.883998315468423e-09,
+      "original_separation_ps": 201.43594882123665
+     },
+     "rise": {
+      "word": 6,
+      "lane": 13,
+      "polarity": 1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 3.2215e-08,
+      "close_s": 1.6857736886769843e-09,
+      "original_data_s": 1.8407394763892455e-09,
+      "original_separation_ps": 154.9657877122612
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ss_v1650_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ss",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "a2812e02b548099854ae0d82b393b74df84f5d8e2a8a3a92e0baecf8ff1d649e",
+    "condition": "ss_v1650_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ss/ss_v1650_t-40.raw",
+    "raw_sha256": "65a496c7919baae614022483fb0e6648c9e1c392b331a835ccea8961f2276ed8",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 14,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 2.0127303906647073e-09,
+      "original_data_s": 2.25277895514869e-09,
+      "original_separation_ps": 240.04856448398274
+     },
+     "rise": {
+      "word": 2,
+      "lane": 9,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 2.0185460466724524e-09,
+      "original_data_s": 2.18131521576494e-09,
+      "original_separation_ps": 162.76916909248783
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/tt",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "5e4b951922ea667aeb8cf8f226201311f8095af00e1fa3e8a492d74684969d35",
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/tt/tt_v1800_t27.raw",
+    "raw_sha256": "cdb0c4548a8024157ff74241b53e2a71926f9e164f1431d1f00ce957749876ff",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.2843158163692193e-09,
+      "original_data_s": 1.4027040497503918e-09,
+      "original_separation_ps": 118.38823338117253
+     },
+     "rise": {
+      "word": 2,
+      "lane": 8,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 1.2875971854827407e-09,
+      "original_data_s": 1.3788859175245131e-09,
+      "original_separation_ps": 91.28873204177243
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ff_v1950_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ff",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "050d51f75d02d9c21396cf234af6518f289e6452a5f1bcaf9ac62b0a47f84aa4",
+    "condition": "ff_v1950_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ff/ff_v1950_t-40.raw",
+    "raw_sha256": "2aa6461c02121588bca86810ed721a6b1f6404513ae018353c6824a9e183feaf",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.0963776095878488e-09,
+      "original_data_s": 1.1668242867209983e-09,
+      "original_separation_ps": 70.44667713314958
+     },
+     "rise": {
+      "word": 2,
+      "lane": 8,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 1.09853639009166e-09,
+      "original_data_s": 1.1541546738162988e-09,
+      "original_separation_ps": 55.61828372463884
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": "Keep every saved source sample plus interpolated window endpoints; 0.8ns before to 1.9ns after CML B select. Baseline unshifted; sweep translates the entire recorded data voltage trace only. No time scaling or polarity fitting.",
+  "validation": {
+   "state": "pending_baseline_comparison",
+   "waveform_error_gate_v": 0.005
+  },
+  "proxy_loads": {
+   "q_wire_f": 2e-15,
+   "partner_wire_f": 2e-15,
+   "mux_output_per_leg_f": 5e-15
+  },
+  "valid_while": [
+   "same transistor cells and load stages, dimensions, PDK installation and R tt",
+   "source driver impedance and perturbed Miller feedback are omitted by voltage replay",
+   "baseline must match full-bank q/CML/MUX waveforms within 5mV before using shifted cases",
+   "two recorded event shapes per condition, not all patterns, noise, mismatch, startup or 45PVT"
+  ]
+ },
+ {
+  "id": "tx_staggered_b_launch_cut_v2",
+  "kind": "loaded_internal_port_voltage_replay",
+  "description": "Cut one B latch/converter/MUX branch from the recorded 16-bit bank; select minimum observed data-close separation of each data direction per PVT.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "staggered_candidate_20261107",
+   "campaign": "results/analog/tx/staggered_ingress/20261106T202607Z",
+   "plan_sha256": "fcd74f528ecf88955df09a6e83fbaeed2e8db874c98ebd0013239c832a5b64de",
+   "physical_sources": {
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59"
+   }
+  },
+  "nodes": {
+   "clk": "clk",
+   "clk_b": "xcap.clk_b",
+   "data": "xcap.h<lane>",
+   "partner": "q<lane-8>",
+   "select": [
+    "sp",
+    "sn"
+   ]
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ sp sn _ _ _ _ _ _ serdes_cml_mux2_lowov nftail=24 rload=500 wdata=40 wselect=96 wsf=80 wtail=72",
+    "X data clk_b clk _ _ _ serdes_tx_launch_latch",
+    "X partner _ _ _ _ _ serdes_cmos_to_cml_data"
+   ],
+   "sha": "72ea883ec9470e9e"
+  },
+  "consumer_sha256": "f5a839f3066ff1df8e20da220cfea1484bb580b53ad681869a397d4b94fc7a41",
+  "points": {
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/fs",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d7363ba665be5bb87aeeada85dd0db9166b40a626e9074885e5346b88b55a508",
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/fs/fs_v1650_t85.raw",
+    "raw_sha256": "dfef9252357db57e59e5c8ed4a09dc532e69919ae2e340e32153ee6bb3180fb1",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.4634561100141424e-09,
+      "original_data_s": 1.602783415448852e-09,
+      "original_separation_ps": 139.32730543470953
+     },
+     "rise": {
+      "word": 6,
+      "lane": 10,
+      "polarity": 1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 3.2215e-08,
+      "close_s": 1.465361565336867e-09,
+      "original_data_s": 1.5769184627723365e-09,
+      "original_separation_ps": 111.55689743546942
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "fs_v1650_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/fs",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d7363ba665be5bb87aeeada85dd0db9166b40a626e9074885e5346b88b55a508",
+    "condition": "fs_v1650_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/fs/fs_v1650_t-40.raw",
+    "raw_sha256": "77303fc98bb3fd899c61408a92710162ab5dd7dc3f7c2df2f0ed33123783d158",
+    "events": {
+     "fall": {
+      "word": 6,
+      "lane": 12,
+      "polarity": -1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 3.2215e-08,
+      "close_s": 1.7277078291332054e-09,
+      "original_data_s": 1.8507146575953547e-09,
+      "original_separation_ps": 123.00682846214936
+     },
+     "rise": {
+      "word": 2,
+      "lane": 9,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 1.7290534100670352e-09,
+      "original_data_s": 1.8241145694926133e-09,
+      "original_separation_ps": 95.06115942557815
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ss_v1650_t85": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ss",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "a2812e02b548099854ae0d82b393b74df84f5d8e2a8a3a92e0baecf8ff1d649e",
+    "condition": "ss_v1650_t85",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ss/ss_v1650_t85.raw",
+    "raw_sha256": "18e083e67a4e94c3622537700afc313d835d8a10a0773ee9978d981ac0dd1b86",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 11,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.6825623666471864e-09,
+      "original_data_s": 1.883998315468423e-09,
+      "original_separation_ps": 201.43594882123665
+     },
+     "rise": {
+      "word": 6,
+      "lane": 13,
+      "polarity": 1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 3.2215e-08,
+      "close_s": 1.6857736886769843e-09,
+      "original_data_s": 1.8407394763892455e-09,
+      "original_separation_ps": 154.9657877122612
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ss_v1650_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ss",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "a2812e02b548099854ae0d82b393b74df84f5d8e2a8a3a92e0baecf8ff1d649e",
+    "condition": "ss_v1650_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ss/ss_v1650_t-40.raw",
+    "raw_sha256": "65a496c7919baae614022483fb0e6648c9e1c392b331a835ccea8961f2276ed8",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 14,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 2.0127303906647073e-09,
+      "original_data_s": 2.25277895514869e-09,
+      "original_separation_ps": 240.04856448398274
+     },
+     "rise": {
+      "word": 2,
+      "lane": 9,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 2.0185460466724524e-09,
+      "original_data_s": 2.18131521576494e-09,
+      "original_separation_ps": 162.76916909248783
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/tt",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "5e4b951922ea667aeb8cf8f226201311f8095af00e1fa3e8a492d74684969d35",
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/tt/tt_v1800_t27.raw",
+    "raw_sha256": "cdb0c4548a8024157ff74241b53e2a71926f9e164f1431d1f00ce957749876ff",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.2843158163692193e-09,
+      "original_data_s": 1.4027040497503918e-09,
+      "original_separation_ps": 118.38823338117253
+     },
+     "rise": {
+      "word": 2,
+      "lane": 8,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 1.2875971854827407e-09,
+      "original_data_s": 1.3788859175245131e-09,
+      "original_separation_ps": 91.28873204177243
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ff_v1950_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ff",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "050d51f75d02d9c21396cf234af6518f289e6452a5f1bcaf9ac62b0a47f84aa4",
+    "condition": "ff_v1950_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ff/ff_v1950_t-40.raw",
+    "raw_sha256": "2aa6461c02121588bca86810ed721a6b1f6404513ae018353c6824a9e183feaf",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 1.2215000000000002e-08,
+      "close_s": 1.0963776095878488e-09,
+      "original_data_s": 1.1668242867209983e-09,
+      "original_separation_ps": 70.44667713314958
+     },
+     "rise": {
+      "word": 2,
+      "lane": 8,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.6215e-08,
+      "close_s": 1.09853639009166e-09,
+      "original_data_s": 1.1541546738162988e-09,
+      "original_separation_ps": 55.61828372463884
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": "Cut 0.8ns before to 1.9ns after CML B select; interpolate endpoints, then bounded vertical-error PWL simplification (10uV). Baseline unshifted; sweep translates the entire recorded data trace only. No time scaling or polarity fitting.",
+  "pwl_tolerance_v": 1e-05,
+  "validation": {
+   "state": "pending_baseline_comparison",
+   "waveform_error_gate_v": 0.005
+  },
+  "proxy_loads": {
+   "q_wire_f": 2e-15,
+   "partner_wire_f": 2e-15,
+   "mux_output_per_leg_f": 5e-15
+  },
+  "valid_while": [
+   "same transistor cells and load stages, dimensions, PDK installation and R tt",
+   "source driver impedance and perturbed Miller feedback are omitted by voltage replay",
+   "baseline must match full-bank q/CML/MUX waveforms within 5mV before using shifted cases",
+   "two recorded event shapes per condition, not all patterns, noise, mismatch, startup or 45PVT"
+  ]
+ },
+ {
+  "id": "tx_staggered_b_launch_cut_v3",
+  "kind": "loaded_internal_port_voltage_replay",
+  "description": "Cut one B latch/converter/MUX branch from the recorded 16-bit bank; select minimum observed data-close separation of each data direction per PVT.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "staggered_candidate_20261107",
+   "campaign": "results/analog/tx/staggered_ingress/20261106T202607Z",
+   "plan_sha256": "fcd74f528ecf88955df09a6e83fbaeed2e8db874c98ebd0013239c832a5b64de",
+   "physical_sources": {
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59"
+   }
+  },
+  "nodes": {
+   "clk": "clk",
+   "clk_b": "xcap.clk_b",
+   "data": "xcap.h<lane>",
+   "partner": "q<lane-8>",
+   "select": [
+    "sp",
+    "sn"
+   ]
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ sp sn _ _ _ _ _ _ serdes_cml_mux2_lowov nftail=24 rload=500 wdata=40 wselect=96 wsf=80 wtail=72",
+    "X data clk_b clk _ _ _ serdes_tx_launch_latch",
+    "X partner _ _ _ _ _ serdes_cmos_to_cml_data"
+   ],
+   "sha": "72ea883ec9470e9e"
+  },
+  "consumer_sha256": "f5a839f3066ff1df8e20da220cfea1484bb580b53ad681869a397d4b94fc7a41",
+  "points": {
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/fs",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d7363ba665be5bb87aeeada85dd0db9166b40a626e9074885e5346b88b55a508",
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/fs/fs_v1650_t85.raw",
+    "raw_sha256": "dfef9252357db57e59e5c8ed4a09dc532e69919ae2e340e32153ee6bb3180fb1",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 9.015000000000002e-09,
+      "close_s": 4.663456110014143e-09,
+      "original_data_s": 4.8027834154488524e-09,
+      "original_separation_ps": 139.32730543470953
+     },
+     "rise": {
+      "word": 6,
+      "lane": 10,
+      "polarity": 1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 2.9015000000000002e-08,
+      "close_s": 4.665361565336866e-09,
+      "original_data_s": 4.776918462772335e-09,
+      "original_separation_ps": 111.55689743546942
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "fs_v1650_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/fs",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "d7363ba665be5bb87aeeada85dd0db9166b40a626e9074885e5346b88b55a508",
+    "condition": "fs_v1650_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/fs/fs_v1650_t-40.raw",
+    "raw_sha256": "77303fc98bb3fd899c61408a92710162ab5dd7dc3f7c2df2f0ed33123783d158",
+    "events": {
+     "fall": {
+      "word": 6,
+      "lane": 12,
+      "polarity": -1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 2.9015000000000002e-08,
+      "close_s": 4.927707829133204e-09,
+      "original_data_s": 5.050714657595354e-09,
+      "original_separation_ps": 123.00682846214936
+     },
+     "rise": {
+      "word": 2,
+      "lane": 9,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.3015000000000001e-08,
+      "close_s": 4.929053410067034e-09,
+      "original_data_s": 5.024114569492612e-09,
+      "original_separation_ps": 95.06115942557815
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ss_v1650_t85": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ss",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "a2812e02b548099854ae0d82b393b74df84f5d8e2a8a3a92e0baecf8ff1d649e",
+    "condition": "ss_v1650_t85",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ss/ss_v1650_t85.raw",
+    "raw_sha256": "18e083e67a4e94c3622537700afc313d835d8a10a0773ee9978d981ac0dd1b86",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 11,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 9.015000000000002e-09,
+      "close_s": 4.882562366647187e-09,
+      "original_data_s": 5.0839983154684236e-09,
+      "original_separation_ps": 201.43594882123665
+     },
+     "rise": {
+      "word": 6,
+      "lane": 13,
+      "polarity": 1,
+      "select_edge_s": 3.3015e-08,
+      "origin_s": 2.9015000000000002e-08,
+      "close_s": 4.885773688676983e-09,
+      "original_data_s": 5.040739476389244e-09,
+      "original_separation_ps": 154.9657877122612
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ss_v1650_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ss",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "a2812e02b548099854ae0d82b393b74df84f5d8e2a8a3a92e0baecf8ff1d649e",
+    "condition": "ss_v1650_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ss/ss_v1650_t-40.raw",
+    "raw_sha256": "65a496c7919baae614022483fb0e6648c9e1c392b331a835ccea8961f2276ed8",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 14,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 9.015000000000002e-09,
+      "close_s": 5.212730390664708e-09,
+      "original_data_s": 5.4527789551486905e-09,
+      "original_separation_ps": 240.04856448398274
+     },
+     "rise": {
+      "word": 2,
+      "lane": 9,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.3015000000000001e-08,
+      "close_s": 5.218546046672451e-09,
+      "original_data_s": 5.381315215764939e-09,
+      "original_separation_ps": 162.76916909248783
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/tt",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "5e4b951922ea667aeb8cf8f226201311f8095af00e1fa3e8a492d74684969d35",
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/tt/tt_v1800_t27.raw",
+    "raw_sha256": "cdb0c4548a8024157ff74241b53e2a71926f9e164f1431d1f00ce957749876ff",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 9.015000000000002e-09,
+      "close_s": 4.48431581636922e-09,
+      "original_data_s": 4.602704049750392e-09,
+      "original_separation_ps": 118.38823338117253
+     },
+     "rise": {
+      "word": 2,
+      "lane": 8,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.3015000000000001e-08,
+      "close_s": 4.4875971854827396e-09,
+      "original_data_s": 4.578885917524512e-09,
+      "original_separation_ps": 91.28873204177243
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   },
+   "ff_v1950_t-40": {
+    "run": "results/analog/tx/staggered_ingress/20261106T202607Z/ff",
+    "git_revision": "546f7c2-dirty",
+    "deck_sha256": "050d51f75d02d9c21396cf234af6518f289e6452a5f1bcaf9ac62b0a47f84aa4",
+    "condition": "ff_v1950_t-40",
+    "raw": "results/analog/tx/staggered_ingress/20261106T202607Z/ff/ff_v1950_t-40.raw",
+    "raw_sha256": "2aa6461c02121588bca86810ed721a6b1f6404513ae018353c6824a9e183feaf",
+    "events": {
+     "fall": {
+      "word": 1,
+      "lane": 9,
+      "polarity": -1,
+      "select_edge_s": 1.3015000000000003e-08,
+      "origin_s": 9.015000000000002e-09,
+      "close_s": 4.296377609587849e-09,
+      "original_data_s": 4.366824286720999e-09,
+      "original_separation_ps": 70.44667713314958
+     },
+     "rise": {
+      "word": 2,
+      "lane": 8,
+      "polarity": 1,
+      "select_edge_s": 1.7015e-08,
+      "origin_s": 1.3015000000000001e-08,
+      "close_s": 4.298536390091659e-09,
+      "original_data_s": 4.354154673816298e-09,
+      "original_separation_ps": 55.61828372463884
+     }
+    },
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": "Cut one full word (4ns) before to 1.9ns after CML B select; starts with B transparent, then replay one real word of history. Interpolate endpoints and simplify PWL with 10uV bounded error. Baseline unshifted; sweep translates the recorded data trace only. Compare outputs only from 100ps before the target B select. No time scaling or polarity fitting.",
+  "pwl_tolerance_v": 1e-05,
+  "validation": {
+   "state": "pending_baseline_comparison",
+   "waveform_error_gate_v": 0.005
+  },
+  "proxy_loads": {
+   "q_wire_f": 2e-15,
+   "partner_wire_f": 2e-15,
+   "mux_output_per_leg_f": 5e-15
+  },
+  "valid_while": [
+   "same transistor cells and load stages, dimensions, PDK installation and R tt",
+   "source driver impedance and perturbed Miller feedback are omitted by voltage replay",
+   "baseline must match full-bank q/CML/MUX waveforms within 5mV before using shifted cases",
+   "two recorded event shapes per condition, not all patterns, noise, mismatch, startup or 45PVT"
   ]
  }
 ]

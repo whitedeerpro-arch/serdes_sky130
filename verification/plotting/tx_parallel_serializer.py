@@ -72,7 +72,7 @@ def clock_extra_2g(plan, entry, deck_text):
     declared_plan = plan.get('clock_extra_2g', 1)
     declared_boundary = entry.get('upstream', {}).get('clock_extra_2g', 1)
     if (type(declared_plan) is not int or type(declared_boundary) is not int or
-            declared_plan not in (1, 2, 3) or declared_plan != declared_boundary):
+            declared_plan not in (1, 2, 3, 4, 5) or declared_plan != declared_boundary):
         raise ValueError('clock extra stage metadata mismatch or unsupported value')
     lines = [' '.join(line.lower().split()) for line in deck_text.splitlines()]
     stages = [line.split() for line in lines if re.match(r'^xe2g_\d+\s', line)]

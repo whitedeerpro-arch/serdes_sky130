@@ -9,7 +9,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-from serdes_flow import watch
+from serdes_flow import boundary, watch
 from serdes_flow.project import ROOT
 
 RUNNER='analog/tx/input_register/tb/final_retime/native_window.py'
@@ -30,7 +30,19 @@ def collect(camp):
     if any(p.is_relative_to(camp) for p in watch.ngspice_cwds()):raise ValueError('campaign still has live ngspice')
     spec=importlib.util.spec_from_file_location('reduced_phase_snapshot',camp/'execution'/RUNNER)
     runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
-    plan,entry=runner.verify(camp)
+    plan=json.loads((camp/'plan.json').read_text());entry=boundary.get(plan['boundary_id'])
+    if entry!=json.loads((camp/'boundary.json').read_text()) or runner.digest(entry)!=plan['boundary_sha256']:
+        raise ValueError('boundary changed')
+    runner.verify_boundary(entry)
+    archive_scripts={RUNNER,'verification/plotting/tx_parallel_serializer.py'}
+    for rel,h in plan['sources'].items():
+        if sha(camp/'execution'/rel)!=h or (rel not in archive_scripts and sha(ROOT/rel)!=h):
+            raise ValueError(f'physical/measurement dependency changed: {rel}')
+    for rel,h in plan['snapshots'].items():
+        if sha(camp/rel)!=h:raise ValueError(f'prepared checkpoint changed: {rel}')
+    if plan['offsets_ps']!=list(runner.OFFSETS) or plan['stop_s']!=runner.STOP or plan['first_bit']!=runner.FIRST or plan['end_bit']!=runner.END:
+        raise ValueError('experiment parameters changed')
+    runner.collector=runner.module('archived_full_tx_collector',camp/'execution/verification/plotting/tx_parallel_serializer.py')
     summary=json.loads((camp/'summary.json').read_text())
     expected={(c['condition'],c['offset_ps']) for c in plan['cases']}
     rows=summary['rows']

@@ -1,5 +1,5 @@
 revision = "tx_lowov_retimed_r2_20261030"
-status = "r2_baseline_retained; capture_extra3_TT_FS_SS_eye_pass; reduced_swing_FS_spread_fail; guard_STA_SS_open"
+status = "r2_baseline_retained; capture_extra3_TT_FS_SS_eye_pass; reduced_swing_extra3_FS_fail; extra5_local_recovery_full_pending; guard_STA_SS_open"
 v3_candidate_native_static_report = "docs/history/clocking_progress_20261106.md"
 v3_candidate_native_static_scope = "r5 4-bit frontend, real bias/PDK R; 8 complete count correctly, 2 FF cold missing; static data, no joint eye/bit-map acceptance"
 report = "docs/history/tx_optimization.md"
@@ -54,7 +54,7 @@ input_remap_rtl = "digital/tx/rtl/tx_word_remap.sv"
 remapped_FS_1v65_85C_1024bit_worst_spread_ui = 0.127
 
 [ingress_candidate]
-status = "full_TX_extra3_three_pressure_eye_pass; reduced_swing_FS_fail; not_45pvt_qualified"
+status = "full_TX_extra3_three_pressure_eye_pass; reduced_swing_extra3_FS_fail; extra5_reduced_swing_full_pending; not_45pvt_qualified"
 preferred_data_cell = "analog/common/devices/spice/cmos_dff.spice:serdes_cmos_dff"
 comparison_cell = "analog/common/devices/spice/cmos_dff_reset.spice:serdes_cmos_dff_reset"
 report = "docs/design/tx_ingress.md"
@@ -198,7 +198,7 @@ SS_cold_dynamic_status = "complete; 256bit_training_mapping_capture_hold_counter
 
 [retime_clock_iteration.output_sizing]
 module = "tx.clocking.output2g"
-status = "full_TX_W16_R240_TT_eye_pass_FS_spread_fail; not_adopted"
+status = "extra3_W16_R240_full_TX_TT_eye_pass_FS_spread_fail; extra5_local_recovery_full_pending; not_adopted"
 boundary = "tx_final_clock_output_sizing_v1"
 campaign = "results/analog/tx/final_clock_swing/20261107T103804.761471Z"
 evidence = "docs/data/tx_final_clock_swing.json"
@@ -281,3 +281,27 @@ phase_fitted_to_payload = false
 physical_clock_implemented = false
 full_TX_qualified = false
 status = "local_8bit_recovery_at_plus20_to_plus60ps; physical_clock_chain_confirmation_next"
+
+[retime_clock_iteration.output_sizing.physical_phase_recovery]
+boundary_id = "tx_reduced_final_word18_clock_stages_v1"
+campaign = "results/analog/tx/native_reduced_clock/20261107T164517.822006Z_16514531"
+evidence = "docs/data/tx_native_reduced_clock.json"
+extra_stages_compared = [3, 4, 5]
+candidate_extra_2g = 5
+tail_w_um = 16
+load_ohm = 240
+baseline_voltage_error_mv_upper = 0.104
+baseline_absolute_edge_error_ps_upper = 0.029
+TT_extra5_clock_shift_ps = 30.822916
+FS_extra5_clock_shift_ps = 38.555771
+TT_extra5_local_margin_mv = 140.054245
+TT_extra5_local_spread_ui = 0.031658148
+FS_extra5_local_margin_mv = 105.921068
+FS_extra5_local_spread_ui = 0.105218198
+TT_extra5_c2g_pp_mv = 368.935286
+FS_extra5_c2g_pp_mv = 351.087594
+first_bit = 296
+end_bit_exclusive = 304
+full_TX_qualified = false
+adopted = false
+status = "actual_loaded_chain_local_TT_FS_recovery; extra5_candidate_for_full_TX_confirmation"

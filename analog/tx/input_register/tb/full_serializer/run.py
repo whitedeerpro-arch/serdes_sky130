@@ -155,7 +155,7 @@ def check_output_identity(plan, entry):
 
 
 def distribution(extra_2g=1,output_wt=24,output_r=300):
-    if extra_2g not in (1,2,3):raise ValueError('unsupported 2GHz extra-stage count')
+    if type(extra_2g) is not int or extra_2g not in (1,2,3,4,5):raise ValueError('unsupported 2GHz extra-stage count')
     wt,resistance=output_parameters(output_wt,output_r)
     return dist.netlist({'extra':{**dist.DEFAULT['extra'],'2g':extra_2g},
                          'out':{**dist.DEFAULT['out'],'2g':(32,wt,resistance)}})
@@ -355,7 +355,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('mode',choices=('probe','prepare','run'))
     p.add_argument('--condition',default='tt_v1800_t27');p.add_argument('--probe',type=Path)
     p.add_argument('--bc');p.add_argument('--stimulus',type=Path);p.add_argument('--resume',type=Path)
-    p.add_argument('--clock-extra-2g',type=int,choices=(1,2,3),help='extra buffer stages before the final 2GHz output driver; baseline=1')
+    p.add_argument('--clock-extra-2g',type=int,choices=(1,2,3,4,5),help='extra buffer stages before the final 2GHz output driver; baseline=1')
     p.add_argument('--clock-output-wt',type=float,help='2GHz output tail width; baseline=24')
     p.add_argument('--clock-output-r',type=float,help='2GHz output nominal load resistance; baseline=300')
     a=p.parse_args()

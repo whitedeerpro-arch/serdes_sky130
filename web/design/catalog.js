@@ -2106,11 +2106,11 @@ window.DESIGN_CATALOG = {
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "减幅后时序迭代",
-      "summary": "WT16/R240完整TT满足，FS散布0.18025UI失败；word18八位在当前减幅边界后移20/40ps恢复至0.134/0.105UI。正在确认实际缓冲级，尚未完整TX采用。",
+      "state": "实际extra5局部恢复",
+      "summary": "WT16/R240原extra3完整FS散布失败；实际extra5切片把FS八位恢复至105.92mV/0.10522UI，c2g351mVpp。extra5作为完整字流确认候选，尚未采用；其他超幅及统计仍开。",
       "facts": {
-        "设计": "Wn32固定；WT16/R240未采用",
-        "PVT": "完整TT/FS两点；FS散布失败，非全角",
+        "设计": "WN32/WT16/R240；extra5局部候选",
+        "PVT": "TT/FS八位局部；extra5完整TX待确认",
         "失配": "未做",
         "噪声": "未做"
       },
@@ -2128,9 +2128,9 @@ window.DESIGN_CATALOG = {
       },
       "planning": {
         "question": "减小尾流和R能否同时满足幅度、共模与数据建立？",
-        "model": "I·R粗估排序，实际加载瞬态校准；RC/gm权重尚未拟合。",
-        "parameters": "extra3；Wn32；WT/R：24/300、18/240、16/240。",
-        "verification": "局部四基线5.56µV；完整120ns独立确认字流及位序；FS散布超过0.15UI，需要减幅后的本地时序/再生校准。"
+        "model": "固定相位卡预测实际缓冲级；FS extra4/5散布预测误差约0.26/0.37ps，仅本加载与码型。",
+        "parameters": "extra3/4/5；iso/中间级24/16µm、400Ω；输出32/16µm、240Ω。",
+        "verification": "原样最大0.104mV/0.029ps；实际extra5恢复TT/FS受检八位，尚未完整字流或全角确认。"
       },
       "references": [
         {
@@ -2164,6 +2164,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "减幅后的局部相位图",
           "path": "docs/figures/tx/ingress/tx_reduced_phase_window.png"
+        },
+        {
+          "title": "实际减幅时钟级比较",
+          "path": "docs/figures/tx/ingress/tx_native_reduced_clock.png"
+        },
+        {
+          "title": "实际缓冲与模型校准数据",
+          "path": "docs/data/tx_native_reduced_clock.json"
         }
       ],
       "iterations": [
@@ -2245,6 +2253,33 @@ window.DESIGN_CATALOG = {
             {
               "title": "校准数据",
               "path": "docs/data/tx_reduced_phase_window.json"
+            }
+          ]
+        },
+        {
+          "id": "20261107T165452Z_c234e328d1",
+          "module": "tx.clocking.output2g",
+          "date": "2026-11-08",
+          "timestamp": "2026-11-07T16:54:52.686513+00:00",
+          "title": "实际extra5缓冲：减幅下局部恢复",
+          "phase": "validation",
+          "problem": "理想时钟平移不能代替真实缓冲级，需要校准增量、波形质量与八位时序。",
+          "model": "以同一r2g输入负载与完整波形切片比较extra3/4/5；原样电压和绝对边沿校准后，用相位卡按实测c2g增量预测。",
+          "changes": "实际iso和中间级均24/16µm、400Ω；最终输出32/16µm、240Ω固定。每分支加载实际末级与driver/RLC16。",
+          "validation": "extra3原样≤0.104mV/0.029ps；extra5 TT/FS增量30.82/38.56ps，FS105.92mV/0.10522UI，c2g351.09mVpp。相位卡对FS extra4/5散布预测偏差≤0.37ps。",
+          "conclusion": "extra5进入完整TX确认候选，未采用。8位局部不覆盖所有码型/PVT、其他内部超幅、失配/噪声。NumPy布尔汇总错误由归档重算恢复，没有NG重跑。",
+          "attachments": [
+            {
+              "title": "实际缓冲图",
+              "path": "docs/figures/tx/ingress/tx_native_reduced_clock.png"
+            },
+            {
+              "title": "模型校准数据",
+              "path": "docs/data/tx_native_reduced_clock.json"
+            },
+            {
+              "title": "当前设计",
+              "path": "docs/design/tx_final_retime.md"
             }
           ]
         }

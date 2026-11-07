@@ -40,6 +40,21 @@ def test_baseline_clock_distribution_is_preserved_and_added_stage_changes_fixtur
     assert first(original)==first(changed)
 
 
+@pytest.mark.parametrize('count',[4,5])
+def test_extended_clock_confirmation_checks_last_stage_and_metadata(count):
+    spec=importlib.util.spec_from_file_location('extended_clock_collector',ROOT/'verification/plotting/tx_parallel_serializer.py')
+    collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
+    plan={'clock_extra_2g':count,'clock_output_wt':16,'clock_output_r':240}
+    entry={'upstream':dict(plan)}
+    text=flow.distribution(count,16,240)
+    assert collector.clock_extra_2g(plan,entry,text)==count
+    bad=text.replace(f'Xout2g e2g_{count-1}p e2g_{count-1}n',f'Xout2g e2g_{count-2}p e2g_{count-2}n')
+    with pytest.raises(ValueError,match='output stage connectivity'):
+        collector.clock_extra_2g(plan,entry,bad)
+    with pytest.raises(ValueError,match='metadata mismatch'):
+        collector.clock_extra_2g(plan,{'upstream':{**plan,'clock_extra_2g':3}},text)
+
+
 def test_concurrent_campaigns_keep_both_runs_when_timestamp_is_identical(tmp_path,monkeypatch):
     class FixedTime:
         @staticmethod

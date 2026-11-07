@@ -43,3 +43,22 @@
 W80 判据来自各 campaign 的 `pdk_resistors/analog/rx/sampler/spice/rx_readout_demux2.spice` 和 `pdk_resistors/analog/pll/divider/spice/cml_div2.spice`：前三类调用 `pll_cml_div2` 未覆盖 `whold`，后者默认 80；065521 调 `pll_cml_div2_ac` 未覆盖 `whold`，其默认同为 80。[055022](../../../results/analog/rx/sampler/readout_deser/20261105T055022Z_ac_trim32_realbias_rhh/plan.json) 的 plan 只有 `ss_v1650_t85`，没有 FF 冷尝试，不能将其误记为 FF。先前 `7598a0f-dirty` 与后来的 `bcc4b32-dirty` 不是可复原的完整源码身份，应以每份快照和 deck 为准。
 
 [设计记录](../../design/rx_pi_sampler.md)提到 `op-steps 20`、`reltol=1e-3` 的一小时尝试；上述 040645 的 deck 实际为 `1e-4`，065521 则没有 opsteps 且为 `1e-4`。本次枚举的 FF 冷 readout_deser deck 未定位到与该组合完全一致的一小时尝试，需另找具体运行身份；不能把这两个 deck 改述成该设置。当前 W40 的 FF hh 在 WP-003 固定十目录内没有正式尝试，以上查到的额外 FF hh 也都是 W80，不能用它们替代 W40 测试。
+
+## 偏置 DC 参考与节点种子可用性
+
+固定 [dist_pvt summary](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/summary.json) 共 135 行；下列两个所需 TSV 均存在、各含一行有限结果，与 summary 一致，两个 deck 的 execution 均 exit 0、无登记 log failure。它们是 DC 工作点，不是 RX 启动或完整链收敛结果。
+
+| MOS / 供电 / 温度 / R | vbg / V | vgi / V | v_cml / V | v_ctle / V | i_cml / µA | i_ctle / µA |
+|---|---:|---:|---:|---:|---:|---:|
+| FS / 1.65 V / −40 °C / hh | 1.226562 | 0.977051 | 1.051571 | 0.721796 | 192.549 | 45.716 |
+| FF / 1.95 V / −40 °C / hh | 1.236737 | 1.236267 | 0.971272 | 0.660091 | 193.959 | 45.979 |
+
+来源分别为 [FS deck](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/fs_hh/tb.cir)、[FS TSV](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/fs_hh/fs_hh_v1650_t-40.tsv)、[FS 执行](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/fs_hh/execution.json) 和 [FF deck](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/ff_hh/tb.cir)、[FF TSV](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/ff_hh/ff_hh_v1950_t-40.tsv)、[FF 执行](../../../results/analog/common/bias/dist_pvt/20261103T212249Z/ff_hh/execution.json)。两 deck 通过 `option temp=-40` 与 `alter Vdd` 选择表中条件，库段分别是 `fs_hh` 和 `ff_hh`。两原始日志的部分其他 OP 步骤出现 dynamic gmin stepping warning；目标 TSV 的单行输出存在且执行整体结束，这些 warning 不等同于目标点失败，也不提供动态验证。
+
+结构上，dist deck 的 `Xref ... serdes_bias_ref` 未显式指定 trim；目前读取的 `bias_dist.spice` 默认 trim=15，失败 RX deck 中的 `Xbias_ref ... serdes_bias_ref trim=15` 与之对应。dist 的 `Xccml ... serdes_bias_pcopy n=85` 和 `Xdcml ... serdes_bias_cml` 对应 RX 的 `XIref ... n=85` 与 `Xref ... serdes_bias_cml`；当前定义中 CML 二极管为 `nfet w=5 l=0.5`。dist 的 CTLE n=20 与 `serdes_bias_ctle` 的 LVT 二极管 `w=8 l=0.5 nf=4`，对应 RX `XIctle n=20` 和 `Xcbias` 的同尺寸二极管。RX 两个所查冷角供电和库段与各 DC 点相同；RX 四个 bias_i 节点与 dist 的 i0–i3 均接 0.7 V。
+
+身份限制：dist 原 deck 直接 include 工作区路径，并未在该目录保存电路快照，`320d2f2-dirty` 不能唯一恢复当时的 cell 内容；上面的默认 trim、CML 尺寸和复制单元对应关系是**按当前源码及 RX 快照检查的结构对照**，不能证明 dist 运行时源码字节完全相同。当前 `bias_dist.spice` 和 FS/FF RX PDK 转换快照的 SHA-256 均为 `722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012`；RX 的 bandgap 快照是 PDK 电阻转换后文本，不能直接与 dist 运行时未保存的动态 include 判为同字节。
+
+负载也不同：dist 同时放 CTLE 和 CP 偏置支路，及 CML 二极管上额外 `w=20 l=0.5 nf=4` 尾管与 500 Ω PDK 电阻/1 V 代理，另有理想参考比较支路；完整 RX 的 `vbias` 驱动 PI、采样器及读出链，`vctle` 驱动真实 CTLE，时钟和数据电压源提供不同 DC 条件。额外栅电容、漏电、供电和内部节点会改变工作点及收敛路径。dist 的 `vbg/vgi/v_cml/v_ctle` 可分别映射为 RX 的 `bias_vbg/vgi_bias/vbias/vctle`，**仅适合作为 bias-only 对照和后续 `.nodeset` 候选**；先在同一 RX cell 快照、trim、供电/角及负载条件下校准偏置，并逐项记录初值及结果。不得直接视作当前 RX 可收敛或 warm-start 已验证；不采用 `.ic` / `uic`，也未注册跨 bench 边界或启动任何仿真。
+
+来源 SHA-256：summary `1c8308b3ec62cb53660f7c79fe0cd85b3977bcd5c400030b11c582e61b2837a2`；FS deck `609397a45ae8479136f41dd2d4d041ea7a8730f7b738d6f196c6650b9f58e80a`、TSV `f142c70495cffdaf8f264892c3c24bb70d374dc6bd2bdea791d585ca0fc0084c`、execution `87556b7e788376b649118c7c1f62ef25eb48508bbcb933ce483b28037b886ca2`；FF deck `877e902987d22f8881d418653fac2827f795fdc12464d044834f582afc83c901`、TSV `606bf6852e1fc20953ff4a20f23c9d6a864319e2f9624e2a1010d9c51822b2be`、execution `080c7d2ae4a8b304dcaa79a7c1c18186dab3553607816678b3ca5d1b772a65c7`。

@@ -3,7 +3,7 @@
     uv run python analog/tx/serializer/tb/clock_replay/counter.py probe --bc ID [points] [--cfg v3|JSON] [--label L]
 
 probe: 30 ns at every recorded corner (the 2 GHz tap drives everything).  Reports
-  * function: the (q2 q1 q0) state read 100 ps after each clock fall counts up by
+  * function: the (q2 q1 q0) state read midway between clock falls counts up by
     one every cycle (binary relation intact);
   * clk->q of each bit after the falling crossing of the counter's internal clock;
   * worst setup / hold of the next-state inputs d1, d2 at the masters;
@@ -19,7 +19,7 @@ from pathlib import Path
 
 import numpy as np
 
-from serdes_flow import boundary, spice
+from serdes_flow import boundary, clock, spice
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
 
@@ -49,33 +49,35 @@ def diff(w, a):
 def check(w):
     t = w.t
     ck, pk = crossings(t, diff(w, "xcnt.ck"))
-    falls = ck[(pk < 0) & (ck > WINDOW[0]) & (ck < WINDOW[1] - 0.2e-9)]
     bits = [diff(w, f"q{i}") for i in range(3)]
-    state = [sum((np.interp(f + 100e-12, t, b) > 0) << i for i, b in enumerate(bits)) for f in falls]
-    steps = np.diff(state) % 8
-    # steady counting from the last irregular step on (a noise-free start-up can linger)
-    bad = [i for i, s in enumerate(steps) if s not in (1,)]
-    since = falls[bad[-1] + 1] if bad else falls[0]
-    counting = bool(len(steps) and (not bad or bad[-1] < len(steps) - 16))
     allf = ck[pk < 0]
+    sequence = clock.binary_counter(t, bits, allf, *WINDOW)
+    bad = sequence["invalid_steps"]
+    samples = sequence["sample_times_s"]
+    since = samples[bad[-1] + 1] if bad else (samples[0] if samples else None)
     cq = {}
     for i, b in enumerate(bits):
         e, _ = crossings(t, b)
         e = e[(e > WINDOW[0]) & (e < WINDOW[1])]
-        cq[f"q{i}"] = float(np.median([x - allf[np.searchsorted(allf, x) - 1] for x in e]))
+        delays = [x - allf[np.searchsorted(allf, x) - 1] for x in e if np.searchsorted(allf, x) > 0]
+        cq[f"q{i}"] = float(np.median(delays)) if delays else None
     su, ho = [], []
     for d in ("d1", "d2"):
         e, _ = crossings(t, diff(w, f"xcnt.{d}"))
         e = e[(e > WINDOW[0]) & (e < WINDOW[1] - 0.6e-9)]
-        su += [allf[np.searchsorted(allf, x)] - x for x in e]
-        ho += [x - allf[np.searchsorted(allf, x) - 1] for x in e]
-    return dict(counting=counting, counting_since_s=float(since), clk_to_q_s=cq,
-                setup_min_s=float(min(su)), hold_min_s=float(min(ho)))
+        su += [allf[np.searchsorted(allf, x)] - x for x in e if np.searchsorted(allf, x) < len(allf)]
+        ho += [x - allf[np.searchsorted(allf, x) - 1] for x in e if np.searchsorted(allf, x) > 0]
+    return dict(counting=sequence["counting"], counting_since_s=since, sequence=sequence, clk_to_q_s=cq,
+                setup_min_s=float(min(su)) if su else None, hold_min_s=float(min(ho)) if ho else None)
 
 
-def positions(w):
-    got = replay.serializer_centroids(w, *WINDOW)
-    return {k: float(replay.wrap((got[k] - got["250"]) / UI - TARGET[k], 1.0)) for k in TARGET}
+def positions(w, ui=UI):
+    # Native open-loop sources need their measured period, or frequency error
+    # smears the circular centroid when folded with a nominal 250 ps UI.
+    periods_ui = {"250": 16, "500": 8, "1g": 4, "2g": 2}
+    got = {k: replay.centroid(w.t, w[v], ui * periods_ui[k], *WINDOW)
+           for k, v in replay.SER_VEC.items()}
+    return {k: float(replay.wrap((got[k] - got["250"]) / ui - TARGET[k], 1.0)) for k in TARGET}
 
 
 def probe(cfg, bc, names=None, label="probe"):

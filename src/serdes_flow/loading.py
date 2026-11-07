@@ -12,11 +12,15 @@ Nodes with a resistive load (a resistor to a rail) get R, C and the pole 1 / (2 
 lists them by ascending pole with the largest contributors (instance path, kind, fF).  Rule of
 thumb for a CML clock node at f: pole >= 2 f keeps ~90 % of the swing of a fully switched stage.
 Values are first-order estimates for spotting overloaded nodes, not a substitute for simulation.
+
+rising_edge_load measures transient clock-port slew and charge from a saved
+waveform; it does not use the static device-card estimate above.
 """
 from __future__ import annotations
 
 import argparse
 import math
+import numpy as np
 from collections import defaultdict
 from fnmatch import fnmatch
 from pathlib import Path
@@ -24,11 +28,44 @@ from pathlib import Path
 from .devices import DeviceCard
 from .netlist import flatten, parse, project_files
 from .project import ROOT
+from .clock import edges
 
 RAILS = {"0", "vss", "vdd", "gnd"}
 C_DIFF_PER_UM = 0.6e-15
 MODEL_DEV = {"sky130_fd_pr__nfet_01v8": "nfet", "sky130_fd_pr__nfet_01v8_lvt": "nfet_lvt",
              "sky130_fd_pr__pfet_01v8": "pfet", "sky130_fd_pr__pfet_01v8_lvt": "pfet_lvt"}
+
+
+def rising_edge_load(t, voltage, current_into_load, low, high, start, stop, half_window_s=400e-12):
+    """Measure clock 10–90% slew and integrated rising-edge input charge.
+
+    Current must be positive into the load. Q/(high-low) is a signed charge
+    equivalent, including leakage/feedthrough within each explicit window;
+    it is not an extracted linear capacitance. Refuse incomplete windows or
+    ambiguous threshold crossings rather than returning partial integrals.
+    """
+    t, voltage, current = map(np.asarray, (t, voltage, current_into_load))
+    if (t.ndim != 1 or len(t) < 2 or voltage.shape != t.shape or current.shape != t.shape
+            or not all(np.all(np.isfinite(x)) for x in (t, voltage, current))
+            or np.any(np.diff(t) <= 0)
+            or not all(np.isfinite(x) for x in (low, high, start, stop, half_window_s))
+            or high <= low or half_window_s <= 0 or stop <= start):
+        raise ValueError("invalid clock load inputs")
+    result = []
+    for edge in edges(t, voltage-(high+low)/2, 1, start, stop):
+        a, b = edge-half_window_s, edge+half_window_s
+        if a < t[0] or b > t[-1]:
+            raise ValueError("incomplete clock charge window")
+        e10 = edges(t, voltage-(low+.1*(high-low)), 1, a, b)
+        e90 = edges(t, voltage-(low+.9*(high-low)), 1, a, b)
+        if len(e10) != 1 or len(e90) != 1 or e90[0] <= e10[0]:
+            raise ValueError("ambiguous clock slew crossings")
+        ti = np.r_[a, t[(t > a) & (t < b)], b]
+        charge = float(np.trapezoid(np.interp(ti, t, current), ti))
+        result.append(dict(edge_s=float(edge), slew_10_90_s=float(e90[0]-e10[0]),
+                           window_from_s=float(a), window_until_s=float(b), charge_c=charge,
+                           charge_equivalent_cap_f=charge/(high-low)))
+    return result
 
 
 def latest_card():

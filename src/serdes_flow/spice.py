@@ -29,6 +29,8 @@ from . import project
 
 _PLACEHOLDER = re.compile(r"@([A-Z0-9_]+)@")
 _LOG_FAILURES = ("error", "aborted", "timestep too small", "singular matrix")
+# The varactor model's cosh overflows during gmin stepping, and the operating point still converges; a run that does not finish fails on its output.
+_LOG_BENIGN = ("out of range for cosh",)
 _WRDATA = re.compile(r"^(\s*)wrdata\s+(\S+?)\.tsv\s+(.+)$", re.M)
 _TRAN_ZERO_START = re.compile(r"^(\s*tran\s+\S+\s+\S+\s+)0(?=\s)", re.M)
 
@@ -116,7 +118,7 @@ def run(deck: str, run_dir: Path, *, files: dict[str, Path] | None = None,
     except subprocess.TimeoutExpired:
         exit_code = None
     log = (run_dir / "simulator.log").read_text(errors="replace") if (run_dir / "simulator.log").exists() else ""
-    failures = [l for l in log.splitlines() if any(k in l.lower() for k in _LOG_FAILURES)]
+    failures = [l for l in log.splitlines() if any(k in l.lower() for k in _LOG_FAILURES) and not any(k in l.lower() for k in _LOG_BENIGN)]
     ex = Execution(run_dir, exit_code, time.time() - start, failures)
     record = dict(
         exit_code=exit_code, elapsed_s=ex.elapsed_s, log_failures=failures, timed_out=exit_code is None,

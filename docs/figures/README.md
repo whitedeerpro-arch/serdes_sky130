@@ -1,10 +1,13 @@
 # 图目录：按用途阅读
 
-现有176个文件归为93组图。PNG/SVG为同一组的不同格式。图片已按模块／专题搬迁；本页整理阅读顺序和适用范围。[组织说明](../history/figure_organization.md)和[旧新路径映射](../data/figure_relocation_20261029.json)保留设计继承与溯源。
+PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页整理阅读顺序和适用范围。[组织说明](../history/figure_organization.md)和[旧新路径映射](../data/figure_relocation_20261029.json)保留设计继承与溯源。
 
 ## 先看当前主线
 
-- [当前PLL/TX基线](../history/design_freeze_v0p1.md)：冻结参数与选定证据具有优先级。
+- **[交互设计工作台](../../web/design/index.html)**：SerDes→TX/Bias/RX/PLL/Channel→子模块，边界、模型规划、迭代与证据挂在模块下；[本地运行与保存](../../web/design/README.md)。[静态图与预览](system/README.md)保留参考。
+- **[TX入口与完整链路](tx/ingress/README.md)**：单元/分组保持/关闭竞争、完整TX的TT与FS对照眼图、guard映射时序可行性；FS失败与SS时序不足均保留。
+- **[11-06 时钟链路图集](clocking/README.md)**：7 组新图，覆盖 VCO 135 条件选码/Kvco、3/4 bit 控制范围、CP 窗口、÷2 可行区、r5＋TX v3 原生联合仿真与计数波形；[来源与复现](../history/clocking_progress_20261106.md)。
+- [当前模块设计](../design/)与[修订表](../overview/revisions.md)决定现行版本；[v0.1 PLL/TX 基线](../history/design_freeze_v0p1.md)保留历史参数与证据。
 - [当前RX阶段结论](../history/stage_review_20261029.md)：按分层范围阅读，不能把局部窗口当作整个链路。
 - [RX前端](../history/rx_frontend_first_design.md) → [加载边界](../history/rx_loaded_link.md) → [PI/采样](../history/rx_sampler_control.md) → [CDR/串并](../history/rx_cdr_closed_loop.md) → [实时数模接口](../history/mixed_signal_cosim.md)。这是一条开发阅读路线，后项不覆盖前项的全部工况。
 - [串化器溯源](../history/serializer_timing_root_cause.md)解释最终末级驱动选型；较早1024bit物理时钟眼图仍使用旧锁存参数。
@@ -13,7 +16,7 @@
 
 ## 如何读下面的分组
 
-文件按模块/专题归属；用途另列。专项研究不自动次要，早期局部表征也不自动失效。标为“原理说明”的图不能当作电路验收。完整范围、当前/历史路径、报告、case和继承边见[机器索引](../data/figure_catalog.json)。
+文件按模块/专题归属；用途另列。专项研究不自动次要，早期局部表征也不自动失效。标为“原理说明”的图不能当作电路验收。既有图的范围、当前/历史路径、报告、case 和继承边见[历史机器索引](../data/figure_catalog.json)；11-06 新增图见[本轮索引](../../results/catalog/clocking_progress_20261106.json)。
 
 ## 公共电平转换
 

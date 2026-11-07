@@ -1,6 +1,6 @@
 # RX 相位插值器、采样器与 CMOS 读出
 
-> **当前修订**：首版 64 码 PI [pi_rotator](../../analog/rx/pi/spice/pi_rotator.spice)、四相静态 CML 采样 [rx_half_rate_samples](../../analog/rx/sampler/spice/rx_half_rate_samples.spice)、静态 CMOS 读出与 pair 对齐 [rx_cmos_pair_align](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice)（[配置](../../config/rx_cdr.toml)）。
+> **当前工作结构**：64码PI（cmix120f）＋ac_trim/c2；读出用ac_trim_rk＋CML1:2分路/静态转换＋CMOS1:4/deser16，读出÷2保持管W40。工作方向和各bench变体见[rx_working_revision.toml](../../config/rx_working_revision.toml)、[设计框图](../overview/development_map.md#5-rx逐框状态)。旧stock/pair只保留历史与对照；下面按实验批次记录的参数/范围不自动转移到当前组合。
 > **关键数字**：PI 64 码全部单调前进，DNL −0.134…+0.122 LSB，最大 |INL| 0.0096 UI；真实 PI + CTLE + 采样器在码 0/4/8 下 51 位比较全部正确，早晚票方向与负反馈一致。
 > **采样器候选 ac**（2026-11-02，时钟 buffer c2）：[rx_half_rate_samples_ac](../../analog/rx/sampler/spice/rx_half_rate_samples_ac.spice)，低过驱动尾管 + 隔直时钟；45 条件采样窗口 ≥ 0.5 UI（压力角完整扫描 0.88–1.00 UI；原设计 SS/FS 1.65 V 85 °C 为 0.06 UI），栅极时钟 325–866 mVpp（≥ 300 mVpp）。
 > **读出候选 demux2**（2026-11-02）：[rx_readout_demux2](../../analog/rx/sampler/spice/rx_readout_demux2.spice)，CML 1:2 分路（÷2 的 q/m 两个 1 GHz 域）+ 匹配 CML→CMOS 转换；45 条件数据逐位正确、边沿判定正确；默认尺寸 p2（恒定 τ 半尺寸）数据 CML 余量 ≥ 170 ps、CMOS 采样余量 334–452 ps，读出约 10 mA（测试台 31–51 mW）。
@@ -8,18 +8,13 @@
 > **失调修调 ac_trim**（2026-11-03）：主锁存器辅助对 + 6 bit DAC + 两边沿 SAR 前台校准（[失调修调](#失调修调2026-11-03)）；45 条件窗口与 ac 相同，读出 deser16 45 条件逐位正确；量程 ±33–49 mV、步长 1.06–1.55 mV；每路校准后残差 3σ 2.2–4.4 mV（含 CTLE 与 27 °C 校准后的温漂），不修调约 27–30 mV。采样器有迟滞（判决依赖本路上一次判决；空闲输入下 ±2.4–4 mV，斜坡台上两向阈值差 9–10.5 mV），单次 SAR 会落在迟滞带内任意处（联调 2–3 mV 偏差），所以校准分别找两个边沿再取中点：联调后数据模式残差 TT ≤ 1.22 mV、SS 1.65 V 85 °C ≤ 0.33 mV。
 > **时钟 cmix 120 fF**（2026-11-04，真实偏置 + PDK 电阻）：PI 混合器每腿 200 → 120 fF，SS 1.65 V 85 °C R hh 的栅极时钟 264 → 323 mVpp；链路窗口 45 × 电阻 tt/ll/hh 全部通过，最差 0.81 UI（[下文](#真实偏置--pdk-电阻2026-11-05)）。
 > **读出 ÷2（I-33，2026-11-06）**：保持管 W 80 → 40，FS 1.65 V 85 °C hh 的 ÷2 输出 76 → 297 mVpp，读出恢复 0 错；保留源跟随器。压力角通过，FS 1.65 V −40 °C hh、FF 1.95 V −40 °C hh 工作点不收敛没有结果，读出 45 × 电阻角未跑（单元级 45 × hh / ll 全部正确，最低 281 mVpp）。
-> **主要缺口**：PI 压力角已过（下文），读出 PVT 失败（原设计）；锚点是理想相关多相源，没接原生 PLL；pair 对齐依赖全速 CML→CMOS（SS 冷角失效）；孔径/失调/亚稳态未表征。
+
+> **历史证据复核（2026-11-07）**：旧45点读出波形完整，但deck动态include工作区源码，缺少包含电路的历史快照；旧报告所称W80/理想R不能凭当前文件追认。新压力点的PDK快照可以明确追踪W40。[清点与审查](../work_packages/deliveries/WP-003/summary.md)保留每次尝试及未知项；历史summary的PRBS结果未在此次重算。
+> **主要缺口**：当前W40读出全链真实偏置/RC网格未闭合，FS/FF冷hh数值未完成；原生PLL锚点、动态PVT/生产参数CDR、真实失配下完整校准仍缺。失调已有局部MC与修调分析；孔径/亚稳态概率和噪声未闭合。
 
 ## 电路
 
-```mermaid
-flowchart LR
-  PLL[2 GHz 四对锚点 0/45/90/135°] --> SEL[相位选择 A/B] --> MIX[两个电流加权混合器] --> REC[恢复 buffer]
-  REC --> CK[D0/E0/D1/E1 四相]
-  CTLE[CTLE 输出] --> IB[输入 buffer] --> DFF[四个 CML 主从 DFF]
-  CK --> SFT[时钟源跟随器 1.65→0.95 V] --> DFF
-  DFF --> CV[静态 CML→CMOS] --> AL[CMOS DFF pair 对齐] --> RTL[数字 CDR]
-```
+![RX采样、读出与控制边界](../figures/system/rx_blocks.png)
 
 | 部分 | 参数 |
 |---|---|
@@ -28,9 +23,9 @@ flowchart LR
 | PI 恢复 buffer | 输入 W = 48 µm、尾 12 µm、600 Ω |
 | 码 → 相位 | c = 8q + f，每码 7.8125 ps = 0.03125 UI；偶数扇区 A = q、B = q + 1，奇数扇区交换 |
 | 采样输入 buffer | W = 24 µm、尾 12 µm、600 Ω |
-| 采样 DFF | 数据/保持/时钟/尾 = 16/48/32/12 µm，600 Ω；四相顺序 D1 → E0 → D0 → E1，每段 125 ps |
-| CMOS 读出 | 静态数据接收器（源跟随 + 镜像负载差分级 + 两级反相器），支持长同码 |
-| pair 对齐 | 公共时钟取自 EDGE 相位经全速 CML→CMOS 和两级 buffer；四个 CMOS DFF 重定时；E0 加两反相器 + 20 fF 延迟 |
+| 当前采样 DFF | ac低过驱尾W72/nf24；ac_trim主级额外8指与辅助对；600 Ω；不再用旧stock的W12尾管 |
+| 当前 CMOS 读出 | CML先1:2分路，再匹配静态转换；CMOS1:4/Johnson产生16 UI字及w；÷2保持W40 |
+| 旧stock/pair对照 | stock DFF数据/保持/时钟/尾16/48/32/12 µm；直接转CMOS＋pair重定时已被当前物理读出路线替代 |
 
 ## 已验证结果
 
@@ -452,14 +447,15 @@ CMOS 读出后码 0/4/8 各 48 位对齐数据零错位；读出后的鉴相零�
 
 ## 适用范围
 
-- 只有 TT；锚点为理想相关多相源；输入为确定码型。
-- 读出与对齐用固定延迟方案，只验证 TT；读出在公共时钟后 350 ps。
-- 约 190 mV 是输出判决裕量，不是输入灵敏度；孔径、setup/hold、失调、kickback、亚稳态未表征。
+- 锚点仍是理想相关多相源。窗口为45×tt/hh/ll，其中每RC6个压力点完整扫、其余39点查门槛；不含当前物理读出/CDR闭环。
+- 旧理想边界deser16有45点逐位和位映射验证；当前W40、真实偏置/RC只有压力点，动态PI/物理CDR主要TT；各节单独标出变体与边界。
+- 失调/迟滞/回踢已有局部分析与MC，96样本校准后结果用理想选码；实际两边沿SAR用注入失调联调，未完成真实随机失配下完整启动统计。
+- 约190 mV是早期TT输出判决裕量，不是输入灵敏度；setup/hold已在读出中测量，孔径/亚稳态概率及噪声尚未闭合。无提取寄生或系统域CDC。
 
 ## 待解决
 
-- RX PVT（[问题清单](../status/open_issues.md) I-14）：采样器候选 ac（c2）已过 45 条件窗口和 300 mVpp 栅极时钟；读出（CML→CMOS + pair 对齐）接 ac 后重做 PVT；本地偏置比例校准；隔直电容/电阻换成实际器件。
-- 读出 deser16 的未覆盖项：PI 步进与背靠背字流的 PVT（两者只有 TT）、版图寄生；旧的 pair 对齐（全速 CML→CMOS，I-04）只剩联调夹具在用。
+- RX PVT（[问题清单](../status/open_issues.md) I-14）：当前ac_trim/c2/120f窗口已覆盖135条件；读出W40的真实偏置/RC网格、原生锚点与动态PVT未闭合；隔直RC仍有理想器件/短bench设置。
+- 读出deser16的未覆盖项：PI步进与背靠背字流的PVT（两者只有TT）、版图寄生；旧pair仅在历史/对照夹具中保留，当前words/cal联调已用deser16。
 - 失调修调（ac_trim）的剩余项：
   - 用真实失配样本代替注入电流的联调；
   - 背靠背链路换成 ac_trim 后复跑；

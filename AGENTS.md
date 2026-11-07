@@ -2,6 +2,8 @@
 
 这份文件写给接手本项目的 agent（以及项目所有者自己）。项目会在不同 agent 之间迁移，先读这里，再读 [README](README.md)。
 
+跨模块接手入口：[交互设计工作台](web/design/README.md)与[详细模块状态](docs/overview/development_map.md)。按 SerDes→TX/Bias/RX/PLL/Channel→子模块组织；每个模块承载边界、行为/理论规划、参数、电路改进和验证记录。PLL 完整电路与启动顶层已有，近期修改作为子模块的迭代推进，不以重复整机长仿真作为每步前提。新结果注明迭代与实际激励/负载边界。
+
 ## 项目与规格
 
 SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL → 16:1 CML 电流舵串化 → 100 Ω 线驱动；RX 为端接/CTLE → PI → 四相半速 CML 采样 → 数字 CDR → 16 位解串。
@@ -29,7 +31,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 | ngspice 共享库 | `~/.local/opt/ngspice47-shared`（混合仿真用） |
 | Xyce | `~/.local/eda/bin/Xyce` 7.10，SKY130 兼容性未验证 |
 | PDK | `config/pdk.toml`，sky130A，模型 `libs.tech/ngspice/sky130.lib.spice` |
-| 数字 | Verilator 4.028、iverilog、yosys 0.9（旧），无 OpenSTA |
+| 数字 | Verilator 4.028、iverilog、yosys 0.9（旧）；OpenSTA 2.0.17 在 `~/.local/opt/opensta-focal-20191111/usr/bin/sta`，已用于guard局部可行性检查，尚非签核流程 |
 
 本机 8 核 / 7 GB 内存：并发 ngspice 不超过 4 个。TX 整链单点约 2 分钟，45 点约 1.7 CPU 小时。
 

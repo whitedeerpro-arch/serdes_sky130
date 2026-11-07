@@ -2,33 +2,24 @@
 
 > 一个共享 2 GHz 多相 PLL 驱动本地 TX 串化器和每路 RX 的相位插值器；TX 是 16:1 的 2:1 CML 选择树，RX 是半速四相采样加数字 PI-CDR。所有电路先按模块独立验证，再用实际负载/电平/边界条件逐层衔接。
 
+逐块工作变体、选用状态、PVT/失配/噪声及开发依赖见 **[设计框图与开发状态](development_map.md)**。本页是连接关系，不代表所有箭头已在同一套实际电路中验证。
+
 ## 系统框图
 
-```mermaid
-flowchart LR
-  REF[参考 250 MHz] --> PFD[PFD/CP/LF]
-  PFD --> VCO[2 GHz 四级环振，八相]
-  VCO --> EXT[四路抽出 buffer + dummy]
-  EXT --> DIV[CML ÷8 → CMOS 250 MHz] --> PFD
-  EXT --> TCK[TX 时钟分发：250M/500M/1G/2G]
-  TCK --> SER[16:1 CML 串化器] --> DRV[线驱动 50 Ω 源端] --> CH[100 Ω PCB]
-  CH --> TERM[50 Ω 端接] --> CTLE[CTLE] --> SMP[四相 CML 采样]
-  EXT --> PI[每路 RX 的 PI，64 码]
-  PI --> SMP
-  SMP --> RD[CMOS 读出 / pair 对齐] --> CDR[数字 CDR + 16 位解串]
-  CDR -->|±1 码| PI
-```
+![PLL、偏置与TX模块边界](../figures/system/clock_tx_blocks.png)
+
+![RX模块边界与控制回路](../figures/system/rx_blocks.png)
 
 ## 时钟域
 
 | 时钟域 | 来源 | 用途 | 状态 |
 |---|---|---|---|
-| VCO 多相 CML | 2 GHz 环振，四路差分抽出，八个极性 | TX 时钟分发、RX PI 锚点、PLL 反馈 | 实现 |
-| PLL 反馈 | VCO 支路 0 → 三级 CML ÷2 → CML→CMOS → 250 MHz | PFD | 实现，45 条件功能通过 |
-| TX 选择时钟 | 不同支路 prescaler 的 ÷8/÷4/÷2 抽头和 2 GHz 抽出，经微调/扇出 buffer | 串化器四级选择 | 实现；分频状态无确定性复位 |
+| VCO 多相 CML | 2 GHz 环振，四路差分抽出，八个极性 | TX选择时钟、RX PI锚点、PLL反馈 | r5/4 bit候选；RX仍用理想相关锚点 |
+| PLL 反馈 | VCO 支路0→三级CML ÷2→CML→CMOS→250 MHz | PFD | 标准输入真实偏置hh/ll各45点；原生r5闭环未资格验证 |
+| TX 选择时钟 | r2：独立prescaler抽头＋微调；v3：同一2G源同步计数器＋复制单元 | 串化器四级选择 | r2基线；v3回放15点、原生静态8点；实际字捕获/保持及完整TX已接，extra3在TT/FS热/SS冷三点眼图满足，内部摆幅仍开 |
 | 自由 CMOS 分频 | 多相 CML 转成的 CMOS 时钟（最高 2 GHz）再按需分频 | 其他时钟域 | 仅定义；旧 4 位 CMOS 分频只在 250 MHz 输入下验证过 |
 | RX 恢复时钟 | PI 输出四相 2 GHz | 数据/边沿采样 | 实现 |
-| RX 恢复字时钟 | 恢复时钟 16 UI，标称 250 MHz | CDR 控制、解串 | RTL 中实现；物理分频未实现 |
+| RX 恢复字时钟 | PI后时钟取点→CML ÷2→CMOS Johnson ÷4，w每16 UI | CDR控制、字输出 | 物理deser16已实现；旧理想边界45点，当前W40真实偏置/RC全网格未闭合 |
 | 系统时钟 | 外部 | 并行接口 | 需要弹性 FIFO/CDC，未设计 |
 
 PLL 反馈与时钟分发是两项独立功能：调整后级派生时钟不改变 VCO；默认反馈总分频为 8。500 MHz 参考在 VCO ≤ 2 GHz 时不能走 ÷8，要用 ÷4 抽头（选择与未用级关断尚未集成）。低参考（如 50 MHz → 400 MHz VCO）只用于低线速，现有电容阵列未证明覆盖 400 MHz。
@@ -66,7 +57,7 @@ PLL 反馈与时钟分发是两项独立功能：调整后级派生时钟不改�
 
 ## 编码与速率
 
-当前冻结的是 4 Gb/s 原始线速、16 bit × 250 MHz，不含编码。若加 8b/10b：保持 4 Gb/s 线速时有效载荷上限 3.2 Gb/s；保持 4 Gb/s 有效载荷则线速需 5 Gb/s，现有时钟计划不支持。可选 16 bit × 200 MHz → 20 bit 编码 → 20→16 gearbox。编码、加扰、gearbox 尚未加入；模拟开发用训练标记/PRBS。
+当前目标是 4 Gb/s 原始线速、16 bit × 250 MHz，不含编码。若加 8b/10b：保持 4 Gb/s 线速时有效载荷上限 3.2 Gb/s；保持 4 Gb/s 有效载荷则线速需 5 Gb/s，现有时钟计划不支持。可选 16 bit × 200 MHz → 20 bit 编码 → 20→16 gearbox。编码、加扰、gearbox 尚未加入；模拟开发用训练标记/PRBS。
 
 ## 目录与所有权
 
@@ -91,7 +82,7 @@ PLL 反馈与时钟分发是两项独立功能：调整后级派生时钟不改�
 | cmos_to_cml | clk_in/数据、outp、outn、偏置、vdd、vss |
 | pfd | ref、fb、rst_b、up、dn、vdd、vss；rst_b 低有效，UP/DN 高有效 |
 | cp | up、dn、out、vbn、vbp、vdd、vss；UP 注入电荷 |
-| vco | 八个输出、vctrl、b0–b2、vbias、vdd、vss |
+| vco | 八个输出、vctrl、粗码b0–b2（3 bit）／cfg0–cfg3（4 bit候选）、vbias、vdd、vss |
 | divider（prescaler8） | clkp、clkn、q2/q4/q8 差分抽头、vbias、vdd、vss |
 | loop_filter | cp_in、ctrl、z、pre_ref、pre_en、vdd、vss（预充版） |
 | rx_input_termination | inp、inn、vcm；两只 50 Ω |

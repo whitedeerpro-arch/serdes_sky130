@@ -1,0 +1,50 @@
+digraph clock_tx_blocks {
+  graph [rankdir=TB, bgcolor="#fafbfc", pad=0.3, nodesep=0.5, ranksep=0.6, fontname="Noto Sans CJK SC", fontsize=20,
+         labelloc=t, label="时钟 / 偏置 / TX：模块结构与局部迭代\n模块边界 → 模型规划 → 参数改进 → 局部验证"];
+  node [shape=box, style="rounded,filled", fillcolor="#e4f2ea", color="#3d7960", fontname="Noto Sans CJK SC", fontsize=11, margin="0.12,0.1"];
+  edge [color="#526474", arrowsize=0.65, fontname="Noto Sans CJK SC", fontsize=9];
+  subgraph cluster_bias {
+    label="偏置与启动支撑"; color="#cbd6de"; fontsize=14;
+    B01 [label="B01 / B02  带隙 → V/I → 分配\n5 bit r_ref，局部二极管 / 去耦\nDC/上电135；局部MC200"];
+    B03 [label="B03  RX vcm 1.05 V\n缓冲已做135点\n系统端接加载待验"];
+    B04 [label="B04  B2 预充参考\n16档 0.95–1.35 V；405点\nr5目标 / 捕获待对齐"];
+    C09 [label="C09 / C10  启动监督 / 粗搜\n监督RTL已有；ready/质量检测缺\n4 bit粗搜 / 无扰切码未实现", fillcolor="#fff0d5", color="#ae7d28"];
+    {rank=same; B01; B03; B04; C09;}
+    B01 -> B03; B01 -> B04; B04 -> C09 [style=dashed, label="集成未验"];
+  }
+  subgraph cluster_pll {
+    label="PLL：完整顶层已有；VCO、分频、PFD、CP与LF在模块内持续迭代"; color="#cbd6de"; fontsize=14;
+    REF [label="参考 250 MHz", fillcolor="white", color="#708090"];
+    C06 [label="C06  PFD\nCMOS三态结构\n45×三相差电荷方向"];
+    C07 [label="C07 / C08  CP + LF\n已实现50 µA / 40p+2p / 6.5k\nk2/3/4与物理LF尚未选定", fillcolor="#fff0d5", color="#ae7d28"];
+    C01 [label="C01  r5 VCO / 4 bit候选\n2 GHz工作区135；三温共同码45/45组\n相噪7点为3 bit；MC未完成", fillcolor="#fff0d5", color="#ae7d28"];
+    C02 [label="C02  四路抽出 + 3 dummy\n负载对称，实际RX扇出未验\n仍含功耗优化空间"];
+    C03 [label="C03 / C04  ÷8 + 反馈转换\n首级W40，后两级W80\n真实偏置hh/ll各45点"];
+    C05 [label="C05  r4 全速CML→CMOS\n理想边界45 / 原生5点\n过冲、真实RC、MC待验"];
+    {rank=same; REF; C06; C07; C01; C02;}
+    {rank=same; C03; C05;}
+    REF -> C06 -> C07 -> C01 -> C02;
+    C02 -> C03 [label="2 GHz"];
+    C03 -> C06 [label="250 MHz反馈", constraint=false];
+    C02 -> C05 [label="全速输出"];
+  }
+  subgraph cluster_tx {
+    label="TX：串化 / 驱动 r2 已实现；选择时钟 v3 为结构改进"; color="#cbd6de"; fontsize=14;
+    T01 [label="T01  完整字捕获＋两组8位保持\n首级6压力；B关闭切片12组\n选择时钟改进后TT/FS/SS冷眼图过\n控制SS时序不足；MC/噪声待验", fillcolor="#fff0d5", color="#ae7d28"];
+    T02 [label="T02  选择时钟\nr2基线 / v3同步计数器候选\nv3回放15点；原生静态8/10\nextra2g=3新入口TT/FS/SS冷眼图过", fillcolor="#fff0d5", color="#ae7d28"];
+    T03 [label="T03  r2 16:1 CML串化\n含输入电平转换与末级重定时\n理想TT时钟边界45；MC未做", fillcolor="#e5eefb", color="#527ba0"];
+    T04 [label="T04  r2 线驱动 / 使能\n约8 mA，源端2×50 Ω\n理想参考45点；实际供电待验", fillcolor="#e5eefb", color="#527ba0"];
+    X01 [label="X01  AC / pad / PCB\nC2为设计信道；RLC16回归负载\n合成模型，非实板提取", fillcolor="white", color="#708090"];
+    {rank=same; T01; T03; T04; X01;}
+    T01 -> T03 [label="分组保持；完整树已接候选"];
+    T02 -> T01 [label="250 MHz字时钟"];
+    T02 -> T03 [label="250M / 500M / 1G / 2G"];
+    T03 -> T04 -> X01;
+  }
+  B01 -> C01 [color="#8f68a9", style=dotted, label="模块电流拷贝", constraint=false];
+  B04 -> C07 [color="#8f68a9", style=dotted, label="预充", constraint=false];
+  C09 -> C06 [style=dashed, label="en/reset；全启动待验", constraint=false];
+  C02 -> T02 [label="原生v3只用2G；r2用分频抽头", constraint=false];
+  B04 -> C07 [style=invis, weight=100];
+  C03 -> T02 [style=invis, weight=100];
+}

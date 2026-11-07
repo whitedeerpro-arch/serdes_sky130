@@ -1,0 +1,41 @@
+digraph rx_blocks {
+  graph [rankdir=TB, bgcolor="#fafbfc", pad=0.3, nodesep=0.65, ranksep=0.65, fontname="Noto Sans CJK SC", fontsize=20,
+         labelloc=t, label="RX：当前方向 ac_trim + c2 + deser16；原生PLL、实际校准与动态PVT尚未连成同一套证据"];
+  node [shape=box, style="rounded,filled", fillcolor="#e4f2ea", color="#3d7960", fontname="Noto Sans CJK SC", fontsize=11, margin="0.12,0.1"];
+  edge [color="#526474", arrowsize=0.65, fontname="Noto Sans CJK SC", fontsize=9];
+  INPUT [label="C2 PCB / 远端边界回放\n当前多为理想或记录的NRZ\n背靠背仅TT固定PI码", fillcolor="white", color="#708090"];
+  ANCHOR [label="C02 原生四对八相\n当前RX仍用理想相关锚点\n原生源/扇出/间距未验", fillcolor="#fff0d5", color="#ae7d28"];
+  BIAS [label="B02 / B03 偏置与vcm\n真实偏置已进入窗口135点\n物理CDR夹具仍理想参考", fillcolor="#e5eefb", color="#527ba0"];
+  R01 [label="R01  端接 + CTLE\n2×50 Ω / vcm1.05 V / EQ3\n独立MOS45；TT失调MC200"];
+  R02 [label="R02  PI / 64码\ncmix120f；数据/边沿两对输出\n静态6压力角×hh/ll；MC为模型"];
+  R03 [label="R03  输入buffer + 四相采样\nac_trim；c2时钟；主尾dtail8\n无读出窗口135；校准MC有条件"];
+  subgraph cluster_readout {
+    label="R04 物理读出：已经实现；当前W40全网格未闭合"; color="#cbd6de"; fontsize=13;
+    DIV [label="读出时钟 CML ÷2\n保持W40 → 两相1 GHz\n冷角hh两点数值未完成", fillcolor="#fff0d5", color="#ae7d28"];
+    DEMUX [label="4路采样 → CML 1:2分路\n8路静态CML→CMOS\n匹配数据/时钟转换延迟"];
+    DESER [label="CMOS 1:4 / Johnson字选通\n16数据 + 16边沿 + w≈250 MHz\n旧W80理想边界45；MC未做"];
+    {rank=same; DIV; DEMUX; DESER;}
+    DIV -> DEMUX [label="读出时钟"];
+    DEMUX -> DESER;
+  }
+  R06 [label="R06  映射 / 投票 / CDR / 字对齐\nKP8192生产；KP65536物理冒烟\n行为100µs；物理TT短窗", fillcolor="#e4f2ea"];
+  R05 [label="R05  两边沿顺序SAR + 6bit DAC\nTT/SS热：注入失调联调\n96样本是理想选码，非实际SAR MC"];
+  R07 [label="R07  系统域 FIFO / CDC\n尚未设计\n恢复字时钟 ≠ 系统时钟", fillcolor="#eeeeee", color="#777777", style="rounded,filled,dashed"];
+  {rank=same; ANCHOR; R02; BIAS;}
+  {rank=same; INPUT; R01; R03; R05;}
+  {rank=same; R06; R07;}
+  R02 -> R01 [style=invis, weight=100];
+  DEMUX -> R06 [style=invis, weight=100];
+  INPUT -> R01 -> R03 [label="模拟数据"];
+  ANCHOR -> R02 [style=dashed, label="待原生接入 / 当前理想源"];
+  R02 -> R03 [label="D0 / E0 / D1 / E1"];
+  R03 -> DEMUX [label="4路采样"];
+  R03 -> DIV [label="_rk取点"];
+  DESER -> R06 [label="32样本 + w"];
+  R06 -> R07 [style=dashed, label="恢复域16位字"];
+  R06 -> R02 [label="±1步 / one-hot + 温度计码", color="#8f68a9", constraint=false];
+  R05 -> R03 [label="24根修调控制", color="#8f68a9", constraint=false];
+  R05 -> R06 [style=dashed, label="cal_done前关闭CDR", constraint=false];
+  BIAS -> R01 [style=dotted, color="#8f68a9", constraint=false];
+  BIAS -> R03 [style=dotted, color="#8f68a9", constraint=false];
+}

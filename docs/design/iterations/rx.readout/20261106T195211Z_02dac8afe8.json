@@ -1,0 +1,23 @@
+{
+  "id": "20261106T195211Z_02dac8afe8",
+  "module": "rx.readout",
+  "date": "2026-11-07",
+  "timestamp": "2026-11-06T19:52:11.675614+00:00",
+  "title": "历史读出尺寸与边界清点：保留未知，修正TT库段分类",
+  "phase": "validation",
+  "problem": "旧45点与近期W40读出边界混用，历史include动态引用工作区源码，难以复原尺寸。",
+  "model": "固定10个目录，沿实际deck/includes追参数与PDK快照，逐raw检查终点与有限性，PRBS结论仅摘录历史summary。",
+  "changes": "Terra交叉核查指出3项问题；集成者修复TT/hh库段别名和缺失输入检查契约，补2个回归，收紧历史W80/理想R表述。",
+  "validation": "固定集合54计划条件，63正式尝试及1smoke；52输出完整，7完整性失败，5输出缺失。633现有输入身份与6缺失路径保留，指定压力边界7/12格具完整正式输出；不是全仓库覆盖率。",
+  "conclusion": "清点交付经review接受，未新增PRBS、噪声或当前全角签核。旧包含电路尺寸保持未知，当前W40单独回归；只有smoke的冷角重试不计正式完成。",
+  "attachments": [
+    {
+      "title": "清点摘要",
+      "path": "docs/work_packages/deliveries/WP-003/summary.md"
+    },
+    {
+      "title": "集成者review",
+      "path": "docs/work_packages/reviews/WP-003.md"
+    }
+  ]
+}

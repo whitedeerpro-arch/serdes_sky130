@@ -1,0 +1,68 @@
+revision = "ac_trim_c2_cmix120_deser16_w40_working"
+status = "module_direction_selected; per_bench_variants_and_boundaries_differ; no_unified_system_signoff"
+report = "docs/design/rx_pi_sampler.md"
+integration_map = "docs/overview/development_map.md"
+
+[frontend]
+termination = "analog/rx/input/spice/rx_input_termination.spice"
+ctle = "analog/rx/ctle/spice/rx_ctle_rc.spice"
+channel = "C2_loss6"
+eq_code = 3
+vcm_target_v = 1.05
+real_vcm_buffer_system_loading_qualified = false
+
+[pi]
+implementation = "analog/rx/pi/spice/pi_rotator.spice"
+cell = "serdes_pi_rotator"
+cmix_f = 1.2e-13
+static_scope = "6_stress_MOS_V_T_points_x_hh_ll_x_64_codes; real_bias_PDK_R; ideal_phase_anchors"
+native_pll_anchors_qualified = false
+transistor_mismatch_mc_completed_for_current_variant = false
+mismatch_evidence = "unit_error_propagation_model; historical_sampler_MC_contains_clock_path"
+
+[sampler]
+implementation = "analog/rx/sampler/spice/rx_half_rate_samples_ac.spice"
+trim_implementation = "analog/rx/sampler/spice/rx_offset_trim.spice"
+window_cell = "serdes_rx_half_rate_samples_ac_trim"
+readout_cell = "serdes_rx_half_rate_samples_ac_trim_rk"
+clock_buffer_variant = "c2"
+extra_master_tail_fingers = 8
+clock_bias_resistor_dut_ohm = 50000
+clock_bias_resistor_short_bench_ohm = 2000
+window_scope = "45_x_tt_hh_ll; per_RC_6_full_sweeps_and_39_gate_points; real_bias_PDK_R; trim32; no_readout_rk_load"
+window_scope_includes_deser16 = false
+calibrated_mc_scope = "96_samples_single_lane_TT_3_temperatures; ideal_codes_from_rising_ramp; not_actual_SAR_MC"
+
+[readout]
+implementation = "analog/rx/sampler/spice/rx_readout_deser16.spice"
+cell = "serdes_rx_readout_deser16"
+front = "analog/rx/sampler/spice/rx_readout_demux2.spice"
+divider_hold_width_um = 40
+old_full45_scope = "ideal_reference_current; fixed_PI20_trim32; old reports say W80/ideal_R, but mutable includes lack historical circuit snapshots; current_W40_requires_regression"
+readout_lineage_report = "docs/work_packages/deliveries/WP-003/summary.md"
+current_scope = "selected_real_bias_PDK_R_stress_points; FS_and_FF_cold_hh_missing; 90_point_RX_loaded_div2_unit_map"
+current_full45_rc_completed = false
+physical_word_clock_implemented = true
+
+[digital]
+word_map = "digital/rx/rtl/rx_word_map.sv"
+word_align = "digital/rx/rtl/rx_word_align16.sv"
+controller = "digital/rx/rtl/rx_cdr_loop.sv"
+commutator = "digital/rx/rtl/pi_step_commutator.sv"
+calibration = "digital/rx/rtl/rx_offset_cal.sv"
+calibration_policy = "sequential_two_edge_SAR; precondition_each_trial; idle_input_and_CDR_disabled"
+production_kp_q = 8192
+production_ki_q = 32
+physical_smoke_kp_q = 65536
+behavioral_frequency_scope = "10_scenarios_100us; includes_plus_minus300ppm"
+physical_scope = "TT_short_windows; ideal_anchors_and_references; ac_rk; KP65536"
+calibration_cosim_scope = "TT_SS_low_voltage_hot; injected_offsets; ac_trim_rk; SS_long_run_interrupted_after_observed_payload"
+library_mapped_sta_completed = false
+system_fifo_cdc_implemented = false
+
+[variants]
+stock = "historical; follower_clock_shift_and_global_tail_bias; low_voltage_hot_window_failure"
+ac = "untrimmed_low_overdrive_AC_clock; reusable_comparison; physical_words_and_b2b_evidence"
+ac_cal = "rejected_current_injection_trim; excessive_temperature_dependence"
+ac_trim = "voltage_trim_auxiliary_pair; selected_direction; window_MC_calibration_evidence_have_different_scopes"
+pair_alignment = "historical_2GHz_CMOS_route; not_current_deser16_architecture"

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "review_owner": "integrator",
+  "remote": null,
+  "packages": [
+    {
+      "id": "WP-001",
+      "module": "pll.extraction",
+      "difficulty": "mechanical",
+      "state": "accepted",
+      "task": "docs/work_packages/WP-001-pll-waveform-audit.md",
+      "script": "verification/work_packages/wp001_pll_waveforms.py",
+      "delivery": "docs/work_packages/deliveries/WP-001",
+      "review": "docs/work_packages/reviews/WP-001.md",
+      "dependencies": [],
+      "simulation_budget": 0,
+      "executor": "recovered_script_and_integrator_review",
+      "review_result": "42 pass and 3 ungraded; same-window raw audit and per-edge divider checks"
+    },
+    {
+      "id": "WP-002",
+      "module": "tx.capture",
+      "difficulty": "extraction_and_model",
+      "state": "accepted",
+      "task": "docs/work_packages/WP-002-tx-ingress-facts.md",
+      "script": "verification/work_packages/wp002_tx_ingress.py",
+      "delivery": "docs/work_packages/deliveries/WP-002",
+      "review": "docs/work_packages/reviews/WP-002.md",
+      "dependencies": [],
+      "simulation_budget": 0,
+      "executor": "gpt-6.1-terra",
+      "review_result": "independent evidence equality; 0 code rework; facts only"
+    },
+    {
+      "id": "WP-003",
+      "module": "rx.readout",
+      "difficulty": "mechanical",
+      "state": "accepted",
+      "task": "docs/work_packages/WP-003-rx-readout-lineage.md",
+      "script": "verification/work_packages/wp003_rx_lineage.py",
+      "delivery": "docs/work_packages/deliveries/WP-003",
+      "review": "docs/work_packages/reviews/WP-003.md",
+      "dependencies": [],
+      "simulation_budget": 0,
+      "executor": "gpt-6.1-terra",
+      "review_result": "3 findings; 2 integrator code fixes and 2 regressions; historical failures retained"
+    },
+    {
+      "id": "WP-004",
+      "module": "tx.capture",
+      "difficulty": "bounded_constraint_model",
+      "state": "accepted",
+      "task": "docs/work_packages/WP-004-tx-capture-model.md",
+      "script": "verification/work_packages/wp004_ingress_windows.py",
+      "delivery": "docs/work_packages/deliveries/WP-004",
+      "review": "docs/work_packages/reviews/WP-004.md",
+      "dependencies": [
+        "WP-002"
+      ],
+      "simulation_budget": 0,
+      "executor": "gpt-6.1-terra",
+      "review_result": "independent JSON equality; one floating-point zero-margin fix and provenance completion; 3 regressions pass; interval model only"
+    },
+    {
+      "id": "WP-005",
+      "module": "tx.capture",
+      "difficulty": "mechanical_waveform_audit",
+      "state": "ready",
+      "task": "docs/work_packages/WP-005-tx-staggered-waveform-audit.md",
+      "script": "verification/work_packages/wp005_staggered_waveforms.py",
+      "delivery": "docs/work_packages/deliveries/WP-005",
+      "review": "docs/work_packages/reviews/WP-005.md",
+      "dependencies": [
+        "WP-002",
+        "WP-004"
+      ],
+      "simulation_budget": 0,
+      "executor": "external_unassigned",
+      "release_gate": "released: six complete receiver stress conditions, 48 words correct; source identity fixed"
+    },
+    {
+      "id": "WP-006",
+      "module": "pll.coarse",
+      "difficulty": "bounded_behavior_model",
+      "state": "ready",
+      "task": "docs/work_packages/WP-006-pll-4bit-coarse-plan.md",
+      "script": "verification/work_packages/wp006_pll_coarse.py",
+      "delivery": "docs/work_packages/deliveries/WP-006",
+      "review": "docs/work_packages/reviews/WP-006.md",
+      "dependencies": [],
+      "simulation_budget": 0,
+      "executor": "external_unassigned; Terra_preparation_reviewed",
+      "review_result": "Partial evidence preparation only; 135 conditions and 45 fixed-code temperature groups; behavior model not implemented"
+    }
+  ],
+  "dispatch_policy": "external-ready packets; internal parallel execution only when explicitly requested; choose Terra for the authorized bounded trial; per-package simulator quotas coordinated by integrator"
+}

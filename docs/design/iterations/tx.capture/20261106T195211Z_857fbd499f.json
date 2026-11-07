@@ -1,0 +1,35 @@
+{
+  "id": "20261106T195211Z_857fbd499f",
+  "module": "tx.capture",
+  "date": "2026-11-07",
+  "timestamp": "2026-11-06T19:52:11.672747+00:00",
+  "title": "实际负载下比较精简与复位DFF，准备字更新约束",
+  "phase": "validation",
+  "problem": "现有串化输入仍是理想发数或静态首字，未实现字入口；缺实际加载后的捕获/转换延迟与字时钟扇出边界。",
+  "model": "同端口30ps时钟，两种已有DFF分别驱动真实CMOS/CML和首级MUX输入，静态选中/未选中对照；下游5fF代理。先用单元card校准结构模型，再检查允许字更新窗。",
+  "changes": "保留既有器件尺寸，新增有真实偏置/PDK R tt的入口单元card，按工艺角合并并限制2 worker；精简无复位数据DFF列为优先候选，未采用完整16位入口。",
+  "validation": "6压力条件×2加载状态12例完整，共120次捕获正确；Q/CML每次捕获后1ns内均恰有一次交越。精简型时钟到CML 91–281ps，复位型216–788ps。单DFF时钟电荷等效5.7–8.7fF，16路约91–139fF，未含额外负载。",
+  "conclusion": "优先考察精简数据存储并明确valid/启动屏蔽。实际时钟驱动、更新窗、孔径、位映射与跨字一致性仍未测。WP-004已给出可外发的固定相位可行区约束，不冒充动态设计证明。",
+  "attachments": [
+    {
+      "title": "入口设计与单元边界",
+      "path": "docs/design/tx_ingress.md"
+    },
+    {
+      "title": "实测延迟图",
+      "path": "docs/figures/tx/ingress/tx_ingress_loaded_delay.png"
+    },
+    {
+      "title": "单元数据",
+      "path": "docs/data/tx_ingress_card.json"
+    },
+    {
+      "title": "事实review",
+      "path": "docs/work_packages/reviews/WP-002.md"
+    },
+    {
+      "title": "可外发约束包",
+      "path": "docs/work_packages/WP-004-tx-capture-model.md"
+    }
+  ]
+}

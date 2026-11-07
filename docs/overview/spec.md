@@ -41,7 +41,7 @@
 
 各量的精确定义（裕量、散布、训练定相、眼图显示）见 [测量约定](../verification/measurement_conventions.md)。
 
-2026-11-06 核对：共模公式修正了单端/差分的二倍关系，没有改变 400 mVpp 上界。部分内部时钟的现有实测超过该上界，功能窗口通过不能代替幅度符合性；逐节点状态待核对，见 [I-17](../status/open_issues.md) 和[设计评估](../history/design_coupling_review_20261106.md)。
+2026-11-06 核对：共模公式修正了单端/差分的二倍关系，没有改变 400 mVpp 上界。内部实测超过该上界，功能窗口通过不能代替幅度符合性；2026-11-08已整理[完整TX逐节点摆幅](../design/tx_cml_amplitude.md)，见 [I-17](../status/open_issues.md) 和[设计评估](../history/design_coupling_review_20261106.md)。
 
 ## 抖动与相位噪声预算
 

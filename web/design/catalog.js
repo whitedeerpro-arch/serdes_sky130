@@ -607,6 +607,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "结构模型",
           "path": "analog/tx/clock_distribution/theory/clock_structures.py"
+        },
+        {
+          "title": "内部CML摆幅与尺寸约束",
+          "path": "docs/design/tx_cml_amplitude.md"
         }
       ],
       "iterations": [
@@ -692,6 +696,33 @@ window.DESIGN_CATALOG = {
               "path": "docs/data/tx_parallel_serializer.json"
             }
           ]
+        },
+        {
+          "id": "20261107T161235Z_1843ec1550",
+          "module": "tx.clocking",
+          "date": "2026-11-08",
+          "timestamp": "2026-11-07T16:12:35.275091+00:00",
+          "title": "完整TX逐节点摆幅定位",
+          "phase": "validation",
+          "problem": "串化眼图满足仍不能关闭400mVpp内部上限。",
+          "model": "完整时钟周期最小幅度与窗口极值分开；数据仅观察上界，共模按时间积分。",
+          "changes": "只读既有extra3 TT/FS热/SS冷三组120ns波形，校验来源与捕获/保持/计数后，在40–100ns逐节点归类。",
+          "validation": "原c2g约620–748mVpp，其他时钟、计数器、数据树与held亦有超幅；数据下限不评分。",
+          "conclusion": "I-17继续打开；按真实扇出逐层校准R/尾流与时序，最终c2g局部修复不能代表全部节点。",
+          "attachments": [
+            {
+              "title": "幅度图",
+              "path": "docs/figures/tx/ingress/tx_cml_amplitude_map.png"
+            },
+            {
+              "title": "范围和数据",
+              "path": "docs/design/tx_cml_amplitude.md"
+            },
+            {
+              "title": "局部尺寸工作方案",
+              "path": "docs/work_packages/deliveries/tx-cml-sizing-next.md"
+            }
+          ]
         }
       ]
     },
@@ -735,6 +766,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "工作电路",
           "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice"
+        },
+        {
+          "title": "内部CML摆幅与尺寸约束",
+          "path": "docs/design/tx_cml_amplitude.md"
         }
       ],
       "iterations": []

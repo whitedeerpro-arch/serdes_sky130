@@ -10,7 +10,7 @@
 | [末级边界框图](tx_final_retime_boundary.png) | 首级半字与末级偶/奇保持怎样区分，2G在哪改？ | 端口/局部跟随器/加载与候选中间级位置；非验收波形 |
 | [末级允许窗](tx_final_retime_window.png) | 后移关闭是否能恢复FS受检事件？ | 四基线＋20平移；两条件两事件理想电压回放 |
 | [实际缓冲级数](tx_final_clock_stage_comparison.png) | 真实额外中间级带来多少延迟及保持改善？ | extra1/2/3局部数学复制，先校准原级；完整TX候选另行验证 |
-
 | [输出尾宽/负载比较](tx_final_clock_output_sizing.png) | c2g减幅后是否保留时序与输出？ | extra3固定，24/300、18/240、16/240；TT/FS各两事件；局部未评分 |
+| [各层CML摆幅图](tx_cml_amplitude_map.png) | 超过400mVpp的节点分布在哪些模块？ | 完整120ns来源的40–100ns观察；数据下限不评分；[尺寸边界](../../../design/tx_cml_amplitude.md) |
 
 图名按对象与用途命名，UTC运行身份在对应数据索引中。当前结论见[完整字入口](../../../design/tx_word_capture.md)、[关闭切片](../../../design/tx_launch_hold.md)。图脚本与来源哈希放在各自小数据中，`.svg`可用于导出。

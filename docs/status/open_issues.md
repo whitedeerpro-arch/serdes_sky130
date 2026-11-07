@@ -36,7 +36,7 @@ FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完
 | I-13 | LF RC 极限角未接入闭环；物理 LF 候选（poly + MIM）未决定是否采用。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-15 | RX 物理 16 UI 降速：读出 deser16（CML 1:2 + CMOS 1:4，45 条件逐位正确）与 `rx_word_map` / `rx_word_align16` 已有，实时联调（TT）中 PI 步进、跨扇区与回卷下 payload 全部正确；PI 步进的 PVT 未做；系统时钟域 FIFO/CDC 未设计。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
 | I-16 | RX数字仍缺综合映射/STA。TX guard已用Yosys0.9与本地OpenSTA2.0.17做局部映射：SS时序不足，驱动增强/缓冲对照未闭合；不是45点或提取后签核。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |
-| I-17 | **政策已确认 2026-10-31，实测符合性待核对（2026-11-06）**：400 mVpp 是上界与驱动目标；内部硬下限 150 mVpp、设计目标 ≥200 mVpp；VCO 由相噪预算决定。现有内部时钟实测可到约 1.01 Vpp 差分；规格共模公式混用单端/差分的问题已修正。需列出逐节点符合性，尚未放宽原上界。 | [规格](../overview/spec.md#已确认的取舍2026-10-31)、[评估](../history/design_coupling_review_20261106.md) | P3 |
+| I-17 | **逐节点观察已建立，内部超幅仍未闭合（2026-11-08）**：400 mVpp上界、150硬下限/200设计目标不变，VCO另按相噪。extra3完整TX的TT/FS热/SS冷三点，计数器、时钟、转换器、数据树及保持节点均有超幅；c2g原输出约620–748mVpp，WT16/R240局部改进单独验证。先分层校准幅度/共模/再生/时序，再完整链确认，不能以眼图通过替代幅度符合性。 | [逐节点图与尺寸边界](../design/tx_cml_amplitude.md)、[规格](../overview/spec.md#已确认的取舍2026-10-31) | P3 |
 | I-19 | TX已实现16位捕获/两组保持：首级6压力48字、关闭切片12组；实际v3＋完整TX原FS眼图失败定位末级建立不足；extra2g=3后TT/FS热/SS冷三点眼图门槛满足，正扩压力角。物理控制路径/blank、45角、建立保持与失配/噪声仍缺，不能用RTL波形回放替代。 | [新字入口整链](../design/tx_parallel_serializer.md) | P2 |
 | I-20 | 链路级眼图门槛未定义。75 mV 只约束串化器节点；TX r2 接 C2 时远端最小裕量 54.81 mV（FS/1.65 V/85 °C）。需要定义 RX 输入或 CTLE 后的门槛。 | [信道模型](../design/channel_model.md) | P5 |
 | I-21 | PLL 启动：频率/细相位测量前端、片内预充参考、看门狗、自动粗搜未实现。 | [PLL 环路](../design/pll_loop.md) | P3 |

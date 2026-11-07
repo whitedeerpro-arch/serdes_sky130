@@ -1,0 +1,32 @@
+{
+  "state": "dynamic_running",
+  "assessment_pending": true,
+  "module": "tx.clocking.output2g",
+  "extra_2g": 3,
+  "tail_width_um": 16,
+  "nominal_load_ohm": 240,
+  "independent_simulators_max": 2,
+  "cases": [
+    {
+      "condition": "tt_v1800_t27",
+      "campaign": "results/analog/tx/parallel_serializer/20261107T155507.514155Z_71459865",
+      "probe": "results/analog/tx/parallel_serializer/20261107T154608.512886Z_a979a16b",
+      "boundary_id": "tx_capture_serializer_word_schedule_20261107T154608.512886Z_a979a16b",
+      "plan_sha256": "858adf8e75d0313b29e89d1097e712e4cbe7d8cc5c77c84affbc47bb0418a8d5",
+      "expected_stop_s": 1.2e-07,
+      "numerical_source_graph_sha256": "29f4e71489c902dd15d0a2e9452faa330dec3812d7d53c65a3d390831285efce"
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "campaign": "results/analog/tx/parallel_serializer/20261107T155507.523830Z_505b46a3",
+      "probe": "results/analog/tx/parallel_serializer/20261107T154608.525417Z_69845479",
+      "boundary_id": "tx_capture_serializer_word_schedule_20261107T154608.525417Z_69845479",
+      "plan_sha256": "2820c2660d6f0d926d5317632b0b431fdf7926fecbd09bac83023cd0fe0baa5a",
+      "expected_stop_s": 1.2e-07,
+      "numerical_source_graph_sha256": "29f4e71489c902dd15d0a2e9452faa330dec3812d7d53c65a3d390831285efce"
+    }
+  ],
+  "previous_rejected_attempts_index": "results/catalog/tx_clock_epoch.json",
+  "clock_only_observation": "results/analog/tx/clock_only_diagnostic/20261107T155127.378774Z/observation.json",
+  "scope": "No full-candidate qualification until actual capture, hold, mapping, eye and clock measurements complete."
+}

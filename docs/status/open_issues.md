@@ -53,7 +53,7 @@ FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完
 | I-24 | 三个 PLL 前端 SPICE 文件的注释仍引用旧路径 `docs/pll_first_debug.md`（现为 `docs/history/pll_first_debug.md`），v0.1 发布快照中也有同样引用；按约定未改源码。 | `analog/pll/top/spice/clock_frontend_*.spice` | — |
 | I-29 | TX 输出级焊盘/ESD/封装为代理参数；电源、回流、PSRR 未建模；FFE 未实现。 | [TX 输出级](../design/tx_output_driver.md) | P5 |
 | I-30 | RX PI 锚点是理想源，没有接原生 PLL 八相；共享 PLL 能支持多少路 PI 扇出未验证。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
-| I-33 | **读出 ÷2：功能已修复，全链未全覆盖（2026-11-06）。** 根因是保持管 W 80 过大，f_SO 在 hh 热角低于 1 GHz；W 40 后 FS 1.65 V 85 °C hh 输出 76 → 297 mVpp，单元级 45 × hh / ll 最低 281 mVpp。读出全链压力角通过，缺 FS 1.65 V −40 °C hh、FF 1.95 V −40 °C hh（工作点不收敛）和其余条件，随 RX 收口做。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05)、[PLL 分频器](../design/pll_divider.md#保持管和自激频率2026-11-06) | P5 |
+| I-33 | **读出 ÷2：功能已修复，全链未全覆盖（2026-11-06）。** 根因是保持管 W 80 过大，f_SO 在 hh 热角低于 1 GHz；W 40 后 FS 1.65 V 85 °C hh 输出 76 → 297 mVpp，单元级 45 × hh / ll 最低 281 mVpp。读出全链压力角通过，缺FS 1.65 V −40°C hh（当前W40超时/OP数值失败）、FF 1.95 V −40°C hh（所查W40正式运行缺失；旧五次失败均W80）及其余条件，随 RX 收口做。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05)、[PLL 分频器](../design/pll_divider.md#保持管和自激频率2026-11-06) | P5 |
 | I-32 | r5 / 4 bit 已接原生前端＋TX v3 静态 bench，8 个完整点连续计数，2 个 FF 冷角需收敛诊断。仍须比较 k=2/3/4 的实际 CP/LF（k=2 已过抖动模型门槛，k=4 最小 PM 约 44°）；验证 LF 分接 VDD 的宽带效果；把 B2 目标范围对到 0.85 V 到 CP 上沿并核实捕获；按选定码重新测 Kvco/噪声，完成原生闭环。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md)、[恢复记录](../history/clocking_progress_20261106.md) | P3 |
 
 ## 文档整理时发现的冲突（已按最新记录处理）

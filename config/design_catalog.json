@@ -1411,9 +1411,9 @@
       "summary": "先在 CML 域分路降低每路数据率，再匹配数据与时钟转换延迟；物理字寄存器和 Johnson 选通输出32个样本及w。",
       "facts": {
         "设计": "物理字路径已有",
-        "PVT": "旧边界45；W40压力角",
+        "PVT": "旧边界45；W40的FS冷hh数值缺失、FF冷hh未见正式运行",
         "失配": "读出局部MC待补",
-        "噪声": "保持 / 时钟偏斜预算"
+        "噪声": "未做；保持/偏斜仅确定性预算"
       },
       "boundary": {
         "inputs": [
@@ -1431,7 +1431,7 @@
         "question": "怎样避免2GHz CMOS转换路径与数据延迟漂移不一致？",
         "model": "readout_deser_plan逐位映射与建立保持规划，DFF单元卡校准。",
         "parameters": "CML÷2 / 1:2、匹配静态转换、CMOS1:4、Johnson选通。",
-        "verification": "45点逐位/位映射与短PI动态；新尺寸按接口局部回归。"
+        "verification": "旧45点逐位/位映射与短PI动态；当前W40按接口回归。FF额外五次旧数值失败均W80。"
       },
       "references": [
         {
@@ -1445,6 +1445,10 @@
         {
           "title": "读出电路",
           "path": "analog/rx/sampler/spice/rx_readout_deser16.spice"
+        },
+        {
+          "title": "冷角实际尝试与数值分层",
+          "path": "docs/work_packages/deliveries/rx-cold-readout-diagnostic.md"
         }
       ],
       "iterations": [

@@ -1760,9 +1760,9 @@ window.DESIGN_CATALOG = {
       "summary": "先在 CML 域分路降低每路数据率，再匹配数据与时钟转换延迟；物理字寄存器和 Johnson 选通输出32个样本及w。",
       "facts": {
         "设计": "物理字路径已有",
-        "PVT": "旧边界45；W40压力角",
+        "PVT": "旧边界45；W40的FS冷hh数值缺失、FF冷hh未见正式运行",
         "失配": "读出局部MC待补",
-        "噪声": "保持 / 时钟偏斜预算"
+        "噪声": "未做；保持/偏斜仅确定性预算"
       },
       "boundary": {
         "inputs": [
@@ -1780,7 +1780,7 @@ window.DESIGN_CATALOG = {
         "question": "怎样避免2GHz CMOS转换路径与数据延迟漂移不一致？",
         "model": "readout_deser_plan逐位映射与建立保持规划，DFF单元卡校准。",
         "parameters": "CML÷2 / 1:2、匹配静态转换、CMOS1:4、Johnson选通。",
-        "verification": "45点逐位/位映射与短PI动态；新尺寸按接口局部回归。"
+        "verification": "旧45点逐位/位映射与短PI动态；当前W40按接口回归。FF额外五次旧数值失败均W80。"
       },
       "references": [
         {
@@ -1794,6 +1794,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "读出电路",
           "path": "analog/rx/sampler/spice/rx_readout_deser16.spice"
+        },
+        {
+          "title": "冷角实际尝试与数值分层",
+          "path": "docs/work_packages/deliveries/rx-cold-readout-diagnostic.md"
         }
       ],
       "iterations": [
@@ -1838,6 +1842,29 @@ window.DESIGN_CATALOG = {
             {
               "title": "集成者review",
               "path": "docs/work_packages/reviews/WP-003.md"
+            }
+          ]
+        },
+        {
+          "id": "20261107T150911Z_fb43de4ab8",
+          "module": "rx.readout",
+          "date": "2026-11-07",
+          "timestamp": "2026-11-07T15:09:11.552989+00:00",
+          "title": "冷角缺口按真实尺寸与尝试分类",
+          "phase": "conclusion",
+          "problem": "当前W40缺口与旧W80数值失败混记，容易重复不必要的长全链尝试。",
+          "model": "固定WP003十来源外再直接复核五个FF hh历史attempt，按snapshot解析读出div2的whold、日志与实际终点。",
+          "changes": "无电路修改；修正文档/模块状态，保留WP003固定审计范围。",
+          "validation": "FS W40当前正式2400s超时、smoke初始OP失败，均无完整raw；FF新增五次均W80，两个OP失败、三个超时。未定位历史opsteps20/reltol1e-3的一小时对应deck，保持未知。",
+          "conclusion": "不能据旧失败判当前W40功能失败，也不能据缺运行判通过；先真实偏置/采样、读出div2、转换、Johnson分层短probe，再同边界完整回归。",
+          "attachments": [
+            {
+              "title": "rx-cold-readout-diagnostic.md",
+              "path": "docs/work_packages/deliveries/rx-cold-readout-diagnostic.md"
+            },
+            {
+              "title": "rx_working_revision.toml",
+              "path": "config/rx_working_revision.toml"
             }
           ]
         }

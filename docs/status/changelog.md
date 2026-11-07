@@ -4,6 +4,8 @@
 
 ## 2026-11-07
 
+- [RX冷角实际尝试复核](../work_packages/deliveries/rx-cold-readout-diagnostic.md)：FS当前W40 hh是超时/初始OP数值缺失；固定审计外五个FF hh旧尝试均W80，不能充当当前W40失败。另有历史reltol记述未匹配deck，保留待核。无电路修改，分层短probe先于长全链/MC。
+
 - 2GHz输出缓冲局部联合选参：四原样事件最大误差5.56µV；WT16/R240的c2g为344–369mVpp，仍保留正输出，但关闭提前10–13ps。WT18/R240在TT仍超400；候选未直接进入完整TX，I-17整体仍开。[数据与图](../design/tx_final_retime.md#2-ghz输出摆幅与时序联合选参)。
 
 - [末级建立与2GHz选择时钟改进](../design/tx_final_retime.md)：公共波形一致的内部追踪定位FS末级A关闭早于g3过零5–6ps；4基线/20时移点和实际缓冲级局部校准后，将extra2g=1→3。完整TT/FS热/SS冷的各256载荷、捕获/保持/位序和眼图通过，FS裕量0.52→128.29mV、散布0.333→0.090UI；原失败保留。四运行对照眼图与边界图已更新，内部摆幅I-17、其他PVT、物理guard和统计仍开。[实验记录](../history/tx_final_retime_characterization.md)。

@@ -55,7 +55,7 @@ SS/1.65 V/85 °C 下原接收器的增益节点仍在摆动，但预驱动 `bp` 
 ### 谁依赖全速输出
 
 - PLL 反馈只用 ÷8 后的 250 MHz CMOS，不受影响。
-- RX 的 [rx_cmos_pair_align.spice](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice) 把恢复的 EDGE 时钟转成约 2 GHz CMOS 再对齐样本；实时 RTL 桥每 500 ps 读一次 pair。若以后改为 CML 整字保持、低速再转 CMOS，这个依赖可以去掉。见 [尺寸与优先级](../history/divider_size_and_clock_priority.md)。
+- 旧 RX [rx_cmos_pair_align.spice](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice) 把 EDGE 转成2 GHz CMOS再对齐pair。当前物理deser16已改用CML÷2/1:2分路＋匹配静态转换＋CMOS1:4，不依赖这个全速恢复接收器做数据采集；旧pair夹具保留。见[RX读出](rx_pi_sampler.md#cmos-读出2026-11-02)。
 
 ### r4：全速 SS 冷角修复（2026-10-31）
 

@@ -1,8 +1,14 @@
 revision = "r5_candidate_20261105"
-status = "VCO r5 candidate (node loss cut); noise at 7 corners, open loop; PLL benches still select r3 codes, closed loop not revalidated; not_release_signoff"
+status = "VCO r5 candidate; 4-bit workmap 135 conditions; native r5+TXv3 static probe 8 complete/2 missing, all 8 count; closed loop not revalidated; not_release_signoff"
 r5_change = "VCO only: cap bank switch W 1 -> 5, varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
 r5_report = "docs/design/pll_vco.md"
 r5_open = "I-32"
+r5_native_static_bench = "analog/tx/serializer/tb/native_clock/r5_v3.py"
+r5_native_static_report = "docs/history/clocking_progress_20261106.md"
+r5_code_table = "config/pll_code_table.json"  # open-loop bench points, not closed-loop lock qualification
+r5_cold_frontend_report = "docs/history/pll_cold_convergence.md"
+r5_cold_frontend_initial_state_bc = "pll_r5_cold_prebiased_state_v1"
+r5_cold_frontend_scope = "FF/1.95V/-40C ll and hh; 24ns native four-branch frontend; prebiased .ic/uic, fixed code/control; dividers and 4 fullrate/feedback functional checks; DC OP and power-up still open"
 prescaler_first_stage_whold_um = 40.0  # others 80; docs/design/pll_divider.md
 last_closed_revision = "lowov_buffered_r4_20261031"
 r4_change = "full-rate CML-to-CMOS receivers on all four branches -> serdes_cml_to_cmos_r4 (feedback receivers unchanged)"
@@ -53,3 +59,20 @@ native_r3_short_handoff_observed = true
 native_r3_sustained_lock_qualified = false
 fullrate_CMOS_priority = "deferred_for_PLL; RX_pair_align_bridge_dependency_retained"
 divider_size_review = "docs/history/divider_size_and_clock_priority.md"
+
+[r5_fixed_code_temperature]
+status = "45_of_45_MOS_supply_RC_groups_have_static_three_temperature_code; not_lock_or_startup"
+original_groups = 42
+filled_groups = 3
+campaign = "results/analog/pll/vco/cp_edge_fill/20261107T102145236159Z"
+evidence = "docs/data/vco_cp_edge_fill.json"
+report = "docs/design/pll_vco.md"
+FF_1V95_Rtt_code = 7
+FF_1V95_Rll_code = 12
+FS_1V95_Rll_code = 7
+added_points = 12
+new_stop_ns = 24
+window = "0.85V_to_measured_CP_DC_5percent_upper_edge"
+fixed_across_supply = false
+physical_CP_LF_handoff_qualified = false
+native_lock_startup_mismatch_noise_qualified = false

@@ -68,6 +68,10 @@ FS、SS 热角 W 40 的自激只有几十 mV 以下，频率读数要打折扣�
 
 **同步计数器不受这个矛盾限制。** TX 的 `serdes_tx_sync_counter8` 三个触发器都吃 2 GHz 时钟，没有慢级，保持管 W 20。
 
+![W20 单元在时钟共模与摆幅平面上的可行区](../figures/clocking/dividers/div2_w20_clock_feasible_region.png)
+
+这组 W20、2 GHz、PLL 型负载的离散扫描同时标出输出摆幅与过零数：FF 冷 ll 在 150 mVpp 输入下虽有输出摆幅，翻转仍异常；215 mVpp 是该组扫描的可用参考点。它不替代 W40 的 RX ÷2 或完整同步计数器验证。[来源和范围](../history/clocking_progress_20261106.md)。
+
 ### 真实偏置 + PDK 电阻 45 条件（2026-11-06）
 
 [rcorner.py](../../analog/pll/divider/tb/pvt/rcorner.py)：标准输入（300 mVpp，比 r5 VCO 的实际摆幅小），每 tap 5 fF。全 W 80 时 hh 下第一级最低 156 mVpp，全 W 40 时第三级自激余量不必要地变小，所以只改第一级。

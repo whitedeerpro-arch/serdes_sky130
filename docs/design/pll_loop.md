@@ -1,9 +1,13 @@
 # PLL 环路：PFD、CP、LF、预充与启动监督
 
+> **模块集成**：PLL 已有包含VCO、粗调码接口、分频反馈、PFD/CP/LF的[完整电路顶层](../../analog/pll/top/spice/pll_balanced_core.spice)及[双节点预充启动顶层](../../analog/pll/top/spice/pll_balanced_startup_core.spice)。下面记录已实现参数、分层/原生验证与近期局部迭代；模型用于选参和降低验证成本。层次、边界与迭代可从[设计工作台](../../web/design/index.html#pll)进入。
+
 > **当前修订**：v0.1 电路（PFD、50 µA CP、6.5 kΩ/40 pF/2 pF LF、双节点预充、启动监督 RTL），在 r3 工况下复测。物理 LF 候选尚未采用。
 > **关键数字**：PFD→CP 45/45 工况电荷方向正确，有效电荷增益 53.3–59.8 µA；4 个选定工况 × 3 种初值的分层闭环均锁定；线性估计 UGB 3.0–4.4 MHz、相位裕度 63–65°。
 > **主要缺口**：r3 原生 PLL 只接回 48 ns，没有持续锁定与从零捕获；LF 的 RC 极限角没有接入闭环；SS 低压高 Vctrl 处 CP 上拉电流不足。
-> **待改（PLL 收口，I-32）**：VCO r5 候选和抖动预算要求环路改为 k = 4，LF 电容分接 VDD 和地。下面的电路和数字还是 50 µA、40 pF、2 pF、全接地。
+> **待改（PLL 收口，I-32）**：VCO r5 候选下比较 k=2/3/4 的实际 CP/LF，k=2 已满足现行抖动模型门槛；LF 电容分接 VDD/地仍待验证。下面的已实现电路还是 50 µA、40 pF、2 pF、全接地。
+
+> **近期局部验证（2026-11-06）**：FF/1.95 V/−40 °C 的 r5 四支路前端，ll/hh 均在偏置就绪初值下跑满 24 ns，VCO约1.989 GHz，三级分频及四路全速/反馈功能检查满足。自动DC仍未完成，原生TX联合缺点和真实上电不因此关闭；初值已登记为 `pll_r5_cold_prebiased_state_v1`。见[分层诊断、边界与波形](../history/pll_cold_convergence.md)。
 
 ## 电路
 
@@ -44,6 +48,10 @@ flowchart LR
 | SS/1.65 V/85 °C、Vctrl = 1.4 V 的 UP/DN | 40.8 / 49.3 µA |
 
 三个相位点不足以证明无死区。零相差残余电荷在闭环中表现为静态相位偏移。来源：[环路 PVT](../history/pll_loop_pvt.md)、[CP 边界](../history/pll_pfd_cp_lf_next.md)。
+
+真实偏置、45 × tt/hh/ll 的 DC 输出窗口见 [VCO 工作区](pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06)：窗口按相对中点电流下垂 5% 定义，UP/DN 失配独立记录。不能用 DC 窗口代替开关电荷验收。
+
+![真实偏置 CP 窗口和失配](../figures/clocking/pll/charge_pump/cp_real_bias_dc_windows.png)
 
 TT/27 °C 名义点（v0.1）：Vout = 1.3 V 时 UP/DN = 48.5/49.9 µA；两者都在 50 µA ± 5% 内的输出区间约 0.36–1.42 V。来源：[CP/LF 原型](../history/pfd_cp_lf_results.md)。
 

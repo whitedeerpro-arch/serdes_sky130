@@ -1,4 +1,6 @@
 status = "design_policy_only"
+# The 0..7 encoding below is the historical 3-bit policy, not an implemented controller.
+# Current 4-bit VCO bench points: config/pll_code_table.json; current selection: pll_working_revision.toml.
 controller_implemented = false
 coarse_encoding_current = "binary_1_2_4"
 preferred_unit_step_encoding = "thermometer_or_segmented_pending_design"

@@ -222,3 +222,13 @@ bit_errors = 0
 pad_peak_to_peak_mv = 480.931
 remote_peak_to_peak_mv = 468.491
 all_specs_qualified = false
+
+[retime_clock_iteration.output_sizing.first_full_attempt]
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T150730.302536Z_c065b1b2"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T150730.281401Z_1033558a"
+status = "complete_waveforms_but_rejected_producer_capture_phase; not_qualified"
+observed_word_clock_epoch_difference_ns = 1.0
+short_diagnostic = "results/analog/tx/clock_epoch/20261107T153055.310765Z"
+short_repeat_common_voltage_error_v = 0.0
+metadata_topology_match_counts_and_phase = true
+force_all_master_zero_adopted = false

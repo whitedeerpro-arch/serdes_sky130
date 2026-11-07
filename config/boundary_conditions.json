@@ -1500,6 +1500,310 @@
   ]
  },
  {
+  "id": "tx_capture_serializer_word_schedule_20261107T145946.375977Z_da7323d1",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "clock_extra_2g": 3,
+   "clock_output_wt": 16,
+   "clock_output_r": 240,
+   "physical_sources": {
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6"
+   },
+   "fixture_sha256": "89b1fbbabc5cca241efed755767ae3d2b5de3feb9e5a071661a0ca4df617a4dd"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "fs_v1650_t85": {
+    "run": "results/analog/tx/parallel_serializer/20261107T145946.375977Z_da7323d1/run",
+    "git_revision": "3f7225f-dirty",
+    "deck_sha256": "42f20c8ff8ca9bdd5afb8afb9d404a0b724bc95f7ee772c7ea8dcbe55345189c",
+    "condition": "fs_v1650_t85",
+    "raw": "results/analog/tx/parallel_serializer/20261107T145946.375977Z_da7323d1/run/waveforms.raw",
+    "raw_sha256": "44b8e1036bf8c760a2f5586647069edbc4eaf6a244abda4fcc77f04e94d654e5",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T145946.375977Z_da7323d1/prepared/schedule.json",
+   "schedule_sha256": "a79712f01cf5835fdcef94bd6483493e4c52f097adf2248cb0cab7369f2f175c",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "sample_times_s": [
+      3.466473834375371e-08,
+      3.51645450064125e-08,
+      3.5664553971395584e-08,
+      3.616469948159001e-08,
+      3.666464473436754e-08,
+      3.716445515644529e-08,
+      3.766446692368667e-08,
+      3.816461584518438e-08,
+      3.866456530429777e-08,
+      3.9164379109953814e-08,
+      3.966439326689954e-08,
+      4.016454524808148e-08,
+      4.0664498260510554e-08,
+      4.116431475123728e-08,
+      4.166433095033575e-08,
+      4.216448532998476e-08,
+      4.2664441334231064e-08,
+      4.316426028653188e-08,
+      4.366427822426514e-08,
+      4.416443480615115e-08,
+      4.466439333851045e-08,
+      4.5164214192967435e-08,
+      4.5664233607952104e-08
+     ]
+    },
+    "rises_s": [
+     3.4175363727202025e-08,
+     3.8174540404440823e-08,
+     4.2173982151375315e-08,
+     4.617358759357196e-08
+    ],
+    "falls_s": [
+     3.617421604972959e-08,
+     4.0173550001978406e-08,
+     4.4173091916371614e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
+  "id": "tx_capture_serializer_word_schedule_20261107T145946.379151Z_1ee34809",
+  "kind": "loaded_word_clock_event_schedule",
+  "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
+  "upstream": {
+   "module": "tx.capture",
+   "revision": "capture_serializer16_candidate",
+   "clock_extra_2g": 3,
+   "clock_output_wt": 16,
+   "clock_output_r": 240,
+   "physical_sources": {
+    "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+    "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice": "aa383c49d6e98ebc3c69e5bda36d92d9feda437eb317fad3c176a32bda841cb9",
+    "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+    "analog/tx/clock_distribution/spice/tx_clock_retime.spice": "3a573c38b5634d56d8082bf86cebe602c449c7bf01eb1a6bf01f9d6d3f750bf6",
+    "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+    "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+    "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+    "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+    "analog/common/cml_mux/spice/cml_lowov_cells.spice": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59",
+    "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+    "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+    "verification/models/channel/diff_rlc16.spice": "1214e719922122f65cdb7814d68bea91728791d388bbbc826828c86c19528148",
+    "analog/tx/input_register/spice/capture_serializer16.spice": "30808a1e1071ce335f29372f46c0d1b6dda097902ddfe44e3067b40a8d4cc384",
+    "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478",
+    "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+    "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+    "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6",
+    "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+    "analog/tx/input_register/spice/word_clock_receiver.spice": "6643f24ecb3565e3ed56902a4b34849f193eba2d1675b0527677e5dfa4131777",
+    "analog/tx/input_register/spice/word_capture16_staggered.spice": "426ee6aee4d04cdd8c218d200284b92125808e99479ade383a915471d688a6fb",
+    "analog/common/devices/spice/cmos_dff.spice": "20a1f95247443d6754fd4fb2314f10802bad62e8f3ef8feadc5e3d1e7af9f225",
+    "analog/tx/clock_distribution/spice/tx_clock_counter.spice": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5",
+    "analog/tx/serializer/spice/serializer16_retimed_lowov.spice": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6",
+    "analog/tx/input_register/tb/full_serializer/tb_full_ngspice.cir.in": "a4f9cfe91a8ba21245ccfe092deb77d3ca6c6dcac660878f11c8e0d9953e773e",
+    "analog/pll/divider/spice/cml_logic.spice": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa"
+   },
+   "fixture_sha256": "f363049c3f7430cfe3f365ae9b1fdeab20756b26f7b314ca38c73aa46515cb33"
+  },
+  "nodes": {
+   "clock": "xtx.word_clk",
+   "producer_data": "d0..d15"
+  },
+  "load": {
+   "stages": [
+    "X _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ c250p c250n c500p c500n c1gp c1gn c2gp c2gn _ _ _ _ _ _ serdes16_cml_tree_retimed_lowov rload=500 rout=400 tail_scale=6 wdata=40 wselect=96 wsf=80 wtail=12",
+    "X c250p c250n _ _ _ _ serdes_tx_word_clock"
+   ],
+   "sha": "6696d26e16be3b2e"
+  },
+  "points": {
+   "tt_v1800_t27": {
+    "run": "results/analog/tx/parallel_serializer/20261107T145946.379151Z_1ee34809/run",
+    "git_revision": "ac1cb8c-dirty",
+    "deck_sha256": "f80c1715ec69f8953d62d1b24424c3650b9759573c2e1622fd0287f0246a683f",
+    "condition": "tt_v1800_t27",
+    "raw": "results/analog/tx/parallel_serializer/20261107T145946.379151Z_1ee34809/run/waveforms.raw",
+    "raw_sha256": "a714cbc3d9b7fc00ddbfbd4d4f0229ae3a40b035c63df5e2716887d0a924f833",
+    "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b"
+   }
+  },
+  "processing": {
+   "schedule": "results/analog/tx/parallel_serializer/20261107T145946.379151Z_1ee34809/prepared/schedule.json",
+   "schedule_sha256": "d5b2a2a1b1dbfcfaaa82eb7bcf65f4fd9351dbb2cccb040d1426c30862a1d8f9",
+   "clock_probe": {
+    "counter": {
+     "counting": true,
+     "samples": 23,
+     "invalid_steps": [],
+     "states": [
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2
+     ],
+     "sample_times_s": [
+      3.463308206355514e-08,
+      3.513310031365547e-08,
+      3.5633092029967134e-08,
+      3.613303266984843e-08,
+      3.663299953171996e-08,
+      3.713302076539714e-08,
+      3.7633016437991336e-08,
+      3.8132961553728406e-08,
+      3.863293192051327e-08,
+      3.913295606063144e-08,
+      3.963295498606586e-08,
+      4.0132903265752986e-08,
+      4.063287720874801e-08,
+      4.113290372107947e-08,
+      4.1632905265747626e-08,
+      4.213285614273517e-08,
+      4.263283246487805e-08,
+      4.313286092570339e-08,
+      4.363286458990679e-08,
+      4.413281759997048e-08,
+      4.463279579337975e-08,
+      4.5132825843830155e-08,
+      4.5632831245625755e-08
+     ]
+    },
+    "rises_s": [
+     3.4988136335913036e-08,
+     3.898758514998729e-08,
+     4.298721331774377e-08,
+     4.69869634737265e-08
+    ],
+    "falls_s": [
+     3.6988264712884996e-08,
+     4.0987815623002705e-08,
+     4.4987514956317267e-08
+    ],
+    "period_s": 4e-09,
+    "window_s": [
+     3.4e-08,
+     4.7e-08
+    ],
+    "period_deviation_gate_s": 1e-12
+   },
+   "exact_period_s": 4e-09,
+   "producer_update_after_fall_s": 1e-10,
+   "reset_release_s": 8e-09,
+   "permit_s": 1.2e-08
+  },
+  "validation": {
+   "requirement": "actual capture edges within 100ps of replay; input data setup/hold >=500ps; captured words and halfwords checked independently"
+  },
+  "valid_while": [
+   "same physical modules, clock source, loads, counter initialization and PDK",
+   "data activity may modulate clock phase; actual second run must verify the producer interface",
+   "RTL event model has no library/physical tag delay or output-blank implementation; not startup qualification"
+  ]
+ },
+ {
   "id": "tx_clk_ideal_tt_v01",
   "kind": "ideal_edge_record",
   "description": "Four TX select clocks (250M/500M/1G/2G) from the v0.1 closed-loop TT PLL record: every crossing time kept, sources idealised to 400 mVpp differential, 20 ps edges, CM VDD-0.17 V ({supply-0.07}/{supply-0.27}); plus ideal CMOS data sources (0/VDD, 20 ps).",

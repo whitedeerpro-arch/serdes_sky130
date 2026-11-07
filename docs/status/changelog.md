@@ -4,6 +4,8 @@
 
 ## 2026-11-07
 
+- WT16/R240首次完整TT/FS波形各120ns完成，但probe/动态字捕获相差约1ns，边界检查拒绝评分。四个18ns对照定位到未完全限定存储初态对源图拓扑的数值敏感性；补齐元数据节点可匹配，额外master零态有两次错误递增而不采用。[记录](../work_packages/deliveries/tx-sizing-clock-epoch.md)。
+
 - [RX冷角实际尝试复核](../work_packages/deliveries/rx-cold-readout-diagnostic.md)：FS当前W40 hh是超时/初始OP数值缺失；固定审计外五个FF hh旧尝试均W80，不能充当当前W40失败。另有历史reltol记述未匹配deck，保留待核。无电路修改，分层短probe先于长全链/MC。
 
 - 2GHz输出缓冲局部联合选参：四原样事件最大误差5.56µV；WT16/R240的c2g为344–369mVpp，仍保留正输出，但关闭提前10–13ps。WT18/R240在TT仍超400；候选未直接进入完整TX，I-17整体仍开。[数据与图](../design/tx_final_retime.md#2-ghz输出摆幅与时序联合选参)。

@@ -64,7 +64,7 @@ W18/R240在TT仍414.60–417.12 mVpp，未满足400上界，保留作趋势对�
 
 ![输出尾宽与负载的局部比较](../figures/tx/ingress/tx_final_clock_output_sizing.png)
 
-[数据](../data/tx_final_clock_swing.json)、[索引](../../results/catalog/tx_final_clock_swing.json)来自`final_clock_swing/20261107T103804.761471Z`，显式边界`tx_final_clock_output_sizing_v1`。源为旧两条件事件的理想电压，忽略上游阻抗/反馈；W16/R240是下一轮完整链候选，未直接改动工作DUT。上游缓冲及其余节点的超幅问题仍开，不能用一个c2g端口的局部改善关闭I-17。
+[数据](../data/tx_final_clock_swing.json)、[索引](../../results/catalog/tx_final_clock_swing.json)来自`final_clock_swing/20261107T103804.761471Z`，显式边界`tx_final_clock_output_sizing_v1`。源为旧两条件事件的理想电压，忽略上游阻抗/反馈；W16/R240进入完整链候选后，两条120ns波形完成，但实际捕获时钟比probe事件偏约1ns，入口边界检查拒绝评分；不能写为完整TX通过。18ns短对照复现原动态波形，静态probe补齐四个独立元数据源后计数和相位匹配；额外强制master零态则出现两次无效递增，不采用。详见[初态与图拓扑诊断](../work_packages/deliveries/tx-sizing-clock-epoch.md)。下一轮只修probe源拓扑、保持原IC，再重新登记事件。上游缓冲及其余节点的超幅问题仍开，不能用一个c2g端口的局部改善关闭I-17。
 
 输出样点为原训练中心，加“本次候选c2g下降沿−源切片count1下降沿”，包含原extra1→3的31–39 ps改进；不得漏加这段延时，也不使用载荷拟合。交越必须在固定窗口中唯一，交越间隔不是完整建立裕量。先前未经校准的RC/gm各半模型仅为敏感性示例；选参依据是此次实际加载与关闭沿测量。
 

@@ -38,6 +38,32 @@ def period_stats(t, y, start=None, stop=None, min_cycles=3):
     )
 
 
+def cycle_amplitudes(t, y, start, stop):
+    """Differential peak-to-peak envelope over complete rising-edge cycles.
+
+    A cycle is included only when both rising crossings are inside the requested
+    window. Interpolated crossings bound each cycle; no partial cycle is padded.
+    Return None if the window contains no complete cycle.
+    """
+    t = np.asarray(t)
+    y = np.asarray(y)
+    if (t.ndim != 1 or y.shape != t.shape or len(t) < 2 or
+            not np.all(np.isfinite(t)) or not np.all(np.isfinite(y)) or
+            not np.all(np.diff(t) > 0) or not np.isfinite(start) or
+            not np.isfinite(stop) or start >= stop or start < t[0] or stop > t[-1]):
+        raise ValueError('invalid or uncovered cycle-amplitude window')
+    rising = edges(t, y, 1, start, stop)
+    if len(rising) < 2:
+        return None
+    amplitudes = []
+    for left, right in zip(rising, rising[1:]):
+        inside = y[(t > left) & (t < right)]
+        bounded = np.r_[np.interp(left, t, y), inside, np.interp(right, t, y)]
+        amplitudes.append(float(np.ptp(bounded)))
+    return dict(complete_cycles=len(amplitudes), min_pp_v=float(np.min(amplitudes)),
+                max_pp_v=float(np.max(amplitudes)), mean_pp_v=float(np.mean(amplitudes)))
+
+
 def relative_phase(t, y_ref, y, ref_polarity=1, polarity=1, start=None, stop=None):
     """Delay of each `y` edge after the nearest preceding `y_ref` edge, in seconds.
 

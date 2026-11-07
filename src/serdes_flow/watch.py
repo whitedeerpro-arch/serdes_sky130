@@ -5,7 +5,7 @@
 A probe lists the deck directories (those with tb.cir), counts finished cases (each case writes
 one .raw/.tsv when its analysis ends; total = '* case' lines in tb.cir), reads the end of
 simulator.log for error lines, and checks which ngspice processes run in which deck (/proc/<pid>/cwd).
-States per deck:
+States per deck (health only, not electrical qualification):
   run    ngspice alive, output keeps coming
   STALL  ngspice alive, no new case for > stall x the typical case time (min 10 min)
   ERROR  error line in the log (timestep too small, singular matrix, ...)
@@ -13,9 +13,8 @@ States per deck:
   done / FAIL  execution.json written; FAIL = non-zero exit or timeout
 A rerun <deck>.rN (case-level resume) supersedes earlier attempts of the same deck; a deck that
 died before plan.json was last written (the current driver) counts as queued, not DEAD.
-If the driver wrote CAMPAIGN/plan.json ({"decks": {name: n_cases}}), totals include decks not
-started yet.  The probe only reads directory listings and file tails (milliseconds).  Exits when
-no ngspice is left in the campaign; the last line is the final state.
+Plans may specify case counts, prepared-deck paths, or a single full-serializer run; totals include
+planned decks not started yet. Smoke and pilot decks do not count toward main cases.  The probe only reads directory listings and file tails (milliseconds).  Exits when no ngspice is left in the campaign and no planned deck remains queued; the last line is the final state.
 """
 import argparse
 import json
@@ -49,10 +48,52 @@ def tail(path, n=20000):
         return ""
 
 
+def _case_count(deck):
+    """Count case markers when present, otherwise distinct saved output names."""
+    markers = sum(1 for line in deck.splitlines() if line.lstrip().startswith('* case '))
+    if markers:
+        return markers
+    names = set()
+    for line in deck.splitlines():
+        match = re.match(r'^\s*(?:write|wrdata)\s+([^\s]+)', line, re.I)
+        if match:
+            names.add(match.group(1))
+    return len(names)
+
+
+def _is_auxiliary(path):
+    return any(re.search(r'(^|\.)(?:pilot|smoke)(?:\.r\d+)?$', part, re.I) for part in path.parts)
+
+
+def _planned(camp, plan):
+    if 'decks' not in plan:
+        return {'run': 1} if plan.get('mode') in ('probe','run') else {}
+    decks = plan['decks']
+    if not isinstance(decks, dict):
+        raise ValueError('plan decks must be a mapping')
+    result = {}
+    for name,value in decks.items():
+        if not isinstance(name,str) or not name or _is_auxiliary(Path(name)):
+            continue
+        if type(value) is int and value >= 0:
+            result[name]=value
+        elif isinstance(value,str):
+            path = Path(value)
+            if path.is_absolute():
+                raise ValueError('prepared deck path must be relative to campaign')
+            resolved=(camp/path).resolve()
+            if not resolved.is_relative_to(camp.resolve()) or not resolved.is_file():
+                raise ValueError('prepared deck path escapes campaign or is missing')
+            result[name]=_case_count(resolved.read_text(errors='replace'))
+        else:
+            raise ValueError('plan deck value must be a case count or prepared path')
+    return result
+
+
 def deck_state(d, alive, stall, now):
     deck = (d / "tb.cir").read_text(errors="replace")
     is_mc = bool(re.search(r"wrdata\s+mc.tsv", deck))
-    total = sum(1 for l in deck.splitlines() if l.startswith("* case "))
+    total = _case_count(deck)
     outs = sorted((p.stat().st_mtime for p in d.iterdir()
                    if (p.suffix in (".raw", ".tsv") or p.name.endswith(".raw.gz")) and p.stat().st_size > 0))
     done = len(outs)
@@ -103,15 +144,16 @@ def probe(camp, stall):
     """Reruns (<deck>.rN, case-level resume) supersede earlier attempts: the newest attempt sets
     the state, finished cases are counted once over all attempts."""
     now = time.time()
+    camp = Path(camp).resolve()
     alive = ngspice_cwds()
-    decks = sorted(p.parent for p in Path(camp).rglob("tb.cir")
-                   if not re.search(r"\.(pilot|smoke)(\.r\d+)?$", p.parent.name))
+    decks = sorted(p.parent for p in camp.rglob("tb.cir")
+                   if not _is_auxiliary(p.parent.relative_to(camp)))
     groups = {}
     for d in decks:
         b, i = _base(str(d.relative_to(camp)))
         groups.setdefault(b, []).append((i, d))
     plan = Path(camp) / "plan.json"
-    planned = json.loads(plan.read_text())["decks"] if plan.exists() else {}
+    planned = _planned(camp, json.loads(plan.read_text())) if plan.exists() else {}
     plan_t = plan.stat().st_mtime if plan.exists() else 0.0
     states, done, total, pending = {}, 0, 0, 0
     for b, att in groups.items():
@@ -132,11 +174,11 @@ def probe(camp, stall):
     waiting = {k: n for k, n in planned.items() if k not in groups}
     total += sum(waiting.values())
     queued = f", {len(waiting) + pending} queued" if planned else ""
-    head = time.strftime("%H:%M") + (" ABNORMAL" if bad else " ok")
+    head = time.strftime("%H:%M") + (" ABNORMAL" if bad else " WAITING" if waiting or pending else " ok")
     line = f"{head}: {done}/{total} cases, {running} decks running{queued}"
     if bad:
         line += "; " + "; ".join(f"{k} {s} {why}" for k, (s, why) in bad.items())
-    finished = not any(d.resolve() in alive for d in decks)
+    finished = not any(p.is_relative_to(camp) for p in alive) and not waiting and not pending
     return line, finished
 
 

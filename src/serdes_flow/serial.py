@@ -71,6 +71,83 @@ def _training_delay(t, y, seq, edge_t, edge_pol):
     return delay, len(offsets)
 
 
+def _match_edges(edge_t, edge_pol, seq, delay, first, end):
+    """The historical matching and half-open extra-crossing span."""
+    ui, bits, start = seq.ui_s, seq.bits, seq.start_s
+    sgn = 2 * bits - 1
+    used, residual, transition_bits, missing = set(), [], [], 0
+    for k in range(first, end):
+        if bits[k] == bits[k - 1]:
+            continue
+        target = start + (k + delay) * ui
+        hit = np.where((abs(edge_t - target) < EDGE_MATCH_HALF_WIDTH_UI * ui) & (edge_pol == sgn[k]))[0]
+        if len(hit):
+            i = int(hit[np.argmin(abs(edge_t[hit] - target))])
+            used.add(i)
+            residual.append((edge_t[i] - target) / ui)
+            transition_bits.append(k)
+        else:
+            missing += 1
+    span = (edge_t >= start + (first + delay - EDGE_MATCH_HALF_WIDTH_UI) * ui) & \
+           (edge_t < start + (end + delay - EDGE_MATCH_HALF_WIDTH_UI) * ui)
+    extra = int(sum(i not in used for i in np.where(span)[0]))
+    return residual, transition_bits, missing, extra
+
+
+def fixed_phase_window(t, y, seq: Sequence, *, delay_ui, first_bit, end_bit):
+    """Measure [first_bit, end_bit) using a supplied phase; never fit payload.
+
+    The supplied delay is typically measured from training in a complete run.
+    All sample times and the complete +/-0.45 UI transition-matching domain,
+    including the half-open extra-crossing span, must be covered by the actual
+    waveform. Returns (metrics, details) for this local interval only; local
+    functionality does not qualify a complete serializer or link.
+    """
+    t = np.asarray(t, dtype=float)
+    y = np.asarray(y, dtype=float)
+    bits = np.asarray(seq.bits)
+    if (t.ndim != 1 or y.shape != t.shape or len(t) < 2 or
+            not np.all(np.isfinite(t)) or not np.all(np.isfinite(y)) or
+            not np.all(np.diff(t) > 0)):
+        raise ValueError('waveform must be finite, aligned and strictly increasing')
+    if bits.ndim != 1:
+        raise ValueError('sequence bits must be a one-dimensional array')
+    if (type(first_bit) is not int or type(end_bit) is not int or
+            first_bit < 1 or end_bit <= first_bit or end_bit > len(bits)):
+        raise ValueError('invalid bit interval: requires 1 <= first_bit < end_bit <= sequence length')
+    if (not np.isfinite(delay_ui) or not np.isfinite(seq.start_s) or
+            not np.isfinite(seq.ui_s) or seq.ui_s <= 0 or
+            not np.all((bits == 0) | (bits == 1))):
+        raise ValueError('invalid sequence or fixed delay')
+    bits = bits.astype(np.int64, copy=False)
+    signed_seq = Sequence(bits, seq.start_s, seq.ui_s)
+    ui, start = seq.ui_s, seq.start_s
+    indices = np.arange(first_bit, end_bit)
+    sample_t = start + (indices + .5 + delay_ui) * ui
+    # Match windows for every bit, even those without expected transitions;
+    # the latter contribute to the historical extra-crossing span.
+    window_start = start + (first_bit + delay_ui - EDGE_MATCH_HALF_WIDTH_UI) * ui
+    window_end = start + (end_bit + delay_ui - EDGE_MATCH_HALF_WIDTH_UI) * ui
+    last_match_end = start + (end_bit - 1 + delay_ui + EDGE_MATCH_HALF_WIDTH_UI) * ui
+    if (min(window_start, sample_t[0]) < t[0] or
+            max(window_end, last_match_end, sample_t[-1]) > t[-1]):
+        raise ValueError('sample or complete matching window exceeds waveform coverage')
+    samples = np.interp(sample_t, t, y)
+    signed = samples * (2 * bits[indices] - 1)
+    edge_t, edge_pol = crossings(t, y)
+    residual, transition_bits, missing, extra = _match_edges(edge_t, edge_pol, signed_seq, delay_ui, first_bit, end_bit)
+    errors = int(np.sum(signed <= 0))
+    metrics = dict(scope='local_window_only', delay_ui=float(delay_ui), first_bit=first_bit, end_bit=end_bit,
+                   bit_errors=errors, minimum_signed_margin_v=float(np.min(signed)),
+                   transition_spread_ui=float(np.ptp(residual)) if residual else None,
+                   matched_transitions=len(residual), missing_transitions=missing, extra_crossings=extra,
+                   functional=bool(errors == 0 and missing == 0 and extra == 0),
+                   edge_match_half_width_ui=EDGE_MATCH_HALF_WIDTH_UI, phase_fitted=False)
+    details = dict(bit_index=indices.tolist(), sample_time_s=sample_t.tolist(), sample_voltage_v=samples.tolist(),
+                   signed_margin_v=signed.tolist(), payload_transition_bits=transition_bits, edge_residual_ui=residual)
+    return metrics, details
+
+
 def check(t, y, seq: Sequence, payload_bits: int):
     """Measure one differential node.  Returns (metrics, details)."""
     ui, bits, start = seq.ui_s, seq.bits, seq.start_s
@@ -88,22 +165,8 @@ def check(t, y, seq: Sequence, payload_bits: int):
     training_errors = int(np.sum(signed[:ALTERNATING_BITS] <= 0))
     marker_errors = int(np.sum(signed[ALTERNATING_BITS:TRAINING_BITS] <= 0))
 
-    used, residual, transition_bits, missing = set(), [], [], 0
-    for k in range(TRAINING_BITS, end):
-        if bits[k] == bits[k - 1]:
-            continue
-        target = start + (k + delay) * ui
-        hit = np.where((abs(edge_t - target) < EDGE_MATCH_HALF_WIDTH_UI * ui) & (edge_pol == sgn[k]))[0]
-        if len(hit):
-            i = int(hit[np.argmin(abs(edge_t[hit] - target))])
-            used.add(i)
-            residual.append((edge_t[i] - target) / ui)
-            transition_bits.append(k)
-        else:
-            missing += 1
-    span = (edge_t >= start + (TRAINING_BITS + delay - EDGE_MATCH_HALF_WIDTH_UI) * ui) & \
-           (edge_t < start + (end + delay - EDGE_MATCH_HALF_WIDTH_UI) * ui)
-    extra = int(sum(i not in used for i in np.where(span)[0]))
+    residual, transition_bits, missing, extra = _match_edges(
+        edge_t, edge_pol, seq, delay, TRAINING_BITS, end)
 
     in_payload = (t >= start + (TRAINING_BITS + delay) * ui) & (t < start + (end + delay) * ui)
     hi = samples[TRAINING_BITS:end][bits[TRAINING_BITS:end] == 1]

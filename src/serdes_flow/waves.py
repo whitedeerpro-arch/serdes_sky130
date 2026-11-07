@@ -51,3 +51,36 @@ def simplify_pwl(t, y, tolerance):
             stack.extend(((a, mid), (mid, b)))
     selected = np.array(sorted(keep))
     return t[selected], y[selected]
+
+
+def shift_pwl(t, y, offset_s, *, tolerance_v=1e-5, time_quantum_s=1e-16):
+    """Shift a finite PWL on [0, t[-1]], holding its endpoint values outside.
+
+    Quantize nearly coincident breakpoints before simplification. The final
+    error is checked at every shifted original vertex and interval endpoint,
+    so both quantization and simplification share the stated voltage bound.
+    Positive offsets delay the waveform. This endpoint-hold behavior is for
+    stimulus construction, never for extrapolating a measurement window.
+    """
+    t, y = np.asarray(t, dtype=float), np.asarray(y, dtype=float)
+    if (t.ndim != 1 or y.shape != t.shape or len(t) < 2 or t[0] != 0
+            or not np.all(np.isfinite(t)) or not np.all(np.isfinite(y))
+            or np.any(np.diff(t) <= 0) or not np.isfinite(offset_s)
+            or not np.isfinite(tolerance_v) or tolerance_v <= 0
+            or not np.isfinite(time_quantum_s) or time_quantum_s <= 0
+            or t[-1]/time_quantum_s > np.iinfo(np.int64).max/2):
+        raise ValueError('invalid shifted PWL or error/time bound')
+    stop = t[-1]
+    moved = t + offset_s
+    original = np.r_[0., moved[(moved > 0) & (moved < stop)], stop]
+    quantized = np.unique(np.rint(original/time_quantum_s).astype(np.int64))*time_quantum_s
+    grid = np.r_[0., quantized[(quantized > 0) & (quantized < stop)], stop]
+    values = np.interp(grid-offset_s, t, y)
+    out_t, out_y = simplify_pwl(grid, values, tolerance_v/2)
+    # Include retained knots too: the error of two linear interpolants reaches
+    # its maximum at a knot of either interpolant.
+    check_t = np.unique(np.r_[original, out_t])
+    error = np.max(np.abs(np.interp(check_t,out_t,out_y)-np.interp(check_t-offset_s,t,y)))
+    if error > tolerance_v*(1+1e-9):
+        raise ValueError('shifted PWL exceeds the voltage interpolation bound')
+    return out_t, out_y

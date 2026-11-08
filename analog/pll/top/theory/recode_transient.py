@@ -14,9 +14,11 @@ its value just before the switch), the time until |TIE change rate| and the PFD 
 cycles slipped (largest PFD error over the reference period).
 """
 import argparse
+import importlib.util
 import json
 import math
 import time
+from pathlib import Path
 
 import numpy as np
 
@@ -128,6 +130,50 @@ def metrics(tie_t, tie_v, pfd, a):
     return peak, settle, float(d[after][-1]), worst
 
 
+def cdr_response(tie_t, tie_v, a, seed=1):
+    """Far-end CDR (cdr_jitter.py's bang-bang loop, RTL constants) fed with the switch's TIE change, one tick per 4 ns.
+    The phase detector sees the error wrapped to +-0.5 UI, so a large excursion can settle one bit away (a slip)."""
+    spec = importlib.util.spec_from_file_location("cdr_jitter", Path(__file__).resolve().parent / "cdr_jitter.py")
+    cj = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cj)
+    ui, tick = cj.UI, cj.TICK
+    before = (tie_t > a.tswitch - 0.3e-6) & (tie_t < a.tswitch)
+    ref = np.mean(tie_v[before])
+    ticks = np.arange(a.tswitch - 1e-6, tie_t[-1], tick)
+    t_in = np.interp(ticks, tie_t, tie_v - ref)
+    rng = np.random.default_rng(seed)
+    n = len(t_in)
+    trans = rng.binomial(16, 0.5, n)
+    noise = rng.standard_normal((n, 16)) * a.edge
+    phase, debt, freq = 0.0, 0.0, 0.0
+    pending, votes = [0], [0] * 3
+    err = np.zeros(n)
+    for k in range(n):
+        e = t_in[k] - phase
+        err[k] = e
+        ew = (e + ui / 2) % ui - ui / 2
+        s = 0
+        m = trans[k]
+        if m:
+            tot = int(np.sign(ew + noise[k, :m]).sum())
+            s = (tot > 0) - (tot < 0)
+        votes.append(s)
+        s = votes.pop(0)
+        freq = min(cj.FLIM, max(-cj.FLIM, freq + cj.KI * s))
+        debt += freq + cj.KP * s
+        d = 0
+        if debt >= 1:
+            d, debt = 1, debt - 1
+        elif debt <= -1:
+            d, debt = -1, debt + 1
+        pending.append(d)
+        phase += pending.pop(0) * cj.STEP
+    ew = (err + ui / 2) % ui - ui / 2
+    bad = np.abs(ew) > a.eye_half * ui
+    return dict(peak_err_ui=float(np.max(np.abs(err)) / ui), bad_ui=int(bad.sum() * 16), bad_span_ns=float((ticks[bad].max() - ticks[bad].min()) * 1e9) if bad.any() else 0.0,
+                slip_bits=int(round(err[-1] / ui)), final_err_ui=float(err[-1] / ui))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--chip", default="tt_v1800:tt")
@@ -145,6 +191,9 @@ def main():
     ap.add_argument("--tstop", type=float, default=8e-6)
     ap.add_argument("--lock-ps", type=float, default=5e-12)
     ap.add_argument("--hold", type=float, default=0.5e-6)
+    ap.add_argument("--cdr", action="store_true", help="feed the TIE change into the far-end CDR model")
+    ap.add_argument("--edge", type=float, default=9e-12, help="CDR edge noise sigma, as cdr_jitter.py")
+    ap.add_argument("--eye-half", type=float, default=0.4, help="sampling errors counted beyond this CDR error, UI")
     a = ap.parse_args()
     curves, key = tuning(a.chip, a.temp)
     codes = sorted(k for k, p in curves.items() if v_at(p) and k - 1 in curves and v_at(curves[k - 1]))
@@ -161,6 +210,11 @@ def main():
         rows[label] = dict(peak_tie_s=peak, settle_s=settle, final_tie_s=final, pfd_peak_s=worst, slips=slips)
         print(f"  {label:20s} peak TIE {peak * 1e12:8.1f} ps ({peak / 250e-12:6.2f} UI), PFD peak {worst * 1e9:6.3f} ns, "
               f"back within {a.lock_ps * 1e12:.0f} ps after {settle * 1e9:6.0f} ns, reference cycles slipped {slips}  [{time.time() - t0:.0f} s]", flush=True)
+        if a.cdr:
+            c = cdr_response(tie_t, tie_v, a)
+            rows[label]["cdr"] = c
+            print(f"  {'':20s} far-end CDR: peak error {c['peak_err_ui']:.2f} UI, about {c['bad_ui']} UI beyond +-{a.eye_half} UI over {c['bad_span_ns']:.0f} ns, "
+                  f"settles {c['slip_bits']:+d} bit(s) away (final {c['final_err_ui']:+.2f} UI)", flush=True)
     out = ROOT / "results/analog/pll/top/recode_transient"
     out.mkdir(parents=True, exist_ok=True)
     path = out / f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}_{key.replace(':', '_')}_c{code}.json"

@@ -89,12 +89,21 @@ def slopes(codes):
     return (float(np.median(sv)), float(np.median(sk))) if sv else None
 
 
+START = "centre"          # or "temperature": the target rises with the start temperature (PTAT-aware selection)
+
+
+def target(t0, vlo, vhi):
+    if START == "temperature":
+        return vlo + (vhi - vlo) * (0.15 + 0.7 * (t0 + 40) / 125)     # cold start low in the band, hot start high
+    return (vlo + vhi) / 2
+
+
 def run_profile(codes, profile, vlo, vhi, margin, chip=None):
     """Walk a temperature profile; returns (ok, switches, events, visited Kvco, reason)."""
     sl = slopes(codes)
     cur = {k: curve(p, sl, (chip, k)) for k, p in codes.items()}
     t0 = profile[0]
-    start = [(abs(cur[k](t0)[0] - (vlo + vhi) / 2), k) for k in cur if cur[k] and vlo <= cur[k](t0)[0] <= vhi]
+    start = [(abs(cur[k](t0)[0] - target(t0, vlo, vhi)), k) for k in cur if cur[k] and vlo <= cur[k](t0)[0] <= vhi]
     if not start:
         return False, 0, [], [], f"no code inside the band at {t0} C"
     k = min(start)[1]
@@ -143,16 +152,19 @@ def main():
     ap.add_argument("--edge-margin", type=float, default=0.02)
     ap.add_argument("--margin", type=float, default=0.02, help="post-switch distance to the opposite threshold")
     ap.add_argument("--dt", type=float, default=0.5)
+    ap.add_argument("--start", choices=("centre", "temperature"), default="centre", help="power-up code: nearest the band centre, or a target that rises with the start temperature")
     a = ap.parse_args()
+    global START
+    START = a.start
     data = chips(a.workmap)
     up = np.arange(-40, 85 + a.dt, a.dt)
     profiles = {"cold start": np.r_[up, up[::-1]], "hot start": np.r_[up[::-1], up], "room start": np.r_[np.arange(27, 85 + a.dt, a.dt), up[::-1], np.arange(-40, 27 + a.dt, a.dt)]}
     result = {}
     for vlo in (float(x) for x in a.vlo.split(",")):
-        ok_chips, fails, sw, kvs, hys = 0, [], [], [], []
+        ok_chips, fails, sw, kvs, hys, never = 0, [], [], [], [], 0
         for chip, codes in sorted(data.items()):
             vhi = chip[1] - 0.39 - a.edge_margin
-            good = True
+            good, chip_sw = True, 0
             for pname, prof in profiles.items():
                 ok, n, ev, kv, why = run_profile(codes, prof, vlo, vhi, a.margin, chip)
                 if not ok:
@@ -160,14 +172,16 @@ def main():
                     fails.append(f"{chip[0]} {chip[1]:.2f} V {chip[2]} {pname}: {why}")
                     break
                 sw.append(n)
+                chip_sw += n
                 kvs += kv
             if good:
                 ok_chips += 1
+                never += chip_sw == 0
                 hys += hysteresis(codes, vlo, vhi)
         kvs = np.array(kvs) / 1e6
-        result[str(vlo)] = dict(ok=ok_chips, chips=len(data), fails=fails, switches_max=int(max(sw)) if sw else None,
+        result[str(vlo)] = dict(ok=ok_chips, never_switch=never, start=a.start, chips=len(data), fails=fails, switches_max=int(max(sw)) if sw else None,
                                 hysteresis_min_k=min(hys) if hys else None, kvco=[float(kvs.min()), float(kvs.max())] if len(kvs) else None)
-        print(f"band {vlo:.2f} V .. VDD-{0.39 + a.edge_margin:.2f} V: {ok_chips}/{len(data)} chips keep it over all three profiles; "
+        print(f"band {vlo:.2f} V .. VDD-{0.39 + a.edge_margin:.2f} V, start {a.start}: {ok_chips}/{len(data)} chips keep it over all three profiles ({never} never switch); "
               f"switches per profile <= {result[str(vlo)]['switches_max']}; smallest hysteresis "
               f"{(min(hys) if hys else float('nan')):.1f} K; visited Kvco {kvs.min() if len(kvs) else float('nan'):.0f}-{kvs.max() if len(kvs) else float('nan'):.0f} MHz/V", flush=True)
         est = {c for c in ESTIMATED if c[0] in data}

@@ -1,14 +1,15 @@
 * Baseline series-switch charge pump; actual SKY130 MOS, external bias references.
 * UP/DN active high. Positive output current means charge delivered to the filter.
 * Long-channel current mirrors; no ideal current source inside the DUT.
+* Scale k (Icp = 50 uA x k from 50 uA references): wn, wp, wsn, wsp, up_wn, up_wp, dn_wn, dn_wp x k; pnf = 4k, nnf = k.
 .subckt pll_cp up dn out vbn vbp vdd vss
-+ params: wn=5 wp=20 lmirror=1 wsn=2 wsp=4 up_wn=0.5 up_wp=2 up_ln=0.88
++ params: wn=5 wp=20 lmirror=1 wsn=2 wsp=4 up_wn=0.5 up_wp=2 up_ln=0.88 dn_wn=1 dn_wp=2 pnf=4 nnf=1
 Xupn up_b up vss vss serdes_nfet w={up_wn} l={up_ln}
 Xupp up_b up vdd vdd serdes_pfet w={up_wp}
-Xdn1 dn dn_b vdd vss serdes_cmos_inv wn=1 wp=2
-Xdn2 dn_b dn_on vdd vss serdes_cmos_inv wn=1 wp=2
-Xp ps vbp vdd vdd serdes_pfet w={wp} l={lmirror} nf=4
+Xdn1 dn dn_b vdd vss serdes_cmos_inv wn={dn_wn} wp={dn_wp}
+Xdn2 dn_b dn_on vdd vss serdes_cmos_inv wn={dn_wn} wp={dn_wp}
+Xp ps vbp vdd vdd serdes_pfet w={wp} l={lmirror} nf={pnf}
 Xps out up_b ps vdd serdes_pfet w={wsp}
 Xns out dn_on ns vss serdes_nfet w={wsn}
-Xn ns vbn vss vss serdes_nfet w={wn} l={lmirror}
+Xn ns vbn vss vss serdes_nfet w={wn} l={lmirror} nf={nnf}
 .ends pll_cp

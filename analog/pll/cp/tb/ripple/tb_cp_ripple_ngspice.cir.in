@@ -1,0 +1,31 @@
+CP in the locked state: PFD-like UP / DN pulses each reference period into the loop filter and the VCO control node
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.param supply=@SUPPLY@ irefn=50u irefp=50u
+Vdd vdd 0 {supply}
+Vbias vb 0 {supply}
+In vb vbn {irefn}
+Ip vbp 0 {irefp}
+Xbn vbn vbn 0 0 serdes_nfet w=5 l=1
+Xbp vbp vbp vb vb serdes_pfet w=20 l=1 nf=4
+* UP from the reference edge, DN from the feedback edge @DN_DELAY@ later (static phase offset); both reset together
+Vup up 0 PULSE(0 {supply} 1n 30p 30p @TON@ 4n)
+Vdn dn 0 PULSE(0 {supply} @DN_START@ 30p 30p @DN_TON@ 4n)
+Xcp up dn ctrl vbn vbp vdd 0 pll_cp @CP@
+* loop filter Rz + Ci, plus the VCO control node and anything added (Cf)
+Rz ctrl z @RZ@
+Ci z 0 @CI@
+Cctrl ctrl 0 @CCTRL@
+.ic v(ctrl)=@V0@ v(z)=@V0@
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(ctrl) v(z) i(Vdd)
+.control
+set num_threads=1
+tran 1p @STOP@ 0 2p
+wrdata ripple.tsv v(ctrl) v(z)
+quit
+.endc
+.end

@@ -45,9 +45,10 @@ def netlist(c, rc, camp):
 def analysis():
     lines = [f"tran 4p {T1:.4e} {T0 - 2e-9:.4e} 4p"]
     for name, p, n, per in OUTS:
-        # four rising crossings after T0: period from the first and the fourth
-        lines += [f"meas tran {name}_ta when v({p},{n})=0 rise=1 from={T0:.4e}", f"meas tran {name}_tb when v({p},{n})=0 rise=4 from={T0:.4e}",
-                  f"meas tran {name}_hi max v({p},{n}) from={T0:.4e} to={T1:.4e}", f"meas tran {name}_lo min v({p},{n}) from={T0:.4e} to={T1:.4e}"]
+        # control-mode meas takes no v(a,b): a differential vector first; four rising crossings after T0
+        lines += [f"let {name}d = v({p})-v({n})",
+                  f"meas tran {name}_ta when {name}d=0 rise=1 from={T0:.4e}", f"meas tran {name}_tb when {name}d=0 rise=4 from={T0:.4e}",
+                  f"meas tran {name}_hi max {name}d from={T0:.4e} to={T1:.4e}", f"meas tran {name}_lo min {name}d from={T0:.4e} to={T1:.4e}"]
     lines.append(f"meas tran tail_min min v(xpre.x2.xmaster.tail) from={T0:.4e} to={T1:.4e}")
     return "\n".join(lines)
 

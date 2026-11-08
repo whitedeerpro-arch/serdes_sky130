@@ -127,16 +127,27 @@ def main():
     ap.add_argument("--stop", type=float, default=4.5e-6)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--grid", metavar="RC", help="all 45 conditions at this RC section (tt/hh/ll), code from config/pll_code_table.json, boundary first")
+    ap.add_argument("--resume", help="campaign to continue: only points without a finished waveform run")
     a = ap.parse_args()
+    if a.grid:
+        from serdes_flow.corners import boundary_first, grid45
+        table = json.loads((ROOT / "config/pll_code_table.json").read_text())["table"]
+        a.points = ",".join(f"{c.tag}:{a.grid}:{table[f'{c.tag}:{a.grid}']['code']}" for c in boundary_first(grid45()))
     cload = ld.CtrlLoad(CTRL_LOAD, 40e-15)
-    camp = RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + a.tag)
+    camp = ROOT / a.resume if a.resume else RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + a.tag)
+    if not a.resume:
+        camp.mkdir(parents=True)
+        (camp / "plan.json").write_text(json.dumps(dict(args=vars(a)), indent=1))
     pts = [point(s, cload) for s in a.points.split(",")]
     jobs = []
     for spec, (c, rc, code, coef, v0, kv, cl) in zip(a.points.split(","), pts):
         d = camp / spec.replace(":", "_")
-        d.mkdir(parents=True)
+        if spice.case_output(d, "run", "loop.raw", a.stop) is not None:
+            continue
+        d.mkdir(parents=True, exist_ok=True)
         (d / "ref.inc").write_text(ref_pwl(c.supply, a.stop, a.tstep, a.step))
-        jobs.append((deck(c, rc, coef, v0, cl, a, camp / "snap"), d / "run", dict(files={"ref.inc": d / "ref.inc"}, timeout_s=7200,
+        jobs.append((deck(c, rc, coef, v0, cl, a, camp / "snap"), spice.next_run_dir(d, "run"), dict(files={"ref.inc": d / "ref.inc"}, timeout_s=7200,
                      meta=dict(point=spec, v0=v0, kvco=kv, cload=cl, pre_offset=a.pre_offset, step=a.step))))
     for ex in spice.run_many(jobs, workers=a.workers):
         if not ex.ok:
@@ -145,8 +156,8 @@ def main():
     print(f"precharge offset {a.pre_offset * 1e3:+.0f} mV, reference step {a.step * 1e12:.0f} ps at {a.tstep * 1e6:.1f} us")
     print(f"{'point':24s} {'V0':>6s} {'Kvco':>6s} {'Cload fF':>8s} | {'capture ns':>10s} {'offset ps':>9s} | {'overshoot':>9s} {'settle ns':>9s} | {'linear ov':>9s} {'settle ns':>9s}")
     for spec, (c, rc, code, coef, v0, kv, cl) in zip(a.points.split(","), pts):
-        p = camp / spec.replace(":", "_") / "run" / "loop.raw"
-        if not p.exists():
+        p = spice.case_output(camp / spec.replace(":", "_"), "run", "loop.raw", a.stop)
+        if p is None:
             print(f"{spec:24s} missing")
             continue
         m = analyse(p, a)

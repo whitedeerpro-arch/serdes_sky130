@@ -91,7 +91,17 @@ SS 热角高起点在原 1.2 µs 记录中未通过，延长到 2 µs 后通过�
 
 方法：[loop_design.py](../../analog/pll/top/theory/loop_design.py)（线性CP-PLL，N = 8，2 ns PFD采样延迟；搜索Rz × Ci × Cf/Ci；稳定性对象为135条件×工作区内的码×LF角：同RC段的poly/MIM实测R、C，另加hl/lh，R另乘温度系数；CP电流取真实偏置CP窗口在VDD/2处的UP/DN均值；噪声取7个压力点的VCO、CP、偏置线噪声和−125 dBc/Hz带内底噪）。控制端负载：[ctrl_load](../../analog/pll/vco/tb/ctrl_load/run.py)，Vctrl串10 mV、50 MHz正弦，振荡中锁相解调。活动：`results/analog/pll/top/loop_design/20261108T014849Z_band1p0_cload`（搜索）、`20261108T015612Z_eval_k4_rz4.13k_ci18.38p_cf0p`（评估与CDR），`results/analog/pll/vco/ctrl_load/20261108T011936Z`。
 
-**200 µA CP的纹波（2026-11-08，晶体管级，TT 1.8 V 27 °C，Vctrl 1.15 V）。** 现行漏端开关CP按4倍缩放（镜像、开关、驱动×4，50 µA参考），锁定态PFD脉冲450 ps、DN按静态相差补偿：UP/DN失配约7.3%（静态相差33 ps，补偿后每周期残余−0.18 fC）。不加Cf、控制端0.4 pF时Vctrl纹波132 mV峰峰，主要是DN开关导通瞬间电流镜漏端（关断时被拉到地）和控制节点的电荷分享（上升沿后0.1 ns下冲97 mV，约0.3 ns恢复）；换算Kvco 1 GHz/V时为11.1 ps峰峰的250 MHz确定性抖动、参考杂散−35 dBc。外加Cf 0.5 / 1 / 2 pF时为5.9 / 4.0 / 2.4 ps、−41 / −45 / −50 dBc，但同一Rz/Ci下环路最差PM降到44 / 38 / 31°。应改CP结构（关断期间把电流镜漏端钳在Vctrl附近，如单位增益缓冲加电流转向），而不是靠Cf。测试台：[cp/tb/ripple](../../analog/pll/cp/tb/ripple/run.py)；CP子电路新增缩放参数（默认值不变）。
+**200 µA CP的纹波（2026-11-08，晶体管级，TT 1.8 V 27 °C，Vctrl 1.15 V）。** 现行漏端开关CP按4倍缩放（镜像、开关、驱动×4，50 µA参考），锁定态PFD脉冲450 ps、DN按静态相差补偿：UP/DN失配约7.3%（静态相差33 ps，补偿后每周期残余−0.18 fC）。不加Cf、控制端0.4 pF时Vctrl纹波132 mV峰峰，主要是DN开关导通瞬间电流镜漏端（关断时被拉到地）和控制节点的电荷分享（上升沿后0.1 ns下冲97 mV，约0.3 ns恢复）；换算Kvco 1 GHz/V时为11.1 ps峰峰的250 MHz确定性抖动、参考杂散−35 dBc。外加Cf 0.5 / 1 / 2 pF时为5.9 / 4.0 / 2.4 ps、−41 / −45 / −50 dBc，但同一Rz/Ci下环路最差PM降到44 / 38 / 31°。应改CP结构，而不是靠Cf。测试台：[cp/tb/ripple](../../analog/pll/cp/tb/ripple/run.py)；CP子电路新增缩放参数（默认值不变）。
+
+**电流转向CP（探索候选，[charge_pump_steer](../../analog/pll/cp/spice/charge_pump_steer.spice)）把最差周期抖动从28.6 ps降到4.4 ps。** 电流镜、驱动与现行CP相同；每侧一对互补开关，无脉冲时电流流进假负载节点，该节点由跟随器钳在V(out)，电流镜漏端因此一直在Vctrl附近，开关闭合时没有电荷可分。跟随器就是B2 / serdes_ref_vbuf的5管LVT输入OTA，去掉目标DAC和使能开关，尾电流100 µA（ntail 2，暂用理想10 µA参考），假负载节点0.3 pF吸收静态相差窗口和失配电流。5个压力条件 × Vctrl 0.95 V / 1.15 V / 上沿 × 控制端0.25 / 0.7 pF（Kvco按1 GHz/V上限）：
+
+| | 现行漏端开关CP | 电流转向CP |
+|---|---|---|
+| 周期抖动峰峰 | 0.98–28.6 ps（最差FF 1.95 V −40 °C、0.95 V、0.25 pF） | 0.46–4.4 ps（最差SF 1.65 V 85 °C、1.24 V、0.25 pF） |
+| 参考杂散 | −57.5…−24.7 dBc | −67.6…−41.6 dBc |
+| Vctrl纹波峰峰 | 19–320 mV | 8.6–53 mV |
+
+两者等脉宽净电荷都在约±25 fC以内（静态相差≤约130 ps），高Vctrl处UP电流下降使其偏负。未做：OTA接真实偏置，捕获/切码时跟随器的跟踪，转向CP的直流窗口，剩余纹波（主要是输出开关的栅馈通）的进一步抵消。结果：`results/analog/pll/cp/ripple/20261108T072026Z_drain_k4_cf0p`、`20261108T072026Z_steer_k4_cf0p`。
 
 仍是模型结果，下一步：统一冻结码覆盖的口径（必要时在三温边缘补点），定粗码策略；200 µA CP单元可行区（窗口、UP/DN、开关注入，因为没有显式Cf）；物理LF（poly 4.1 kΩ、MIM 18 pF，按约0.69分接VDD/地），预充门和B2按新电容重定；实际CP＋LF＋校准的VCO模型做瞬态阶跃，核对PM。
 

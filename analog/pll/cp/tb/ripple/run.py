@@ -37,7 +37,11 @@ def cp_params(k):
 
 def deck(c, a, v0, cctrl, dn_delay, camp):
     ton = a.ton
-    text = spice.render(TEMPLATE, **spice.corner_values(c), CP=cp_params(a.k), TON=f"{ton:.4e}", DN_START=f"{1e-9 + dn_delay:.5e}",
+    if a.cell == "steer":
+        xcp = f"Xcp up dn ctrl vbn vbp ibuf vdd 0 pll_cp_steer {cp_params(a.k)} ntail={a.ntail} cdum={a.cdum:.3e}\nIbuf vdd ibuf 10u"
+    else:
+        xcp = f"Xcp up dn ctrl vbn vbp vdd 0 pll_cp {cp_params(a.k)}"
+    text = spice.render(TEMPLATE, **spice.corner_values(c), XCP=xcp, TON=f"{ton:.4e}", DN_START=f"{1e-9 + dn_delay:.5e}",
                         DN_TON=f"{ton - dn_delay:.5e}", DN_DELAY=f"{dn_delay * 1e12:.1f} ps", RZ=a.rz, CI=a.ci, CCTRL=f"{cctrl + a.cf:.4e}",
                         V0=f"{v0:.4f}", STOP=f"{PERIODS * TREF + 1e-9:.4e}")
     text = spice.binary_output(text)
@@ -77,10 +81,13 @@ def main():
     ap.add_argument("--ton", type=float, default=0.45e-9)
     ap.add_argument("--kvco", type=float, default=1e9)
     ap.add_argument("--passive", default="tt")
+    ap.add_argument("--cell", choices=("drain", "steer"), default="drain", help="pll_cp (drain switches) or pll_cp_steer (current steering + follower)")
+    ap.add_argument("--ntail", type=int, default=2, help="steer: follower tail 50 uA x ntail (ideal 10 uA reference)")
+    ap.add_argument("--cdum", type=float, default=0.3e-12, help="steer: dummy node capacitor")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--tag", default="")
     a = ap.parse_args()
-    camp = RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + f"_k{a.k:g}_cf{a.cf * 1e12:g}p" + a.tag)
+    camp = RESULTS / (time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()) + f"_{a.cell}_k{a.k:g}_cf{a.cf * 1e12:g}p" + a.tag)
     pts = []
     for tag in a.conds.split(","):
         c = Condition.parse(tag)
@@ -107,7 +114,7 @@ def main():
         if not ex.ok:
             print(f"FAILED {ex.run_dir.name}: {ex.log_failures[:2]}", flush=True)
     rows = {}
-    print(f"k {a.k:g} (Icp {icp * 1e6:.0f} uA), Rz {a.rz:.0f}, Ci {a.ci * 1e12:.1f} p, Cf added {a.cf * 1e12:.2f} p, pulses {a.ton * 1e12:.0f} ps, Kvco {a.kvco / 1e6:.0f} MHz/V")
+    print(f"{a.cell} CP" + (f" (follower tail {50 * a.ntail} uA, dummy {a.cdum * 1e12:.2f} pF)" if a.cell == "steer" else "") + f", k {a.k:g} (Icp {icp * 1e6:.0f} uA), Rz {a.rz:.0f}, Ci {a.ci * 1e12:.1f} p, Cf added {a.cf * 1e12:.2f} p, pulses {a.ton * 1e12:.0f} ps, Kvco {a.kvco / 1e6:.0f} MHz/V")
     print(f"{'condition':15s} {'Vctrl':>6s} {'Cctrl fF':>8s} | {'net Q fC':>8s} {'offset ps':>9s} | {'ripple mV':>9s} {'jitter pp ps':>12s} {'spur dBc':>8s} {'residual fC':>11s}")
     for (c, v0, cc, d) in second:
         m1 = analyse(camp / name(c, v0, cc, "p1") / "ripple.raw", a, cc)

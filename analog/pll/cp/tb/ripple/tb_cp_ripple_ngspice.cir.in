@@ -3,6 +3,8 @@ CP in the locked state: PFD-like UP / DN pulses each reference period into the l
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
 .include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump_steer.spice"
 .param supply=@SUPPLY@ irefn=50u irefp=50u
 Vdd vdd 0 {supply}
 Vbias vb 0 {supply}
@@ -13,7 +15,7 @@ Xbp vbp vbp vb vb serdes_pfet w=20 l=1 nf=4
 * UP from the reference edge, DN from the feedback edge @DN_DELAY@ later (static phase offset); both reset together
 Vup up 0 PULSE(0 {supply} 1n 30p 30p @TON@ 4n)
 Vdn dn 0 PULSE(0 {supply} @DN_START@ 30p 30p @DN_TON@ 4n)
-Xcp up dn ctrl vbn vbp vdd 0 pll_cp @CP@
+@XCP@
 * loop filter Rz + Ci, plus the VCO control node and anything added (Cf)
 Rz ctrl z @RZ@
 Ci z 0 @CI@

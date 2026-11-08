@@ -19,7 +19,7 @@
 | 1 | 环路参数（模型）、粗码策略、电流转向CP | 完成：k = 4、Rz 4.13 kΩ、Ci 18 pF、无Cf；上电按温度选码＋Vctrl迟滞切码；转向CP接真实偏置 |
 | 2 | PDK环路滤波器与预充门 | 网表完成；电源分接12/6（α 0.667）按20 MHz单音数据线性估计最差约122 MHz/V（理想0.69为104，13/5为124），待仿真复核；B2按18 pF节点的建立待复核 |
 | 3 | 电路闭环（晶体管PFD/CP/LF＋校准行为VCO） | 4个压力点与线性模型一致；45条件tt全部锁定（110–298 ns，过冲≤19.8%）；hh/ll待补 |
-| 4 | 原生晶体管级VCO/分频器闭环 | 待做（压力角） |
+| 4 | 原生晶体管级VCO/分频器闭环 | 顶层[pll_core_r5k4](../../analog/pll/top/spice/pll_core_r5k4.spice)与测试台[native_k4](../../analog/pll/top/tb/native_k4/run.py)已写；TT直流工作点不收敛（瞬态初始点卡在带隙B源；行为VCO闭环与固定Vctrl的r5前端各自都收敛），需按convergence/probe.py的预偏置初态办法处理 |
 | 5 | 启动链：偏置就绪 → 预充 → 选码 → 捕获 | 待做 |
 | 6 | 局部失配MC：VCO、CP、PFD、分频器、接收器 | 分频器测试台已写（[divider/tb/mc](../../analog/pll/divider/tb/mc/run.py)），待跑 |
 | 7 | 噪声与电源抑制按新环路复核 | 待做 |

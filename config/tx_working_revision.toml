@@ -1,5 +1,5 @@
 revision = "tx_lowov_retimed_r2_20261030"
-status = "r2_baseline_retained; capture_extra3_TT_FS_SS_eye_pass; reduced_swing_extra3_FS_fail; extra5_local_recovery_full_pending; guard_STA_SS_open"
+status = "r2_baseline_retained; extra5_WT16_R240_plus_driver_candidate_full_TX_45of45_serializer_and_pad_gates_ideal_2GHz_PDK_R_tt; guard_STA_SS_open; I17_open"
 v3_candidate_native_static_report = "docs/history/clocking_progress_20261106.md"
 v3_candidate_native_static_scope = "r5 4-bit frontend, real bias/PDK R; 8 complete count correctly, 2 FF cold missing; static data, no joint eye/bit-map acceptance"
 report = "docs/history/tx_optimization.md"
@@ -307,7 +307,7 @@ adopted = false
 status = "actual_loaded_chain_local_TT_FS_recovery; extra5_candidate_for_full_TX_confirmation"
 
 [retime_clock_iteration.output_sizing.extra5_full_confirmation]
-status = "TT_FS_SS_serializer_pass; working_candidate; 45_conditions_pad_remote_and_I17_open"
+status = "45of45_with_output_driver_candidate (see output_driver_iteration.pvt45); working_candidate; I17_open"
 SS_probe = "results/analog/tx/parallel_serializer/20261107T181342.431277Z_826110f5"
 SS_campaign = "results/analog/tx/parallel_serializer/20261107T182054.943768Z_e576538e"
 serializer_margin_mv = { TT = 135.75, FS = 102.73, SS = 124.08 }
@@ -324,7 +324,7 @@ load_ohm = 240
 full_TX_qualified = false
 
 [output_driver_iteration]
-status = "pre120_out192_working_candidate; full_TX_TT_FS_SS_pad_pass; 45_condition_clean_stage_45of45; TX_45_PVT_open; netlist_defaults_still_r2"
+status = "pre120_out192_working_candidate; full_TX_45of45_serializer_and_pad_gates; netlist_defaults_still_r2"
 cause = "serializer-output amplitude ISI accumulated by the near-linear isolation buffer and predriver; stage own DDJ with clean input 0.010 UI (FS hot)"
 report = "docs/design/tx_output_driver.md"
 bench = "analog/tx/output_driver/tb/ddj/run.py"
@@ -343,3 +343,18 @@ SS_campaign = "results/analog/tx/parallel_serializer/20261107T191809.308741Z_fc6
 TT_probe = "results/analog/tx/parallel_serializer/20261107T190834.490889Z_6f3a9e94"
 FS_probe = "results/analog/tx/parallel_serializer/20261107T190832.443952Z_50390fa5"
 SS_probe = "results/analog/tx/parallel_serializer/20261107T190836.513627Z_d12721c4"
+
+[output_driver_iteration.pvt45]
+status = "45of45_pass; serializer_and_pad_gates; 0_errors; in_order; capture_hold_tags_counting_ok"
+campaign = "results/analog/tx/full_pvt45/20261107T200334Z"
+orchestrator = "analog/tx/input_register/tb/full_serializer/pvt45.py"
+data = "docs/data/tx_full_pvt45.json"
+index = "results/catalog/tx_full_pvt45.json"
+worst_condition = "fs_v1650_t85"
+serializer_min_margin_mv = 103.1
+serializer_max_spread_ui = 0.1152
+pad_min_margin_mv = 136.0
+pad_max_spread_ui = 0.1379
+pad_pp_mv_range = [376, 494]
+remote_max_spread_ui = 0.1601  # comparison only; the only condition above 0.15
+scope = "ideal 2 GHz source, real bias, PDK R tt, initialized counter, RTL guard replay; not PLL-native, resistor corners, mismatch, noise or startup"

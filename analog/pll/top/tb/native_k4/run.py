@@ -57,8 +57,10 @@ def deck(c, rc, code, vctrl, a, camp):
             lines += [f".nodeset v(xpll.xclock.x{cell}{k}.xrestore.qp)=0 v(xpll.xclock.x{cell}{k}.xrestore.qn)={{supply}}"]
         for sd in ("p", "n"):
             lines += [f".nodeset v(xpll.xclock.v{k}{sd})={c.supply - .12:.3f} v(xpll.xclock.xvco.xv{k}{sd}.p2)={vctrl:.4f}"]
-    lines += [f".nodeset v(xpll.ctrl)={vctrl:.4f} v(ctrl)={vctrl:.4f} v(z)={vctrl:.4f}",
-              f".temp {c.temp}", ".options reltol=1e-4 abstol=1p vntol=1u klu",
+    lines += [f".nodeset v(ctrl)={vctrl:.4f} v(z)={vctrl:.4f}",
+              # default SPARSE solver: with KLU the operating point converges (true gmin stepping) but the first
+              # transient step fails ("initial timepoint", reported at the bandgap trim source) - 2026-11-09, TT
+              f".temp {c.temp}", ".options reltol=1e-4 abstol=1p vntol=1u",
               ".save v(ref) v(fb0) v(ctrl) v(z) v(c0p)", ".control", "set num_threads=1",
               f"tran 4p {a.stop:.4e} 0 4p", "wrdata loop.tsv v(ref) v(fb0) v(ctrl) v(z) v(c0p)", "quit", ".endc", ".end"]
     text = spice.skip_output_before(spice.binary_output("\n".join(lines) + "\n"), "40n")

@@ -7,7 +7,7 @@ Transistor PFD (pll_pfd), current-steering CP (pll_cp_steer, k = 4, follower fro
 behavioural: the working map's parabola f(V) of the given code and condition, and the control node capacitance
 measured there (ctrl_load, interpolated at the 2 GHz Vctrl).  Sequence: precharge both LF nodes to the 2 GHz Vctrl
 + --pre-offset (B2's tolerance), release at 50 ns, PFD out of reset at 52 ns; capture; at --tstep the reference
-moves --step later.  Reported: capture time (|PFD error - final| < 20 ps and |f - 2 GHz| < 100 ppm until the step),
+moves --step later.  Reported: capture time (|PFD error - final| < 20 ps and the feedback period, averaged over 16 reference periods, within 100 ppm until the step),
 the step response's overshoot and 2 % settling, and the same from the linear model (pnoise.Loop, the delay as a
 first-order Pade) at that Kvco and load: the circuit-level check of the phase margin.
 """
@@ -107,8 +107,13 @@ def analyse(path, a):
     e = near - ref_r
     pre = ref_r < a.tstep
     e_lock = np.median(e[pre][-50:])
-    fgh = np.interp(ref_r, t, w["v(f_ghz)"])
-    bad = pre & ((np.abs(e - e_lock) > 20e-12) | (np.abs(fgh / 2 - 1) > 1e-4))
+    # frequency from the feedback edge intervals (the mean over each reference period), not the instantaneous f_ghz,
+    # which carries the CP ripple (tens of mV x Kvco: ~2 %, far above 100 ppm)
+    # averaged over 16 reference periods: single periods carry ~1 ps of cycle-to-cycle residue in lock (> 0.4 ps = 100 ppm)
+    per = np.diff(near, prepend=near[0] - TREF)
+    cum = np.cumsum(np.where(pre, per, 0.0))
+    mean16 = np.array([(cum[i] - (cum[i - 16] if i >= 16 else 0.0)) / min(i + 1, 16) for i in range(len(per))])   # trailing, pre-step only
+    bad = pre & ((np.abs(e - e_lock) > 20e-12) | (np.abs(mean16 / TREF - 1) > 1e-4))
     capture = float(ref_r[bad].max() - 52e-9) if bad.any() else 0.0
     # step: the output phase follows the reference shift; y = (fb shift) / step
     post = ref_r >= a.tstep

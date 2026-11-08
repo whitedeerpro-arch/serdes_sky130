@@ -46,7 +46,13 @@ def deck(c, a, v0, cctrl, dn_delay, camp):
                         V0=f"{v0:.4f}", STOP=f"{PERIODS * TREF + 1e-9:.4e}")
     text = spice.binary_output(text)
     camp.mkdir(parents=True, exist_ok=True)
-    return bias.section(rcorner.to_pdk(bias.real(text), camp), c.process, a.passive)
+    text = bias.real(text)
+    if a.cell == "steer" and not a.ideal_ota_bias:
+        # the follower's 10 uA from the bias distribution, as B2's (a 4-finger PMOS copy of the bandgap V->I gate line)
+        old = "Ibuf vdd ibuf 10u"
+        assert text.count(old) == 1 and "vgi_bias" in text
+        text = text.replace(old, "XIbuf ibuf vgi_bias vdd serdes_bias_pcopy n=4")
+    return bias.section(rcorner.to_pdk(text, camp), c.process, a.passive)
 
 
 def analyse(path, a, cctrl):
@@ -84,6 +90,7 @@ def main():
     ap.add_argument("--cell", choices=("drain", "steer"), default="drain", help="pll_cp (drain switches) or pll_cp_steer (current steering + follower)")
     ap.add_argument("--ntail", type=int, default=2, help="steer: follower tail 50 uA x ntail (ideal 10 uA reference)")
     ap.add_argument("--cdum", type=float, default=0.3e-12, help="steer: dummy node capacitor")
+    ap.add_argument("--ideal-ota-bias", action="store_true", help="steer: keep the ideal 10 uA follower reference")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--tag", default="")
     a = ap.parse_args()
@@ -114,7 +121,7 @@ def main():
         if not ex.ok:
             print(f"FAILED {ex.run_dir.name}: {ex.log_failures[:2]}", flush=True)
     rows = {}
-    print(f"{a.cell} CP" + (f" (follower tail {50 * a.ntail} uA, dummy {a.cdum * 1e12:.2f} pF)" if a.cell == "steer" else "") + f", k {a.k:g} (Icp {icp * 1e6:.0f} uA), Rz {a.rz:.0f}, Ci {a.ci * 1e12:.1f} p, Cf added {a.cf * 1e12:.2f} p, pulses {a.ton * 1e12:.0f} ps, Kvco {a.kvco / 1e6:.0f} MHz/V")
+    print(f"{a.cell} CP" + (f" (follower tail {50 * a.ntail} uA from {'an ideal' if a.ideal_ota_bias else 'the real'} 10 uA, dummy {a.cdum * 1e12:.2f} pF)" if a.cell == "steer" else "") + f", k {a.k:g} (Icp {icp * 1e6:.0f} uA), Rz {a.rz:.0f}, Ci {a.ci * 1e12:.1f} p, Cf added {a.cf * 1e12:.2f} p, pulses {a.ton * 1e12:.0f} ps, Kvco {a.kvco / 1e6:.0f} MHz/V")
     print(f"{'condition':15s} {'Vctrl':>6s} {'Cctrl fF':>8s} | {'net Q fC':>8s} {'offset ps':>9s} | {'ripple mV':>9s} {'jitter pp ps':>12s} {'spur dBc':>8s} {'residual fC':>11s}")
     for (c, v0, cc, d) in second:
         m1 = analyse(camp / name(c, v0, cc, "p1") / "ripple.raw", a, cc)

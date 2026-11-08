@@ -38,7 +38,7 @@ SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL 
 ## 仿真与结果
 
 - DUT 只放电路；电源、激励、负载、测量放测试台。测试台模板在 `analog/**/tb/<case>/`，`@KEY@` 占位符由脚本替换。
-- 每次运行写入 `results/<模块>/<测试>/<run_id>/`，只追加不覆盖；保留 `tb.cir`、日志、指标 JSON。大波形用无损 gzip。
+- 每次运行写入 `results/<模块>/<测试>/<run_id>/`，只追加不覆盖；保留 `tb.cir`、日志、指标 JSON。大波形用无损 gzip。`/home` 分区只有 47 GB：`/home` 余量不足时运行 `verification/maintenance/waveform_archive.py archive`，把波形本体转存到 `/opt/serdes_archive`，原路径留文件软链接，读取不受影响。
 - 执行成功不等于设计通过；没有规格的量记为 ungraded。
 - 新代码写成正常的 `.py`。公共测量函数（边沿、眼图裕量、频率/相位、PVT 网格）收进共享库，不在每个 campaign 里重写。
 - 新 bench 用 `spice.binary_output` 输出二进制 raw，并用 `spice.skip_output_before` 不保存分析窗口之前的启动段；`spice.Waves` 两种格式都能读。瓶颈在求解器，不在波形量（TX bench 文件小 58%，仿真时间不变）。

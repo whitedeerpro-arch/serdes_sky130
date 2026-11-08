@@ -60,11 +60,33 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--points", default="fs_v1650_t-40:hh,fs_v1650_t-40:ll,fs_v1650_t85:hh,fs_v1650_t85:ll,ss_v1650_t-40:hh,ff_v1950_t-40:ll,tt_v1800_t27:tt")
     ap.add_argument("--samples", type=int, default=200)
-    ap.add_argument("--chunk", type=int, default=25)
+    ap.add_argument("--chunk", type=int, default=8, help="samples per ngspice; this bench grows ~165-200 MB per sample (3 GB cap)")
     ap.add_argument("--seed", type=int, default=1)
-    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--resume")
+    ap.add_argument("--analyse", help="campaign: read every chunk's rows as far as they go (a chunk cut by the memory cap keeps "
+                                      "its first samples: sample k of a seed is fixed, the cut depends on memory, not on values)")
     a = ap.parse_args()
+    if a.analyse:
+        camp = ROOT / a.analyse
+        groups = {}
+        for spec in a.points.split(","):
+            pt = camp / spec.replace(":", "_")
+            if not pt.is_dir():
+                continue
+            rows = []
+            for base in sorted(x for x in pt.glob("chunk??") if x.is_dir()):
+                best = []
+                for d in [base] + sorted(pt.glob(base.name + ".r*")):
+                    if (d / "mc.tsv").exists():
+                        try:
+                            r = mc.read(d)
+                        except Exception:
+                            continue
+                        best = r if len(r) > len(best) else best
+                rows += best
+            groups[spec] = rows
+        return report(a, camp, groups)
     camp = ROOT / a.resume if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs, owners = [], []
     for spec in a.points.split(","):
@@ -76,12 +98,18 @@ def main():
                          dict(timeout_s=600 + 120 * n, meta=dict(point=spec, samples=n, seed=s))))
             owners.append(spec)
     dirs = mc.run_many(jobs, workers=a.workers)
-    kf = stats.k_factor(a.samples)
+    report(a, camp, {spec: mc.read_all([d for d, o in zip(dirs, owners) if o == spec]) for spec in a.points.split(",")})
+
+
+def report(a, camp, groups):
     out = {}
-    print(f"{a.samples} samples per point, k = {kf:.2f}; swing floor {FLOOR * 1e3:.0f} / target {TARGET * 1e3:.0f} mVpp")
+    print(f"swing floor {FLOOR * 1e3:.0f} / target {TARGET * 1e3:.0f} mVpp; k from each point's sample count (99.73 %, 95 %)")
     print(f"{'point':18s} {'div fail':>8s} | " + " ".join(f"{n + ' sw mean/sd':>18s}" for n, *_ in OUTS) + f" | {'min - k sd vs floor':>19s} | {'tail min V':>10s}")
-    for spec in a.points.split(","):
-        rows = mc.read_all([d for d, o in zip(dirs, owners) if o == spec])
+    for spec, rows in groups.items():
+        if len(rows) < 3:
+            print(f"{spec:18s} {len(rows)} samples")
+            continue
+        kf = stats.k_factor(len(rows))
         col = lambda k: np.array([r[k] for r in rows], float)
         fail = np.zeros(len(rows), bool)
         for n, _, _, per in OUTS:
@@ -91,11 +119,11 @@ def main():
         worst = min(float(np.nanmean(v) - kf * np.nanstd(v, ddof=1)) for v in sw.values())
         tail = col("tail_min")
         ci = stats.yield_ci(int((~fail).sum()), len(rows))
-        out[spec] = dict(samples=len(rows), divide_fail=int(fail.sum()), divide_pass_ci=list(ci), swing={n: [float(np.nanmean(v)), float(np.nanstd(v, ddof=1)), float(np.nanmin(v))] for n, v in sw.items()},
+        out[spec] = dict(samples=len(rows), k=kf, divide_fail=int(fail.sum()), divide_pass_ci=list(ci), swing={n: [float(np.nanmean(v)), float(np.nanstd(v, ddof=1)), float(np.nanmin(v))] for n, v in sw.items()},
                          swing_mean_minus_k_sd=worst, tail_min=[float(np.nanmean(tail)), float(np.nanstd(tail, ddof=1)), float(np.nanmin(tail))])
-        print(f"{spec:18s} {int(fail.sum()):4d}/{len(rows):3d} | " + " ".join(f"{np.nanmean(v) * 1e3:8.0f}/{np.nanstd(v, ddof=1) * 1e3:5.1f} mV" for v in sw.values())
+        print(f"{spec:18s} k {kf:.2f} {int(fail.sum()):4d}/{len(rows):3d} | " + " ".join(f"{np.nanmean(v) * 1e3:8.0f}/{np.nanstd(v, ddof=1) * 1e3:5.1f} mV" for v in sw.values())
               + f" | {worst * 1e3:8.0f} mV ({'ok' if worst >= FLOOR else 'BELOW'}) | {np.nanmean(tail):.3f}/{np.nanmin(tail):.3f}", flush=True)
-    (camp / "summary.json").write_text(json.dumps(dict(args=vars(a), k=kf, floor=FLOOR, target=TARGET, points=out), indent=1))
+    (camp / "summary.json").write_text(json.dumps(dict(args=vars(a), floor=FLOOR, target=TARGET, points=out), indent=1))
     print(camp.relative_to(ROOT))
 
 

@@ -72,7 +72,7 @@ uv run python -m serdes_flow.audit results/analog/rx/sampler/offset_mc/RUN_ID
 uv run python verification/mc_profile.py --samples 3
 ```
 
-`mc.deck(..., profile=True)` 输出 `rusage all`。分块大小应由当前 DUT/时间窗的内存增量决定；并发最多 4 个，多个 campaign 合计也不得超过 4。默认是保守起点，不是任意机器上不会 OOM 的保证。详见 [2026-11-05 成本与架构评估](../history/workflow_review_20261105.md)。
+`mc.deck(..., profile=True)` 输出 `rusage all`。分块大小应由当前 DUT/时间窗的内存增量决定；并发最多 4 个，多个 campaign 合计也不得超过 4。默认是保守起点，不是任意机器上不会 OOM 的保证。实测增量：PLL ÷8分频器（真实偏置、PDK R、48 ns瞬态）约165–200 MB/样本；`spice.run`的3 GB上限下一块最多约15个样本。2026-11-08按25样本/块×4并发运行时，每块都在第18个样本被上限杀掉（run_many反复重跑、无一完成），4个进程合计8.4 GB，同日的虚拟机停机也发生在这一运行中。被截断的块可回收：样本k由种子固定、截断只由内存决定（`divider/tb/mc/run.py --analyse`）。详见 [2026-11-05 成本与架构评估](../history/workflow_review_20261105.md)。
 
 ## 模型局限
 

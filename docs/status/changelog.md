@@ -4,7 +4,7 @@
 
 ## 2026-11-08
 
-- 磁盘：`/home`为固定47 GB分区（200 GB盘按分区切分）。新增[waveform_archive.py](../../verification/maintenance/waveform_archive.py)：波形本体转存到`/opt/serdes_archive`，原路径留文件软链接（SHA-256核对后原子替换），读取/续跑/边界SHA校验照常。首次转存4127个文件18.2 GB，`/home`可用4.2 → 22 GB；先前gzip旧波形省1.6 GB。按“失败且已被成功重跑取代”的规则没有可删的输出。
+- 磁盘：`/home`为固定47 GB分区（200 GB盘按分区切分）。新增[waveform_archive.py](../../verification/maintenance/waveform_archive.py)：波形本体转存到`/opt/serdes_archive`，原路径留文件软链接（SHA-256核对后原子替换），读取/续跑/边界SHA校验照常。首次转存4127个文件18.2 GB，第二轮补最后一批45条件波形和`results/archives`打包文件110个2.4 GB；`results/`在`/home`上22 → 4.7 GB，`/home`可用4.2 → 24 GB；先前gzip旧波形省1.6 GB。按“失败且已被成功重跑取代”的规则没有可删的输出。
 - [45条件完整TX](../design/tx_final_retime.md#45条件完整tx2026-11-08)：extra5＋输出级候选（预驱动120 Ω/尾60 µm、输出对W192）在45个MOS条件下串化器与焊盘全部满足75 mV / 0.15 UI，256位零错、位序和捕获/保持正确；最差FS 1.65 V 85 °C 103.1 mV / 0.115 UI（串化器）、136.0 mV / 0.138 UI（焊盘）。远端只有该点0.160 UI超过比较线。焊盘摆幅376–494 mVpp。理想2 GHz源、PDK R tt；PLL原生、电阻角、MC/噪声、I-17仍开。
 - 规格：TX焊盘节点（输出级出口，代理焊盘/封装/AC/RLC16负载）改为门槛，与串化器节点相同（75 mV / 0.15 UI / 无错误），45条件适用；远端仍只作比较（I-20）。新增45条件完整TX编排`full_serializer/pvt45.py`（按条件续跑、边界优先、prepare串行登记）。
 - [TX输出级散布归因](../design/tx_output_driver.md#串化器到焊盘的散布增量2026-11-08)：FS热焊盘多出的+0.043 UI来自串化器输出幅度ISI经隔离buffer/预驱动累积（干净输入只加0.010 UI，实际过零时刻+干净波形只加0.003 UI）。新单级bench与串化器输出回放边界`tx_extra5_serializer_output_v1`（过零时刻误差≤0.43 ps，电平误差5–17 mV，只用于时序）。工作候选预驱动120 Ω/尾60 µm、输出对W192：完整TX焊盘TT/FS/SS 0.0763/0.1379/0.0545 UI（FS原0.1584），串化器不变，FS焊盘摆幅385→376 mVpp，+0.8 mW；45条件单级干净输入全部正常。`full_serializer/run.py`新增`--driver-params`。

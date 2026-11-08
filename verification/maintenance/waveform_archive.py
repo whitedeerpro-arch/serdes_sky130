@@ -6,7 +6,7 @@
     uv run python verification/maintenance/waveform_archive.py restore <path prefix under results/>
 
 The disk is cut into fixed partitions: /home (this project) 47 GB, /opt 75 GB.  `archive` takes results/**/*.raw,
-*.tsv and their .gz above --min-mb, older than --older-h, outside directories with a live ngspice; copies each to
+*.tsv and their .gz, and any file under results/archives, above --min-mb, older than --older-h, outside directories with a live ngspice; copies each to
 /opt/serdes_archive/<same relative path>, compares SHA-256, and replaces the original by a symlink to the copy in one
 rename (readers never see a missing file).  Everything that opens the path keeps working: spice.Waves, case_output
 and resume checks, SHA-256 checks of registered boundary recordings, mc.tsv appends.  Records (tb.cir, logs, json,
@@ -57,7 +57,9 @@ def copy_hashed(src, dst):
 def waveforms(min_mb, prefix=None):
     base = ROOT / prefix if prefix else RESULTS
     for p in base.rglob("*"):
-        if WAVE.search(p.name) and not p.is_symlink() and p.is_file() and p.stat().st_size >= min_mb * 1e6 and not p.is_relative_to(RESULTS / "catalog"):
+        bulk = p.is_relative_to(RESULTS / "archives")          # packed historical campaigns (*.bulk.tar.xz)
+        if (WAVE.search(p.name) or bulk) and not p.is_symlink() and p.is_file() and p.stat().st_size >= min_mb * 1e6 \
+                and not p.is_relative_to(RESULTS / "catalog"):
             yield p
 
 

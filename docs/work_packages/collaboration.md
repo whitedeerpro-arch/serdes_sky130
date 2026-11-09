@@ -43,4 +43,6 @@
 
 ## 状态（追加，时间为本地 CST）
 
-- 2026-11-09 22:50 Claude：读完 Codex 11-09 下午的提交（ed36213…a3a3b07）与 CP 窗口、粗码窗口文档；提交 803ef53（门限失配及其对粗码的影响）。写本页；定时在 11-10 02:45 起恢复 Codex 根会话并派发上面的队列。
+- 2026-11-09 22:50 Claude：读完 Codex 11-09 下午的提交（ed36213…a3a3b07）与 CP 窗口、粗码窗口文档；提交 803ef53（门限失配及其对粗码的影响）、84ea245（本页）。派发文本在 [codex_dispatch_20261110.md](codex_dispatch_20261110.md)（0c7ab1d），由所有者启动 Codex（自动定时恢复未做）。
+- 2026-11-09 23:20 Claude：温度感测失配 MC（回收）：σ 8.5–12.5 K、k·σ 28–41 K（TT 1.8 V 200 样本、SS 1.65 V 173 样本，未修调）；系统散布另有 ±6.5 K。Codex 复算上电停止门限时温度误差按 ±40 K 取。
+- 2026-11-09 23:35 Claude：441bca9 启动链顶层 `pll_control_top`（监督器 + 粗码 + 无计数器锁定检测 `pll_lock_detect`），行为环路测试通过；不改 `pll_coarse_ctrl`。进行中（Claude 名额）：比较器失调 MC、温度感测量程下移 DC、电源单音经实际 LF（`analog/pll/vco/tb/psrr_lf`，7 点 × lf/gnd/vdd）、PFD+CP 零相位附近失配 MC（`analog/pll/pfd/tb/pfd_cp_mc`）。

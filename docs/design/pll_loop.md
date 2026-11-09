@@ -231,9 +231,9 @@ SS 热角高起点在原 1.2 µs 记录中未通过，延长到 2 µs 后通过�
    原理：降Rz使正交分量ωRzCp(β − α)K_line按比例减小，控制端极点1/(RzCp)上移，PM反而改善；Ci和Icp随之加大以保持UGB。|K|的下限约90–110 MHz/V，由实部零点α随条件的散布决定，单一分接去不掉。代价：CP电流＋50% / ＋100%，Ci＋11 / ＋15 pF（每个PLL的MIM约＋0.010 / ＋0.013 mm²，[面积](../overview/area.md)按0.00087 mm²/pF）。未查：k ≠ 4的CP输出电容是按比例估的；转向CP要按新电流重定尺寸，CP窗口、预充时间（C大60–80%）、捕获都要重做；电源模型只拟合了7个压力点。结果`results/analog/pll/top/loop_psrr/20261109T203627Z`。
 3. 降低VCO本身的电源灵敏度（K_gnd为−420…−800 MHz/V），或给VCO单独供电：结构性改动。
 
-**覆盖缺口。** 门槛只定在20 MHz；按[supply_tolerance.py](../../analog/pll/top/theory/supply_tolerance.py)，容限最差频率在环路带宽附近（约8 MHz），那里的|K|尚未实测。
+**20 MHz以外。** 按标称环路（[supply_tolerance.py](../../analog/pll/top/theory/supply_tolerance.py)，|K|不随频率变）容限最差在约8 MHz；实际|K|的正交分量随频率下降，且各点环路不同。每点按自身环路（码表Kvco、CP窗口电流、Rz / Ci角、拟合的控制端Cp）算误差传递1/(1 + L)，23/36分接在12 MHz实测：FS 1.95 V 85 °C hh 104 MHz/V（模型116）、TT 113（模型113）、FS 1.65 V 85 °C hh 102（模型111），模型在FS点偏保守 ≤ 12 MHz/V。折成0.05 UI峰值的单音容限：12 MHz为16.2 / 17.5 / 22.2 mV，20 MHz为15.8 / 20.2 / 16.2 mV，最差仍在20 MHz附近（TT按模型在约10 MHz为17.3 mV）。规格里"约17 mV"按标称环路；这几点20 MHz处|1/(1 + L)|约1.3，门槛150 MHz/V对应约15.6 mV。
 
-结果：`results/analog/pll/vco/psrr_lf/20261109T145047Z`（12/6）、`20261109T180645Z`（11/7）、`20261109T192257Z`（23/36）、`results/analog/pll/top/loop_design/20261109T19213*Z_*psrr_cx150`。
+结果：`results/analog/pll/vco/psrr_lf/20261109T145047Z`（12/6）、`20261109T180645Z`（11/7）、`20261109T192257Z`（23/36）、`20261109T203223Z`（23/36，12 MHz）、`results/analog/pll/top/loop_design/20261109T19213*Z_*psrr_cx150`。
 
 ### 按抖动预算选的环路（r5 候选 VCO，未实现；已被上一节取代）
 

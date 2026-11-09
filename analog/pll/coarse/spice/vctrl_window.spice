@@ -13,5 +13,9 @@
 .subckt pll_vctrl_window z hi lo ilo ihi ibh ibl vdd vss params: code_lo=5 code_hi=3
 Xlo ilo vlo vdd vss serdes_vref_gnd code={code_lo} r0=160k rstep=4k
 Xhi ihi vhi vdd vss serdes_vref_vdd code={code_hi} r0=64k rstep=6k
-Xw z vlo vhi hi lo ibh ibl vdd vss serdes_window_cmp
+* both comparators are the high-common-mode variant: the upper threshold's +k sigma tail reaches VDD - 0.36 V, where
+* the LVT-pair serdes_cmp degrades at SF 1.65 V -40 C (MC sigma 12.6 mV, one non-trip); serdes_cmp_hv keeps sigma
+* 1.7-2.0 mV from 0.9 V to VDD - 0.35 V (cmp_mc 20261109T154004Z)
+Xh z vhi hi ibh vdd vss serdes_cmp_hv
+Xl vlo z lo ibl vdd vss serdes_cmp_hv
 .ends pll_vctrl_window

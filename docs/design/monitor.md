@@ -46,7 +46,21 @@
 
 ### 比较器局部失配
 
-**输入在 VDD − 0.40 V 以下时随机失调 σ 1.62–1.77 mV，|均值| + k·σ ≤ 6.2 mV**（5 个压力点 × 共模 0.9 / 1.3 V，各 200 样本，k = 3.28），与 Pelgrom 估计一致（输入对 LVT 16/2、镜像 LVT 8/8）。**例外：SF 1.65 V −40 °C、共模 1.3 V（= VDD − 0.35 V）σ 12.6 mV，四分位 −10.6…+7.6 mV，200 样本中 1 个在 ±30 mV 内不翻转**：输入对在这一角进入线性区，增益下降，失配被放大。PLL 上门限名义 VDD − 0.41 V，其 +k·σ 尾部到 VDD − 0.36 V，正落在这个区域，所以上门限比较器改用高共模变体 `serdes_cmp_hv`（普通 nfet 输入对、镜像加宽，正在表征）。测试台 [cmp_mc](../../analog/common/monitor/tb/cmp_mc/run.py)，结果 `results/analog/common/monitor/cmp_mc/20261109T144617Z`。
+**输入在 VDD − 0.40 V 以下时随机失调 σ 1.62–1.77 mV，|均值| + k·σ ≤ 6.2 mV**（5 个压力点 × 共模 0.9 / 1.3 V，各 200 样本，k = 3.28），与 Pelgrom 估计一致（输入对 LVT 16/2、镜像 LVT 8/8）。**例外：SF 1.65 V −40 °C、共模 1.3 V（= VDD − 0.35 V）σ 12.6 mV，四分位 −10.6…+7.6 mV，200 样本中 1 个在 ±30 mV 内不翻转**：输入对在这一角进入线性区，增益下降，失配被放大。PLL 上门限名义 VDD − 0.41 V，其 +k·σ 尾部到 VDD − 0.36 V，正落在这个区域。测试台 [cmp_mc](../../analog/common/monitor/tb/cmp_mc/run.py)，结果 `results/analog/common/monitor/cmp_mc/20261109T144617Z`。
+
+### 高共模变体 `serdes_cmp_hv`
+
+**普通 nfet 输入对（16/2）＋加宽一倍的 LVT 镜像（16/8）：45 条件下输入 0.6 V 到 VDD − 0.15 V 都干净，系统失调 −2.5…+0.5 mV（VDD − 0.15…0.60 V），低共模端 −4.7…−1.3 mV；随机失调 σ 1.73–1.99 mV、|均值| + k·σ ≤ 8.6 mV，SF 1.65 V −40 °C 在 VDD − 0.35 V 处 σ 1.73 mV、100 样本全部翻转。** 代价：1 mV/µs 斜坡下滞后增至 ≤ 10.6 mV（镜像节点电容大），判决仍是 µs 级。PLL 窗口检测的两个比较器都改用它（换用后 135 条件仍全部功能正确，门限误差不变，`results/analog/pll/coarse/window_dc/20261109T162021Z`）；工具包的 `serdes_cmp` 保留给 VDD − 0.40 V 以下的用途。
+
+| | `serdes_cmp`（LVT 对） | `serdes_cmp_hv`（普通对） |
+|---|---|---|
+| 干净输入范围（45 条件） | 0.6 V … VDD − 0.40 V | 0.6 V … VDD − 0.15 V |
+| 系统失调 | −1.0 … +0.3 mV | −4.7 … +0.5 mV |
+| 随机 σ（VDD − 0.40 V 以下） | 1.62–1.77 mV | 1.73–1.99 mV |
+| VDD − 0.35 V、SF 1.65 V −40 °C | σ 12.6 mV，1/200 不翻转 | σ 1.73 mV，100/100 翻转 |
+| 滞后（1 mV/µs） | ≤ 3.3 mV | ≤ 10.6 mV |
+
+结果：翻转点 `results/analog/common/monitor/cmp_trip/20261109T154002Z`，失配 `results/analog/common/monitor/cmp_mc/20261109T154004Z`（3 点 × 共模 0.9 / 1.24 / 1.3 V × 100 样本；重启后按块续跑）。
 
 ### 门限梯与窗口检测（PLL 实例，135 条件）
 
@@ -69,7 +83,7 @@ PLL 的 [pll_vctrl_window](../../analog/pll/coarse/spice/vctrl_window.spice)：�
 
 **随机部分（初版梯，未修调）：σ 8.5–12.5 K，k·σ 28–41 K**（TT 1.8 V 200 样本、SS 1.65 V 173 样本，码 3 / 9 / 14）。原因是 VBE 与 vbg / r_ref 派生的参考比较，带隙本身的失配（vbg σ 2.2 %）和两路 LVT 拷贝的失配（pfet_lvt A_VT ≈ 20 mV·µm）都按 1 V 量级全额进入；PTAT 方案同样受这两项限制（约 2 %，≈ 6 K）。做到 1–2 K 需要室温一点修调或斩波。PLL 用途只要粗分档：[上电选码模型](pll_vco.md#上电选码的实现2026-11-09模型待补点数据复核)显示 ±30 K 误差仍保留大部分好处，所以先不修调。测试台 [tsense_mc](../../analog/common/monitor/tb/tsense_mc/run.py)，结果 `results/analog/common/monitor/tsense_mc/20261109T062640Z`：会话结束时中断（FF 1.95 V 点未跑、SS 第 7 块末行截断），按样本回收（`--analyse`，截断行丢弃），默认块改为 8。
 
-（进行中：高共模比较器 `serdes_cmp_hv` 的 45 条件翻转点与失配。）
+
 
 ## 适用范围
 

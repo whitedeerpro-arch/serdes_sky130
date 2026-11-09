@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 
@@ -16,13 +17,21 @@ from .project import ROOT
 
 STATES = {"waiting", "ready", "running", "submitted", "accepted", "changes_requested"}
 CHECK_STATES = {"pass", "fail", "ungraded", "missing"}
+ARCHIVE_ROOT = Path("/opt/serdes_archive")
 
 
 def relative_file(root: Path, name: str) -> Path:
     if not isinstance(name, str) or Path(name).is_absolute():
         raise ValueError("paths must be relative to the repository")
-    path = (root / name).resolve()
-    if not path.is_relative_to(root.resolve()) or not path.is_file():
+    root = root.resolve()
+    lexical = Path(os.path.abspath(root / name))
+    if not lexical.is_relative_to(root):
+        raise ValueError(f"input missing or outside repository: {name}")
+    path = lexical.resolve()
+    relative = lexical.relative_to(root)
+    archived = (relative.parts and relative.parts[0] == "results"
+                and path == ARCHIVE_ROOT / relative)
+    if not (path.is_relative_to(root) or archived) or not path.is_file():
         raise ValueError(f"input missing or outside repository: {name}")
     return path
 

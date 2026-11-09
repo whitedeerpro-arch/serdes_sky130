@@ -18,3 +18,15 @@ def test_tt_bare_hh_section_counts_as_hh_not_tt_hh(monkeypatch):
     rows = LINEAGE.coverage(campaigns)
     assert rows[0]["resistor_corner"] == "hh" and rows[0]["status"] == "pass"
     assert rows[1]["resistor_corner"] == "ll" and rows[1]["status"] == "missing"
+
+
+def test_rel_keeps_lexical_repository_path_for_archived_wave(tmp_path, monkeypatch):
+    monkeypatch.setattr(LINEAGE, 'ROOT', tmp_path / 'repo')
+    wave = LINEAGE.ROOT / 'results/run/wave.raw'
+    wave.parent.mkdir(parents=True)
+    target = tmp_path / 'archive/wave.raw'
+    target.parent.mkdir()
+    target.write_bytes(b'wave')
+    wave.symlink_to(target)
+    assert LINEAGE.rel(wave) == 'results/run/wave.raw'
+    assert LINEAGE.rel(wave.parent / '../run/wave.raw') == 'results/run/wave.raw'

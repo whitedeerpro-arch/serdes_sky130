@@ -95,3 +95,33 @@ def test_symlink_escape_is_rejected(repository, tmp_path_factory):
     (root / "escape").symlink_to(outside)
     with pytest.raises(ValueError, match="outside"):
         wp.relative_file(root, "escape")
+
+
+def test_archive_mapping_only_for_matching_results_path(repository, tmp_path_factory, monkeypatch):
+    root, _, _ = repository
+    external = tmp_path_factory.mktemp('archive-test')
+    archive = external / 'archive'
+    monkeypatch.setattr(wp, 'ARCHIVE_ROOT', archive)
+    target = archive / 'results/run/wave.raw'
+    target.parent.mkdir(parents=True)
+    target.write_bytes(b'wave')
+    link = root / 'results/run/wave.raw'
+    link.parent.mkdir(parents=True)
+    link.symlink_to(target)
+    assert wp.relative_file(root, 'results/run/wave.raw').read_bytes() == b'wave'
+    wrong = root / 'results/run/wrong.raw'
+    wrong.symlink_to(target)
+    with pytest.raises(ValueError, match='outside'):
+        wp.relative_file(root, 'results/run/wrong.raw')
+    outside = external / 'outside.raw'
+    outside.write_bytes(b'wave')
+    link.unlink()
+    link.symlink_to(outside)
+    with pytest.raises(ValueError, match='outside'):
+        wp.relative_file(root, 'results/run/wave.raw')
+    non_results = root / 'other.raw'
+    non_results.symlink_to(target)
+    with pytest.raises(ValueError, match='outside'):
+        wp.relative_file(root, 'other.raw')
+    with pytest.raises(ValueError, match='outside'):
+        wp.relative_file(root, '../outside.raw')

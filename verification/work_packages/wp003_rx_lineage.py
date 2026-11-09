@@ -11,6 +11,7 @@ import gc
 import gzip
 import hashlib
 import json
+import os
 import re
 import shlex
 import tomllib
@@ -50,7 +51,7 @@ UNRESOLVED: list[dict] = []
 
 def rel(path: Path) -> str:
     try:
-        return str(path.resolve().relative_to(ROOT))
+        return str(Path(os.path.abspath(path)).relative_to(ROOT))
     except ValueError:
         return str(path)
 

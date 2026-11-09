@@ -30,22 +30,41 @@ def netlist(proc, supply, ts, lad, ncopy):
     return spice.render(td.TEMPLATE, **vals, SECTION=f"{proc}_mm", TS_PARAMS=ts, LAD_PARAMS=lad, NCOPY=ncopy)
 
 
+def read_tolerant(run_dir):
+    """mc.read, but an interrupted chunk's unfinished last line is dropped instead of failing the chunk."""
+    try:
+        return mc.read(run_dir)
+    except ValueError:
+        rows, names = [], None
+        for line in (run_dir / mc.MC_FILE).read_text().splitlines():
+            parts = line.split()
+            try:
+                vals = [float(x) for x in parts]
+            except ValueError:
+                names = names or parts
+                continue
+            if names and len(vals) == len(names):
+                rows.append({k: (float("nan") if v <= mc.SENTINEL / 10 else v) for k, v in zip(names, vals)})
+        return rows
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--points", default="tt_v1800,ss_v1650,ff_v1950")
     ap.add_argument("--codes", default="3,9,14")
     ap.add_argument("--samples", type=int, default=200)
-    ap.add_argument("--chunk", type=int, default=25)
+    ap.add_argument("--chunk", type=int, default=8, help="~140 MB per sample (bandgap + ladder): 25 hit the 3 GB cap at sample ~21")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=1)
-    ap.add_argument("--ts", default="rs=38k")
-    ap.add_argument("--lad", default="r0=95k rstep=1.867k")
+    ap.add_argument("--ts", default="rs=23k")
+    ap.add_argument("--lad", default="r0=85.6k rstep=1.57k")
     ap.add_argument("--ncopy", type=int, default=4)
+    ap.add_argument("--analyse", help="campaign: summarize the rows already written (truncated chunks included), no simulation")
     a = ap.parse_args()
     codes = [int(x) for x in a.codes.split(",")]
     analysis = "\n".join(["dc temp -40 125 0.5"] + [f"meas dc t{k} when v(vs)=v(xlad.t{k})" for k in codes])
     lets = {f"trip{k}": f"t{k}" for k in codes}
-    camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = (ROOT / a.analyse) if a.analyse else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs, owners = [], []
     for p in a.points.split(","):
         proc, v = p.split("_v")
@@ -54,11 +73,18 @@ def main():
             jobs.append((mc.deck(net, n, seed=s, analysis=analysis, lets=lets), camp / p / f"chunk{k:02d}",
                          dict(timeout_s=600 + 20 * n, meta=dict(point=p, samples=n, seed=s))))
             owners.append(p)
-    dirs = mc.run_many(jobs, workers=a.workers)
+    if a.analyse:
+        # sample k of a chunk seed is fixed; a memory-truncated or interrupted chunk keeps its first rows unchanged
+        dirs = [j[1] for j in jobs if (j[1] / mc.MC_FILE).exists()]
+    else:
+        dirs = mc.run_many(jobs, workers=a.workers)
     out = {}
     print("trip temperature (local mismatch), C: mean / sd / k sd")
     for p in a.points.split(","):
-        rows = mc.read_all([d for d, o in zip(dirs, owners) if o == p])
+        rows = [r for d in dirs if d.parent.name == p for r in (read_tolerant(d) if a.analyse else mc.read(d))]
+        if not rows:
+            print(f"  {p:10s} no samples")
+            continue
         kf = stats.k_factor(len(rows))
         res = {}
         for k in codes:

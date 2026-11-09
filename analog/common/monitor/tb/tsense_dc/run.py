@@ -1,7 +1,7 @@
 """Monitor temperature sense (serdes_tsense_vbe vs serdes_vref_gnd): trip temperature of every ladder code over
 MOS corner x resistor corner x supply, real bandgap bias.
 
-    uv run python analog/common/monitor/tb/tsense_dc/run.py [--rcorners tt,ll,hh] [--ts "rs=38k"] [--lad "r0=95k rstep=1.867k"]
+    uv run python analog/common/monitor/tb/tsense_dc/run.py [--rcorners tt,ll,hh] [--ts "rs=23k"] [--lad "r0=85.6k rstep=1.57k"]
         [--ncopy 4] [--workers 2]
 
 One deck per library section; each supply runs `dc temp -40 125 1` and writes the sense voltage vs and the 16 ladder taps.
@@ -58,8 +58,8 @@ def trips(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--rcorners", default="tt,ll,hh")
-    ap.add_argument("--ts", default="rs=38k")
-    ap.add_argument("--lad", default="r0=95k rstep=1.867k")
+    ap.add_argument("--ts", default="rs=23k")
+    ap.add_argument("--lad", default="r0=85.6k rstep=1.57k")
     ap.add_argument("--ncopy", type=int, default=4)
     ap.add_argument("--workers", type=int, default=2)
     a = ap.parse_args()

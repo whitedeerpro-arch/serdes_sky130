@@ -59,11 +59,13 @@ PLL 的 [pll_vctrl_window](../../analog/pll/coarse/spice/vctrl_window.spice)：�
 
 ### 温度感测 `serdes_tsense_vbe`
 
-VBE + I·rs（rs 38 kΩ，10 µA）对同类 10 µA 拷贝的 I·R 梯（r0 95 kΩ，rstep 1.867 kΩ）。斜率 −1.66…−1.72 mV/K，一码约 10.6 K。45 组（MOS × 电阻 × VDD）上每码翻转温度的系统散布约 13 K（±6.5 K）：MOS 角 ±2.8 K（PNP 的 VBE 角）、VDD ±2.3 K（拷贝余量）、电阻角 ±1.4 K。码 15 的中位翻转温度是 −35 °C，量程偏热，需下移（r0 ≈ 100.6 kΩ、rstep ≈ 1.57 kΩ 覆盖约 −45…95 °C）。测试台 [tsense_dc](../../analog/common/monitor/tb/tsense_dc/run.py)，结果 `results/analog/common/monitor/tsense_dc/20261109T053634Z`。
+**当前：VBE + I·rs（rs 23 kΩ，10 µA）对同类 10 µA 拷贝的 I·R 梯（r0 85.6 kΩ，rstep 1.57 kΩ）。码 0–14 覆盖 93 → −35 °C，一码约 9 K；系统散布每码约 10.5 K（±5.3 K），随机 σ 约 11 K（未修调）。** 斜率 −1.69…−1.73 mV/K，27 °C 时 vs 0.96–0.98 V；码 15 落在 −40 °C 边上（45 组中 42 组不翻转，作"低于 −35 °C"档）。测试台 [tsense_dc](../../analog/common/monitor/tb/tsense_dc/run.py)，结果 `results/analog/common/monitor/tsense_dc/20261109T144616Z`。
 
-随机部分：4 样本试跑 σ 8–11 K（MC 进行中）。原因是 VBE 与 vbg / r_ref 派生的参考比较，带隙本身的失配（vbg σ 2.2 %，未修调）和两路 LVT 拷贝的失配（pfet_lvt A_VT ≈ 20 mV·µm）都按 1 V 量级全额进入；PTAT 方案同样受这两项限制（约 2 %，≈ 6 K）。做到 1–2 K 需要室温一点修调或斩波。PLL 用途只要粗分档：[上电选码模型](pll_vco.md#上电选码的实现2026-11-09模型待补点数据复核)显示 ±30 K 误差仍保留大部分好处，所以先不修调。
+初版（rs 38 kΩ、梯 95 k / 1.867 k）量程偏热（码 15 中位 −35 °C），系统散布约 13 K（±6.5 K）：MOS 角 ±2.8 K（PNP 的 VBE 角）、VDD ±2.3 K（拷贝余量）、电阻角 ±1.4 K。降压后拷贝余量增加，VDD 项变小，散布降到 ±5.3 K（`results/analog/common/monitor/tsense_dc/20261109T053634Z`）。
 
-（进行中：比较器、门限、温度感测的局部失配 MC。）
+**随机部分（初版梯，未修调）：σ 8.5–12.5 K，k·σ 28–41 K**（TT 1.8 V 200 样本、SS 1.65 V 173 样本，码 3 / 9 / 14）。原因是 VBE 与 vbg / r_ref 派生的参考比较，带隙本身的失配（vbg σ 2.2 %）和两路 LVT 拷贝的失配（pfet_lvt A_VT ≈ 20 mV·µm）都按 1 V 量级全额进入；PTAT 方案同样受这两项限制（约 2 %，≈ 6 K）。做到 1–2 K 需要室温一点修调或斩波。PLL 用途只要粗分档：[上电选码模型](pll_vco.md#上电选码的实现2026-11-09模型待补点数据复核)显示 ±30 K 误差仍保留大部分好处，所以先不修调。测试台 [tsense_mc](../../analog/common/monitor/tb/tsense_mc/run.py)，结果 `results/analog/common/monitor/tsense_mc/20261109T062640Z`：会话结束时中断（FF 1.95 V 点未跑、SS 第 7 块末行截断），按样本回收（`--analyse`，截断行丢弃），默认块改为 8。
+
+（进行中：比较器局部失配 MC。）
 
 ## 适用范围
 

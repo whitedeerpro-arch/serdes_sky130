@@ -1,0 +1,23 @@
+* PFD phase-error window for the lock detector (digital/pll/rtl/pll_lock_detect.sv, pw_late_async).
+* e = UP xor DN is the phase-error pulse (its width is |phase error|; the common reset pulse cancels).  A chain of nd
+* inverters (even), each loaded with cd, delays e by tau_d; a static DFF clocked by the delayed edge samples e: still
+* high -> the error exceeded ~tau_d.  The flag is sticky (D = e or late) until the digital side clears it once per
+* measurement window (clr_b low), so a period without an xor edge (zero phase) cannot leave a stale value.
+* Needs devices/spice/{sky130_primitives,cmos_logic,cmos_dff_reset}.spice.
+.subckt pll_phase_window up dn clr_b late vdd vss params: cd=10f
+Xx up dn e vdd vss serdes_cmos_xor
+Xd1 e d1 vdd vss serdes_cmos_inv
+Xd2 d1 d2 vdd vss serdes_cmos_inv
+Xd3 d2 d3 vdd vss serdes_cmos_inv
+Xd4 d3 d4 vdd vss serdes_cmos_inv
+Xd5 d4 d5 vdd vss serdes_cmos_inv
+Xd6 d5 dly vdd vss serdes_cmos_inv
+C1 d1 vss {cd}
+C2 d2 vss {cd}
+C3 d3 vss {cd}
+C4 d4 vss {cd}
+C5 d5 vss {cd}
+C6 dly vss {cd}
+Xo e late dset vdd vss serdes_cmos_or2
+Xff dset dly clr_b late vdd vss serdes_cmos_dff_reset
+.ends pll_phase_window

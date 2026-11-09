@@ -52,3 +52,10 @@ def test_rewrites_refuse_unexpected_decks():
         spice.binary_output("no output here\n")
     with pytest.raises(ValueError):
         spice.skip_output_before("tran 1p 10n 1n 5p\n", "2n")
+
+
+def test_log_failures_skip_the_title_echo():
+    from serdes_flow.spice import log_failures
+    log = "Circuit: pfd + phase-error window\nDoing analysis at TEMP = 27\nError: no such vector v(x)\n"
+    assert log_failures(log) == ["Error: no such vector v(x)"]
+    assert log_failures("Warning: out of range for cosh\n") == []

@@ -47,7 +47,7 @@ iverilog -g2012 -s tb_pll_coarse_ctrl -o /tmp/coarse.vvp digital/common/rtl/mon_
 ## 启动链顶层
 
 `rtl/pll_control_top.sv`把监督器、粗码控制和`rtl/pll_lock_detect.sv`接在一起，不用频率计：
-- **phase_good**：一个测量窗（默认32个参考周期）内，相位误差脉冲UP xor DN（宽度即|相差|，不含公共复位脉冲）从未长于τd。模拟侧用该脉冲延迟τd后的沿对它本身采样，送入`pw_late_async`。不用"参考沿+τ时UP|DN仍高"：复位脉宽在45条件为290–746 ps（`analog/pll/pfd/tb/reset_pvt`），τ要盖过它，FF角就会放过约600 ps相差。τd须大于锁定静态相差（约150 ps界）在最快角的值：反相器链FF约250 ps、SS约600 ps，仍远小于捕获期的ns级相差。
+- **phase_good**：一个测量窗（默认32个参考周期）内，相位误差脉冲UP xor DN（宽度即|相差|，不含公共复位脉冲）从未长于τd。模拟侧用该脉冲延迟τd后的沿对它本身采样，送入`pw_late_async`。不用"参考沿+τ时UP|DN仍高"：复位脉宽在45条件为290–746 ps（`analog/pll/pfd/tb/reset_pvt`），τ要盖过它，FF角就会放过约600 ps相差。模拟单元`pll_phase_window`（`analog/pll/pfd/spice/phase_window.spice`，6级反相器、每级10 fF）由真实PFD驱动，45条件门限225–750 ps（FF 1.95 V −40 °C … SS 1.65 V −40 °C），每个条件≥3.9倍同条件的锁定静态相差上界（PFD＋CP失配|均值|+kσ 51–189 ps），远小于捕获期的ns级相差（[PLL环路](../../docs/design/pll_loop.md#锁定检测相位窗口2026-11-10)）。清零后一直为高的xor没有新沿、不置位；这种情况（UP卡死、VCO停振）Vctrl到轨，由frequency_good报告。
 - **frequency_good**：粗码搜索结束，且整窗内窗口检测既无hi也无lo。环路锁在窗口内即在2 GHz，码不够时Vctrl被推出门限。
 - 顺序：start后第一次进入ACQUIRE时触发一次粗码搜索，搜索期间不向监督器报告测量窗；锁定后开启运行中切码；切码扰动使监督器回到ACQUIRE（保留LF状态）后重新锁定，不重复搜索。`fast_end`（码0仍高于上门限）作为range_fault，进入FAULT 3。
 
@@ -55,7 +55,7 @@ iverilog -g2012 -s tb_pll_coarse_ctrl -o /tmp/coarse.vvp digital/common/rtl/mon_
 iverilog -g2012 -s tb_pll_control_top -o /tmp/ctop.vvp digital/common/rtl/mon_sync.sv digital/common/rtl/mon_persist.sv digital/pll/rtl/pll_startup_supervisor.sv digital/pll/rtl/pll_coarse_ctrl.sv digital/pll/rtl/pll_lock_detect.sv digital/pll/rtl/pll_control_top.sv digital/pll/tb/tb_pll_control_top.sv && vvp /tmp/ctop.vvp
 ```
 
-`tb_pll_control_top`对行为环路（每码锁定Vctrl随温度线性漂移，预充到1.20 V，CP开启后z一阶跟随300 ns，偏离锁定点15 mV以上或钳位时相差脉冲过τd）检查：27 °C冷启动7.6 µs锁定于码13且只搜一次；升温60 K（7 mV/K）切码2次后重新锁定，无FAULT、不重搜；码0仍达不到2 GHz的芯片进入FAULT 3；FAULT后重启再次搜索并锁定。τd与测量窗长度需按静态相差和切码暂态校准，xor采样前端尚未设计。
+`tb_pll_control_top`对行为环路（每码锁定Vctrl随温度线性漂移，预充到1.20 V，CP开启后z一阶跟随300 ns，偏离锁定点15 mV以上或钳位时相差脉冲过τd）检查：27 °C冷启动7.6 µs锁定于码13且只搜一次；升温60 K（7 mV/K）切码2次后重新锁定，无FAULT、不重搜；码0仍达不到2 GHz的芯片进入FAULT 3；FAULT后重启再次搜索并锁定。τd已按静态相差校准（见上）；测量窗长度需按切码暂态校准。
 
 Icarus行为检查、Verilator lint、Yosys通用综合检查不等于SKY130映射后的时序/CDC验证。
 模拟电路、结果、接口边界和其他模型接手的测试模板见[启动优化](../../docs/history/pll_startup_optimization.md)。

@@ -16,6 +16,7 @@ import json
 import os
 import re
 import resource
+import shlex
 import shutil
 import subprocess
 import time
@@ -149,18 +150,33 @@ def spice_number(text: str) -> float:
 
 
 def smoke_deck(deck: str, after: float = 1e-9) -> str:
-    """The same deck stopped `after` past its first stored point (tstart, or 0).
+    """Shorten each transient to `after` past its own first stored point."""
+    def shorten(m):
+        rest = m[4].split()
+        tstart = spice_number(rest[0]) if rest and rest[0].lower() != "uic" else 0.0
+        stop = min(spice_number(m[3]), tstart + after)
+        return f"{m[1]}{m[2]} {stop:.6e}{(' ' + ' '.join(rest)) if rest else ''}"
 
-    Runs the whole start-up, every .save/let/write line and the output step,
-    so missing nodes, invalid vectors and include errors show up before a batch.
-    """
-    m = _TRAN.search(deck)
-    if not m:
+    out, n = _TRAN.subn(shorten, deck)
+    if not n:
         raise ValueError("deck has no tran line")
-    rest = m[4].split()
-    tstart = spice_number(rest[0]) if rest else 0.0
-    stop = min(spice_number(m[3]), tstart + after)
-    return deck[:m.start()] + f"{m[1]}{m[2]} {stop:.6e}{(' ' + ' '.join(rest)) if rest else ''}" + deck[m.end():]
+    return out
+
+
+def _smoke_outputs(deck: str) -> list[str]:
+    """Find literal control output names; dynamic names cannot be verified reliably."""
+    names = []
+    for line in deck.splitlines():
+        if not re.match(r"^\s*(?:write|wrdata)\s+", line, re.I):
+            continue
+        try:
+            tokens = shlex.split(line, comments=True)
+        except ValueError as exc:
+            raise SmokeTestFailed(f"cannot parse smoke output command: {line.strip()}") from exc
+        if len(tokens) < 2 or any(c in tokens[1] for c in "$`*?[]{}"):
+            raise SmokeTestFailed(f"cannot verify dynamic smoke output: {line.strip()}")
+        names.append(tokens[1])
+    return names
 
 
 class SmokeTestFailed(RuntimeError):
@@ -178,10 +194,16 @@ def run_many(jobs, *, workers: int = 4, smoke: bool = True):
     if smoke and jobs:
         deck, run_dir, kw = jobs[0]
         sdir = Path(str(run_dir) + ".smoke")
+        outputs = _smoke_outputs(deck)
+        copied = set((kw.get("files") or {}).keys())
+        if copied.intersection(outputs):
+            raise SmokeTestFailed(f"smoke outputs overlap copied inputs: {sorted(copied.intersection(outputs))}")
         ex = run(smoke_deck(deck), sdir, **{k: v for k, v in kw.items() if k == "files"})
-        written = any(sdir.glob("waveforms.*")) or any(sdir.glob("*.raw")) or any(sdir.glob("*.tsv"))
-        if not ex.ok or not written:
-            raise SmokeTestFailed(f"{sdir}: exit {ex.exit_code}, output {'yes' if written else 'missing'}, "
+        missing = [name for name in outputs if not (sdir / name).is_file() or (sdir / name).stat().st_size == 0]
+        if not outputs and not any(p.is_file() and p.stat().st_size for pattern in ("waveforms.*", "*.raw", "*.tsv") for p in sdir.glob(pattern)):
+            missing = ["waveform output"]
+        if not ex.ok or missing:
+            raise SmokeTestFailed(f"{sdir}: exit {ex.exit_code}, missing or empty outputs: {missing}, "
                                   f"log: {ex.log_failures[:5]}")
         shutil.rmtree(sdir)
     with ThreadPoolExecutor(max_workers=workers) as pool:

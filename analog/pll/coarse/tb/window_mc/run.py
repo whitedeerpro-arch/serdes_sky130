@@ -35,14 +35,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--points", default="tt_v1800_t27,ss_v1650_t-40,ff_v1950_t85,sf_v1650_t-40,fs_v1650_t85")
     ap.add_argument("--samples", type=int, default=200)
-    ap.add_argument("--chunk", type=int, default=40)
+    ap.add_argument("--chunk", type=int, default=8, help="~140 MB per sample (bandgap + ladders): 40 hit the 3 GB cap at sample ~21")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--code-lo", type=int, default=5)
     ap.add_argument("--code-hi", type=int, default=3)
+    ap.add_argument("--analyse", help="campaign: summarize the rows already written (truncated chunks included), no simulation")
     a = ap.parse_args()
     lets = {"vlo": "v(xw.vlo)", "drop": "v(vdd)-v(xw.vhi)"}
-    camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = (ROOT / a.analyse) if a.analyse else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs, owners = [], []
     for p in a.points.split(","):
         c = Condition.parse(p)
@@ -51,7 +52,12 @@ def main():
             jobs.append((mc.deck(net, n, seed=s, analysis="op", lets=lets), camp / p / f"chunk{k:02d}",
                          dict(timeout_s=600 + 10 * n, meta=dict(point=p, samples=n, seed=s))))
             owners.append(p)
-    dirs = mc.run_many(jobs, workers=a.workers)
+    if a.analyse:
+        # sample k of a chunk seed is fixed; a memory-truncated chunk keeps its first rows unchanged
+        dirs = [j[1] for j in jobs]
+        dirs = [d for d in dirs if (d / mc.MC_FILE).exists()]
+    else:
+        dirs = mc.run_many(jobs, workers=a.workers)
     out = {}
     print("thresholds (local mismatch), mV: mean - design / sd / |mean - design| + k sd")
     for p in a.points.split(","):

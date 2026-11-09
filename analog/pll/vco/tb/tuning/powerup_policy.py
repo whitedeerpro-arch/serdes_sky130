@@ -43,6 +43,7 @@ rp = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(rp)
 
 B2_LO, B2_HI, B2_STEP = 0.95, 1.35, 0.4 / 15
+LADDER = dict(g_hi=1.0)   # per-chip relative gain of the VDD-referenced ladder (stop thresholds share it with vhi)
 CLASS_EDGES = {2: (22.5,), 3: (0.0, 50.0), 4: (-10.0, 22.5, 55.0)}
 
 
@@ -161,7 +162,7 @@ def make_slow(nclass, err, stops, ref):
             return None
         c = int(np.searchsorted(edges, t0 + err)) if edges else 0
         vdd = vhi + 0.41
-        vstop = (vdd - stops[c]) if ref == "v" else stops[c]
+        vstop = (vdd - stops[c] * LADDER["g_hi"]) if ref == "v" else stops[c]
         vstop = min(vstop, vhi)
         order = sorted(pts, reverse=True)                  # slow end first: Vctrl falls code by code
         for i, k in enumerate(order):
@@ -173,17 +174,28 @@ def make_slow(nclass, err, stops, ref):
     return pick
 
 
+RANDOM = dict(sig_lo=0.0, sig_hi=0.0, draws=1, seed=1)   # per-chip ladder errors: relative sigma of vlo and of vdd - vhi
+
+
 def evaluate(data, pick_for_err, errs, vlo, dvlo, dvhi, margin, step):
-    """All chips x start temperatures x sensor errors; returns counts."""
+    """All chips x start temperatures x sensor errors (x random ladder draws); returns counts."""
+    rng = np.random.default_rng(RANDOM["seed"])
+    items = []
+    for chip, codes in sorted(data.items()):
+        for d in range(RANDOM["draws"]):
+            g_lo = 1 + rng.normal(0, RANDOM["sig_lo"]) if RANDOM["sig_lo"] else 1.0
+            g_hi = 1 + rng.normal(0, RANDOM["sig_hi"]) if RANDOM["sig_hi"] else 1.0
+            items.append((chip, codes, g_lo, g_hi))
     t0s = np.arange(-40, 85 + 1e-9, step)
     dt = 0.5
     cases = ok = 0
     worst = Counter()
     never = 0
     fails = []
-    for chip, codes in sorted(data.items()):
-        vhi = chip[1] - 0.41 + dvhi
-        lo = vlo + dvlo
+    for chip, codes, g_lo, g_hi in items:
+        LADDER["g_hi"] = g_hi
+        vhi = chip[1] - 0.41 * g_hi + dvhi
+        lo = vlo * g_lo + dvlo
         chip_switch = 0
         chip_ok = True
         for t0 in t0s:
@@ -209,7 +221,7 @@ def evaluate(data, pick_for_err, errs, vlo, dvlo, dvhi, margin, step):
                 else:
                     chip_ok = False
         never += chip_ok and chip_switch == 0
-    return dict(cases=cases, ok=ok, never_switch_chips=never, worst_switches=dict(sorted(worst.items())), fails=fails)
+    return dict(cases=cases, ok=ok, never_switch_chips=never, chip_draws=len(items), worst_switches=dict(sorted(worst.items())), fails=fails)
 
 
 def main():
@@ -224,12 +236,17 @@ def main():
     ap.add_argument("--count-n", type=int, default=64)
     ap.add_argument("--targets", default="", help="absolute precharge target per class, e.g. 3:1.00,1.12,1.25;2:1.02,1.22")
     ap.add_argument("--step", type=float, default=5.0)
+    ap.add_argument("--sig-lo", type=float, default=0.0, help="per-chip relative sigma of vlo (window_mc: ~0.028 untrimmed)")
+    ap.add_argument("--sig-hi", type=float, default=0.0, help="per-chip relative sigma of vdd - vhi and of the VDD-referenced stops (~0.034)")
+    ap.add_argument("--draws", type=int, default=1, help="random ladder draws per chip")
+    ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--pwin", default="0.05,0.12,0.05", help="pwinK power-up threshold offsets: cold (above Vlo), middle (above Vlo), hot (below Vhi)")
     ap.add_argument("--stops-v", default="0.62;0.70,0.50;0.70,0.58,0.48",
                     help="slowvK stop thresholds as VDD - x per class, for K = 1;2;3 (cold .. hot)")
     ap.add_argument("--stops-g", default="1.05;0.98,1.20;0.97,1.07,1.20",
                     help="slowgK absolute stop thresholds per class, for K = 1;2;3 (cold .. hot)")
     a = ap.parse_args()
+    RANDOM.update(sig_lo=a.sig_lo, sig_hi=a.sig_hi, draws=a.draws, seed=a.seed)
     data = rp.chips(a.workmap)
     vhi_mid = 1.8 - 0.41
     targets = {k: [a.vlo + (vhi_mid - a.vlo) * frac(t) for t in classes(k)[1]] for k in CLASS_EDGES}
@@ -264,7 +281,9 @@ def main():
             raise SystemExit(f"unknown scheme {s}")
         out[s] = r
         extra = "".join(f" {key} {r[key]}" for key in ("targets", "deltas", "stops") if key in r)
-        print(f"{s:8s}: {r['ok']}/{r['cases']} cases keep the window; {r['never_switch_chips']}/45 chips never switch; worst-excursion switches {r['worst_switches']}{extra}", flush=True)
+        zero = r["worst_switches"].get(0, 0) / max(r["ok"], 1)
+        print(f"{s:8s}: {r['ok']}/{r['cases']} cases keep the window; {r['never_switch_chips']}/{r['chip_draws']} chip draws never switch; "
+              f"no switch in {zero * 100:.0f} % of kept cases; worst-excursion switches {r['worst_switches']}{extra}", flush=True)
         for f in r["fails"][:3]:
             print("     ", f)
         if len(r["fails"]) > 3:

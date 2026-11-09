@@ -116,7 +116,7 @@ FS新全局极端在同一B半字：bit302/slot14的0→1最早，bit296/slot8�
 
 ## 减幅下的实际缓冲级确认
 
-**实际extra4/5恢复了受检FS半字的局部门槛；选择extra5进入下一轮完整TX确认，尚未采用。** 保持输出WN32/WT16/R240，r2g后第一隔离级与中间级均24/16µm、400Ω。三条分支是同一理想录制输入下的独立数学实验，均加载原末级、驱动与RLC16，不是芯片上并联三条路径；每条第一隔离级的输入负载签名均与完整源相同。
+**实际extra4/5恢复了受检FS半字的局部门槛；当时选择extra5进入完整TX确认。** 后续已完成[45条件确认](#45条件完整tx2026-11-08)。本局部实验保持输出WN32/WT16/R240，r2g后第一隔离级与中间级均24/16µm、400Ω。三条分支是同一理想录制输入下的独立数学实验，均加载原末级、驱动与RLC16，不是芯片上并联三条路径；每条第一隔离级的输入负载签名均与完整源相同。
 
 原样extra3对完整源的c2g、qp/qn、两组保持和本地sap/san最大误差，TT/FS分别0.104/0.040mV，绝对输出过零误差0.029/0.020ps；校准时没有用时钟相位补偿隐藏绝对交越误差。下面时钟增量是相对记录c2g下降沿的中位差，输出采样相位取原完整训练相位加该增量，不由载荷拟合。
 
@@ -137,7 +137,7 @@ FS新全局极端在同一B半字：bit302/slot14的0→1最早，bit296/slot8�
 
 [独立复算数据](../data/tx_native_reduced_clock.json)、[索引](../../results/catalog/tx_native_reduced_clock.json)来自`native_reduced_clock/20261107T164517.822006Z_16514531`，前缀`results/analog/tx/`，子边界`tx_reduced_final_word18_clock_stages_v1`。原求解完整，但汇总的NumPy布尔值导致JSON序列化失败；错误另记`analysis_error.json`，原plan、源码/执行快照和波形不变。独立采集器用归档测量代码重算并仅归一化标量类型；修正后的脚本与原归档所有科学指标逐项一致，没有重跑仿真。较早两个仅准备目录因源码变化失效，没有执行，不作证据。
 
-extra5已经分别完成TT/FS的48ns时钟探针：23次计数采样连续、末段字时钟1ps稳定性门满足；按各自记录重新登记事件并运行RTL生产者后，120ns动态确认分别为`parallel_serializer/20261107T170534.584797Z_533f8f18`和`20261107T170534.588144Z_51e1e33e`。当前仍待评价，不补成完整TX通过；[运行索引](../../results/catalog/tx_reduced_clock_full_confirmation.json)与新四运行比较采集器保留extra3的原失败。
+extra5随后分别完成TT/FS的48ns时钟探针：23次计数采样连续、末段字时钟1ps稳定性门满足；按各自记录重新登记事件并运行RTL生产者后，120ns动态确认分别为`parallel_serializer/20261107T170534.584797Z_533f8f18`和`20261107T170534.588144Z_51e1e33e`。评价见下节；[运行索引](../../results/catalog/tx_reduced_clock_full_confirmation.json)与四运行比较采集器保留extra3的原失败。
 
 ## extra5的完整TX确认（2026-11-08）
 
@@ -173,6 +173,6 @@ extra5已经分别完成TT/FS的48ns时钟探针：23次计数采样连续、末
 
 局部源是记录的g3两对数据、时钟、偏置及VDD，忽略上游源阻抗和受扰反馈；早期切片为TT/FS各两个事件，减幅后重配另覆盖word18的B半字八位，均无MC/噪声。固定训练相位加时钟增量的采样只用于局部比较，**不是串化器规格通过**，也没有证明全部位的边沿散布满足0.15 UI。内部时钟摆幅的既有I-17问题仍开。
 
-extra=3改进归属T02选择时钟分发，T03末级尺寸保持不动。完整TX已重新登记TT/FS各自负载字时钟并完成120 ns动态载荷。TT为155.68 mV/0.03137 UI，FS为128.29 mV/0.08961 UI；训练、marker、位映射、计数、捕获/保持均正确，原FS额外交越消失，见[完整比较](tx_parallel_serializer.md)。新运行同时保存各级内部节点。SS低压冷角随后完成120ns，137.61mV/0.03607UI，训练/位序/捕获保持均正确。完整FS旧失败保留，改进未获得全45 PVT资格。物理guard/blank的SS时序问题独立处理。
+此前extra=3改进归属T02选择时钟分发，T03末级尺寸保持不动。完整TX重新登记TT/FS各自负载字时钟并完成120 ns动态载荷。TT为155.68 mV/0.03137 UI，FS为128.29 mV/0.08961 UI；训练、marker、位映射、计数、捕获/保持均正确，原FS额外交越消失，见[完整比较](tx_parallel_serializer.md)。该阶段保存各级内部节点；SS低压冷角随后完成120ns，137.61mV/0.03607UI，训练/位序/捕获保持均正确。完整FS旧失败保留；extra3阶段仅覆盖三点，后续extra5及输出级候选的45条件结果见上。物理guard/blank的SS时序问题独立处理。
 
 入口：[完整追踪](../../analog/tx/input_register/tb/full_serializer/trace.py)、[末级平移](../../analog/tx/input_register/tb/final_retime/window.py)、[实际时钟链](../../analog/tx/input_register/tb/final_clock_chain/run.py)。所有路径前缀为`results/analog/tx/`；两种切片均先显式登记来源，再运行和校准。

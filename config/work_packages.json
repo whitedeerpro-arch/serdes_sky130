@@ -82,7 +82,7 @@
       "id": "WP-006",
       "module": "pll.coarse",
       "difficulty": "bounded_behavior_model",
-      "state": "ready",
+      "state": "waiting",
       "task": "docs/work_packages/WP-006-pll-4bit-coarse-plan.md",
       "script": "verification/work_packages/wp006_pll_coarse.py",
       "delivery": "docs/work_packages/deliveries/WP-006",
@@ -90,7 +90,8 @@
       "dependencies": [],
       "simulation_budget": 0,
       "executor": "external_unassigned; Terra_preparation_reviewed",
-      "review_result": "Partial evidence preparation only; 135 conditions and 45 fixed-code temperature groups; behavior model not implemented"
+      "review_result": "Partial evidence preparation only; 135 conditions and 45 fixed-code temperature groups; behavior model not implemented",
+      "release_gate": "superseded architecture: fixed-Vctrl frequency-counting proposal retained as historical; current window-based slow-end search RTL exists; rewrite task before redispatch"
     }
   ],
   "dispatch_policy": "external-ready packets; internal parallel execution only when explicitly requested; choose Terra for the authorized bounded trial; per-package simulator quotas coordinated by integrator"

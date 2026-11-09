@@ -1,5 +1,7 @@
 # WP-006：PLL r5 四位粗调捕获规划
 
+> **历史任务，暂不派发（2026-11-09）**：下文的固定Vctrl测频搜索是旧提案。当前已实现[窗口式慢端逐码搜索RTL](../../digital/pll/rtl/pll_coarse_ctrl.sv)和[模拟窗口检测](../../analog/pll/coarse/README.md)，见[VCO策略](../design/pll_vco.md)。原数据/资料包保留，不代表现行控制器缺失；重新派发前须围绕当前控制器、门限/等待时序与实际闭环接口改写任务。
+
 目标是形成可独立复核的低成本行为模型与参数计划，为现有 PLL 顶层补充未来粗调控制提供依据；本包不采用电路、RTL 或配置修改。交付者应使用 [证据](deliveries/WP-006/evidence.json)、[摘要](deliveries/WP-006/summary.md) 和[交接](deliveries/WP-006/handoff.md)，集成者独立复跑、review 后决定是否采纳。
 
 ## 边界和输入

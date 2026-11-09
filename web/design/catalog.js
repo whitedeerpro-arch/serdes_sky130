@@ -5,7 +5,7 @@ window.DESIGN_CATALOG = {
     "name": "Simple SerDes",
     "subtitle": "SKY130 · 1.8 V · 4 Gb/s",
     "description": "以模块边界组织设计，以模型规划参数，用局部仿真验证迭代。",
-    "updated": "2026-11-07"
+    "updated": "2026-11-09"
   },
   "nodes": [
     {
@@ -18,7 +18,7 @@ window.DESIGN_CATALOG = {
       "facts": {
         "设计": "模块分层推进",
         "PVT": "按模块与工况记录",
-        "失配": "偏置与 RX 已有局部分析",
+        "失配": "偏置/RX及PLL VCO/CP/分频器局部统计",
         "噪声": "VCO 已有模型与预算"
       },
       "boundary": {
@@ -61,10 +61,10 @@ window.DESIGN_CATALOG = {
       "name": "TX",
       "subtitle": "并行输入 → 16:1 串化 → 线驱动",
       "state": "迭代推进",
-      "summary": "新字入口已接实际v3与完整串化/驱动：TT位序/眼图通过，FS热角暴露半字边界低裕量；物理guard映射SS时序不足，优先局部归因与接口校准。",
+      "summary": "新字入口＋v3完整TX已在45个MOS条件满足串化器与焊盘门槛，每点256bit/位序正确。内部幅度、物理guard/blank、原生源与电阻角仍需闭合。",
       "facts": {
-        "设计": "串化 / 线驱动已实现",
-        "PVT": "r2 固定时钟边界 45 点",
+        "设计": "r2树＋v3/extra5＋输出级候选",
+        "PVT": "完整TX MOS45点，理想2GHz/Rtt",
         "失配": "局部统计待补",
         "噪声": "时钟路径预算待校准"
       },
@@ -76,8 +76,8 @@ window.DESIGN_CATALOG = {
           "4 Gb/s NRZ，源端 2×50 Ω，约 400 mVpp 差分目标"
         ],
         "assumptions": [
-          "r2 的 45 点使用同一份理想化 TT 时钟边界。",
-          "数据到达时刻、选择时钟相对位置、驱动负载应分别明确。"
+          "当前extra5/WT16/R240＋预驱/输出对候选，理想2GHz、真实偏置/PDK R tt、计数器初态、RTL PWL；非原生PLL或物理guard。",
+          "原r2的45点使用同一份理想化TT时钟，历史数据单独保留。"
         ]
       },
       "planning": {
@@ -94,6 +94,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "串化器",
           "path": "docs/design/tx_serializer.md"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": []
@@ -190,11 +198,11 @@ window.DESIGN_CATALOG = {
       "name": "PLL",
       "subtitle": "PFD / CP / LF / VCO / ÷8 / 粗调码",
       "state": "顶层集成已有",
-      "summary": "PLL 已有完整电路顶层，包含 VCO、粗调码接口、分频反馈、PFD、CP 和 LF，并有带双节点预充的启动顶层。近期按模块改进 VCO 工作区与环路参数。",
+      "summary": "当前r5/4bit＋k4转向CP/PDK LF已集成：行为VCO闭环135点、原生预充闭环三点锁定。粗码RTL/监测已有，实际粗搜和从零启动待接。",
       "facts": {
         "设计": "完整 PLL 顶层已具备",
-        "PVT": "分模块网格 + 分层闭环",
-        "失配": "VCO / CP 局部 MC 待补",
+        "PVT": "行为VCO135点；原生预充3点",
+        "失配": "VCO5点 / CP3点 / 分频6点局部MC",
         "噪声": "ISF + 环路 / CDR 模型"
       },
       "boundary": {
@@ -212,8 +220,8 @@ window.DESIGN_CATALOG = {
       "planning": {
         "question": "怎样联合选择工作点、Kvco、CP 电流、LF 和预充目标？",
         "model": "实测 VCO 曲线作为 plant，实际 PFD/CP 与 LF 做分层捕获；线性模型比较带宽、稳定性与噪声。",
-        "parameters": "÷8；50 µA / 6.5 kΩ / 40p+2p 为已有实现；k2/3/4 为近期环路改进比较。",
-        "verification": "模块工作区和电荷测试 → 分层闭环 → 有判别力的原生短联合验证。"
+        "parameters": "k4转向CP200µA、poly4.13kΩ、18×1pF MIM（12接VDD/6接地）、无外加Cf。",
+        "verification": "保留模型/原生/启动边界，优先粗码/CP窗口交接和当前码噪声。"
       },
       "references": [
         {
@@ -227,6 +235,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "环路设计与验证",
           "path": "docs/design/pll_loop.md"
+        },
+        {
+          "title": "当前r5/k4核心",
+          "path": "analog/pll/top/spice/pll_core_r5k4.spice"
         }
       ],
       "iterations": [
@@ -303,10 +315,10 @@ window.DESIGN_CATALOG = {
       "key": "T01",
       "subtitle": "同沿完整捕获 · 两组互补保持",
       "state": "完整树接口验证",
-      "summary": "首级六压力48字、B关闭12组；完整TX原FS眼图失败已定位末级，时钟改进后TT/FS/SS冷过眼图门槛。guard回放非物理路径，SS映射时序仍不足。",
+      "summary": "16位捕获＋两组保持在当前完整TX 45点正确；早期首级六压力48字/B关闭12组证据保留。物理guard SS时序和blank仍开。",
       "facts": {
         "设计": "16位保持入口＋完整TX候选",
-        "PVT": "首级6压力；整链extra3 TT/FS/SS冷眼图过",
+        "PVT": "完整TX MOS45点；理想2GHz/Rtt",
         "失配": "待时序预算",
         "噪声": "归入发数抖动"
       },
@@ -327,7 +339,7 @@ window.DESIGN_CATALOG = {
         "question": "实际接收延迟与同沿捕获是否保持被选中的旧半字？",
         "model": "单元卡与balance区间比较；两组8位互补保持扩展建立时间。",
         "parameters": "两级数据延迟、本地互补时钟、接收器与bank缓冲负载。",
-        "verification": "先用FS逐位诊断定位半字边界，补转换器/树内部观察再局部修复；物理控制先校准接口参数，之后扩角/统计/噪声。"
+        "verification": "输入建立保持/源阻抗、物理控制/标签与blank；原生源、电阻角、统计和噪声。"
       },
       "references": [
         {
@@ -381,6 +393,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "Guard映射时序可行性",
           "path": "docs/work_packages/deliveries/tx-ingress-timing.md"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": [
@@ -574,11 +594,11 @@ window.DESIGN_CATALOG = {
       "name": "选择时钟分发",
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
-      "state": "改进验证中",
-      "summary": "同步计数器v3结构保留；extra2g由1→3改善末级建立。局部校准后完整TX的TT/FS热/SS冷三点眼图、位序、捕获和计数满足；SS冷角动态已通过眼图门槛，摆幅/45点/统计未闭合。",
+      "state": "MOS45点动态确认",
+      "summary": "v3同步计数器结构保留，extra5/WT16R240恢复减幅后的关闭建立；与输出级候选完整TX MOS45点眼图/位序通过。原生r5静态仍8完整/2数值缺失。",
       "facts": {
         "设计": "v3 同步结构",
-        "PVT": "旧回放15/静态8；新入口extra3 TT/FS/SS冷三点眼图满足",
+        "PVT": "当前完整TX MOS45点；原生静态8点",
         "失配": "路径局部 MC 待补",
         "噪声": "附加抖动待测"
       },
@@ -597,7 +617,7 @@ window.DESIGN_CATALOG = {
         "question": "为什么固定延迟不能同时适配各 PVT？",
         "model": "路径结构比较：buffer、分频 clk→q、重定时和复制单元的漂移分解。",
         "parameters": "计数器/复制的同构时钟路径，隔离和对中级数。",
-        "verification": "计数序列、相对时序、眼图与位映射分别检查。"
+        "verification": "原生动态接口、电阻角、内部幅度、功耗和附加抖动。"
       },
       "references": [
         {
@@ -611,6 +631,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "内部CML摆幅与尺寸约束",
           "path": "docs/design/tx_cml_amplitude.md"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": [
@@ -733,10 +761,10 @@ window.DESIGN_CATALOG = {
       "key": "T03",
       "subtitle": "CMOS→CML / 选择树 / 末级重定时",
       "state": "结构已实现",
-      "summary": "完整TX的FS异常已定位g3_0与末级A关闭建立不足；保持r2尺寸，2G选择时钟改进后TT/FS/SS冷眼图恢复。",
+      "summary": "r2树/保持尺寸保留，当前extra5选择时钟与输出级改进后完整TX 45点通过串化器/焊盘门槛。早期FS建立失败及extra3减幅失败保留。",
       "facts": {
         "设计": "r2 结构与尺寸",
-        "PVT": "固定边界 45 点",
+        "PVT": "完整TX 45点256bit；旧长码型另留",
         "失配": "待做",
         "噪声": "待做"
       },
@@ -770,6 +798,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "内部CML摆幅与尺寸约束",
           "path": "docs/design/tx_cml_amplitude.md"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": []
@@ -780,11 +816,11 @@ window.DESIGN_CATALOG = {
       "name": "末级重定时",
       "key": "T03.4",
       "subtitle": "g3数据 → 保持/选择 · 2G接口",
-      "state": "时序改进验证中",
-      "summary": "FS原g3过零晚于A关闭5–6ps；经校准切片/实际级数选择extra2g=3，完整TX的TT/FS/SS冷眼图与位序满足；继续扩压力点。",
+      "state": "MOS45点时序确认",
+      "summary": "原FS关闭建立不足由时钟路径迭代修复；当前extra5/减幅输出与驱动候选在MOS45点完成120ns/256bit确认，未覆盖物理guard/原生PLL。",
       "facts": {
         "设计": "末级尺寸保留，改进2G时钟位置",
-        "PVT": "TT/FS/SS冷完整120ns、256载荷；未45点",
+        "PVT": "完整TX MOS45点；MC/噪声未闭合",
         "失配": "尚未纳入",
         "噪声": "尚未纳入"
       },
@@ -804,7 +840,7 @@ window.DESIGN_CATALOG = {
         "question": "选择关闭前数据是否充分建立，怎样增加有效建立时间？",
         "model": "实际节点时序与固定前史回放，原样校准后比较时移，再用实际缓冲级校准。",
         "parameters": "末级Wdata40/Whold40；保持尾W144、R300；extra2g=1→3候选。",
-        "verification": "4基线/20平移点、实际三种级数已测；完整TT/FS回归通过，继续扩角/统计/噪声。"
+        "verification": "当前关闭边界在原生源/电阻角、长码型和MC下回归。"
       },
       "references": [
         {
@@ -818,6 +854,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "实际级数比较",
           "path": "docs/figures/tx/ingress/tx_final_clock_stage_comparison.png"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": [
@@ -864,11 +908,11 @@ window.DESIGN_CATALOG = {
       "name": "线驱动与使能",
       "key": "T04",
       "subtitle": "隔离 / 预驱 / 电流舵输出",
-      "state": "结构已实现",
-      "summary": "约 8 mA 差分电流舵输出；低阈值使能传输门解决冷角尾偏置建立过慢。",
+      "state": "输出尺寸候选已验证",
+      "summary": "预驱R120Ω/尾W60、输出对W192降低FS焊盘散布；当前完整TX45点焊盘通过。旧r2低阈值使能保留，幅度容差与真实封装待定。",
       "facts": {
-        "设计": "r2 使能改进",
-        "PVT": "启用 / DC 45 点",
+        "设计": "rpre120 / wtpre60 / wout192候选",
+        "PVT": "完整TX45点焊盘门槛通过；旧启用45点",
         "失配": "待补",
         "噪声": "供电回流待表征"
       },
@@ -886,13 +930,21 @@ window.DESIGN_CATALOG = {
       "planning": {
         "question": "怎样在 SS 冷角及时建立尾电流？",
         "model": "偏置门充电与尾源余量诊断。",
-        "parameters": "N-LVT W2、P-LVT W32；输出尾流约 8 mA。",
-        "verification": "从禁用态启动、启用电流、关断残流和真实负载波形。"
+        "parameters": "预驱120Ω/尾W60；输出W192；使能N-LVT W2/P-LVT W32。",
+        "verification": "当前完整源下电阻角、使能/blank、供电回流；输出幅度376–494mVpp需定义容差。"
       },
       "references": [
         {
           "title": "输出级设计",
           "path": "docs/design/tx_output_driver.md"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": []
@@ -1072,11 +1124,11 @@ window.DESIGN_CATALOG = {
       "key": "C01",
       "subtitle": "四级 CML 环振 / r5 / 4 bit",
       "state": "工作区改进",
-      "summary": "r5减损耗/4bit量程保留；补测FF/FS共同码后45组均有三温静态交点，原42统计来自候选码缺项。工作点/噪声/环路仍待匹配。",
+      "summary": "r5/4bit工作区135点、45组三温共同码；五压力点各200样本频率σ0.75–1.12%。当前环路三原生点锁定，三温码补点与当前码/负载噪声仍开。",
       "facts": {
         "设计": "r5 减损耗 / 4 bit 阵列",
         "PVT": "135条件；45组三温共同码静态覆盖",
-        "失配": "局部 MC 待补",
+        "失配": "五压力点各200样本；频率σ0.75–1.12%",
         "噪声": "7 压力点 ISF"
       },
       "boundary": {
@@ -1095,7 +1147,7 @@ window.DESIGN_CATALOG = {
         "question": "损耗、量程、Kvco 和 CP 控制范围如何共同选点？",
         "model": "1/f 对码拟合用于选点；仿真确认工作区；ISF 加环路传递形成抖动预算。",
         "parameters": "开关 W5；变容 4.5×4 指；15 个半单元；0.85 V 到 CP 上沿。",
-        "verification": "原42组＋12点补测三组后45/45组三温有共同码；实际B2/CP-LF、hl/lh与动态未验证。"
+        "verification": "三温码曲线补点、慢端失配余量、动态选码与当前负载噪声；hl/lh另验。"
       },
       "references": [
         {
@@ -1256,11 +1308,11 @@ window.DESIGN_CATALOG = {
       "key": "C03",
       "subtitle": "低过驱锁存器 / 级间 buffer",
       "state": "尺寸改进",
-      "summary": "保持管尺寸按输入频率确定。首级改 W40 恢复高频再生，后两级保留 W80 以适应较慢输入。",
+      "summary": "首级保持W40、后级W80；标准输入真实偏置hh/ll各45点正确，六压力点1048 MC样本正确分频；FF冷失配OP缺失仍开。",
       "facts": {
         "设计": "首级 W40 / 后级 W80",
         "PVT": "hh / ll 各 45 点",
-        "失配": "待补",
+        "失配": "6点1048样本；FF冷数值缺失",
         "噪声": "待表征"
       },
       "boundary": {
@@ -1278,7 +1330,7 @@ window.DESIGN_CATALOG = {
         "question": "保持管、时钟幅度与共模的可行区在哪里？",
         "model": "单元 f_SO / 再生与电流转向模型，画共模×摆幅可行区。",
         "parameters": "首级保持 W40、尾 W72、600 Ω；后级 W80。",
-        "verification": "真实偏置 / PDK R 的单元地图与 ÷8 频率、反馈核对。"
+        "verification": "FF冷OP/启动、原生源完整覆盖及尾管余量；避免用不同初始化状态替代。"
       },
       "references": [
         {
@@ -1351,13 +1403,13 @@ window.DESIGN_CATALOG = {
       "parent": "pll",
       "name": "鉴相与环路",
       "subtitle": "PFD → CP → LF → Vctrl",
-      "state": "集成已有 / 参数迭代",
-      "summary": "实际 PFD/CP/LF 已连接于 PLL 顶层。实测 VCO plant 与线性模型用于规划新 Kvco 下的环路参数。",
+      "state": "当前候选闭环验证",
+      "summary": "r5/k4转向CP/PDK LF接校准行为VCO，135点锁定；原生预充三点捕获118/418/254ns。粗码/真实启动和新环路噪声仍待闭合。",
       "facts": {
-        "设计": "电路与闭环顶层已有",
-        "PVT": "分层 4 工况 × 3 初值",
-        "失配": "CP 局部 MC 待补",
-        "噪声": "k2 / 3 / 4 模型比较"
+        "设计": "k4转向CP / 4.13kΩ / 18pF",
+        "PVT": "分层135点；原生预充3点",
+        "失配": "CP3压力点各200样本",
+        "噪声": "当前闭环器件噪声待重验"
       },
       "boundary": {
         "inputs": [
@@ -1373,8 +1425,8 @@ window.DESIGN_CATALOG = {
       "planning": {
         "question": "新 Kvco 下怎样兼顾抖动、稳定性、CP 电荷与预充？",
         "model": "逐角 VCO plant + 实际 CP/LF；线性噪声与延迟敏感性分析。",
-        "parameters": "允许独立优化 Icp、Rz、Ci/Cf；不要只按 k 比例放大。",
-        "verification": "CP 电荷、分层捕获与短原生接回分级验证。"
+        "parameters": "Icp200µA、Rz4.13kΩ、Ci18pF，无外加Cf；控制端负载计入。",
+        "verification": "转向CP窗口/门限、启动链、供电抑制及当前码噪声。"
       },
       "references": [
         {
@@ -1395,10 +1447,10 @@ window.DESIGN_CATALOG = {
       "key": "C09",
       "subtitle": "双节点预充 / 门控 / 状态机",
       "state": "电路与 RTL 已有",
-      "summary": "PLL 启动顶层和监督 RTL 已有，ready 与质量测量由模块接口输入；B2 参考作为 Bias 子模块提供。",
+      "summary": "监督RTL、B2、粗码RTL和窗口检测均已有；四压力点行为VCO闭环可从±200mV预充误差捕获。真实bias-ready→选码→捕获的链路仍未验证。",
       "facts": {
         "设计": "启动核心 / 监督 RTL 已有",
-        "PVT": "局部预充与分层捕获",
+        "PVT": "原生预充3点；行为VCO容限4点",
         "失配": "按支路预算",
         "噪声": "释放 / 漏电表征"
       },
@@ -1417,7 +1469,7 @@ window.DESIGN_CATALOG = {
         "question": "偏置建立和捕获需要什么时序预算？",
         "model": "状态机周期、B2 充电和分层初值捕获配合。",
         "parameters": "128 参考周期预充、2 周期 GAP、2 周期 FLUSH。",
-        "verification": "RTL 默认周期 / 异常输入，模拟释放与捕获。"
+        "verification": "接监测/粗码真实闭环，校准等待时间与quality/ready/看门狗。"
       },
       "references": [
         {
@@ -1436,18 +1488,18 @@ window.DESIGN_CATALOG = {
       "parent": "pll",
       "name": "粗调搜索与切码控制",
       "key": "C10",
-      "subtitle": "阵列码接口已有 / 自动搜索待做",
-      "state": "策略规划",
-      "summary": "VCO 粗调码和阵列已在 PLL 中；自动搜索、温度漂移重校与无扰切码控制仍是独立控制任务。",
+      "subtitle": "慢端逐码搜索 / Vctrl窗口 / 温度粗分",
+      "state": "RTL/监测已有，接口待接",
+      "summary": "pll_coarse_ctrl已实现慢端逐码上电搜索、温度档停止门限与持续越界切邻码，行为环路RTL测试通过；硬件窗口/环路与动态译码尚未联调。",
       "facts": {
-        "设计": "码接口已有，控制器待做",
-        "PVT": "工作区支撑选码",
-        "失配": "码边界统计待补",
-        "噪声": "切码扰动待测"
+        "设计": "粗码RTL＋Vctrl窗口已有",
+        "PVT": "窗口三点功能×135条件",
+        "失配": "门限/温感局部表征；策略待复核",
+        "噪声": "切码CDR影响为模型"
       },
       "boundary": {
         "inputs": [
-          "频率误差、Vctrl 上下限、已有粗码"
+          "异步窗口hi/lo、参考时钟、温度档、搜索/track使能和门限配置"
         ],
         "outputs": [
           "阵列粗码与冻结 / 越界状态"
@@ -1458,9 +1510,9 @@ window.DESIGN_CATALOG = {
       },
       "planning": {
         "question": "一个码能覆盖多大温区，什么时候重新粗搜？",
-        "model": "135 条件可达码集合与全温交集。",
-        "parameters": "4 bit 码0–15、迟滞、确认次数、保持时间与端点策略。",
-        "verification": "先静态覆盖和捕获，再受控切码。"
+        "model": "三温可用码曲线、迟滞重编码与温度分档上电模型；缺测处须补点。",
+        "parameters": "4bit0–15；vlo0.90V、vhi VDD−0.41V为候选，停止门限可配置。",
+        "verification": "门限误差与CP窗口交接；补码曲线后接入实际闭环；数字译码瞬态。"
       },
       "references": [
         {
@@ -1470,6 +1522,18 @@ window.DESIGN_CATALOG = {
         {
           "title": "工作区",
           "path": "docs/design/pll_vco.md"
+        },
+        {
+          "title": "粗码电路与边界",
+          "path": "analog/pll/coarse/README.md"
+        },
+        {
+          "title": "粗码控制RTL",
+          "path": "digital/pll/rtl/pll_coarse_ctrl.sv"
+        },
+        {
+          "title": "监测工具包",
+          "path": "docs/design/monitor.md"
         }
       ],
       "iterations": []
@@ -1579,12 +1643,12 @@ window.DESIGN_CATALOG = {
       "name": "Charge pump",
       "key": "C07",
       "subtitle": "电流匹配 / 合规窗口 / 电荷",
-      "state": "参数改进规划",
-      "summary": "长沟道镜与串联开关构成实际 CP。DC 窗口、上下拉差别和有限脉宽电荷分别验证。",
+      "state": "转向CP候选闭环验证",
+      "summary": "k4/200µA电流转向结构避免关断镜像漏端向Vctrl分享电荷；五压力点周期抖动上界4.4ps，三个MC点净电荷σ1.7–1.9fC。完整新DC窗口待核。",
       "facts": {
-        "设计": "50 µA 实现；k 比较中",
-        "PVT": "DC 窗口 135 点",
-        "失配": "随机 MC 待补",
+        "设计": "k4转向CP，跟随器真实偏置",
+        "PVT": "纹波压力点＋135点分层闭环",
+        "失配": "3点各200样本；σ1.7–1.9fC",
         "噪声": "电流 / 脉宽模型待细化"
       },
       "boundary": {
@@ -1602,7 +1666,7 @@ window.DESIGN_CATALOG = {
         "question": "增大 Icp 后如何保持电荷、输出余量与参考杂散？",
         "model": "DC 电流下垂窗口、脉冲电荷与实际 VCO plant。",
         "parameters": "Icp、开关与驱动尺寸、电流密度、输出阻抗。",
-        "verification": "窗口135点、有限脉宽/近零电荷，再与LF联合。"
+        "verification": "当前CP独立DC窗口、控制门限尾部、近零开关电荷和噪声。"
       },
       "references": [
         {
@@ -1612,6 +1676,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "环路设计",
           "path": "docs/design/pll_loop.md"
+        },
+        {
+          "title": "电流转向CP",
+          "path": "analog/pll/cp/spice/charge_pump_steer.spice"
         }
       ],
       "iterations": []
@@ -1622,11 +1690,11 @@ window.DESIGN_CATALOG = {
       "name": "Loop filter",
       "key": "C08",
       "subtitle": "Rz / Ci / Cf / 双节点预充",
-      "state": "参数改进规划",
-      "summary": "已有无源滤波器和预充电路；物理 poly/MIM 实现有表征，环路参数按 Kvco 和噪声联合选择。",
+      "state": "物理候选闭环验证",
+      "summary": "当前poly4.13kΩ、18个1pF MIM（12接VDD/6接地）、无外加Cf；行为VCO闭环135点和原生预充三点锁定，供电分接宽带效果待验。",
       "facts": {
-        "设计": "6.5k / 40p + 2p 已实现",
-        "PVT": "无源角与分层捕获",
+        "设计": "4.13k / 18×1p MIM / 无外加Cf",
+        "PVT": "分层135点；原生预充3点",
         "失配": "容差 / 统计待补",
         "噪声": "带宽与供电抵消分析"
       },
@@ -1644,8 +1712,8 @@ window.DESIGN_CATALOG = {
       "planning": {
         "question": "带宽、稳定性、面积和供电耦合的共同可行区？",
         "model": "线性环路 / 延迟敏感性，配合实际CP分层捕获。",
-        "parameters": "Rz、Ci/Cf、Icp 与电容参考端。",
-        "verification": "k2/3/4比较，逐角plant校准，选择关键原生点。"
+        "parameters": "Rz4.13kΩ；Ci18pF、12/6分接；VCO控制节点175–693fF。",
+        "verification": "原生全角、B2加载建立及分接宽带供电抑制。"
       },
       "references": [
         {
@@ -1655,6 +1723,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "联合模型比较",
           "path": "verification/design_coupling_review.py"
+        },
+        {
+          "title": "当前k4物理滤波器",
+          "path": "analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice"
         }
       ],
       "iterations": []
@@ -2106,17 +2178,17 @@ window.DESIGN_CATALOG = {
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "完整TX动态确认中",
-      "summary": "实际extra5在TT/FS受检八位恢复，FS105.92mV/0.10522UI、c2g351mVpp。两角探针已通过并重新登记激励，120ns动态确认待评价；extra3原完整FS失败保留，尚未采用。",
+      "state": "完整TX MOS45点已确认",
+      "summary": "WN32/WT16/R240配extra5与输出级候选，在完整TX MOS45点通过串化器/焊盘门槛。extra3减幅FS散布0.18025UI的失败保留；内部其他层超幅I-17仍开。",
       "facts": {
-        "设计": "WN32/WT16/R240；extra5局部候选",
-        "PVT": "TT/FS八位局部；extra5完整TX待确认",
+        "设计": "WN32/WT16/R240；extra5当前候选",
+        "PVT": "完整TX MOS45点；理想2GHz/Rtt",
         "失配": "未做",
         "噪声": "未做"
       },
       "boundary": {
         "inputs": [
-          "extra3末级e3差分、vbias、VDD"
+          "extra5末级e5差分、vbias、VDD；历史extra3/4作为局部对照"
         ],
         "outputs": [
           "c2g差分，加载末级A/B保持和MUX三个跟随器/极"
@@ -2130,7 +2202,7 @@ window.DESIGN_CATALOG = {
         "question": "减小尾流和R能否同时满足幅度、共模与数据建立？",
         "model": "固定相位卡预测实际缓冲级；FS extra4/5散布预测误差约0.26/0.37ps，仅本加载与码型。",
         "parameters": "extra3/4/5；iso/中间级24/16µm、400Ω；输出32/16µm、240Ω。",
-        "verification": "原样最大0.104mV/0.029ps；实际extra5恢复TT/FS受检八位，尚未完整字流或全角确认。"
+        "verification": "局部校准→完整TT/FS/SS→当前MOS45点；实际PLL、电阻角、失配/噪声另验。"
       },
       "references": [
         {
@@ -2176,6 +2248,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "完整确认运行索引",
           "path": "results/catalog/tx_reduced_clock_full_confirmation.json"
+        },
+        {
+          "title": "当前完整TX 45条件",
+          "path": "docs/data/tx_full_pvt45.json"
+        },
+        {
+          "title": "45条件结果图",
+          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
         }
       ],
       "iterations": [

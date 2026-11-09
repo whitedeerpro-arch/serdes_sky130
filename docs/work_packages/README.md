@@ -12,7 +12,7 @@
 | [WP-004](WP-004-tx-capture-model.md) | TX / 字捕获 | 参数约束；用已测延迟扫假定更新窗，复用balance | 已接受，见独立review |
 | [WP-005](WP-005-tx-staggered-waveform-audit.md) | TX / 字捕获 | 机械波形复核；实际接收器、首级逐字/保持与启动失败对照 | 六压力结果已完整，可外发，0仿真配额 |
 
-| [WP-006](WP-006-pll-4bit-coarse-plan.md) | PLL / 四位粗码 | 行为模型；测频有效性、±1限幅、冻结/故障/接管 | 数据准备已复核，模型待外部领取，0仿真配额 |
+| [WP-006](WP-006-pll-4bit-coarse-plan.md) | PLL / 四位粗码 | 行为模型；测频有效性、±1限幅、冻结/故障/接管 | 旧测频搜索提案已被窗口式RTL替代，暂停派发；原数据保留 |
 
 ## 交付与权限
 
@@ -45,4 +45,4 @@ WP-005已有可携出的[资料包索引](../../results/catalog/work_package_wp0
 
 仿真由集成者统一分配：本机全局ngspice最多4个，不能每个agent各自开4个。当前工作包都是0仿真配额；主agent的入口单元campaign限制2 worker。后续仿真包先写明配额、时限和续跑身份，再启动。
 
-WP-006另有[小资料包索引](../../results/catalog/work_package_wp006_bundle.json)：27个输入文件，gzip约351 KiB，位于`results/work_packages/bundles/20261107T104040197072Z/WP-006-inputs.tar.gz`。只带135条件数字表、三组共同码补测小数据、任务与必要源码，不含raw/PDK；隔离解包后主提取器已成功复现。适合外部模型继续纯数学/数字行为任务，现交付partial、ngspice配额0；按包内BUNDLE.md执行，不运行需要大波形的`--tradeoff`。
+WP-006另有[小资料包索引](../../results/catalog/work_package_wp006_bundle.json)：27个输入文件，gzip约351 KiB，位于`results/work_packages/bundles/20261107T104040197072Z/WP-006-inputs.tar.gz`。只带135条件数字表、三组共同码补测小数据、任务与必要源码，不含raw/PDK；隔离解包后主提取器已成功复现。这是旧测频搜索提案的固定输入，现行策略已改用窗口式慢端逐码搜索；暂停派发，原交付partial、ngspice配额0；按包内BUNDLE.md执行，不运行需要大波形的`--tradeoff`。

@@ -54,7 +54,7 @@ input_remap_rtl = "digital/tx/rtl/tx_word_remap.sv"
 remapped_FS_1v65_85C_1024bit_worst_spread_ui = 0.127
 
 [ingress_candidate]
-status = "full_TX_extra3_three_pressure_eye_pass; reduced_swing_extra3_FS_fail; extra5_reduced_swing_full_pending; not_45pvt_qualified"
+status = "historical_extra3_three_pressure_eye_pass_reduced_swing_FS_fail; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
 preferred_data_cell = "analog/common/devices/spice/cmos_dff.spice:serdes_cmos_dff"
 comparison_cell = "analog/common/devices/spice/cmos_dff_reset.spice:serdes_cmos_dff_reset"
 report = "docs/design/tx_ingress.md"
@@ -198,7 +198,7 @@ SS_cold_dynamic_status = "complete; 256bit_training_mapping_capture_hold_counter
 
 [retime_clock_iteration.output_sizing]
 module = "tx.clocking.output2g"
-status = "extra3_W16_R240_full_TX_TT_eye_pass_FS_spread_fail; extra5_local_recovery_full_pending; not_adopted"
+status = "historical_extra3_W16_R240_full_TX_TT_eye_pass_FS_spread_fail; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
 boundary = "tx_final_clock_output_sizing_v1"
 campaign = "results/analog/tx/final_clock_swing/20261107T103804.761471Z"
 evidence = "docs/data/tx_final_clock_swing.json"
@@ -304,7 +304,7 @@ first_bit = 296
 end_bit_exclusive = 304
 full_TX_qualified = false
 adopted = false
-status = "actual_loaded_chain_local_TT_FS_recovery; extra5_candidate_for_full_TX_confirmation"
+status = "historical_actual_loaded_chain_local_TT_FS_recovery; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
 
 [retime_clock_iteration.output_sizing.extra5_full_confirmation]
 status = "45of45_with_output_driver_candidate (see output_driver_iteration.pvt45); working_candidate; I17_open"

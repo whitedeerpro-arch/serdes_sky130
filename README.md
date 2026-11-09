@@ -22,14 +22,14 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 | 模块 | 当前修订 | 已验证到 | 主要缺口 |
 |---|---|---|---|
-| [VCO](docs/design/pll_vco.md) | PLL r5 / 4 bit 候选 | 真实偏置/PDK R 下 135 条件存在 2 GHz 可用码，45/45组存在三温共同码（原42组＋补测3组）；七压力点 L(1 MHz) −84.9…−90.2 dBc/Hz | hl/lh 与切码；实际 CP/LF 与原生闭环；工作区码表的噪声重验 |
-| [÷8 prescaler](docs/design/pll_divider.md) | r3结构；首级W40/后级W80 | 真实偏置/PDK R、标准输入hh/ll各45点分频/反馈正确 | 原生r5全角、局部失配/启动；无确定性复位；FS冷角旧尾管余量约−5 mV |
+| [VCO](docs/design/pll_vco.md) | PLL r5 / 4 bit 候选 | 真实偏置/PDK R 工作区135点、45组三温共同码；五压力点各200样本频率σ 0.75–1.12% | 当前码表/负载噪声重验；慢端失配余量与粗码补点、hl/lh、切码 |
+| [÷8 prescaler](docs/design/pll_divider.md) | r3结构；首级W40/后级W80 | 真实偏置/PDK R、标准输入hh/ll各45点；六压力点MC共1048样本正确分频 | FF冷失配数值缺失；原生全角/启动、FS冷尾管余量 |
 | [时钟接收器](docs/design/clock_receiver.md) | PLL r4 | 反馈 45/45，全速 45/45；原生 VCO 5 个工作点全部正常 | SS 热角幅度余量约 110 mV；1.95 V 过冲 |
-| [PFD/CP/LF/启动](docs/design/pll_loop.md) | v0.1 电路；r5 配套环路待选 | PFD→CP 45 条件；r3 的 4 工况分层闭环锁定 | r5 的 CP/LF/选码联合设计、原生持续锁定、完整上电捕获 |
-| [TX 字入口](docs/design/tx_word_capture.md) | 16位捕获＋两组8位保持；整链候选 | 首级6压力48字；B关闭12组；[新入口＋v3完整TX](docs/design/tx_parallel_serializer.md) TT通过，末级选择时钟改进后TT/FS热及SS冷三点串化眼图满足；原失败保留 | 扩选择时钟改进压力角；物理控制路径（初步映射SS时序不足）、45点/失配/噪声；驱动blank/CDC |
-| [TX 时钟分发](docs/design/tx_clock_distribution.md) | TX r2；v3 候选 | v3 在 15 个 r4 时钟回放 V/T 点满足，最差 121.6 mV / 0.140 UI；r5 真实偏置/PDK R 联合静态 8 点连续正确计数 | 2 个 FF 冷角数值未完成；新字入口与原生分发联合、动态眼图/位映射与全角；功耗待降 |
+| [PFD/CP/LF/启动](docs/design/pll_loop.md) | r5/k4转向CP、4.13kΩ/18pF PDK LF候选 | 行为VCO闭环135/135锁定；原生预充闭环三点；CP三点各200样本MC；粗码RTL与监测积木已有 | 自动粗搜接入真实闭环、从零启动、新环路噪声/供电抑制；转向CP窗口 |
+| [TX 字入口](docs/design/tx_word_capture.md) | 16位捕获＋两组8位保持；extra5整链候选 | 首级6压力48字；B关闭12组；[完整TX](docs/design/tx_parallel_serializer.md)在理想2GHz、真实偏置/PDK R tt下45/45串化器与焊盘过门槛，每点256 bit | 内部幅度I-17；原生源/电阻角、物理guard/blank、建立保持、失配/噪声 |
+| [TX 时钟分发](docs/design/tx_clock_distribution.md) | v3同步计数器、extra5/WT16/R240候选 | r4抽头回放15点；r5原生静态8点计数；理想2GHz整链45点眼图/位序正确 | 原生静态2个FF冷角数值缺失；原生动态/启动、内部幅度、功耗/噪声 |
 | [TX 串化器](docs/design/tx_serializer.md) | TX r2 | 固定理想 TT 时钟边界下 45/45 满足 75 mV / 0.15 UI（128 bit） | 原生分发见上；FS 热角长码型：串化器 0.115 UI，远端 0.147 UI |
-| [TX 输出级](docs/design/tx_output_driver.md) | TX r2 | 45 条件从禁用态启动正常 | 焊盘/ESD 代理；无 FFE |
+| [TX 输出级](docs/design/tx_output_driver.md) | r2使能；预驱120Ω/尾W60、输出W192候选 | 旧启用45点；新完整TX 45点焊盘过75mV/0.15UI门槛 | 幅度容差/内部超幅；实际焊盘/ESD、供电回流和电阻角 |
 | [信道模型](docs/design/channel_model.md) | RLC16 + PCB 族 | C0–C5 构造与 TX 接入 | 链路级眼图门槛未定义 |
 | [RX 前端](docs/design/rx_frontend.md) | vcm 1.05 V | AC/DC 45 条件 × 4 档；C2 眼图 45 条件（默认 EQ3） | C3 未做；档位自适应；输入失调 σ 6.1 mV |
 | [RX PI 与采样](docs/design/rx_pi_sampler.md) | ac_trim/c2/120f；deser16/W40 | 无读出窗口135条件：18完整扫＋117门槛，最差0.8125 UI；PI压力角静态单调；旧读出45点；两边沿校准注入联调 | 当前W40读出FS/FF冷hh数值缺失、全网格未闭合；真实失配完整SAR、原生锚点/动态PVT |

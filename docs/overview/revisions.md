@@ -1,6 +1,6 @@
 # 版本与基线
 
-> 按模块维护工作修订与迭代：PLL完整顶层已有，近期推进r5/4 bit工作区与环路选参；TX为r2串化/驱动和v3选择时钟改进；RX为ac_trim/c2/120f＋deser16/W40；偏置为带隙/恒I·R/分配/B2。修订是解决角点和约束问题的迭代记录，归属稳定的模块层次。见[设计工作台](../../web/design/index.html)与[详细验证边界](development_map.md)。v0.1为历史基线。
+> 按模块维护工作修订与迭代：PLL完整顶层已有，近期为r5/4 bit＋k4转向CP/物理LF候选；TX为r2树、v3选择时钟与输出级改进；RX为ac_trim/c2/120f＋deser16/W40；偏置为带隙/恒I·R/分配/B2。修订是解决角点和约束问题的迭代记录，归属稳定的模块层次。见[设计工作台](../../web/design/index.html)与[详细验证边界](development_map.md)。v0.1为历史基线。
 
 ## 基线政策
 
@@ -13,9 +13,9 @@
 
 | 模块组 | 当前修订 | 配置 | 上一版 |
 |---|---|---|---|
-| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r5 候选 `r5_candidate_20261105`（只改 VCO 节点无源件，闭环未重验证，I-32） | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r4 `lowov_buffered_r4_20261031`（全速接收器） |
-| PFD/CP/LF/启动 | v0.1 电路，r3 工况下复测 | [pll_startup.toml](../../config/pll_startup.toml)、[pll_loop_prototype.toml](../../config/pll_loop_prototype.toml) | — |
-| TX 时钟分发、串化器、输出级 | r2 `tx_lowov_retimed_r2_20261030` | [tx_working_revision.toml](../../config/tx_working_revision.toml) | v0.1 |
+| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r5/4bit候选；已有k4原生预充闭环三点，完整覆盖/启动待补 | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r4全速接收器，r3分频结构 |
+| PFD/CP/LF/启动 | k4转向CP、PDK LF4.13kΩ/18pF、粗码RTL/监测；行为VCO闭环135点 | [pll_working_revision.toml](../../config/pll_working_revision.toml)、[环路](../design/pll_loop.md)；旧启动参数保留 | v0.1 50µA/6.5kΩ/40p+2p |
+| TX 时钟分发、串化器、输出级 | r2树＋v3计数器；extra5/WT16R240与预驱/输出对改进，理想2GHz完整MOS45点 | [tx_working_revision.toml](../../config/tx_working_revision.toml) | r2旧理想时钟45点与extra3三压力点 |
 | RX 前端、PI、采样、读出、CDR | ac_trim/c2、PI120f、deser16/W40；行为与物理闭环范围不同 | [rx_working_revision.toml](../../config/rx_working_revision.toml)；旧夹具/参数见rx_frontend、rx_cdr配置 | stock、ac、旧pair读出 |
 | 偏置/带隙/参考缓冲 | 恒I·R＋5bit r_ref修调、模块电流拷贝、去耦、B2 | [bias_working_revision.toml](../../config/bias_working_revision.toml) | 理想电流参考 |
 | 信道模型 | RLC16 + 合成 PCB 族 | [channel_family.toml](../../config/channel_family.toml) | — |
@@ -58,7 +58,7 @@ r5/4 bit原生候选为 [clock_frontend_r5.spice](../../analog/pll/top/spice/clo
 
 - TX r2的45点基线使用v0.1 TT边沿理想化；r4原生接入暴露位置/质量问题。v3已有15点回放动态数据、r5原生8点静态计数，两者不能代替当前组合的全角动态资格，见[TX时钟分发](../design/tx_clock_distribution.md)。
 - RX 的 PI 锚点是理想相关的 2 GHz 多相源，没有接原生 PLL。
-- PLL r3 的闭环 PVT 是分层模型（实测 VCO 曲线 + 真实 PFD/CP），原生 r3 只做了 48 ns 接回。
+- PLL r3的48ns原生记录为历史；当前r5/k4的135点为行为VCO分层闭环，原生晶体管闭环已有预充后三点，均不替代从零启动。
 
 ## v0.1 历史基线
 

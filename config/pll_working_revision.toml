@@ -1,5 +1,5 @@
 revision = "r5_candidate_20261105"
-status = "VCO r5 candidate; 4-bit workmap 135 conditions; native r5+TXv3 static probe 8 complete/2 missing, all 8 count; closed loop not revalidated; not_release_signoff"
+status = "r5 4-bit VCO / k4 steering CP / PDK LF candidate; behavioural-VCO loop 135/135 locked; native transistor loop 3 points locked; native full PVT and startup open; not_release_signoff"
 r5_change = "VCO only: cap bank switch W 1 -> 5, varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
 r5_report = "docs/design/pll_vco.md"
 r5_open = "I-32"
@@ -23,12 +23,13 @@ report = "docs/history/pll_buffered_pvt.md"
 results = "docs/data/pll_buffered_pvt.json"
 previous_revision_report = "docs/history/pll_lowov_pvt.md"
 frozen_release = "releases/v0.1-design-freeze-20261028"
-native_clock_frontend = "analog/pll/top/spice/clock_frontend_r4.spice"
-VCO = "analog/pll/vco/spice/vco_ring4_pvt_candidate.spice"
+native_clock_frontend = "analog/pll/top/spice/clock_frontend_r5.spice"
+VCO = "analog/pll/vco/spice/vco_ring4_4b.spice"
 clock_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice"
 feedback_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice"
 divider = "analog/pll/divider/spice/cml_prescaler8.spice"
-external_reference_current_a = 0.00085
+external_reference_current_a = 0.00085  # historical ideal-bias benches; current r5/k4 uses real bias distribution
+current_bias = "serdes_bias_ref plus module copies; see r5/k4 prepared decks"
 reference_generator_qualified = false
 internal_logic_bias = "real_NMOS_PMOS_mirror; one_per_prescaler"
 divider_tail_w_um = 72.0
@@ -48,8 +49,8 @@ native_FS_2GHz_qualified = true
 native_qualification_scope = "functional_selected_open_loop_point_near2GHz_only"
 native_SS_minus40_clock_feedback_functional = true
 native_SS_minus40_fullrate_cmos_functional = true  # r4; false in r3
-VCO_full45_tuning_mapping_completed = false
-next_stage = "long_native_handoff_key_corners; RC_extremes; bias_reference; noise"
+VCO_full45_tuning_mapping_completed = false  # exhaustive code/Vctrl map incomplete; 135-condition 2GHz coverage exists
+next_stage = "coarse_control_and_CP_window_handoff; startup; current_code_noise; native_and_RC_coverage"
 native_closed_loop_PLL_PVT_completed = false
 
 loop_PVT_report = "docs/history/pll_loop_pvt.md"
@@ -57,8 +58,19 @@ loop_PVT_results = "docs/data/pll_loop_pvt.json"
 selected_same_corner_hierarchical_loop_scenarios = 12
 native_r3_short_handoff_observed = true
 native_r3_sustained_lock_qualified = false
-fullrate_CMOS_priority = "deferred_for_PLL; RX_pair_align_bridge_dependency_retained"
+fullrate_CMOS_priority = "PLL uses feedback receiver; fullrate receiver separate; RX deser16 uses divided clock and static data converters"
 divider_size_review = "docs/history/divider_size_and_clock_priority.md"
+
+[r5_k4_loop]
+report = "docs/design/pll_loop.md"
+core = "analog/pll/top/spice/pll_core_r5k4.spice"
+behavioural_vco_scope = "transistor PFD/steering CP/PDK LF with calibrated behavioural VCO/divide-by-8; 45 MOS/supply/temperature x tt/hh/ll; precharged"
+behavioural_vco_locked = "135/135; capture <= 322 ns; overshoot <= 27.2%"
+native_scope = "transistor VCO/divider closed loop, precharged; TT, FS 1.65 V 85 C hh, SS 1.65 V -40 C hh"
+native_locked = "3 points; capture 118/418/254 ns; 2.00000 GHz"
+native_campaigns = "results/analog/pll/top/native_k4/20261108T200611Z; results/analog/pll/top/native_k4/20261108T221446Z"
+coarse_monitor = "coarse RTL behavioural-loop tests and monitor components available; not integrated into physical closed-loop startup"
+remaining = "native full PVT and startup; CP window and switching; LF supply split; new-loop noise and supply rejection"
 
 [r5_fixed_code_temperature]
 status = "45_of_45_MOS_supply_RC_groups_have_static_three_temperature_code; not_lock_or_startup"

@@ -13,6 +13,6 @@
 | `serdes_window_cmp` | in vlo vhi hi lo ibh ibl vdd vss | hi = in > vhi，lo = in < vlo |
 | `serdes_tsense_vbe` | out vss | out = VBE + I·rs，I 由外部拷贝灌入；约 −1.8 mV/K |
 
-实现：[spice/monitor.spice](spice/monitor.spice)。测试：[cmp_dc](tb/cmp_dc/run.py)（45 条件 × 输入共模的翻转点）、
+实现：[spice/monitor.spice](spice/monitor.spice)。测试：[cmp_trip](tb/cmp_trip/run.py)（45 条件 × 输入共模的翻转点）、
 [cmp_mc](tb/cmp_mc/run.py)（局部失配失调）、[tsense_dc](tb/tsense_dc/run.py)（MOS 角 × 电阻角 × VDD 的各码翻转温度）。
 结果在 `results/analog/common/monitor/<case>/<run_id>/`。

@@ -661,6 +661,3517 @@
   ]
  },
  {
+  "id": "rx_fs_w40_full_transient_op_xro_seed_v1",
+  "kind": "numerical_initial_guess",
+  "description": "Soft nodeset hints from the same FS full W40 deck transient-OP initial solution; not DC qualification or power-up evidence.",
+  "upstream": {
+   "module": "rx sampler readout",
+   "deck": "results/analog/rx/sampler/readout_deser/20261105T195801Z_ac_trim32_realbias_rhh/fs_v1650_t-40/tb.cir",
+   "deck_sha256": "1d9abd7fce707f7eee7edc74e600421f3f57a8d790f005963e33918c9bc12b15",
+   "execution": "results/analog/rx/sampler/readout_deser/20261105T195801Z_ac_trim32_realbias_rhh/fs_v1650_t-40/execution.json",
+   "execution_sha256": "d62f2e1da59c8c4a53593a6a733745061ee4e7164da8122a9e450b0404d57122",
+   "log": "results/analog/rx/sampler/readout_deser/20261105T195801Z_ac_trim32_realbias_rhh/fs_v1650_t-40/simulator.log",
+   "log_sha256": "c6e54422a972f2f17c97cd1ee25491f506738eb2da73388c509ff3fc4930f1a9",
+   "frozen_cell_manifest_sha256": "86b71a8561c0c38d67651b560269990c9c66167cc206b07a155bae787440751f",
+   "limitation": "source execution records deck/stimulus hashes and PDK identity, but no per-cell execution-time hashes; frozen historical cell paths are verified against the prepared source snapshot"
+  },
+  "nodes": [
+   {
+    "node": "xro.xf.dqp",
+    "value": "1.64739",
+    "line": 1938
+   },
+   {
+    "node": "xro.xf.dqn",
+    "value": "1.44993",
+    "line": 1939
+   },
+   {
+    "node": "xro.xf.xlb.pdiode",
+    "value": "0.476661",
+    "line": 2277
+   },
+   {
+    "node": "xro.xf.vbias_logic",
+    "value": "0.827286",
+    "line": 2278
+   },
+   {
+    "node": "xro.xf.xdiv.xbias.pdiode",
+    "value": "0.476661",
+    "line": 2279
+   },
+   {
+    "node": "xro.xf.xdiv.vbias_logic",
+    "value": "0.827285",
+    "line": 2280
+   },
+   {
+    "node": "xro.xf.xdiv.ckp",
+    "value": "0.585267",
+    "line": 2281
+   },
+   {
+    "node": "xro.xf.xdiv.ckn",
+    "value": "0.882343",
+    "line": 2282
+   },
+   {
+    "node": "xro.xf.xdiv.xmaster.xrp.rb",
+    "value": "1.64974",
+    "line": 2283
+   },
+   {
+    "node": "xro.xf.dmp",
+    "value": "1.64908",
+    "line": 2284
+   },
+   {
+    "node": "xro.xf.xdiv.xmaster.xrn.rb",
+    "value": "1.59228",
+    "line": 2285
+   },
+   {
+    "node": "xro.xf.dmn",
+    "value": "1.44783",
+    "line": 2286
+   },
+   {
+    "node": "xro.xf.xdiv.xmaster.track",
+    "value": "1.06215",
+    "line": 2287
+   },
+   {
+    "node": "xro.xf.xdiv.xmaster.hold",
+    "value": "0.824744",
+    "line": 2288
+   },
+   {
+    "node": "xro.xf.xdiv.xmaster.tail",
+    "value": "0.14077",
+    "line": 2289
+   },
+   {
+    "node": "xro.xf.xdiv.xslave.xrp.rb",
+    "value": "1.64925",
+    "line": 2290
+   },
+   {
+    "node": "xro.xf.xdiv.xslave.xrn.rb",
+    "value": "1.59288",
+    "line": 2291
+   },
+   {
+    "node": "xro.xf.xdiv.xslave.track",
+    "value": "0.780678",
+    "line": 2292
+   },
+   {
+    "node": "xro.xf.xdiv.xslave.hold",
+    "value": "1.0717",
+    "line": 2293
+   },
+   {
+    "node": "xro.xf.xdiv.xslave.tail",
+    "value": "0.139151",
+    "line": 2294
+   },
+   {
+    "node": "xro.xf.xbq.xgain.xrp.rb",
+    "value": "1.56525",
+    "line": 2295
+   },
+   {
+    "node": "xro.xf.qn",
+    "value": "1.35313",
+    "line": 2296
+   },
+   {
+    "node": "xro.xf.xbq.xgain.xrn.rb",
+    "value": "1.649",
+    "line": 2297
+   },
+   {
+    "node": "xro.xf.qp",
+    "value": "1.64649",
+    "line": 2298
+   },
+   {
+    "node": "xro.xf.xbq.xgain.tail",
+    "value": "0.770064",
+    "line": 2299
+   },
+   {
+    "node": "xro.xf.xbm.xgain.xrp.rb",
+    "value": "1.56514",
+    "line": 2300
+   },
+   {
+    "node": "xro.xf.mn",
+    "value": "1.35274",
+    "line": 2301
+   },
+   {
+    "node": "xro.xf.xbm.xgain.xrn.rb",
+    "value": "1.6491",
+    "line": 2302
+   },
+   {
+    "node": "xro.xf.mp",
+    "value": "1.64685",
+    "line": 2303
+   },
+   {
+    "node": "xro.xf.xbm.xgain.tail",
+    "value": "0.771489",
+    "line": 2304
+   },
+   {
+    "node": "xro.xf.xa0.ckp",
+    "value": "0.851886",
+    "line": 2305
+   },
+   {
+    "node": "xro.xf.xa0.ckn",
+    "value": "0.588607",
+    "line": 2306
+   },
+   {
+    "node": "xro.xf.xa0.xmaster.xrp.rb",
+    "value": "1.60467",
+    "line": 2307
+   },
+   {
+    "node": "xro.xf.xa0.mp",
+    "value": "1.483",
+    "line": 2308
+   },
+   {
+    "node": "xro.xf.xa0.xmaster.xrn.rb",
+    "value": "1.64983",
+    "line": 2309
+   },
+   {
+    "node": "xro.xf.xa0.mn",
+    "value": "1.64937",
+    "line": 2310
+   },
+   {
+    "node": "xro.xf.xa0.xmaster.track",
+    "value": "0.768545",
+    "line": 2311
+   },
+   {
+    "node": "xro.xf.xa0.xmaster.hold",
+    "value": "1.06028",
+    "line": 2312
+   },
+   {
+    "node": "xro.xf.xa0.xmaster.tail",
+    "value": "0.0804363",
+    "line": 2313
+   },
+   {
+    "node": "xro.xf.xa0.xslave.xrp.rb",
+    "value": "1.60424",
+    "line": 2314
+   },
+   {
+    "node": "xro.xf.a0p",
+    "value": "1.48142",
+    "line": 2315
+   },
+   {
+    "node": "xro.xf.xa0.xslave.xrn.rb",
+    "value": "1.64959",
+    "line": 2316
+   },
+   {
+    "node": "xro.xf.a0n",
+    "value": "1.64848",
+    "line": 2317
+   },
+   {
+    "node": "xro.xf.xa0.xslave.track",
+    "value": "0.992898",
+    "line": 2318
+   },
+   {
+    "node": "xro.xf.xa0.xslave.hold",
+    "value": "0.858123",
+    "line": 2319
+   },
+   {
+    "node": "xro.xf.xa0.xslave.tail",
+    "value": "0.0830006",
+    "line": 2320
+   },
+   {
+    "node": "xro.xf.xb0.ckp",
+    "value": "0.588607",
+    "line": 2321
+   },
+   {
+    "node": "xro.xf.xb0.ckn",
+    "value": "0.851886",
+    "line": 2322
+   },
+   {
+    "node": "xro.xf.xb0.xmaster.xrp.rb",
+    "value": "1.60424",
+    "line": 2323
+   },
+   {
+    "node": "xro.xf.xb0.mp",
+    "value": "1.48142",
+    "line": 2324
+   },
+   {
+    "node": "xro.xf.xb0.xmaster.xrn.rb",
+    "value": "1.64959",
+    "line": 2325
+   },
+   {
+    "node": "xro.xf.xb0.mn",
+    "value": "1.64848",
+    "line": 2326
+   },
+   {
+    "node": "xro.xf.xb0.xmaster.track",
+    "value": "0.993109",
+    "line": 2327
+   },
+   {
+    "node": "xro.xf.xb0.xmaster.hold",
+    "value": "0.858124",
+    "line": 2328
+   },
+   {
+    "node": "xro.xf.xb0.xmaster.tail",
+    "value": "0.0830006",
+    "line": 2329
+   },
+   {
+    "node": "xro.xf.xb0.xslave.xrp.rb",
+    "value": "1.60529",
+    "line": 2330
+   },
+   {
+    "node": "xro.xf.b0p",
+    "value": "1.48529",
+    "line": 2331
+   },
+   {
+    "node": "xro.xf.xb0.xslave.xrn.rb",
+    "value": "1.64921",
+    "line": 2332
+   },
+   {
+    "node": "xro.xf.b0n",
+    "value": "1.64709",
+    "line": 2333
+   },
+   {
+    "node": "xro.xf.xb0.xslave.track",
+    "value": "0.768221",
+    "line": 2334
+   },
+   {
+    "node": "xro.xf.xb0.xslave.hold",
+    "value": "1.05839",
+    "line": 2335
+   },
+   {
+    "node": "xro.xf.xb0.xslave.tail",
+    "value": "0.0804269",
+    "line": 2336
+   },
+   {
+    "node": "xro.xf.xae1.ckp",
+    "value": "0.851886",
+    "line": 2337
+   },
+   {
+    "node": "xro.xf.xae1.ckn",
+    "value": "0.588607",
+    "line": 2338
+   },
+   {
+    "node": "xro.xf.xae1.xmaster.xrp.rb",
+    "value": "1.60467",
+    "line": 2339
+   },
+   {
+    "node": "xro.xf.xae1.mp",
+    "value": "1.483",
+    "line": 2340
+   },
+   {
+    "node": "xro.xf.xae1.xmaster.xrn.rb",
+    "value": "1.64983",
+    "line": 2341
+   },
+   {
+    "node": "xro.xf.xae1.mn",
+    "value": "1.64937",
+    "line": 2342
+   },
+   {
+    "node": "xro.xf.xae1.xmaster.track",
+    "value": "0.768545",
+    "line": 2343
+   },
+   {
+    "node": "xro.xf.xae1.xmaster.hold",
+    "value": "1.06028",
+    "line": 2344
+   },
+   {
+    "node": "xro.xf.xae1.xmaster.tail",
+    "value": "0.0804363",
+    "line": 2345
+   },
+   {
+    "node": "xro.xf.xae1.xslave.xrp.rb",
+    "value": "1.60424",
+    "line": 2346
+   },
+   {
+    "node": "xro.xf.ae1p",
+    "value": "1.48142",
+    "line": 2347
+   },
+   {
+    "node": "xro.xf.xae1.xslave.xrn.rb",
+    "value": "1.64959",
+    "line": 2348
+   },
+   {
+    "node": "xro.xf.ae1n",
+    "value": "1.64848",
+    "line": 2349
+   },
+   {
+    "node": "xro.xf.xae1.xslave.track",
+    "value": "0.992898",
+    "line": 2350
+   },
+   {
+    "node": "xro.xf.xae1.xslave.hold",
+    "value": "0.858123",
+    "line": 2351
+   },
+   {
+    "node": "xro.xf.xae1.xslave.tail",
+    "value": "0.0830006",
+    "line": 2352
+   },
+   {
+    "node": "xro.xf.xbe1.ckp",
+    "value": "0.588607",
+    "line": 2353
+   },
+   {
+    "node": "xro.xf.xbe1.ckn",
+    "value": "0.851886",
+    "line": 2354
+   },
+   {
+    "node": "xro.xf.xbe1.xmaster.xrp.rb",
+    "value": "1.60424",
+    "line": 2355
+   },
+   {
+    "node": "xro.xf.xbe1.mp",
+    "value": "1.48142",
+    "line": 2356
+   },
+   {
+    "node": "xro.xf.xbe1.xmaster.xrn.rb",
+    "value": "1.64959",
+    "line": 2357
+   },
+   {
+    "node": "xro.xf.xbe1.mn",
+    "value": "1.64848",
+    "line": 2358
+   },
+   {
+    "node": "xro.xf.xbe1.xmaster.track",
+    "value": "0.993109",
+    "line": 2359
+   },
+   {
+    "node": "xro.xf.xbe1.xmaster.hold",
+    "value": "0.858124",
+    "line": 2360
+   },
+   {
+    "node": "xro.xf.xbe1.xmaster.tail",
+    "value": "0.0830006",
+    "line": 2361
+   },
+   {
+    "node": "xro.xf.xbe1.xslave.xrp.rb",
+    "value": "1.60529",
+    "line": 2362
+   },
+   {
+    "node": "xro.xf.be1p",
+    "value": "1.48529",
+    "line": 2363
+   },
+   {
+    "node": "xro.xf.xbe1.xslave.xrn.rb",
+    "value": "1.64921",
+    "line": 2364
+   },
+   {
+    "node": "xro.xf.be1n",
+    "value": "1.64709",
+    "line": 2365
+   },
+   {
+    "node": "xro.xf.xbe1.xslave.track",
+    "value": "0.768221",
+    "line": 2366
+   },
+   {
+    "node": "xro.xf.xbe1.xslave.hold",
+    "value": "1.05839",
+    "line": 2367
+   },
+   {
+    "node": "xro.xf.xbe1.xslave.tail",
+    "value": "0.0804269",
+    "line": 2368
+   },
+   {
+    "node": "xro.xf.xa1.ckp",
+    "value": "0.852217",
+    "line": 2369
+   },
+   {
+    "node": "xro.xf.xa1.ckn",
+    "value": "0.588266",
+    "line": 2370
+   },
+   {
+    "node": "xro.xf.xa1.xmaster.xrp.rb",
+    "value": "1.60461",
+    "line": 2371
+   },
+   {
+    "node": "xro.xf.xa1.mp",
+    "value": "1.48278",
+    "line": 2372
+   },
+   {
+    "node": "xro.xf.xa1.xmaster.xrn.rb",
+    "value": "1.64983",
+    "line": 2373
+   },
+   {
+    "node": "xro.xf.xa1.mn",
+    "value": "1.64936",
+    "line": 2374
+   },
+   {
+    "node": "xro.xf.xa1.xmaster.track",
+    "value": "0.76847",
+    "line": 2375
+   },
+   {
+    "node": "xro.xf.xa1.xmaster.hold",
+    "value": "1.06085",
+    "line": 2376
+   },
+   {
+    "node": "xro.xf.xa1.xmaster.tail",
+    "value": "0.080657",
+    "line": 2377
+   },
+   {
+    "node": "xro.xf.xa1.xslave.xrp.rb",
+    "value": "1.60418",
+    "line": 2378
+   },
+   {
+    "node": "xro.xf.a1p",
+    "value": "1.48121",
+    "line": 2379
+   },
+   {
+    "node": "xro.xf.xa1.xslave.xrn.rb",
+    "value": "1.64959",
+    "line": 2380
+   },
+   {
+    "node": "xro.xf.a1n",
+    "value": "1.64849",
+    "line": 2381
+   },
+   {
+    "node": "xro.xf.xa1.xslave.track",
+    "value": "0.993463",
+    "line": 2382
+   },
+   {
+    "node": "xro.xf.xa1.xslave.hold",
+    "value": "0.858076",
+    "line": 2383
+   },
+   {
+    "node": "xro.xf.xa1.xslave.tail",
+    "value": "0.0832255",
+    "line": 2384
+   },
+   {
+    "node": "xro.xf.xb1.ckp",
+    "value": "0.588265",
+    "line": 2385
+   },
+   {
+    "node": "xro.xf.xb1.ckn",
+    "value": "0.852217",
+    "line": 2386
+   },
+   {
+    "node": "xro.xf.xb1.xmaster.xrp.rb",
+    "value": "1.60418",
+    "line": 2387
+   },
+   {
+    "node": "xro.xf.xb1.mp",
+    "value": "1.48121",
+    "line": 2388
+   },
+   {
+    "node": "xro.xf.xb1.xmaster.xrn.rb",
+    "value": "1.64959",
+    "line": 2389
+   },
+   {
+    "node": "xro.xf.xb1.mn",
+    "value": "1.64849",
+    "line": 2390
+   },
+   {
+    "node": "xro.xf.xb1.xmaster.track",
+    "value": "0.993644",
+    "line": 2391
+   },
+   {
+    "node": "xro.xf.xb1.xmaster.hold",
+    "value": "0.858076",
+    "line": 2392
+   },
+   {
+    "node": "xro.xf.xb1.xmaster.tail",
+    "value": "0.0832255",
+    "line": 2393
+   },
+   {
+    "node": "xro.xf.xb1.xslave.xrp.rb",
+    "value": "1.60523",
+    "line": 2394
+   },
+   {
+    "node": "xro.xf.b1p",
+    "value": "1.48506",
+    "line": 2395
+   },
+   {
+    "node": "xro.xf.xb1.xslave.xrn.rb",
+    "value": "1.64921",
+    "line": 2396
+   },
+   {
+    "node": "xro.xf.b1n",
+    "value": "1.6471",
+    "line": 2397
+   },
+   {
+    "node": "xro.xf.xb1.xslave.track",
+    "value": "0.768147",
+    "line": 2398
+   },
+   {
+    "node": "xro.xf.xb1.xslave.hold",
+    "value": "1.05893",
+    "line": 2399
+   },
+   {
+    "node": "xro.xf.xb1.xslave.tail",
+    "value": "0.0806476",
+    "line": 2400
+   },
+   {
+    "node": "xro.xf.xae0.ckp",
+    "value": "0.852217",
+    "line": 2401
+   },
+   {
+    "node": "xro.xf.xae0.ckn",
+    "value": "0.588265",
+    "line": 2402
+   },
+   {
+    "node": "xro.xf.xae0.xmaster.xrp.rb",
+    "value": "1.60461",
+    "line": 2403
+   },
+   {
+    "node": "xro.xf.xae0.mp",
+    "value": "1.48279",
+    "line": 2404
+   },
+   {
+    "node": "xro.xf.xae0.xmaster.xrn.rb",
+    "value": "1.64983",
+    "line": 2405
+   },
+   {
+    "node": "xro.xf.xae0.mn",
+    "value": "1.64936",
+    "line": 2406
+   },
+   {
+    "node": "xro.xf.xae0.xmaster.track",
+    "value": "0.768469",
+    "line": 2407
+   },
+   {
+    "node": "xro.xf.xae0.xmaster.hold",
+    "value": "1.06081",
+    "line": 2408
+   },
+   {
+    "node": "xro.xf.xae0.xmaster.tail",
+    "value": "0.080657",
+    "line": 2409
+   },
+   {
+    "node": "xro.xf.xae0.xslave.xrp.rb",
+    "value": "1.60418",
+    "line": 2410
+   },
+   {
+    "node": "xro.xf.ae0p",
+    "value": "1.48121",
+    "line": 2411
+   },
+   {
+    "node": "xro.xf.xae0.xslave.xrn.rb",
+    "value": "1.64959",
+    "line": 2412
+   },
+   {
+    "node": "xro.xf.ae0n",
+    "value": "1.64849",
+    "line": 2413
+   },
+   {
+    "node": "xro.xf.xae0.xslave.track",
+    "value": "0.993431",
+    "line": 2414
+   },
+   {
+    "node": "xro.xf.xae0.xslave.hold",
+    "value": "0.858076",
+    "line": 2415
+   },
+   {
+    "node": "xro.xf.xae0.xslave.tail",
+    "value": "0.0832255",
+    "line": 2416
+   },
+   {
+    "node": "xro.xf.xbe0.ckp",
+    "value": "0.588265",
+    "line": 2417
+   },
+   {
+    "node": "xro.xf.xbe0.ckn",
+    "value": "0.852217",
+    "line": 2418
+   },
+   {
+    "node": "xro.xf.xbe0.xmaster.xrp.rb",
+    "value": "1.60418",
+    "line": 2419
+   },
+   {
+    "node": "xro.xf.xbe0.mp",
+    "value": "1.48121",
+    "line": 2420
+   },
+   {
+    "node": "xro.xf.xbe0.xmaster.xrn.rb",
+    "value": "1.64959",
+    "line": 2421
+   },
+   {
+    "node": "xro.xf.xbe0.mn",
+    "value": "1.64849",
+    "line": 2422
+   },
+   {
+    "node": "xro.xf.xbe0.xmaster.track",
+    "value": "0.993644",
+    "line": 2423
+   },
+   {
+    "node": "xro.xf.xbe0.xmaster.hold",
+    "value": "0.858076",
+    "line": 2424
+   },
+   {
+    "node": "xro.xf.xbe0.xmaster.tail",
+    "value": "0.0832255",
+    "line": 2425
+   },
+   {
+    "node": "xro.xf.xbe0.xslave.xrp.rb",
+    "value": "1.60523",
+    "line": 2426
+   },
+   {
+    "node": "xro.xf.be0p",
+    "value": "1.48506",
+    "line": 2427
+   },
+   {
+    "node": "xro.xf.xbe0.xslave.xrn.rb",
+    "value": "1.64921",
+    "line": 2428
+   },
+   {
+    "node": "xro.xf.be0n",
+    "value": "1.6471",
+    "line": 2429
+   },
+   {
+    "node": "xro.xf.xbe0.xslave.track",
+    "value": "0.768147",
+    "line": 2430
+   },
+   {
+    "node": "xro.xf.xbe0.xslave.hold",
+    "value": "1.05893",
+    "line": 2431
+   },
+   {
+    "node": "xro.xf.xbe0.xslave.tail",
+    "value": "0.0806476",
+    "line": 2432
+   },
+   {
+    "node": "xro.xf.xca0.fp",
+    "value": "0.690768",
+    "line": 2433
+   },
+   {
+    "node": "xro.xf.xca0.fn",
+    "value": "0.839406",
+    "line": 2434
+   },
+   {
+    "node": "xro.xf.xca0.xgain.mirror",
+    "value": "1.00783",
+    "line": 2435
+   },
+   {
+    "node": "xro.xf.xca0.xgain.tail",
+    "value": "0.0285857",
+    "line": 2436
+   },
+   {
+    "node": "xro.xf.xca0.raw",
+    "value": "0.0888209",
+    "line": 2437
+   },
+   {
+    "node": "xro.xf.xca0.inv",
+    "value": "1.65",
+    "line": 2438
+   },
+   {
+    "node": "xro.ra0",
+    "value": "9.67865e-08",
+    "line": 2439
+   },
+   {
+    "node": "xro.xf.xcb0.fp",
+    "value": "0.694191",
+    "line": 2440
+   },
+   {
+    "node": "xro.xf.xcb0.fn",
+    "value": "0.838162",
+    "line": 2441
+   },
+   {
+    "node": "xro.xf.xcb0.xgain.mirror",
+    "value": "1.00493",
+    "line": 2442
+   },
+   {
+    "node": "xro.xf.xcb0.xgain.tail",
+    "value": "0.0293886",
+    "line": 2443
+   },
+   {
+    "node": "xro.xf.xcb0.raw",
+    "value": "0.0953253",
+    "line": 2444
+   },
+   {
+    "node": "xro.xf.xcb0.inv",
+    "value": "1.65",
+    "line": 2445
+   },
+   {
+    "node": "xro.rb0",
+    "value": "9.73974e-08",
+    "line": 2446
+   },
+   {
+    "node": "xro.xf.xcae0.fp",
+    "value": "0.690576",
+    "line": 2447
+   },
+   {
+    "node": "xro.xf.xcae0.fn",
+    "value": "0.839413",
+    "line": 2448
+   },
+   {
+    "node": "xro.xf.xcae0.xgain.mirror",
+    "value": "1.00799",
+    "line": 2449
+   },
+   {
+    "node": "xro.xf.xcae0.xgain.tail",
+    "value": "0.0285381",
+    "line": 2450
+   },
+   {
+    "node": "xro.xf.xcae0.raw",
+    "value": "0.0885583",
+    "line": 2451
+   },
+   {
+    "node": "xro.xf.xcae0.inv",
+    "value": "1.65",
+    "line": 2452
+   },
+   {
+    "node": "xro.rae0",
+    "value": "9.67963e-08",
+    "line": 2453
+   },
+   {
+    "node": "xro.xf.xcbe0.fp",
+    "value": "0.693989",
+    "line": 2454
+   },
+   {
+    "node": "xro.xf.xcbe0.fn",
+    "value": "0.838172",
+    "line": 2455
+   },
+   {
+    "node": "xro.xf.xcbe0.xgain.mirror",
+    "value": "1.0051",
+    "line": 2456
+   },
+   {
+    "node": "xro.xf.xcbe0.xgain.tail",
+    "value": "0.0293385",
+    "line": 2457
+   },
+   {
+    "node": "xro.xf.xcbe0.raw",
+    "value": "0.0950068",
+    "line": 2458
+   },
+   {
+    "node": "xro.xf.xcbe0.inv",
+    "value": "1.65",
+    "line": 2459
+   },
+   {
+    "node": "xro.rbe0",
+    "value": "9.74347e-08",
+    "line": 2460
+   },
+   {
+    "node": "xro.xf.xca1.fp",
+    "value": "0.690576",
+    "line": 2461
+   },
+   {
+    "node": "xro.xf.xca1.fn",
+    "value": "0.839413",
+    "line": 2462
+   },
+   {
+    "node": "xro.xf.xca1.xgain.mirror",
+    "value": "1.00799",
+    "line": 2463
+   },
+   {
+    "node": "xro.xf.xca1.xgain.tail",
+    "value": "0.0285382",
+    "line": 2464
+   },
+   {
+    "node": "xro.xf.xca1.raw",
+    "value": "0.0885582",
+    "line": 2465
+   },
+   {
+    "node": "xro.xf.xca1.inv",
+    "value": "1.65",
+    "line": 2466
+   },
+   {
+    "node": "xro.ra1",
+    "value": "9.68173e-08",
+    "line": 2467
+   },
+   {
+    "node": "xro.xf.xcb1.fp",
+    "value": "0.693989",
+    "line": 2468
+   },
+   {
+    "node": "xro.xf.xcb1.fn",
+    "value": "0.838172",
+    "line": 2469
+   },
+   {
+    "node": "xro.xf.xcb1.xgain.mirror",
+    "value": "1.0051",
+    "line": 2470
+   },
+   {
+    "node": "xro.xf.xcb1.xgain.tail",
+    "value": "0.0293385",
+    "line": 2471
+   },
+   {
+    "node": "xro.xf.xcb1.raw",
+    "value": "0.0950068",
+    "line": 2472
+   },
+   {
+    "node": "xro.xf.xcb1.inv",
+    "value": "1.65",
+    "line": 2473
+   },
+   {
+    "node": "xro.rb1",
+    "value": "9.74346e-08",
+    "line": 2474
+   },
+   {
+    "node": "xro.xf.xcae1.fp",
+    "value": "0.690768",
+    "line": 2475
+   },
+   {
+    "node": "xro.xf.xcae1.fn",
+    "value": "0.839406",
+    "line": 2476
+   },
+   {
+    "node": "xro.xf.xcae1.xgain.mirror",
+    "value": "1.00783",
+    "line": 2477
+   },
+   {
+    "node": "xro.xf.xcae1.xgain.tail",
+    "value": "0.0285857",
+    "line": 2478
+   },
+   {
+    "node": "xro.xf.xcae1.raw",
+    "value": "0.0888209",
+    "line": 2479
+   },
+   {
+    "node": "xro.xf.xcae1.inv",
+    "value": "1.65",
+    "line": 2480
+   },
+   {
+    "node": "xro.rae1",
+    "value": "9.67865e-08",
+    "line": 2481
+   },
+   {
+    "node": "xro.xf.xcbe1.fp",
+    "value": "0.694191",
+    "line": 2482
+   },
+   {
+    "node": "xro.xf.xcbe1.fn",
+    "value": "0.838162",
+    "line": 2483
+   },
+   {
+    "node": "xro.xf.xcbe1.xgain.mirror",
+    "value": "1.00493",
+    "line": 2484
+   },
+   {
+    "node": "xro.xf.xcbe1.xgain.tail",
+    "value": "0.0293886",
+    "line": 2485
+   },
+   {
+    "node": "xro.xf.xcbe1.raw",
+    "value": "0.0953253",
+    "line": 2486
+   },
+   {
+    "node": "xro.xf.xcbe1.inv",
+    "value": "1.65",
+    "line": 2487
+   },
+   {
+    "node": "xro.rbe1",
+    "value": "9.73975e-08",
+    "line": 2488
+   },
+   {
+    "node": "xro.xf.xcq.fp",
+    "value": "0.837625",
+    "line": 2489
+   },
+   {
+    "node": "xro.xf.xcq.fn",
+    "value": "0.577524",
+    "line": 2490
+   },
+   {
+    "node": "xro.xf.xcq.xgain.mirror",
+    "value": "0.839866",
+    "line": 2491
+   },
+   {
+    "node": "xro.xf.xcq.xgain.tail",
+    "value": "0.048566",
+    "line": 2492
+   },
+   {
+    "node": "xro.xf.xcq.raw",
+    "value": "1.64906",
+    "line": 2493
+   },
+   {
+    "node": "xro.xf.xcq.inv",
+    "value": "1.42321e-07",
+    "line": 2494
+   },
+   {
+    "node": "xro.xf.rq",
+    "value": "1.65",
+    "line": 2495
+   },
+   {
+    "node": "xro.xf.xcm.fp",
+    "value": "0.837952",
+    "line": 2496
+   },
+   {
+    "node": "xro.xf.xcm.fn",
+    "value": "0.577185",
+    "line": 2497
+   },
+   {
+    "node": "xro.xf.xcm.xgain.mirror",
+    "value": "0.839614",
+    "line": 2498
+   },
+   {
+    "node": "xro.xf.xcm.xgain.tail",
+    "value": "0.0487083",
+    "line": 2499
+   },
+   {
+    "node": "xro.xf.xcm.raw",
+    "value": "1.64908",
+    "line": 2500
+   },
+   {
+    "node": "xro.xf.xcm.inv",
+    "value": "1.26758e-07",
+    "line": 2501
+   },
+   {
+    "node": "xro.xf.rm",
+    "value": "1.65",
+    "line": 2502
+   },
+   {
+    "node": "xro.xf.nq",
+    "value": "1.23956e-07",
+    "line": 2503
+   },
+   {
+    "node": "xro.ckq",
+    "value": "1.65",
+    "line": 2504
+   },
+   {
+    "node": "xro.ckqb",
+    "value": "8.48735e-08",
+    "line": 2505
+   },
+   {
+    "node": "xro.xf.nm",
+    "value": "1.23956e-07",
+    "line": 2506
+   },
+   {
+    "node": "xro.ckm",
+    "value": "1.65",
+    "line": 2507
+   },
+   {
+    "node": "xro.ckmb",
+    "value": "8.48734e-08",
+    "line": 2508
+   },
+   {
+    "node": "xro.xwc.xj0.clkb",
+    "value": "1.24736e-07",
+    "line": 2509
+   },
+   {
+    "node": "xro.xwc.j1b",
+    "value": "1.65",
+    "line": 2510
+   },
+   {
+    "node": "xro.xwc.xj0.m1",
+    "value": "1.21822e-06",
+    "line": 2511
+   },
+   {
+    "node": "xro.xwc.xj0.m2",
+    "value": "1.65",
+    "line": 2512
+   },
+   {
+    "node": "xro.xwc.xj0.mf",
+    "value": "7.68566e-07",
+    "line": 2513
+   },
+   {
+    "node": "xro.xwc.xj0.s1",
+    "value": "1.65",
+    "line": 2514
+   },
+   {
+    "node": "xro.xwc.j0",
+    "value": "1.31445e-07",
+    "line": 2515
+   },
+   {
+    "node": "xro.xwc.xj0.sf",
+    "value": "1.65",
+    "line": 2516
+   },
+   {
+    "node": "xro.xwc.xj1.clkb",
+    "value": "1.24736e-07",
+    "line": 2517
+   },
+   {
+    "node": "xro.xwc.xj1.m1",
+    "value": "3.36844e-07",
+    "line": 2518
+   },
+   {
+    "node": "xro.xwc.xj1.m2",
+    "value": "1.65",
+    "line": 2519
+   },
+   {
+    "node": "xro.xwc.xj1.mf",
+    "value": "3.27878e-07",
+    "line": 2520
+   },
+   {
+    "node": "xro.xwc.xj1.s1",
+    "value": "1.65",
+    "line": 2521
+   },
+   {
+    "node": "xro.xwc.j1",
+    "value": "1.24736e-07",
+    "line": 2522
+   },
+   {
+    "node": "xro.xwc.xj1.sf",
+    "value": "1.65",
+    "line": 2523
+   },
+   {
+    "node": "xro.xwc.xkq.clkb",
+    "value": "1.65",
+    "line": 2524
+   },
+   {
+    "node": "xro.xwc.xkq.m1",
+    "value": "1.343e-07",
+    "line": 2525
+   },
+   {
+    "node": "xro.xwc.xkq.m2",
+    "value": "1.65",
+    "line": 2526
+   },
+   {
+    "node": "xro.xwc.xkq.mf",
+    "value": "3.20769e-07",
+    "line": 2527
+   },
+   {
+    "node": "xro.xwc.xkq.s1",
+    "value": "1.21822e-06",
+    "line": 2528
+   },
+   {
+    "node": "xro.xwc.kq",
+    "value": "1.65",
+    "line": 2529
+   },
+   {
+    "node": "xro.xwc.xkq.sf",
+    "value": "7.68566e-07",
+    "line": 2530
+   },
+   {
+    "node": "xro.xwc.xkm.clkb",
+    "value": "1.24736e-07",
+    "line": 2531
+   },
+   {
+    "node": "xro.xwc.xkm.m1",
+    "value": "3.36844e-07",
+    "line": 2532
+   },
+   {
+    "node": "xro.xwc.xkm.m2",
+    "value": "1.65",
+    "line": 2533
+   },
+   {
+    "node": "xro.xwc.xkm.mf",
+    "value": "3.27878e-07",
+    "line": 2534
+   },
+   {
+    "node": "xro.xwc.xkm.s1",
+    "value": "1.65",
+    "line": 2535
+   },
+   {
+    "node": "xro.xwc.km",
+    "value": "1.28759e-07",
+    "line": 2536
+   },
+   {
+    "node": "xro.xwc.xkm.sf",
+    "value": "1.65",
+    "line": 2537
+   },
+   {
+    "node": "xro.xwc.xkmb.clkb",
+    "value": "1.65",
+    "line": 2538
+   },
+   {
+    "node": "xro.xwc.xkmb.m1",
+    "value": "1.31615e-07",
+    "line": 2539
+   },
+   {
+    "node": "xro.xwc.xkmb.m2",
+    "value": "1.65",
+    "line": 2540
+   },
+   {
+    "node": "xro.xwc.xkmb.mf",
+    "value": "3.20767e-07",
+    "line": 2541
+   },
+   {
+    "node": "xro.xwc.xkmb.s1",
+    "value": "1.65",
+    "line": 2542
+   },
+   {
+    "node": "xro.xwc.kmb",
+    "value": "1.24737e-07",
+    "line": 2543
+   },
+   {
+    "node": "xro.xwc.xkmb.sf",
+    "value": "1.65",
+    "line": 2544
+   },
+   {
+    "node": "xro.xwc.xbqb.n",
+    "value": "1.65",
+    "line": 2545
+   },
+   {
+    "node": "xro.st_qb",
+    "value": "9.6461e-08",
+    "line": 2546
+   },
+   {
+    "node": "xro.xwc.xbq.n",
+    "value": "1.24736e-07",
+    "line": 2547
+   },
+   {
+    "node": "xro.st_q",
+    "value": "1.65",
+    "line": 2548
+   },
+   {
+    "node": "xro.xwc.xbmb.n",
+    "value": "1.65",
+    "line": 2549
+   },
+   {
+    "node": "xro.st_mb",
+    "value": "9.6461e-08",
+    "line": 2550
+   },
+   {
+    "node": "xro.xwc.xbm.n",
+    "value": "1.65",
+    "line": 2551
+   },
+   {
+    "node": "xro.st_m",
+    "value": "9.6461e-08",
+    "line": 2552
+   },
+   {
+    "node": "xro.xwc.xbw.n",
+    "value": "1.23956e-07",
+    "line": 2553
+   },
+   {
+    "node": "xro.xla0.xs0.clkb",
+    "value": "1.24736e-07",
+    "line": 2555
+   },
+   {
+    "node": "xro.xla0.xs0.m1",
+    "value": "3.36844e-07",
+    "line": 2556
+   },
+   {
+    "node": "xro.xla0.xs0.m2",
+    "value": "1.65",
+    "line": 2557
+   },
+   {
+    "node": "xro.xla0.xs0.mf",
+    "value": "3.27878e-07",
+    "line": 2558
+   },
+   {
+    "node": "xro.xla0.xs0.s1",
+    "value": "1.65",
+    "line": 2559
+   },
+   {
+    "node": "xro.xla0.s0",
+    "value": "1.27422e-07",
+    "line": 2560
+   },
+   {
+    "node": "xro.xla0.xs0.sf",
+    "value": "1.65",
+    "line": 2561
+   },
+   {
+    "node": "xro.xla0.xs1.clkb",
+    "value": "1.24736e-07",
+    "line": 2562
+   },
+   {
+    "node": "xro.xla0.xs1.m1",
+    "value": "3.36844e-07",
+    "line": 2563
+   },
+   {
+    "node": "xro.xla0.xs1.m2",
+    "value": "1.65",
+    "line": 2564
+   },
+   {
+    "node": "xro.xla0.xs1.mf",
+    "value": "3.27878e-07",
+    "line": 2565
+   },
+   {
+    "node": "xro.xla0.xs1.s1",
+    "value": "1.65",
+    "line": 2566
+   },
+   {
+    "node": "xro.xla0.s1",
+    "value": "1.27422e-07",
+    "line": 2567
+   },
+   {
+    "node": "xro.xla0.xs1.sf",
+    "value": "1.65",
+    "line": 2568
+   },
+   {
+    "node": "xro.xla0.xs2.clkb",
+    "value": "1.24736e-07",
+    "line": 2569
+   },
+   {
+    "node": "xro.xla0.xs2.m1",
+    "value": "3.36844e-07",
+    "line": 2570
+   },
+   {
+    "node": "xro.xla0.xs2.m2",
+    "value": "1.65",
+    "line": 2571
+   },
+   {
+    "node": "xro.xla0.xs2.mf",
+    "value": "3.27878e-07",
+    "line": 2572
+   },
+   {
+    "node": "xro.xla0.xs2.s1",
+    "value": "1.65",
+    "line": 2573
+   },
+   {
+    "node": "xro.xla0.s2",
+    "value": "2.50808e-07",
+    "line": 2574
+   },
+   {
+    "node": "xro.xla0.xs2.sf",
+    "value": "1.65",
+    "line": 2575
+   },
+   {
+    "node": "xro.xla0.xs3.clkb",
+    "value": "1.24736e-07",
+    "line": 2576
+   },
+   {
+    "node": "xro.xla0.xs3.m1",
+    "value": "1.65",
+    "line": 2577
+   },
+   {
+    "node": "xro.xla0.xs3.m2",
+    "value": "1.28765e-07",
+    "line": 2578
+   },
+   {
+    "node": "xro.xla0.xs3.mf",
+    "value": "1.65",
+    "line": 2579
+   },
+   {
+    "node": "xro.xla0.xs3.s1",
+    "value": "1.3162e-07",
+    "line": 2580
+   },
+   {
+    "node": "xro.xla0.s3",
+    "value": "1.65",
+    "line": 2581
+   },
+   {
+    "node": "xro.xla0.xs3.sf",
+    "value": "3.20769e-07",
+    "line": 2582
+   },
+   {
+    "node": "xro.xla0.xl0.clkb",
+    "value": "1.24736e-07",
+    "line": 2583
+   },
+   {
+    "node": "xro.xla0.xl0.m1",
+    "value": "3.36844e-07",
+    "line": 2584
+   },
+   {
+    "node": "xro.xla0.xl0.m2",
+    "value": "1.65",
+    "line": 2585
+   },
+   {
+    "node": "xro.xla0.xl0.mf",
+    "value": "3.27878e-07",
+    "line": 2586
+   },
+   {
+    "node": "xro.xla0.xl0.s1",
+    "value": "1.65",
+    "line": 2587
+   },
+   {
+    "node": "xro.xla0.xl0.sf",
+    "value": "1.65",
+    "line": 2589
+   },
+   {
+    "node": "xro.xla0.xl1.clkb",
+    "value": "1.24736e-07",
+    "line": 2590
+   },
+   {
+    "node": "xro.xla0.xl1.m1",
+    "value": "3.36844e-07",
+    "line": 2591
+   },
+   {
+    "node": "xro.xla0.xl1.m2",
+    "value": "1.65",
+    "line": 2592
+   },
+   {
+    "node": "xro.xla0.xl1.mf",
+    "value": "3.27878e-07",
+    "line": 2593
+   },
+   {
+    "node": "xro.xla0.xl1.s1",
+    "value": "1.65",
+    "line": 2594
+   },
+   {
+    "node": "xro.xla0.xl1.sf",
+    "value": "1.65",
+    "line": 2596
+   },
+   {
+    "node": "xro.xla0.xl2.clkb",
+    "value": "1.24736e-07",
+    "line": 2597
+   },
+   {
+    "node": "xro.xla0.xl2.m1",
+    "value": "3.36844e-07",
+    "line": 2598
+   },
+   {
+    "node": "xro.xla0.xl2.m2",
+    "value": "1.65",
+    "line": 2599
+   },
+   {
+    "node": "xro.xla0.xl2.mf",
+    "value": "3.27878e-07",
+    "line": 2600
+   },
+   {
+    "node": "xro.xla0.xl2.s1",
+    "value": "1.65",
+    "line": 2601
+   },
+   {
+    "node": "xro.xla0.xl2.sf",
+    "value": "1.65",
+    "line": 2603
+   },
+   {
+    "node": "xro.xla0.xl3.clkb",
+    "value": "1.24736e-07",
+    "line": 2604
+   },
+   {
+    "node": "xro.xla0.xl3.m1",
+    "value": "1.21822e-06",
+    "line": 2605
+   },
+   {
+    "node": "xro.xla0.xl3.m2",
+    "value": "1.65",
+    "line": 2606
+   },
+   {
+    "node": "xro.xla0.xl3.mf",
+    "value": "7.68566e-07",
+    "line": 2607
+   },
+   {
+    "node": "xro.xla0.xl3.s1",
+    "value": "1.65",
+    "line": 2608
+   },
+   {
+    "node": "xro.xla0.xl3.sf",
+    "value": "1.65",
+    "line": 2610
+   },
+   {
+    "node": "xro.xlae1.xs0.clkb",
+    "value": "1.24736e-07",
+    "line": 2611
+   },
+   {
+    "node": "xro.xlae1.xs0.m1",
+    "value": "3.36844e-07",
+    "line": 2612
+   },
+   {
+    "node": "xro.xlae1.xs0.m2",
+    "value": "1.65",
+    "line": 2613
+   },
+   {
+    "node": "xro.xlae1.xs0.mf",
+    "value": "3.27878e-07",
+    "line": 2614
+   },
+   {
+    "node": "xro.xlae1.xs0.s1",
+    "value": "1.65",
+    "line": 2615
+   },
+   {
+    "node": "xro.xlae1.s0",
+    "value": "1.27422e-07",
+    "line": 2616
+   },
+   {
+    "node": "xro.xlae1.xs0.sf",
+    "value": "1.65",
+    "line": 2617
+   },
+   {
+    "node": "xro.xlae1.xs1.clkb",
+    "value": "1.24736e-07",
+    "line": 2618
+   },
+   {
+    "node": "xro.xlae1.xs1.m1",
+    "value": "3.36844e-07",
+    "line": 2619
+   },
+   {
+    "node": "xro.xlae1.xs1.m2",
+    "value": "1.65",
+    "line": 2620
+   },
+   {
+    "node": "xro.xlae1.xs1.mf",
+    "value": "3.27878e-07",
+    "line": 2621
+   },
+   {
+    "node": "xro.xlae1.xs1.s1",
+    "value": "1.65",
+    "line": 2622
+   },
+   {
+    "node": "xro.xlae1.s1",
+    "value": "1.27422e-07",
+    "line": 2623
+   },
+   {
+    "node": "xro.xlae1.xs1.sf",
+    "value": "1.65",
+    "line": 2624
+   },
+   {
+    "node": "xro.xlae1.xs2.clkb",
+    "value": "1.24736e-07",
+    "line": 2625
+   },
+   {
+    "node": "xro.xlae1.xs2.m1",
+    "value": "3.36844e-07",
+    "line": 2626
+   },
+   {
+    "node": "xro.xlae1.xs2.m2",
+    "value": "1.65",
+    "line": 2627
+   },
+   {
+    "node": "xro.xlae1.xs2.mf",
+    "value": "3.27878e-07",
+    "line": 2628
+   },
+   {
+    "node": "xro.xlae1.xs2.s1",
+    "value": "1.65",
+    "line": 2629
+   },
+   {
+    "node": "xro.xlae1.s2",
+    "value": "1.27422e-07",
+    "line": 2630
+   },
+   {
+    "node": "xro.xlae1.xs2.sf",
+    "value": "1.65",
+    "line": 2631
+   },
+   {
+    "node": "xro.xlae1.xs3.clkb",
+    "value": "1.24736e-07",
+    "line": 2632
+   },
+   {
+    "node": "xro.xlae1.xs3.m1",
+    "value": "3.36844e-07",
+    "line": 2633
+   },
+   {
+    "node": "xro.xlae1.xs3.m2",
+    "value": "1.65",
+    "line": 2634
+   },
+   {
+    "node": "xro.xlae1.xs3.mf",
+    "value": "3.27878e-07",
+    "line": 2635
+   },
+   {
+    "node": "xro.xlae1.xs3.s1",
+    "value": "1.65",
+    "line": 2636
+   },
+   {
+    "node": "xro.xlae1.s3",
+    "value": "1.26079e-07",
+    "line": 2637
+   },
+   {
+    "node": "xro.xlae1.xs3.sf",
+    "value": "1.65",
+    "line": 2638
+   },
+   {
+    "node": "xro.xlae1.xl0.clkb",
+    "value": "1.24736e-07",
+    "line": 2639
+   },
+   {
+    "node": "xro.xlae1.xl0.m1",
+    "value": "3.36844e-07",
+    "line": 2640
+   },
+   {
+    "node": "xro.xlae1.xl0.m2",
+    "value": "1.65",
+    "line": 2641
+   },
+   {
+    "node": "xro.xlae1.xl0.mf",
+    "value": "3.27878e-07",
+    "line": 2642
+   },
+   {
+    "node": "xro.xlae1.xl0.s1",
+    "value": "1.65",
+    "line": 2643
+   },
+   {
+    "node": "xro.xlae1.xl0.sf",
+    "value": "1.65",
+    "line": 2645
+   },
+   {
+    "node": "xro.xlae1.xl1.clkb",
+    "value": "1.24736e-07",
+    "line": 2646
+   },
+   {
+    "node": "xro.xlae1.xl1.m1",
+    "value": "3.36844e-07",
+    "line": 2647
+   },
+   {
+    "node": "xro.xlae1.xl1.m2",
+    "value": "1.65",
+    "line": 2648
+   },
+   {
+    "node": "xro.xlae1.xl1.mf",
+    "value": "3.27878e-07",
+    "line": 2649
+   },
+   {
+    "node": "xro.xlae1.xl1.s1",
+    "value": "1.65",
+    "line": 2650
+   },
+   {
+    "node": "xro.xlae1.xl1.sf",
+    "value": "1.65",
+    "line": 2652
+   },
+   {
+    "node": "xro.xlae1.xl2.clkb",
+    "value": "1.24736e-07",
+    "line": 2653
+   },
+   {
+    "node": "xro.xlae1.xl2.m1",
+    "value": "3.36844e-07",
+    "line": 2654
+   },
+   {
+    "node": "xro.xlae1.xl2.m2",
+    "value": "1.65",
+    "line": 2655
+   },
+   {
+    "node": "xro.xlae1.xl2.mf",
+    "value": "3.27878e-07",
+    "line": 2656
+   },
+   {
+    "node": "xro.xlae1.xl2.s1",
+    "value": "1.65",
+    "line": 2657
+   },
+   {
+    "node": "xro.xlae1.xl2.sf",
+    "value": "1.65",
+    "line": 2659
+   },
+   {
+    "node": "xro.xlae1.xl3.clkb",
+    "value": "1.24736e-07",
+    "line": 2660
+   },
+   {
+    "node": "xro.xlae1.xl3.m1",
+    "value": "3.36844e-07",
+    "line": 2661
+   },
+   {
+    "node": "xro.xlae1.xl3.m2",
+    "value": "1.65",
+    "line": 2662
+   },
+   {
+    "node": "xro.xlae1.xl3.mf",
+    "value": "3.27878e-07",
+    "line": 2663
+   },
+   {
+    "node": "xro.xlae1.xl3.s1",
+    "value": "1.65",
+    "line": 2664
+   },
+   {
+    "node": "xro.xlae1.xl3.sf",
+    "value": "1.65",
+    "line": 2666
+   },
+   {
+    "node": "xro.xlb0.xs0.clkb",
+    "value": "1.65",
+    "line": 2667
+   },
+   {
+    "node": "xro.xlb0.xs0.m1",
+    "value": "1.00252e-07",
+    "line": 2668
+   },
+   {
+    "node": "xro.xlb0.xs0.m2",
+    "value": "1.65",
+    "line": 2669
+   },
+   {
+    "node": "xro.xlb0.xs0.mf",
+    "value": "3.20767e-07",
+    "line": 2670
+   },
+   {
+    "node": "xro.xlb0.xs0.s1",
+    "value": "1.65",
+    "line": 2671
+   },
+   {
+    "node": "xro.xlb0.s0",
+    "value": "1.32783e-07",
+    "line": 2672
+   },
+   {
+    "node": "xro.xlb0.xs0.sf",
+    "value": "1.65",
+    "line": 2673
+   },
+   {
+    "node": "xro.xlb0.xs1.clkb",
+    "value": "1.65",
+    "line": 2674
+   },
+   {
+    "node": "xro.xlb0.xs1.m1",
+    "value": "1.35638e-07",
+    "line": 2675
+   },
+   {
+    "node": "xro.xlb0.xs1.m2",
+    "value": "1.65",
+    "line": 2676
+   },
+   {
+    "node": "xro.xlb0.xs1.mf",
+    "value": "3.20767e-07",
+    "line": 2677
+   },
+   {
+    "node": "xro.xlb0.xs1.s1",
+    "value": "1.65",
+    "line": 2678
+   },
+   {
+    "node": "xro.xlb0.s1",
+    "value": "1.32783e-07",
+    "line": 2679
+   },
+   {
+    "node": "xro.xlb0.xs1.sf",
+    "value": "1.65",
+    "line": 2680
+   },
+   {
+    "node": "xro.xlb0.xs2.clkb",
+    "value": "1.65",
+    "line": 2681
+   },
+   {
+    "node": "xro.xlb0.xs2.m1",
+    "value": "1.35638e-07",
+    "line": 2682
+   },
+   {
+    "node": "xro.xlb0.xs2.m2",
+    "value": "1.65",
+    "line": 2683
+   },
+   {
+    "node": "xro.xlb0.xs2.mf",
+    "value": "3.20767e-07",
+    "line": 2684
+   },
+   {
+    "node": "xro.xlb0.xs2.s1",
+    "value": "1.65",
+    "line": 2685
+   },
+   {
+    "node": "xro.xlb0.s2",
+    "value": "1.32783e-07",
+    "line": 2686
+   },
+   {
+    "node": "xro.xlb0.xs2.sf",
+    "value": "1.65",
+    "line": 2687
+   },
+   {
+    "node": "xro.xlb0.xs3.clkb",
+    "value": "1.65",
+    "line": 2688
+   },
+   {
+    "node": "xro.xlb0.xs3.m1",
+    "value": "1.35638e-07",
+    "line": 2689
+   },
+   {
+    "node": "xro.xlb0.xs3.m2",
+    "value": "1.65",
+    "line": 2690
+   },
+   {
+    "node": "xro.xlb0.xs3.mf",
+    "value": "3.20767e-07",
+    "line": 2691
+   },
+   {
+    "node": "xro.xlb0.xs3.s1",
+    "value": "1.65",
+    "line": 2692
+   },
+   {
+    "node": "xro.xlb0.s3",
+    "value": "1.2876e-07",
+    "line": 2693
+   },
+   {
+    "node": "xro.xlb0.xs3.sf",
+    "value": "1.65",
+    "line": 2694
+   },
+   {
+    "node": "xro.xlb0.xl0.clkb",
+    "value": "1.65",
+    "line": 2695
+   },
+   {
+    "node": "xro.xlb0.xl0.m1",
+    "value": "1.35638e-07",
+    "line": 2696
+   },
+   {
+    "node": "xro.xlb0.xl0.m2",
+    "value": "1.65",
+    "line": 2697
+   },
+   {
+    "node": "xro.xlb0.xl0.mf",
+    "value": "3.20769e-07",
+    "line": 2698
+   },
+   {
+    "node": "xro.xlb0.xl0.s1",
+    "value": "1.21822e-06",
+    "line": 2699
+   },
+   {
+    "node": "xro.xlb0.xl0.sf",
+    "value": "7.68566e-07",
+    "line": 2701
+   },
+   {
+    "node": "xro.xlb0.xl1.clkb",
+    "value": "1.65",
+    "line": 2702
+   },
+   {
+    "node": "xro.xlb0.xl1.m1",
+    "value": "1.35638e-07",
+    "line": 2703
+   },
+   {
+    "node": "xro.xlb0.xl1.m2",
+    "value": "1.65",
+    "line": 2704
+   },
+   {
+    "node": "xro.xlb0.xl1.mf",
+    "value": "3.20769e-07",
+    "line": 2705
+   },
+   {
+    "node": "xro.xlb0.xl1.s1",
+    "value": "1.21822e-06",
+    "line": 2706
+   },
+   {
+    "node": "xro.xlb0.xl1.sf",
+    "value": "7.68566e-07",
+    "line": 2708
+   },
+   {
+    "node": "xro.xlb0.xl2.clkb",
+    "value": "1.65",
+    "line": 2709
+   },
+   {
+    "node": "xro.xlb0.xl2.m1",
+    "value": "1.35638e-07",
+    "line": 2710
+   },
+   {
+    "node": "xro.xlb0.xl2.m2",
+    "value": "1.65",
+    "line": 2711
+   },
+   {
+    "node": "xro.xlb0.xl2.mf",
+    "value": "3.20767e-07",
+    "line": 2712
+   },
+   {
+    "node": "xro.xlb0.xl2.s1",
+    "value": "1.65",
+    "line": 2713
+   },
+   {
+    "node": "xro.xlb0.xl2.sf",
+    "value": "1.65",
+    "line": 2715
+   },
+   {
+    "node": "xro.xlb0.xl3.clkb",
+    "value": "1.65",
+    "line": 2716
+   },
+   {
+    "node": "xro.xlb0.xl3.m1",
+    "value": "1.31615e-07",
+    "line": 2717
+   },
+   {
+    "node": "xro.xlb0.xl3.m2",
+    "value": "1.65",
+    "line": 2718
+   },
+   {
+    "node": "xro.xlb0.xl3.mf",
+    "value": "3.20767e-07",
+    "line": 2719
+   },
+   {
+    "node": "xro.xlb0.xl3.s1",
+    "value": "1.65",
+    "line": 2720
+   },
+   {
+    "node": "xro.xlb0.xl3.sf",
+    "value": "1.65",
+    "line": 2722
+   },
+   {
+    "node": "xro.xlbe1.xs0.clkb",
+    "value": "1.65",
+    "line": 2723
+   },
+   {
+    "node": "xro.xlbe1.xs0.m1",
+    "value": "1.00252e-07",
+    "line": 2724
+   },
+   {
+    "node": "xro.xlbe1.xs0.m2",
+    "value": "1.65",
+    "line": 2725
+   },
+   {
+    "node": "xro.xlbe1.xs0.mf",
+    "value": "3.20767e-07",
+    "line": 2726
+   },
+   {
+    "node": "xro.xlbe1.xs0.s1",
+    "value": "1.65",
+    "line": 2727
+   },
+   {
+    "node": "xro.xlbe1.s0",
+    "value": "1.32783e-07",
+    "line": 2728
+   },
+   {
+    "node": "xro.xlbe1.xs0.sf",
+    "value": "1.65",
+    "line": 2729
+   },
+   {
+    "node": "xro.xlbe1.xs1.clkb",
+    "value": "1.65",
+    "line": 2730
+   },
+   {
+    "node": "xro.xlbe1.xs1.m1",
+    "value": "1.35638e-07",
+    "line": 2731
+   },
+   {
+    "node": "xro.xlbe1.xs1.m2",
+    "value": "1.65",
+    "line": 2732
+   },
+   {
+    "node": "xro.xlbe1.xs1.mf",
+    "value": "3.20767e-07",
+    "line": 2733
+   },
+   {
+    "node": "xro.xlbe1.xs1.s1",
+    "value": "1.65",
+    "line": 2734
+   },
+   {
+    "node": "xro.xlbe1.s1",
+    "value": "1.32783e-07",
+    "line": 2735
+   },
+   {
+    "node": "xro.xlbe1.xs1.sf",
+    "value": "1.65",
+    "line": 2736
+   },
+   {
+    "node": "xro.xlbe1.xs2.clkb",
+    "value": "1.65",
+    "line": 2737
+   },
+   {
+    "node": "xro.xlbe1.xs2.m1",
+    "value": "1.35638e-07",
+    "line": 2738
+   },
+   {
+    "node": "xro.xlbe1.xs2.m2",
+    "value": "1.65",
+    "line": 2739
+   },
+   {
+    "node": "xro.xlbe1.xs2.mf",
+    "value": "3.20767e-07",
+    "line": 2740
+   },
+   {
+    "node": "xro.xlbe1.xs2.s1",
+    "value": "1.65",
+    "line": 2741
+   },
+   {
+    "node": "xro.xlbe1.s2",
+    "value": "1.32783e-07",
+    "line": 2742
+   },
+   {
+    "node": "xro.xlbe1.xs2.sf",
+    "value": "1.65",
+    "line": 2743
+   },
+   {
+    "node": "xro.xlbe1.xs3.clkb",
+    "value": "1.65",
+    "line": 2744
+   },
+   {
+    "node": "xro.xlbe1.xs3.m1",
+    "value": "1.35638e-07",
+    "line": 2745
+   },
+   {
+    "node": "xro.xlbe1.xs3.m2",
+    "value": "1.65",
+    "line": 2746
+   },
+   {
+    "node": "xro.xlbe1.xs3.mf",
+    "value": "3.20767e-07",
+    "line": 2747
+   },
+   {
+    "node": "xro.xlbe1.xs3.s1",
+    "value": "1.65",
+    "line": 2748
+   },
+   {
+    "node": "xro.xlbe1.s3",
+    "value": "1.2876e-07",
+    "line": 2749
+   },
+   {
+    "node": "xro.xlbe1.xs3.sf",
+    "value": "1.65",
+    "line": 2750
+   },
+   {
+    "node": "xro.xlbe1.xl0.clkb",
+    "value": "1.65",
+    "line": 2751
+   },
+   {
+    "node": "xro.xlbe1.xl0.m1",
+    "value": "1.35638e-07",
+    "line": 2752
+   },
+   {
+    "node": "xro.xlbe1.xl0.m2",
+    "value": "1.65",
+    "line": 2753
+   },
+   {
+    "node": "xro.xlbe1.xl0.mf",
+    "value": "3.20767e-07",
+    "line": 2754
+   },
+   {
+    "node": "xro.xlbe1.xl0.s1",
+    "value": "1.65",
+    "line": 2755
+   },
+   {
+    "node": "xro.xlbe1.xl0.sf",
+    "value": "1.65",
+    "line": 2757
+   },
+   {
+    "node": "xro.xlbe1.xl1.clkb",
+    "value": "1.65",
+    "line": 2758
+   },
+   {
+    "node": "xro.xlbe1.xl1.m1",
+    "value": "1.35638e-07",
+    "line": 2759
+   },
+   {
+    "node": "xro.xlbe1.xl1.m2",
+    "value": "1.65",
+    "line": 2760
+   },
+   {
+    "node": "xro.xlbe1.xl1.mf",
+    "value": "3.20767e-07",
+    "line": 2761
+   },
+   {
+    "node": "xro.xlbe1.xl1.s1",
+    "value": "1.65",
+    "line": 2762
+   },
+   {
+    "node": "xro.xlbe1.xl1.sf",
+    "value": "1.65",
+    "line": 2764
+   },
+   {
+    "node": "xro.xlbe1.xl2.clkb",
+    "value": "1.65",
+    "line": 2765
+   },
+   {
+    "node": "xro.xlbe1.xl2.m1",
+    "value": "1.35638e-07",
+    "line": 2766
+   },
+   {
+    "node": "xro.xlbe1.xl2.m2",
+    "value": "1.65",
+    "line": 2767
+   },
+   {
+    "node": "xro.xlbe1.xl2.mf",
+    "value": "3.20767e-07",
+    "line": 2768
+   },
+   {
+    "node": "xro.xlbe1.xl2.s1",
+    "value": "1.65",
+    "line": 2769
+   },
+   {
+    "node": "xro.xlbe1.xl2.sf",
+    "value": "1.65",
+    "line": 2771
+   },
+   {
+    "node": "xro.xlbe1.xl3.clkb",
+    "value": "1.65",
+    "line": 2772
+   },
+   {
+    "node": "xro.xlbe1.xl3.m1",
+    "value": "1.31615e-07",
+    "line": 2773
+   },
+   {
+    "node": "xro.xlbe1.xl3.m2",
+    "value": "1.65",
+    "line": 2774
+   },
+   {
+    "node": "xro.xlbe1.xl3.mf",
+    "value": "3.20767e-07",
+    "line": 2775
+   },
+   {
+    "node": "xro.xlbe1.xl3.s1",
+    "value": "1.65",
+    "line": 2776
+   },
+   {
+    "node": "xro.xlbe1.xl3.sf",
+    "value": "1.65",
+    "line": 2778
+   },
+   {
+    "node": "xro.xla1.xs0.clkb",
+    "value": "1.24736e-07",
+    "line": 2779
+   },
+   {
+    "node": "xro.xla1.xs0.m1",
+    "value": "3.36844e-07",
+    "line": 2780
+   },
+   {
+    "node": "xro.xla1.xs0.m2",
+    "value": "1.65",
+    "line": 2781
+   },
+   {
+    "node": "xro.xla1.xs0.mf",
+    "value": "3.27878e-07",
+    "line": 2782
+   },
+   {
+    "node": "xro.xla1.xs0.s1",
+    "value": "1.65",
+    "line": 2783
+   },
+   {
+    "node": "xro.xla1.s0",
+    "value": "1.30102e-07",
+    "line": 2784
+   },
+   {
+    "node": "xro.xla1.xs0.sf",
+    "value": "1.65",
+    "line": 2785
+   },
+   {
+    "node": "xro.xla1.xs1.clkb",
+    "value": "1.24736e-07",
+    "line": 2786
+   },
+   {
+    "node": "xro.xla1.xs1.m1",
+    "value": "3.36844e-07",
+    "line": 2787
+   },
+   {
+    "node": "xro.xla1.xs1.m2",
+    "value": "1.65",
+    "line": 2788
+   },
+   {
+    "node": "xro.xla1.xs1.mf",
+    "value": "3.27878e-07",
+    "line": 2789
+   },
+   {
+    "node": "xro.xla1.xs1.s1",
+    "value": "1.65",
+    "line": 2790
+   },
+   {
+    "node": "xro.xla1.s1",
+    "value": "1.30102e-07",
+    "line": 2791
+   },
+   {
+    "node": "xro.xla1.xs1.sf",
+    "value": "1.65",
+    "line": 2792
+   },
+   {
+    "node": "xro.xla1.xs2.clkb",
+    "value": "1.24736e-07",
+    "line": 2793
+   },
+   {
+    "node": "xro.xla1.xs2.m1",
+    "value": "3.36844e-07",
+    "line": 2794
+   },
+   {
+    "node": "xro.xla1.xs2.m2",
+    "value": "1.65",
+    "line": 2795
+   },
+   {
+    "node": "xro.xla1.xs2.mf",
+    "value": "3.27878e-07",
+    "line": 2796
+   },
+   {
+    "node": "xro.xla1.xs2.s1",
+    "value": "1.65",
+    "line": 2797
+   },
+   {
+    "node": "xro.xla1.s2",
+    "value": "1.30102e-07",
+    "line": 2798
+   },
+   {
+    "node": "xro.xla1.xs2.sf",
+    "value": "1.65",
+    "line": 2799
+   },
+   {
+    "node": "xro.xla1.xs3.clkb",
+    "value": "1.24736e-07",
+    "line": 2800
+   },
+   {
+    "node": "xro.xla1.xs3.m1",
+    "value": "3.36844e-07",
+    "line": 2801
+   },
+   {
+    "node": "xro.xla1.xs3.m2",
+    "value": "1.65",
+    "line": 2802
+   },
+   {
+    "node": "xro.xla1.xs3.mf",
+    "value": "3.27878e-07",
+    "line": 2803
+   },
+   {
+    "node": "xro.xla1.xs3.s1",
+    "value": "1.65",
+    "line": 2804
+   },
+   {
+    "node": "xro.xla1.s3",
+    "value": "1.28759e-07",
+    "line": 2805
+   },
+   {
+    "node": "xro.xla1.xs3.sf",
+    "value": "1.65",
+    "line": 2806
+   },
+   {
+    "node": "xro.xla1.xl0.clkb",
+    "value": "1.65",
+    "line": 2807
+   },
+   {
+    "node": "xro.xla1.xl0.m1",
+    "value": "1.32957e-07",
+    "line": 2808
+   },
+   {
+    "node": "xro.xla1.xl0.m2",
+    "value": "1.65",
+    "line": 2809
+   },
+   {
+    "node": "xro.xla1.xl0.mf",
+    "value": "3.20767e-07",
+    "line": 2810
+   },
+   {
+    "node": "xro.xla1.xl0.s1",
+    "value": "1.65",
+    "line": 2811
+   },
+   {
+    "node": "xro.xla1.xl0.sf",
+    "value": "1.65",
+    "line": 2813
+   },
+   {
+    "node": "xro.xla1.xl1.clkb",
+    "value": "1.65",
+    "line": 2814
+   },
+   {
+    "node": "xro.xla1.xl1.m1",
+    "value": "1.32957e-07",
+    "line": 2815
+   },
+   {
+    "node": "xro.xla1.xl1.m2",
+    "value": "1.65",
+    "line": 2816
+   },
+   {
+    "node": "xro.xla1.xl1.mf",
+    "value": "3.20769e-07",
+    "line": 2817
+   },
+   {
+    "node": "xro.xla1.xl1.s1",
+    "value": "1.21822e-06",
+    "line": 2818
+   },
+   {
+    "node": "xro.xla1.xl1.sf",
+    "value": "7.68566e-07",
+    "line": 2820
+   },
+   {
+    "node": "xro.xla1.xl2.clkb",
+    "value": "1.65",
+    "line": 2821
+   },
+   {
+    "node": "xro.xla1.xl2.m1",
+    "value": "1.32957e-07",
+    "line": 2822
+   },
+   {
+    "node": "xro.xla1.xl2.m2",
+    "value": "1.65",
+    "line": 2823
+   },
+   {
+    "node": "xro.xla1.xl2.mf",
+    "value": "3.20767e-07",
+    "line": 2824
+   },
+   {
+    "node": "xro.xla1.xl2.s1",
+    "value": "1.65",
+    "line": 2825
+   },
+   {
+    "node": "xro.xla1.xl2.sf",
+    "value": "1.65",
+    "line": 2827
+   },
+   {
+    "node": "xro.xla1.xl3.clkb",
+    "value": "1.65",
+    "line": 2828
+   },
+   {
+    "node": "xro.xla1.xl3.m1",
+    "value": "1.31615e-07",
+    "line": 2829
+   },
+   {
+    "node": "xro.xla1.xl3.m2",
+    "value": "1.65",
+    "line": 2830
+   },
+   {
+    "node": "xro.xla1.xl3.mf",
+    "value": "3.20767e-07",
+    "line": 2831
+   },
+   {
+    "node": "xro.xla1.xl3.s1",
+    "value": "1.65",
+    "line": 2832
+   },
+   {
+    "node": "xro.xla1.xl3.sf",
+    "value": "1.65",
+    "line": 2834
+   },
+   {
+    "node": "xro.xlae0.xs0.clkb",
+    "value": "1.24736e-07",
+    "line": 2835
+   },
+   {
+    "node": "xro.xlae0.xs0.m1",
+    "value": "3.36844e-07",
+    "line": 2836
+   },
+   {
+    "node": "xro.xlae0.xs0.m2",
+    "value": "1.65",
+    "line": 2837
+   },
+   {
+    "node": "xro.xlae0.xs0.mf",
+    "value": "3.27878e-07",
+    "line": 2838
+   },
+   {
+    "node": "xro.xlae0.xs0.s1",
+    "value": "1.65",
+    "line": 2839
+   },
+   {
+    "node": "xro.xlae0.s0",
+    "value": "1.30102e-07",
+    "line": 2840
+   },
+   {
+    "node": "xro.xlae0.xs0.sf",
+    "value": "1.65",
+    "line": 2841
+   },
+   {
+    "node": "xro.xlae0.xs1.clkb",
+    "value": "1.24736e-07",
+    "line": 2842
+   },
+   {
+    "node": "xro.xlae0.xs1.m1",
+    "value": "3.36844e-07",
+    "line": 2843
+   },
+   {
+    "node": "xro.xlae0.xs1.m2",
+    "value": "1.65",
+    "line": 2844
+   },
+   {
+    "node": "xro.xlae0.xs1.mf",
+    "value": "3.27878e-07",
+    "line": 2845
+   },
+   {
+    "node": "xro.xlae0.xs1.s1",
+    "value": "1.65",
+    "line": 2846
+   },
+   {
+    "node": "xro.xlae0.s1",
+    "value": "1.30102e-07",
+    "line": 2847
+   },
+   {
+    "node": "xro.xlae0.xs1.sf",
+    "value": "1.65",
+    "line": 2848
+   },
+   {
+    "node": "xro.xlae0.xs2.clkb",
+    "value": "1.24736e-07",
+    "line": 2849
+   },
+   {
+    "node": "xro.xlae0.xs2.m1",
+    "value": "3.36844e-07",
+    "line": 2850
+   },
+   {
+    "node": "xro.xlae0.xs2.m2",
+    "value": "1.65",
+    "line": 2851
+   },
+   {
+    "node": "xro.xlae0.xs2.mf",
+    "value": "3.27878e-07",
+    "line": 2852
+   },
+   {
+    "node": "xro.xlae0.xs2.s1",
+    "value": "1.65",
+    "line": 2853
+   },
+   {
+    "node": "xro.xlae0.s2",
+    "value": "1.30102e-07",
+    "line": 2854
+   },
+   {
+    "node": "xro.xlae0.xs2.sf",
+    "value": "1.65",
+    "line": 2855
+   },
+   {
+    "node": "xro.xlae0.xs3.clkb",
+    "value": "1.24736e-07",
+    "line": 2856
+   },
+   {
+    "node": "xro.xlae0.xs3.m1",
+    "value": "3.36844e-07",
+    "line": 2857
+   },
+   {
+    "node": "xro.xlae0.xs3.m2",
+    "value": "1.65",
+    "line": 2858
+   },
+   {
+    "node": "xro.xlae0.xs3.mf",
+    "value": "3.27878e-07",
+    "line": 2859
+   },
+   {
+    "node": "xro.xlae0.xs3.s1",
+    "value": "1.65",
+    "line": 2860
+   },
+   {
+    "node": "xro.xlae0.s3",
+    "value": "1.28759e-07",
+    "line": 2861
+   },
+   {
+    "node": "xro.xlae0.xs3.sf",
+    "value": "1.65",
+    "line": 2862
+   },
+   {
+    "node": "xro.xlae0.xl0.clkb",
+    "value": "1.65",
+    "line": 2863
+   },
+   {
+    "node": "xro.xlae0.xl0.m1",
+    "value": "1.32957e-07",
+    "line": 2864
+   },
+   {
+    "node": "xro.xlae0.xl0.m2",
+    "value": "1.65",
+    "line": 2865
+   },
+   {
+    "node": "xro.xlae0.xl0.mf",
+    "value": "3.20767e-07",
+    "line": 2866
+   },
+   {
+    "node": "xro.xlae0.xl0.s1",
+    "value": "1.65",
+    "line": 2867
+   },
+   {
+    "node": "xro.xlae0.xl0.sf",
+    "value": "1.65",
+    "line": 2869
+   },
+   {
+    "node": "xro.xlae0.xl1.clkb",
+    "value": "1.65",
+    "line": 2870
+   },
+   {
+    "node": "xro.xlae0.xl1.m1",
+    "value": "1.32957e-07",
+    "line": 2871
+   },
+   {
+    "node": "xro.xlae0.xl1.m2",
+    "value": "1.65",
+    "line": 2872
+   },
+   {
+    "node": "xro.xlae0.xl1.mf",
+    "value": "3.20767e-07",
+    "line": 2873
+   },
+   {
+    "node": "xro.xlae0.xl1.s1",
+    "value": "1.65",
+    "line": 2874
+   },
+   {
+    "node": "xro.xlae0.xl1.sf",
+    "value": "1.65",
+    "line": 2876
+   },
+   {
+    "node": "xro.xlae0.xl2.clkb",
+    "value": "1.65",
+    "line": 2877
+   },
+   {
+    "node": "xro.xlae0.xl2.m1",
+    "value": "1.32957e-07",
+    "line": 2878
+   },
+   {
+    "node": "xro.xlae0.xl2.m2",
+    "value": "1.65",
+    "line": 2879
+   },
+   {
+    "node": "xro.xlae0.xl2.mf",
+    "value": "3.20767e-07",
+    "line": 2880
+   },
+   {
+    "node": "xro.xlae0.xl2.s1",
+    "value": "1.65",
+    "line": 2881
+   },
+   {
+    "node": "xro.xlae0.xl2.sf",
+    "value": "1.65",
+    "line": 2883
+   },
+   {
+    "node": "xro.xlae0.xl3.clkb",
+    "value": "1.65",
+    "line": 2884
+   },
+   {
+    "node": "xro.xlae0.xl3.m1",
+    "value": "1.31615e-07",
+    "line": 2885
+   },
+   {
+    "node": "xro.xlae0.xl3.m2",
+    "value": "1.65",
+    "line": 2886
+   },
+   {
+    "node": "xro.xlae0.xl3.mf",
+    "value": "3.20767e-07",
+    "line": 2887
+   },
+   {
+    "node": "xro.xlae0.xl3.s1",
+    "value": "1.65",
+    "line": 2888
+   },
+   {
+    "node": "xro.xlae0.xl3.sf",
+    "value": "1.65",
+    "line": 2890
+   },
+   {
+    "node": "xro.xlb1.xs0.clkb",
+    "value": "1.65",
+    "line": 2891
+   },
+   {
+    "node": "xro.xlb1.xs0.m1",
+    "value": "1.00291e-07",
+    "line": 2892
+   },
+   {
+    "node": "xro.xlb1.xs0.m2",
+    "value": "1.65",
+    "line": 2893
+   },
+   {
+    "node": "xro.xlb1.xs0.mf",
+    "value": "3.20769e-07",
+    "line": 2894
+   },
+   {
+    "node": "xro.xlb1.xs0.s1",
+    "value": "1.21822e-06",
+    "line": 2895
+   },
+   {
+    "node": "xro.xlb1.s0",
+    "value": "1.65",
+    "line": 2896
+   },
+   {
+    "node": "xro.xlb1.xs0.sf",
+    "value": "7.68566e-07",
+    "line": 2897
+   },
+   {
+    "node": "xro.xlb1.xs1.clkb",
+    "value": "1.65",
+    "line": 2898
+   },
+   {
+    "node": "xro.xlb1.xs1.m1",
+    "value": "1.65",
+    "line": 2899
+   },
+   {
+    "node": "xro.xlb1.xs1.m2",
+    "value": "2.49465e-07",
+    "line": 2900
+   },
+   {
+    "node": "xro.xlb1.xs1.mf",
+    "value": "1.65",
+    "line": 2901
+   },
+   {
+    "node": "xro.xlb1.xs1.s1",
+    "value": "1.65",
+    "line": 2902
+   },
+   {
+    "node": "xro.xlb1.s1",
+    "value": "1.32788e-07",
+    "line": 2903
+   },
+   {
+    "node": "xro.xlb1.xs1.sf",
+    "value": "1.65",
+    "line": 2904
+   },
+   {
+    "node": "xro.xlb1.xs2.clkb",
+    "value": "1.65",
+    "line": 2905
+   },
+   {
+    "node": "xro.xlb1.xs2.m1",
+    "value": "1.35643e-07",
+    "line": 2906
+   },
+   {
+    "node": "xro.xlb1.xs2.m2",
+    "value": "1.65",
+    "line": 2907
+   },
+   {
+    "node": "xro.xlb1.xs2.mf",
+    "value": "3.20767e-07",
+    "line": 2908
+   },
+   {
+    "node": "xro.xlb1.xs2.s1",
+    "value": "1.65",
+    "line": 2909
+   },
+   {
+    "node": "xro.xlb1.s2",
+    "value": "1.32783e-07",
+    "line": 2910
+   },
+   {
+    "node": "xro.xlb1.xs2.sf",
+    "value": "1.65",
+    "line": 2911
+   },
+   {
+    "node": "xro.xlb1.xs3.clkb",
+    "value": "1.65",
+    "line": 2912
+   },
+   {
+    "node": "xro.xlb1.xs3.m1",
+    "value": "1.35638e-07",
+    "line": 2913
+   },
+   {
+    "node": "xro.xlb1.xs3.m2",
+    "value": "1.65",
+    "line": 2914
+   },
+   {
+    "node": "xro.xlb1.xs3.mf",
+    "value": "3.20769e-07",
+    "line": 2915
+   },
+   {
+    "node": "xro.xlb1.xs3.s1",
+    "value": "1.21822e-06",
+    "line": 2916
+   },
+   {
+    "node": "xro.xlb1.s3",
+    "value": "1.65",
+    "line": 2917
+   },
+   {
+    "node": "xro.xlb1.xs3.sf",
+    "value": "7.68566e-07",
+    "line": 2918
+   },
+   {
+    "node": "xro.xlb1.xl0.clkb",
+    "value": "1.65",
+    "line": 2919
+   },
+   {
+    "node": "xro.xlb1.xl0.m1",
+    "value": "1.65",
+    "line": 2920
+   },
+   {
+    "node": "xro.xlb1.xl0.m2",
+    "value": "1.26079e-07",
+    "line": 2921
+   },
+   {
+    "node": "xro.xlb1.xl0.mf",
+    "value": "1.65",
+    "line": 2922
+   },
+   {
+    "node": "xro.xlb1.xl0.s1",
+    "value": "3.36844e-07",
+    "line": 2923
+   },
+   {
+    "node": "xro.xlb1.xl0.sf",
+    "value": "3.27878e-07",
+    "line": 2925
+   },
+   {
+    "node": "xro.xlb1.xl1.clkb",
+    "value": "1.65",
+    "line": 2926
+   },
+   {
+    "node": "xro.xlb1.xl1.m1",
+    "value": "1.35643e-07",
+    "line": 2927
+   },
+   {
+    "node": "xro.xlb1.xl1.m2",
+    "value": "1.65",
+    "line": 2928
+   },
+   {
+    "node": "xro.xlb1.xl1.mf",
+    "value": "3.20767e-07",
+    "line": 2929
+   },
+   {
+    "node": "xro.xlb1.xl1.s1",
+    "value": "1.65",
+    "line": 2930
+   },
+   {
+    "node": "xro.xlb1.xl1.sf",
+    "value": "1.65",
+    "line": 2932
+   },
+   {
+    "node": "xro.xlb1.xl2.clkb",
+    "value": "1.65",
+    "line": 2933
+   },
+   {
+    "node": "xro.xlb1.xl2.m1",
+    "value": "1.35638e-07",
+    "line": 2934
+   },
+   {
+    "node": "xro.xlb1.xl2.m2",
+    "value": "1.65",
+    "line": 2935
+   },
+   {
+    "node": "xro.xlb1.xl2.mf",
+    "value": "3.20767e-07",
+    "line": 2936
+   },
+   {
+    "node": "xro.xlb1.xl2.s1",
+    "value": "1.65",
+    "line": 2937
+   },
+   {
+    "node": "xro.xlb1.xl2.sf",
+    "value": "1.65",
+    "line": 2939
+   },
+   {
+    "node": "xro.xlb1.xl3.clkb",
+    "value": "1.65",
+    "line": 2940
+   },
+   {
+    "node": "xro.xlb1.xl3.m1",
+    "value": "1.65",
+    "line": 2941
+   },
+   {
+    "node": "xro.xlb1.xl3.m2",
+    "value": "2.49465e-07",
+    "line": 2942
+   },
+   {
+    "node": "xro.xlb1.xl3.mf",
+    "value": "1.65",
+    "line": 2943
+   },
+   {
+    "node": "xro.xlb1.xl3.s1",
+    "value": "1.65",
+    "line": 2944
+   },
+   {
+    "node": "xro.xlb1.xl3.sf",
+    "value": "1.65",
+    "line": 2946
+   },
+   {
+    "node": "xro.xlbe0.xs0.clkb",
+    "value": "1.65",
+    "line": 2947
+   },
+   {
+    "node": "xro.xlbe0.xs0.m1",
+    "value": "1.00291e-07",
+    "line": 2948
+   },
+   {
+    "node": "xro.xlbe0.xs0.m2",
+    "value": "1.65",
+    "line": 2949
+   },
+   {
+    "node": "xro.xlbe0.xs0.mf",
+    "value": "3.20767e-07",
+    "line": 2950
+   },
+   {
+    "node": "xro.xlbe0.xs0.s1",
+    "value": "1.65",
+    "line": 2951
+   },
+   {
+    "node": "xro.xlbe0.s0",
+    "value": "1.32783e-07",
+    "line": 2952
+   },
+   {
+    "node": "xro.xlbe0.xs0.sf",
+    "value": "1.65",
+    "line": 2953
+   },
+   {
+    "node": "xro.xlbe0.xs1.clkb",
+    "value": "1.65",
+    "line": 2954
+   },
+   {
+    "node": "xro.xlbe0.xs1.m1",
+    "value": "1.35638e-07",
+    "line": 2955
+   },
+   {
+    "node": "xro.xlbe0.xs1.m2",
+    "value": "1.65",
+    "line": 2956
+   },
+   {
+    "node": "xro.xlbe0.xs1.mf",
+    "value": "3.20769e-07",
+    "line": 2957
+   },
+   {
+    "node": "xro.xlbe0.xs1.s1",
+    "value": "1.21822e-06",
+    "line": 2958
+   },
+   {
+    "node": "xro.xlbe0.s1",
+    "value": "1.65",
+    "line": 2959
+   },
+   {
+    "node": "xro.xlbe0.xs1.sf",
+    "value": "7.68566e-07",
+    "line": 2960
+   },
+   {
+    "node": "xro.xlbe0.xs2.clkb",
+    "value": "1.65",
+    "line": 2961
+   },
+   {
+    "node": "xro.xlbe0.xs2.m1",
+    "value": "1.65",
+    "line": 2962
+   },
+   {
+    "node": "xro.xlbe0.xs2.m2",
+    "value": "2.49465e-07",
+    "line": 2963
+   },
+   {
+    "node": "xro.xlbe0.xs2.mf",
+    "value": "1.65",
+    "line": 2964
+   },
+   {
+    "node": "xro.xlbe0.xs2.s1",
+    "value": "1.65",
+    "line": 2965
+   },
+   {
+    "node": "xro.xlbe0.s2",
+    "value": "1.32788e-07",
+    "line": 2966
+   },
+   {
+    "node": "xro.xlbe0.xs2.sf",
+    "value": "1.65",
+    "line": 2967
+   },
+   {
+    "node": "xro.xlbe0.xs3.clkb",
+    "value": "1.65",
+    "line": 2968
+   },
+   {
+    "node": "xro.xlbe0.xs3.m1",
+    "value": "1.35643e-07",
+    "line": 2969
+   },
+   {
+    "node": "xro.xlbe0.xs3.m2",
+    "value": "1.65",
+    "line": 2970
+   },
+   {
+    "node": "xro.xlbe0.xs3.mf",
+    "value": "3.20767e-07",
+    "line": 2971
+   },
+   {
+    "node": "xro.xlbe0.xs3.s1",
+    "value": "1.65",
+    "line": 2972
+   },
+   {
+    "node": "xro.xlbe0.s3",
+    "value": "1.2876e-07",
+    "line": 2973
+   },
+   {
+    "node": "xro.xlbe0.xs3.sf",
+    "value": "1.65",
+    "line": 2974
+   },
+   {
+    "node": "xro.xlbe0.xl0.clkb",
+    "value": "1.65",
+    "line": 2975
+   },
+   {
+    "node": "xro.xlbe0.xl0.m1",
+    "value": "1.35638e-07",
+    "line": 2976
+   },
+   {
+    "node": "xro.xlbe0.xl0.m2",
+    "value": "1.65",
+    "line": 2977
+   },
+   {
+    "node": "xro.xlbe0.xl0.mf",
+    "value": "3.20767e-07",
+    "line": 2978
+   },
+   {
+    "node": "xro.xlbe0.xl0.s1",
+    "value": "1.65",
+    "line": 2979
+   },
+   {
+    "node": "xro.xlbe0.xl0.sf",
+    "value": "1.65",
+    "line": 2981
+   },
+   {
+    "node": "xro.xlbe0.xl1.clkb",
+    "value": "1.65",
+    "line": 2982
+   },
+   {
+    "node": "xro.xlbe0.xl1.m1",
+    "value": "1.65",
+    "line": 2983
+   },
+   {
+    "node": "xro.xlbe0.xl1.m2",
+    "value": "1.26079e-07",
+    "line": 2984
+   },
+   {
+    "node": "xro.xlbe0.xl1.mf",
+    "value": "1.65",
+    "line": 2985
+   },
+   {
+    "node": "xro.xlbe0.xl1.s1",
+    "value": "3.36844e-07",
+    "line": 2986
+   },
+   {
+    "node": "xro.xlbe0.xl1.sf",
+    "value": "3.27878e-07",
+    "line": 2988
+   },
+   {
+    "node": "xro.xlbe0.xl2.clkb",
+    "value": "1.65",
+    "line": 2989
+   },
+   {
+    "node": "xro.xlbe0.xl2.m1",
+    "value": "1.35643e-07",
+    "line": 2990
+   },
+   {
+    "node": "xro.xlbe0.xl2.m2",
+    "value": "1.65",
+    "line": 2991
+   },
+   {
+    "node": "xro.xlbe0.xl2.mf",
+    "value": "3.20767e-07",
+    "line": 2992
+   },
+   {
+    "node": "xro.xlbe0.xl2.s1",
+    "value": "1.65",
+    "line": 2993
+   },
+   {
+    "node": "xro.xlbe0.xl2.sf",
+    "value": "1.65",
+    "line": 2995
+   },
+   {
+    "node": "xro.xlbe0.xl3.clkb",
+    "value": "1.65",
+    "line": 2996
+   },
+   {
+    "node": "xro.xlbe0.xl3.m1",
+    "value": "1.31615e-07",
+    "line": 2997
+   },
+   {
+    "node": "xro.xlbe0.xl3.m2",
+    "value": "1.65",
+    "line": 2998
+   },
+   {
+    "node": "xro.xlbe0.xl3.mf",
+    "value": "3.20769e-07",
+    "line": 2999
+   },
+   {
+    "node": "xro.xlbe0.xl3.s1",
+    "value": "1.21822e-06",
+    "line": 3000
+   },
+   {
+    "node": "xro.xlbe0.xl3.sf",
+    "value": "7.68566e-07",
+    "line": 3002
+   }
+  ],
+  "load": null,
+  "points": {
+   "fs_v1650_t-40": {
+    "condition": "FS_hh 1.65 V -40 C PI20 trim32 rb2k W40",
+    "count": 695,
+    "content_sha256": "f526b51182806d1e08f867d23988e248877ce50c6e383f2aaad9417ce3cf6505"
+   }
+  },
+  "processing": "finite xro.* voltage lines in original Initial Transient Solution, excluding branch currents; decimal text copied verbatim into soft .nodeset only",
+  "validation": {
+   "state": "ungraded",
+   "limitation": "transient-OP solution is not full DC proof, functional proof, nor physical power-up"
+  },
+  "valid_while": [
+   "same source log/deck, frozen cell snapshot and PDK identity",
+   "same t=0 controls and load",
+   "no hard .ic/uic"
+  ]
+ },
+ {
   "id": "tx_capture_serializer_word_schedule_20261107T044215Z",
   "kind": "loaded_word_clock_event_schedule",
   "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",
@@ -12369,6 +15880,75 @@
    "source driver impedance and perturbed Miller feedback are omitted by voltage replay",
    "baseline must match full-bank q/CML/MUX waveforms within 5mV before using shifted cases",
    "two recorded event shapes per condition, not all patterns, noise, mismatch, startup or 45PVT"
+  ]
+ },
+ {
+  "id": "rx_fs_w40_full_optran_raw_newton_seed_v1",
+  "kind": "numerical_initial_guess",
+  "description": "Soft guesses from same full FS W40 circuit OPtran raw; direct Newton comparison only; not a DC or functional qualification.",
+  "upstream": {
+   "module": "RX sampler/readout",
+   "run": "results/analog/rx/sampler/cold_readout_full_sparse_op/20261109T133404.020641Z_42c4ada0/full_sparse_op",
+   "raw_sha256": "72bef0c59df624344a5a01b30015e0f84d45ea2b47c8a04d80fca11db212e3ff",
+   "deck_sha256": "a45f49e28cab6364ab33529ab8d6b3417e81b48f233848de9558222f04256af1",
+   "execution_sha256": "4c967da6a67abcd33c647c30c045ca7e6eb36609517f58ae8a0cb3698f15f10c",
+   "execution_deck_sha256": "a45f49e28cab6364ab33529ab8d6b3417e81b48f233848de9558222f04256af1",
+   "source_plan_sha256": "927b492fe40fb70c241fab83c985c52340ea78ceb82d6b643ae57dbe233492d7"
+  },
+  "nodes": {
+   "file": "results/analog/rx/sampler/cold_readout_full_dc_newton/20261109T134022.118325Z_0e2ea2f8/seed_nodes.json",
+   "sha256": "8ab0230d04ec9ce47bcdbcad4042d29bff9cb7b294268885c5c01f2f50eb13a2",
+   "format": "JSON list of node/value; voltage nodes only"
+  },
+  "load": null,
+  "points": {
+   "fs_v1650_t-40": {
+    "condition": "FS_hh 1.65 V -40 C full W40 PI20 trim32 rb2k real bias",
+    "replay_boundary": "rx_c2_far_nominal@ctle_rc"
+   }
+  },
+  "processing": "all finite v(...) vectors copied as soft .nodeset; original six overlapping hints replaced, never .ic/uic or clamped",
+  "validation": {
+   "state": "ungraded",
+   "limitation": "source is an internal OPtran endpoint, not an established DC solution; candidate and converged root comparison does not directly evaluate original residual"
+  },
+  "valid_while": [
+   "same full deck, stimulus, historical cell/PDK identities and numerical node list",
+   "same t=0 and load"
+  ]
+ },
+ {
+  "id": "rx_fs_w40_full_direct_newton_dc_seed_v1",
+  "kind": "numerical_initial_guess",
+  "description": "Same full FS W40 direct-Newton DC solution used as soft transient operating-point guesses; not a physical startup condition.",
+  "upstream": {
+   "module": "RX sampler/readout",
+   "run": "results/analog/rx/sampler/cold_readout_full_dc_newton/20261109T134022.118325Z_0e2ea2f8/full_dc_newton",
+   "raw_sha256": "e2c289925a203b3aa8c0f39822c679c09dedc954d9925398a4a48ba5c6bcf61a",
+   "deck_sha256": "a4ab13865c103323d86be8361796d7b91fdb217f5bb7c0b87e871cf7f6ab3367",
+   "execution_sha256": "843e084a86128f2a36d38e70e64a249b8322c49afc498148861cf389ec892e0c",
+   "source_plan_sha256": "26de46fcdddab7aa1880017e8c9ec0946ffbf5da89a995741c9b2b25b1bf03b6"
+  },
+  "nodes": {
+   "file": "results/analog/rx/sampler/cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d/seed_nodes.json",
+   "sha256": "bd03a75fa7549f72e28651392ad550d39175b52f8bed9d59d43bcb628e96f1cc",
+   "format": "JSON list of node/value; voltage nodes only"
+  },
+  "load": null,
+  "points": {
+   "fs_v1650_t-40": {
+    "condition": "FS_hh 1.65 V -40 C full W40 PI20 trim32 rb2k real bias",
+    "replay_boundary": "rx_c2_far_nominal@ctle_rc"
+   }
+  },
+  "processing": "all finite same-DUT DC v(...) vectors as soft nodeset; overlaps replace original six hints; no .ic/uic or clamps",
+  "validation": {
+   "state": "ungraded",
+   "limitation": "DC converged direct Newton, not physical startup or RX functional proof"
+  },
+  "valid_while": [
+   "same full circuit, historical snapshot/PDK and t=0 sources",
+   "same node list and recorded source identity"
   ]
  }
 ]

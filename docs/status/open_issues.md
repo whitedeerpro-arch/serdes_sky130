@@ -32,7 +32,7 @@ FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完
 | I-09 | VCO r5/4bit工作区135条件可达2GHz，45组三温共同码静态覆盖；五压力点各200 MC样本频率σ0.75–1.12%，快芯片慢端需低至约0.73–0.78V。三温码补点与温度选码模型待统一；已有k4原生闭环三点，hl/lh及动态切码/当前码噪声仍开。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06) | P3 |
 | I-10 | FS/1.65 V/−40 °C 分频首级/第二级 master 尾管平均 VDS − VDSAT 约 −5/−4 mV（r3）；r2 时约 63% 采样点低于饱和判据。功能正常但无裕量；修补困难时考虑减少堆叠的结构。 | [分频器](../design/pll_divider.md) | P3 |
 | I-11 | 1.95 V 条件 CMOS 上冲（FF/FS 冷角峰值约 2.022–2.026 V），15 个 1.95 V 条件都有；器件端电压未核对。r4 接收器最高约 2.049 V（SS/1.95 V/−40 °C）。 | [时钟接收器](../design/clock_receiver.md) | P3 |
-| I-12 | 当前k4转向CP的真实偏置DC135点已完整，5%窗口上沿与实测粗码vhi最小距离24.37mV（SF1.65V85°C ll）；旧CP窗口不再沿用。现有五点门限MC未覆盖最差条件，仍须联合CP/门限失配、ctrl−z纹波及决策延迟；三点CP MC电荷σ1.7–1.9fC和静态相差上界148ps保留。 | [窗口交接](../design/pll_cp_window.md)、[PLL环路](../design/pll_loop.md) | P3 |
+| I-12 | 当前k4转向CP的真实偏置DC135点已完整，5%窗口上沿与实测粗码vhi最小距离24.37mV（SF1.65V85°C ll）；旧CP窗口不再沿用。最差点32对联合CP/门限pilot已做：vhi+20mV假设下码3有5/32超过5%，码4为0/32但未采用；须复核VCO控制范围、统计尾部及实际ctrl−z/比较/决策预算；三点CP MC电荷σ1.7–1.9fC和静态相差上界148ps保留。 | [窗口交接](../design/pll_cp_window.md)、[PLL环路](../design/pll_loop.md) | P3 |
 | I-13 | 当前k4已实现poly4.13kΩ、18个1pF MIM（12接VDD/6接地）及双预充门；tt/hh/ll在行为VCO闭环135点锁定、原生三点。仍缺原生全角、LF分接的宽带电源抑制和加载B2建立；不再列为物理LF未实现。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-15 | RX 物理 16 UI 降速：读出 deser16（CML 1:2 + CMOS 1:4，45 条件逐位正确）与 `rx_word_map` / `rx_word_align16` 已有，实时联调（TT）中 PI 步进、跨扇区与回卷下 payload 全部正确；PI 步进的 PVT 未做；系统时钟域 FIFO/CDC 未设计。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
 | I-16 | RX数字仍缺综合映射/STA。TX guard已用Yosys0.9与本地OpenSTA2.0.17做局部映射：SS时序不足，驱动增强/缓冲对照未闭合；不是45点或提取后签核。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |

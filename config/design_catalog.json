@@ -1268,11 +1268,11 @@
       "key": "C07",
       "subtitle": "电流匹配 / 合规窗口 / 电荷",
       "state": "转向CP候选闭环验证",
-      "summary": "k4转向CP DC135点完整；对实测粗码vhi名义最小距离24.37mV（SF低压热ll），联合失配/纹波仍开。已有三点MC电荷σ1.7–1.9fC和纹波压力测试。",
+      "summary": "当前CP DC135点，最小名义上门限距离24.37mV。最差点32对联合pilot在vhi+20mV假设下码3有5/32超过5%下垂；码4改善但未采用，需配合VCO范围/动态预算。",
       "facts": {
         "设计": "k4转向CP，跟随器真实偏置",
         "PVT": "当前DC135点＋135点分层闭环",
-        "失配": "3点各200样本；σ1.7–1.9fC",
+        "失配": "CP电荷3点×200；窗口交接32对pilot",
         "噪声": "电流 / 脉宽模型待细化"
       },
       "boundary": {
@@ -1312,6 +1312,14 @@
         {
           "title": "135点DC窗口图",
           "path": "docs/figures/clocking/pll/charge_pump/cp_steer_control_window.png"
+        },
+        {
+          "title": "门限码配对MC",
+          "path": "docs/data/pll_cp_handoff_mc.json"
+        },
+        {
+          "title": "配对静态比较图",
+          "path": "docs/figures/clocking/pll/charge_pump/cp_handoff_threshold_mc.png"
         }
       ],
       "iterations": []

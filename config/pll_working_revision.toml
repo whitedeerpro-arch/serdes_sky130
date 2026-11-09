@@ -98,3 +98,16 @@ worst_condition = "sf_v1650_t85:ll"
 criterion = "each branch within 5 percent of its own VDD/2 current; 10mV sweep grid"
 qualified = false
 remaining = "joint CP/monitor mismatch, ctrl-z ripple and decision delay; static diagnostic only"
+
+[r5_cp_window.joint_mc_pilot]
+evidence = "docs/data/pll_cp_handoff_mc.json"
+condition = "sf_v1650_t85:ll"
+samples_per_code = 32
+seed = 1
+chunk = 4
+current_code_hi = 3
+comparison_code_hi = 4
+comparison_adopted = false
+static_headroom_assumption_mv = 20
+above_5percent_at_assumed_headroom = "code3 5/32; code4 0/32; not yield"
+remaining = "VCO-range tradeoff, actual ctrl-z/comparator/decision budget, population tail; pilot only"

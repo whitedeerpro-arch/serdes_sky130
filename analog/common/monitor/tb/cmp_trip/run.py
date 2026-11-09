@@ -35,9 +35,11 @@ def pwl(a, tr):
     return f"0 {-a:.6g} {T0:.6g} {-a:.6g} {T0 + tr:.6g} {a:.6g} {T0 + 2 * tr:.6g} {-a:.6g}"
 
 
-def deck(proc, cms, a_v, tr, params, ncopy, headroom):
+def deck(proc, cms, a_v, tr, params, ncopy, headroom, cell="serdes_cmp"):
     vals = spice.corner_values(Condition(proc, 1.8, 27))
     text = spice.render(TEMPLATE, **vals, SECTION=proc, CMP_PARAMS=params, NCOPY=ncopy, PWL=pwl(a_v, tr))
+    assert text.count(" serdes_cmp ") == 1
+    text = text.replace(" serdes_cmp ", f" {cell} ")
     lines = [".control", "set num_threads=1", "set wr_vecnames", "set wr_singlescale"]
     tend = T0 + 2 * tr
     for v in SUPPLY_V:
@@ -75,12 +77,13 @@ def main():
     ap.add_argument("--ncopy", type=int, default=1)
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--processes", default=",".join(PROCESS))
+    ap.add_argument("--cell", default="serdes_cmp", help="serdes_cmp (LVT pair) or serdes_cmp_hv (regular pair, high common mode)")
     a = ap.parse_args()
     cms = [float(x) for x in a.cms.split(",")]
     a_v, tr = a.ramp_mv * 1e-3, a.ramp_us * 1e-6
     procs = a.processes.split(",")
     camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    jobs = [(deck(p, cms, a_v, tr, a.cmp_params, a.ncopy, a.headroom), camp / p, dict(timeout_s=7200, meta=dict(process=p))) for p in procs]
+    jobs = [(deck(p, cms, a_v, tr, a.cmp_params, a.ncopy, a.headroom, a.cell), camp / p, dict(timeout_s=7200, meta=dict(process=p))) for p in procs]
     for ex in spice.run_many(jobs, workers=a.workers, smoke=False):
         if not ex.ok:
             print(f"FAILED {ex.run_dir.relative_to(ROOT)}: {ex.log_failures[:3]}")

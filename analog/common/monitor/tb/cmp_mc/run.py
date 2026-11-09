@@ -31,7 +31,7 @@ LEAD = 5e-6          # each segment: Vn steps, inp stays at Vn - A for LEAD, the
 SEG = LEAD + 2 * TR
 
 
-def netlist(c, params, cms):
+def netlist(c, params, cms, cell="serdes_cmp"):
     """One transient per sample: segment j holds inn at cms[j] and runs one triangle on inp - inn."""
     vals = spice.corner_values(c)
     tri, vn = [], []
@@ -42,7 +42,8 @@ def netlist(c, params, cms):
     fmt = lambda pts: " ".join(f"{x:.9g} {y:.6g}" for x, y in pts)
     text = spice.render(tr.TEMPLATE, **vals, SECTION=f"{c.process}_mm", CMP_PARAMS=params, NCOPY=1, PWL=fmt(tri))
     text, n = re.subn(r"^Vn inn 0 .*$", f"Vn inn 0 PWL({fmt(vn)})", text, flags=re.M)
-    assert n == 1
+    assert n == 1 and text.count(" serdes_cmp ") == 1
+    text = text.replace(" serdes_cmp ", f" {cell} ")
     return re.sub(r"^\.temp .*$", f".temp {c.temp}", text, flags=re.M)
 
 
@@ -73,6 +74,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--cmp-params", default="")
+    ap.add_argument("--cell", default="serdes_cmp", help="serdes_cmp or serdes_cmp_hv")
     a = ap.parse_args()
     cms = [float(x) for x in a.cms.split(",")]
     lets = {f"off{i}": offset_expr(i) for i, cm in enumerate(cms)}
@@ -80,7 +82,7 @@ def main():
     jobs, owners = [], []
     for p in a.points.split(","):
         c = Condition.parse(p)
-        net = netlist(c, a.cmp_params, cms)
+        net = netlist(c, a.cmp_params, cms, a.cell)
         for k, s, n in mc.chunks(a.samples, a.seed, a.chunk):
             jobs.append((mc.deck(net, n, seed=s, analysis=analysis(c, cms), lets=lets, t_end=len(cms) * SEG), camp / p / f"chunk{k:02d}",
                          dict(timeout_s=600 + 30 * n, meta=dict(point=p, samples=n, seed=s))))

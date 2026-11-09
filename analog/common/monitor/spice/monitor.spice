@@ -27,6 +27,25 @@ Xi1 o2 o2b vdd vss serdes_cmos_inv wn={wi} wp={2*wi}
 Xi2 o2b out vdd vss serdes_cmos_inv wn={wi} wp={2*wi}
 .ends serdes_cmp
 
+* serdes_cmp_hv: serdes_cmp for inputs near VDD (the PLL window's upper threshold VDD - 0.32 .. 0.77 V).  At an input
+* of VDD - 0.35 V the LVT pair of serdes_cmp enters triode at SF 1.65 V -40 C (MC sigma 12.6 mV, one sample without a
+* trip in +-30 mV; cmp_mc 20261109T144617Z).  Here the pair is a regular nfet (Vth ~0.15-0.2 V above LVT: the pair
+* stays saturated up to a higher input; A_VT 5.4 against 7.9 mV um) and the LVT mirror is twice as wide (smaller
+* |Vgs|, o1 sits higher).  The low end of the input range moves up to ~0.8 V.  Same ports and bias.
+.subckt serdes_cmp_hv inp inn out ib vdd vss
++ params: win=16 lin=2 wl=16 ll=8 wb=4 lb=2 m2=1 wi=1
+Xbd ib ib vss vss serdes_nfet w={wb} l={lb}
+Xt tail ib vss vss serdes_nfet w={wb} l={lb}
+Xa da inn tail vss serdes_nfet w={win} l={lin}
+Xb o1 inp tail vss serdes_nfet w={win} l={lin}
+Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll}
+Xlb o1 da vdd vdd serdes_pfet_lvt w={wl} l={ll}
+Xp2 o2 o1 vdd vdd serdes_pfet_lvt w={2*m2*wl} l={ll} nf=2
+Xn2 o2 ib vss vss serdes_nfet w={m2*wb} l={lb}
+Xi1 o2 o2b vdd vss serdes_cmos_inv wn={wi} wp={2*wi}
+Xi2 o2b out vdd vss serdes_cmos_inv wn={wi} wp={2*wi}
+.ends serdes_cmp_hv
+
 * serdes_vref_gnd: out = I(iin) x R(code) to vss.  iin is a sourced current (a bandgap copy); the high_po string
 * r0 + code * rstep (code 0..15) is the same resistor type as the bandgap's r_ref, so out = vbg x R / r_ref x
 * (copy ratio) holds over resistor corners.  Taps reach out through a 16:1 transmission-gate mux (gate loads

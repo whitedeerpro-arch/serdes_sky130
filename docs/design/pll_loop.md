@@ -19,7 +19,7 @@
 | 1 | 环路参数（模型）、粗码策略、电流转向CP | 完成：k = 4、Rz 4.13 kΩ、Ci 18 pF、无Cf；上电按温度选码＋Vctrl迟滞切码；转向CP接真实偏置 |
 | 2 | PDK环路滤波器与预充门 | 网表完成；电源分接12/6（α 0.667）按20 MHz单音数据线性估计最差约122 MHz/V（理想0.69为104，13/5为124），待仿真复核；B2按18 pF节点的建立待复核 |
 | 3 | 电路闭环（晶体管PFD/CP/LF＋校准行为VCO） | 完成：45条件×tt/hh/ll共135点全部锁定，捕获≤322 ns，过冲≤27.2%，与线性模型逐点差≤7个百分点 |
-| 4 | 原生晶体管级VCO/分频器闭环 | 顶层[pll_core_r5k4](../../analog/pll/top/spice/pll_core_r5k4.spice)与测试台[native_k4](../../analog/pll/top/tb/native_k4/run.py)已写；TT：KLU下工作点经true gmin stepping收敛、但瞬态第一步失败（报在带隙修调B源）；改用默认SPARSE求解器后正常起步（二分定位：偏置节点种子不起作用，求解器是关键）。**TT原生闭环锁定：从+40 mV预充118 ns捕获（行为VCO闭环同为118 ns），静态相差33.1 ps（峰峰0.01 ps），Vctrl 1.206 V（码表1.195 V），输出2.00000 GHz**；1.5 µs约1.6 h（`results/analog/pll/top/native_k4/20261108T200611Z`）。FS热、SS冷待跑 |
+| 4 | 原生晶体管级VCO/分频器闭环（完成3压力点） | 顶层[pll_core_r5k4](../../analog/pll/top/spice/pll_core_r5k4.spice)与测试台[native_k4](../../analog/pll/top/tb/native_k4/run.py)已写；TT：KLU下工作点经true gmin stepping收敛、但瞬态第一步失败（报在带隙修调B源）；改用默认SPARSE求解器后正常起步（二分定位：偏置节点种子不起作用，求解器是关键）。**三个原生压力点都锁定，输出2.00000 GHz**（预充到码表Vctrl+40 mV，1.5 µs约1.6 h）：TT 118 ns捕获、相差33 ps、Vctrl 1.206 V（码表1.195）；FS 1.65 V 85 °C hh 418 ns、46 ps、1.165 V（码表1.185）；SS 1.65 V −40 °C hh 254 ns、54 ps、0.963 V（码表0.956）。FS热比同点行为VCO闭环（230 ns）慢，因为原生锁定Vctrl比工作区抛物线低32 mV（工作区测试台是代理负载），同一预充目标的初始误差60 mV对28 mV；预充目标需按实际前端校准（第5步）。结果`results/analog/pll/top/native_k4/20261108T200611Z`、`20261108T221446Z` |
 | 5 | 启动链：偏置就绪 → 预充 → 选码 → 捕获 | 待做 |
 | 6 | 局部失配MC：VCO、CP、PFD、分频器、接收器 | 分频器6点1048样本全部正确（[分频器](pll_divider.md#局部失配2026-11-08)，FF冷角工作点不收敛未完）；VCO 5点频率σ 0.75–1.12%（[VCO](pll_vco.md#局部失配2026-11-09)）；CP 3点见下；PFD、接收器未做 |
 | 7 | 噪声与电源抑制按新环路复核 | 待做 |

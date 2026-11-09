@@ -111,3 +111,17 @@ comparison_adopted = false
 static_headroom_assumption_mv = 20
 above_5percent_at_assumed_headroom = "code3 5/32; code4 0/32; not yield"
 remaining = "VCO-range tradeoff, actual ctrl-z/comparator/decision budget, population tail; pilot only"
+
+[r5_coarse_control_windows]
+report = "docs/design/pll_coarse_windows.md"
+evidence = "docs/data/vco_control_windows.json"
+fill_complete_curves = 228
+historical_partial_curves_excluded = 3
+resumed_points = 20
+ideal_low_v = 0.90
+upper_codes_compared = "3: VDD-0.41V; 4: VDD-0.44V; 5: VDD-0.47V"
+conditions_with_measured_choice = "135/135 for each upper code"
+same_code_at_three_temperatures = "27/45; 23/45; 19/45 respectively; narrower window than r5_fixed_code_temperature"
+default_changed = false
+qualified = false
+remaining = "adjacent-code landing; actual threshold and dynamic/MC budgets; startup and noise"

@@ -819,10 +819,10 @@
       "key": "C01",
       "subtitle": "四级 CML 环振 / r5 / 4 bit",
       "state": "工作区改进",
-      "summary": "r5/4bit工作区135点、45组三温共同码；五压力点各200样本频率σ0.75–1.12%。当前环路三原生点锁定，三温码补点与当前码/负载噪声仍开。",
+      "summary": "r5/4bit工作区135点；宽窗口45组三温共同码。补齐20个中断点后，0.90V到上门限码3/4/5各有135/135工况候选，三温共用码27/23/19组；仍需切码/实际门限与当前负载噪声。",
       "facts": {
         "设计": "r5 减损耗 / 4 bit 阵列",
-        "PVT": "135条件；45组三温共同码静态覆盖",
+        "PVT": "135条件；宽窗口45组三温共同码；较窄粗码窗口另计",
         "失配": "五压力点各200样本；频率σ0.75–1.12%",
         "噪声": "7 压力点 ISF"
       },
@@ -842,7 +842,7 @@
         "question": "损耗、量程、Kvco 和 CP 控制范围如何共同选点？",
         "model": "1/f 对码拟合用于选点；仿真确认工作区；ISF 加环路传递形成抖动预算。",
         "parameters": "开关 W5；变容 4.5×4 指；15 个半单元；0.85 V 到 CP 上沿。",
-        "verification": "三温码曲线补点、慢端失配余量、动态选码与当前负载噪声；hl/lh另验。"
+        "verification": "实测同码三温曲线的相邻切码落点、慢端失配、实际门限与当前负载噪声；hl/lh另验。"
       },
       "references": [
         {
@@ -852,6 +852,10 @@
         {
           "title": "工作区模型与验证",
           "path": "analog/pll/vco/tb/tuning/workmap.py"
+        },
+        {
+          "title": "粗码门限与实测控制范围",
+          "path": "docs/design/pll_coarse_windows.md"
         }
       ],
       "iterations": [
@@ -877,6 +881,31 @@
             {
               "title": "工作区脚本",
               "path": "analog/pll/vco/tb/tuning/workmap.py"
+            }
+          ]
+        },
+        {
+          "id": "vco-r5-coarse-window-fill",
+          "title": "补齐20点并比较三个粗码上门限",
+          "date": "2026-11-09",
+          "phase": "validation",
+          "problem": "CP上门限下调可增加余量，但会收窄VCO可用窗口；旧中断补点尚无完整汇总。",
+          "model": "仅实际电压夹点求2GHz交点；完整补点曲线整条优先，不外推、不借邻码温度斜率。",
+          "changes": "补完FS/ll两个电压的20点；保留228完整码曲线及3条历史部分曲线。电路与门限默认值不变。",
+          "validation": "下门限理想0.90V，上门限码3/4/5分别135/135工况有候选；三温共同码27/23/19组。",
+          "conclusion": "码4值得继续评估；当前为静态范围证据，尚无切码/启动或联合统计资格。",
+          "attachments": [
+            {
+              "title": "门限与实测候选图",
+              "path": "docs/figures/clocking/vco/vco_coarse_control_windows.png"
+            },
+            {
+              "title": "数据与输入身份",
+              "path": "docs/data/vco_control_windows.json"
+            },
+            {
+              "title": "恢复审计",
+              "path": "docs/work_packages/deliveries/vco-fill-resume-audit.md"
             }
           ]
         }

@@ -22,6 +22,10 @@
 
 ## CP：输出余量与上下拉匹配
 
+当前上门限码3/4/5的[实测VCO窗口比较](../../design/pll_coarse_windows.md)使用0.90V下门限，135工况各自有候选；它与上方0.85V到CP上沿的旧宽窗口不同。新增20个点恢复了中断任务，按实际夹点统计：
+
+![粗码门限与实测VCO候选](vco/vco_coarse_control_windows.png)
+
 窗口按各支路相对 VDD/2 的电流下垂 5% 计算，点色表示 UP/DN 失配。窗口足够宽仍可能有约 11% 的支路失配，需要实际开关电荷和环路验证。
 
 ![CP 输出窗口](pll/charge_pump/cp_real_bias_dc_windows.png)

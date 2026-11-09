@@ -1198,7 +1198,29 @@
           "path": "docs/design/monitor.md"
         }
       ],
-      "iterations": []
+      "iterations": [
+        {
+          "id": "pll-coarse-persist-clear",
+          "title": "换码时同步丢弃旧越界确认",
+          "date": "2026-11-09",
+          "phase": "validation",
+          "problem": "滤波器原靠送零清除，HOLD小于PERSIST时旧确认可能重复触发；关闭跟踪仍会积累确认。",
+          "model": "连续采样确认、相邻换码后保持，并明确同步清除输出及计数；恢复跟踪重新采样。",
+          "changes": "mon_persist增加clear；换码同沿、搜索、hold及track_en=0时清除。保留双越界hi优先和端点语义。",
+          "validation": "短HOLD=1/PERSIST=8一次脉冲只切一次；关闭/恢复跟踪丢弃旧计数和确认；原粗码行为环路与公共滤波器均通过Icarus，Verilator lint通过。",
+          "conclusion": "修复数字重复切码机制；默认等待和真实比较器/PLL的动态迟滞仍需电路校准。",
+          "attachments": [
+            {
+              "title": "滤波器与控制器回归",
+              "path": "tests/test_pll_coarse_rtl.py"
+            },
+            {
+              "title": "短HOLD与跟踪门控测试台",
+              "path": "digital/pll/tb/tb_pll_coarse_persist.sv"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "pll.receivers.feedback",

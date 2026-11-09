@@ -2,11 +2,12 @@
 // strobes (en).  Symmetric for both directions.  d must already be synchronous to clk (mon_sync).
 // Use: a comparator that sits near its threshold while a slow quantity drifts through it chatters; q changes
 // once, after the input has stayed on the new side for N samples.
+// clear synchronously restores RESET and discards the partial run, even when en is low.
 module mon_persist #(
     parameter integer N = 8,
     parameter RESET = 1'b0
 ) (
-    input wire clk, rst_n, en, d,
+    input wire clk, rst_n, clear, en, d,
     output reg q
 );
     localparam integer CW = (N < 2) ? 1 : $clog2(N + 1);
@@ -14,6 +15,9 @@ module mon_persist #(
     reg [CW-1:0] n;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
+            q <= RESET;
+            n <= 0;
+        end else if (clear) begin
             q <= RESET;
             n <= 0;
         end else if (en) begin

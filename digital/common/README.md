@@ -8,7 +8,7 @@
 |---|---|---|
 | [mon_sync](rtl/mon_sync.sv) | 多级同步器 | 只用于彼此时序无关的单比特或握手翻转位 |
 | [mon_freq_meter](rtl/mon_freq_meter.sv) | 频率计：`window` 个参考周期内数被测时钟上升沿 | 被测时钟异步、可停；结果误差 ±1；`timeout` 内无回应给 `stalled` |
-| [mon_persist](rtl/mon_persist.sv) | 持续性滤波：输入在 N 个采样点连续不同才改输出 | 输入须已同步；对称 |
+| [mon_persist](rtl/mon_persist.sv) | 持续性滤波：输入在 N 个采样点连续不同才改输出 | 输入须已同步；对称；`clear` 同步清除输出和计数，优先于 `en` |
 | [mon_sar](rtl/mon_sar.sv) | 逐次逼近：W 位门限码对外部比较器求值 | 比较器异步（内部同步）；门限须随码单调上升；`settle` 个周期等模拟建立；给 `under`/`over` |
 
 测试（仓库根目录）：

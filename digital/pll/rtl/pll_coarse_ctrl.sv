@@ -57,19 +57,21 @@ module pll_coarse_ctrl #(
     wire my_sel = stop_sel[cls];
     wire above = my_sel ? hi : !lo;
 
-    // run-time persistence filters, sampled on strobe; cleared outside RUN and during hold
+    // Clear synchronously on the switching edge, while held/disabled, or during search.
+    // hi retains priority if both window outputs are asserted.
     wire strobe = (state == RUN) && (div_n == 0);
-    wire filt_rst_n = rst_n;
-    reg clear_f;
     wire hi_f, lo_f;
-    mon_persist #(.N(PERSIST)) u_ph (.clk(ref_clk), .rst_n(filt_rst_n), .en(strobe || clear_f), .d(hi && !clear_f), .q(hi_f));
-    mon_persist #(.N(PERSIST)) u_pl (.clk(ref_clk), .rst_n(filt_rst_n), .en(strobe || clear_f), .d(lo && !clear_f), .q(lo_f));
+    wire switch_now = (state == RUN) && !search && track_en && (hold_n == 0) &&
+                      ((hi_f && vco_code != 4'd0) || (!hi_f && lo_f && vco_code != 4'd15));
+    wire clear_f = (state != RUN) || search || !track_en || (hold_n != 0) || switch_now;
+    mon_persist #(.N(PERSIST)) u_ph (.clk(ref_clk), .rst_n(rst_n), .clear(clear_f), .en(strobe), .d(hi), .q(hi_f));
+    mon_persist #(.N(PERSIST)) u_pl (.clk(ref_clk), .rst_n(rst_n), .clear(clear_f), .en(strobe), .d(lo), .q(lo_f));
 
     always @(posedge ref_clk or negedge rst_n) begin
         if (!rst_n) begin
             state <= IDLE; vco_code <= 4'd15; lo_code <= 4'd8; hi_code <= 4'd8;
             busy <= 1'b0; done <= 1'b0; fast_end <= 1'b0; slow_end <= 1'b0; switches <= 8'd0;
-            wait_n <= 0; hold_n <= 0; div_n <= 0; clear_f <= 1'b1;
+            wait_n <= 0; hold_n <= 0; div_n <= 0;
         end else begin
             if (search && (state == IDLE || state == RUN)) begin
                 // (re)start the power-up search from the slow end
@@ -78,9 +80,8 @@ module pll_coarse_ctrl #(
                 lo_code <= my_sel ? lo_run : my_stop;
                 hi_code <= my_sel ? my_stop : hi_run;
                 wait_n <= SETTLE_CYCLES[SW-1:0];
-                clear_f <= 1'b1;
             end else case (state)
-                IDLE: clear_f <= 1'b1;
+                IDLE: begin end
                 STEP: begin                              // settle at this code with the stop threshold
                     if (wait_n != 0) wait_n <= wait_n - 1'b1;
                     else if (above && vco_code != 4'd0) begin
@@ -115,18 +116,16 @@ module pll_coarse_ctrl #(
                         div_n <= (div_n == 0) ? SAMPLE_DIV[DW-1:0] - 1'b1 : div_n - 1'b1;
                         if (hold_n != 0) begin
                             hold_n <= hold_n - 1'b1;
-                            clear_f <= 1'b1;
                         end else begin
-                            clear_f <= 1'b0;
                             if (track_en && hi_f) begin
                                 if (vco_code != 4'd0) begin
                                     vco_code <= vco_code - 1'b1; switches <= switches + 1'b1;
-                                    hold_n <= HOLD_CYCLES[HW-1:0]; clear_f <= 1'b1;
+                                    hold_n <= HOLD_CYCLES[HW-1:0];
                                 end else fast_end <= 1'b1;
                             end else if (track_en && lo_f) begin
                                 if (vco_code != 4'd15) begin
                                     vco_code <= vco_code + 1'b1; switches <= switches + 1'b1;
-                                    hold_n <= HOLD_CYCLES[HW-1:0]; clear_f <= 1'b1;
+                                    hold_n <= HOLD_CYCLES[HW-1:0];
                                 end else slow_end <= 1'b1;
                             end
                             if (!hi_f) fast_end <= 1'b0;

@@ -32,11 +32,15 @@ verilator --lint-only --top-module pll_startup_supervisor digital/pll/rtl/pll_st
 
 RTL：`rtl/pll_coarse_ctrl.sv`（I-18），例化[公共监测单元](../common/README.md)的`mon_sync`/`mon_persist`。输入为[Vctrl窗口检测](../../analog/pll/coarse/README.md)的异步hi/lo、温度档`tclass`和各档停止门限（梯码+选用哪一侧比较器）；输出VCO粗码与两条门限梯的码。
 上电从码15逐码往快搜，每步等`SETTLE_CYCLES`；停止后梯码回到运行值，若低于vlo则退回一码。运行中hi/lo每`SAMPLE_DIV`周期采样、连续`PERSIST`次才切相邻码，切后`HOLD_CYCLES`内不再判；码0仍越上沿给`fast_end`，码15低于下沿给`slow_end`（快芯片的正常状态）。
-搜索须在环路闭合、CP开启时进行（监督器ACQUIRE内）；搜索期间由上层屏蔽送监督器的`quality_valid`，并把ACQUIRE超时设得大于最坏搜索（18×SETTLE_CYCLES）。
+搜索须在环路闭合、CP开启时进行（监督器ACQUIRE内）；搜索期间由上层屏蔽送监督器的`quality_valid`。每个等待段装载后递减到零，再在下一拍判决，耗 `SETTLE_CYCLES + 1` 周期；16 个搜索码加 CHECK/BACK 最多 18 段。ACQUIRE 超时至少留出 `18 × (SETTLE_CYCLES + 1) + 8` 个参考周期，并另计上层交接和模拟建立余量。
+
+滤波器在切码同一时钟沿同步清除，并在保持期、搜索期和 `track_en=0` 时持续清除；恢复跟踪后须重新取得 `PERSIST` 个采样点。同步器仍有两拍输入延迟，上层须允许比较器输出和环路在切码后建立。`hi` 与 `lo` 同时有效时保持高越界优先；这不作为合格模拟窗口输入。`SETTLE_CYCLES` 与 `HOLD_CYCLES` 是数字等待值，须结合模拟比较器与 PLL 再捕获时间逐角校准。
 
 ```sh
 iverilog -g2012 -s tb_pll_coarse_ctrl -o /tmp/coarse.vvp digital/common/rtl/mon_sync.sv digital/common/rtl/mon_persist.sv digital/pll/rtl/pll_coarse_ctrl.sv digital/pll/tb/tb_pll_coarse_ctrl.sv && vvp /tmp/coarse.vvp
 ```
+
+`uv run pytest -q tests/test_pll_coarse_rtl.py`同时运行上述行为环路、公共滤波器清除检查及短HOLD/关闭再恢复跟踪回归。短HOLD用例取`HOLD_CYCLES=1、PERSIST=8`，检查一次已消失的越界不会被旧确认状态重复消费。
 
 `tb_pll_coarse_ctrl`对行为环路（每码锁定Vctrl随温度线性漂移、z一阶跟随300 ns、比较器±2 mV噪声）检查：三档温度×四种芯片偏移的上电码与独立实现的规则一致（门限±3 mV内两码都算对）；错档上电后−40→85→−40 °C扫描，升温往快码、降温往慢码，共3次切码，无两次间隔小于HOLD；码15下沿保持与码0上沿标志。
 

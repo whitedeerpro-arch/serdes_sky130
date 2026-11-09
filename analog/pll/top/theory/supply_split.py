@@ -1,15 +1,15 @@
 """Supply tone to the VCO through the k = 4 loop filter: fit the control node, then search the Ci split and an added
 control-node capacitor (PLL closure step 7).
 
-    uv run python analog/pll/top/theory/supply_split.py [--base C] [--other C:alpha,...] [--freq 20e6]
+    uv run python analog/pll/top/theory/supply_split.py [--base C,...] [--other C:alpha,...] [--freq 20e6]
         [--units 36] [--dcs 0,50e-15,100e-15,200e-15,300e-15] [--gate 150e6]
 
 Network at the tone frequency (VDD = 1, small signal): node z carries Ci split into alpha Ci to VDD and (1 - alpha) Ci
 to ground; Rz joins z to the control node, whose own capacitance Cp (VCO input, CP output, precharge gate) has the part
 Cpv referenced to VDD.  vctrl / vdd = H(alpha, Cp, Cpv), and the VCO's frequency moves by K = K_gnd + H (K_vdd - K_gnd),
 with K_gnd / K_vdd the ideal-control variants of analog/pll/vco/tb/psrr_lf (control fixed / carrying the tone).
-Per stress point Cp and Cpv are fitted to the lf runs of the base campaign (the 12 / 6 filter) and of every --other
-campaign (its alpha given); Rz and Ci are the nominal values times the RC section and temperature factors of
+Per stress point Cp and Cpv are fitted to the lf runs of the base campaigns (gnd, vdd and the 12 / 6 filter; rows of
+several campaigns are merged) and of every --other campaign (its alpha given); Rz and Ci are the nominal values times the RC section and temperature factors of
 docs/design/pll_loop.md.  Printed: the fit (and its residual), then |K| per point for every split n / --units and
 added control-to-ground capacitor dC.  dC is a loop-filter Cf: its phase-margin cost comes from loop_design.py
 --evaluate with --c-extra.  Points without gnd / vdd runs (FF cold failed at the first step) are left out.
@@ -36,6 +36,14 @@ def transfer(f, alpha, cp, cpv, rz, ci, dc=0.0):
     m = np.array([[-s * ci - 1 / rz, 1 / rz], [1 / rz, -1 / rz - s * (cp + dc)]])
     b = np.array([-s * alpha * ci, -s * cpv])
     return np.linalg.solve(m, b)[1]
+
+
+def rows(campaigns):
+    """summary.json rows of one or more psrr_lf campaigns (comma separated), merged."""
+    out = {}
+    for c in filter(None, campaigns.split(",")):
+        out.update(json.loads((ROOT / c / "summary.json").read_text())["rows"])
+    return out
 
 
 def k_of(row):
@@ -66,14 +74,14 @@ def fit(base, others, f):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base", default=BASE, help="psrr_lf campaign with gnd, vdd and lf runs of the 12 / 6 filter")
+    ap.add_argument("--base", default=BASE, help="psrr_lf campaigns (comma separated) with gnd, vdd and lf runs of the 12 / 6 filter")
     ap.add_argument("--other", default=OTHER, help="campaign:alpha of lf runs with another split (comma separated)")
     ap.add_argument("--freq", type=float, default=20e6)
     ap.add_argument("--units", type=int, default=36)
     ap.add_argument("--dcs", default="0,50e-15,100e-15,150e-15,200e-15,300e-15")
     ap.add_argument("--gate", type=float, default=150e6)
     a = ap.parse_args()
-    base = json.loads((ROOT / a.base / "summary.json").read_text())["rows"]
+    base = rows(a.base)
     others = []
     for spec in filter(None, a.other.split(",")):
         c, alpha = spec.rsplit(":", 1)

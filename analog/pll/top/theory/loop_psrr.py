@@ -50,14 +50,14 @@ def main():
     ap.add_argument("--c-pre", type=float, default=40e-15, help="precharge gate on the control node, F")
     ap.add_argument("--c-cp", type=float, default=110e-15, help="CP output on the control node at k = 4, F (scaled with k)")
     ap.add_argument("--ctrl-load", default=CTRL_LOAD)
-    ap.add_argument("--base", default=ss.BASE)
+    ap.add_argument("--base", default=ss.BASE, help="psrr_lf campaigns with gnd / vdd / 12-6 lf runs (comma separated)")
     ap.add_argument("--other", default=SPLITS)
     ap.add_argument("--delay", type=float, default=2e-9)
     ap.add_argument("--floor", type=float, default=-125.0)
     ap.add_argument("--rms-slack", type=float, default=0.05)
     ap.add_argument("--top", type=int, default=4)
     a = ap.parse_args()
-    base = json.loads((ROOT / a.base / "summary.json").read_text())["rows"]
+    base = ss.rows(a.base)
     others = [(json.loads((ROOT / c / "summary.json").read_text())["rows"], float(x)) for c, x in (s.rsplit(":", 1) for s in a.other.split(","))]
     fits = ss.fit(base, others, a.freq)
     extra = lambda k: a.c_pre + a.c_cp * k / 4

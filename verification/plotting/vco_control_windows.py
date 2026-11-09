@@ -65,7 +65,7 @@ def plot(data, dest):
                 for x in (2.5, 5.5): ax.axvline(x, color='white', linewidth=1.5)
             counts = result['counts'][code]
             total = counts['conditions_with_code'] if i == 0 else counts['fixed_chips_with_common_code']
-            ax.set_title((f'Upper code {code}: VDD - {model.DROPS[code]:.2f} V\n' if i == 0 else 'Same code at all three temperatures\n') +
+            ax.set_title((f'Upper threshold H={code}: VDD - {model.DROPS[code]:.2f} V\n' if i == 0 else 'Same VCO code K at all three temperatures\n') +
                          f'{total}/{135 if i == 0 else 45} have an evidenced choice', fontsize=10)
             ax.set_xlabel('RC section / temperature (C)' if i == 0 else 'RC section', fontsize=9)
     fig.colorbar(im, ax=axes, ticks=range(vmax + 1), shrink=.8, label='Number of measured, bracketed 2 GHz code choices')

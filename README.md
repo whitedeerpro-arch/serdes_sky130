@@ -22,7 +22,7 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 | 模块 | 当前修订 | 已验证到 | 主要缺口 |
 |---|---|---|---|
-| [VCO](docs/design/pll_vco.md) | PLL r5 / 4 bit 候选 | 真实偏置/PDK R 工作区135点、45组三温共同码；五压力点各200样本频率σ 0.75–1.12% | 当前码表/负载噪声重验；慢端失配余量与粗码补点、hl/lh、切码 |
+| [VCO](docs/design/pll_vco.md) | PLL r5 / 4 bit 主线；3 bit仅历史参考 | 真实偏置/PDK R 工作区135点、宽窗口45组三温共同码；五压力点各200样本频率σ 0.75–1.12%；[较窄门限窗口](docs/design/pll_coarse_windows.md)另计 | 当前码表/负载噪声重验；实际门限与电压迟滞切码、慢端失配余量、hl/lh |
 | [÷8 prescaler](docs/design/pll_divider.md) | r3结构；首级W40/后级W80 | 真实偏置/PDK R、标准输入hh/ll各45点；六压力点MC共1048样本正确分频 | FF冷失配数值缺失；原生全角/启动、FS冷尾管余量 |
 | [时钟接收器](docs/design/clock_receiver.md) | PLL r4 | 反馈 45/45，全速 45/45；原生 VCO 5 个工作点全部正常 | SS 热角幅度余量约 110 mV；1.95 V 过冲 |
 | [PFD/CP/LF/启动](docs/design/pll_loop.md) | r5/k4转向CP、4.13kΩ/18pF PDK LF候选 | 行为VCO闭环135/135锁定；原生预充闭环三点；CP三点各200样本MC；粗码RTL与监测积木已有 | 自动粗搜接入真实闭环、从零启动、新环路噪声/供电抑制；转向CP窗口 |

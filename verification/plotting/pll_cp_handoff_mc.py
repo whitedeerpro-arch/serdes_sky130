@@ -114,7 +114,7 @@ def main():
                 for offset, point, marker in [(-.13, 'hi', 'o'), (.13, 'plus20mv', 'x')]:
                     vals = [(i + 1 + offset, row['droop'][f'{side}_{point}'] * 100) for i, row in enumerate(campaign['rows']) if row['droop'][f'{side}_{point}'] is not None]
                     if vals:
-                        ax.scatter(*zip(*vals), s=20, marker=marker, color=f'C{j}', label=f'code {campaign["code_hi"]}, ' + ('vhi' if point == 'hi' else 'vhi + 20 mV'))
+                        ax.scatter(*zip(*vals), s=20, marker=marker, color=f'C{j}', label=f'threshold H={campaign["code_hi"]}, ' + ('vhi' if point == 'hi' else 'vhi + 20 mV'))
             ax.axhline(5, color='black', linestyle='--', linewidth=1, label='5% reference')
             ax.set(title=side.upper(), xlabel='Sample index (seed 1; chunks of 4)', ylabel='Current droop relative to mid (%)')
             ax.grid(alpha=.2)

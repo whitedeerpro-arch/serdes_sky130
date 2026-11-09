@@ -25,6 +25,8 @@ previous_revision_report = "docs/history/pll_lowov_pvt.md"
 frozen_release = "releases/v0.1-design-freeze-20261028"
 native_clock_frontend = "analog/pll/top/spice/clock_frontend_r5.spice"
 VCO = "analog/pll/vco/spice/vco_ring4_4b.spice"
+active_vco_bank_bits = 4
+legacy_3bit_status = "historical_reference_only; no_further_parallel_design; noise_evidence_not_transferable"
 clock_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice"
 feedback_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice"
 divider = "analog/pll/divider/spice/cml_prescaler8.spice"
@@ -120,6 +122,7 @@ historical_partial_curves_excluded = 3
 resumed_points = 20
 ideal_low_v = 0.90
 upper_codes_compared = "3: VDD-0.41V; 4: VDD-0.44V; 5: VDD-0.47V"
+code_names = "K=VCO bank value 0..15; H=upper threshold tap value 0..15; H=3/4 are values, not bit widths"
 conditions_with_measured_choice = "135/135 for each upper code"
 same_code_at_three_temperatures = "27/45; 23/45; 19/45 respectively; narrower window than r5_fixed_code_temperature"
 default_changed = false

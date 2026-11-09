@@ -70,7 +70,7 @@ native_scope = "transistor VCO/divider closed loop, precharged; TT, FS 1.65 V 85
 native_locked = "3 points; capture 118/418/254 ns; 2.00000 GHz"
 native_campaigns = "results/analog/pll/top/native_k4/20261108T200611Z; results/analog/pll/top/native_k4/20261108T221446Z"
 coarse_monitor = "coarse RTL behavioural-loop tests and monitor components available; not integrated into physical closed-loop startup"
-remaining = "native full PVT and startup; CP window and switching; LF supply split; new-loop noise and supply rejection"
+remaining = "native full PVT and startup; CP-window joint mismatch/dynamic margin and switching; LF supply split; new-loop noise and supply rejection"
 
 [r5_fixed_code_temperature]
 status = "45_of_45_MOS_supply_RC_groups_have_static_three_temperature_code; not_lock_or_startup"
@@ -88,3 +88,13 @@ window = "0.85V_to_measured_CP_DC_5percent_upper_edge"
 fixed_across_supply = false
 physical_CP_LF_handoff_qualified = false
 native_lock_startup_mismatch_noise_qualified = false
+
+[r5_cp_window]
+report = "docs/design/pll_cp_window.md"
+evidence = "docs/data/pll_cp_steer_window.json"
+conditions_complete = 135
+minimum_nominal_upper_gap_mv = 24.37264
+worst_condition = "sf_v1650_t85:ll"
+criterion = "each branch within 5 percent of its own VDD/2 current; 10mV sweep grid"
+qualified = false
+remaining = "joint CP/monitor mismatch, ctrl-z ripple and decision delay; static diagnostic only"

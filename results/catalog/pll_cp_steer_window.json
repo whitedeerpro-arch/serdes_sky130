@@ -1,0 +1,4678 @@
+{
+  "campaign": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024",
+  "cp_params": "wn=20 wp=80 wsn=8 wsp=16 up_wn=2 up_wp=8 dn_wn=4 dn_wp=8 pnf=16 nnf=4 ntail=2 cdum=0.3p",
+  "droop": 0.05,
+  "scope": "135 static real-bias k4 steering-CP conditions; DC window diagnostic, not PLL signoff",
+  "grid_step_v": 0.01,
+  "inputs_sha256": {
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/execution.json": "8cbf563b83094e94de923718f04f7f771a9173d1fa1684d8f50f963c9523b1f2",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1650_t-40.raw": "be63db086d6760ebcefb6c9d533da29b605f52ee8d85bdcd3272e713fc8d104a",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1650_t27.raw": "286ae2e61fff90f9175e508dede64b561f2cd1a1d27e59756afb6026d7f7defd",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1650_t85.raw": "cde452d80ae73d061d52fd58adfc8c6f613fae5389b59bb0d890d1bcd13b545a",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1800_t-40.raw": "e4d71fbefc6c6b70c54bdada882d5f36f6e8579693b9e147d2c29bf254434a85",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1800_t27.raw": "7040244338c3a8a6010f7e20143cbd77684615a4a274df8474f876b58df99f05",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1800_t85.raw": "9fabef69ff8893af0dd11bd53c627c99ac913e103c4f34ec98fd628e914555cb",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1950_t-40.raw": "35f660838ddc4a2f17da5f950b8f8a1bb49e2d31672bf2e0b9ada667cc2e8647",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1950_t27.raw": "dc3c615c2604d2133968939842f87cfef68ba89ceed8b98b1143e0b7bddb4b64",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt/tt_v1950_t85.raw": "921f9013f397d1db7ae4cfa54eec87a314ab3e7171e8b69e58c446cd0b801511",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/execution.json": "fa4f2edef01c9a61b959ec4bab02d314406458b1dcf623d763ff907b6c3dfc89",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1650_t-40.raw": "02f173bede26e2a4589d82b9276edaee76a55317a727f42817b1364286bc5b9e",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1650_t27.raw": "550fc2e39d0f89feebcfbd2f6fef11579cb24493c485e82f7ffd28aad3e55ba7",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1650_t85.raw": "f6f70441ea38876d7e8bb3ae9170800beb76b8fd59c3cf0537f0a6ffdb50a17d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1800_t-40.raw": "13935cc2eb4f70a1eced48a449f0fa6d9d117794d4f518cb6b4f7beeff5a14fc",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1800_t27.raw": "2114a2b9a3cf8561ddcb70219b9bab97fbead01f50ce6d901470b26204b4708f",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1800_t85.raw": "9285f9c32459c5b13f13e3cc941a1dad5bd6e79b0002d0c2490ba558c9f3965e",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1950_t-40.raw": "68721697c9a6a3073a02b07943e6d2d746cc651caff984e997d1faa045c0c2a7",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1950_t27.raw": "ff02f0cb0f883f72d54f819e3fcfdd254981a8d6da3aa895bd51bdaba01ab54d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt/ss_v1950_t85.raw": "f9393988ead525635dc4c15a662b13d7528afbf821e50617f4f4eb4899dc7ad6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/execution.json": "3d9e8dfd609afcc04df38ba60e6481cd2e25f361ee43814e87cc740ebe74246e",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1650_t-40.raw": "b73132a3ef4594a7ea93f6a9629ee9ce85c2e2d89cd45231e9936d5a57c6a797",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1650_t27.raw": "93efb7422cabd0b67a3375ef1c2ed94a9b531734da3944c1f06386d08d058fa9",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1650_t85.raw": "cd25f2e861af27c1743e1ebffa44c5f919b24138964f078a7fb1356c294d83e6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1800_t-40.raw": "6e6004458b6b5f79d3b7f4765cb1ef724a5b0f870bae8030c9218520c9c0a4ef",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1800_t27.raw": "cef611b084c6c743a20dc744aca81bdfe30efd6c4cd2d715467a02e0b3443670",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1800_t85.raw": "e21fec509bce9fa26f4a0d107f4de5d6abf5f28004c64c757c62d93704a6ff16",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1950_t-40.raw": "8035c41e78ac30d9e3bacd8b2d70dd7cdd4773cea8f8edc9ae6b9f16eda9a3b9",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1950_t27.raw": "a94333a4818db6395cadc7caae054644d5aca628367da2ce124800d2965a68d1",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt/ff_v1950_t85.raw": "71be4d42d4dec2186c7edbe545ffaff01067768f31657e19978b52f6c349eeb7",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/execution.json": "c6f057d2a7226804a3201dd498db72b621c53d92505f36397b36d0168ca156aa",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1650_t-40.raw": "9c8747d5582c108eebc9753cb84a3543b5ef429fb42a306f7b3df17503f55206",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1650_t27.raw": "061c2bae6ae59979c2a6d76fad25436d6f61aded151f3dc53227a27e5634eec0",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1650_t85.raw": "cb5b76d40630b014c578ae075b8f88a77a7b3fe9f64f3fd09bfeb1e6f0b5ac6e",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1800_t-40.raw": "d44ecbf4ec3c23e4afd2b57b0e71c2fe14ae9a19de421f1b0dc7918ab5605eb5",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1800_t27.raw": "a2aa9c2a03ea0c3426ab3176d2fcd32bf052d231a6033437f55d6b6a5697e35d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1800_t85.raw": "a0bcc5cd85eefa90ba6517ca790649bc51c79286591f92f8471003a3f944210f",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1950_t-40.raw": "e9afa91b479c759bc8284ac9613b6debb961271a52e55d1d52581313c6f1bd66",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1950_t27.raw": "0aad3a13c101ee14dcef1ee0939d152356f86f427e2328f9206d47eac11e31a5",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2/sf_v1950_t85.raw": "a7f8382534aea6600a4f42e794e836518c7eb91c013636dd1eefc85ba642e186",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/execution.json": "8540e75514434a2331c16bbd57a5d9a56285e51973572bc67ddd5c15661c8a5f",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1650_t-40.raw": "7bf4f7b2deddf389d21a8a74b523352d27ba3dfed4cfe7802f7d34dd81859687",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1650_t27.raw": "7800546ab30163d4b97c775c8f7861102c9a0dea4def394f92469fa852b7f8c0",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1650_t85.raw": "bae03aa23077c81724476188267035a348129d6c21045bf001d450920559fae3",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1800_t-40.raw": "358b7858cdd2cac848a344b6fbc2c1cb1ed9389860a4486f6860c80a3539d2a6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1800_t27.raw": "e3dfed44ff3f8cf8e60226c7d58fffbdcdeecb6d88e0190e6aa303db332e6735",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1800_t85.raw": "8414df049b71919854bf2c39ebcc6c3f3e4f9fe06df661c888fa715a2a2756a2",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1950_t-40.raw": "6e0acce0788e5585c998af970fdd4ff69a8f19fd69497fe4f2ec123c6be6514d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1950_t27.raw": "d3081f8fefef77a98f3347ba77408315dca1ef0e9acf1dd258478d08fd13b759",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt/fs_v1950_t85.raw": "4019b87b70b204809e16e9847cac74a578d8a8facfe4284f1e366784a1e57570",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/execution.json": "3d8d4b10c3f5fb22ef2aba3ace92a7e9d30e059890157e5c4565e4a55dec8c08",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1650_t-40.raw": "4ff0a31358a3922371118e0af327d8f66cbcec30cd0a0e2e5cc742e76ff5eb24",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1650_t27.raw": "e8431d69031666b9396f5c8dca6774a8acc75a81e683376fb79491bb98e78702",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1650_t85.raw": "339830d7af69544e72644f6bb7b58eff69ad7ba0451a544590ed7104534df43d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1800_t-40.raw": "8bb8c247e78bf0cc19b00d646964b41bcca69e3d4bb1ec5fd95e53a3df32f451",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1800_t27.raw": "c5a8f3bd5667d86eea75da9fd311b08212a5692ede27b703e64250baffa463dd",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1800_t85.raw": "4f37937838a5f1536f119d4f6f7e439aafaf24eb7f5b6ac37080ca00c07ed787",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1950_t-40.raw": "4d5f36da8b158badf8b7d994d2e19148ebc72d5506a14e8d67e47742025e1460",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1950_t27.raw": "cfe9e8ab80a05701a5559d839751f638f5eb11cc8c08d15824c3288f668679ff",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh/tt_v1950_t85.raw": "923d32e2125ce5ef6d1848109a036e1da9ae1de695a917ac4279347f6532ec5d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/execution.json": "5b7eb5590500394acbd6bdd2d955a1565752165741ec06068969101efae25d8d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1650_t-40.raw": "f8fc7e7cc29112786dfc7ddeb2fa7860bbe731096234359f64a07e6c7fcd6d1d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1650_t27.raw": "0ed8aebe9bba0cbbe789bbb833f39b3f43fc166868cdfbe70ac46690f07686c0",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1650_t85.raw": "80a2b2bd81536fbe2c1239a41e61e3c8abc8f4af743978ce21f44307c1bb73ae",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1800_t-40.raw": "85de6e35eefc88997f181af8194796941e2094d71551202f06fecd64dada7bf1",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1800_t27.raw": "026dea083f38698170a14939bb8bfb7d5d341f2f387316f18f652395a5058b89",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1800_t85.raw": "0f28d77bc451adac1b1eacc245706e9d33a42fce545c470a1a66e386373a0812",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1950_t-40.raw": "69e7b0fe91e3358dfc154126fe95cbdfb3f4cb94f90db8bf399ddf6477b5bd63",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1950_t27.raw": "4f47869e5cc0a0e6d262205a5fc9664f910e525195c87d561447acb58e973e33",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh/ss_v1950_t85.raw": "7dd4d6809efa3dd7c7f9e3daf9cf04520a4627772c00d76112c24666376338ec",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/execution.json": "07278fdec28b616408cb4e414b0dd8273077f98af2b8da20fd2d23fbe42ee262",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1650_t-40.raw": "78218d8bd88255544070f6bf9124c3741c606b750cec253affcf361d4bf263ea",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1650_t27.raw": "f08a73d9cdbbab60c968b703060865668cc01b90c97480d7615726ee44da4215",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1650_t85.raw": "b5ad306acd4b84046d3bfb0ae5ba932d1bd6be6e57c0ea702c5ca8988e24e3ce",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1800_t-40.raw": "8cc1b81841aaefbacba4906b4d8bd6c0f454451fb252304ff47849b00df9ed2b",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1800_t27.raw": "7488d53608bd0310ba2dad20da30417cb2260a84a2fc94910501600178271369",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1800_t85.raw": "9b16fbef791fc3435ce2bc3eae95cc6188097e4cfd2e14bd2a5859c3157f9445",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1950_t-40.raw": "5cf15738954e7dff6dcfbd6fc8e74794e1053c09cbb33d591b7db949023df332",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1950_t27.raw": "41a76156dcefe0d49d8a7f2dfdeeb296dcaebb7eb759ae14de59c2ee72895331",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh/ff_v1950_t85.raw": "8e12bb08ebcfc21a0a5e425ec266385f998ac07494e200bb4a3261fb9d405792",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/execution.json": "e23be64d7ec28675d614ea07966f4a5bfa76d18734d412bb7c2bd2811f1a6fcb",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1650_t-40.raw": "c2fa037caa7737ae5b6f63e987c8fd8bffa2b641041203a75c88b54ab8c37b17",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1650_t27.raw": "f3e8b1b42b26d821c5c145b0c216a04a893bc4942fa857d0bc5db3602f37a6a6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1650_t85.raw": "31ce8650d4df1904544e640c6904b7a73bc26268b6f1f9911b30584b03b2aaad",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1800_t-40.raw": "b4f658d9ce8001e23ed0ee83eb0ba665c9503dd3f6296ce4b47ede841c8f3f3e",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1800_t27.raw": "6f78b9fd01a47ef5f53a02887f026709a431617ef1557801665256bc22c642cc",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1800_t85.raw": "decfaed1e52d42763a582232e54bd663f152a324497c58447fffc9916ede2462",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1950_t-40.raw": "634439ea281c2f1f6a27a8eb65dd2c70055470517da151ea537162b8a0fd1813",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1950_t27.raw": "8963ab7bc62365faf2de05dde9ce6e383ff095f4f4b270a9b23b196070cc87dd",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh/sf_v1950_t85.raw": "6a024f350876fc52ce73ee78bcea6d15a179be8a6d274a947b4fcffcb9c3fd6c",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/execution.json": "4706417b32b0f9fb44c7e1e2ab9584c8e3313fc8bbb097773e5ff7ec0f06b7f3",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1650_t-40.raw": "81219987baa02e4c3ab6d0904c3632be3c85e22c2c08d575d30b09adddb4c2cc",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1650_t27.raw": "cbf8f6e0bf51e02f096b6d3c9b8efb430c4eaa6e75443391f865d78a5ae6a0ac",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1650_t85.raw": "f716b8bfd5a5f59750b052e757b4f8979f457a9a20b0f1e2e2757291773d9b51",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1800_t-40.raw": "2ef6cd5f55bf3ab29174a2f5898c1cd2d41bb18cccf2dbe5b0a01dbb8446a644",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1800_t27.raw": "45486fa8d326e489443832e08c89a7c13fbeef3b719bb4db153dffd93d112b44",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1800_t85.raw": "707d91343866b87f96950d826e8dad58934bdec302b9f4d1f60ac588433e7775",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1950_t-40.raw": "8e808b798680cc4aaf5ecb5e6993a437a8f81fe33bf528a13ce90a5eade8ccb4",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1950_t27.raw": "f8f1f732a08bf87b0fc3c384b7651f1baefe360fc6a1fb549f3810e3959ee952",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh/fs_v1950_t85.raw": "10d58ee24b758284236270b4b04c1fb65c835256436ff180ceca818062536e6b",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/execution.json": "aa09293ea57ffd95834c781e3787c6adb45056f76a2e61418c2c6466e37700c0",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1650_t-40.raw": "fe1bcef8efd2c28e0ebffad1fb09f1e46341bf4d4ebad9bbfc72e4df9384c89c",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1650_t27.raw": "808defa2e272de4d355c160069d4b7e904ad75278da4483aba835d2b75a38b0d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1650_t85.raw": "66a96d591517e320f069b4f5bb87afe435f484cc16186fb8f380c6b90db8e8f6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1800_t-40.raw": "7eeddb2b3f86864cd35efe7cca89a40e39cb1a7651a64a2e01e2134220f6570c",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1800_t27.raw": "2250185edb632b706622fc2a5ebe46357b3fce2c5a32d50e9b0620a2b045c538",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1800_t85.raw": "c7a9b50d62414e285a2baebf56c31931b3ec8026d3e889c0d72d1bfa121f1cb3",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1950_t-40.raw": "60323bb9bb5db8c0202e9a9939618a969ecf26936c27ad57fb84c3dca7d76137",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1950_t27.raw": "5348739ba59197bf99cbb073a0197351344f86355224335cde98d027396b6502",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll/tt_v1950_t85.raw": "71cffe03e520a6c34493692585a72de3f83105286f99430fbb94587a481db1a5",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/execution.json": "7663316984f58bee7eb09ea48958e9be3f9648dc78b315d392d2c4183cfd0177",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1650_t-40.raw": "83ba1f2976be2e9181de29f51afa47bba7103980515949986a7aaa1bc0ebccf0",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1650_t27.raw": "c3ce3ec68b67b9249d80c016186250fdc2abd66a62175405e7b6a156b2eb0280",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1650_t85.raw": "6d6f27d691e944b116d0af16f0b4948bdbc78e71daf30b3bd6ff51ea8d48db2d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1800_t-40.raw": "ef73e350e276dc1c377539c75781f2785f1679fcbbd7b912ba019c26c40b6a28",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1800_t27.raw": "5db982c3fb62d725d29fa28a460436000ee7bb1e0a69f9379b3f786b9e9d9598",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1800_t85.raw": "d2e6e7a72e7b318c74e3aa94c005e989d17a2eec28e1c9644e6b9fdbd0c64b49",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1950_t-40.raw": "9ddc1e3285dce9e5db161be107c4c4dcbbf8a1d51f7e47132119c4460043b3f9",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1950_t27.raw": "7ed8c5875543ff9306e67719585b94bb226eacfe09e357ccc8b9d20425d23e94",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll/ss_v1950_t85.raw": "ee8d4ed960e5fb92086b53b4b8b8dd346a4c331f4db8ee1272688f20a4efc820",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/execution.json": "0cd33ce12eb7eea50f64be38520dbcbcfbac8ac4c883750b41d5e9b8f04c3bdd",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1650_t-40.raw": "45644ea207236f8559fe712eb79f946f499ef3943b36969447b087f746499f9a",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1650_t27.raw": "17a51ed17a136dc443c0957221596aa45e75ca1676415c0f1621e9327628d305",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1650_t85.raw": "a06b6f164715d488b210ab69ccd31fcfe52053e1810b63c154b07ff374228800",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1800_t-40.raw": "450ea5dea28d8ad97276db81c759a082b119b9df89820e71e2f32174bae5ce46",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1800_t27.raw": "7da2a718c93ef5583055e9377693a19e558d26f1046d87564c7b3bd0d69ba1e4",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1800_t85.raw": "c360d8b670a4053ee0d5a52e1c20bc9bff536932b1f1a6e6595f8de42ce319dd",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1950_t-40.raw": "4f9ccc89acd54a1646208e7b81cdbd8ccf262c02d849c4897f5678429f44a2b6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1950_t27.raw": "9baf170d3c53da819ce9387b5c3d042026efecfaeb0eb46f6d2b9e3aa993a70d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll/ff_v1950_t85.raw": "83d5ab459802e44ea3f46da540f46e64eb04ae56db268d870dbf9af27ba3e027",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/execution.json": "c5c1d027b0e1df8477eb8f2623926845c6638b61b1fd164aa8b5ac687f8b01b6",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1650_t-40.raw": "e0eb2df1f768c5a54b9d4d46e356aecf4d4eddc9d7476b2e71d787b1ccef7a9f",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1650_t27.raw": "9e27cc66ba9ae51e0629243eec890ff4adb80976f06107b721b0a7f8f7741708",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1650_t85.raw": "f43406f8dc192d9f531a5dcb095997c020a10737d1ed95faff814bad9709d26d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1800_t-40.raw": "9e2ad220421e40d1f1605b06fb8d30689c0789966d78fbb53e6cae387bfcef6d",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1800_t27.raw": "790ae0dcec75924402e4455f68136553c9d31afba7c188e332ac1dbaef9343db",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1800_t85.raw": "427fb3a96e607fabc194e42151dce0864df9003bcb3a3a98844698f9c9b0c245",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1950_t-40.raw": "779f25d2b4958a359aea8f7edc190e55dab412a700c3cb81e4f4b276c51e48c9",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1950_t27.raw": "95e68096acce4f57adf7035ef2b619ab0529cff38bc01c27305d4acb0be2ca90",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll/sf_v1950_t85.raw": "b698912070ca4f5e224a037567631d7d607bd4a4ec2311b2822954269be6f45c",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/execution.json": "eefec93023bd770f39f647211d257877f9c7f5db8c613b05d533cdd010b9c10e",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1650_t-40.raw": "36ce2455e2598e6371b141f50d4789d30a50f61d09446dd35d60a8161d1570bb",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1650_t27.raw": "2cd29a8f1382496787476273862724ff473b1c778d587614c41bc29f60d50a3f",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1650_t85.raw": "cc1cc174ae42eee5bd8ea198fe14e25edb0ee58ebd7d533b4619392e69bf899b",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1800_t-40.raw": "c89826ef4f2234fbc743eca6f7ba7ac46db86da0c955e7f6747665e9d8fcad1f",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1800_t27.raw": "02011ee9716f5ddb67ca33f135bb08b744f5c178df2cbcd32d1ca99ce9f38f78",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1800_t85.raw": "55c99d827592bf47bb9193fce69afa5b6a5362a1d8f924ebf306f060c68e76aa",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1950_t-40.raw": "37f1ce6e950843fb221669d903fa914cb41c414dc4e961a24c79128c2bb4ca33",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1950_t27.raw": "7b7680a076016712439e6e34aba2accc2c82e635c3460cb298d05087e64ba5b1",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll/fs_v1950_t85.raw": "905b538b4b91c01f1c4a300b0e159a5efc10831b927a0b64fc4a6526292e7289",
+    "results/analog/pll/coarse/window_dc/20261109T052834Z/summary.json": "ac59d8344784043f74daba7e0d599be328472ab33cdd1fc6fe8b3aa5f2453f85",
+    "results/analog/pll/coarse/window_mc/20261109T055255Z/summary.json": "258e240f025cb04c0ce90459230f5915c2b9a9c31e46fb60c2e7d368dd6c750b",
+    "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/plan.json": "6d293d44f748df1b4112d25cb2db4e8a8c0f08d9f53d4ef2efeee7471c09d10d"
+  },
+  "collector_sha256": "13f7f4250d3257aef1267965143ab4ee83b46bbf9a51f50b0e4c9f92d1376710",
+  "rows": [
+    {
+      "condition": "tt_v1650_t-40",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.30000000000000016,
+      "hi": 1.360000000000001,
+      "up": 0.00018846016800922643,
+      "dn": 0.00020174651621084343,
+      "mismatch": 0.06809902925252675,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02284752725683381,
+          "dn": -0.0027071461410024256
+        },
+        "0.39": {
+          "up": 0.017616083608163358,
+          "dn": -0.0025740215560972057
+        },
+        "0.41": {
+          "up": 0.0149060384828269,
+          "dn": -0.0024851804993653026
+        },
+        "0.44": {
+          "up": 0.011658197308793694,
+          "dn": -0.002348851387158568
+        }
+      },
+      "vlo": 0.889908635,
+      "vhi": 1.23853743,
+      "upper_gap_mv": 121.46257000000094,
+      "lower_gap_mv": 589.9086349999998
+    },
+    {
+      "condition": "tt_v1650_t27",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3300000000000002,
+      "hi": 1.330000000000001,
+      "up": 0.00018811468698210664,
+      "dn": 0.00019777692382737483,
+      "mismatch": 0.05007746514623522,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03176912090257078,
+          "dn": -0.0030527846626289268
+        },
+        "0.39": {
+          "up": 0.02472999179278368,
+          "dn": -0.002921910286441065
+        },
+        "0.41": {
+          "up": 0.021176358523180228,
+          "dn": -0.002833248436672653
+        },
+        "0.44": {
+          "up": 0.016963806547279026,
+          "dn": -0.002697936945606161
+        }
+      },
+      "vlo": 0.894583157,
+      "vhi": 1.23646791,
+      "upper_gap_mv": 93.53209000000095,
+      "lower_gap_mv": 564.5831569999998
+    },
+    {
+      "condition": "tt_v1650_t85",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3600000000000002,
+      "hi": 1.310000000000001,
+      "up": 0.0001848058980188818,
+      "dn": 0.0001918044090280025,
+      "mismatch": 0.03716579646477632,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03948457358769619,
+          "dn": -0.0035808640649503953
+        },
+        "0.39": {
+          "up": 0.0307426425434304,
+          "dn": -0.0034510191645884536
+        },
+        "0.41": {
+          "up": 0.02641251400257305,
+          "dn": -0.003362821357938195
+        },
+        "0.44": {
+          "up": 0.021367269852290538,
+          "dn": -0.0032277974487031624
+        }
+      },
+      "vlo": 0.894681756,
+      "vhi": 1.23620195,
+      "upper_gap_mv": 73.79805000000084,
+      "lower_gap_mv": 534.6817559999998
+    },
+    {
+      "condition": "tt_v1800_t-40",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3200000000000002,
+      "hi": 1.5100000000000011,
+      "up": 0.0001945594612989026,
+      "dn": 0.00020383059728050316,
+      "mismatch": 0.046543008701873355,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02591295339546884,
+          "dn": -0.0032406990745357245
+        },
+        "0.39": {
+          "up": 0.021051347258459696,
+          "dn": -0.003119865135566835
+        },
+        "0.41": {
+          "up": 0.018463196480239974,
+          "dn": -0.003038276780390037
+        },
+        "0.44": {
+          "up": 0.015251589196056181,
+          "dn": -0.002914237464336944
+        }
+      },
+      "vlo": 0.892503697,
+      "vhi": 1.3854381,
+      "upper_gap_mv": 124.56190000000112,
+      "lower_gap_mv": 572.5036969999998
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.480000000000001,
+      "up": 0.0001926946090040628,
+      "dn": 0.0001993516254420605,
+      "mismatch": 0.0339603641259437,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03398199009598013,
+          "dn": -0.003834386074573981
+        },
+        "0.39": {
+          "up": 0.027525223519824227,
+          "dn": -0.0037174552924683635
+        },
+        "0.41": {
+          "up": 0.02421550821112406,
+          "dn": -0.003638376011283695
+        },
+        "0.44": {
+          "up": 0.020223304121044672,
+          "dn": -0.0035179152588213913
+        }
+      },
+      "vlo": 0.896330213,
+      "vhi": 1.38425756,
+      "upper_gap_mv": 95.7424400000011,
+      "lower_gap_mv": 546.3302129999998
+    },
+    {
+      "condition": "tt_v1800_t85",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.460000000000001,
+      "up": 0.0001883958047407977,
+      "dn": 0.00019311902060962756,
+      "mismatch": 0.024760326755278936,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04081438632045575,
+          "dn": -0.004527183723741057
+        },
+        "0.39": {
+          "up": 0.03274485664557325,
+          "dn": -0.004412907167520297
+        },
+        "0.41": {
+          "up": 0.02871339569595588,
+          "dn": -0.004335445135857485
+        },
+        "0.44": {
+          "up": 0.0239625254528808,
+          "dn": -0.0042171295472834824
+        }
+      },
+      "vlo": 0.896278767,
+      "vhi": 1.38439513,
+      "upper_gap_mv": 75.60487000000116,
+      "lower_gap_mv": 526.2787669999998
+    },
+    {
+      "condition": "tt_v1950_t-40",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.6600000000000013,
+      "up": 0.00019897753212205996,
+      "dn": 0.0002059435711769188,
+      "mismatch": 0.03440689555622083,
+      "droop_at": {
+        "0.36": {
+          "up": 0.029325629345506754,
+          "dn": -0.004683736674786054
+        },
+        "0.39": {
+          "up": 0.024664185742929834,
+          "dn": -0.0045690669986448995
+        },
+        "0.41": {
+          "up": 0.022150360710545103,
+          "dn": -0.00449172166486389
+        },
+        "0.44": {
+          "up": 0.018988948134521677,
+          "dn": -0.004374264489359847
+        }
+      },
+      "vlo": 0.896175579,
+      "vhi": 1.53163685,
+      "upper_gap_mv": 128.36315000000133,
+      "lower_gap_mv": 546.1755789999997
+    },
+    {
+      "condition": "tt_v1950_t27",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00019636950198794042,
+      "dn": 0.00020110300798369162,
+      "mismatch": 0.023818029559272064,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03651613634779172,
+          "dn": -0.005461123332944018
+        },
+        "0.39": {
+          "up": 0.03036715464034001,
+          "dn": -0.0053518325836572345
+        },
+        "0.41": {
+          "up": 0.02718805004662006,
+          "dn": -0.005278014667597475
+        },
+        "0.44": {
+          "up": 0.023319126717153527,
+          "dn": -0.005165727412525856
+        }
+      },
+      "vlo": 0.899606703,
+      "vhi": 1.53103709,
+      "upper_gap_mv": 98.96291000000113,
+      "lower_gap_mv": 529.6067029999998
+    },
+    {
+      "condition": "tt_v1950_t85",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_tt",
+      "lo": 0.39000000000000024,
+      "hi": 1.6100000000000012,
+      "up": 0.00019153723416868906,
+      "dn": 0.00019466781797407035,
+      "mismatch": 0.016212029273113108,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04267292615103635,
+          "dn": -0.006189048050848189
+        },
+        "0.39": {
+          "up": 0.034970816813167604,
+          "dn": -0.006083420677857276
+        },
+        "0.41": {
+          "up": 0.031101553216481448,
+          "dn": -0.006011933827502647
+        },
+        "0.44": {
+          "up": 0.026511927253371592,
+          "dn": -0.005902933863722648
+        }
+      },
+      "vlo": 0.899414177,
+      "vhi": 1.53148172,
+      "upper_gap_mv": 78.51828000000127,
+      "lower_gap_mv": 509.4141769999998
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.30000000000000016,
+      "hi": 1.340000000000001,
+      "up": 0.0001835270030949291,
+      "dn": 0.0002001648943662736,
+      "mismatch": 0.08672526775484933,
+      "droop_at": {
+        "0.36": {
+          "up": 0.026358985330871998,
+          "dn": -0.0020421598856463774
+        },
+        "0.39": {
+          "up": 0.01933269967389928,
+          "dn": -0.0019411196287573151
+        },
+        "0.41": {
+          "up": 0.01588185895019334,
+          "dn": -0.001872848183189335
+        },
+        "0.44": {
+          "up": 0.011968541570748226,
+          "dn": -0.001768959441163398
+        }
+      },
+      "vlo": 0.887203912,
+      "vhi": 1.24035928,
+      "upper_gap_mv": 99.6407200000009,
+      "lower_gap_mv": 587.2039119999998
+    },
+    {
+      "condition": "ss_v1650_t27",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3300000000000002,
+      "hi": 1.320000000000001,
+      "up": 0.000184558409814066,
+      "dn": 0.00019654422281320245,
+      "mismatch": 0.06290070953594805,
+      "droop_at": {
+        "0.36": {
+          "up": 0.035309574643165975,
+          "dn": -0.002314547182737936
+        },
+        "0.39": {
+          "up": 0.02625535796177425,
+          "dn": -0.002212926733154985
+        },
+        "0.41": {
+          "up": 0.021814689140271293,
+          "dn": -0.0021440911827677045
+        },
+        "0.44": {
+          "up": 0.016729823596383087,
+          "dn": -0.0020390374159835467
+        }
+      },
+      "vlo": 0.893216131,
+      "vhi": 1.23767224,
+      "upper_gap_mv": 82.32776000000098,
+      "lower_gap_mv": 563.2161309999998
+    },
+    {
+      "condition": "ss_v1650_t85",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.300000000000001,
+      "up": 0.00018215709073866418,
+      "dn": 0.00019087392053617207,
+      "mismatch": 0.04673514819970629,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04342312745506005,
+          "dn": -0.002741349724258546
+        },
+        "0.39": {
+          "up": 0.03265404548061257,
+          "dn": -0.0026387001244594366
+        },
+        "0.41": {
+          "up": 0.027404686312064275,
+          "dn": -0.00256896518354921
+        },
+        "0.44": {
+          "up": 0.02143194413864069,
+          "dn": -0.0024621779768505547
+        }
+      },
+      "vlo": 0.894455474,
+      "vhi": 1.23688387,
+      "upper_gap_mv": 63.116130000000936,
+      "lower_gap_mv": 524.4554739999999
+    },
+    {
+      "condition": "ss_v1800_t-40",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3200000000000002,
+      "hi": 1.500000000000001,
+      "up": 0.00019165310639225684,
+      "dn": 0.00020244402273966798,
+      "mismatch": 0.05476272497178664,
+      "droop_at": {
+        "0.36": {
+          "up": 0.026869409377473286,
+          "dn": -0.0023248054120674766
+        },
+        "0.39": {
+          "up": 0.020863311314423982,
+          "dn": -0.002234860411081785
+        },
+        "0.41": {
+          "up": 0.0177930783011776,
+          "dn": -0.002174169848133234
+        },
+        "0.44": {
+          "up": 0.014124349732751895,
+          "dn": -0.0020819544867598516
+        }
+      },
+      "vlo": 0.890201587,
+      "vhi": 1.3870895,
+      "upper_gap_mv": 112.91050000000102,
+      "lower_gap_mv": 570.2015869999998
+    },
+    {
+      "condition": "ss_v1800_t27",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.0001904189853510414,
+      "dn": 0.0001983566583797856,
+      "mismatch": 0.04083420943025907,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03593663958962068,
+          "dn": -0.002765672802688357
+        },
+        "0.39": {
+          "up": 0.02803562959187167,
+          "dn": -0.0026775613763843076
+        },
+        "0.41": {
+          "up": 0.024102938751645597,
+          "dn": -0.002617981908527689
+        },
+        "0.44": {
+          "up": 0.019494602343925416,
+          "dn": -0.0025272298805132376
+        }
+      },
+      "vlo": 0.89537299,
+      "vhi": 1.38526237,
+      "upper_gap_mv": 84.73763000000112,
+      "lower_gap_mv": 545.3729899999998
+    },
+    {
+      "condition": "ss_v1800_t85",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3800000000000002,
+      "hi": 1.450000000000001,
+      "up": 0.0001866394492859844,
+      "dn": 0.00019241408153633142,
+      "mismatch": 0.030468689938434712,
+      "droop_at": {
+        "0.36": {
+          "up": 0.0437335580152155,
+          "dn": -0.00337603108781126
+        },
+        "0.39": {
+          "up": 0.03408912336305081,
+          "dn": -0.003288656140248314
+        },
+        "0.41": {
+          "up": 0.029364410782443007,
+          "dn": -0.0032294261398824187
+        },
+        "0.44": {
+          "up": 0.02392068129271463,
+          "dn": -0.0031389425296446394
+        }
+      },
+      "vlo": 0.896382704,
+      "vhi": 1.38489865,
+      "upper_gap_mv": 65.10135000000106,
+      "lower_gap_mv": 516.3827039999998
+    },
+    {
+      "condition": "ss_v1950_t-40",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3400000000000002,
+      "hi": 1.6500000000000012,
+      "up": 0.00019659497248697777,
+      "dn": 0.00020470589428078258,
+      "mismatch": 0.04042314615033581,
+      "droop_at": {
+        "0.36": {
+          "up": 0.029491864440052362,
+          "dn": -0.003238856848377214
+        },
+        "0.39": {
+          "up": 0.02399105327854323,
+          "dn": -0.0031547311208837137
+        },
+        "0.41": {
+          "up": 0.02111612330093715,
+          "dn": -0.003098025422235473
+        },
+        "0.44": {
+          "up": 0.017595160879134042,
+          "dn": -0.003011960540152181
+        }
+      },
+      "vlo": 0.894040026,
+      "vhi": 1.53325648,
+      "upper_gap_mv": 116.74352000000133,
+      "lower_gap_mv": 554.0400259999998
+    },
+    {
+      "condition": "ss_v1950_t27",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.6200000000000012,
+      "up": 0.0001945122964987539,
+      "dn": 0.000200249616708031,
+      "mismatch": 0.02906724289924987,
+      "droop_at": {
+        "0.36": {
+          "up": 0.0378983203743708,
+          "dn": -0.003970241611175318
+        },
+        "0.39": {
+          "up": 0.03061914158193546,
+          "dn": -0.003889322907014492
+        },
+        "0.41": {
+          "up": 0.026955102424553012,
+          "dn": -0.003834678468240149
+        },
+        "0.44": {
+          "up": 0.02260223546801876,
+          "dn": -0.003751562915695228
+        }
+      },
+      "vlo": 0.898815337,
+      "vhi": 1.53199558,
+      "upper_gap_mv": 88.00442000000119,
+      "lower_gap_mv": 528.8153369999999
+    },
+    {
+      "condition": "ss_v1950_t85",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_tt",
+      "lo": 0.39000000000000024,
+      "hi": 1.6000000000000012,
+      "up": 0.00019011626985427016,
+      "dn": 0.00019408814987381283,
+      "mismatch": 0.020675868447082017,
+      "droop_at": {
+        "0.36": {
+          "up": 0.045130393077422726,
+          "dn": -0.004718415623876204
+        },
+        "0.39": {
+          "up": 0.03612742728538354,
+          "dn": -0.004639232012298766
+        },
+        "0.41": {
+          "up": 0.03169351228540518,
+          "dn": -0.004585640944398062
+        },
+        "0.44": {
+          "up": 0.026540907552909387,
+          "dn": -0.004503918183873745
+        }
+      },
+      "vlo": 0.899674761,
+      "vhi": 1.53193386,
+      "upper_gap_mv": 68.06614000000111,
+      "lower_gap_mv": 509.67476099999976
+    },
+    {
+      "condition": "ff_v1650_t-40",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.30000000000000016,
+      "hi": 1.370000000000001,
+      "up": 0.00019183594406893304,
+      "dn": 0.00020306293481500096,
+      "mismatch": 0.056860079105809196,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02296470493532088,
+          "dn": -0.003854640369289397
+        },
+        "0.39": {
+          "up": 0.018491533205133748,
+          "dn": -0.0036706744561940674
+        },
+        "0.41": {
+          "up": 0.016089145262280224,
+          "dn": -0.003545968587956194
+        },
+        "0.44": {
+          "up": 0.013095554636151863,
+          "dn": -0.003355640955228889
+        }
+      },
+      "vlo": 0.89174078,
+      "vhi": 1.23715577,
+      "upper_gap_mv": 132.844230000001,
+      "lower_gap_mv": 591.7407799999999
+    },
+    {
+      "condition": "ff_v1650_t27",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3300000000000002,
+      "hi": 1.340000000000001,
+      "up": 0.0001907341096199155,
+      "dn": 0.0001988147968064386,
+      "mismatch": 0.04148740788751671,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03061601524755375,
+          "dn": -0.004267213252013402
+        },
+        "0.39": {
+          "up": 0.02471036079008626,
+          "dn": -0.004088700278986002
+        },
+        "0.41": {
+          "up": 0.021642563419142946,
+          "dn": -0.0039675535849788
+        },
+        "0.44": {
+          "up": 0.01790451875521104,
+          "dn": -0.0037823769660227935
+        }
+      },
+      "vlo": 0.895464062,
+      "vhi": 1.23551593,
+      "upper_gap_mv": 104.48407000000093,
+      "lower_gap_mv": 565.4640619999998
+    },
+    {
+      "condition": "ff_v1650_t85",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.320000000000001,
+      "up": 0.0001868162492896301,
+      "dn": 0.00019259859629265717,
+      "mismatch": 0.030480341348546325,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03691951104338742,
+          "dn": -0.004857233466043498
+        },
+        "0.39": {
+          "up": 0.029560024588278333,
+          "dn": -0.004682516244719714
+        },
+        "0.41": {
+          "up": 0.025835516992689822,
+          "dn": -0.004563623497775504
+        },
+        "0.44": {
+          "up": 0.021395574393011763,
+          "dn": -0.004381344512143226
+        }
+      },
+      "vlo": 0.89473521,
+      "vhi": 1.23561976,
+      "upper_gap_mv": 84.38024000000088,
+      "lower_gap_mv": 544.7352099999998
+    },
+    {
+      "condition": "ff_v1800_t-40",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3300000000000002,
+      "hi": 1.5200000000000011,
+      "up": 0.00019683749865569288,
+      "dn": 0.00020492768388141258,
+      "mismatch": 0.040273202245306686,
+      "droop_at": {
+        "0.36": {
+          "up": 0.026583701260395,
+          "dn": -0.0047918538085436335
+        },
+        "0.39": {
+          "up": 0.02227936524461782,
+          "dn": -0.004620672100346335
+        },
+        "0.41": {
+          "up": 0.019928194524386322,
+          "dn": -0.004504810026588757
+        },
+        "0.44": {
+          "up": 0.01694438511291918,
+          "dn": -0.0043282641749973205
+        }
+      },
+      "vlo": 0.893930681,
+      "vhi": 1.38424376,
+      "upper_gap_mv": 135.75624000000118,
+      "lower_gap_mv": 563.9306809999998
+    },
+    {
+      "condition": "ff_v1800_t27",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.490000000000001,
+      "up": 0.00019449238428188484,
+      "dn": 0.00020014726411044176,
+      "mismatch": 0.028658447531025477,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03316729774629468,
+          "dn": -0.005436713316776753
+        },
+        "0.39": {
+          "up": 0.027570186044484912,
+          "dn": -0.005273422425207341
+        },
+        "0.41": {
+          "up": 0.02463046109880096,
+          "dn": -0.005162803833925977
+        },
+        "0.44": {
+          "up": 0.021008172714548357,
+          "dn": -0.004994043893901345
+        }
+      },
+      "vlo": 0.896781312,
+      "vhi": 1.38353205,
+      "upper_gap_mv": 106.4679500000012,
+      "lower_gap_mv": 546.7813119999998
+    },
+    {
+      "condition": "ff_v1800_t85",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.00018981295912656878,
+      "dn": 0.00019370221723115756,
+      "mismatch": 0.02028216010393838,
+      "droop_at": {
+        "0.36": {
+          "up": 0.038660350354361106,
+          "dn": -0.0061157889598317805
+        },
+        "0.39": {
+          "up": 0.03169677476336874,
+          "dn": -0.005957930159956604
+        },
+        "0.41": {
+          "up": 0.028144894667982423,
+          "dn": -0.005850723815851611
+        },
+        "0.44": {
+          "up": 0.02387480694348698,
+          "dn": -0.005686724145952171
+        }
+      },
+      "vlo": 0.896011276,
+      "vhi": 1.38400837,
+      "upper_gap_mv": 85.99163000000098,
+      "lower_gap_mv": 526.0112759999997
+    },
+    {
+      "condition": "ff_v1950_t-40",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.6600000000000013,
+      "up": 0.00020089662386562444,
+      "dn": 0.0002068812684325105,
+      "mismatch": 0.029352471921212257,
+      "droop_at": {
+        "0.36": {
+          "up": 0.0300134296389718,
+          "dn": -0.006824255078695218
+        },
+        "0.39": {
+          "up": 0.02580204095806815,
+          "dn": -0.0066599062613232896
+        },
+        "0.41": {
+          "up": 0.023485437853406954,
+          "dn": -0.006548801214996791
+        },
+        "0.44": {
+          "up": 0.02052461565736352,
+          "dn": -0.006379714902040812
+        }
+      },
+      "vlo": 0.897434799,
+      "vhi": 1.53048294,
+      "upper_gap_mv": 129.5170600000013,
+      "lower_gap_mv": 547.4347989999998
+    },
+    {
+      "condition": "ff_v1950_t27",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00019784914449723844,
+      "dn": 0.00020176709571188963,
+      "mismatch": 0.019608568523645786,
+      "droop_at": {
+        "0.36": {
+          "up": 0.035701733128346125,
+          "dn": -0.007458929785009838
+        },
+        "0.39": {
+          "up": 0.030263668073684635,
+          "dn": -0.0073041543025689215
+        },
+        "0.41": {
+          "up": 0.027391517692583744,
+          "dn": -0.007199446959253786
+        },
+        "0.44": {
+          "up": 0.023833369089150347,
+          "dn": -0.007039938742526841
+        }
+      },
+      "vlo": 0.899889251,
+      "vhi": 1.53036698,
+      "upper_gap_mv": 99.6330200000013,
+      "lower_gap_mv": 529.8892509999997
+    },
+    {
+      "condition": "ff_v1950_t85",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_tt",
+      "lo": 0.3800000000000002,
+      "hi": 1.6100000000000012,
+      "up": 0.00019271504357888612,
+      "dn": 0.00019513739537997243,
+      "mismatch": 0.012491100004882311,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04071183336992146,
+          "dn": -0.008075298443854573
+        },
+        "0.39": {
+          "up": 0.03395590451942254,
+          "dn": -0.00792706253330766
+        },
+        "0.41": {
+          "up": 0.030495039201557717,
+          "dn": -0.007826545214585812
+        },
+        "0.44": {
+          "up": 0.026315809340105467,
+          "dn": -0.007673037515683934
+        }
+      },
+      "vlo": 0.898990438,
+      "vhi": 1.53115421,
+      "upper_gap_mv": 78.84579000000124,
+      "lower_gap_mv": 518.9904379999998
+    },
+    {
+      "condition": "sf_v1650_t-40",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.30000000000000016,
+      "hi": 1.330000000000001,
+      "up": 0.00018329024288240642,
+      "dn": 0.0002023608421884717,
+      "mismatch": 0.09890079423767377,
+      "droop_at": {
+        "0.36": {
+          "up": 0.028250301607352535,
+          "dn": -0.003919181582072717
+        },
+        "0.39": {
+          "up": 0.020452784851529793,
+          "dn": -0.0037373754269285353
+        },
+        "0.41": {
+          "up": 0.016667101648515925,
+          "dn": -0.003614130764922896
+        },
+        "0.44": {
+          "up": 0.012448975142286822,
+          "dn": -0.0034260172916069642
+        }
+      },
+      "vlo": 0.886647503,
+      "vhi": 1.23870962,
+      "upper_gap_mv": 91.2903800000009,
+      "lower_gap_mv": 586.6475029999998
+    },
+    {
+      "condition": "sf_v1650_t27",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3300000000000002,
+      "hi": 1.310000000000001,
+      "up": 0.00018441844076061003,
+      "dn": 0.00019835110187715497,
+      "mismatch": 0.07279921500823361,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03847558011695307,
+          "dn": -0.004412168269081196
+        },
+        "0.39": {
+          "up": 0.028118285487673034,
+          "dn": -0.004236380705029408
+        },
+        "0.41": {
+          "up": 0.023067095333409227,
+          "dn": -0.004117058761207382
+        },
+        "0.44": {
+          "up": 0.017352575821850902,
+          "dn": -0.003934612910449831
+        }
+      },
+      "vlo": 0.891805222,
+      "vhi": 1.23661046,
+      "upper_gap_mv": 73.38954000000086,
+      "lower_gap_mv": 561.8052219999998
+    },
+    {
+      "condition": "sf_v1650_t85",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3500000000000002,
+      "hi": 1.290000000000001,
+      "up": 0.0001820188159656521,
+      "dn": 0.00019234668645554598,
+      "mismatch": 0.05517533225202999,
+      "droop_at": {
+        "0.36": {
+          "up": 0.047975990201713836,
+          "dn": -0.005027450131632749
+        },
+        "0.39": {
+          "up": 0.035502965643823825,
+          "dn": -0.004856478395426134
+        },
+        "0.41": {
+          "up": 0.02943089926685838,
+          "dn": -0.004740184303407835
+        },
+        "0.44": {
+          "up": 0.022590809812357504,
+          "dn": -0.004561905340540795
+        }
+      },
+      "vlo": 0.892223265,
+      "vhi": 1.2363083,
+      "upper_gap_mv": 53.691700000001006,
+      "lower_gap_mv": 542.2232649999999
+    },
+    {
+      "condition": "sf_v1800_t-40",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3300000000000002,
+      "hi": 1.490000000000001,
+      "up": 0.00019194361494068607,
+      "dn": 0.00020451465203894566,
+      "mismatch": 0.06341669802489165,
+      "droop_at": {
+        "0.36": {
+          "up": 0.027356781527287377,
+          "dn": -0.005022852865866234
+        },
+        "0.39": {
+          "up": 0.02089212832302101,
+          "dn": -0.004853063532854973
+        },
+        "0.41": {
+          "up": 0.01762461689348993,
+          "dn": -0.004738138108969947
+        },
+        "0.44": {
+          "up": 0.013768225963366243,
+          "dn": -0.0045630008581214465
+        }
+      },
+      "vlo": 0.890090209,
+      "vhi": 1.38512303,
+      "upper_gap_mv": 104.87697000000118,
+      "lower_gap_mv": 560.0902089999998
+    },
+    {
+      "condition": "sf_v1800_t27",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3500000000000002,
+      "hi": 1.460000000000001,
+      "up": 0.00019059067101069983,
+      "dn": 0.00019996411290575675,
+      "mismatch": 0.04800065077201556,
+      "droop_at": {
+        "0.36": {
+          "up": 0.037899851035117504,
+          "dn": -0.0057171808043654515
+        },
+        "0.39": {
+          "up": 0.02906180979156192,
+          "dn": -0.0055557190584794025
+        },
+        "0.41": {
+          "up": 0.024709433542066894,
+          "dn": -0.005446315640933674
+        },
+        "0.44": {
+          "up": 0.019674741032433052,
+          "dn": -0.005279356127345869
+        }
+      },
+      "vlo": 0.894278271,
+      "vhi": 1.38395898,
+      "upper_gap_mv": 76.04102000000101,
+      "lower_gap_mv": 544.2782709999998
+    },
+    {
+      "condition": "sf_v1800_t85",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3700000000000002,
+      "hi": 1.440000000000001,
+      "up": 0.00018671196883648036,
+      "dn": 0.00019367966635326552,
+      "mismatch": 0.0366343361536305,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04719066057701249,
+          "dn": -0.006372390278508222
+        },
+        "0.39": {
+          "up": 0.03618010212382017,
+          "dn": -0.00621733208783648
+        },
+        "0.41": {
+          "up": 0.030826704660383397,
+          "dn": -0.006112081718988582
+        },
+        "0.44": {
+          "up": 0.02473659362005609,
+          "dn": -0.005951103807668057
+        }
+      },
+      "vlo": 0.894364391,
+      "vhi": 1.38413062,
+      "upper_gap_mv": 55.869380000000966,
+      "lower_gap_mv": 524.3643909999997
+    },
+    {
+      "condition": "sf_v1950_t-40",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3500000000000002,
+      "hi": 1.6400000000000012,
+      "up": 0.00019711622152392984,
+      "dn": 0.0002065391729747547,
+      "mismatch": 0.04668809870621239,
+      "droop_at": {
+        "0.36": {
+          "up": 0.029628864311332825,
+          "dn": -0.007237426990738927
+        },
+        "0.39": {
+          "up": 0.023807469580522822,
+          "dn": -0.007074064356585419
+        },
+        "0.41": {
+          "up": 0.020791023310502643,
+          "dn": -0.006963618940107663
+        },
+        "0.44": {
+          "up": 0.017126746834209228,
+          "dn": -0.006795517134172702
+        }
+      },
+      "vlo": 0.894025683,
+      "vhi": 1.53113069,
+      "upper_gap_mv": 108.86931000000133,
+      "lower_gap_mv": 544.0256829999997
+    },
+    {
+      "condition": "sf_v1950_t27",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3700000000000002,
+      "hi": 1.6100000000000012,
+      "up": 0.0001948502788488956,
+      "dn": 0.00020166031257421455,
+      "mismatch": 0.03434982001805884,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03938938386973101,
+          "dn": -0.0078434629054418
+        },
+        "0.39": {
+          "up": 0.0313693846645009,
+          "dn": -0.007690059372854607
+        },
+        "0.41": {
+          "up": 0.027378100649158688,
+          "dn": -0.007586257725143097
+        },
+        "0.44": {
+          "up": 0.0226916790982844,
+          "dn": -0.007428080547179583
+        }
+      },
+      "vlo": 0.897777686,
+      "vhi": 1.53057348,
+      "upper_gap_mv": 79.42652000000128,
+      "lower_gap_mv": 527.7776859999998
+    },
+    {
+      "condition": "sf_v1950_t85",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_tt.r2",
+      "lo": 0.3800000000000002,
+      "hi": 1.5900000000000012,
+      "up": 0.00019031830655998362,
+      "dn": 0.00019518882629612896,
+      "mismatch": 0.025268117350052893,
+      "droop_at": {
+        "0.36": {
+          "up": 0.048107754903874755,
+          "dn": -0.008386560101701912
+        },
+        "0.39": {
+          "up": 0.03793148582261374,
+          "dn": -0.008240643996323849
+        },
+        "0.41": {
+          "up": 0.03296928898094731,
+          "dn": -0.008141757082656742
+        },
+        "0.44": {
+          "up": 0.02727828105356722,
+          "dn": -0.007990779053679065
+        }
+      },
+      "vlo": 0.897683801,
+      "vhi": 1.53107303,
+      "upper_gap_mv": 58.92697000000125,
+      "lower_gap_mv": 517.6838009999998
+    },
+    {
+      "condition": "fs_v1650_t-40",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.30000000000000016,
+      "hi": 1.370000000000001,
+      "up": 0.00019172302048094822,
+      "dn": 0.00020101625996573236,
+      "mismatch": 0.04732523558231564,
+      "droop_at": {
+        "0.36": {
+          "up": 0.023486510887303358,
+          "dn": -0.001827331073463112
+        },
+        "0.39": {
+          "up": 0.01914594148221238,
+          "dn": -0.001736618014545277
+        },
+        "0.41": {
+          "up": 0.016797164673488685,
+          "dn": -0.0016753300163212526
+        },
+        "0.44": {
+          "up": 0.013847736652260245,
+          "dn": -0.0015820737084104586
+        }
+      },
+      "vlo": 0.892800848,
+      "vhi": 1.23844041,
+      "upper_gap_mv": 131.55959000000107,
+      "lower_gap_mv": 592.8008479999999
+    },
+    {
+      "condition": "fs_v1650_t27",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3300000000000002,
+      "hi": 1.350000000000001,
+      "up": 0.0001906690061956854,
+      "dn": 0.00019709822118521743,
+      "mismatch": 0.033160177217434736,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03017235997137868,
+          "dn": -0.002080771922598146
+        },
+        "0.39": {
+          "up": 0.0246293293481471,
+          "dn": -0.0019887568769325625
+        },
+        "0.41": {
+          "up": 0.021720394795262776,
+          "dn": -0.0019264163270675816
+        },
+        "0.44": {
+          "up": 0.018143395189007427,
+          "dn": -0.0018312564195834824
+        }
+      },
+      "vlo": 0.897276652,
+      "vhi": 1.23627112,
+      "upper_gap_mv": 113.72888000000091,
+      "lower_gap_mv": 567.2766519999998
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "passive": "tt",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.330000000000001,
+      "up": 0.00018678327519772357,
+      "dn": 0.00019115827707656382,
+      "mismatch": 0.023151737894462225,
+      "droop_at": {
+        "0.36": {
+          "up": 0.035497108063245464,
+          "dn": -0.0025225481484028034
+        },
+        "0.39": {
+          "up": 0.028736674635416404,
+          "dn": -0.002428389266408759
+        },
+        "0.41": {
+          "up": 0.02527590218745268,
+          "dn": -0.002364105739273592
+        },
+        "0.44": {
+          "up": 0.021105472894876187,
+          "dn": -0.002265240304252236
+        }
+      },
+      "vlo": 0.897188877,
+      "vhi": 1.23597215,
+      "upper_gap_mv": 94.02785000000091,
+      "lower_gap_mv": 527.1888769999998
+    },
+    {
+      "condition": "fs_v1800_t-40",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3200000000000002,
+      "hi": 1.5200000000000011,
+      "up": 0.0001965092061785155,
+      "dn": 0.00020303286855768965,
+      "mismatch": 0.03265569656703299,
+      "droop_at": {
+        "0.36": {
+          "up": 0.027042388715242005,
+          "dn": -0.0020446546664298904
+        },
+        "0.39": {
+          "up": 0.022842755588674546,
+          "dn": -0.0019646483614583765
+        },
+        "0.41": {
+          "up": 0.020538435735016125,
+          "dn": -0.0019106689349377426
+        },
+        "0.44": {
+          "up": 0.017601112329307167,
+          "dn": -0.0018295300121586866
+        }
+      },
+      "vlo": 0.894718886,
+      "vhi": 1.38578302,
+      "upper_gap_mv": 134.21698000000103,
+      "lower_gap_mv": 574.7188859999999
+    },
+    {
+      "condition": "fs_v1800_t27",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3500000000000002,
+      "hi": 1.490000000000001,
+      "up": 0.00019422569396318273,
+      "dn": 0.00019863155662128498,
+      "mismatch": 0.022429840108830864,
+      "droop_at": {
+        "0.36": {
+          "up": 0.032709476612286736,
+          "dn": -0.0024358010415963527
+        },
+        "0.39": {
+          "up": 0.027403758311918214,
+          "dn": -0.0023569117554682606
+        },
+        "0.41": {
+          "up": 0.024593375993107514,
+          "dn": -0.0023035581905024305
+        },
+        "0.44": {
+          "up": 0.021105516396062063,
+          "dn": -0.002222273913135453
+        }
+      },
+      "vlo": 0.89828798,
+      "vhi": 1.38455328,
+      "upper_gap_mv": 105.44672000000111,
+      "lower_gap_mv": 548.2879799999998
+    },
+    {
+      "condition": "fs_v1800_t85",
+      "passive": "tt",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3800000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.000189637692111408,
+      "dn": 0.00019248001322792925,
+      "mismatch": 0.014876678451720266,
+      "droop_at": {
+        "0.36": {
+          "up": 0.037356171972340424,
+          "dn": -0.003072056117431332
+        },
+        "0.39": {
+          "up": 0.03090309231295596,
+          "dn": -0.0029927628035957277
+        },
+        "0.41": {
+          "up": 0.02757570929080677,
+          "dn": -0.002938701818659517
+        },
+        "0.44": {
+          "up": 0.02353653802500688,
+          "dn": -0.0028557017839072607
+        }
+      },
+      "vlo": 0.89827824,
+      "vhi": 1.38457958,
+      "upper_gap_mv": 85.42042000000106,
+      "lower_gap_mv": 518.2782399999998
+    },
+    {
+      "condition": "fs_v1950_t-40",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3400000000000002,
+      "hi": 1.6600000000000013,
+      "up": 0.0002003955526055631,
+      "dn": 0.00020522168516849248,
+      "mismatch": 0.023796486507398924,
+      "droop_at": {
+        "0.36": {
+          "up": 0.030321548138764864,
+          "dn": -0.002797406718193507
+        },
+        "0.39": {
+          "up": 0.026199389729448463,
+          "dn": -0.002722964667782435
+        },
+        "0.41": {
+          "up": 0.023924336853151873,
+          "dn": -0.002672790928031299
+        },
+        "0.44": {
+          "up": 0.021008246736930247,
+          "dn": -0.002596645138525533
+        }
+      },
+      "vlo": 0.89812796,
+      "vhi": 1.53218878,
+      "upper_gap_mv": 127.81122000000123,
+      "lower_gap_mv": 558.1279599999998
+    },
+    {
+      "condition": "fs_v1950_t27",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.3700000000000002,
+      "hi": 1.6400000000000012,
+      "up": 0.00019744969257331856,
+      "dn": 0.00020045616360208664,
+      "mismatch": 0.01511146911817635,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03519100658256713,
+          "dn": -0.0034961206323778082
+        },
+        "0.39": {
+          "up": 0.03001008477524192,
+          "dn": -0.003424121890523546
+        },
+        "0.41": {
+          "up": 0.027252800427394974,
+          "dn": -0.003375491896696392
+        },
+        "0.44": {
+          "up": 0.023815438974675085,
+          "dn": -0.003301510301885413
+        }
+      },
+      "vlo": 0.901330362,
+      "vhi": 1.5315207,
+      "upper_gap_mv": 108.47930000000127,
+      "lower_gap_mv": 531.3303619999998
+    },
+    {
+      "condition": "fs_v1950_t85",
+      "passive": "tt",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_tt",
+      "lo": 0.39000000000000024,
+      "hi": 1.6200000000000012,
+      "up": 0.00019244351853214418,
+      "dn": 0.00019408761939712464,
+      "mismatch": 0.008506951723414898,
+      "droop_at": {
+        "0.36": {
+          "up": 0.039460977079392556,
+          "dn": -0.004327039588826631
+        },
+        "0.39": {
+          "up": 0.03316717315356943,
+          "dn": -0.00425549344836651
+        },
+        "0.41": {
+          "up": 0.029909081746588462,
+          "dn": -0.00420683620465212
+        },
+        "0.44": {
+          "up": 0.02593928062444195,
+          "dn": -0.0041322341218055225
+        }
+      },
+      "vlo": 0.901226244,
+      "vhi": 1.53183172,
+      "upper_gap_mv": 88.1682800000012,
+      "lower_gap_mv": 511.2262439999997
+    },
+    {
+      "condition": "tt_v1650_t-40",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.29000000000000015,
+      "hi": 1.380000000000001,
+      "up": 0.0001683284984940897,
+      "dn": 0.0001794090938115687,
+      "mismatch": 0.06372963730501273,
+      "droop_at": {
+        "0.36": {
+          "up": 0.020265192869605597,
+          "dn": -0.0027195944154632112
+        },
+        "0.39": {
+          "up": 0.0158354608454645,
+          "dn": -0.0025865378892646618
+        },
+        "0.41": {
+          "up": 0.013494275274095302,
+          "dn": -0.002496581785078833
+        },
+        "0.44": {
+          "up": 0.010633112103773823,
+          "dn": -0.0023596369798206673
+        }
+      },
+      "vlo": 0.888792315,
+      "vhi": 1.23859668,
+      "upper_gap_mv": 141.40332000000112,
+      "lower_gap_mv": 598.7923149999998
+    },
+    {
+      "condition": "tt_v1650_t27",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.350000000000001,
+      "up": 0.00016782535816646413,
+      "dn": 0.00017579866684135602,
+      "mismatch": 0.04640716652283226,
+      "droop_at": {
+        "0.36": {
+          "up": 0.027891127938551863,
+          "dn": -0.00305987758067916
+        },
+        "0.39": {
+          "up": 0.022125897476883205,
+          "dn": -0.0029296999576799987
+        },
+        "0.41": {
+          "up": 0.01914107878322302,
+          "dn": -0.002841532203330166
+        },
+        "0.44": {
+          "up": 0.01552166580823533,
+          "dn": -0.0027070127380564024
+        }
+      },
+      "vlo": 0.892895283,
+      "vhi": 1.23683296,
+      "upper_gap_mv": 113.16704000000088,
+      "lower_gap_mv": 572.8952829999998
+    },
+    {
+      "condition": "tt_v1650_t85",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3500000000000002,
+      "hi": 1.330000000000001,
+      "up": 0.00016470973547447825,
+      "dn": 0.00017041404669110153,
+      "mismatch": 0.03404301049458117,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03438552217677859,
+          "dn": -0.003585404050174379
+        },
+        "0.39": {
+          "up": 0.02734793159893245,
+          "dn": -0.003457374711553607
+        },
+        "0.41": {
+          "up": 0.023780898763670066,
+          "dn": -0.0033704390428350717
+        },
+        "0.44": {
+          "up": 0.01952525823420348,
+          "dn": -0.0032373958121107993
+        }
+      },
+      "vlo": 0.892531411,
+      "vhi": 1.23682231,
+      "upper_gap_mv": 93.17769000000098,
+      "lower_gap_mv": 542.5314109999998
+    },
+    {
+      "condition": "tt_v1800_t-40",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.5200000000000011,
+      "up": 0.00017336171448967307,
+      "dn": 0.00018132628777632132,
+      "mismatch": 0.0449103055968344,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02383661830962791,
+          "dn": -0.0033202701341961127
+        },
+        "0.39": {
+          "up": 0.01961382027971248,
+          "dn": -0.003197530893003897
+        },
+        "0.41": {
+          "up": 0.01731748613870121,
+          "dn": -0.0031146593256308197
+        },
+        "0.44": {
+          "up": 0.014419164944541651,
+          "dn": -0.002988677309519794
+        }
+      },
+      "vlo": 0.891594728,
+      "vhi": 1.38527844,
+      "upper_gap_mv": 134.72156000000112,
+      "lower_gap_mv": 571.5947279999998
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.500000000000001,
+      "up": 0.00017165037360276615,
+      "dn": 0.00017726448110523454,
+      "mismatch": 0.03218038685780065,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03072583437328069,
+          "dn": -0.0039405329570203484
+        },
+        "0.39": {
+          "up": 0.02532324621465387,
+          "dn": -0.003822613134528474
+        },
+        "0.41": {
+          "up": 0.02248318692523188,
+          "dn": -0.0037428772498611096
+        },
+        "0.44": {
+          "up": 0.018983315411513324,
+          "dn": -0.0036214383432446873
+        }
+      },
+      "vlo": 0.894938884,
+      "vhi": 1.38436076,
+      "upper_gap_mv": 115.63924000000102,
+      "lower_gap_mv": 554.9388839999998
+    },
+    {
+      "condition": "tt_v1800_t85",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.00016774459355301934,
+      "dn": 0.0001716424862643934,
+      "mismatch": 0.02297018916259916,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03635499743628656,
+          "dn": -0.004647557387972956
+        },
+        "0.39": {
+          "up": 0.02975786606980979,
+          "dn": -0.004532942005043283
+        },
+        "0.41": {
+          "up": 0.02637894146723807,
+          "dn": -0.004455359410305393
+        },
+        "0.44": {
+          "up": 0.022302362757700034,
+          "dn": -0.004337024709873738
+        }
+      },
+      "vlo": 0.894423146,
+      "vhi": 1.38474289,
+      "upper_gap_mv": 85.25711000000102,
+      "lower_gap_mv": 534.4231459999997
+    },
+    {
+      "condition": "tt_v1950_t-40",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3500000000000002,
+      "hi": 1.6700000000000013,
+      "up": 0.00017721560494888335,
+      "dn": 0.000183235925376207,
+      "mismatch": 0.033404327188700976,
+      "droop_at": {
+        "0.36": {
+          "up": 0.027466332759030432,
+          "dn": -0.004901249204121827
+        },
+        "0.39": {
+          "up": 0.023364253597983664,
+          "dn": -0.004783968611991263
+        },
+        "0.41": {
+          "up": 0.021107991923639324,
+          "dn": -0.0047048626173213925
+        },
+        "0.44": {
+          "up": 0.018226148357465055,
+          "dn": -0.004584734969557358
+        }
+      },
+      "vlo": 0.895348892,
+      "vhi": 1.5313326,
+      "upper_gap_mv": 138.6674000000012,
+      "lower_gap_mv": 545.3488919999998
+    },
+    {
+      "condition": "tt_v1950_t27",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.6400000000000012,
+      "up": 0.0001748528867194383,
+      "dn": 0.00017884141078606305,
+      "mismatch": 0.022553510728075626,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03354417470663562,
+          "dn": -0.005702897271828711
+        },
+        "0.39": {
+          "up": 0.028336816250282837,
+          "dn": -0.005591731479406281
+        },
+        "0.41": {
+          "up": 0.025577690959578292,
+          "dn": -0.005516656832286193
+        },
+        "0.44": {
+          "up": 0.022151104307745695,
+          "dn": -0.0054024715032172654
+        }
+      },
+      "vlo": 0.89830275,
+      "vhi": 1.53100812,
+      "upper_gap_mv": 108.99188000000115,
+      "lower_gap_mv": 538.3027499999998
+    },
+    {
+      "condition": "tt_v1950_t85",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_hh",
+      "lo": 0.3800000000000002,
+      "hi": 1.6200000000000012,
+      "up": 0.000170484863517698,
+      "dn": 0.00017303374201662735,
+      "mismatch": 0.014839827932840444,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03854122151967987,
+          "dn": -0.006436549177332607
+        },
+        "0.39": {
+          "up": 0.03217988562970808,
+          "dn": -0.006329685062431478
+        },
+        "0.41": {
+          "up": 0.0289036922964655,
+          "dn": -0.006257371424216895
+        },
+        "0.44": {
+          "up": 0.024928367912555482,
+          "dn": -0.006147130538352474
+        }
+      },
+      "vlo": 0.897644348,
+      "vhi": 1.53170445,
+      "upper_gap_mv": 88.29555000000111,
+      "lower_gap_mv": 517.6443479999998
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.29000000000000015,
+      "hi": 1.360000000000001,
+      "up": 0.00016455152327162094,
+      "dn": 0.00017802052557135692,
+      "mismatch": 0.07863456662752812,
+      "droop_at": {
+        "0.36": {
+          "up": 0.021594827807259742,
+          "dn": -0.002025066747455284
+        },
+        "0.39": {
+          "up": 0.01605581469287809,
+          "dn": -0.001924550454758922
+        },
+        "0.41": {
+          "up": 0.013284577515732754,
+          "dn": -0.00185665239913968
+        },
+        "0.44": {
+          "up": 0.010086711050753316,
+          "dn": -0.0017533646247214207
+        }
+      },
+      "vlo": 0.886126298,
+      "vhi": 1.24040039,
+      "upper_gap_mv": 119.59961000000096,
+      "lower_gap_mv": 596.1262979999998
+    },
+    {
+      "condition": "ss_v1650_t27",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.340000000000001,
+      "up": 0.00016507104383455895,
+      "dn": 0.000174744551731268,
+      "mismatch": 0.056933866620227834,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02934982051615398,
+          "dn": -0.0022759442976039157
+        },
+        "0.39": {
+          "up": 0.02226657193364534,
+          "dn": -0.002176117861242277
+        },
+        "0.41": {
+          "up": 0.01872324375118184,
+          "dn": -0.0021085264294087303
+        },
+        "0.44": {
+          "up": 0.014573563042168503,
+          "dn": -0.0020054189944587186
+        }
+      },
+      "vlo": 0.891610045,
+      "vhi": 1.23799207,
+      "upper_gap_mv": 102.00793000000097,
+      "lower_gap_mv": 571.6100449999998
+    },
+    {
+      "condition": "ss_v1650_t85",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3500000000000002,
+      "hi": 1.320000000000001,
+      "up": 0.00016263901231061342,
+      "dn": 0.0001696372810996165,
+      "mismatch": 0.04212319041589271,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03626766330310416,
+          "dn": -0.0026904001839012093
+        },
+        "0.39": {
+          "up": 0.027876464108871124,
+          "dn": -0.0025906513696001277
+        },
+        "0.41": {
+          "up": 0.02372151980412307,
+          "dn": -0.002522921975501191
+        },
+        "0.44": {
+          "up": 0.0188869842122531,
+          "dn": -0.002419262600343197
+        }
+      },
+      "vlo": 0.892376824,
+      "vhi": 1.23745793,
+      "upper_gap_mv": 82.54207000000102,
+      "lower_gap_mv": 542.3768239999997
+    },
+    {
+      "condition": "ss_v1800_t-40",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.31000000000000016,
+      "hi": 1.5100000000000011,
+      "up": 0.00017091988042241648,
+      "dn": 0.00018009335374632052,
+      "mismatch": 0.05226853252771787,
+      "droop_at": {
+        "0.36": {
+          "up": 0.023570350185517897,
+          "dn": -0.002350152129094507
+        },
+        "0.39": {
+          "up": 0.018618559921095845,
+          "dn": -0.002259417173316125
+        },
+        "0.41": {
+          "up": 0.016021249157617712,
+          "dn": -0.0021982061068248626
+        },
+        "0.44": {
+          "up": 0.012849291778490368,
+          "dn": -0.0021052215386241357
+        }
+      },
+      "vlo": 0.889289168,
+      "vhi": 1.38693937,
+      "upper_gap_mv": 123.06063000000123,
+      "lower_gap_mv": 579.2891679999999
+    },
+    {
+      "condition": "ss_v1800_t27",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.490000000000001,
+      "up": 0.00016974685257225544,
+      "dn": 0.00017639798801395235,
+      "mismatch": 0.03842978234448325,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03123982161893779,
+          "dn": -0.0028031567250339506
+        },
+        "0.39": {
+          "up": 0.024903583530121343,
+          "dn": -0.002715054914379511
+        },
+        "0.41": {
+          "up": 0.021665888731050575,
+          "dn": -0.002655500873220973
+        },
+        "0.44": {
+          "up": 0.017775987854380948,
+          "dn": -0.002564819061156909
+        }
+      },
+      "vlo": 0.894010461,
+      "vhi": 1.38535575,
+      "upper_gap_mv": 104.64425000000111,
+      "lower_gap_mv": 554.0104609999999
+    },
+    {
+      "condition": "ss_v1800_t85",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3700000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.00016628301785043663,
+      "dn": 0.00017104068630654232,
+      "mismatch": 0.028208325697097365,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03774809225514264,
+          "dn": -0.0034258339372224
+        },
+        "0.39": {
+          "up": 0.030112068627680122,
+          "dn": -0.003339160415556597
+        },
+        "0.41": {
+          "up": 0.026287498966617084,
+          "dn": -0.003280428441882144
+        },
+        "0.44": {
+          "up": 0.021769679563079514,
+          "dn": -0.003190742515144507
+        }
+      },
+      "vlo": 0.89455834,
+      "vhi": 1.38523205,
+      "upper_gap_mv": 84.76795000000115,
+      "lower_gap_mv": 524.5583399999998
+    },
+    {
+      "condition": "ss_v1950_t-40",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.6600000000000013,
+      "up": 0.0001751529028040517,
+      "dn": 0.00018213548290854165,
+      "mismatch": 0.03908652160950343,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02679722273903351,
+          "dn": -0.003356195589883537
+        },
+        "0.39": {
+          "up": 0.02214040724220545,
+          "dn": -0.003270605222348788
+        },
+        "0.41": {
+          "up": 0.019645238306211676,
+          "dn": -0.003212921506061228
+        },
+        "0.44": {
+          "up": 0.016527093727949915,
+          "dn": -0.0031253884358521944
+        }
+      },
+      "vlo": 0.893201605,
+      "vhi": 1.53297005,
+      "upper_gap_mv": 127.02995000000116,
+      "lower_gap_mv": 553.2016049999999
+    },
+    {
+      "condition": "ss_v1950_t27",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00017325670911349115,
+      "dn": 0.00017809435886716228,
+      "mismatch": 0.02753741311489347,
+      "droop_at": {
+        "0.36": {
+          "up": 0.033846334556848934,
+          "dn": -0.004119912053011987
+        },
+        "0.39": {
+          "up": 0.027899559714687494,
+          "dn": -0.00403813022301569
+        },
+        "0.41": {
+          "up": 0.02482355239833489,
+          "dn": -0.003982917102751893
+        },
+        "0.44": {
+          "up": 0.021079675032964706,
+          "dn": -0.0038989603655457117
+        }
+      },
+      "vlo": 0.897528856,
+      "vhi": 1.53196666,
+      "upper_gap_mv": 98.0333400000013,
+      "lower_gap_mv": 537.5288559999998
+    },
+    {
+      "condition": "ss_v1950_t85",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_hh",
+      "lo": 0.3800000000000002,
+      "hi": 1.6100000000000012,
+      "up": 0.000169272031357155,
+      "dn": 0.00017253420836954624,
+      "mismatch": 0.019087872796000323,
+      "droop_at": {
+        "0.36": {
+          "up": 0.039778146185606045,
+          "dn": -0.004881910236344433
+        },
+        "0.39": {
+          "up": 0.032559835303237916,
+          "dn": -0.004802380790636773
+        },
+        "0.41": {
+          "up": 0.028916868287975794,
+          "dn": -0.004748572446373833
+        },
+        "0.44": {
+          "up": 0.024575753844924386,
+          "dn": -0.004666545744821615
+        }
+      },
+      "vlo": 0.897924519,
+      "vhi": 1.53215256,
+      "upper_gap_mv": 77.8474400000011,
+      "lower_gap_mv": 517.9245189999998
+    },
+    {
+      "condition": "ff_v1650_t-40",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.30000000000000016,
+      "hi": 1.390000000000001,
+      "up": 0.00017104605742278194,
+      "dn": 0.0001805650459925797,
+      "mismatch": 0.05414498277975523,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02122478381369375,
+          "dn": -0.003915918052219247
+        },
+        "0.39": {
+          "up": 0.01728147976965344,
+          "dn": -0.003729904293083619
+        },
+        "0.41": {
+          "up": 0.015123183743007362,
+          "dn": -0.003603788742920333
+        },
+        "0.44": {
+          "up": 0.012392783202677005,
+          "dn": -0.00341128033996263
+        }
+      },
+      "vlo": 0.890591619,
+      "vhi": 1.23723507,
+      "upper_gap_mv": 152.7649300000009,
+      "lower_gap_mv": 590.5916189999998
+    },
+    {
+      "condition": "ff_v1650_t27",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.360000000000001,
+      "up": 0.000169937702031553,
+      "dn": 0.00017668585093264747,
+      "mismatch": 0.03893647066615477,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02786086304409552,
+          "dn": -0.004332312563239293
+        },
+        "0.39": {
+          "up": 0.022839991219434808,
+          "dn": -0.004153280311150365
+        },
+        "0.41": {
+          "up": 0.02016996544963734,
+          "dn": -0.004031776257346298
+        },
+        "0.44": {
+          "up": 0.016852681368448308,
+          "dn": -0.00384605073038502
+        }
+      },
+      "vlo": 0.893708744,
+      "vhi": 1.23592454,
+      "upper_gap_mv": 124.07546000000092,
+      "lower_gap_mv": 573.7087439999998
+    },
+    {
+      "condition": "ff_v1650_t85",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.340000000000001,
+      "up": 0.0001663331829703194,
+      "dn": 0.00017107922172271482,
+      "mismatch": 0.0281319755076177,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03310356094140987,
+          "dn": -0.004933364349175795
+        },
+        "0.39": {
+          "up": 0.02699393959584706,
+          "dn": -0.004759045022263209
+        },
+        "0.41": {
+          "up": 0.023826398579610553,
+          "dn": -0.004640425240223456
+        },
+        "0.44": {
+          "up": 0.01996736190594195,
+          "dn": -0.004458573983579628
+        }
+      },
+      "vlo": 0.892544251,
+      "vhi": 1.23627751,
+      "upper_gap_mv": 103.72249000000089,
+      "lower_gap_mv": 552.5442509999998
+    },
+    {
+      "condition": "ff_v1800_t-40",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.5300000000000011,
+      "up": 0.00017531188861216014,
+      "dn": 0.00018230006768594825,
+      "mismatch": 0.039082468864450985,
+      "droop_at": {
+        "0.36": {
+          "up": 0.025055619630408588,
+          "dn": -0.004963011181918331
+        },
+        "0.39": {
+          "up": 0.021209201605317696,
+          "dn": -0.004788421193280712
+        },
+        "0.41": {
+          "up": 0.019071442871201105,
+          "dn": -0.004670226720264958
+        },
+        "0.44": {
+          "up": 0.016321253297685634,
+          "dn": -0.004490090418530546
+        }
+      },
+      "vlo": 0.893031724,
+      "vhi": 1.38407501,
+      "upper_gap_mv": 145.92499000000103,
+      "lower_gap_mv": 573.0317239999998
+    },
+    {
+      "condition": "ff_v1800_t27",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.500000000000001,
+      "up": 0.00017317682632826364,
+      "dn": 0.0001779573484673759,
+      "mismatch": 0.02722903369855432,
+      "droop_at": {
+        "0.36": {
+          "up": 0.030694532992912027,
+          "dn": -0.005631137972013089
+        },
+        "0.39": {
+          "up": 0.025869987116179716,
+          "dn": -0.005465603028445454
+        },
+        "0.41": {
+          "up": 0.02327884836609917,
+          "dn": -0.005353450946415261
+        },
+        "0.44": {
+          "up": 0.02002792857382052,
+          "dn": -0.0051823348621837795
+        }
+      },
+      "vlo": 0.895377962,
+      "vhi": 1.3836402,
+      "upper_gap_mv": 116.35980000000102,
+      "lower_gap_mv": 555.3779619999998
+    },
+    {
+      "condition": "ff_v1800_t85",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.480000000000001,
+      "up": 0.0001689422512731175,
+      "dn": 0.00017214120033790968,
+      "mismatch": 0.018757574134322302,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03518966529026046,
+          "dn": -0.006322046605361287
+        },
+        "0.39": {
+          "up": 0.029337616710626402,
+          "dn": -0.006162584528440096
+        },
+        "0.41": {
+          "up": 0.026270611623898987,
+          "dn": -0.006055419352811731
+        },
+        "0.44": {
+          "up": 0.022520430437736327,
+          "dn": -0.005889732539752002
+        }
+      },
+      "vlo": 0.894147873,
+      "vhi": 1.38436215,
+      "upper_gap_mv": 95.63785000000102,
+      "lower_gap_mv": 534.1478729999998
+    },
+    {
+      "condition": "ff_v1950_t-40",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3500000000000002,
+      "hi": 1.6700000000000013,
+      "up": 0.0001788952829234675,
+      "dn": 0.00018406955561354977,
+      "mismatch": 0.028511151167908946,
+      "droop_at": {
+        "0.36": {
+          "up": 0.028573737941047006,
+          "dn": -0.007168899246651872
+        },
+        "0.39": {
+          "up": 0.02478498104956539,
+          "dn": -0.0070003333490356034
+        },
+        "0.41": {
+          "up": 0.022666636107430582,
+          "dn": -0.006886351031332172
+        },
+        "0.44": {
+          "up": 0.019924667944462238,
+          "dn": -0.006712847577626135
+        }
+      },
+      "vlo": 0.896626416,
+      "vhi": 1.53016128,
+      "upper_gap_mv": 139.8387200000013,
+      "lower_gap_mv": 546.6264159999998
+    },
+    {
+      "condition": "ff_v1950_t27",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.6500000000000012,
+      "up": 0.0001761354243878826,
+      "dn": 0.00017942408479572867,
+      "mismatch": 0.01849850909850265,
+      "droop_at": {
+        "0.36": {
+          "up": 0.033351228949356715,
+          "dn": -0.007804671262526819
+        },
+        "0.39": {
+          "up": 0.028628653511214464,
+          "dn": -0.007646680547677365
+        },
+        "0.41": {
+          "up": 0.02608016692678472,
+          "dn": -0.007539781531230139
+        },
+        "0.44": {
+          "up": 0.0228682991286292,
+          "dn": -0.007376912323800777
+        }
+      },
+      "vlo": 0.89858476,
+      "vhi": 1.53033277,
+      "upper_gap_mv": 119.66723000000124,
+      "lower_gap_mv": 538.5847599999997
+    },
+    {
+      "condition": "ff_v1950_t85",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_hh",
+      "lo": 0.3800000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00017150211686771632,
+      "dn": 0.00017343927344849958,
+      "mismatch": 0.011231801315623038,
+      "droop_at": {
+        "0.36": {
+          "up": 0.037402653626464555,
+          "dn": -0.008421620810909358
+        },
+        "0.39": {
+          "up": 0.03168447800491814,
+          "dn": -0.00827068792301211
+        },
+        "0.41": {
+          "up": 0.028685434787194652,
+          "dn": -0.008168328736521957
+        },
+        "0.44": {
+          "up": 0.024990441557426135,
+          "dn": -0.00801199137683839
+        }
+      },
+      "vlo": 0.897223848,
+      "vhi": 1.5313725,
+      "upper_gap_mv": 98.6275000000012,
+      "lower_gap_mv": 517.2238479999997
+    },
+    {
+      "condition": "sf_v1650_t-40",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.30000000000000016,
+      "hi": 1.350000000000001,
+      "up": 0.00016443260044099627,
+      "dn": 0.00017999531148677524,
+      "mismatch": 0.09036846612502511,
+      "droop_at": {
+        "0.36": {
+          "up": 0.022512668266397307,
+          "dn": -0.003996168547606871
+        },
+        "0.39": {
+          "up": 0.016467667219052462,
+          "dn": -0.003812032233127649
+        },
+        "0.41": {
+          "up": 0.01349615943885829,
+          "dn": -0.0036871870440333687
+        },
+        "0.44": {
+          "up": 0.010140928149052653,
+          "dn": -0.0034966026308123066
+        }
+      },
+      "vlo": 0.885615538,
+      "vhi": 1.23865683,
+      "upper_gap_mv": 111.34317000000094,
+      "lower_gap_mv": 585.6155379999999
+    },
+    {
+      "condition": "sf_v1650_t27",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.330000000000001,
+      "up": 0.00016498802969674783,
+      "dn": 0.00017632723703332417,
+      "mismatch": 0.06644418484534954,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03121181825498598,
+          "dn": -0.004500885241704999
+        },
+        "0.39": {
+          "up": 0.02321177596606372,
+          "dn": -0.0043242747354723665
+        },
+        "0.41": {
+          "up": 0.019261534262369873,
+          "dn": -0.004204390093678789
+        },
+        "0.44": {
+          "up": 0.014707227539386358,
+          "dn": -0.004021082536351139
+        }
+      },
+      "vlo": 0.890178585,
+      "vhi": 1.23688175,
+      "upper_gap_mv": 93.11825000000096,
+      "lower_gap_mv": 570.1785849999999
+    },
+    {
+      "condition": "sf_v1650_t85",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.310000000000001,
+      "up": 0.00016253262145941952,
+      "dn": 0.00017089663216023282,
+      "mismatch": 0.050169627349820056,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03924055060392939,
+          "dn": -0.005119983311839382
+        },
+        "0.39": {
+          "up": 0.029588537760880884,
+          "dn": -0.004949368195537263
+        },
+        "0.41": {
+          "up": 0.024861621968330305,
+          "dn": -0.004833326934554627
+        },
+        "0.44": {
+          "up": 0.019443282566201203,
+          "dn": -0.004655455235424544
+        }
+      },
+      "vlo": 0.890098319,
+      "vhi": 1.23685362,
+      "upper_gap_mv": 73.14638000000096,
+      "lower_gap_mv": 550.0983189999998
+    },
+    {
+      "condition": "sf_v1800_t-40",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.5100000000000011,
+      "up": 0.00017121351068741827,
+      "dn": 0.00018194842037075895,
+      "mismatch": 0.06079313051197635,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02360964617015915,
+          "dn": -0.005224063121430644
+        },
+        "0.39": {
+          "up": 0.01835036737347928,
+          "dn": -0.005050679922909751
+        },
+        "0.41": {
+          "up": 0.015624317618203931,
+          "dn": -0.004933297223284061
+        },
+        "0.44": {
+          "up": 0.012335341135493505,
+          "dn": -0.004754380550972437
+        }
+      },
+      "vlo": 0.88914218,
+      "vhi": 1.38490925,
+      "upper_gap_mv": 125.09075000000114,
+      "lower_gap_mv": 569.1421799999998
+    },
+    {
+      "condition": "sf_v1800_t27",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.480000000000001,
+      "up": 0.00016991942555957647,
+      "dn": 0.00017780972218166833,
+      "mismatch": 0.04538185351067121,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03236379947572132,
+          "dn": -0.0059392524119641354
+        },
+        "0.39": {
+          "up": 0.02537591679597906,
+          "dn": -0.005775370514208955
+        },
+        "0.41": {
+          "up": 0.021852523389016776,
+          "dn": -0.005664315352647442
+        },
+        "0.44": {
+          "up": 0.01767419189885655,
+          "dn": -0.005494820759828434
+        }
+      },
+      "vlo": 0.892844848,
+      "vhi": 1.38402178,
+      "upper_gap_mv": 95.978220000001,
+      "lower_gap_mv": 552.8448479999997
+    },
+    {
+      "condition": "sf_v1800_t85",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.460000000000001,
+      "up": 0.0001663611607985008,
+      "dn": 0.0001721358596891132,
+      "mismatch": 0.03411964384379985,
+      "droop_at": {
+        "0.36": {
+          "up": 0.039989774657092525,
+          "dn": -0.006595812724486727
+        },
+        "0.39": {
+          "up": 0.031379391619185015,
+          "dn": -0.006439253738548256
+        },
+        "0.41": {
+          "up": 0.027122908689212855,
+          "dn": -0.006332984051521162
+        },
+        "0.44": {
+          "up": 0.022165572102747833,
+          "dn": -0.006170449215018303
+        }
+      },
+      "vlo": 0.892469078,
+      "vhi": 1.38444388,
+      "upper_gap_mv": 75.556120000001,
+      "lower_gap_mv": 532.4690779999997
+    },
+    {
+      "condition": "sf_v1950_t-40",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3500000000000002,
+      "hi": 1.6600000000000013,
+      "up": 0.00017564575829764244,
+      "dn": 0.00018377745275509252,
+      "mismatch": 0.04524857720586657,
+      "droop_at": {
+        "0.36": {
+          "up": 0.026668734174900788,
+          "dn": -0.007617227627344514
+        },
+        "0.39": {
+          "up": 0.02178371544504598,
+          "dn": -0.007449508253181802
+        },
+        "0.41": {
+          "up": 0.019187518993801667,
+          "dn": -0.007336091802798483
+        },
+        "0.44": {
+          "up": 0.01596706748649479,
+          "dn": -0.007163431368514939
+        }
+      },
+      "vlo": 0.893153437,
+      "vhi": 1.53077267,
+      "upper_gap_mv": 129.2273300000013,
+      "lower_gap_mv": 543.1534369999998
+    },
+    {
+      "condition": "sf_v1950_t27",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00017357583053637725,
+      "dn": 0.00017933975741091408,
+      "mismatch": 0.03266462050068293,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03472239841086333,
+          "dn": -0.008217206896338425
+        },
+        "0.39": {
+          "up": 0.02825265692692469,
+          "dn": -0.008060468096866558
+        },
+        "0.41": {
+          "up": 0.024946854238714566,
+          "dn": -0.007954394600824921
+        },
+        "0.44": {
+          "up": 0.020967138647325023,
+          "dn": -0.007792735703399556
+        }
+      },
+      "vlo": 0.896421062,
+      "vhi": 1.5305076,
+      "upper_gap_mv": 99.49240000000125,
+      "lower_gap_mv": 536.4210619999999
+    },
+    {
+      "condition": "sf_v1950_t85",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_hh",
+      "lo": 0.3700000000000002,
+      "hi": 1.6100000000000012,
+      "up": 0.00016946775136574552,
+      "dn": 0.00017349600108898088,
+      "mismatch": 0.023490819040808786,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04179290089875609,
+          "dn": -0.008744221343191194
+        },
+        "0.39": {
+          "up": 0.03372908797105012,
+          "dn": -0.008595770589220786
+        },
+        "0.41": {
+          "up": 0.029714753610430078,
+          "dn": -0.008495160521457157
+        },
+        "0.44": {
+          "up": 0.024995619536700264,
+          "dn": -0.008341545860084176
+        }
+      },
+      "vlo": 0.895865248,
+      "vhi": 1.53126521,
+      "upper_gap_mv": 78.73479000000128,
+      "lower_gap_mv": 525.8652479999998
+    },
+    {
+      "condition": "fs_v1650_t-40",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.29000000000000015,
+      "hi": 1.390000000000001,
+      "up": 0.00017093721070549878,
+      "dn": 0.00017874009273161399,
+      "mismatch": 0.04462904483315148,
+      "droop_at": {
+        "0.36": {
+          "up": 0.021864176027504123,
+          "dn": -0.0018043358333832415
+        },
+        "0.39": {
+          "up": 0.018014905588131347,
+          "dn": -0.0017144012425402977
+        },
+        "0.41": {
+          "up": 0.015893332584761,
+          "dn": -0.0016536591912761356
+        },
+        "0.44": {
+          "up": 0.013190065670407036,
+          "dn": -0.0015612670491917946
+        }
+      },
+      "vlo": 0.891671906,
+      "vhi": 1.23858032,
+      "upper_gap_mv": 151.41968000000094,
+      "lower_gap_mv": 601.6719059999999
+    },
+    {
+      "condition": "fs_v1650_t27",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3200000000000002,
+      "hi": 1.360000000000001,
+      "up": 0.00016987266554081888,
+      "dn": 0.00017518954848504608,
+      "mismatch": 0.03081695258483828,
+      "droop_at": {
+        "0.36": {
+          "up": 0.027720539317349857,
+          "dn": -0.0020340510059448924
+        },
+        "0.39": {
+          "up": 0.022953484745523833,
+          "dn": -0.0019440447524272653
+        },
+        "0.41": {
+          "up": 0.020395249992258613,
+          "dn": -0.0018830927858792812
+        },
+        "0.44": {
+          "up": 0.01719171420789012,
+          "dn": -0.0017900981497251944
+        }
+      },
+      "vlo": 0.895556208,
+      "vhi": 1.23672294,
+      "upper_gap_mv": 123.27706000000104,
+      "lower_gap_mv": 575.5562079999999
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "passive": "hh",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3500000000000002,
+      "hi": 1.340000000000001,
+      "up": 0.00016630129276475796,
+      "dn": 0.00016985221225436042,
+      "mismatch": 0.02112677355186589,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03215356854747242,
+          "dn": -0.0024730260880083677
+        },
+        "0.39": {
+          "up": 0.02647224327310127,
+          "dn": -0.0023814817910468022
+        },
+        "0.41": {
+          "up": 0.02349322826334055,
+          "dn": -0.0023189716080529443
+        },
+        "0.44": {
+          "up": 0.019828333781433116,
+          "dn": -0.002222842240827916
+        }
+      },
+      "vlo": 0.895047747,
+      "vhi": 1.23666194,
+      "upper_gap_mv": 103.3380600000009,
+      "lower_gap_mv": 545.0477469999998
+    },
+    {
+      "condition": "fs_v1800_t-40",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.31000000000000016,
+      "hi": 1.5300000000000011,
+      "up": 0.00017500459937009003,
+      "dn": 0.00018060324155137752,
+      "mismatch": 0.0314877319171593,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02558745156118225,
+          "dn": -0.002058199980974784
+        },
+        "0.39": {
+          "up": 0.021821443795694062,
+          "dn": -0.0019776694925988103
+        },
+        "0.41": {
+          "up": 0.019717800001145536,
+          "dn": -0.0019255236088933092
+        },
+        "0.44": {
+          "up": 0.01700398917095214,
+          "dn": -0.0018430163793006216
+        }
+      },
+      "vlo": 0.893863751,
+      "vhi": 1.38566973,
+      "upper_gap_mv": 144.3302700000011,
+      "lower_gap_mv": 583.8637509999999
+    },
+    {
+      "condition": "fs_v1800_t27",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.5100000000000011,
+      "up": 0.00017292944546166208,
+      "dn": 0.00017662845452245078,
+      "mismatch": 0.021163927698139982,
+      "droop_at": {
+        "0.36": {
+          "up": 0.030447471034243723,
+          "dn": -0.0024554825699238947
+        },
+        "0.39": {
+          "up": 0.025837662146414475,
+          "dn": -0.002376809920644929
+        },
+        "0.41": {
+          "up": 0.023342877150319796,
+          "dn": -0.002323620906785173
+        },
+        "0.44": {
+          "up": 0.02019320656505663,
+          "dn": -0.002242617479500719
+        }
+      },
+      "vlo": 0.896954383,
+      "vhi": 1.38469019,
+      "upper_gap_mv": 125.30981000000119,
+      "lower_gap_mv": 556.9543829999998
+    },
+    {
+      "condition": "fs_v1800_t85",
+      "passive": "hh",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3700000000000002,
+      "hi": 1.490000000000001,
+      "up": 0.00016877402623350043,
+      "dn": 0.00017108177698894715,
+      "mismatch": 0.013580764156828094,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03426438259281395,
+          "dn": -0.0031200453954960405
+        },
+        "0.39": {
+          "up": 0.02878319199822099,
+          "dn": -0.0030411491321293838
+        },
+        "0.41": {
+          "up": 0.025890023194792944,
+          "dn": -0.002987343911092788
+        },
+        "0.44": {
+          "up": 0.02230827467375429,
+          "dn": -0.0029047363441565555
+        }
+      },
+      "vlo": 0.896466107,
+      "vhi": 1.3849616,
+      "upper_gap_mv": 105.03840000000109,
+      "lower_gap_mv": 526.4661069999997
+    },
+    {
+      "condition": "fs_v1950_t-40",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3400000000000002,
+      "hi": 1.6800000000000013,
+      "up": 0.00017842700952803634,
+      "dn": 0.00018258440383188152,
+      "mismatch": 0.02303192724657923,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02893241619237452,
+          "dn": -0.0028861904163501872
+        },
+        "0.39": {
+          "up": 0.02521490007351157,
+          "dn": -0.002810574357156259
+        },
+        "0.41": {
+          "up": 0.023130112482725118,
+          "dn": -0.002759619504109301
+        },
+        "0.44": {
+          "up": 0.02042458150293014,
+          "dn": -0.002682305719837297
+        }
+      },
+      "vlo": 0.897361346,
+      "vhi": 1.53193053,
+      "upper_gap_mv": 148.06947000000136,
+      "lower_gap_mv": 557.3613459999998
+    },
+    {
+      "condition": "fs_v1950_t27",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3600000000000002,
+      "hi": 1.6500000000000012,
+      "up": 0.00017576381017994505,
+      "dn": 0.00017826889848515355,
+      "mismatch": 0.014151733689545717,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03301531832998694,
+          "dn": -0.003618531775678502
+        },
+        "0.39": {
+          "up": 0.028485821938754152,
+          "dn": -0.003545899930991414
+        },
+        "0.41": {
+          "up": 0.026024750590458168,
+          "dn": -0.003496855914048247
+        },
+        "0.44": {
+          "up": 0.022906056383631634,
+          "dn": -0.0034222673555908134
+        }
+      },
+      "vlo": 0.900095454,
+      "vhi": 1.53152094,
+      "upper_gap_mv": 118.4790600000012,
+      "lower_gap_mv": 540.0954539999998
+    },
+    {
+      "condition": "fs_v1950_t85",
+      "passive": "hh",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_hh",
+      "lo": 0.3800000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00017124267467731838,
+      "dn": 0.00017251896345012434,
+      "mismatch": 0.007425428734621098,
+      "droop_at": {
+        "0.36": {
+          "up": 0.0364879727190528,
+          "dn": -0.004488305822707206
+        },
+        "0.39": {
+          "up": 0.03110824987184657,
+          "dn": -0.004416234564690313
+        },
+        "0.41": {
+          "up": 0.028259341867779453,
+          "dn": -0.004367135730719118
+        },
+        "0.44": {
+          "up": 0.024721599267167105,
+          "dn": -0.004291853255754541
+        }
+      },
+      "vlo": 0.899507652,
+      "vhi": 1.53208411,
+      "upper_gap_mv": 97.91589000000123,
+      "lower_gap_mv": 519.5076519999998
+    },
+    {
+      "condition": "tt_v1650_t-40",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.31000000000000016,
+      "hi": 1.340000000000001,
+      "up": 0.00021380258634593426,
+      "dn": 0.00023044986521937897,
+      "mismatch": 0.07494513002590492,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02705850829277401,
+          "dn": -0.002714104837749698
+        },
+        "0.39": {
+          "up": 0.020482744700119904,
+          "dn": -0.0025814145496845242
+        },
+        "0.41": {
+          "up": 0.017170838208749095,
+          "dn": -0.00249168037492864
+        },
+        "0.44": {
+          "up": 0.013286222068144116,
+          "dn": -0.0023550256296684946
+        }
+      },
+      "vlo": 0.891208612,
+      "vhi": 1.2384279,
+      "upper_gap_mv": 101.57210000000094,
+      "lower_gap_mv": 581.2086119999999
+    },
+    {
+      "condition": "tt_v1650_t27",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.3400000000000002,
+      "hi": 1.310000000000001,
+      "up": 0.0002137870047739917,
+      "dn": 0.00022603362317000848,
+      "mismatch": 0.05568914970298335,
+      "droop_at": {
+        "0.36": {
+          "up": 0.038079379126652935,
+          "dn": -0.003080853849914744
+        },
+        "0.39": {
+          "up": 0.028944377027442014,
+          "dn": -0.0029479389941000633
+        },
+        "0.41": {
+          "up": 0.024443733667048995,
+          "dn": -0.0028578624391888408
+        },
+        "0.44": {
+          "up": 0.01924760305168105,
+          "dn": -0.002720337498107739
+        }
+      },
+      "vlo": 0.896569267,
+      "vhi": 1.23598946,
+      "upper_gap_mv": 74.01054000000084,
+      "lower_gap_mv": 556.5692669999997
+    },
+    {
+      "condition": "tt_v1650_t85",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.3700000000000002,
+      "hi": 1.290000000000001,
+      "up": 0.00021033771448553123,
+      "dn": 0.00021931483233793986,
+      "mismatch": 0.04178780234763511,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04777665376699003,
+          "dn": -0.003621535557535527
+        },
+        "0.39": {
+          "up": 0.036295107864039444,
+          "dn": -0.0034881021837285253
+        },
+        "0.41": {
+          "up": 0.03069851712924565,
+          "dn": -0.0033974249216384145
+        },
+        "0.44": {
+          "up": 0.024335400591333656,
+          "dn": -0.003258535986301103
+        }
+      },
+      "vlo": 0.897206462,
+      "vhi": 1.23541955,
+      "upper_gap_mv": 54.580450000000894,
+      "lower_gap_mv": 527.2064619999998
+    },
+    {
+      "condition": "tt_v1800_t-40",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.3300000000000002,
+      "hi": 1.490000000000001,
+      "up": 0.00022163181801330048,
+      "dn": 0.00023273937776180104,
+      "mismatch": 0.048892006587488136,
+      "droop_at": {
+        "0.36": {
+          "up": 0.029209051608167558,
+          "dn": -0.0031717870528920056
+        },
+        "0.39": {
+          "up": 0.023305264625184674,
+          "dn": -0.003052435703990719
+        },
+        "0.41": {
+          "up": 0.02024778048903897,
+          "dn": -0.0029718413108315023
+        },
+        "0.44": {
+          "up": 0.016539604639253525,
+          "dn": -0.002849298780867482
+        }
+      },
+      "vlo": 0.893540598,
+      "vhi": 1.38558874,
+      "upper_gap_mv": 104.41126000000112,
+      "lower_gap_mv": 563.5405979999998
+    },
+    {
+      "condition": "tt_v1800_t27",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.3600000000000002,
+      "hi": 1.460000000000001,
+      "up": 0.0002195864147195462,
+      "dn": 0.00022773220415899138,
+      "mismatch": 0.03642052485929301,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03923239763431641,
+          "dn": -0.0037452188897095784
+        },
+        "0.39": {
+          "up": 0.031036005607968487,
+          "dn": -0.0036286176872688536
+        },
+        "0.41": {
+          "up": 0.026952975688882885,
+          "dn": -0.0035497433008544466
+        },
+        "0.44": {
+          "up": 0.02216048059155651,
+          "dn": -0.0034295635587771045
+        }
+      },
+      "vlo": 0.897923789,
+      "vhi": 1.38410793,
+      "upper_gap_mv": 75.89207000000098,
+      "lower_gap_mv": 537.9237889999998
+    },
+    {
+      "condition": "tt_v1800_t85",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.39000000000000024,
+      "hi": 1.440000000000001,
+      "up": 0.0002148118391813126,
+      "dn": 0.00022072862595035785,
+      "mismatch": 0.02716986017479002,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04799012737682662,
+          "dn": -0.0044311842087318976
+        },
+        "0.39": {
+          "up": 0.03753445714562065,
+          "dn": -0.004316230875683891
+        },
+        "0.41": {
+          "up": 0.03242529801176797,
+          "dn": -0.004238286399549374
+        },
+        "0.44": {
+          "up": 0.026563992760710864,
+          "dn": -0.00411919418654394
+        }
+      },
+      "vlo": 0.898426903,
+      "vhi": 1.38395554,
+      "upper_gap_mv": 56.04446000000096,
+      "lower_gap_mv": 508.4269029999998
+    },
+    {
+      "condition": "tt_v1950_t-40",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.3500000000000002,
+      "hi": 1.6400000000000012,
+      "up": 0.0002268500855511523,
+      "dn": 0.00023511363229620358,
+      "mismatch": 0.03577573920115412,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03220830379438555,
+          "dn": -0.004466789923434078
+        },
+        "0.39": {
+          "up": 0.02665451244805017,
+          "dn": -0.004354535786180058
+        },
+        "0.41": {
+          "up": 0.023737137902449246,
+          "dn": -0.004278816642402594
+        },
+        "0.44": {
+          "up": 0.020145078456122456,
+          "dn": -0.004163821360934961
+        }
+      },
+      "vlo": 0.897118991,
+      "vhi": 1.53194715,
+      "upper_gap_mv": 108.05285000000131,
+      "lower_gap_mv": 547.1189909999998
+    },
+    {
+      "condition": "tt_v1950_t27",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.6100000000000012,
+      "up": 0.00022393403072739474,
+      "dn": 0.00022970982863922997,
+      "mismatch": 0.025464018932822626,
+      "droop_at": {
+        "0.36": {
+          "up": 0.041220776281096994,
+          "dn": -0.005223539342573025
+        },
+        "0.39": {
+          "up": 0.033534720843273025,
+          "dn": -0.005115776159587915
+        },
+        "0.41": {
+          "up": 0.02967574002667317,
+          "dn": -0.005042979003486048
+        },
+        "0.44": {
+          "up": 0.025102231931983132,
+          "dn": -0.004932222971238742
+        }
+      },
+      "vlo": 0.901097781,
+      "vhi": 1.53103653,
+      "upper_gap_mv": 78.96347000000125,
+      "lower_gap_mv": 521.0977809999998
+    },
+    {
+      "condition": "tt_v1950_t85",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/tt_ll",
+      "lo": 0.40000000000000024,
+      "hi": 1.5900000000000012,
+      "up": 0.00021852534433147532,
+      "dn": 0.0002224841243273234,
+      "mismatch": 0.01795326530238705,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04924197368486527,
+          "dn": -0.005949809843109
+        },
+        "0.39": {
+          "up": 0.0393703061542352,
+          "dn": -0.005844938855424697
+        },
+        "0.41": {
+          "up": 0.03453161646172809,
+          "dn": -0.005773947343421515
+        },
+        "0.44": {
+          "up": 0.028946308368727913,
+          "dn": -0.005665675662949177
+        }
+      },
+      "vlo": 0.901462051,
+      "vhi": 1.53118488,
+      "upper_gap_mv": 58.81512000000111,
+      "lower_gap_mv": 501.46205099999975
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.31000000000000016,
+      "hi": 1.320000000000001,
+      "up": 0.00020681939658029336,
+      "dn": 0.0002286025933954357,
+      "mismatch": 0.10005556594124507,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03433751404982266,
+          "dn": -0.002081399571840503
+        },
+        "0.39": {
+          "up": 0.024881325743749017,
+          "dn": -0.0019788307140902184
+        },
+        "0.41": {
+          "up": 0.02028330842221593,
+          "dn": -0.0019095003469751237
+        },
+        "0.44": {
+          "up": 0.015145325052787872,
+          "dn": -0.0018036597934179
+        }
+      },
+      "vlo": 0.888437735,
+      "vhi": 1.24028313,
+      "upper_gap_mv": 79.71687000000105,
+      "lower_gap_mv": 578.4377349999999
+    },
+    {
+      "condition": "ss_v1650_t27",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.3500000000000002,
+      "hi": 1.290000000000001,
+      "up": 0.00020881841420547324,
+      "dn": 0.00022454752648057665,
+      "mismatch": 0.0725904405417882,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04519903104408873,
+          "dn": -0.002389331971323516
+        },
+        "0.39": {
+          "up": 0.0330010234700856,
+          "dn": -0.0022843799486551575
+        },
+        "0.41": {
+          "up": 0.027055618883157995,
+          "dn": -0.0022132482918395535
+        },
+        "0.44": {
+          "up": 0.020369053714773266,
+          "dn": -0.002104626080287053
+        }
+      },
+      "vlo": 0.895079274,
+      "vhi": 1.23726331,
+      "upper_gap_mv": 52.73669000000103,
+      "lower_gap_mv": 545.0792739999998
+    },
+    {
+      "condition": "ss_v1650_t85",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.280000000000001,
+      "up": 0.0002066890488779065,
+      "dn": 0.0002181584478837546,
+      "mismatch": 0.053993016756704156,
+      "droop_at": {
+        "0.36": {
+          "up": 0.05506106559968105,
+          "dn": -0.0028454089927378856
+        },
+        "0.39": {
+          "up": 0.04064795155099954,
+          "dn": -0.002737818307396278
+        },
+        "0.41": {
+          "up": 0.03360425820003532,
+          "dn": -0.002664677950651839
+        },
+        "0.44": {
+          "up": 0.025704714473768986,
+          "dn": -0.002552597512971877
+        }
+      },
+      "vlo": 0.896879926,
+      "vhi": 1.23616876,
+      "upper_gap_mv": 43.83124000000094,
+      "lower_gap_mv": 516.8799259999997
+    },
+    {
+      "condition": "ss_v1800_t-40",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.3300000000000002,
+      "hi": 1.480000000000001,
+      "up": 0.00021802501524752953,
+      "dn": 0.0002311468588579676,
+      "mismatch": 0.058426826642115785,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03243458105440655,
+          "dn": -0.002311782334368795
+        },
+        "0.39": {
+          "up": 0.02461411985078321,
+          "dn": -0.002222145704619205
+        },
+        "0.41": {
+          "up": 0.02072920062586403,
+          "dn": -0.0021616469630523216
+        },
+        "0.44": {
+          "up": 0.016211836169603644,
+          "dn": -0.002069695431971441
+        }
+      },
+      "vlo": 0.89123301,
+      "vhi": 1.38723501,
+      "upper_gap_mv": 92.76499000000116,
+      "lower_gap_mv": 561.2330099999998
+    },
+    {
+      "condition": "ss_v1800_t27",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.3600000000000002,
+      "hi": 1.450000000000001,
+      "up": 0.00021674697126980216,
+      "dn": 0.00022656010754345136,
+      "mismatch": 0.04427240954473029,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04380047689360189,
+          "dn": -0.00274941947533458
+        },
+        "0.39": {
+          "up": 0.03327804285676339,
+          "dn": -0.0026605615637642632
+        },
+        "0.41": {
+          "up": 0.02815421555974118,
+          "dn": -0.0026004530188161734
+        },
+        "0.44": {
+          "up": 0.022314852416471798,
+          "dn": -0.0025088550909770913
+        }
+      },
+      "vlo": 0.896921497,
+      "vhi": 1.38513138,
+      "upper_gap_mv": 64.86862000000104,
+      "lower_gap_mv": 536.9214969999998
+    },
+    {
+      "condition": "ss_v1800_t85",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.39000000000000024,
+      "hi": 1.430000000000001,
+      "up": 0.000212607129958306,
+      "dn": 0.0002198775856365187,
+      "mismatch": 0.03362179247520082,
+      "droop_at": {
+        "0.36": {
+          "up": 0.05358145988237584,
+          "dn": -0.003356120347638214
+        },
+        "0.39": {
+          "up": 0.040709148387878646,
+          "dn": -0.003267070504495262
+        },
+        "0.41": {
+          "up": 0.034470236079278904,
+          "dn": -0.003206675806397552
+        },
+        "0.44": {
+          "up": 0.02744887773592375,
+          "dn": -0.0031143655113885504
+        }
+      },
+      "vlo": 0.89848772,
+      "vhi": 1.38448121,
+      "upper_gap_mv": 45.51879000000114,
+      "lower_gap_mv": 508.48771999999974
+    },
+    {
+      "condition": "ss_v1950_t-40",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.3500000000000002,
+      "hi": 1.6300000000000012,
+      "up": 0.00022401747526664727,
+      "dn": 0.00023369525101102568,
+      "mismatch": 0.04228755369369982,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03388888833243531,
+          "dn": -0.003127132286762091
+        },
+        "0.39": {
+          "up": 0.026965235511205554,
+          "dn": -0.0030442239949657335
+        },
+        "0.41": {
+          "up": 0.023457870420054205,
+          "dn": -0.002988327175119876
+        },
+        "0.44": {
+          "up": 0.019277040533448808,
+          "dn": -0.002903469706774686
+        }
+      },
+      "vlo": 0.894989607,
+      "vhi": 1.53355098,
+      "upper_gap_mv": 96.44902000000121,
+      "lower_gap_mv": 544.9896069999998
+    },
+    {
+      "condition": "ss_v1950_t27",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.6000000000000012,
+      "up": 0.0002217048704713266,
+      "dn": 0.00022871207158807342,
+      "mismatch": 0.031114287507518903,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04456657880162762,
+          "dn": -0.0038306742130591598
+        },
+        "0.39": {
+          "up": 0.03505331307004844,
+          "dn": -0.003750218448018483
+        },
+        "0.41": {
+          "up": 0.03039571410158659,
+          "dn": -0.0036958220465337366
+        },
+        "0.44": {
+          "up": 0.025023719680744905,
+          "dn": -0.0036131259205391952
+        }
+      },
+      "vlo": 0.900277712,
+      "vhi": 1.53200035,
+      "upper_gap_mv": 67.9996500000013,
+      "lower_gap_mv": 520.2777119999997
+    },
+    {
+      "condition": "ss_v1950_t85",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ss_ll",
+      "lo": 0.41000000000000025,
+      "hi": 1.5800000000000012,
+      "up": 0.00021680386118207233,
+      "dn": 0.0002217930633559703,
+      "mismatch": 0.0227507394364559,
+      "droop_at": {
+        "0.36": {
+          "up": 0.05385912347238053,
+          "dn": -0.004570989554996796
+        },
+        "0.39": {
+          "up": 0.04195750817200583,
+          "dn": -0.004491614424464441
+        },
+        "0.41": {
+          "up": 0.036197312116460045,
+          "dn": -0.004437872786308139
+        },
+        "0.44": {
+          "up": 0.029680104833047838,
+          "dn": -0.004355886338439419
+        }
+      },
+      "vlo": 0.901696464,
+      "vhi": 1.531645,
+      "upper_gap_mv": 48.355000000001255,
+      "lower_gap_mv": 491.69646399999976
+    },
+    {
+      "condition": "ff_v1650_t-40",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.31000000000000016,
+      "hi": 1.360000000000001,
+      "up": 0.00021826278267047578,
+      "dn": 0.00023198710634796593,
+      "mismatch": 0.060963140745729366,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02568226274659391,
+          "dn": -0.003811257058750517
+        },
+        "0.39": {
+          "up": 0.020363275701644423,
+          "dn": -0.0036285289111164243
+        },
+        "0.41": {
+          "up": 0.017576252095998446,
+          "dn": -0.0035046778483589502
+        },
+        "0.44": {
+          "up": 0.014172661032364697,
+          "dn": -0.0033156741873330287
+        }
+      },
+      "vlo": 0.893098698,
+      "vhi": 1.2370111,
+      "upper_gap_mv": 122.98890000000107,
+      "lower_gap_mv": 583.0986979999998
+    },
+    {
+      "condition": "ff_v1650_t27",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3400000000000002,
+      "hi": 1.320000000000001,
+      "up": 0.00021723916225187376,
+      "dn": 0.00022728812525132664,
+      "mismatch": 0.04521190613919526,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03499881727008025,
+          "dn": -0.004230838493784361
+        },
+        "0.39": {
+          "up": 0.027653472455650974,
+          "dn": -0.0040516091230518025
+        },
+        "0.41": {
+          "up": 0.023942752009347035,
+          "dn": -0.003929970863373322
+        },
+        "0.44": {
+          "up": 0.01953357189805993,
+          "dn": -0.0037440287526508964
+        }
+      },
+      "vlo": 0.897554596,
+      "vhi": 1.23497009,
+      "upper_gap_mv": 85.02991000000092,
+      "lower_gap_mv": 557.5545959999998
+    },
+    {
+      "condition": "ff_v1650_t85",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3700000000000002,
+      "hi": 1.300000000000001,
+      "up": 0.00021297679779304734,
+      "dn": 0.00022029620266769017,
+      "mismatch": 0.03378657274678765,
+      "droop_at": {
+        "0.36": {
+          "up": 0.043016456186411256,
+          "dn": -0.004822987680396906
+        },
+        "0.39": {
+          "up": 0.03357001360847667,
+          "dn": -0.004644431114664727
+        },
+        "0.41": {
+          "up": 0.028952352123284286,
+          "dn": -0.00452412743173225
+        },
+        "0.44": {
+          "up": 0.023587034131087092,
+          "dn": -0.004339653816199052
+        }
+      },
+      "vlo": 0.897316518,
+      "vhi": 1.23478291,
+      "upper_gap_mv": 65.21709000000087,
+      "lower_gap_mv": 527.3165179999997
+    },
+    {
+      "condition": "ff_v1800_t-40",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3300000000000002,
+      "hi": 1.500000000000001,
+      "up": 0.00022438394400039287,
+      "dn": 0.00023400039042128845,
+      "mismatch": 0.04195800640974405,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02891869916934764,
+          "dn": -0.00462841695500571
+        },
+        "0.39": {
+          "up": 0.023900159230451967,
+          "dn": -0.004460296142680065
+        },
+        "0.41": {
+          "up": 0.021221709573969738,
+          "dn": -0.004346528060455546
+        },
+        "0.44": {
+          "up": 0.01788482933962743,
+          "dn": -0.0041732035876875795
+        }
+      },
+      "vlo": 0.894964828,
+      "vhi": 1.38439948,
+      "upper_gap_mv": 115.60052000000121,
+      "lower_gap_mv": 564.9648279999998
+    },
+    {
+      "condition": "ff_v1800_t27",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3600000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.00022178178880501336,
+      "dn": 0.00022866960898101484,
+      "mismatch": 0.030581857265201844,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03701989993598531,
+          "dn": -0.005254347244670887
+        },
+        "0.39": {
+          "up": 0.030182514420958206,
+          "dn": -0.005092714017063793
+        },
+        "0.41": {
+          "up": 0.02669006909646543,
+          "dn": -0.0049832256973518785
+        },
+        "0.44": {
+          "up": 0.02248849380144935,
+          "dn": -0.004816197025387714
+        }
+      },
+      "vlo": 0.898399932,
+      "vhi": 1.38336977,
+      "upper_gap_mv": 86.63023000000103,
+      "lower_gap_mv": 538.3999319999998
+    },
+    {
+      "condition": "ff_v1800_t85",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.450000000000001,
+      "up": 0.00021655373105866922,
+      "dn": 0.00022143090825793707,
+      "mismatch": 0.02227099656681009,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04410304591543379,
+          "dn": -0.005927787616921032
+        },
+        "0.39": {
+          "up": 0.03535429402848911,
+          "dn": -0.005770696530889019
+        },
+        "0.41": {
+          "up": 0.031007247105799163,
+          "dn": -0.005664013232186127
+        },
+        "0.44": {
+          "up": 0.02591493590544991,
+          "dn": -0.005500810712293358
+        }
+      },
+      "vlo": 0.898174852,
+      "vhi": 1.38355651,
+      "upper_gap_mv": 66.44349000000105,
+      "lower_gap_mv": 518.1748519999998
+    },
+    {
+      "condition": "ff_v1950_t-40",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3500000000000002,
+      "hi": 1.6500000000000012,
+      "up": 0.0002290991067414114,
+      "dn": 0.00023618870840358495,
+      "mismatch": 0.030474048240288636,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03217975089301395,
+          "dn": -0.006472285368318786
+        },
+        "0.39": {
+          "up": 0.027319586630612958,
+          "dn": -0.00631204503084537
+        },
+        "0.41": {
+          "up": 0.02470408017392267,
+          "dn": -0.006203741593621359
+        },
+        "0.44": {
+          "up": 0.021418363857578893,
+          "dn": -0.006038953120981461
+        }
+      },
+      "vlo": 0.898363685,
+      "vhi": 1.53080916,
+      "upper_gap_mv": 119.19084000000124,
+      "lower_gap_mv": 548.3636849999998
+    },
+    {
+      "condition": "ff_v1950_t27",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.3700000000000002,
+      "hi": 1.6200000000000012,
+      "up": 0.000225689787707292,
+      "dn": 0.00023048466837425176,
+      "mismatch": 0.02102213573353897,
+      "droop_at": {
+        "0.36": {
+          "up": 0.039305768716797806,
+          "dn": -0.007109962148604154
+        },
+        "0.39": {
+          "up": 0.03273200994775327,
+          "dn": -0.006958132990564581
+        },
+        "0.41": {
+          "up": 0.02935363111931988,
+          "dn": -0.006855431168275583
+        },
+        "0.44": {
+          "up": 0.025263251014332577,
+          "dn": -0.006698993465098946
+        }
+      },
+      "vlo": 0.901388716,
+      "vhi": 1.53036759,
+      "upper_gap_mv": 89.63241000000122,
+      "lower_gap_mv": 531.3887159999998
+    },
+    {
+      "condition": "ff_v1950_t85",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/ff_ll",
+      "lo": 0.40000000000000024,
+      "hi": 1.6000000000000012,
+      "up": 0.00021992855790054394,
+      "dn": 0.00022304146022291294,
+      "mismatch": 0.01405468629933967,
+      "droop_at": {
+        "0.36": {
+          "up": 0.0458374652232324,
+          "dn": -0.007732695999934425
+        },
+        "0.39": {
+          "up": 0.03742371135407618,
+          "dn": -0.0075867099747961575
+        },
+        "0.41": {
+          "up": 0.03322721101661075,
+          "dn": -0.00748772673316811
+        },
+        "0.44": {
+          "up": 0.028287174589855524,
+          "dn": -0.00733657042998459
+        }
+      },
+      "vlo": 0.901037807,
+      "vhi": 1.53085947,
+      "upper_gap_mv": 69.1405300000012,
+      "lower_gap_mv": 501.03780699999976
+    },
+    {
+      "condition": "sf_v1650_t-40",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.31000000000000016,
+      "hi": 1.310000000000001,
+      "up": 0.00020638028359988307,
+      "dn": 0.00023108127024977108,
+      "mismatch": 0.11292871994130572,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03778136172951596,
+          "dn": -0.00385846592078698
+        },
+        "0.39": {
+          "up": 0.02722525348537852,
+          "dn": -0.003678262219128925
+        },
+        "0.41": {
+          "up": 0.022095216990759114,
+          "dn": -0.0035561189695421103
+        },
+        "0.44": {
+          "up": 0.01641419888693585,
+          "dn": -0.0033697047335257135
+        }
+      },
+      "vlo": 0.887775216,
+      "vhi": 1.23876019,
+      "upper_gap_mv": 71.2398100000009,
+      "lower_gap_mv": 577.7752159999998
+    },
+    {
+      "condition": "sf_v1650_t27",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3400000000000002,
+      "hi": 1.280000000000001,
+      "up": 0.00020859184855008653,
+      "dn": 0.00022666145704632913,
+      "mismatch": 0.08303031023041774,
+      "droop_at": {
+        "0.36": {
+          "up": 0.05038450331780875,
+          "dn": -0.0043492695147107074
+        },
+        "0.39": {
+          "up": 0.03643911931238908,
+          "dn": -0.0041731801827280535
+        },
+        "0.41": {
+          "up": 0.029589627796394624,
+          "dn": -0.0040536476527190946
+        },
+        "0.44": {
+          "up": 0.021905074319275353,
+          "dn": -0.003870865298502002
+        }
+      },
+      "vlo": 0.89366654,
+      "vhi": 1.23626373,
+      "upper_gap_mv": 43.73627000000102,
+      "lower_gap_mv": 553.6665399999998
+    },
+    {
+      "condition": "sf_v1650_t85",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3700000000000002,
+      "hi": 1.260000000000001,
+      "up": 0.00020651013202474452,
+      "dn": 0.00021993627840194386,
+      "mismatch": 0.06296756661061155,
+      "droop_at": {
+        "0.36": {
+          "up": 0.061965020803122384,
+          "dn": -0.004970822830131283
+        },
+        "0.39": {
+          "up": 0.0454007134294695,
+          "dn": -0.004797995546460765
+        },
+        "0.41": {
+          "up": 0.03719614653309755,
+          "dn": -0.004680416647059316
+        },
+        "0.44": {
+          "up": 0.0279792736596004,
+          "dn": -0.004500128850782215
+        }
+      },
+      "vlo": 0.894687968,
+      "vhi": 1.23562736,
+      "upper_gap_mv": 24.372640000000835,
+      "lower_gap_mv": 524.6879679999997
+    },
+    {
+      "condition": "sf_v1800_t-40",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3300000000000002,
+      "hi": 1.470000000000001,
+      "up": 0.00021830445579887374,
+      "dn": 0.00023350434648263755,
+      "mismatch": 0.06728461511598934,
+      "droop_at": {
+        "0.36": {
+          "up": 0.0337337905402425,
+          "dn": -0.004827045583035039
+        },
+        "0.39": {
+          "up": 0.025197769196917852,
+          "dn": -0.00466054402663163
+        },
+        "0.41": {
+          "up": 0.02099048210372534,
+          "dn": -0.004547865193624823
+        },
+        "0.44": {
+          "up": 0.016152301544118397,
+          "dn": -0.004376180199948454
+        }
+      },
+      "vlo": 0.891167554,
+      "vhi": 1.38533336,
+      "upper_gap_mv": 84.66664000000112,
+      "lower_gap_mv": 561.1675539999999
+    },
+    {
+      "condition": "sf_v1800_t27",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3600000000000002,
+      "hi": 1.440000000000001,
+      "up": 0.00021691546297801742,
+      "dn": 0.00022843505207890621,
+      "mismatch": 0.05173268565510197,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04718277744477439,
+          "dn": -0.0055043814489255105
+        },
+        "0.39": {
+          "up": 0.03530255526013237,
+          "dn": -0.005344804376226087
+        },
+        "0.41": {
+          "up": 0.029532234631489684,
+          "dn": -0.0052366839648883
+        },
+        "0.44": {
+          "up": 0.02301714838119573,
+          "dn": -0.005071687302218297
+        }
+      },
+      "vlo": 0.895912954,
+      "vhi": 1.38385547,
+      "upper_gap_mv": 56.14453000000097,
+      "lower_gap_mv": 535.9129539999998
+    },
+    {
+      "condition": "sf_v1800_t85",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.420000000000001,
+      "up": 0.00021266987008121654,
+      "dn": 0.00022137944982963563,
+      "mismatch": 0.0401317516184931,
+      "droop_at": {
+        "0.36": {
+          "up": 0.05892234012577391,
+          "dn": -0.006166277713492985
+        },
+        "0.39": {
+          "up": 0.044200115106732496,
+          "dn": -0.0060119642845604115
+        },
+        "0.41": {
+          "up": 0.037032494040371455,
+          "dn": -0.0059072130505613
+        },
+        "0.44": {
+          "up": 0.02901310467795093,
+          "dn": -0.005746985533831683
+        }
+      },
+      "vlo": 0.896542481,
+      "vhi": 1.3837348,
+      "upper_gap_mv": 36.265200000000995,
+      "lower_gap_mv": 516.5424809999997
+    },
+    {
+      "condition": "sf_v1950_t-40",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3600000000000002,
+      "hi": 1.6200000000000012,
+      "up": 0.00022457227038942524,
+      "dn": 0.0002357803383849109,
+      "mismatch": 0.04869340493291238,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03449433532435309,
+          "dn": -0.006846986636469987
+        },
+        "0.39": {
+          "up": 0.02708901388991769,
+          "dn": -0.006687897715647484
+        },
+        "0.41": {
+          "up": 0.02336718744523425,
+          "dn": -0.006580364653919979
+        },
+        "0.44": {
+          "up": 0.01896850247139248,
+          "dn": -0.006416727675047307
+        }
+      },
+      "vlo": 0.89501998,
+      "vhi": 1.53149872,
+      "upper_gap_mv": 88.50128000000113,
+      "lower_gap_mv": 535.0199799999998
+    },
+    {
+      "condition": "sf_v1950_t27",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.3700000000000002,
+      "hi": 1.5900000000000012,
+      "up": 0.00022206650853951793,
+      "dn": 0.00023034605211940014,
+      "mismatch": 0.03660174053445125,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04710173587793498,
+          "dn": -0.007463531330565543
+        },
+        "0.39": {
+          "up": 0.03650420564501555,
+          "dn": -0.007313223460227336
+        },
+        "0.41": {
+          "up": 0.03135010517988601,
+          "dn": -0.007211527275108098
+        },
+        "0.44": {
+          "up": 0.025468592159935244,
+          "dn": -0.0070565714058585804
+        }
+      },
+      "vlo": 0.899325614,
+      "vhi": 1.53061303,
+      "upper_gap_mv": 59.38697000000115,
+      "lower_gap_mv": 529.3256139999997
+    },
+    {
+      "condition": "sf_v1950_t85",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/sf_ll",
+      "lo": 0.39000000000000024,
+      "hi": 1.5700000000000012,
+      "up": 0.00021701115573809692,
+      "dn": 0.00022308233728365488,
+      "mismatch": 0.027590417226450035,
+      "droop_at": {
+        "0.36": {
+          "up": 0.05837089687373476,
+          "dn": -0.008029132543330375
+        },
+        "0.39": {
+          "up": 0.044851337935291835,
+          "dn": -0.00788535754437536
+        },
+        "0.41": {
+          "up": 0.03831129757399243,
+          "dn": -0.007787922293272631
+        },
+        "0.44": {
+          "up": 0.03097747578840615,
+          "dn": -0.007639158933185675
+        }
+      },
+      "vlo": 0.899774707,
+      "vhi": 1.53081364,
+      "upper_gap_mv": 39.18636000000109,
+      "lower_gap_mv": 509.7747069999997
+    },
+    {
+      "condition": "fs_v1650_t-40",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.31000000000000016,
+      "hi": 1.360000000000001,
+      "up": 0.00021813222571866997,
+      "dn": 0.00022963759524288188,
+      "mismatch": 0.051389660426444085,
+      "droop_at": {
+        "0.36": {
+          "up": 0.026000182774081226,
+          "dn": -0.0018722881736616959
+        },
+        "0.39": {
+          "up": 0.020881737016030466,
+          "dn": -0.0017797890869988287
+        },
+        "0.41": {
+          "up": 0.018178454510909936,
+          "dn": -0.0017172680764905301
+        },
+        "0.44": {
+          "up": 0.014849743419856565,
+          "dn": -0.0016220911159314788
+        }
+      },
+      "vlo": 0.894137531,
+      "vhi": 1.23823068,
+      "upper_gap_mv": 121.76932000000096,
+      "lower_gap_mv": 584.1375309999999
+    },
+    {
+      "condition": "fs_v1650_t27",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.3500000000000002,
+      "hi": 1.330000000000001,
+      "up": 0.00021715813903751084,
+      "dn": 0.0002252578925845748,
+      "mismatch": 0.03661600379790403,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03406918610133769,
+          "dn": -0.002164404807605491
+        },
+        "0.39": {
+          "up": 0.027257006204174483,
+          "dn": -0.0020688154435710704
+        },
+        "0.41": {
+          "up": 0.023781470710944386,
+          "dn": -0.002004015795082248
+        },
+        "0.44": {
+          "up": 0.01961069287861128,
+          "dn": -0.0019050405991605235
+        }
+      },
+      "vlo": 0.899329729,
+      "vhi": 1.23567859,
+      "upper_gap_mv": 94.32141000000094,
+      "lower_gap_mv": 549.3297289999998
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "passive": "ll",
+      "supply": 1.65,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.310000000000001,
+      "up": 0.000212924489461804,
+      "dn": 0.00021853896167420804,
+      "mismatch": 0.026025250563502106,
+      "droop_at": {
+        "0.36": {
+          "up": 0.04078421735227988,
+          "dn": -0.002627552373912323
+        },
+        "0.39": {
+          "up": 0.03227769377991985,
+          "dn": -0.0025286299782045774
+        },
+        "0.41": {
+          "up": 0.028037619888824916,
+          "dn": -0.002461107717657507
+        },
+        "0.44": {
+          "up": 0.023059063418699344,
+          "dn": -0.00235724932476411
+        }
+      },
+      "vlo": 0.899703952,
+      "vhi": 1.2351054,
+      "upper_gap_mv": 74.89460000000103,
+      "lower_gap_mv": 519.7039519999997
+    },
+    {
+      "condition": "fs_v1800_t-40",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.3200000000000002,
+      "hi": 1.500000000000001,
+      "up": 0.00022402486495714667,
+      "dn": 0.00023184160867188545,
+      "mismatch": 0.03429400566578962,
+      "droop_at": {
+        "0.36": {
+          "up": 0.02925687995902948,
+          "dn": -0.002043425708833313
+        },
+        "0.39": {
+          "up": 0.024383912636643856,
+          "dn": -0.001963467197189761
+        },
+        "0.41": {
+          "up": 0.021770312154078097,
+          "dn": -0.001909503065144147
+        },
+        "0.44": {
+          "up": 0.018499102772960185,
+          "dn": -0.0018274851121906632
+        }
+      },
+      "vlo": 0.895697934,
+      "vhi": 1.38588299,
+      "upper_gap_mv": 114.11701000000107,
+      "lower_gap_mv": 575.6979339999998
+    },
+    {
+      "condition": "fs_v1800_t27",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.3600000000000002,
+      "hi": 1.480000000000001,
+      "up": 0.0002214858153093138,
+      "dn": 0.00022689726207570575,
+      "mismatch": 0.02413760482644277,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03620322047509783,
+          "dn": -0.0024374762565058106
+        },
+        "0.39": {
+          "up": 0.029788307361760635,
+          "dn": -0.0023572268873446323
+        },
+        "0.41": {
+          "up": 0.026481714844488913,
+          "dn": -0.0023032078207396722
+        },
+        "0.44": {
+          "up": 0.022471206088737317,
+          "dn": -0.0022208714002389662
+        }
+      },
+      "vlo": 0.899824363,
+      "vhi": 1.38436422,
+      "upper_gap_mv": 95.63578000000118,
+      "lower_gap_mv": 539.8243629999998
+    },
+    {
+      "condition": "fs_v1800_t85",
+      "passive": "ll",
+      "supply": 1.8,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.39000000000000024,
+      "hi": 1.460000000000001,
+      "up": 0.0002163682489592229,
+      "dn": 0.00021998140822285565,
+      "mismatch": 0.01656084382862275,
+      "droop_at": {
+        "0.36": {
+          "up": 0.042172384663938356,
+          "dn": -0.003054948727378548
+        },
+        "0.39": {
+          "up": 0.03415832511022188,
+          "dn": -0.002974230399647615
+        },
+        "0.41": {
+          "up": 0.030137495393515845,
+          "dn": -0.0029192177442030065
+        },
+        "0.44": {
+          "up": 0.025366418346444264,
+          "dn": -0.0028357637100229205
+        }
+      },
+      "vlo": 0.900394712,
+      "vhi": 1.38409496,
+      "upper_gap_mv": 75.90504000000098,
+      "lower_gap_mv": 510.39471199999974
+    },
+    {
+      "condition": "fs_v1950_t-40",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.3500000000000002,
+      "hi": 1.6500000000000012,
+      "up": 0.000228554617198293,
+      "dn": 0.00023429865789626435,
+      "mismatch": 0.02482013634579074,
+      "droop_at": {
+        "0.36": {
+          "up": 0.03240617689005221,
+          "dn": -0.0027150803145550295
+        },
+        "0.39": {
+          "up": 0.027664277422651207,
+          "dn": -0.0026415459258914975
+        },
+        "0.41": {
+          "up": 0.025103140762115173,
+          "dn": -0.0025919846782958
+        },
+        "0.44": {
+          "up": 0.021875361129785276,
+          "dn": -0.0025167471257556695
+        }
+      },
+      "vlo": 0.899003625,
+      "vhi": 1.53245042,
+      "upper_gap_mv": 117.54958000000127,
+      "lower_gap_mv": 549.0036249999998
+    },
+    {
+      "condition": "fs_v1950_t27",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.3800000000000002,
+      "hi": 1.6200000000000012,
+      "up": 0.00022525293928533032,
+      "dn": 0.00022896285548167084,
+      "mismatch": 0.016335478594457907,
+      "droop_at": {
+        "0.36": {
+          "up": 0.038504563461013275,
+          "dn": -0.0033849656293585273
+        },
+        "0.39": {
+          "up": 0.032294605801749254,
+          "dn": -0.003313187665269668
+        },
+        "0.41": {
+          "up": 0.029077128739249836,
+          "dn": -0.0032646997828500446
+        },
+        "0.44": {
+          "up": 0.025153491186177157,
+          "dn": -0.003190906346919986
+        }
+      },
+      "vlo": 0.902747764,
+      "vhi": 1.53148802,
+      "upper_gap_mv": 88.51198000000116,
+      "lower_gap_mv": 522.7477639999997
+    },
+    {
+      "condition": "fs_v1950_t85",
+      "passive": "ll",
+      "supply": 1.95,
+      "run": "results/analog/pll/cp/window_steer/20261109T082621.791624Z_9de0d024/fs_ll",
+      "lo": 0.41000000000000025,
+      "hi": 1.6000000000000012,
+      "up": 0.00021964398437919857,
+      "dn": 0.00022181583490768183,
+      "mismatch": 0.009839402969863005,
+      "droop_at": {
+        "0.36": {
+          "up": 0.044037352830583076,
+          "dn": -0.004184638110866112
+        },
+        "0.39": {
+          "up": 0.03628288302177329,
+          "dn": -0.004113231465653344
+        },
+        "0.41": {
+          "up": 0.03237757439945255,
+          "dn": -0.00406462182274403
+        },
+        "0.44": {
+          "up": 0.02773531470107049,
+          "dn": -0.003990068446484418
+        }
+      },
+      "vlo": 0.903232178,
+      "vhi": 1.53149675,
+      "upper_gap_mv": 68.50325000000113,
+      "lower_gap_mv": 493.23217799999975
+    }
+  ],
+  "threshold_component_screens": [
+    {
+      "condition": "tt_v1800_t27",
+      "samples": 105,
+      "k": 3.405649669393925,
+      "vhi_mean": 1.3832708470761905,
+      "vhi_upper_component_screen": 1.4296909478676518,
+      "cp_nominal_hi": 1.480000000000001,
+      "upper_gap_mv": 50.309052132349265,
+      "spec_status": "ungraded"
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "samples": 105,
+      "k": 3.405649669393925,
+      "vhi_mean": 1.2387509513904762,
+      "vhi_upper_component_screen": 1.2887946288071093,
+      "cp_nominal_hi": 1.340000000000001,
+      "upper_gap_mv": 51.205371192891704,
+      "spec_status": "ungraded"
+    },
+    {
+      "condition": "ff_v1950_t85",
+      "samples": 105,
+      "k": 3.405649669393925,
+      "vhi_mean": 1.5305415225904762,
+      "vhi_upper_component_screen": 1.575782374339589,
+      "cp_nominal_hi": 1.6100000000000012,
+      "upper_gap_mv": 34.21762566041231,
+      "spec_status": "ungraded"
+    },
+    {
+      "condition": "sf_v1650_t-40",
+      "samples": 105,
+      "k": 3.405649669393925,
+      "vhi_mean": 1.2370308188476191,
+      "vhi_upper_component_screen": 1.2898650981197872,
+      "cp_nominal_hi": 1.330000000000001,
+      "upper_gap_mv": 40.13490188021373,
+      "spec_status": "ungraded"
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "samples": 105,
+      "k": 3.405649669393925,
+      "vhi_mean": 1.2354429914857141,
+      "vhi_upper_component_screen": 1.2783295940226187,
+      "cp_nominal_hi": 1.330000000000001,
+      "upper_gap_mv": 51.67040597738226,
+      "spec_status": "ungraded"
+    }
+  ],
+  "limitations": [
+    "CP edge is the last sampled point within 5% of each branch's own VDD/2 current; 10 mV grid",
+    "Monitor senses LF z; CP sees ctrl. Ripple, Rz drop and comparator/decision delay are not budgeted here",
+    "MC is monitor-ladder-only at R tt, five points; no paired CP mismatch or yield assertion",
+    "No dynamic switching, startup, noise or hl/lh qualification"
+  ]
+}

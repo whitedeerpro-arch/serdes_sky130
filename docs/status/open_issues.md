@@ -32,7 +32,7 @@ FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完
 | I-09 | VCO r5/4bit工作区135条件可达2GHz，45组三温共同码静态覆盖；五压力点各200 MC样本频率σ0.75–1.12%，快芯片慢端需低至约0.73–0.78V。三温码补点与温度选码模型待统一；已有k4原生闭环三点，hl/lh及动态切码/当前码噪声仍开。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06) | P3 |
 | I-10 | FS/1.65 V/−40 °C 分频首级/第二级 master 尾管平均 VDS − VDSAT 约 −5/−4 mV（r3）；r2 时约 63% 采样点低于饱和判据。功能正常但无裕量；修补困难时考虑减少堆叠的结构。 | [分频器](../design/pll_divider.md) | P3 |
 | I-11 | 1.95 V 条件 CMOS 上冲（FF/FS 冷角峰值约 2.022–2.026 V），15 个 1.95 V 条件都有；器件端电压未核对。r4 接收器最高约 2.049 V（SS/1.95 V/−40 °C）。 | [时钟接收器](../design/clock_receiver.md) | P3 |
-| I-12 | 旧漏端开关CP的135点5%窗口上沿约VDD−0.39V，不能直接转给当前k4转向CP。新CP三压力点各200 MC样本净电荷σ1.7–1.9fC，静态相差上界≤148ps；需核实完整DC窗口与窗口检测门限（含失配尾部）、开关注入及近零电荷。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06)、[PLL 环路](../design/pll_loop.md) | P3 |
+| I-12 | 当前k4转向CP的真实偏置DC135点已完整，5%窗口上沿与实测粗码vhi最小距离24.37mV（SF1.65V85°C ll）；旧CP窗口不再沿用。现有五点门限MC未覆盖最差条件，仍须联合CP/门限失配、ctrl−z纹波及决策延迟；三点CP MC电荷σ1.7–1.9fC和静态相差上界148ps保留。 | [窗口交接](../design/pll_cp_window.md)、[PLL环路](../design/pll_loop.md) | P3 |
 | I-13 | 当前k4已实现poly4.13kΩ、18个1pF MIM（12接VDD/6接地）及双预充门；tt/hh/ll在行为VCO闭环135点锁定、原生三点。仍缺原生全角、LF分接的宽带电源抑制和加载B2建立；不再列为物理LF未实现。 | [PLL 环路](../design/pll_loop.md) | P3 |
 | I-15 | RX 物理 16 UI 降速：读出 deser16（CML 1:2 + CMOS 1:4，45 条件逐位正确）与 `rx_word_map` / `rx_word_align16` 已有，实时联调（TT）中 PI 步进、跨扇区与回卷下 payload 全部正确；PI 步进的 PVT 未做；系统时钟域 FIFO/CDC 未设计。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
 | I-16 | RX数字仍缺综合映射/STA。TX guard已用Yosys0.9与本地OpenSTA2.0.17做局部映射：SS时序不足，驱动增强/缓冲对照未闭合；不是45点或提取后签核。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |
@@ -55,7 +55,7 @@ FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完
 | I-24 | 三个 PLL 前端 SPICE 文件的注释仍引用旧路径 `docs/pll_first_debug.md`（现为 `docs/history/pll_first_debug.md`），v0.1 发布快照中也有同样引用；按约定未改源码。 | `analog/pll/top/spice/clock_frontend_*.spice` | — |
 | I-29 | TX 输出级焊盘/ESD/封装为代理参数；电源、回流、PSRR 未建模；FFE 未实现。 | [TX 输出级](../design/tx_output_driver.md) | P5 |
 | I-30 | RX PI 锚点是理想源，没有接原生 PLL 八相；共享 PLL 能支持多少路 PI 扇出未验证。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
-| I-33 | **读出 ÷2：功能已修复，全链未全覆盖（2026-11-06）。** 根因是保持管 W 80 过大，f_SO 在 hh 热角低于 1 GHz；W 40 后 FS 1.65 V 85 °C hh 输出 76 → 297 mVpp，单元级 45 × hh / ll 最低 281 mVpp。读出全链压力角通过，缺FS 1.65 V −40°C hh（当前W40超时/OP数值失败）、FF 1.95 V −40°C hh（所查W40正式运行缺失；旧五次失败均W80）及其余条件，随 RX 收口做。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05)、[PLL 分频器](../design/pll_divider.md#保持管和自激频率2026-11-06) | P5 |
+| I-33 | **读出 ÷2：功能已修复，全链未全覆盖（2026-11-06）。** 根因是保持管 W 80 过大，f_SO 在 hh 热角低于 1 GHz；W 40 后 FS 1.65 V 85 °C hh 输出 76 → 297 mVpp，单元级 45 × hh / ll 最低 281 mVpp。读出全链压力角通过，缺FS 1.65 V −40°C hh（当前W40超时/OP数值失败）、FF 1.95 V −40°C hh（所查W40正式运行缺失；旧五次失败均W80）及其余条件，FS分层OP已确认偏置/CTLE/PI/采样器可求解，加入完整读出后SPARSE120s未完成，见[分层诊断](../design/rx_cold_convergence.md)。随 RX 收口做。 | [RX PI 与采样](../design/rx_pi_sampler.md#真实偏置--pdk-电阻2026-11-05)、[PLL 分频器](../design/pll_divider.md#保持管和自激频率2026-11-06) | P5 |
 | I-32 | r5/k4已选转向CP 200µA、PDK LF4.13kΩ/18pF，行为VCO闭环135/135、原生预充闭环三点锁定；VCO/CP/分频器已有局部MC。下一步粗码门限与CP窗口交接、补工作区、真实启动链、新环路噪声/电源抑制；原生TX静态两个FF冷数值缺点独立保留。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md)、[恢复记录](../history/clocking_progress_20261106.md) | P3 |
 
 ## 文档整理时发现的冲突（已按最新记录处理）

@@ -608,6 +608,59 @@
   ]
  },
  {
+  "id": "rx_cold_bias_dist_seed_v1",
+  "kind": "numerical_nodeset_initial_guess",
+  "description": "dist_pvt DC voltages as soft guesses only; not RX equivalent or accepted operating point",
+  "upstream": {
+   "module": "bias",
+   "summary": "results/analog/common/bias/dist_pvt/20261103T212249Z/summary.json",
+   "summary_sha256": "1c8308b3ec62cb53660f7c79fe0cd85b3977bcd5c400030b11c582e61b2837a2",
+   "limitation": "historic dist deck used mutable includes without archived cell snapshot"
+  },
+  "nodes": [
+   "bias_vbg",
+   "vgi_bias",
+   "vbias",
+   "vctle"
+  ],
+  "points": {
+   "fs_v1650_t-40": {
+    "seed_v": {
+     "bias_vbg": 1.22656164,
+     "vgi_bias": 0.977050705,
+     "vbias": 1.05157082,
+     "vctle": 0.721796289
+    },
+    "source_tsv": "results/analog/common/bias/dist_pvt/20261103T212249Z/fs_hh/fs_hh_v1650_t-40.tsv",
+    "source_tsv_sha256": "f142c70495cffdaf8f264892c3c24bb70d374dc6bd2bdea791d585ca0fc0084c",
+    "source_deck_sha256": "609397a45ae8479136f41dd2d4d041ea7a8730f7b738d6f196c6650b9f58e80a",
+    "source_execution_sha256": "87556b7e788376b649118c7c1f62ef25eb48508bbcb933ce483b28037b886ca2"
+   },
+   "ff_v1950_t-40": {
+    "seed_v": {
+     "bias_vbg": 1.23673667,
+     "vgi_bias": 1.23626702,
+     "vbias": 0.971271528,
+     "vctle": 0.660090527
+    },
+    "source_tsv": "results/analog/common/bias/dist_pvt/20261103T212249Z/ff_hh/ff_hh_v1950_t-40.tsv",
+    "source_tsv_sha256": "606bf6852e1fc20953ff4a20f23c9d6a864319e2f9624e2a1010d9c51822b2be",
+    "source_deck_sha256": "877e902987d22f8881d418653fac2827f795fdc12464d044834f582afc83c901",
+    "source_execution_sha256": "080c7d2ae4a8b304dcaa79a7c1c18186dab3553607816678b3ca5d1b772a65c7"
+   }
+  },
+  "load": null,
+  "processing": "four top-level .nodeset guesses; never .ic/uic or forced voltage",
+  "validation": {
+   "state": "ungraded",
+   "reason": "source load differs; solve and check actual bias-only and later RX loading"
+  },
+  "valid_while": [
+   "source hashes and condition tags unchanged",
+   "seed is solver aid only"
+  ]
+ },
+ {
   "id": "tx_capture_serializer_word_schedule_20261107T044215Z",
   "kind": "loaded_word_clock_event_schedule",
   "description": "Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.",

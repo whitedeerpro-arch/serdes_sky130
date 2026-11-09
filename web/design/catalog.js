@@ -1644,10 +1644,10 @@ window.DESIGN_CATALOG = {
       "key": "C07",
       "subtitle": "电流匹配 / 合规窗口 / 电荷",
       "state": "转向CP候选闭环验证",
-      "summary": "k4/200µA电流转向结构避免关断镜像漏端向Vctrl分享电荷；五压力点周期抖动上界4.4ps，三个MC点净电荷σ1.7–1.9fC。完整新DC窗口待核。",
+      "summary": "k4转向CP DC135点完整；对实测粗码vhi名义最小距离24.37mV（SF低压热ll），联合失配/纹波仍开。已有三点MC电荷σ1.7–1.9fC和纹波压力测试。",
       "facts": {
         "设计": "k4转向CP，跟随器真实偏置",
-        "PVT": "纹波压力点＋135点分层闭环",
+        "PVT": "当前DC135点＋135点分层闭环",
         "失配": "3点各200样本；σ1.7–1.9fC",
         "噪声": "电流 / 脉宽模型待细化"
       },
@@ -1666,7 +1666,7 @@ window.DESIGN_CATALOG = {
         "question": "增大 Icp 后如何保持电荷、输出余量与参考杂散？",
         "model": "DC 电流下垂窗口、脉冲电荷与实际 VCO plant。",
         "parameters": "Icp、开关与驱动尺寸、电流密度、输出阻抗。",
-        "verification": "当前CP独立DC窗口、控制门限尾部、近零开关电荷和噪声。"
+        "verification": "最差SF低压热ll联合CP/门限MC，保留ctrl−z动态预算；近零开关电荷与噪声。"
       },
       "references": [
         {
@@ -1680,6 +1680,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "电流转向CP",
           "path": "analog/pll/cp/spice/charge_pump_steer.spice"
+        },
+        {
+          "title": "CP窗口与门限交接",
+          "path": "docs/design/pll_cp_window.md"
+        },
+        {
+          "title": "135点DC窗口图",
+          "path": "docs/figures/clocking/pll/charge_pump/cp_steer_control_window.png"
         }
       ],
       "iterations": []
@@ -1864,7 +1872,7 @@ window.DESIGN_CATALOG = {
       "key": "R04",
       "subtitle": "CML 1:2 → 匹配转换 → CMOS 1:4",
       "state": "结构已实现 / 角点迭代",
-      "summary": "先在 CML 域分路降低每路数据率，再匹配数据与时钟转换延迟；物理字寄存器和 Johnson 选通输出32个样本及w。",
+      "summary": "W40读出单元已修复热角；完整读出仍缺冷角与全网格。FS分层OP的偏置/CTLE/PI/采样器均收敛，加入完整读出后SPARSE120s未完成；不是功能失败证明。",
       "facts": {
         "设计": "物理字路径已有",
         "PVT": "旧边界45；W40的FS冷hh数值缺失、FF冷hh未见正式运行",
@@ -1905,6 +1913,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "冷角实际尝试与数值分层",
           "path": "docs/work_packages/deliveries/rx-cold-readout-diagnostic.md"
+        },
+        {
+          "title": "冷角分层诊断",
+          "path": "docs/design/rx_cold_convergence.md"
+        },
+        {
+          "title": "偏置/逐层OP数据",
+          "path": "docs/data/rx_cold_op.json"
         }
       ],
       "iterations": [

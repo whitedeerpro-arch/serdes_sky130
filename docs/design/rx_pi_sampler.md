@@ -13,6 +13,8 @@
 > **冷角范围复核**：FF额外五个历史尝试均为W80；当前W40的FF hh在固定审计及本次扩展中未找到正式运行。FS当前W40 hh有超时/初始OP数值失败，无完整raw；[实际尝试与分层计划](../work_packages/deliveries/rx-cold-readout-diagnostic.md)保留日志、尺寸快照和未定位的历史设置，不把它们记为功能失败。
 > **主要缺口**：当前W40读出全链真实偏置/RC网格未闭合，FS/FF冷hh数值未完成；原生PLL锚点、动态PVT/生产参数CDR、真实失配下完整校准仍缺。失调已有局部MC与修调分析；孔径/亚稳态概率和噪声未闭合。
 
+冷角数值诊断已分层到读出接口：偏置单层FS/FF两种初猜均收敛；FS的CTLE→PI→采样器组合均有OP，加入完整读出后SPARSE 120s未完成。见[分层诊断](rx_cold_convergence.md)，不改变完整W40瞬态的缺失状态。
+
 ## 电路
 
 ![RX采样、读出与控制边界](../figures/system/rx_blocks.png)

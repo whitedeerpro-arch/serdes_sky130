@@ -11,9 +11,9 @@ digraph rx_blocks {
   R03 [label="R03  输入buffer + 四相采样\nac_trim；c2时钟；主尾dtail8\n无读出窗口135；校准MC有条件"];
   subgraph cluster_readout {
     label="R04 物理读出：已经实现；当前W40全网格未闭合"; color="#cbd6de"; fontsize=13;
-    DIV [label="读出时钟 CML ÷2\n保持W40 → 两相1 GHz\n冷角hh两点数值未完成", fillcolor="#fff0d5", color="#ae7d28"];
+    DIV [label="读出时钟 CML ÷2\n保持W40 → 两相1 GHz\nFS冷hh数值缺失；FF当前全链未测", fillcolor="#fff0d5", color="#ae7d28"];
     DEMUX [label="4路采样 → CML 1:2分路\n8路静态CML→CMOS\n匹配数据/时钟转换延迟"];
-    DESER [label="CMOS 1:4 / Johnson字选通\n16数据 + 16边沿 + w≈250 MHz\n旧W80理想边界45；MC未做"];
+    DESER [label="CMOS 1:4 / Johnson字选通\n16数据 + 16边沿 + w≈250 MHz\n旧理想边界45缺单元快照；MC未做"];
     {rank=same; DIV; DEMUX; DESER;}
     DIV -> DEMUX [label="读出时钟"];
     DEMUX -> DESER;

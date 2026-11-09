@@ -1,9 +1,12 @@
 // PLL lock quality without a frequency counter: one measurement every WINDOW reference cycles.
-//   phase_good     : in the whole window the PFD never had UP or DN still high at "reference edge + tau".  The
-//                    analog side samples (UP | DN) with a flop clocked by the reference delayed by tau and hands the
-//                    sampled bit in as pw_late_async (asynchronous to ref_clk: synchronized here).  tau = PFD reset
-//                    width + the static phase offset allowed in lock, so a locked loop never sets it and a loop
-//                    still slewing a phase error sets it every cycle.
+//   phase_good     : in the whole window the PFD's phase-error pulse (UP xor DN, whose width is |phase error|
+//                    without the common reset pulse) never lasted longer than tau_d.  The analog side samples the
+//                    xor pulse with a flop clocked by the same pulse delayed by tau_d and hands the sampled bit in as
+//                    pw_late_async (asynchronous to ref_clk: synchronized here).  Sampling (UP | DN) at "ref + tau"
+//                    instead would need tau above the reset width, which spans 290-746 ps over 45 conditions
+//                    (analog/pll/pfd/tb/reset_pvt): at FF that tau would pass ~600 ps of phase error.  tau_d must
+//                    exceed the locked static offset (bound ~150 ps) at the fastest corner; an inverter-chain tau_d
+//                    of ~250 ps at FF becomes ~600 ps at SS, still far below acquisition errors (ns).
 //   frequency_good : the coarse search is over (coarse_ready) and the Vctrl window detector reported neither hi nor
 //                    lo during the window (hi_async / lo_async synchronized here).  A loop locked inside the window
 //                    is at 2 GHz / 8 with zero frequency error; a code that cannot reach 2 GHz pushes Vctrl past a

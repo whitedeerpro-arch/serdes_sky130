@@ -28,5 +28,17 @@ vvp /tmp/pll_startup.vvp
 verilator --lint-only --top-module pll_startup_supervisor digital/pll/rtl/pll_startup_supervisor.sv
 ```
 
+## 粗码控制
+
+RTL：`rtl/pll_coarse_ctrl.sv`（I-18），例化[公共监测单元](../common/README.md)的`mon_sync`/`mon_persist`。输入为[Vctrl窗口检测](../../analog/pll/coarse/README.md)的异步hi/lo、温度档`tclass`和各档停止门限（梯码+选用哪一侧比较器）；输出VCO粗码与两条门限梯的码。
+上电从码15逐码往快搜，每步等`SETTLE_CYCLES`；停止后梯码回到运行值，若低于vlo则退回一码。运行中hi/lo每`SAMPLE_DIV`周期采样、连续`PERSIST`次才切相邻码，切后`HOLD_CYCLES`内不再判；码0仍越上沿给`fast_end`，码15低于下沿给`slow_end`（快芯片的正常状态）。
+搜索须在环路闭合、CP开启时进行（监督器ACQUIRE内）；搜索期间由上层屏蔽送监督器的`quality_valid`，并把ACQUIRE超时设得大于最坏搜索（18×SETTLE_CYCLES）。
+
+```sh
+iverilog -g2012 -s tb_pll_coarse_ctrl -o /tmp/coarse.vvp digital/common/rtl/mon_sync.sv digital/common/rtl/mon_persist.sv digital/pll/rtl/pll_coarse_ctrl.sv digital/pll/tb/tb_pll_coarse_ctrl.sv && vvp /tmp/coarse.vvp
+```
+
+`tb_pll_coarse_ctrl`对行为环路（每码锁定Vctrl随温度线性漂移、z一阶跟随300 ns、比较器±2 mV噪声）检查：三档温度×四种芯片偏移的上电码与独立实现的规则一致（门限±3 mV内两码都算对）；错档上电后−40→85→−40 °C扫描，升温往快码、降温往慢码，共3次切码，无两次间隔小于HOLD；码15下沿保持与码0上沿标志。
+
 Icarus行为检查、Verilator lint、Yosys通用综合检查不等于SKY130映射后的时序/CDC验证。
 模拟电路、结果、接口边界和其他模型接手的测试模板见[启动优化](../../docs/history/pll_startup_optimization.md)。

@@ -98,15 +98,21 @@ def target(t0, vlo, vhi):
     return (vlo + vhi) / 2
 
 
-def run_profile(codes, profile, vlo, vhi, margin, chip=None):
-    """Walk a temperature profile; returns (ok, switches, events, visited Kvco, reason)."""
+def run_profile(codes, profile, vlo, vhi, margin, chip=None, pick=None):
+    """Walk a temperature profile; returns (ok, switches, events, visited Kvco, reason).  pick(cur, t0, vlo, vhi) -> start
+    code or None overrides the power-up selection (default: the code nearest target())."""
     sl = slopes(codes)
     cur = {k: curve(p, sl, (chip, k)) for k, p in codes.items()}
     t0 = profile[0]
-    start = [(abs(cur[k](t0)[0] - target(t0, vlo, vhi)), k) for k in cur if cur[k] and vlo <= cur[k](t0)[0] <= vhi]
-    if not start:
-        return False, 0, [], [], f"no code inside the band at {t0} C"
-    k = min(start)[1]
+    if pick is not None:
+        k = pick(cur, t0, vlo, vhi)
+        if k is None:
+            return False, 0, [], [], f"power-up selection found no code at {t0} C"
+    else:
+        start = [(abs(cur[k](t0)[0] - target(t0, vlo, vhi)), k) for k in cur if cur[k] and vlo <= cur[k](t0)[0] <= vhi]
+        if not start:
+            return False, 0, [], [], f"no code inside the band at {t0} C"
+        k = min(start)[1]
     events, kv = [], []
     for t in profile:
         v, kk = cur[k](t)

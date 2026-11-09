@@ -176,6 +176,24 @@ def _signature(deck_text: str, files: dict) -> dict:
                 pdk=project.pdk_installation_id(), ngspice=project.ngspice())
 
 
+def completed(jobs) -> list[Path | None]:
+    """Analysis without running: per job the newest complete attempt (the base directory or a .rN retry made by
+    run_many after an interruption) whose deck is the job's deck; None where no attempt is complete.  Reading the base
+    directory alone would take a truncated chunk and miss its retry.  Attempts the manifest lists as unverified are
+    skipped, as in run_many."""
+    out = []
+    for text, base, _ in jobs:
+        base = Path(base)
+        manifest = base.parent / (base.name + ".inputs.json")
+        excluded = json.loads(manifest.read_text()).get("unverified_attempts", []) if manifest.exists() else []
+        attempts = [base] + sorted((p for p in base.parent.glob(base.name + ".r*")
+                                   if p.is_dir() and p.name.rsplit(".r", 1)[-1].isdigit()),
+                                  key=lambda p: int(p.name.rsplit(".r", 1)[-1]))
+        out.append(next((p for p in reversed(attempts) if p.exists() and p.name not in excluded and complete(p, text)
+                         and (p / "tb.cir").read_text() == text), None))
+    return out
+
+
 def run_many(jobs, *, workers: int = 4) -> list[Path]:
     """Resume MC by whole chunk, retaining its seed/order and all previous attempts.
 

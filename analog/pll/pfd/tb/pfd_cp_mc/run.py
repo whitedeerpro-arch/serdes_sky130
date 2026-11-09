@@ -5,10 +5,12 @@
 
 Per sample one transient: three warm-up periods at zero phase, then one 4 ns period at each phase of PHASES (fb edge
 minus ref edge; > 0 = ref leads = net UP).  Net charge per period = integral of i(Vout) over [edge - 0.5 ns, edge + 3.5 ns]
-with the CP output held at Vctrl (Vout).  Reported per point: dead-zone check (the charge rises monotonically and no
-local slope falls below half the sample's median slope; the zero-charge point is offset by mismatch, so the sign at
-+-2 ps is no test), the zero-charge phase (static offset of the loop), the charge gain near zero,
-and the UP / DN pulse widths in the zero-phase period (the PFD reset width; the lock detector's tau needs it).
+with the CP output held at Vctrl (Vout).  Reported per point: dead-zone check (gain over +-5 ps against gain over
++-40 ps, and the largest deviation from the sample's straight-line fit, in ps of phase; the integration noise is
+~0.2 fC = 1 ps per point, so 2 ps local slopes and strict monotonicity are noise tests, kept only as counts), the
+zero-charge phase (static offset of the loop: interpolated where the charge changes sign inside PHASES, otherwise
+extrapolated along the sample's straight-line fit; the count of extrapolated samples is reported), the charge gain
+near zero, and the UP / DN pulse widths in the zero-phase period (the PFD reset width; the lock detector's tau needs it).
 Library section <process>_mm (local mismatch only).  Memory: chunk 8 (bias + CP + PFD, ~140 MB per sample assumed).
 """
 import argparse
@@ -83,14 +85,22 @@ def summarize(rows):
     # itself is offset by mismatch, so the sign at +-2 ps is not the test)
     slope = np.diff(q, axis=1) / np.diff(ph)
     ok_sign = np.all(slope >= 0.5 * np.median(slope, axis=1, keepdims=True), axis=1)
-    zero = []
+    zero, extrap, resid = [], 0, []
     for row in q:
+        a, b = np.polyfit(ph, row, 1)
+        resid.append(np.abs(row - (a * ph + b)).max() / a)            # s of phase
         s = np.where(np.diff(np.sign(row)) > 0)[0]
-        zero.append(np.interp(0.0, row[s[0]:s[0] + 2], ph[s[0]:s[0] + 2]) if len(s) else np.nan)
+        if len(s):
+            zero.append(np.interp(0.0, row[s[0]:s[0] + 2], ph[s[0]:s[0] + 2]))
+        else:
+            zero.append(-b / a)
+            extrap += 1
     zero = np.array(zero)
     i5, j5 = PHASES.index(-5e-12), PHASES.index(5e-12)
     gain = (q[:, j5] - q[:, i5]) / 10e-12                 # A (charge per period per second of phase)
+    gout = (q[:, -1] - q[:, 0]) / (ph[-1] - ph[0])
     return dict(n=len(rows), sign_ok=int(ok_sign.sum()), monotonic=int(mono.sum()), zero_phase=zero, gain=gain,
+                zero_extrapolated=extrap, gain_ratio=gain / gout, line_resid_s=np.array(resid),
                 upw=np.array([r["upw"] for r in rows], float), dnw=np.array([r["dnw"] for r in rows], float), q=q)
 
 
@@ -117,7 +127,9 @@ def main():
                          dict(timeout_s=900 + 120 * n, meta=dict(point=spec, samples=n, seed=s))))
             owners.append(cond)
     if a.analyse:
-        dirs = [j[1] for j in jobs if (j[1] / mc.MC_FILE).exists()]
+        dirs = [d for d in mc.completed(jobs) if d is not None]
+        if len(dirs) < len(jobs):
+            print(f"{len(jobs) - len(dirs)} of {len(jobs)} chunks without a complete attempt (not analysed)")
     else:
         dirs = mc.run_many(jobs, workers=a.workers)
     out = {}
@@ -132,12 +144,17 @@ def main():
         z = s["zero_phase"][np.isfinite(s["zero_phase"])]
         out[spec] = dict(samples=s["n"], k=kf, no_flat_stretch=s["sign_ok"], monotonic=s["monotonic"],
                          zero_phase_mean_s=float(z.mean()), zero_phase_sd_s=float(z.std(ddof=1)), zero_phase_bound_s=float(abs(z.mean()) + kf * z.std(ddof=1)),
+                         zero_phase_extrapolated=s["zero_extrapolated"], zero_phase_range_s=[float(z.min()), float(z.max())],
+                         gain_ratio_5_40=[float(s["gain_ratio"].min()), float(s["gain_ratio"].max())],
+                         line_resid_max_s=float(s["line_resid_s"].max()),
                          gain_mean_a=float(s["gain"].mean()), gain_min_a=float(s["gain"].min()),
                          upw_s=[float(s["upw"].min()), float(s["upw"].max())], dnw_s=[float(s["dnw"].min()), float(s["dnw"].max())],
                          q_mean_fc=[float(x) for x in s["q"].mean(axis=0) * 1e15])
         o = out[spec]
-        print(f"  {spec:20s} n {s['n']:3d} | no flat stretch {s['sign_ok']}/{s['n']}, monotonic {s['monotonic']}/{s['n']} | "
-              f"zero phase {o['zero_phase_mean_s'] * 1e12:+.1f} / sd {o['zero_phase_sd_s'] * 1e12:.1f} / bound {o['zero_phase_bound_s'] * 1e12:.1f} ps | "
+        print(f"  {spec:20s} n {s['n']:3d} | gain(+-5)/gain(+-40) {o['gain_ratio_5_40'][0]:.2f}..{o['gain_ratio_5_40'][1]:.2f}, "
+              f"line residual <= {o['line_resid_max_s'] * 1e12:.1f} ps (2 ps slopes ok {s['sign_ok']}, monotonic {s['monotonic']}) | "
+              f"zero phase {o['zero_phase_mean_s'] * 1e12:+.1f} / sd {o['zero_phase_sd_s'] * 1e12:.1f} / bound {o['zero_phase_bound_s'] * 1e12:.1f} ps "
+              f"({o['zero_phase_extrapolated']} extrapolated) | "
               f"gain {o['gain_mean_a'] * 1e6:.0f} uA (min {o['gain_min_a'] * 1e6:.0f}) | UP / DN width {o['upw_s'][0] * 1e12:.0f}-{o['upw_s'][1] * 1e12:.0f} / "
               f"{o['dnw_s'][0] * 1e12:.0f}-{o['dnw_s'][1] * 1e12:.0f} ps", flush=True)
     (camp / "summary.json").write_text(json.dumps(dict(args=vars(a), phases=PHASES, cp=CP_PARAMS, points=out), indent=1))

@@ -79,3 +79,16 @@ def test_short_rows_and_legacy_not_reused(tmp_path):
 def test_bad_chunk_sizes(samples, per):
     with pytest.raises(ValueError):
         mc.chunks(samples, 1, per)
+
+
+def test_completed_takes_the_retry_of_a_truncated_chunk(tmp_path):
+    deck = mc.deck(NET, 2, lets={"voltage": "v(out)"})
+    base = tmp_path / "chunk"
+    assert mc.completed([(deck, base, {})]) == [None]
+    first = mc.run_many([(deck, base, {})], workers=1)[0]
+    assert mc.completed([(deck, base, {})]) == [first]
+    lines = (first / "mc.tsv").read_text().splitlines()
+    (first / "mc.tsv").write_text("\n".join(lines[:2]) + "\n")      # interrupted: one row left
+    retry = mc.run_many([(deck, base, {})], workers=1)[0]
+    assert retry.name == "chunk.r2"
+    assert mc.completed([(deck, base, {})]) == [retry]

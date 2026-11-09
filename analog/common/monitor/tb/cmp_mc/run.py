@@ -75,10 +75,11 @@ def main():
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--cmp-params", default="")
     ap.add_argument("--cell", default="serdes_cmp", help="serdes_cmp or serdes_cmp_hv")
+    ap.add_argument("--resume", help="campaign to continue (mc.run_many resumes by chunk identity)")
     a = ap.parse_args()
     cms = [float(x) for x in a.cms.split(",")]
     lets = {f"off{i}": offset_expr(i) for i, cm in enumerate(cms)}
-    camp = RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    camp = (ROOT / a.resume) if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     jobs, owners = [], []
     for p in a.points.split(","):
         c = Condition.parse(p)

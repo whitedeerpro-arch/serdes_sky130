@@ -8,8 +8,9 @@ Network at the tone frequency (VDD = 1, small signal): node z carries Ci split i
 to ground; Rz joins z to the control node, whose own capacitance Cp (VCO input, CP output, precharge gate) has the part
 Cpv referenced to VDD.  vctrl / vdd = H(alpha, Cp, Cpv), and the VCO's frequency moves by K = K_gnd + H (K_vdd - K_gnd),
 with K_gnd / K_vdd the ideal-control variants of analog/pll/vco/tb/psrr_lf (control fixed / carrying the tone).
-Per stress point Cp and Cpv are fitted to the lf runs of the base campaigns (gnd, vdd and the 12 / 6 filter; rows of
-several campaigns are merged) and of every --other campaign (its alpha given); Rz and Ci are the nominal values times the RC section and temperature factors of
+Per point Cp and Cpv are fitted to the lf runs of the base campaigns (gnd, vdd and the 12 / 6 filter; rows of several
+campaigns are merged) and of every --other campaign (its alpha given); a point needs gnd, vdd and at least one lf run
+(one split determines Cp and Cpv exactly, more give a residual); Rz and Ci are the nominal values times the RC section and temperature factors of
 docs/design/pll_loop.md.  Printed: the fit (and its residual), then |K| per point for every split n / --units and
 added control-to-ground capacitor dC.  dC is a loop-filter Cf: its phase-margin cost comes from loop_design.py
 --evaluate with --c-extra.  Points without gnd / vdd runs (FF cold failed at the first step) are left out.
@@ -54,15 +55,17 @@ def fit(base, others, f):
     tag = f"{f / 1e6:g}M"
     out = {}
     for key in sorted(k[: -len(f":gnd_{tag}")] for k in base if k.endswith(f":gnd_{tag}")):
-        if f"{key}:vdd_{tag}" not in base or f"{key}:lf_{tag}" not in base:
+        if f"{key}:vdd_{tag}" not in base:
             continue
         cond, rc = key.split(":")
         t = int(cond.split("_t")[1])
         rz, ci = RZ * R_RC[rc] * R_T[t], CI * C_RC[rc]
         kg = k_of(base[f"{key}:gnd_{tag}"])
         kl = k_of(base[f"{key}:vdd_{tag}"]) - kg
-        meas = [(ALPHA0, (k_of(base[f"{key}:lf_{tag}"]) - kg) / kl)]
+        meas = [(ALPHA0, (k_of(base[f"{key}:lf_{tag}"]) - kg) / kl)] if f"{key}:lf_{tag}" in base else []
         meas += [(a, (k_of(rows[f"{key}:lf_{tag}"]) - kg) / kl) for rows, a in others if f"{key}:lf_{tag}" in rows]
+        if not meas:
+            continue
 
         def res(x):
             e = [transfer(f, a, x[0] * 1e-12, x[1] * 1e-12, rz, ci) - h for a, h in meas]

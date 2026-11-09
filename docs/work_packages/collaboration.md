@@ -1,0 +1,46 @@
+# Claude / Codex 协作约定
+
+所有者让两个 agent 在同一工作区并行推进（2026-11-09 起）。本页记分工、仿真名额、文件范围和状态，两边开工前先读，完成一项在末尾追加一行。设计判断和合入仍按[工作包说明](README.md)：各自负责自己范围的结论，跨范围的改动先在这里写明再动手。
+
+## 分工
+
+| 线 | 负责 | 主要文件 |
+|---|---|---|
+| PLL 粗码窗口、上门限 H3/H4、上电停止门限、切码动态预算 | Codex | `docs/design/pll_coarse_windows.md`、`pll_cp_window.md`、`verification/analysis/vco_recode_evidence.py`、`analog/pll/coarse/tb/*`、`digital/pll/rtl/pll_coarse_ctrl.sv` 的参数默认值 |
+| RX 冷角收敛与读出复核 | Codex | `docs/design/rx_cold_convergence.md`、`rx_pi_sampler.md`、`verification/plotting/rx_cold_readout.py` |
+| WP-007 四位 VCO ISF pilot | Codex | `analog/pll/vco/tb/phase_noise/isf_4b_pilot.py`、`docs/work_packages/WP-007*` |
+| 监测工具包（比较器、门限梯、温度感测、mon_* RTL） | Claude | `analog/common/monitor/`、`digital/common/`、`docs/design/monitor.md` |
+| PLL 第 7 步：电源抑制（LF 实际 12/6 MIM 分接）与噪声复核 | Claude | `analog/pll/*/tb/psrr*`、`docs/design/pll_loop.md` 相应小节 |
+| PLL 失配收尾：PFD、反馈接收器 MC | Claude | `analog/pll/pfd/tb/mc/`、`analog/pll/top/tb/*mc*` |
+| 启动链顶层 RTL（监督器 + 粗码 + 窗口门控 + 相位锁定检测） | Claude | `digital/pll/rtl/pll_control_top.sv`（新）、`digital/pll/tb/` 对应测试 |
+
+共享文件（`docs/status/open_issues.md`、`docs/overview/development_map.md`、`docs/status/changelog.md`、`config/pll_working_revision.toml`、`config/design_catalog.json`、`web/design/catalog.js`）：只做小段、定位明确的编辑，改前重读，改完尽快提交。
+
+## 仿真名额
+
+全机 ngspice 不超过 4 个：**Codex 2 个，Claude 2 个**。开跑前 `pgrep -x ngspice | wc -l`；对方未用满时可临时借用，但要在本页记一行并在对方开工前还回。MC 块大小按 [MC 内存预算](../verification/statistics.md#执行续跑与成本)实测增长定（带隙+门限梯类约 140 MB/样本，默认 8 样本/块）。
+
+## 提交规矩
+
+- 只 `git add` 自己的路径，提交前看 `git diff --cached --stat`；不 `git add -A`，不 reset / stash / checkout 对方的文件，不改写对方的提交。
+- 工作区里对方未提交的改动视为对方的进行中工作：不替对方提交，不覆盖。
+- 2026-11-09 22:40 时 Codex 留下的未提交改动（额度用尽时的进行中工作）：`README.md`、`config/design_catalog.json`、`config/pll_working_revision.toml`、`config/rx_working_revision.toml`、`config/work_packages.json`、`docs/design/pll_coarse_windows.md`、`docs/design/rx_cold_convergence.md`、`docs/design/rx_pi_sampler.md`、`docs/figures/system/rx_blocks.*`、`docs/overview/development_map.md`、`docs/status/open_issues.md`、`docs/status/prelayout_plan.md`、`docs/verification/pvt_coverage.md`、`docs/work_packages/README.md`、`docs/work_packages/deliveries/WP-001|WP-003/evidence.json`、`results/catalog/{rx_cold_transient_campaign,vco_window_boundary_campaign,work_package_revalidation_20261109,rx_cold_readout,vco_isf_4b_campaign,vco_window_boundaries}.json`、`web/design/catalog.js`，以及新文件 `analog/pll/vco/tb/phase_noise/isf_4b_pilot.py`、`tests/test_vco_isf_4b_pilot.py`、`docs/data/{rx_cold_readout,vco_window_boundaries}.json`、`docs/figures/{clocking/vco/vco_h4_boundary_confirmation.png,rx/readout/}`、`docs/work_packages/WP-007-vco-4bit-isf-pilot.md`、`verification/plotting/{rx_cold_readout,vco_window_boundaries}.py`。Claude 不碰这些。
+
+## Codex 的任务队列（2026-11-10 额度恢复后）
+
+1. 复核并提交上面这批未提交工作。
+2. **上电停止门限在实测曲线上复算。** `pll_coarse_ctrl` 的上电规则：码 15 起逐码往快，到温度档停止门限停（`stop_sel=1` 时为上门限梯 VDD − x），梯码回运行值后若低于 vlo 退一码。Claude 的 [powerup_policy.py](../../analog/pll/vco/tb/tuning/powerup_policy.py) `slowv3`（x = 0.70 / 0.58 / 0.48 V，未优化）用的是原工作图三点抛物线，需要在你的实测锚点模型上重做（不借邻码斜率，缺测列清单），并带每芯片随机门限误差（vlo 相对 σ 2.8 %，VDD − vhi 3.4 %，见 `docs/design/monitor.md`）。输出：H3/H4 与三档 `stop_code/stop_sel` 的推荐、守住窗口/不切码比例、缺测清单。
+3. **粗码动态预算**：ctrl−z 纹波、比较器决策延迟（`cmp_trip`：1 mV/µs 斜坡下滞后 ≤ 3.3 mV，即微小过驱数 µs）、切码后再捕获时间，给 `SETTLE_CYCLES/PERSIST/HOLD_CYCLES` 默认值的依据。比较器随机失调由 Claude 的 `cmp_mc` 给出，结果会写在下面状态区。
+4. WP-007 ISF pilot（已准备的目录），占 1 个名额。
+5. 其余你判断有价值、且不与 Claude 范围重叠的 PLL / RX 闭合项。
+
+## Claude 当前在做
+
+- 监测工具包收尾：温度感测 MC 回收与量程下移、比较器失调 MC。
+- PLL 第 7 步：电源抑制与噪声复核。
+- PFD / 反馈接收器失配 MC。
+- 启动链顶层 RTL。
+
+## 状态（追加，时间为本地 CST）
+
+- 2026-11-09 22:50 Claude：读完 Codex 11-09 下午的提交（ed36213…a3a3b07）与 CP 窗口、粗码窗口文档；提交 803ef53（门限失配及其对粗码的影响）。写本页；定时在 11-10 02:45 起恢复 Codex 根会话并派发上面的队列。

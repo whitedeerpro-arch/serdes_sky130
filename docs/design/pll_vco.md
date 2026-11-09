@@ -1,18 +1,18 @@
 # VCO：四级差分 CML 环振
 
-> **当前修订**：PLL r5 候选 `pll_vco_ring4_pvt_candidate`（[网表](../../analog/pll/vco/spice/vco_ring4_pvt_candidate.spice)）。相对 r3 只改节点无源件：电容阵列开关 W 1 → 5 µm，变容管 W 18 单指 → 4.5 µm × 4 指，去掉固定 MIM。
-> **关键数字**：七个压力工况（真实偏置、PDK 电阻）开环都调到 2 GHz，差分摆幅 389–493 mVpp（r3 最差 237），L(1 MHz) −84.9 … −90.2 dBc/Hz（r3 最差 −77.2），局部 Kvco 721–1001 MHz/V。
-> **主要缺口**：4 bit 的 `pll_vco_ring4_4b` 已接入 r5 原生前端＋TX v3 静态 bench，10 个压力点中 8 个完整且连续计数，2 个 FF 冷角未完成；原生闭环未重验证。局部 Kvco 跨 191–1122 MHz/V，运行中切码未验证（[工作区](#工作区r5-候选45-条件--tt--hh--ll2026-11-06)）。
+> **当前主线**：PLL r5、4 bit阵列`pll_vco_ring4_4b`（[网表](../../analog/pll/vco/spice/vco_ring4_4b.spice)），K=0…15；旧3 bit `pll_vco_ring4_pvt_candidate`保留作历史参考，不再并行推进。变容为4.5µm×4指，去掉固定MIM；4 bit半单元开关W2.5µm，旧3 bit完整单元为W5µm。
+> **关键数字与范围**：4 bit工作区135条件可达2GHz，旧宽窗口45组三温有共同码；五压力点各200样本频率σ0.75–1.12%。七压力点相噪与389–493mVpp摆幅来自旧3 bit r5，不能转给当前4 bit码/负载。
+> **主要缺口**：当前r5/k4原生预充闭环已验证TT、FS低压热hh、SS低压冷hh三个点（[环路](pll_loop.md)），尚非原生全角或从零启动。当前码/负载噪声、实际门限与动态切码待完成。门限梯H=3/4是档位值，不是位宽；[电压迟滞与实测范围](pll_coarse_windows.md)记录其与VCO码K的关系。
 
 ## 电路
 
-四个电阻负载 CML 反相延迟单元成环，偶数级环路中有一次差分交叉，保证直流负反馈。四路差分输出给出八个极性（顺序见 [架构](../overview/architecture.md#vco-八相顺序)）。粗调为每节点 3 bit 电容阵列，细调为累积型变容管；码增大 → 电容增大 → 频率降低，Kvco 为正。
+四个电阻负载 CML 反相延迟单元成环，偶数级环路中有一次差分交叉，保证直流负反馈。四路差分输出给出八个极性（顺序见 [架构](../overview/architecture.md#vco-八相顺序)）。当前粗调为每节点4 bit电容阵列，细调为累积型变容管；码增大 → 电容增大 → 频率降低，Kvco 为正。
 
 | 部分 | 参数 |
 |---|---|
-| 延迟单元 [serdes_cml_delay](../../analog/common/cml_buffer/spice/cml_delay_resistive.spice) | 输入对 LVT W = 40 µm、8 指、L = 0.15 µm；尾管 W = 20 µm、4 指、L = 0.5 µm；负载每端 400 Ω（理想电阻） |
+| 延迟单元 [serdes_cml_delay](../../analog/common/cml_buffer/spice/cml_delay_resistive.spice) | 输入对 LVT W = 40 µm、8 指、L = 0.15 µm；尾管 W = 20 µm、4 指、L = 0.5 µm；每端负载名义400Ω，当前工作区bench转换为PDK high_po |
 | 变容管 | 每节点 `sky130_fd_pr__cap_var_lvt` W/L = 4.5/0.5 µm × vm 4，栅接振荡节点，阱接 Vctrl |
-| 粗调阵列 [cap_bank_3b](../../analog/pll/vco/spice/cap_bank_3b.spice) | 7 个相同 MIM 单元 2.35 × 5 µm（约 25.9 fF），分组 1:2:4；底板接 NMOS 开关 W = 5 µm |
+| 当前4 bit阵列 [cap_bank_4b](../../analog/pll/vco/spice/cap_bank_4b.spice) | 15个MIM半单元2.35×2.5µm，分组1:2:4:8；底板NMOS开关W2.5µm；复用3 bit文件内的单元定义，不代表继续使用3 bit阵列 |
 | 偏置 | 真实偏置：212.5 µA 拷贝进 `serdes_bias_cml`（nfet 5/0.5，[偏置](bias.md)）；旧 bench 为理想 0.85 mA 进 20/0.5 |
 
 ### 为什么是这组尺寸（r5）
@@ -67,7 +67,7 @@ VDD 上 5 mV 正弦，Vctrl 带 α 倍同一正弦（[psrr_tone.py](../../analog
 
 ### 工作区（r5 候选，45 条件 × tt / hh / ll，2026-11-06）
 
-**结论：4 bit（15 个半单元，[vco_ring4_4b](../../analog/pll/vco/spice/vco_ring4_4b.spice)）配 0.85 V 到 CP 上沿的控制窗口，135 个条件都能到 2 GHz；原工作图42组加上11-07的12点补测，45/45组（MOS×VDD×RC）均存在一个码在三档温度跨越2 GHz；不同组允许不同码。原扩展记录42/45来自候选码缺测，已由后续补测补齐。3 bit 是 3 个条件无解、28 个芯片。** 4 bit 已接入原生前端静态 bench，闭环尚未验证，见[原生联合结果](../history/clocking_progress_20261106.md#原生联合仿真恢复)。
+**结论：4 bit（15 个半单元，[vco_ring4_4b](../../analog/pll/vco/spice/vco_ring4_4b.spice)）配 0.85 V 到 CP 上沿的控制窗口，135 个条件都能到 2 GHz；原工作图42组加上11-07的12点补测，45/45组（MOS×VDD×RC）均存在一个码在三档温度跨越2 GHz；不同组允许不同码。原扩展记录42/45来自候选码缺测，已由后续补测补齐。3 bit 是 3 个条件无解、28 个芯片。** 当前4 bit原生预充闭环已完成三个点，见[环路](pll_loop.md)；下列3/4 bit对照及[原生联合结果](../history/clocking_progress_20261106.md#原生联合仿真恢复)保留原批次边界。
 
 ![3/4 bit 控制范围比较](../figures/clocking/vco/vco_r5_3b_4b_control_windows.png)
 

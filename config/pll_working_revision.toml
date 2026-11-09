@@ -1,6 +1,6 @@
 revision = "r5_candidate_20261105"
 status = "r5 4-bit VCO / k4 steering CP / PDK LF candidate; behavioural-VCO loop 135/135 locked; native transistor loop 3 points locked; native full PVT and startup open; not_release_signoff"
-r5_change = "VCO only: cap bank switch W 1 -> 5, varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
+r5_change = "VCO only: legacy 3-bit switch W 1 -> 5; current 4-bit half-unit switch W 2.5 and MIM 2.35x2.5; varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
 r5_report = "docs/design/pll_vco.md"
 r5_open = "I-32"
 r5_native_static_bench = "analog/tx/serializer/tb/native_clock/r5_v3.py"

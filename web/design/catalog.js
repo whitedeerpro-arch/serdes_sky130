@@ -1124,7 +1124,7 @@ window.DESIGN_CATALOG = {
       "key": "C01",
       "subtitle": "四级 CML 环振 / r5 / 4 bit",
       "state": "工作区改进",
-      "summary": "r5/4bit工作区135点；宽窗口45组三温共同码。补齐20个中断点后，0.90V到上门限码3/4/5各有135/135工况候选，三温共用码27/23/19组；仍需切码/实际门限与当前负载噪声。",
+      "summary": "4bit主线，3bit仅历史参考。135点线性内插预测候选；H4有95点完整夹区在窗口内，40点边界确认中。电压迟滞采用相邻切码；当前负载噪声/动态切码仍待验证。",
       "facts": {
         "设计": "r5 / 4 bit主线；3 bit仅历史参考",
         "PVT": "135条件；宽窗口45组三温共同码；较窄粗码窗口另计",
@@ -1147,7 +1147,7 @@ window.DESIGN_CATALOG = {
       "planning": {
         "question": "4 bit阵列的损耗、量程、Kvco、CP窗口与电压迟滞如何共同选点？",
         "model": "1/f 对码拟合用于选点；仿真确认工作区；ISF 加环路传递形成抖动预算。",
-        "parameters": "开关 W5；变容 4.5×4 指；15 个半单元；0.85 V 到 CP 上沿。",
+        "parameters": "4 bit半单元：开关W2.5µm、MIM2.35×2.5µm，共15个；变容4.5×4指；实际门限与相邻码落点约束。",
         "verification": "实测同码三温曲线的相邻切码落点、慢端失配、实际门限与当前负载噪声；hl/lh另验。"
       },
       "references": [
@@ -1198,7 +1198,7 @@ window.DESIGN_CATALOG = {
           "problem": "CP上门限下调可增加余量，但会收窄VCO可用窗口；旧中断补点尚无完整汇总。",
           "model": "仅实际电压夹点求2GHz交点；完整补点曲线整条优先，不外推、不借邻码温度斜率。",
           "changes": "补完FS/ll两个电压的20点；保留228完整码曲线及3条历史部分曲线。电路与门限默认值不变。",
-          "validation": "下门限理想0.90V，上门限码3/4/5分别135/135工况有候选；三温共同码27/23/19组。",
+          "validation": "下门限0.90V，上门限H3/4/5各135个内插预测候选；完整夹区在窗口内95/95/56点。H4的40边界点确认中；38°C局部校准K0/K1预测偏差22/3mV。",
           "conclusion": "码4值得继续评估；当前为静态范围证据，尚无切码/启动或联合统计资格。",
           "attachments": [
             {
@@ -1216,6 +1216,10 @@ window.DESIGN_CATALOG = {
             {
               "title": "相邻码迟滞落点模型",
               "path": "docs/figures/clocking/vco/vco_hysteresis_landing.png"
+            },
+            {
+              "title": "38°C静态模型校准",
+              "path": "docs/figures/clocking/vco/vco_hysteresis_static_anchor.png"
             }
           ]
         },
@@ -1914,7 +1918,7 @@ window.DESIGN_CATALOG = {
       "key": "R04",
       "subtitle": "CML 1:2 → 匹配转换 → CMOS 1:4",
       "state": "结构已实现 / 角点迭代",
-      "summary": "W40读出单元已修复热角；完整读出仍缺冷角与全网格。FS分层OP的偏置/CTLE/PI/采样器均收敛，加入完整读出后SPARSE120s未完成；不是功能失败证明。",
+      "summary": "W40完整FS低压冷角已从OPtran候选软提示获得无回退直接Newton DC，偏置与局部DC一致；完整瞬态/映射、FF冷角与全网格仍待闭合。",
       "facts": {
         "设计": "物理字路径已有",
         "PVT": "旧边界45；W40的FS冷hh数值缺失、FF冷hh未见正式运行",
@@ -1984,6 +1988,27 @@ window.DESIGN_CATALOG = {
             {
               "title": "电路实现",
               "path": "analog/rx/sampler/spice/rx_readout_deser16.spice"
+            }
+          ]
+        },
+        {
+          "id": "rx-w40-cold-direct-dc",
+          "title": "冷角完整读出直接DC求解",
+          "date": "2026-11-09",
+          "phase": "validation",
+          "problem": "完整W40在FS低压冷hh的旧长运行缺完整波形；OPtran短终点偏置未稳。",
+          "model": "分层负载定位，分别记录source/gmin/OPtran路径；同DUT软初猜后禁用所有回退独立求DC。",
+          "changes": "先SPARSE普通OP获得全节点候选，再以7943个电压软nodeset进行直接Newton；物理电路、真实偏置与刺激不改，无硬初值。",
+          "validation": "95.8s完成无回退DC；vbg1.22656V/vgi.977051V，CML192.5485µA。OPtran候选到DC最大节点变化76.04mV。",
+          "conclusion": "完整加载下有正确偏置DC根；真实瞬态、字流及启动仍待验证。",
+          "attachments": [
+            {
+              "title": "冷角证据与数值路径",
+              "path": "docs/design/rx_cold_convergence.md"
+            },
+            {
+              "title": "独立复核数据",
+              "path": "docs/data/rx_cold_op.json"
             }
           ]
         },

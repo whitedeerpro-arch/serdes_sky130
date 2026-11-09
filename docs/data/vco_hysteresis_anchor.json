@@ -1,0 +1,114 @@
+{
+  "spec_status": "ungraded",
+  "calibration": {
+    "scope": "static calibration only; nonstandard 38 C; real bias PDK R four buffers 30 fF/leg; no switching or startup qualification",
+    "spec_status": "ungraded",
+    "points": [
+      {
+        "code": 0,
+        "vctrl": 0.85,
+        "path": "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c0_v850.raw",
+        "frequency_hz": 1966654223.2526188,
+        "swing_v": 0.4547267438902425
+      },
+      {
+        "code": 0,
+        "vctrl": 0.9,
+        "path": "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c0_v900.raw",
+        "frequency_hz": 1988343650.5682654,
+        "swing_v": 0.45013363980115484
+      },
+      {
+        "code": 0,
+        "vctrl": 0.95,
+        "path": "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c0_v950.raw",
+        "frequency_hz": 2016046927.0997167,
+        "swing_v": 0.44487648291197135
+      },
+      {
+        "code": 1,
+        "vctrl": 1.05,
+        "path": "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c1_v1050.raw",
+        "frequency_hz": 1949358915.2684853,
+        "swing_v": 0.43843002723148294
+      },
+      {
+        "code": 1,
+        "vctrl": 1.1,
+        "path": "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c1_v1100.raw",
+        "frequency_hz": 1994879966.005186,
+        "swing_v": 0.43313200818104614
+      },
+      {
+        "code": 1,
+        "vctrl": 1.15,
+        "path": "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c1_v1150.raw",
+        "frequency_hz": 2049061424.7611103,
+        "swing_v": 0.4288549669190389
+      }
+    ],
+    "crossings": {
+      "0": {
+        "vctrl": 0.9210378534439803,
+        "kvco_hz_per_v": 554065530.6290252,
+        "bracket_v": [
+          0.9,
+          0.95
+        ]
+      },
+      "1": {
+        "vctrl": 1.1047248949293509,
+        "kvco_hz_per_v": 1083629175.1184883,
+        "bracket_v": [
+          1.1,
+          1.15
+        ]
+      }
+    },
+    "model_at_38_vctrl": {
+      "0": 0.8990674083191745,
+      "1": 1.1018320704259967
+    },
+    "model_event_at_38_37": {
+      "chip": "fs_v1650:hh",
+      "code": 0,
+      "temperature_interval": [
+        27,
+        85
+      ],
+      "edge": "lower",
+      "temperature": 38.36654578598736,
+      "next_code": 1,
+      "landing_v": 1.1024793795224188,
+      "opposite_edge_room_v": 0.10752062047758115,
+      "status": "evidenced",
+      "reason": null
+    },
+    "measured_minus_model_vctrl": {
+      "0": 0.021970445124805726,
+      "1": 0.002892824503354152
+    },
+    "h4_window_v": [
+      0.9,
+      1.21
+    ],
+    "h4_code1_opposite_room_v": 0.10527510507064908,
+    "h4_room_minus_model_at_38_v": -0.002892824503354152,
+    "model_report_sha256": "4ba3149012f4e1d8d6ecfdee76182bbb9ceffb98faa31159e1eacef4be79d436"
+  },
+  "inputs_sha256": {
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/analysis/20261109T134910.007982Z_3c17ab5b/summary.json": "84c0bf67d1e5bb0914d2c1706ec98a51ecc4fdaebd8b9343eb7502a4f6fc21af",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/plan.json": "191c97111794814b0efee8bb0b986434274b5ebabc42f40b3f608e325d36bbdf",
+    "analog/pll/vco/tb/tuning/hysteresis_anchor.py": "6870d7e26c17490a2c6eaf61eba23df56423f28ef1a897b3d06579d17fefb184",
+    "verification/plotting/vco_hysteresis_anchor.py": "445f7c6c487a9cb4c6c18394f1ebbaa0030dac2d75fe113f68c1d380de5bf875",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c0_v850.raw": "76cb0d0cb6dc1b71a57adc173f3f42074ab131db1899c1c959b487c9bba50c90",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/execution.json": "d2f0b987804ae99cc4006aed0ef792cd02ab8e751f677f0020e098a91b581c3b",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/tb.cir": "6062a68dda7a6c56ee6a438c391457035c1c6a6ee06cee2f9ea191dae402ba7a",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c0_v900.raw": "c8f3b8e63303ee3754acd19a4a192582324edf60205bbf103af0c5117e38a327",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c0_v950.raw": "d1fc6ee48a5585aeed0a05336669c1d308077c462cfb1ddb19220b528a40e79b",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c1_v1050.raw": "fb704a48e92ff2df50e53c843806dc92bbf881fa7f3ff0795b6367cd3f392138",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c1_v1100.raw": "6a2b322931abb15b9e0d34eb59f29e63d6b125ee41c9f1f81dcf67a241684ae8",
+    "results/analog/pll/vco/hysteresis_anchor/20261109T134457.199552Z_12c079b7/fs_hh_v1650/fs_v1650_t38_c1_v1150.raw": "011d6dad2a30a889cd5fd5081dcbe4492fab1a74a504eadd175e3065468fbb7d"
+  },
+  "warning": "38 C is a calibration point, not an observed switching temperature. Errors include coarse voltage-grid and temperature interpolation. Independent static codes do not demonstrate dynamic switching."
+}

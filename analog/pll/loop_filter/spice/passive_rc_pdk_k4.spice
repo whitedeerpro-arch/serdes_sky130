@@ -32,3 +32,32 @@ Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
 Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
 Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
 .ends pll_loop_filter_k4
+
+* Candidate split 7 to ground / 11 to VDD (0.61), otherwise identical: the 20 MHz supply tone through the 12 / 6 filter
+* gives 155 MHz/V at FS 1.95 V 85 C (null alpha 0.565 there, 0.66-0.76 elsewhere; analog/pll/vco/tb/psrr_lf).
+.subckt pll_loop_filter_k4_s7 cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=7.594 cside=22.1965 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg00 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg01 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg02 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg03 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg04 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg05 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv00 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv01 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv02 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv03 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv04 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv05 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv06 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv07 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv08 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv09 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv10 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg06 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k4_s7

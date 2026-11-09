@@ -1,7 +1,7 @@
 """Supply tone to the 4-bit VCO's frequency through the real k = 4 loop filter (PLL closure step 7).
 
     uv run python analog/pll/vco/tb/psrr_lf/run.py [--points tt_v1800_t27:tt,...] [--variants lf,gnd,vdd] [--freqs 20e6]
-        [--lf50] [--amp 5e-3] [--workers 2] [--analyse C]
+        [--lf50] [--amp 5e-3] [--lf-cell pll_loop_filter_k4] [--workers 2] [--analyse C]
 
 4-bit ring (vco_ring4_4b + cap_bank_4b) with its four buffers, real bias and PDK resistors (the workmap / ISF bench), at
 the code-table code and Vctrl of each point (config/pll_code_table.json).  VDD carries a sine of --amp from 12 ns on;
@@ -53,7 +53,7 @@ Ipcp vbp 0 50u
 Xbncp vbn vbn 0 0 serdes_nfet w=5 l=1
 Xbpcp vbp vbp vdd vdd serdes_pfet w=20 l=1 nf=4
 Xcp up dn cpo vbn vbp ibcp vdd 0 pll_cp_steer {cp}
-Xlf cpo ctrl z pre_ref pre_en vdd 0 pll_loop_filter_k4
+Xlf cpo ctrl z pre_ref pre_en vdd 0 {lf}
 Vpre pre_ref 0 {v}
 Ven pre_en 0 0
 """
@@ -79,7 +79,7 @@ def name(variant, fm):
     return f"{variant}_{fm / 1e6:g}M"
 
 
-def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp):
+def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_filter_k4"):
     text = spice.render(wm.TEMPLATE, **spice.corner_values(c), VCTRL=vctrl, INJECT="", PROBES="v(ctrl)" + (" v(z)" if variant == "lf" else ""),
                         TSTEP="1p", STOP=f"{stop:.5e}", SAVE_FROM=f"{SETTLE:.5e}", OUT="tone.raw", CFG0=0, CFG1=0, CFG2=0)
     old = "ctrl cfg0 cfg1 cfg2 vbias vdd 0 pll_vco_ring4_pvt_candidate"
@@ -93,7 +93,7 @@ def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp):
     for k in range(4):                                         # a set bit is tied to VDD, a clear bit to ground
         rep[f"Vb{k} cfg{k} 0 0"] = f"Vb{k} cfg{k} vdd 0" if (code >> k) & 1 else f"Vb{k} cfg{k} 0 0"
     if variant == "lf":
-        rep[f"Vctrl ctrl 0 {vctrl}"] = LF_BLOCK.format(supply=c.supply, cp=CP_PARAMS, v=vctrl)
+        rep[f"Vctrl ctrl 0 {vctrl}"] = LF_BLOCK.format(supply=c.supply, cp=CP_PARAMS, v=vctrl, lf=lf_cell)
     elif variant == "vdd":
         rep[f"Vctrl ctrl 0 {vctrl}"] = f"Vctrl ctrl 0 DC {vctrl} SIN({vctrl} {amp:.5e} {fm:.5e} {SETTLE:.5e})"
     for o, n in rep.items():
@@ -114,6 +114,7 @@ def main():
     ap.add_argument("--freqs", default="20e6")
     ap.add_argument("--lf50", action="store_true", help="also the lf variant at 50 MHz")
     ap.add_argument("--amp", type=float, default=5e-3)
+    ap.add_argument("--lf-cell", default="pll_loop_filter_k4", help="loop-filter subcircuit for the lf variant (pll_loop_filter_k4_s7: 7 / 11 split)")
     ap.add_argument("--periods", type=int, default=2)
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--analyse")
@@ -139,8 +140,8 @@ def main():
                 continue
             if d.exists():                                      # interrupted: keep it, run again beside it
                 d = spice.next_run_dir(camp / f"{cond}_{rc}", name(var, fm))
-            jobs.append((deck(c, rc, code, v, var, fm, a.amp, stop, camp / "snap" / f"{cond}_{rc}_{name(var, fm)}"), d,
-                         dict(timeout_s=3600, meta=dict(point=f"{cond}:{rc}", code=code, vctrl=v, variant=var, fm=fm, amp=a.amp))))
+            jobs.append((deck(c, rc, code, v, var, fm, a.amp, stop, camp / "snap" / f"{cond}_{rc}_{name(var, fm)}", a.lf_cell), d,
+                         dict(timeout_s=3600, meta=dict(point=f"{cond}:{rc}", code=code, vctrl=v, variant=var, fm=fm, amp=a.amp, lf_cell=a.lf_cell))))
         for ex in spice.run_many(jobs, workers=a.workers, smoke=True):
             if not ex.ok:
                 print(f"FAILED {ex.run_dir.relative_to(ROOT)}: {ex.log_failures[:3]}", flush=True)

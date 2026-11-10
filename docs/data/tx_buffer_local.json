@@ -1,0 +1,992 @@
+{
+  "scope": "TT and FS low-voltage hot, physical archived extra5 clock/slice/driver/channel cut, fixed ideal recorded input/bias/supplies. Only Xe2 changes. Local8bit window, no upstream impedance or full TX/PVT/noise/I17 qualification.",
+  "campaign": "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60",
+  "summary": "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60/analysis/20261110T162413Z_71bd670e/summary.json",
+  "summary_sha256": "3b3b340fe55a845dc4d378b42c0b55649e4bfa7ce0df288400c5f6fb070234cd",
+  "plan_sha256": "1992b2c5463a455aef750ab28ee69ffa649d9700c1ef66ecb2128d473d2cc9ff",
+  "runner_sha256": "0e70cb872ae29073d419592b4ac15f910e8263492b922a1b4c420fd46b5ed2c0",
+  "generator_sha256": "625bfc4e36e533fdb5f3bacbdf6792e068e8f62db789bd98d3cdb016e16f7828",
+  "parameters": [
+    {
+      "branch": "baseline",
+      "wn_um": 24,
+      "wt_um": 16,
+      "r_nominal_ohm": 400
+    },
+    {
+      "branch": "tail_only",
+      "wn_um": 24,
+      "wt_um": 12.8,
+      "r_nominal_ohm": 400
+    },
+    {
+      "branch": "R_only",
+      "wn_um": 24,
+      "wt_um": 16,
+      "r_nominal_ohm": 320
+    }
+  ],
+  "evidence": {
+    "tt_v1800_t27": {
+      "tt_v1800_t27.raw": "337f46681258795da87c69ecf74ff7fe3196857d1b1fb86b6edf065fb64d9c12",
+      "execution.json": "cae7d6a757a006756c90e6b909613e89c4fd4a4b480298501670c456638dc2f1",
+      "tb.cir": "c66773559006bb23fb4324584eda7acb6a370ed1353fd9a1e4965ab9ce32849b",
+      "simulator.log": "340abdc96d2974d5c7f7468a0f61d00ef2b277d2909092a00eb78730faee6afd"
+    },
+    "fs_v1650_t85": {
+      "fs_v1650_t85.raw": "240ddeb8c2d02f99e4c621f060e5b760cb5a801fae45c381c83ea0b4328cae9a",
+      "execution.json": "a4815c497e0091489aa41b9fce19f443ebf5cd8cdeccd200f5052baad71c30cf",
+      "tb.cir": "bb634d7a0fdd006a18afe93b0494fb3fa709dc2d63d1de61f665eb6483436dc3",
+      "simulator.log": "f3e26f3f36559eaaf1db8da1a6a8bc607e812e829f1291c37b6dba757f1d8dd9"
+    }
+  },
+  "results": [
+    {
+      "condition": "tt_v1800_t27",
+      "raw": "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60/tt_v1800_t27/tt_v1800_t27.raw",
+      "raw_sha256": "337f46681258795da87c69ecf74ff7fe3196857d1b1fb86b6edf065fb64d9c12",
+      "result": {
+        "input_max_error_v": {
+          "ap": 4.993537463304776e-06,
+          "an": 4.98775422896891e-06,
+          "bp": 4.971347152382677e-06,
+          "bn": 4.977915441184422e-06,
+          "vbias": 4.996710775362345e-06,
+          "vbias_logic": 4.9973076429177254e-06,
+          "vdd": 0.0,
+          "rp": 4.9940255153479995e-06,
+          "rn": 4.988005974704279e-06
+        },
+        "baseline_max_error_v": {
+          "sp1": 2.6024688626336e-08,
+          "sn1": 3.4664788151062e-08,
+          "qp1": 1.6584023265764358e-08,
+          "qn1": 2.7262273105677082e-08,
+          "xslice1.xfinal.ahp": 8.17897705118753e-09,
+          "xslice1.xfinal.ahn": 1.229863255680641e-08,
+          "xslice1.xfinal.bhp": 1.4651911905971815e-08,
+          "xslice1.xfinal.bhn": 2.7058719487271787e-08,
+          "xslice1.xfinal.sap": 1.7830662280005072e-08,
+          "xslice1.xfinal.san": 2.246911523506867e-08
+        },
+        "baseline_matches": true,
+        "branch_status": "measured",
+        "ungraded": [
+          "physical resistance",
+          "tail Vdsat and Id",
+          "branch current and power"
+        ],
+        "source_to_old_extra5_clock_shift_s": 3.08229162145203e-11,
+        "old_extra5_metrics": {
+          "scope": "local_window_only",
+          "delay_ui": 1.4833537055629622,
+          "first_bit": 296,
+          "end_bit": 304,
+          "bit_errors": 0,
+          "minimum_signed_margin_v": 0.14005424482456666,
+          "transition_spread_ui": 0.03165814758092281,
+          "matched_transitions": 6,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "functional": true,
+          "edge_match_half_width_ui": 0.45,
+          "phase_fitted": false
+        },
+        "baseline_serial_edge_error_s": 1.2051429264397259e-17,
+        "branches": [
+          {
+            "branch": "baseline",
+            "clock_fall_shift_s": -4.510847490823175e-18,
+            "clock_shift_min_s": -8.363791918368624e-18,
+            "clock_total_shift_from_source_s": 3.082291441728679e-11,
+            "clock_shift_max_s": 5.085349241659629e-19,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.483353698374028,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.14005424498852945,
+              "transition_spread_ui": 0.031658198330610676,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.497773821615952e-09,
+                4.747773821615958e-09,
+                4.99777382161595e-09,
+                5.247773821615956e-09,
+                5.497773821615948e-09,
+                5.7477738216159535e-09,
+                5.997773821615959e-09,
+                6.247773821615951e-09
+              ],
+              "sample_voltage_v": [
+                -0.14911035980308954,
+                0.15229834383703766,
+                -0.14966761743970883,
+                0.14005424498852945,
+                0.14151352572924616,
+                -0.14240494009207036,
+                0.20127513805574043,
+                0.18266899273864878
+              ],
+              "signed_margin_v": [
+                0.14911035980308954,
+                0.15229834383703766,
+                0.14966761743970883,
+                0.14005424498852945,
+                0.14151352572924616,
+                0.14240494009207036,
+                0.20127513805574043,
+                0.18266899273864878
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.03246998995749217,
+                -0.008670259865771801,
+                -0.012920251650768023,
+                -0.007910105168874897,
+                -0.022458722472615347,
+                -0.03956830349948558
+              ]
+            },
+            "nodes": {
+              "xe2_input": {
+                "differential_pp_v": 0.5332713243751943,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5328131965670235,
+                  "max_pp_v": 0.532902499728775,
+                  "mean_pp_v": 0.5328484522682234
+                },
+                "common_mode_mean_v": 1.6648671501890393
+              },
+              "xe2_output": {
+                "differential_pp_v": 0.5359404095599785,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5354876669880493,
+                  "max_pp_v": 0.5355667735298739,
+                  "mean_pp_v": 0.535535330246806
+                },
+                "common_mode_mean_v": 1.6648016087659012,
+                "delay_-1_s": [
+                  1.5335833305965773e-11,
+                  1.534905334267497e-11,
+                  1.534004887338878e-11,
+                  1.533937646699311e-11
+                ],
+                "delay_1_s": [
+                  1.5339492883614144e-11,
+                  1.534290600965716e-11,
+                  1.5338080686063806e-11,
+                  1.5344994517118108e-11
+                ]
+              },
+              "xe3_output": {
+                "differential_pp_v": 0.5386870141975684,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5382956108578709,
+                  "max_pp_v": 0.5383811209558245,
+                  "mean_pp_v": 0.5383260715605872
+                },
+                "common_mode_mean_v": 1.6647873707990595
+              },
+              "c2g": {
+                "differential_pp_v": 0.36893528453076496,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.3683847005356786,
+                  "max_pp_v": 0.36865923907596354,
+                  "mean_pp_v": 0.3685772573233364
+                },
+                "common_mode_mean_v": 1.718263783204605
+              }
+            },
+            "xe2_tail_mean_v": 0.9648473597635481
+          },
+          {
+            "branch": "tail_only",
+            "clock_fall_shift_s": 1.100885478586477e-12,
+            "clock_shift_min_s": 1.0930157444244316e-12,
+            "clock_total_shift_from_source_s": 3.1920333814918574e-11,
+            "clock_shift_max_s": 1.1039303361081514e-12,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.487743375964555,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.1403269737146523,
+              "transition_spread_ui": 0.031703364094661776,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.4988712410135915e-09,
+                4.748871241013597e-09,
+                4.998871241013589e-09,
+                5.248871241013595e-09,
+                5.498871241013587e-09,
+                5.748871241013593e-09,
+                5.998871241013585e-09,
+                6.248871241013591e-09
+              ],
+              "sample_voltage_v": [
+                -0.14905788938421977,
+                0.15230390118319242,
+                -0.14964088226722777,
+                0.1403269737146523,
+                0.14144121931716447,
+                -0.14225626238883038,
+                0.20124847788713449,
+                0.1829930816879972
+              ],
+              "signed_margin_v": [
+                0.14905788938421977,
+                0.15230390118319242,
+                0.14964088226722777,
+                0.1403269737146523,
+                0.14144121931716447,
+                0.14225626238883038,
+                0.20124847788713449,
+                0.1829930816879972
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.03309247131394784,
+                -0.009005482156205787,
+                -0.013158737302772632,
+                -0.00820992691419881,
+                -0.022774247873548214,
+                -0.03991329100886059
+              ]
+            },
+            "nodes": {
+              "xe2_input": {
+                "differential_pp_v": 0.5332749561826202,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5328153662342161,
+                  "max_pp_v": 0.5329038795530843,
+                  "mean_pp_v": 0.5328505878522961
+                },
+                "common_mode_mean_v": 1.6648688929421667
+              },
+              "xe2_output": {
+                "differential_pp_v": 0.42069342006448585,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.42035683665226453,
+                  "max_pp_v": 0.4204189603821771,
+                  "mean_pp_v": 0.420393282250239
+                },
+                "common_mode_mean_v": 1.694630598034124,
+                "delay_-1_s": [
+                  1.5916779846377888e-11,
+                  1.5930042879234703e-11,
+                  1.592092063084438e-11,
+                  1.5920364198560375e-11
+                ],
+                "delay_1_s": [
+                  1.5920638410128712e-11,
+                  1.5924235618910626e-11,
+                  1.5918749712873716e-11,
+                  1.5926141928063436e-11
+                ]
+              },
+              "xe3_output": {
+                "differential_pp_v": 0.5149936338851591,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5145761335706169,
+                  "max_pp_v": 0.5146576514166294,
+                  "mean_pp_v": 0.514605179716834
+                },
+                "common_mode_mean_v": 1.6647591201197802
+              },
+              "c2g": {
+                "differential_pp_v": 0.3687389388388753,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.36817546866573836,
+                  "max_pp_v": 0.3684661896263919,
+                  "mean_pp_v": 0.36837780737822645
+                },
+                "common_mode_mean_v": 1.7182676565284474
+              }
+            },
+            "xe2_tail_mean_v": 0.9864455650496121
+          },
+          {
+            "branch": "R_only",
+            "clock_fall_shift_s": -1.619572308282849e-12,
+            "clock_shift_min_s": -1.6249667005145235e-12,
+            "clock_total_shift_from_source_s": 2.9203343906237454e-11,
+            "clock_shift_max_s": -1.6123456235051303e-12,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.4768754163298308,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.1396598736816319,
+              "transition_spread_ui": 0.0319305504217497,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.496154251104908e-09,
+                4.7461542511049134e-09,
+                4.996154251104919e-09,
+                5.246154251104911e-09,
+                5.496154251104917e-09,
+                5.746154251104909e-09,
+                5.996154251104915e-09,
+                6.24615425110492e-09
+              ],
+              "sample_voltage_v": [
+                -0.14909415757163844,
+                0.15219275368628013,
+                -0.1496105190280746,
+                0.1396598736816319,
+                0.14154453931051847,
+                -0.14258579075379585,
+                0.20122110806218854,
+                0.1821155565691353
+              ],
+              "signed_margin_v": [
+                0.14909415757163844,
+                0.15219275368628013,
+                0.1496105190280746,
+                0.1396598736816319,
+                0.14154453931051847,
+                0.14258579075379585,
+                0.20122110806218854,
+                0.1821155565691353
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.03220156002409936,
+                -0.008920086653404045,
+                -0.013281071914061804,
+                -0.008211752940262761,
+                -0.022740123168089318,
+                -0.04014230336201246
+              ]
+            },
+            "nodes": {
+              "xe2_input": {
+                "differential_pp_v": 0.5333006649155931,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.532843486804375,
+                  "max_pp_v": 0.5329318532584306,
+                  "mean_pp_v": 0.532878109291956
+                },
+                "common_mode_mean_v": 1.6648669384453354
+              },
+              "xe2_output": {
+                "differential_pp_v": 0.43037248170615916,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4300063377580088,
+                  "max_pp_v": 0.43007207483774,
+                  "mean_pp_v": 0.43004441827794865
+                },
+                "common_mode_mean_v": 1.6916235444884125,
+                "delay_-1_s": [
+                  1.3435476909006411e-11,
+                  1.3445479179141443e-11,
+                  1.343876451383916e-11,
+                  1.3438084222555231e-11
+                ],
+                "delay_1_s": [
+                  1.3438163578872586e-11,
+                  1.3441022041962656e-11,
+                  1.3437081546873785e-11,
+                  1.3442794487497554e-11
+                ]
+              },
+              "xe3_output": {
+                "differential_pp_v": 0.5171267259382617,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.516711322702057,
+                  "max_pp_v": 0.516791811248438,
+                  "mean_pp_v": 0.5167412068890057
+                },
+                "common_mode_mean_v": 1.6647687057438736
+              },
+              "c2g": {
+                "differential_pp_v": 0.36878477530338993,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.3682348357048537,
+                  "max_pp_v": 0.3685044655121066,
+                  "mean_pp_v": 0.3684232372157137
+                },
+                "common_mode_mean_v": 1.7182643723216668
+              }
+            },
+            "xe2_tail_mean_v": 0.9682175439249299
+          }
+        ]
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "raw": "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60/fs_v1650_t85/fs_v1650_t85.raw",
+      "raw_sha256": "240ddeb8c2d02f99e4c621f060e5b760cb5a801fae45c381c83ea0b4328cae9a",
+      "result": {
+        "input_max_error_v": {
+          "ap": 4.991544635180034e-06,
+          "an": 4.99345625559755e-06,
+          "bp": 4.99857782165769e-06,
+          "bn": 4.99623296978946e-06,
+          "vbias": 4.991974214663131e-06,
+          "vbias_logic": 4.990816238614748e-06,
+          "vdd": 2.220446049250313e-16,
+          "rp": 4.9919675120246865e-06,
+          "rn": 4.998308776649196e-06
+        },
+        "baseline_max_error_v": {
+          "sp1": 1.9643502380262134e-08,
+          "sn1": 1.8952891700507735e-08,
+          "qp1": 6.909312899594511e-09,
+          "qn1": 1.503556945614548e-08,
+          "xslice1.xfinal.ahp": 2.136384003037506e-08,
+          "xslice1.xfinal.ahn": 3.303581297409153e-08,
+          "xslice1.xfinal.bhp": 2.0931672617408026e-08,
+          "xslice1.xfinal.bhn": 2.667933363120767e-08,
+          "xslice1.xfinal.sap": 1.296842344622462e-08,
+          "xslice1.xfinal.san": 1.312128339314711e-08
+        },
+        "baseline_matches": true,
+        "branch_status": "measured",
+        "ungraded": [
+          "physical resistance",
+          "tail Vdsat and Id",
+          "branch current and power"
+        ],
+        "source_to_old_extra5_clock_shift_s": 3.855577051610352e-11,
+        "old_extra5_metrics": {
+          "scope": "local_window_only",
+          "delay_ui": 1.6866467523453237,
+          "first_bit": 296,
+          "end_bit": 304,
+          "bit_errors": 0,
+          "minimum_signed_margin_v": 0.10592106769455516,
+          "transition_spread_ui": 0.10521819772330118,
+          "matched_transitions": 6,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "functional": true,
+          "edge_match_half_width_ui": 0.45,
+          "phase_fitted": false
+        },
+        "baseline_serial_edge_error_s": 7.648440334300716e-18,
+        "branches": [
+          {
+            "branch": "baseline",
+            "clock_fall_shift_s": -7.42452502409221e-20,
+            "clock_shift_min_s": -4.224147517692908e-18,
+            "clock_total_shift_from_source_s": 3.8555776996938713e-11,
+            "clock_shift_max_s": 6.480835195080476e-18,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6866467782686643,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.10592106378664894,
+              "transition_spread_ui": 0.10521821632305613,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.549785425835013e-09,
+                4.799785425835019e-09,
+                5.049785425835024e-09,
+                5.299785425835017e-09,
+                5.549785425835022e-09,
+                5.7997854258350145e-09,
+                6.04978542583502e-09,
+                6.299785425835012e-09
+              ],
+              "sample_voltage_v": [
+                -0.12025250930654509,
+                0.11545686370425833,
+                -0.11340156492950475,
+                0.11271945454800186,
+                0.11709538330217885,
+                -0.10592106378664894,
+                0.17666868054422516,
+                0.15388786448684338
+              ],
+              "signed_margin_v": [
+                0.12025250930654509,
+                0.11545686370425833,
+                0.11340156492950475,
+                0.11271945454800186,
+                0.11709538330217885,
+                0.10592106378664894,
+                0.17666868054422516,
+                0.15388786448684338
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.010027741911920119,
+                -0.008242311372603776,
+                -0.025617303497913677,
+                -0.012976010223042945,
+                -0.03606778305037729,
+                -0.09519047441113601
+              ]
+            },
+            "nodes": {
+              "xe2_input": {
+                "differential_pp_v": 0.4973657472545516,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4968377620835913,
+                  "max_pp_v": 0.49700087781820623,
+                  "mean_pp_v": 0.49693593711691303
+                },
+                "common_mode_mean_v": 1.5190353187111065
+              },
+              "xe2_output": {
+                "differential_pp_v": 0.5008444245658157,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.500387075597923,
+                  "max_pp_v": 0.5004805731907349,
+                  "mean_pp_v": 0.5004399190969445
+                },
+                "common_mode_mean_v": 1.5188693038082377,
+                "delay_-1_s": [
+                  1.954966368022305e-11,
+                  1.9555428260529742e-11,
+                  1.955563523354491e-11,
+                  1.955510827600652e-11
+                ],
+                "delay_1_s": [
+                  1.9555033189563227e-11,
+                  1.9548797696693695e-11,
+                  1.9556898788917138e-11,
+                  1.9563045262878104e-11
+                ]
+              },
+              "xe3_output": {
+                "differential_pp_v": 0.5022558105547723,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5015522275886952,
+                  "max_pp_v": 0.5018827630479195,
+                  "mean_pp_v": 0.5017653628766188
+                },
+                "common_mode_mean_v": 1.5187584842021713
+              },
+              "c2g": {
+                "differential_pp_v": 0.35108759419252955,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.3497892089541761,
+                  "max_pp_v": 0.35079490295734295,
+                  "mean_pp_v": 0.3503803289246332
+                },
+                "common_mode_mean_v": 1.5705580722646861
+              }
+            },
+            "xe2_tail_mean_v": 0.759224374377676
+          },
+          {
+            "branch": "tail_only",
+            "clock_fall_shift_s": 1.4989148684876613e-12,
+            "clock_shift_min_s": 1.4915801885477237e-12,
+            "clock_total_shift_from_source_s": 4.005169402024001e-11,
+            "clock_shift_max_s": 1.5006274181258682e-12,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6926304463618695,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.10471295813719755,
+              "transition_spread_ui": 0.10507184627386949,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.5512813428583294e-09,
+                4.801281342858322e-09,
+                5.051281342858327e-09,
+                5.30128134285832e-09,
+                5.551281342858325e-09,
+                5.801281342858331e-09,
+                6.051281342858323e-09,
+                6.3012813428583286e-09
+              ],
+              "sample_voltage_v": [
+                -0.11926528216898039,
+                0.11465070736242122,
+                -0.11257049236547466,
+                0.11210199142789887,
+                0.11596109054148963,
+                -0.10471295813719755,
+                0.17625414677085652,
+                0.15344391024993898
+              ],
+              "signed_margin_v": [
+                0.11926528216898039,
+                0.11465070736242122,
+                0.11257049236547466,
+                0.11210199142789887,
+                0.11596109054148963,
+                0.10471295813719755,
+                0.17625414677085652,
+                0.15344391024993898
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.007356436475047704,
+                -0.009409932202571629,
+                -0.026594361908535206,
+                -0.014005946570373923,
+                -0.03720307237665664,
+                -0.09771540979882179
+              ]
+            },
+            "nodes": {
+              "xe2_input": {
+                "differential_pp_v": 0.49802820409231785,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.49749690323828943,
+                  "max_pp_v": 0.4976630155724242,
+                  "mean_pp_v": 0.49759710360724996
+                },
+                "common_mode_mean_v": 1.5190406298191308
+              },
+              "xe2_output": {
+                "differential_pp_v": 0.39303446819875987,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3926895775866688,
+                  "max_pp_v": 0.39275465715497004,
+                  "mean_pp_v": 0.3927247695736256
+                },
+                "common_mode_mean_v": 1.5481977828181268,
+                "delay_-1_s": [
+                  2.022378080913323e-11,
+                  2.0230098583008253e-11,
+                  2.023025976427003e-11,
+                  2.0229658421679603e-11
+                ],
+                "delay_1_s": [
+                  2.02294188963644e-11,
+                  2.0225024195720408e-11,
+                  2.023160195285652e-11,
+                  2.0238285605327914e-11
+                ]
+              },
+              "xe3_output": {
+                "differential_pp_v": 0.46482117281179014,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4641138014500452,
+                  "max_pp_v": 0.4644430071053389,
+                  "mean_pp_v": 0.4643220476196584
+                },
+                "common_mode_mean_v": 1.5186594878037725
+              },
+              "c2g": {
+                "differential_pp_v": 0.348701235124129,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.34731160034533337,
+                  "max_pp_v": 0.34840004720242557,
+                  "mean_pp_v": 0.34794845883130104
+                },
+                "common_mode_mean_v": 1.5705780554841047
+              }
+            },
+            "xe2_tail_mean_v": 0.7818896573750266
+          },
+          {
+            "branch": "R_only",
+            "clock_fall_shift_s": -1.9166396191981548e-12,
+            "clock_shift_min_s": -1.922924180571343e-12,
+            "clock_total_shift_from_source_s": 3.6637012048527374e-11,
+            "clock_shift_max_s": -1.9083120103220293e-12,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.678971718475019,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.10562324343946164,
+              "transition_spread_ui": 0.10894345834812562,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.5478666608866036e-09,
+                4.797866660886609e-09,
+                5.0478666608866014e-09,
+                5.297866660886607e-09,
+                5.547866660886599e-09,
+                5.797866660886605e-09,
+                6.04786666088661e-09,
+                6.297866660886603e-09
+              ],
+              "sample_voltage_v": [
+                -0.11987468683652272,
+                0.11477478842529669,
+                -0.11277435197412958,
+                0.11194647397971756,
+                0.11670903731469413,
+                -0.10562324343946164,
+                0.17622017777558924,
+                0.1532055781197815
+              ],
+              "signed_margin_v": [
+                0.11987468683652272,
+                0.11477478842529669,
+                0.11277435197412958,
+                0.11194647397971756,
+                0.11670903731469413,
+                0.10562324343946164,
+                0.17622017777558924,
+                0.1532055781197815
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.012412078730643086,
+                -0.008956077979626087,
+                -0.026664092470239042,
+                -0.01409549907447588,
+                -0.03686799415877795,
+                -0.09653137961748254
+              ]
+            },
+            "nodes": {
+              "xe2_input": {
+                "differential_pp_v": 0.4982695518846538,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.49773667783860076,
+                  "max_pp_v": 0.49790441430448373,
+                  "mean_pp_v": 0.4978381791141194
+                },
+                "common_mode_mean_v": 1.5190335746999097
+              },
+              "xe2_output": {
+                "differential_pp_v": 0.4027115021462542,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.40234022099264455,
+                  "max_pp_v": 0.4024191136927142,
+                  "mean_pp_v": 0.40238493307376005
+                },
+                "common_mode_mean_v": 1.5448506439513647,
+                "delay_-1_s": [
+                  1.7022073930889995e-11,
+                  1.702662845408378e-11,
+                  1.7026727985133616e-11,
+                  1.70263093835058e-11
+                ],
+                "delay_1_s": [
+                  1.7026123582831882e-11,
+                  1.7021238588275407e-11,
+                  1.702787156962703e-11,
+                  1.70328211048747e-11
+                ]
+              },
+              "xe3_output": {
+                "differential_pp_v": 0.4689790754373566,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4684033139536772,
+                  "max_pp_v": 0.46861082474309024,
+                  "mean_pp_v": 0.4685274870088237
+                },
+                "common_mode_mean_v": 1.5186892989222822
+              },
+              "c2g": {
+                "differential_pp_v": 0.34911329257257506,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.34769376605433666,
+                  "max_pp_v": 0.34880109202507725,
+                  "mean_pp_v": 0.3483377743353891
+                },
+                "common_mode_mean_v": 1.5705659228509559
+              }
+            },
+            "xe2_tail_mean_v": 0.7612985051036696
+          }
+        ]
+      }
+    }
+  ],
+  "next_joint_prediction": {
+    "tt_v1800_t27": {
+      "wt_um": 12.8,
+      "r_nominal_ohm": 320,
+      "predicted_xe2_pp_v": 0.33782649712727464,
+      "predicted_c2g_shift_s": -5.186868296963719e-13,
+      "status": "ungraded_prediction_only",
+      "model": "separable amplitude ratios; additive small delay perturbations; no joint simulation"
+    },
+    "fs_v1650_t85": {
+      "wt_um": 12.8,
+      "r_nominal_ohm": 320,
+      "predicted_xe2_pp_v": 0.31602528314214534,
+      "predicted_c2g_shift_s": -4.177247507104935e-13,
+      "status": "ungraded_prediction_only",
+      "model": "separable amplitude ratios; additive small delay perturbations; no joint simulation"
+    }
+  },
+  "ungraded": [
+    "physical resistance",
+    "tail Vdsat and Id",
+    "branch current and power",
+    "upstream impedance",
+    "new real bias"
+  ]
+}

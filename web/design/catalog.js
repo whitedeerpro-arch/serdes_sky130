@@ -595,7 +595,7 @@ window.DESIGN_CATALOG = {
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
       "state": "MOS45点动态确认",
-      "summary": "v3同步计数器结构保留，extra5/WT16R240恢复减幅后的关闭建立；与输出级候选完整TX MOS45点眼图/位序通过。原生r5静态仍8完整/2数值缺失。",
+      "summary": "v3同步计数器与extra5/WT16R240在完整TX MOS45点眼图/位序通过。Xe2联合尺寸卡TT/FS降至338/316mVpp，后一级仍473/414mVpp；级联待验。原生r5静态8完整/2数值缺失。",
       "facts": {
         "设计": "v3 同步结构",
         "PVT": "当前完整TX MOS45点；原生静态8点",
@@ -639,6 +639,26 @@ window.DESIGN_CATALOG = {
         {
           "title": "45条件结果图",
           "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
+        },
+        {
+          "title": "Xe2局部尺寸卡",
+          "path": "docs/design/tx_buffer_local.md"
+        },
+        {
+          "title": "Xe2单轴校准数据",
+          "path": "docs/data/tx_buffer_local.json"
+        },
+        {
+          "title": "Xe2幅度与时序图",
+          "path": "docs/figures/tx/ingress/tx_buffer_local.png"
+        },
+        {
+          "title": "Xe2联合校准数据",
+          "path": "docs/data/tx_buffer_joint.json"
+        },
+        {
+          "title": "Xe2联合幅度/时序图",
+          "path": "docs/figures/tx/ingress/tx_buffer_joint.png"
         }
       ],
       "iterations": [
@@ -749,6 +769,68 @@ window.DESIGN_CATALOG = {
             {
               "title": "局部尺寸工作方案",
               "path": "docs/work_packages/deliveries/tx-cml-sizing-next.md"
+            }
+          ]
+        },
+        {
+          "id": "20261110T164153Z_de81ae3ace",
+          "module": "tx.clocking",
+          "date": "2026-11-11",
+          "timestamp": "2026-11-10T16:41:53.219820+00:00",
+          "title": "非再生Xe2单轴尺寸卡：减幅与时序联合观察",
+          "phase": "validation",
+          "problem": "中间级约501–536mVpp超过400mVpp上界，不能直接缩小整棵再生树。",
+          "model": "先复现旧extra5切片，再测尾宽−20%与名义R−20%；幅度比相乘与小时移相加只作联合点预测。",
+          "changes": "只改Xe2的WT或R，WN24及隔离、其余extra级、输出级、slice/driver/RLC16不变。",
+          "validation": "TT与FS低压热，基线最大误差\u003c35nV；六分支局部8bit零错，TT Xe2仍421–430mVpp，下一Xe3仍超幅。固定PWL忽略上游阻抗，不是新真实偏置或全TX资格。",
+          "conclusion": "不采用到当前DUT；联合参数先仿真校准，再决定相邻级传播。I17继续打开。",
+          "attachments": [
+            {
+              "title": "局部设计记录",
+              "path": "docs/design/tx_buffer_local.md"
+            },
+            {
+              "title": "校准数据",
+              "path": "docs/data/tx_buffer_local.json"
+            },
+            {
+              "title": "幅度与时序",
+              "path": "docs/figures/tx/ingress/tx_buffer_local.png"
+            },
+            {
+              "title": "可续跑测试台",
+              "path": "analog/tx/input_register/tb/final_clock_chain/buffer_local_card.py"
+            }
+          ]
+        },
+        {
+          "id": "20261110T164609Z_39f304ecad",
+          "module": "tx.clocking",
+          "date": "2026-11-11",
+          "timestamp": "2026-11-10T16:46:09.843801+00:00",
+          "title": "Xe2联合减尾宽与R：模型残差小于0.3mV",
+          "phase": "validation",
+          "problem": "单轴改动TT仍超幅，需验证联合后幅度与传播；后一级不能由单级结果代替。",
+          "model": "单轴幅度比相乘、c2g小时移相加，预测TT337.83mV/FS316.03mV。",
+          "changes": "只改Xe2；WT12.8/R320与WT12/R320，WN24、其余链和最终输出不变。",
+          "validation": "校准基线后TT/FS分别337.63/315.79mVpp；预测残差−0.198/−0.235mV，c2g时移残差−0.050/−0.024ps。四个新参数分支局部8bit均零错。",
+          "conclusion": "单级局部模型有效；下一Xe3仍473/414mVpp，继续验证级联，不关闭I17或采用到完整TX。",
+          "attachments": [
+            {
+              "title": "当前局部设计",
+              "path": "docs/design/tx_buffer_local.md"
+            },
+            {
+              "title": "联合实测/残差",
+              "path": "docs/data/tx_buffer_joint.json"
+            },
+            {
+              "title": "联合参数图",
+              "path": "docs/figures/tx/ingress/tx_buffer_joint.png"
+            },
+            {
+              "title": "联合测试台",
+              "path": "analog/tx/input_register/tb/final_clock_chain/buffer_joint_card.py"
             }
           ]
         }
@@ -1244,7 +1326,7 @@ window.DESIGN_CATALOG = {
           "problem": "独立quiet引脚不能任意接大电容；两压力边界不足以确定负载约束。",
           "model": "保持同R角名义电压码；增加100pF理想负载，检查5MOS×5RC×17边界/名义点。",
           "change": "未改DUT；新增端点PVT与hl/lh测试台。",
-          "validation": "425条DC/AC，单次向下交越；PM65.07–79.16°，20MHz抑制38.44–51.94dB；DC变化<0.6nV，全部日志无瞬态OP回退。",
+          "validation": "425条DC/AC，单次向下交越；PM65.07–79.16°，20MHz抑制38.44–51.94dB；DC变化\u003c0.6nV，全部日志无瞬态OP回退。",
           "conclusion": "100pF理想端点有局部边界证据；实际pad/ESD/ESR、电容区间与启动仍需补。",
           "attachments": [
             {

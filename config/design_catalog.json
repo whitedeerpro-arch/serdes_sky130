@@ -411,7 +411,7 @@
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
       "state": "MOS45点动态确认",
-      "summary": "v3同步计数器结构保留，extra5/WT16R240恢复减幅后的关闭建立；与输出级候选完整TX MOS45点眼图/位序通过。原生r5静态仍8完整/2数值缺失。",
+      "summary": "v3同步计数器与extra5/WT16R240在完整TX MOS45点眼图/位序通过。Xe2联合尺寸卡TT/FS降至338/316mVpp，后一级仍473/414mVpp；级联待验。原生r5静态8完整/2数值缺失。",
       "facts": {
         "设计": "v3 同步结构",
         "PVT": "当前完整TX MOS45点；原生静态8点",
@@ -455,6 +455,26 @@
         {
           "title": "45条件结果图",
           "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
+        },
+        {
+          "title": "Xe2局部尺寸卡",
+          "path": "docs/design/tx_buffer_local.md"
+        },
+        {
+          "title": "Xe2单轴校准数据",
+          "path": "docs/data/tx_buffer_local.json"
+        },
+        {
+          "title": "Xe2幅度与时序图",
+          "path": "docs/figures/tx/ingress/tx_buffer_local.png"
+        },
+        {
+          "title": "Xe2联合校准数据",
+          "path": "docs/data/tx_buffer_joint.json"
+        },
+        {
+          "title": "Xe2联合幅度/时序图",
+          "path": "docs/figures/tx/ingress/tx_buffer_joint.png"
         }
       ],
       "iterations": [

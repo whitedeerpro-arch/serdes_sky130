@@ -24,6 +24,8 @@
 
 Claude与Codex按实际进展协作，没有固定的模块禁区。改前读[协作记录](../work_packages/collaboration.md)，在同一文件上交叉编辑时先说明具体范围；不覆盖对方工作区或代为提交未审查改动。每次只提交自己已核对的路径/段落。
 
-全机ngspice≤4，通常各最多2个；借用空闲名额先登记。当前Claude跑quiet PLL压力角的hv/ext原生闭环；Codex补RX FF W40短窗。每项均按条件续跑、检查完整终点和输入身份。
+全机ngspice≤4，通常各最多2个；借用空闲名额先登记。当前Claude跑quiet PLL压力角的hv/ext原生闭环；Codex已完成RX FF W40短窗，推进TX非再生时钟级的局部尺寸校准。每项均按条件续跑、检查完整终点和输入身份。
+
+[Xe2局部尺寸卡](../design/tx_buffer_local.md)已在TT/FS实际加载切片上复现基线并测单轴/联合扰动，联合点降至338/316mVpp、模型残差<0.3mV；后一级仍473/414mVpp，级联及完整TX仍待确认。
 
 TT原生quiet PLL两条1.5µs结果各约2.1h、约37.8万保存点。离线前缀复用原分析器，HV的600ns尚未满足末端锁定判据，800ns与1500ns的捕获/频率/纹波接近；只能作为这两条TT预充边界的短筛依据，不能推广所有压力角或直接预测实际耗时。[成本与窗口数据](../data/native_pll_cost.json)、[采集器](../../verification/analysis/native_pll_cost.py)。日志没有分阶段计时，OP与瞬态耗时比例尚未知。

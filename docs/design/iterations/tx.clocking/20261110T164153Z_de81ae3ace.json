@@ -1,0 +1,31 @@
+{
+  "id": "20261110T164153Z_de81ae3ace",
+  "module": "tx.clocking",
+  "date": "2026-11-11",
+  "timestamp": "2026-11-10T16:41:53.219820+00:00",
+  "title": "非再生Xe2单轴尺寸卡：减幅与时序联合观察",
+  "phase": "validation",
+  "problem": "中间级约501–536mVpp超过400mVpp上界，不能直接缩小整棵再生树。",
+  "model": "先复现旧extra5切片，再测尾宽−20%与名义R−20%；幅度比相乘与小时移相加只作联合点预测。",
+  "changes": "只改Xe2的WT或R，WN24及隔离、其余extra级、输出级、slice/driver/RLC16不变。",
+  "validation": "TT与FS低压热，基线最大误差<35nV；六分支局部8bit零错，TT Xe2仍421–430mVpp，下一Xe3仍超幅。固定PWL忽略上游阻抗，不是新真实偏置或全TX资格。",
+  "conclusion": "不采用到当前DUT；联合参数先仿真校准，再决定相邻级传播。I17继续打开。",
+  "attachments": [
+    {
+      "title": "局部设计记录",
+      "path": "docs/design/tx_buffer_local.md"
+    },
+    {
+      "title": "校准数据",
+      "path": "docs/data/tx_buffer_local.json"
+    },
+    {
+      "title": "幅度与时序",
+      "path": "docs/figures/tx/ingress/tx_buffer_local.png"
+    },
+    {
+      "title": "可续跑测试台",
+      "path": "analog/tx/input_register/tb/final_clock_chain/buffer_local_card.py"
+    }
+  ]
+}

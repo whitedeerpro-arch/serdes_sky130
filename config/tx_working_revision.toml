@@ -304,6 +304,7 @@ first_bit = 296
 end_bit_exclusive = 304
 full_TX_qualified = false
 adopted = false
+
 status = "historical_actual_loaded_chain_local_TT_FS_recovery; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
 
 [retime_clock_iteration.output_sizing.extra5_full_confirmation]
@@ -358,3 +359,38 @@ pad_max_spread_ui = 0.1379
 pad_pp_mv_range = [376, 494]
 remote_max_spread_ui = 0.1601  # comparison only; the only condition above 0.15
 scope = "ideal 2 GHz source, real bias, PDK R tt, initialized counter, RTL guard replay; not PLL-native, resistor corners, mismatch, noise or startup"
+
+[retime_clock_iteration.buffer_local_card]
+status = "single_axis_measured_TT_FS; TT_Xe2_and_next_Xe3_still_over_400mVpp; I17_open"
+report = "docs/design/tx_buffer_local.md"
+data = "docs/data/tx_buffer_local.json"
+index = "results/catalog/tx_buffer_local.json"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_local_card.py"
+campaign = "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60"
+boundary_id = "tx_i17_extra5_xe2_local_proposal"
+changed_instance = "Xe2_only; WN24; baseline_WT16_R400; tail_only_WT12.8_R400; R_only_WT16_R320"
+baseline_max_voltage_error_nv_upper = 35
+baseline_max_serial_edge_error_ps_upper = 0.00002
+TT_xe2_pp_mv = [535.940, 420.693, 430.372]
+FS_xe2_pp_mv = [500.844, 393.034, 402.712]
+bit_errors_each_8bit_window = 0
+scope = "two archived actual-loaded extra5 cuts, fixed ideal PWL input/bias/supplies; eight bits; no upstream impedance or new real-bias validation"
+ungraded = "physical R, tail Id/Vdsat, current/power, noise, other PVT/passive corners and full TX"
+adopted = false
+
+[retime_clock_iteration.buffer_joint_card]
+status = "joint_measured_TT_FS; Xe2_within_200to400mVpp; next_Xe3_over_400mVpp; I17_open"
+report = "docs/design/tx_buffer_local.md"
+data = "docs/data/tx_buffer_joint.json"
+index = "results/catalog/tx_buffer_joint.json"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_joint_card.py"
+campaign = "results/analog/tx/buffer_joint_card/20261110T163621Z_5e8b82b2"
+boundary_id = "tx_i17_extra5_xe2_joint_proposal"
+changed_instance = "Xe2_only; WN24; joint_a_WT12.8_R320; joint_b_WT12_R320"
+joint_a_TT_FS_xe2_pp_mv = [337.629, 315.791]
+joint_a_TT_FS_next_xe3_pp_mv = [472.722, 414.479]
+joint_a_TT_FS_c2g_shift_ps = [-0.569, -0.442]
+joint_a_amplitude_prediction_error_mv_upper = 0.235
+bit_errors_each_8bit_window = 0
+scope = "same calibrated actual-loaded TT/FS extra5 ideal-PWL cuts; no full TX/PVT or upstream impedance qualification"
+adopted = false

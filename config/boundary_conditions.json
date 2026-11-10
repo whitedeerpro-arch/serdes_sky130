@@ -15950,5 +15950,71 @@
    "same full circuit, historical snapshot/PDK and t=0 sources",
    "same node list and recorded source identity"
   ]
+ },
+ {
+  "id": "rx_ff_w40_optran_newton_seed_v1",
+  "kind": "numerical_initial_guess",
+  "description": "All finite voltage nodes from same-FF W40 ordinary-OP OPtran candidate, soft guesses for independent Newton; not a DC root or physical startup.",
+  "upstream": {
+   "module": "RX sampler/readout",
+   "run": "results/analog/rx/sampler/cold_readout_ff_current/20261110T125113.199628Z_8f15432e/ff_op",
+   "raw_sha256": "22455d260abf27ae82ed92e58f15b94eaf9b5cde2249db2fecc27e5f7b56dfd2",
+   "deck_sha256": "d94900ec0984d5e89cfff1874e2c102e90cbbcc65935ed32257c4c4187a78118",
+   "execution_sha256": "b8c21bf3fb36c1761161457134c2feb957aefca2eb3e291c9ff0ec1bac4fb5e8",
+   "source_plan_sha256": "0696c2d5e820605414944dee96f4490d2cfb045bf238775b5322f773a99e077d"
+  },
+  "nodes": {
+   "file": "results/analog/rx/sampler/cold_readout_ff_direct_dc/20261110T130130.446962Z_0943ba28/seed_nodes.json",
+   "sha256": "be5c33fdd2691b8af20ed7bdf1eaa7b07b9500e01572276d7dd5fa263092c14c",
+   "format": "JSON list of node/value; voltage nodes only"
+  },
+  "load": null,
+  "points": {
+   "ff_v1950_t-40": {
+    "condition": "FF_hh 1.95 V -40 C full W40 PI20 trim32 rb2k real bias",
+    "replay_boundary": "rx_c2_far_nominal@ctle_rc"
+   }
+  },
+  "processing": "all finite same-DUT OP voltages as soft .nodeset; replace original six guesses; no .ic/uic",
+  "validation": {
+   "state": "ungraded",
+   "limitation": "OPtran candidate can be transient state; independent Newton required; no physical startup proof"
+  },
+  "valid_while": [
+   "same full FF circuit, replay, PDK, load, t=0 and numerical node list"
+  ]
+ },
+ {
+  "id": "rx_ff_w40_direct_newton_dc_seed_v1",
+  "kind": "numerical_initial_guess",
+  "description": "All finite voltage nodes from same-FF W40 direct Newton solution; soft transient guesses, not physical startup.",
+  "upstream": {
+   "module": "RX sampler/readout",
+   "run": "results/analog/rx/sampler/cold_readout_ff_direct_dc/20261110T130130.446962Z_0943ba28/ff_direct_dc",
+   "raw_sha256": "74a2f361d8e6c40f4e2c9100a6bebb273c171c18b72ec04b66a4beafa79e1895",
+   "deck_sha256": "8d3673ac056e9d8167abcc24bda7591d639bf9f56f4e0cb45d207fc9947534c6",
+   "execution_sha256": "e0eb4968fa6213987e9a67376737e363a4b0ced1114fad44d85cfd840d385610",
+   "source_plan_sha256": "228d4ecfb0db160d4f2daab9e5f35ea3b8da609147a9577d2b73b9f13326eadb"
+  },
+  "nodes": {
+   "file": "results/analog/rx/sampler/cold_readout_ff_transient_dc/20261110T130359.865093Z_9bbc587f/seed_nodes.json",
+   "sha256": "d5a02dcb2424f43685d43875f3fc6ad468aa1212f8a628dc7863f27b16f9275f",
+   "format": "JSON list of node/value; voltage nodes only"
+  },
+  "load": null,
+  "points": {
+   "ff_v1950_t-40": {
+    "condition": "FF_hh 1.95 V -40 C full W40 PI20 trim32 rb2k real bias",
+    "replay_boundary": "rx_c2_far_nominal@ctle_rc"
+   }
+  },
+  "processing": "all finite same-DUT independent Newton voltages as soft .nodeset; no .ic/uic",
+  "validation": {
+   "state": "ungraded",
+   "limitation": "converged DC is not physical startup or functional readout proof"
+  },
+  "valid_while": [
+   "same full FF circuit, nominal C2 replay, PDK, load and t=0 sources"
+  ]
  }
 ]

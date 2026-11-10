@@ -157,7 +157,7 @@
       "summary": "四相采样与物理 deser16 将高速模拟判决转为恢复字时钟域的数据和边沿票。独立 PI 跟踪每一路远端频偏。",
       "facts": {
         "设计": "ac_trim / c2 / deser16",
-        "PVT": "采样窗口 135 条件",
+        "PVT": "窗口135条件；W40 FS/FF冷角短窗正确，全读出网格仍开",
         "失配": "CTLE / 采样 / 校准分析已有",
         "噪声": "孔径与联合噪声待补"
       },
@@ -1727,10 +1727,10 @@
       "key": "R04",
       "subtitle": "CML 1:2 → 匹配转换 → CMOS 1:4",
       "state": "结构已实现 / 角点迭代",
-      "summary": "W40完整FS低压冷角已从OPtran候选软提示获得无回退直接Newton DC，偏置与局部DC一致；完整瞬态/映射、FF冷角与全网格仍待闭合。",
+      "summary": "当前W40的FS/FF冷hh均以同条件软DC/理想锚点完成44.75ns，分别96/112数据位、49/55确定边沿零错；FF16路单独映射均唯一。全网格、实际SAR、原生锚点与启动仍开。",
       "facts": {
         "设计": "物理字路径已有",
-        "PVT": "旧边界45；W40的FS冷hh数值缺失、FF冷hh未见正式运行",
+        "PVT": "W40 FS/FF冷hh短窗正确；旧45点不转移；同版本45×RC未闭合",
         "失配": "读出局部MC待补",
         "噪声": "未做；保持/偏斜仅确定性预算"
       },
@@ -1743,14 +1743,15 @@
         ],
         "assumptions": [
           "先验证字内连续位映射，再检查数据/确定边沿。",
-          "当前÷2保持W40；旧45点报告称W80，历史include无快照，尺寸不可由当前源码追认。"
+          "当前÷2保持W40；旧45点报告称W80，历史include无快照，尺寸不可由当前源码追认。",
+          "新冷角结果固定PI20/trim32/rb2k、名义C2回放/理想相位；软nodeset无IC/UIC，不是从零启动。"
         ]
       },
       "planning": {
         "question": "怎样避免2GHz CMOS转换路径与数据延迟漂移不一致？",
         "model": "readout_deser_plan逐位映射与建立保持规划，DFF单元卡校准。",
         "parameters": "CML÷2 / 1:2、匹配静态转换、CMOS1:4、Johnson选通。",
-        "verification": "旧45点逐位/位映射与短PI动态；当前W40按接口回归。FF额外五次旧数值失败均W80。"
+        "verification": "当前W40 FS/FF冷角独立DC、1ns健康与44.75ns字映射已完成；旧45点仅历史，仍需同版本网格和动态。"
       },
       "references": [
         {
@@ -1776,6 +1777,18 @@
         {
           "title": "偏置/逐层OP数据",
           "path": "docs/data/rx_cold_op.json"
+        },
+        {
+          "title": "FS冷角读出波形",
+          "path": "docs/figures/rx/readout/fs_cold_w40_words.png"
+        },
+        {
+          "title": "FF冷角读出波形",
+          "path": "docs/figures/rx/readout/ff_cold_w40_words.png"
+        },
+        {
+          "title": "FF独立复算与身份",
+          "path": "docs/data/rx_ff_cold_readout.json"
         }
       ],
       "iterations": [
@@ -1818,6 +1831,48 @@
             {
               "title": "独立复核数据",
               "path": "docs/data/rx_cold_op.json"
+            }
+          ]
+        },
+        {
+          "id": "rx-w40-fs-cold-full-transient",
+          "title": "FS低压冷hh完整字流恢复",
+          "date": "2026-11-09",
+          "phase": "validation",
+          "problem": "当前W40 FS冷hh此前没有完整读出波形。",
+          "model": "同DUT直接DC软提示、禁用数值回退，原C2/理想相位及固定PRBS窗；不使用硬初值。",
+          "changes": "物理电路未改；独立1ns健康检查后完成44.75ns。",
+          "validation": "6有效字、96数据位/49确定边沿零错；合同位序正确，两个单路拟合有歧义。字建立/保持1662/1558ps，数据捕获最小359.81ps。",
+          "conclusion": "补上该FS冷角的短窗功能证据；FF冷、全网格、原生锚点、真实启动及BER仍开。",
+          "attachments": [
+            {
+              "title": "读出波形与有效字沿",
+              "path": "docs/figures/rx/readout/fs_cold_w40_words.png"
+            },
+            {
+              "title": "逐项复算数据",
+              "path": "docs/data/rx_cold_readout.json"
+            }
+          ]
+        },
+        {
+          "id": "rx-w40-ff-cold-full-transient",
+          "title": "FF高压冷hh当前W40完整字流恢复",
+          "date": "2026-11-11",
+          "phase": "validation",
+          "problem": "旧FF失败为W80，当前W40此前没有正式完整结果。",
+          "model": "冻结闭包与当前PDK映射源码逐字比较；同FF普通OP→禁回退Newton→1ns健康→44.75ns。",
+          "changes": "物理电路和原C2/理想锚点/PI20/trim32不变，7943节点只作软初猜，无IC/UIC。",
+          "validation": "7有效字、112数据位/55确定边沿零错；合同及16路单独位序均正确；字建立/保持1647/1588ps，数据捕获384.11ps。",
+          "conclusion": "该当前W40冷角的短窗功能已验证；不转为完整网格、真实启动/PLL、校准MC或BER资格。",
+          "attachments": [
+            {
+              "title": "FF波形",
+              "path": "docs/figures/rx/readout/ff_cold_w40_words.png"
+            },
+            {
+              "title": "证据与复算",
+              "path": "docs/data/rx_ff_cold_readout.json"
             }
           ]
         }

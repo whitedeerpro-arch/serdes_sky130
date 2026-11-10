@@ -9,5 +9,14 @@
   "full_run": "results/analog/rx/sampler/cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d/transient_full",
   "full_state_at_registration": "started; no final summary registered",
   "scope": "FS 1.65V -40C hh W40; real bias; original PRBS and 44.75ns; numerical DC soft hints only, not physical startup",
-  "functional_qualified": false
+  "functional_qualified": false,
+  "updated_at": "2026-11-09T14:18:29.275109+00:00",
+  "state": "complete",
+  "full_summary": "results/analog/rx/sampler/cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d/analysis/20261109T140521.539625Z/summary.json",
+  "full_summary_sha256": "1c230fdb040e824ec5e0d091cf931ac6da96701b29ffa136e112838324bc23f7",
+  "data": "docs/data/rx_cold_readout.json",
+  "functional_observation": "96 data/49 determinate edges zero errors; contract map true; fixed FS cold boundary only",
+  "short_window_functional_checks_pass": true,
+  "qualification_note": "Specific fixed FS cold readout window only; no full-PVT/noise/startup/BER qualification",
+  "related_ff_cold": "results/catalog/rx_ff_cold_readout.json"
 }

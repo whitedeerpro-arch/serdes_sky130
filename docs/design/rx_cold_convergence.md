@@ -1,6 +1,6 @@
 # RX 冷角：偏置与读出的分层收敛诊断
 
-当前 FS 1.65 V −40 °C hh、完整W40读出及真实偏置已找到 **不依赖gmin/source/OPtran回退的直接Newton直流解**。先用SPARSE取得OPtran候选，再以其全节点电压作为软初猜，关闭所有回退重新求DC；完整电路偏置回到局部DC数值。此前120s的未完成和OPtran终点都不再等同于“找不到正确偏置根”。有效偏置下44.75ns完整读出瞬态、字映射和FF冷角仍待完成。
+当前W40的FS/FF两个冷角hh均已完成独立Newton DC与44.75ns完整读出：FS为6字/96数据位/49确定边沿零错，FF为7字/112数据位/55确定边沿零错。两者合同位映射正确，FF16路单独映射均唯一，FS两路仍有短窗拟合歧义。使用各自同条件电压软初猜，无gmin/source/OPtran回退或硬初值。当前W40全网格、原生锚点和真实启动仍开。
 
 ## 偏置单层
 
@@ -67,16 +67,45 @@
 | CML / CTLE电流 | 192.5485 / 45.7155 µA |
 | 整个完整RX电源电流幅值 | 16.5472 mA |
 
-相对OPtran候选，vgi变化+8.923mV、vbias变化−13.123mV；7943个节点最大变化76.04mV，位于带隙内部`xbias_ref.xbg.s`。这个差异也说明10µs OPtran终点不能当作准确DC值。新解证明存在完整加载下的DC根，不证明原OPtran向量的残差、真实上电、时钟启动或字流功能；后续真实瞬态仍须检查偏置稳定与映射。
+相对OPtran候选，vgi变化+8.923mV、vbias变化−13.123mV；7943个节点最大变化76.04mV，位于带隙内部`xbias_ref.xbg.s`。这个差异也说明10µs OPtran终点不能当作准确DC值。新解证明存在完整加载下的DC根；字流验证见下节，真实上电不在此次边界内。
+
+## 正常偏置下的完整读出瞬态
+
+从直接DC raw提取相同电路的软节点初猜，数值边界为`rx_fs_w40_full_direct_newton_dc_seed_v1`。先完成0–1ns健康检查，再运行原0–44.75ns PRBS；两者均直接求初始工作点，没有回退或硬`.ic/uic`。完整运行908.7s，22560个实际时间点，所有所需向量有限。
+
+沿用原12.5–44.75ns测量窗和原PRBS对齐算法：窗内8个字时钟上升沿，起始offset=14；索引2–7的6个字满足原合法索引条件，时间为21.719–41.716ns。96个数据位、49个确定边沿均零错，`map_ok=true`。单路`b0_2`与`a1_0`各自仍可匹配[6,15]两处，不称16路均已唯一确定。
+
+字输出建立/保持最小值1662.44/1557.96ps，第0级数据捕获最小余量359.81ps；平均测试台功耗30.16mW。vbg初末差约1nV，vgi约0.16µV，vbias/vctle末值较初值变动约−0.13/−0.26mV。它证明当前固定PI20/trim32、rb2k、真实偏置、理想相位源及原C2输入边界下的短窗功能；未验收原生PLL锚点、PI动态、真实启动、失配/噪声、BER或全PVT。
+
+![FS冷角W40完整读出](../figures/rx/readout/fs_cold_w40_words.png)
+
+[独立复算数据](../data/rx_cold_readout.json)、[索引](../../results/catalog/rx_cold_readout.json)与[采集器](../../verification/plotting/rx_cold_readout.py)保存波形/执行/计划身份、全部字沿和有效索引，不改动原测量窗。
+
+## FF冷角的当前W40恢复
+
+FF1.95V/−40°C/hh使用原FF测试台与固定名义C2回放、PI20/trim32/rb2k、真实偏置、理想相位源。先将已明确W40的冻结单元逐个与当前源码作PDK电阻映射比较：七个文本差异均由该映射解释，整个闭包映射后一致。原FF五次W80失败仍保留，不转为本次W40失败或通过。
+
+普通OP在gmin/source失败后返回10µs OPtran候选。以其自身7943个有限电压作软`.nodeset`，关闭所有求解回退后独立Newton成功：vbg/vgi为1.23673667/1.23626939V、vbias/vctle为0.97126810/0.66008921V。相对候选最大节点改变量14.51mV，位于`xbias_ref.xbg.s`；不将原OPtran终点追认为准确DC。
+
+新数值边界登记为`rx_ff_w40_optran_newton_seed_v1`与`rx_ff_w40_direct_newton_dc_seed_v1`。冻结原始源、父运行、PDK、输入、节点列表与单元；只核对本次依赖的注册条目，新增其他边界不改变既有条目身份。没有复用FS节点电压作FF种子，没有`.ic/uic`或强制逻辑状态。
+
+健康1ns后完成44.75ns正式瞬态，耗时944.8s。沿用12.5–44.75ns测量窗和原读出测量器，7字、112数据位、55确定边沿均零错，`map_ok=true`，全部16路单独位序唯一。字输出建立/保持最小1646.58/1587.90ps，第0级数据捕获最小384.11ps；该窗功耗的采样点算术均值45.356mW。主要偏置初末稳定，完整波形无回退、截断或缺向量。
+
+![FF冷角W40完整读出](../figures/rx/readout/ff_cold_w40_words.png)
+
+[FF逐点数据](../data/rx_ff_cold_readout.json)、[索引](../../results/catalog/rx_ff_cold_readout.json)与[独立采集器](../../verification/plotting/rx_ff_cold_readout.py)记录source/deck/execution/raw身份与原测量窗。这是当前固定C2/理想锚点下的短窗功能证据，不是全PVT、实际SAR校准、真实上电、原生PLL或BER资格。
 
 ## 证据与适用范围
 
-[独立复核数据](../data/rx_cold_op.json)和[运行索引](../../results/catalog/rx_cold_op.json)保存明确的summary、deck、execution及OP表身份；采集器逐项回读电压/电流，并保留最后一层超时。所有量对RX功能均为 **ungraded**；仅完成上述短时数值诊断，没有完成数据眼图、PI动态、CDR、失配或噪声验证。
+[工作点复核数据](../data/rx_cold_op.json)和[索引](../../results/catalog/rx_cold_op.json)保留各次诊断与失败；OP量对RX功能为ungraded。新瞬态单独记录上述短窗功能，不把OP成功、旧45点或此单点合成当前全网格资格。数据眼图、PI动态、CDR、失配与噪声仍按各自边界推进。
 
 运行前缀为 `results/analog/rx/sampler/`：
 
 - 偏置：`cold_bias_op/20261107T171335.226592Z_4e1d4df2`，执行及分析于2026-11-09完成。
 - 完整直接DC：`cold_readout_full_dc_newton/20261109T134022.118325Z_0e2ea2f8`，分析`20261109T134300.886399Z`。
+- 完整瞬态：`cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d`，pilot/full分析为`20261109T134921.992550Z`和`20261109T140521.539625Z`。
+- FF普通OP：`cold_readout_ff_current/20261110T125113.199628Z_8f15432e`；独立DC：`cold_readout_ff_direct_dc/20261110T130130.446962Z_0943ba28`，分析`20261110T130311.931588Z`。
+- FF完整瞬态：`cold_readout_ff_transient_dc/20261110T130359.865093Z_9bbc587f`，pilot/full分析为`20261110T130715.271029Z`和`20261110T161234.977317Z`。
 - lane 对照：`cold_readout_lane_op/20261109T132857.690692Z_6c4b5a34`，分析 `20261109T133038.816191Z` 与 `20261109T133117.956436Z`。
 - 读出部分：`cold_readout_parts/20261109T084345.824625Z_321a922a`，分析`20261109T084624.763139Z`；旧`20261109T083933.889249Z_dd8e579f`为夹具失败，不计设计结果。
 - 逐层：`cold_readout_layers/20261109T083205.422134Z_5cb6b16b`，分析 `20261109T083633.378024Z`。

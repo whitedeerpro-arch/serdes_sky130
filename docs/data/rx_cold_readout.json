@@ -1,0 +1,205 @@
+{
+  "scope": "FS 1.65 V -40 C hh; full W40 readout, PI20, trim32, rb2k; ideal phase sources, original C2 replay and real bias; soft same-DUT DC hints, no .ic/uic; not full PVT, physical startup or BER.",
+  "campaign": "results/analog/rx/sampler/cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d",
+  "pilot_summary": "results/analog/rx/sampler/cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d/analysis/20261109T134921.992550Z/summary.json",
+  "full_summary": "results/analog/rx/sampler/cold_readout_full_transient_dc/20261109T134623.873301Z_0c20ee1d/analysis/20261109T140521.539625Z/summary.json",
+  "measurement_window_ns": [
+    12.500000000000002,
+    44.75
+  ],
+  "word_rising_edges_ns": [
+    13.71934034663116,
+    17.719415321405567,
+    21.71853955224698,
+    25.718755985616536,
+    29.71861687795181,
+    33.720362726542454,
+    37.718443032530274,
+    41.71641156272641
+  ],
+  "word_edge_count": 8,
+  "usable_edge_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "usable_word_times_ns": [
+    21.71853955224698,
+    25.718755985616536,
+    29.71861687795181,
+    33.720362726542454,
+    37.718443032530274,
+    41.71641156272641
+  ],
+  "offset_start_bit": 14,
+  "offset_rule": "readout_deser.word_check minimizes contract mapping errors over candidate PRBS start offsets and requires >=4 usable words",
+  "usable_words": 6,
+  "data_bits": 96,
+  "data_errors": 0,
+  "edge_determinate": 49,
+  "edge_errors": 0,
+  "contract_map_ok": true,
+  "single_lane_ambiguities": {
+    "b0_2": [
+      6,
+      15
+    ],
+    "a1_0": [
+      6,
+      15
+    ]
+  },
+  "analysis": {
+    "condition": "fs_v1650_t-40",
+    "code": 20,
+    "power_mw": 30.159085819491363,
+    "w_setup_ps": 1662.4428987680294,
+    "w_hold_ps": 1557.9628544163822,
+    "start": 14,
+    "words": 6,
+    "data_errors": 0,
+    "edge_errors": 0,
+    "edge_determinate": 49,
+    "derived": {
+      "a0_0": [
+        12
+      ],
+      "a0_1": [
+        8
+      ],
+      "a0_2": [
+        4
+      ],
+      "a0_3": [
+        0
+      ],
+      "b0_0": [
+        14
+      ],
+      "b0_1": [
+        10
+      ],
+      "b0_2": [
+        6,
+        15
+      ],
+      "b0_3": [
+        2
+      ],
+      "a1_0": [
+        6,
+        15
+      ],
+      "a1_1": [
+        11
+      ],
+      "a1_2": [
+        7
+      ],
+      "a1_3": [
+        3
+      ],
+      "b1_0": [
+        13
+      ],
+      "b1_1": [
+        9
+      ],
+      "b1_2": [
+        5
+      ],
+      "b1_3": [
+        1
+      ]
+    },
+    "map_ok": true,
+    "capture": {
+      "a0": [
+        362.1668676193189,
+        595.7937058713773
+      ],
+      "b0": [
+        396.2851405999987,
+        558.5618364428228
+      ],
+      "ae1": [
+        290.81125622344814,
+        599.9687293442292
+      ],
+      "be1": [
+        324.999182197807,
+        563.9913278210616
+      ],
+      "a1": [
+        359.81430198142175,
+        598.1631997130103
+      ],
+      "b1": [
+        391.47321773295766,
+        563.0061620884615
+      ],
+      "ae0": [
+        287.6064266431195,
+        602.3749732255712
+      ],
+      "be0": [
+        323.0339547904634,
+        569.5380156684712
+      ]
+    },
+    "capture_data_slack_min_ps": 359.81430198142175,
+    "ck_start_ns": 1.9756598606667612,
+    "toggles": {
+      "w": 16,
+      "j0": 17,
+      "st_q": 16,
+      "st_m": 16,
+      "ckq": 64
+    }
+  },
+  "provenance": {
+    "runner": "analog/rx/sampler/tb/cold_readout_layers/full_transient_dc.py",
+    "runner_sha256": "467a357e5575e604aa2347b085c12e339b3c89b863a7e9192e92b400be866408",
+    "pilot_summary_sha256": "208043de51b2435691704d6b486dfa0f39a135224f71f1e55aa62bbe007db022",
+    "full_summary_sha256": "1c230fdb040e824ec5e0d091cf931ac6da96701b29ffa136e112838324bc23f7",
+    "pilot_raw_sha256": "62ab12421333bcc7a0908fd80b36925c5f56002b69e94c0da67ce6b2baffb0bb",
+    "full_raw_sha256": "cb2b94472ba610a8d5c0b9dea21db4698d5d5b91b1657d478d74d4e3ace8f445",
+    "collector_sha256": "ebc46804c3801071693192bca15c7f3dfac31e2289508ee6945e9034c0b60cc9",
+    "seed_bc": "rx_fs_w40_full_direct_newton_dc_seed_v1",
+    "replay_bc": "rx_c2_far_nominal@ctle_rc",
+    "plan_sha256": "aae94263de54e0b9c136fbc0d2036bdb27593773e3ce92544765349a6dc95ba6",
+    "historical_read_only_verification": {
+      "exceptions": {
+        "src/serdes_flow/mc.py": {
+          "historical_sha256": "f358f1dbca880ce3e775d80ec873255f5d73ce66013047a465cdea87e3a7702c",
+          "current_sha256": "4fdf7f31d1b94e793265e0020cfcae6774247ded55acbf620b38a34006517394",
+          "git_revision": "efb4f28f"
+        },
+        "src/serdes_flow/spice.py": {
+          "historical_sha256": "1ca9376c06a368890787da86d336dcc47960700971e7d19214cc19e8de94691b",
+          "current_sha256": "7d97d104f9b938f912515862bc03a9a74c84d1b3de2d43039f9ae3b0b7204d2f",
+          "git_revision": "c4cd1d1c",
+          "verified_equal_ast": [
+            "Waves",
+            "read_raw",
+            "_resolve"
+          ]
+        }
+      },
+      "profile_guard": "mc.py calls forbidden; spice.py reader-only calls allowed",
+      "observed_spice_calls": [
+        "__contains__",
+        "__getitem__",
+        "__init__",
+        "_column",
+        "_resolve",
+        "read_raw",
+        "t"
+      ],
+      "mc_calls": 0
+    }
+  }
+}

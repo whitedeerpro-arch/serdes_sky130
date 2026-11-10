@@ -170,6 +170,7 @@ def analyse(c,p):
     (out/'summary.json').write_text(json.dumps(data,indent=2,allow_nan=False)+'\n')
     print(json.dumps(dict(analysis=str(out.relative_to(ROOT)),cases=len(rows),ac_cases=sum(x['ac'] for x in rows),missing=missing,
                          rows=rows if len(rows)<=3 else None,calibration_codes=codes),indent=2),flush=True)
+    return out
 
 
 def resume(c,workers):

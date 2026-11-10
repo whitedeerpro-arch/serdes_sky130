@@ -32,6 +32,9 @@ uv run python analog/common/ldo/tb/r4/bias_filter.py --prepare --slow
 uv run python analog/common/ldo/tb/r4/bias_filter.py --resume <bias-filter-campaign> --workers 2
 uv run python analog/common/ldo/tb/r4/cap_load.py --prepare <complete-grid-summary.json>
 uv run python analog/common/ldo/tb/r4/cap_load.py --run <cap-load-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/cap_pvt.py --prepare <complete-grid-summary.json> --extra-pf 100
+uv run python analog/common/ldo/tb/r4/cap_pvt.py --prepare <complete-grid-summary.json> --extra-pf 100 --rc-crossed
+uv run python analog/common/ldo/tb/r4/cap_pvt.py --resume <cap-pvt-campaign> --workers 1
 uv run python analog/common/ldo/tb/r4/card.py --help
 uv run python analog/common/ldo/tb/r4/noise_check.py --help
 ```
@@ -46,6 +49,8 @@ dot -Tpng docs/figures/clocking/pll/core/ldo_hv18_r4.dot -o docs/figures/clockin
 ```
 
 发布脚本核对source/PDK/deck/execution/输出SHA和网格坐标。结果本体在`results/analog/common/ldo/`（不入git），索引为`results/catalog/ldo_r4.json`，小数据和图为`docs/data/ldo_r4.json`及`docs/figures/clocking/pll/core/ldo_r4*.png`。
+
+额外100pF端点的425点补测另有[数据/明确summary参数](../../../docs/data/ldo_r4_pin_cap.json)与[索引](../../../results/catalog/ldo_r4_pin_cap.json)，使用`verification/plotting/ldo_r4_pin_cap.py --base ... --endpoint ... --crossed ...`重画；两个新增campaign保持原同R角校准码，交叉RC不按每条件重新择码。
 
 ## 历史与限制
 

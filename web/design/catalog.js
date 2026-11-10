@@ -1126,7 +1126,7 @@ window.DESIGN_CATALOG = {
       "summary": "参考RC＋独立6bit电压修调、PDK无源；1215点输出1.776–1.815V，255点AC最差38.44dB/PM71.28°。独立尾偏置滤波候选与引脚电容约束已有，尚未改接现行PLL。",
       "facts": {
         "设计": "HV18 r4；静态Vin/quiet双配置、无串联开关",
-        "PVT": "DC1215；AC255；独立HV/host、MOS五角与RC三段",
+        "PVT": "DC1215/AC255；额外100pF端点5MOS×5RC共425点",
         "失配": "电压码＋TT±90mV范围压力；HV/PNP统计覆盖未完成",
         "噪声": "真实参考DC谱200–246µVrms；PLL相关噪声/抖动未合并"
       },
@@ -1140,7 +1140,7 @@ window.DESIGN_CATALOG = {
         ],
         "assumptions": [
           "仅初始化配置；不支持Vin0且quiet独立供电。",
-          "片上100pF；额外100pF仅规划，需补PVT/pad/ESD；不能任意外接nF去耦。",
+          "片上100pF；额外100pF端点425点PM最低65.07°，电容区间/ESR/pad/ESD仍开；不能任意外接nF。",
           "使能前设置电压码；PLL等待quiet及tail建立；UVLO/ready未实现。",
           "瞬态为六压力条件、电阻负载和明确gate/vgi代理；未改现行PLL。"
         ]
@@ -1149,7 +1149,7 @@ window.DESIGN_CATALOG = {
         "question": "分别控制高压输入、共享参考和宿主尾偏置噪声，保留静态外供接口。",
         "model": "固定每模型名义电压码→独立HV/host网格→双注入/冷启动/噪声工作点→真实负载和引脚模型。",
         "parameters": "核心1k/50p＋10k/50p；Cout100p；参考1M/16p；6bit反馈；尾滤波候选1M/16p。",
-        "verification": "DC1215/AC255、校准1088、无源27、启动18、DC噪声18、tail AC3和额外电容两边界。"
+        "verification": "DC1215/AC255、校准1088、启动18/噪声18；额外100pF端点425点含hl/lh，非真实PLL通过。"
       },
       "references": [
         {
@@ -1171,6 +1171,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "quiet额外电容与PM",
           "path": "docs/figures/clocking/pll/core/ldo_r4_cap_load.png"
+        },
+        {
+          "title": "额外100pF端点PVT/交叉RC",
+          "path": "docs/figures/clocking/pll/core/ldo_r4_pin_cap_pvt.png"
         },
         {
           "title": "工作修订",
@@ -1225,6 +1229,27 @@ window.DESIGN_CATALOG = {
             {
               "title": "交接",
               "path": "docs/work_packages/WP-LDO-002-r4-handoff.md"
+            }
+          ]
+        },
+        {
+          "id": "hv18-r4-pin-cap-20261110",
+          "title": "quiet引脚100pF端点扩展至五种RC段",
+          "date": "2026-11-10",
+          "stage": "验证",
+          "problem": "独立quiet引脚不能任意接大电容；两压力边界不足以确定负载约束。",
+          "model": "保持同R角名义电压码；增加100pF理想负载，检查5MOS×5RC×17边界/名义点。",
+          "change": "未改DUT；新增端点PVT与hl/lh测试台。",
+          "validation": "425条DC/AC，单次向下交越；PM65.07–79.16°，20MHz抑制38.44–51.94dB；DC变化<0.6nV，全部日志无瞬态OP回退。",
+          "conclusion": "100pF理想端点有局部边界证据；实际pad/ESD/ESR、电容区间与启动仍需补。",
+          "attachments": [
+            {
+              "title": "设计与证据",
+              "path": "docs/design/ldo_r4.md"
+            },
+            {
+              "title": "逐点索引",
+              "path": "results/catalog/ldo_r4_pin_cap.json"
             }
           ]
         }

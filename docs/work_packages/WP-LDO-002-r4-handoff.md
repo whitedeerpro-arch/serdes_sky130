@@ -10,7 +10,7 @@
 - 六压力条件×三独立bench的360µs启动/同模式使能循环/静态旁路，共18条。电阻负载、12pF vgi和1pF尾栅代理，不是实际PLL。
 - 独立尾偏置1MΩ/16pF候选，三个真实gate AC边界；1MHz改善41–44dB；尚未插入当前PLL。
 - 六条件输出/尾偏置共18条纯DC噪声谱；逐次pass电流一致，1k–199.5MHz。没有完整慢节点逐点认证或PLL抖动结论。
-- quiet额外电容两边界扫描；1nF时最差PM35.85°，不能任意挂外部去耦。额外≤100pF仅规划，需选定端点后补PVT/真实引脚模型。
+- quiet额外电容两边界扫描；1nF时最差PM35.85°，不能任意挂外部去耦。100pF端点另补MOS五角×RC五段共425条DC/AC，最差PM65.07°；电容区间、ESR/真实引脚和启动仍开。
 
 ## 证据清单
 
@@ -26,9 +26,13 @@
 | 尾偏置100k/16p | `r4_bias_filter/20261110T112350.767887Z_4f102ee3` | 3 |
 | 尾偏置1M/16p | `r4_bias_filter/20261110T113540.869125Z_59f58e7a` | 3 |
 | 额外quiet电容 | `r4_cap_load/20261110T120319.075181Z_64e49ca1` | 16 |
+| 额外100pF端点ll/tt/hh | `r4_cap_pvt/20261110T124405.408601Z_ad913485` | 255 |
+| 额外100pF端点hl/lh | `r4_cap_pvt/20261110T125237.670359Z_af15b6b4` | 170 |
 | 电阻热噪声卡 | `resistor_noise_check/20261110T111240.488278Z` | 4器件 |
 
 读取完整清单并复核/重画：`uv run python verification/plotting/ldo_r4.py`。不启动ngspice，须有本机results与相同PDK；仅有git的环境可审查已发布摘要，不能称为raw复核。
+
+端点补测另见[数据与命令输入](../data/ldo_r4_pin_cap.json)、[catalog](../../results/catalog/ldo_r4_pin_cap.json)，由`verification/plotting/ldo_r4_pin_cap.py --base ... --endpoint ... --crossed ...`读取三份明确summary重画，不混入原九项基线清单。
 
 保留但排除：早期xhigh参考电阻活动`r4/20261110T110933.041892Z_f3aa54e9`已显式终止；startup末尾旧noise偏置不成立；DCnoise `20261110T114706.769581Z_464b47a0`也被pass电流检查器拒绝。有效噪声必须使用上表campaign与清单所列新分析，不将旧约6µV数值混入。
 
@@ -45,7 +49,7 @@
 
 先画出供电域连接表，审查VCO/首buffer/CP/LF/预充/码驱动/窗口门限的host与quiet归属。tail滤波仅移动gate侧，保留本地二极管和电流拷贝在原侧。原宿主VDD比例门限需要检查，不能在quiet恒1.8V时仍默认host=quiet。
 
-提取真实负载和实际gate/分布电容，选定quiet引脚Cload端点并补PVT，再安排有价值的短启动/捕获/切码/负载阶跃联合验证。原r3动态测量不可直接标为r4已完成；已有PLL集成不需要从头再证明。
+提取真实负载和实际gate/分布电容，100pF理想端点PVT已补；继续真实quiet引脚模型和电容区间，再安排有价值的短启动/捕获/切码/负载阶跃联合验证。原r3动态测量不可直接标为r4已完成；已有PLL集成不需要从头再证明。
 
 随后补电压码存储/工厂测量流程、quiet和bias-ready与失效复位边界；模型侧以r4实际传递重算两电源与尾偏置路径，明确共享BG相关噪声，再决定PLL噪声实验。HV/PNP局部随机模型有缺口，先做采样/几何审计，不能直接跑通用MC后宣称完整失配资格。
 

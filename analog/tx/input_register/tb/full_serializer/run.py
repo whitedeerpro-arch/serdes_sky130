@@ -19,6 +19,7 @@ import numpy as np
 
 from serdes_flow import bias,boundary,clock,project,rcorner,serial,spice,watch
 from serdes_flow.corners import Condition
+from serdes_flow.clock_profiles import normalize_extra
 
 ROOT=project.ROOT
 HERE=Path(__file__).resolve().parent
@@ -127,13 +128,14 @@ def check_runtime_includes(text,camp,plan):
             raise ValueError(f'unbound or changed runtime include: {path}')
 
 
-def vectors():
+def vectors(extra_2g=1):
     names=['v(vdd)','i(Vdd)','v(xtx.word_clk)','v(xtx.xcap.clk_b)','v(qp)','v(qn)','v(lqp)','v(lqn)','v(lrp)','v(lrn)']
     names += [f'v({x})' for x in SELECTS]+['v(s2gp)','v(s2gn)']+dist.probe_vectors()
     names += [f'v(d{i})' for i in range(16)]+[f'v(xtx.q{i})' for i in range(16)]
     names += [f'v(xtx.xcap.s{i})' for i in range(16)]
     names += [f'v(xtx.xcap.h{i})' for i in range(8,16)]
     names += [f'v(xtx.xc{i}.din_b)' for i in range(16)]
+    names += [f'v(xclocks.{node}{leg})' for node in ['i2g']+[f'e2g_{i}' for i in range(extra_2g)] for leg in ('p','n')]
     return list(dict.fromkeys(names+trace_vectors.internal_vectors()))
 
 
@@ -154,11 +156,59 @@ def check_output_identity(plan, entry):
     return planned
 
 
-def distribution(extra_2g=1,output_wt=24,output_r=300):
+def stage_parameters(wt=16, resistance=400):
+    """Uniform sizes of the 2 GHz extra buffers; iso/other clocks stay fixed."""
+    return output_parameters(wt,resistance)
+
+
+def check_stage_identity(plan, entry):
+    planned=stage_parameters(plan.get('clock_stage_wt',16),plan.get('clock_stage_r',400))
+    upstream=entry['upstream']
+    registered=stage_parameters(upstream.get('clock_stage_wt',16),upstream.get('clock_stage_r',400))
+    if planned!=registered:raise ValueError('clock extra-stage parameters differ from registered probe')
+    return planned
+
+
+def extra_profile(plan):
+    value=plan.get('clock_stage_profile')
+    return None if value is None else normalize_extra(value,plan.get('clock_extra_2g',1))
+
+
+def check_stage_profile_identity(plan,entry):
+    profile=extra_profile(plan)
+    if profile!=extra_profile(entry['upstream']):raise ValueError('clock stage profile differs from registered probe')
+    return profile
+
+
+def distribution(extra_2g=1,output_wt=24,output_r=300,stage_wt=16,stage_r=400,stage_profile=None):
     if type(extra_2g) is not int or extra_2g not in (1,2,3,4,5):raise ValueError('unsupported 2GHz extra-stage count')
     wt,resistance=output_parameters(output_wt,output_r)
-    return dist.netlist({'extra':{**dist.DEFAULT['extra'],'2g':extra_2g},
-                         'out':{**dist.DEFAULT['out'],'2g':(32,wt,resistance)}})
+    text=dist.netlist({'extra':{**dist.DEFAULT['extra'],'2g':extra_2g},
+                       'out':{**dist.DEFAULT['out'],'2g':(32,wt,resistance)}})
+    sw,sr=stage_parameters(stage_wt,stage_r)
+    profile=None if stage_profile is None else normalize_extra(stage_profile,extra_2g)
+    if profile is None and (sw,sr)==(16,400):return text
+    sizes=profile if profile is not None else [[24,sw,sr]]*extra_2g
+    def override(match):
+        wn,wt,r=sizes[int(match.group(2))]
+        return f'{match.group(1)} wn={wn} wt={wt} rload={r}'
+    text,count=re.subn(r'(?m)^(Xe2g_(\d+) .*? serdes_cml_buffer) wn=24 wt=16 rload=400$',override,text)
+    if count!=extra_2g:raise ValueError('extra-stage override did not match the 2GHz chain')
+    return f'* 2GHz extra sizes [WN,WT,R]: {sizes}; iso and other clocks unchanged\n'+text
+
+
+def check_distribution_identity(plan, deck_text):
+    """Reject inconsistent plan sizes before registering or using a probe."""
+    expected=distribution(plan.get('clock_extra_2g',1),*output_parameters(
+        plan.get('clock_output_wt',24),plan.get('clock_output_r',300)),*stage_parameters(
+        plan.get('clock_stage_wt',16),plan.get('clock_stage_r',400)),extra_profile(plan))
+    def statements(text):
+        match=re.search(r'(?ms)^\.subckt serdes_cml_clock_distribution_tx_lowov .*?^\.ends serdes_cml_clock_distribution_tx_lowov$',text)
+        if match is None:raise ValueError('missing actual clock distribution')
+        return [' '.join(line.lower().split()) for line in match.group().splitlines()
+                if line.strip() and not line.lstrip().startswith('*')]
+    if statements(deck_text)!=statements(expected):
+        raise ValueError('actual clock distribution differs from plan parameters')
 
 
 DRIVER_LINE='Xdriver qp qn tx_en lqp lqn vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32'
@@ -173,7 +223,7 @@ def driver_parameters(text):
     return ' '.join(f'{k}={pairs[k]}' for k in sorted(pairs))
 
 
-def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300,driver=None):
+def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300,driver=None,stage_wt=16,stage_r=400,stage_profile=None):
     lines=[]
     for name,period in (('250',4e-9),('500',2e-9),('1g',1e-9),('2g',.5e-9)):
         lines += [f'V{name} u{name} 0 PULSE(0 1 1n 30p 30p {period/2-30e-12:.12e} {period:.12e})',
@@ -182,11 +232,11 @@ def deck(c,data,stop,snap,smoke=False,extra_2g=1,output_wt=24,output_r=300,drive
     loads=[f'Cq{i} xtx.q{i} 0 2f' for i in range(16)]
     loads += [f'.nodeset v(xtx.q{i})=0 v(xtx.xcap.s{i})=0' for i in range(16)]
     include='\n'.join(f'.include "{ROOT/p}"' for p in dict.fromkeys(FILES))
-    vec=vectors()
+    vec=vectors(extra_2g)
     if 'Vguard_a ' in data:vec+=['v(guard_a)','v(guard_b)','v(guard_ready)','v(guard_valid)']
     tran='tran 2p 1.001n 0 2p' if smoke else spice.skip_output_before(f'tran 2p {stop:.12e} 0 2p','8n')
     txt=spice.render(HERE/'tb_full_ngspice.cir.in',**spice.corner_values(c),INCLUDES=include,
-        DISTRIBUTION='\n'.join(l for l in distribution(extra_2g,output_wt,output_r).splitlines() if not l.startswith('.include ')),CLOCK_SOURCES='\n'.join(lines),DATA=data,WIRE_LOADS='\n'.join(loads),
+        DISTRIBUTION='\n'.join(l for l in distribution(extra_2g,output_wt,output_r,stage_wt,stage_r,stage_profile).splitlines() if not l.startswith('.include ')),CLOCK_SOURCES='\n'.join(lines),DATA=data,WIRE_LOADS='\n'.join(loads),
         VECTORS=' '.join(vec),TRAN=tran)
     if driver:
         if txt.count(DRIVER_LINE)!=1:raise ValueError('driver instance line not found once')
@@ -222,7 +272,9 @@ def prepare(camp):
         if sha(ROOT/rel)!=plan['sources'][rel]:raise ValueError('physical circuit changed after probe')
     c=Condition.parse(plan['condition']);run=wave.parent
     ex=json.loads((run/'execution.json').read_text())
-    if sha(run/'tb.cir')!=ex['deck_sha256']:raise ValueError('probe deck changed')
+    if sha(run/'tb.cir')!=ex['deck_sha256'] or sha(run/'tb.cir')!=plan['deck_sha256']:
+        raise ValueError('probe deck differs from execution or plan')
+    check_distribution_identity(plan,(run/'tb.cir').read_text())
     bc_id='tx_capture_serializer_word_schedule_'+camp.name
     period=4e-9
     # Clock phase comes only from the loaded clock probe. The frequency is the
@@ -243,9 +295,10 @@ def prepare(camp):
     folder=camp/'prepared';folder.mkdir(exist_ok=False)
     schedule_path=folder/'schedule.json';schedule_path.write_text(json.dumps(schedule,indent=2)+'\n')
     output_wt,output_r=output_parameters(plan.get('clock_output_wt',24),plan.get('clock_output_r',300))
+    stage_wt,stage_r=stage_parameters(plan.get('clock_stage_wt',16),plan.get('clock_stage_r',400))
     entry=dict(id=bc_id,kind='loaded_word_clock_event_schedule',
         description='Producer events on a loaded capture/serializer word clock. Actual v3 distribution/receiver; ideal CML source, exact 2GHz. RTL behavior replay, no output-derived phase fit.',
-        upstream=dict(module='tx.capture',revision='capture_serializer16_candidate',clock_extra_2g=plan.get('clock_extra_2g',1),clock_output_wt=output_wt,clock_output_r=output_r,physical_sources={p:plan['sources'][p] for p in PHYSICAL},fixture_sha256=fixture_signature((run/'tb.cir').read_text())),
+        upstream=dict(module='tx.capture',revision='capture_serializer16_candidate',clock_extra_2g=plan.get('clock_extra_2g',1),clock_output_wt=output_wt,clock_output_r=output_r,clock_stage_wt=stage_wt,clock_stage_r=stage_r,physical_sources={p:plan['sources'][p] for p in PHYSICAL},fixture_sha256=fixture_signature((run/'tb.cir').read_text())),
         nodes=dict(clock='xtx.word_clk',producer_data='d0..d15'),
         load=boundary.input_stage_signature(DUT,'serdes_tx_capture_serializer16',SELECTS),
         points={c.tag:boundary.run_record(run,condition=c.tag,raw=str(wave.relative_to(ROOT)),raw_sha256=sha(wave),pdk_installation_id=ex['pdk_installation_id'])},
@@ -259,6 +312,7 @@ def prepare(camp):
         entry['upstream']['numerical_source_graph_sha256']=plan['numerical_source_graph_sha256']
     if plan.get('driver_params'):
         entry['upstream']['driver_params']=plan['driver_params']
+    if extra_profile(plan) is not None:entry['upstream']['clock_stage_profile']=extra_profile(plan)
     boundary.register(entry)
     print(bc_id,schedule_path,flush=True)
     return entry
@@ -330,6 +384,8 @@ def execute(camp,plan,manifest,entry):
         raise ValueError('registered producer boundary changed')
     if entry:
         check_output_identity(plan,entry)
+        check_stage_identity(plan,entry)
+        check_stage_profile_identity(plan,entry)
         if plan.get('clock_extra_2g',1)!=entry['upstream'].get('clock_extra_2g',1):
             raise ValueError('clock stage count differs from registered probe')
     if entry and plan['fixture_sha256']!=entry['upstream']['fixture_sha256']:
@@ -337,6 +393,7 @@ def execute(camp,plan,manifest,entry):
     original=(camp/'execution/physical_tb.cir').read_text()
     if hashlib.sha256(original.encode()).hexdigest()!=plan['deck_sha256']:raise ValueError('physical deck changed')
     check_stimulus_graph(plan,entry,original)
+    if 'clock_extra_2g' in plan:check_distribution_identity(plan,original)
     wave=spice.case_output(camp,'run','waveforms.raw',plan['stop_s'])
     print(camp,flush=True)
     if wave is None:
@@ -344,8 +401,10 @@ def execute(camp,plan,manifest,entry):
             raise RuntimeError('campaign still has a live ngspice; observe it instead of restarting')
         check_runtime_includes(original,camp,plan)
         check_runtime_includes((camp/'execution/smoke_tb.cir').read_text(),camp,plan)
+        if len(watch.ngspice_cwds())>=4:raise RuntimeError('global ngspice limit before smoke')
         smoke=spice.run((camp/'execution/smoke_tb.cir').read_text(),spice.next_run_dir(camp,'smoke'),timeout_s=180)
         if not smoke.ok or spice.case_output(camp,'smoke','waveforms.raw',1e-9) is None:raise RuntimeError(f'smoke failed: {smoke.run_dir}')
+        if len(watch.ngspice_cwds())>=4:raise RuntimeError('global ngspice limit before full run')
         ex=spice.run(original,spice.next_run_dir(camp,'run'),timeout_s=180+12*plan['stop_s']/1e-9,
                      meta=dict(resumed_from=str(camp/'execution/physical_tb.cir'),boundary_id=plan['boundary_id']))
         wave=spice.case_output(camp,'run','waveforms.raw',plan['stop_s'])
@@ -375,26 +434,44 @@ def main():
     p.add_argument('--clock-extra-2g',type=int,choices=(1,2,3,4,5),help='extra buffer stages before the final 2GHz output driver; baseline=1')
     p.add_argument('--clock-output-wt',type=float,help='2GHz output tail width; baseline=24')
     p.add_argument('--clock-output-r',type=float,help='2GHz output nominal load resistance; baseline=300')
+    p.add_argument('--clock-stage-wt',type=float,help='tail width of all 2GHz extra buffers; baseline=16, iso/other clocks fixed')
+    p.add_argument('--clock-stage-r',type=float,help='nominal load of all 2GHz extra buffers; baseline=400')
+    p.add_argument('--clock-stage-profile',help='JSON list of per-stage [WN,WT,R] triples; overrides uniform extra sizing')
     p.add_argument('--driver-params',help="line-driver overrides for probe, e.g. 'rpre=120 wtpre=60 wout=192'; run inherits them from the probe boundary")
     a=p.parse_args()
     a.driver_params=driver_parameters(a.driver_params)
-    for value,name in ((a.clock_output_wt,'clock output wt'),(a.clock_output_r,'clock output resistance')):
+    if a.clock_stage_profile is not None and (a.clock_stage_wt is not None or a.clock_stage_r is not None):
+        p.error('use either a stage profile or uniform stage overrides')
+    for value,name in ((a.clock_output_wt,'clock output wt'),(a.clock_output_r,'clock output resistance'),
+                       (a.clock_stage_wt,'clock extra-stage wt'),(a.clock_stage_r,'clock extra-stage resistance')):
         if value is not None and (not math.isfinite(value) or value<=0):p.error(f'{name} must be positive and finite')
     if a.mode=='prepare':
         if a.probe is None:p.error('--probe required')
         probe_plan=json.loads((a.probe/'plan.json').read_text())
         wt,resistance=output_parameters(probe_plan.get('clock_output_wt',24),probe_plan.get('clock_output_r',300))
+        sw,sr=stage_parameters(probe_plan.get('clock_stage_wt',16),probe_plan.get('clock_stage_r',400))
+        profile=extra_profile(probe_plan)
         if a.clock_extra_2g is not None and a.clock_extra_2g!=probe_plan.get('clock_extra_2g',1):raise ValueError('probe clock stage count differs')
         if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('probe clock output wt differs')
         if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('probe clock output resistance differs')
+        if a.clock_stage_wt is not None and a.clock_stage_wt!=sw:raise ValueError('probe clock extra-stage wt differs')
+        if a.clock_stage_r is not None and a.clock_stage_r!=sr:raise ValueError('probe clock extra-stage resistance differs')
+        if a.clock_stage_profile is not None and normalize_extra(a.clock_stage_profile,probe_plan.get('clock_extra_2g',1))!=profile:
+            raise ValueError('probe clock stage profile differs')
         prepare(a.probe.resolve());return
     if a.resume:
         camp=a.resume.resolve();plan=json.loads((camp/'plan.json').read_text())
         if plan['mode']!=a.mode:raise ValueError('resume mode differs from original')
         if a.clock_extra_2g is not None and a.clock_extra_2g!=plan.get('clock_extra_2g',1):raise ValueError('resume clock stage count differs')
         wt,resistance=output_parameters(plan.get('clock_output_wt',24),plan.get('clock_output_r',300))
+        sw,sr=stage_parameters(plan.get('clock_stage_wt',16),plan.get('clock_stage_r',400))
+        profile=extra_profile(plan)
         if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('resume clock output wt differs')
         if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('resume clock output resistance differs')
+        if a.clock_stage_wt is not None and a.clock_stage_wt!=sw:raise ValueError('resume clock extra-stage wt differs')
+        if a.clock_stage_r is not None and a.clock_stage_r!=sr:raise ValueError('resume clock extra-stage resistance differs')
+        if a.clock_stage_profile is not None and normalize_extra(a.clock_stage_profile,plan.get('clock_extra_2g',1))!=profile:
+            raise ValueError('resume clock stage profile differs')
         if a.driver_params is not None and a.driver_params!=plan.get('driver_params'):raise ValueError('resume driver parameters differ')
         if 'snapshot_files' not in plan:raise ValueError('legacy campaign has no rendered checkpoint; keep it as evidence')
         manifest=json.loads((camp/'execution/stimulus_manifest.json').read_text()) if a.mode=='run' else None
@@ -405,15 +482,23 @@ def main():
     if a.mode=='probe':
         extra_2g=a.clock_extra_2g if a.clock_extra_2g is not None else 1
         wt,resistance=output_parameters(a.clock_output_wt if a.clock_output_wt is not None else 24,a.clock_output_r if a.clock_output_r is not None else 300)
+        sw,sr=stage_parameters(a.clock_stage_wt if a.clock_stage_wt is not None else 16,a.clock_stage_r if a.clock_stage_r is not None else 400)
+        profile=None if a.clock_stage_profile is None else normalize_extra(a.clock_stage_profile,extra_2g)
         data=static_probe_sources();stop=48e-9;driver=a.driver_params
     else:
         if not a.bc or a.stimulus is None:p.error('--bc and --stimulus required')
         entry=boundary.get(a.bc);boundary.check_load(a.bc,boundary.input_stage_signature(DUT,'serdes_tx_capture_serializer16',SELECTS))
         extra_2g=entry['upstream'].get('clock_extra_2g',1)
         wt,resistance=output_parameters(entry['upstream'].get('clock_output_wt',24),entry['upstream'].get('clock_output_r',300))
+        sw,sr=stage_parameters(entry['upstream'].get('clock_stage_wt',16),entry['upstream'].get('clock_stage_r',400))
+        profile=extra_profile(entry['upstream'])
         if a.clock_output_wt is not None and a.clock_output_wt!=wt:raise ValueError('requested clock output wt differs from registered probe')
         if a.clock_output_r is not None and a.clock_output_r!=resistance:raise ValueError('requested clock output resistance differs from registered probe')
         if a.clock_extra_2g is not None and a.clock_extra_2g!=extra_2g:raise ValueError('requested clock count differs from registered probe')
+        if a.clock_stage_wt is not None and a.clock_stage_wt!=sw:raise ValueError('requested extra-stage wt differs from registered probe')
+        if a.clock_stage_r is not None and a.clock_stage_r!=sr:raise ValueError('requested extra-stage resistance differs from registered probe')
+        if a.clock_stage_profile is not None and normalize_extra(a.clock_stage_profile,extra_2g)!=profile:
+            raise ValueError('requested stage profile differs from registered probe')
         if c.tag not in entry['points']:raise ValueError('no matching probe condition')
         driver=entry['upstream'].get('driver_params')
         if a.driver_params is not None and a.driver_params!=driver:raise ValueError('requested driver parameters differ from registered probe')
@@ -435,7 +520,7 @@ def main():
         data=(a.stimulus/'stimuli.inc').read_text();stop=DATA_STOP
     camp=new_campaign_dir()
     sources=[Path(__file__),HERE/'trace.py',HERE/'tb_full_ngspice.cir.in',EXPECTED,DIST]+[ROOT/x for x in set(FILES)]
-    sources += [ROOT/'src/serdes_flow'/x for x in ('spice.py','bias.py','rcorner.py','project.py','clock.py','waves.py','serial.py','boundary.py','watch.py')]
+    sources += [ROOT/'src/serdes_flow'/x for x in ('spice.py','bias.py','rcorner.py','project.py','clock.py','waves.py','serial.py','boundary.py','watch.py','clock_profiles.py')]
     sources += [ROOT/'config'/x for x in ('pdk.toml','tools.toml')]
     if manifest:sources += [ROOT/'digital/tx/rtl/tx_ingress_control.sv',ROOT/'verification/digital/tx_ingress_stimulus.py']
     identity={str(x.relative_to(ROOT)):sha(x) for x in sources}
@@ -450,10 +535,11 @@ def main():
         out=camp/'execution/producer';out.mkdir()
         for name in manifest['outputs']:shutil.copyfile(a.stimulus/name,out/name)
         (camp/'execution/boundary.json').write_text(json.dumps(entry,indent=2)+'\n')
-    full=deck(c,data,stop,camp/'snap/run',extra_2g=extra_2g,output_wt=wt,output_r=resistance,driver=driver);smoke=deck(c,data,stop,camp/'snap/smoke',True,extra_2g=extra_2g,output_wt=wt,output_r=resistance,driver=driver)
+    full=deck(c,data,stop,camp/'snap/run',extra_2g=extra_2g,output_wt=wt,output_r=resistance,driver=driver,stage_wt=sw,stage_r=sr,stage_profile=profile)
+    smoke=deck(c,data,stop,camp/'snap/smoke',True,extra_2g=extra_2g,output_wt=wt,output_r=resistance,driver=driver,stage_wt=sw,stage_r=sr,stage_profile=profile)
     (camp/'execution/physical_tb.cir').write_text(full);(camp/'execution/smoke_tb.cir').write_text(smoke)
     checkpoints=[x for root in (camp/'snap',camp/'execution') for x in root.rglob('*') if x.is_file()]
-    plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,clock_output_wt=wt,clock_output_r=resistance,driver_params=driver,
+    plan=dict(mode=a.mode,condition=c.tag,stop_s=stop,sources=identity,boundary_id=a.bc,payload_bits=PAYLOAD_BITS,clock_extra_2g=extra_2g,clock_output_wt=wt,clock_output_r=resistance,clock_stage_wt=sw,clock_stage_r=sr,clock_stage_profile=profile,driver_params=driver,
               numerical_source_graph_sha256=stimulus_graph_signature(full),
               fixture_sha256=fixture_signature(full),deck_sha256=hashlib.sha256(full.encode()).hexdigest(),
               boundary_sha256=hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest() if entry else None,

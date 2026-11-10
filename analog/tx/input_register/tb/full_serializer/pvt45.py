@@ -33,6 +33,7 @@ from pathlib import Path
 
 from serdes_flow import boundary, corners, watch
 from serdes_flow.project import ROOT
+from serdes_flow.clock_profiles import normalize_extra
 
 HERE = Path(__file__).resolve().parent
 RUN = HERE / "run.py"
@@ -193,6 +194,10 @@ def adopt(camp, plan, spec):
         if pl["condition"] != cond or pl.get("driver_params") != plan["driver_params"] or \
                 [pl["clock_extra_2g"], pl["clock_output_wt"], pl["clock_output_r"]] != plan["clock"]:
             raise ValueError(f"{p}: condition or configuration differs from the campaign")
+        if [pl.get("clock_stage_wt",16),pl.get("clock_stage_r",400)] != plan.get("clock_stage",[16,400]):
+            raise ValueError(f"{p}: clock extra-stage sizing differs from the campaign")
+        if pl.get("clock_stage_profile") != plan.get("clock_stage_profile"):
+            raise ValueError(f"{p}: per-stage clock profile differs from the campaign")
         for rel, digest in pl["sources"].items():
             if rel in plan["sources"] and plan["sources"][rel] != digest:
                 raise ValueError(f"{p}: {rel} differs from the campaign's source")
@@ -208,7 +213,7 @@ def adopt(camp, plan, spec):
 def sources():
     import hashlib
     files = [RUN, Path(__file__), PRODUCER, HERE / "tb_full_ngspice.cir.in", ROOT / "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice",
-             ROOT / "digital/tx/rtl/tx_ingress_control.sv"]
+             ROOT / "digital/tx/rtl/tx_ingress_control.sv", ROOT / "src/serdes_flow/clock_profiles.py"]
     return {str(f.relative_to(ROOT)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files}
 
 
@@ -256,24 +261,32 @@ def main():
     ap.add_argument("--clock-extra-2g", type=int, default=5)
     ap.add_argument("--clock-output-wt", type=float, default=16)
     ap.add_argument("--clock-output-r", type=float, default=240)
+    ap.add_argument("--clock-stage-wt", type=float, default=16)
+    ap.add_argument("--clock-stage-r", type=float, default=400)
+    ap.add_argument("--clock-stage-profile", help="JSON list of [WN,WT,R] triples, one per extra2g stage")
     ap.add_argument("--driver-params", default="rpre=120 wtpre=60 wout=192")
     ap.add_argument("--adopt", action="append", default=[], metavar="COND=PROBE,RUN")
     ap.add_argument("--conds", nargs="*")
-    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--workers", type=int, choices=(1,2,3,4), default=2)
     ap.add_argument("--retry", action="store_true")
     a = ap.parse_args()
     if a.mode == "start":
         sys.path.insert(0, str(HERE))
-        from run import driver_parameters, output_parameters  # same normalisation as the single-point runner
+        from run import driver_parameters, output_parameters, stage_parameters  # same normalisation as the single-point runner
         wt, r = output_parameters(a.clock_output_wt, a.clock_output_r)
+        sw, sr = stage_parameters(a.clock_stage_wt, a.clock_stage_r)
+        profile=None if a.clock_stage_profile is None else normalize_extra(a.clock_stage_profile,a.clock_extra_2g)
+        if profile is not None and (sw,sr)!=(16,400):ap.error('use either a stage profile or uniform stage overrides')
         driver = driver_parameters(a.driver_params)
         conds = [c.tag for c in corners.boundary_first(corners.grid45())]
         if a.conds:
             conds = [c for c in conds if c in set(a.conds)]
         camp = RESULTS / now()
         camp.mkdir(parents=True, exist_ok=False)
-        plan = dict(conditions=conds, clock=[a.clock_extra_2g, wt, r], driver_params=driver,
-                    clock_args=["--clock-extra-2g", str(a.clock_extra_2g), "--clock-output-wt", str(wt), "--clock-output-r", str(r)],
+        plan = dict(conditions=conds, clock=[a.clock_extra_2g, wt, r], clock_stage=[sw,sr], clock_stage_profile=profile, driver_params=driver,
+                    clock_args=["--clock-extra-2g", str(a.clock_extra_2g), "--clock-output-wt", str(wt), "--clock-output-r", str(r),
+                                *(["--clock-stage-profile",json.dumps(profile)] if profile is not None else
+                                  ["--clock-stage-wt",str(sw),"--clock-stage-r",str(sr)])],
                     driver_args=["--driver-params", driver] if driver else [], sources=sources(), started=now(),
                     gates="serializer and pad: serial.meets_draft (75 mV / 0.15 UI) + function; remote: comparison")
         (camp / "plan.json").write_text(json.dumps(plan, indent=1) + "\n")

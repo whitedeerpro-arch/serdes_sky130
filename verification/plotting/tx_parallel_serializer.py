@@ -18,6 +18,7 @@ import numpy as np
 from serdes_flow import clock, serial, spice
 from serdes_flow.project import ROOT
 from serdes_flow.corners import Condition
+from serdes_flow.clock_profiles import normalize_extra
 
 DEFAULT = ROOT / 'results/analog/tx/parallel_serializer/20261107T044921Z'
 DATA = ROOT / 'docs/data/tx_parallel_serializer.json'
@@ -85,10 +86,20 @@ def clock_extra_2g(plan, entry, deck_text):
     iso = next((line.split() for line in lines if line.startswith('xiso2g ')), None)
     if iso != expected('xiso2g','r2g','i2g',small):
         raise ValueError('clock input isolation stage differs from v3')
+    stage_wt, stage_r = clock_stage_parameters(plan, entry)
+    profile=clock_stage_profile(plan,entry)
     for i in range(declared_plan):
         src = 'i2g' if i == 0 else f'e2g_{i-1}'
-        if by_name[f'xe2g_{i}'] != expected(f'xe2g_{i}',src,f'e2g_{i}',small):
+        actual = by_name[f'xe2g_{i}']
+        prefix = expected(f'xe2g_{i}',src,f'e2g_{i}',[])
+        if actual[:len(prefix)] != prefix or len(actual) != len(prefix)+3:
             raise ValueError('clock extra stage connectivity differs from v3')
+        try:
+            params = dict(token.split('=',1) for token in actual[len(prefix):])
+            wn,wt,r=profile[i] if profile is not None else (24,stage_wt,stage_r)
+            valid = set(params)=={'wn','wt','rload'} and float(params['wn'])==wn and float(params['wt'])==wt and float(params['rload'])==r
+        except (ValueError,KeyError):valid=False
+        if not valid:raise ValueError('clock extra-stage sizes differ from archived metadata')
     wt, resistance = clock_output_parameters(plan, entry)
     out = next((line.split() for line in lines if line.startswith('xout2g ')), None)
     prefix = expected('xout2g',f'e2g_{declared_plan-1}','c2g',[])
@@ -104,19 +115,41 @@ def clock_extra_2g(plan, entry, deck_text):
 
 
 def clock_output_parameters(plan, entry):
+    return clock_pair_parameters(plan, entry, 'clock_output', (24,300))
+
+
+def clock_stage_parameters(plan, entry):
+    return clock_pair_parameters(plan, entry, 'clock_stage', (16,400))
+
+
+def clock_pair_parameters(plan, entry, stem, defaults):
     def checked(obj):
-        values=(obj.get('clock_output_wt',24),obj.get('clock_output_r',300))
+        values=(obj.get(stem+'_wt',defaults[0]),obj.get(stem+'_r',defaults[1]))
         if any(isinstance(x,bool) or not isinstance(x,(int,float)) or not math.isfinite(x) or x<=0 for x in values):
-            raise ValueError('clock output parameters must be positive finite numbers')
+            raise ValueError(stem+' parameters must be positive finite numbers')
         return values
     planned=checked(plan); registered=checked(entry.get('upstream',{}))
-    if planned!=registered:raise ValueError('clock output parameters differ from boundary')
+    if planned!=registered:raise ValueError(stem+' parameters differ from boundary')
+    return planned
+
+
+def clock_stage_profile(plan,entry):
+    def checked(obj):
+        value=obj.get('clock_stage_profile')
+        return None if value is None else normalize_extra(value,obj.get('clock_extra_2g',1))
+    planned,registered=checked(plan),checked(entry.get('upstream',{}))
+    if planned!=registered:raise ValueError('per-stage profile differs from boundary')
     return planned
 
 
 def case_label(case):
     c = Condition.parse(case['condition'])
-    return f"{c.process.upper()} {c.supply:g}V {c.temp}°C / extra2g={case.get('clock_extra_2g', 1)} / wt={case.get('clock_output_wt',24):g} R={case.get('clock_output_r',300):g}"
+    text=f"{c.process.upper()} {c.supply:g}V {c.temp}°C / extra2g={case.get('clock_extra_2g', 1)} / wt={case.get('clock_output_wt',24):g} R={case.get('clock_output_r',300):g}"
+    if case.get('clock_stage_profile') is not None:
+        text+=' / extra WT='+','.join(f'{s[1]:g}' for s in case['clock_stage_profile'])
+    elif (case.get('clock_stage_wt',16),case.get('clock_stage_r',400))!=(16,400):
+        text+=f" / extra WT{case['clock_stage_wt']:g} R{case['clock_stage_r']:g}"
+    return text
 
 
 def collect(camp):
@@ -163,6 +196,8 @@ def collect(camp):
     graph_sha=check_stimulus_graph(plan,entry,deck_text)
     extra_2g = clock_extra_2g(plan, entry, deck_text)
     output_wt, output_r = clock_output_parameters(plan, entry)
+    stage_wt, stage_r = clock_stage_parameters(plan, entry)
+    profile=clock_stage_profile(plan,entry)
     w = spice.Waves(wave)
     c = Condition.parse(plan['condition'])
     actual = clock.edges(w.t, w['xtx.word_clk'] - c.supply / 2, 1, 12e-9, w.t[-1] - 1.2e-9)
@@ -203,7 +238,7 @@ def collect(camp):
         indices=np.unique(np.r_[indices,worst])
         traces = [np.interp(seq.start_s + (i + metrics['training_delay_ui'] + x) * seq.ui_s, w.t, y).round(6).tolist() for i in indices]
         outputs[label] = dict(**result,grading_scope='serializer_spec' if label=='serializer' else 'comparison_screen_not_link_spec', eye_trace_bit_indices=indices.tolist(),eye_ui=x.round(4).tolist(), eye_v=traces)
-    return dict(campaign=str(camp.relative_to(ROOT)), condition=plan['condition'], clock_extra_2g=extra_2g, clock_output_wt=output_wt, clock_output_r=output_r, numerical_source_graph_sha256=graph_sha, waveform=str(wave.relative_to(ROOT)),
+    return dict(campaign=str(camp.relative_to(ROOT)), condition=plan['condition'], clock_extra_2g=extra_2g, clock_output_wt=output_wt, clock_output_r=output_r, clock_stage_wt=stage_wt, clock_stage_r=stage_r, clock_stage_profile=profile, numerical_source_graph_sha256=graph_sha, waveform=str(wave.relative_to(ROOT)),
                 hashes=dict(waveform_sha256=digest(wave), plan_sha256=digest(camp/'plan.json'),
                             summary_sha256=digest(camp/'summary.json'), manifest_sha256=digest(camp/'execution/stimulus_manifest.json'),
                             boundary_sha256=plan['boundary_sha256'], probe_raw_sha256=point['raw_sha256'],

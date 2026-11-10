@@ -69,4 +69,6 @@ SS低压冷角也完成120 ns动态验证：`parallel_serializer/20261107T103131
 
 电路：[capture_serializer16.spice](../../analog/tx/input_register/spice/capture_serializer16.spice)。测试：[full_serializer/run.py](../../analog/tx/input_register/tb/full_serializer/run.py)。每点 `probe → prepare → RTL producer → run`；probe 和 run 的源、负载、布线与计数器初态签名必须一致。`run --resume <campaign>` 保持已渲染快照，只补缺失或截断的运行；完整波形只生成新的分析记录，不再启动仿真。
 
+内部幅度迭代可在probe指定`--clock-stage-wt`/`--clock-stage-r`统一调整2GHz extra级，或用`--clock-stage-profile '[[24,14.4,320],[24,15.6,320],[24,15.6,320],[24,15.6,320],[24,15.6,320]]'`指定各级WN/WT/名义R。两种选参方式互斥；Xiso、其他频段及最终输出独立。prepare、dynamic与resume继承并核对参数，登记前比对实际分发网表与plan；新尺寸必须重新probe，不能套用旧发数边界。45点编排器传同样参数、默认2worker，运行时仍须遵守全机4个/本agent2个限制。这里增加选参能力，不表示示例尺寸已通过完整TX。
+
 图：[tx_parallel_serializer.py](../../verification/plotting/tx_parallel_serializer.py)，重复 `--collect <campaign>` 可合并固定条件，只读原结果。尚未完成或不一致的输入会被记录并使命令失败，不丢掉失败项。

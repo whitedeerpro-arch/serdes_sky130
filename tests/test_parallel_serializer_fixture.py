@@ -147,3 +147,82 @@ def test_new_run_cannot_reuse_an_unbound_legacy_probe():
     plan={'numerical_source_graph_sha256':flow.stimulus_graph_signature(data)}
     with pytest.raises(ValueError,match='record a new probe'):
         flow.check_stimulus_graph(plan,{'upstream':{}},data)
+
+
+@pytest.mark.parametrize('count',[1,3,5])
+def test_extra_sizing_changes_only_the_declared_2g_buffers(count):
+    before=flow.distribution(count,16,240)
+    after=flow.distribution(count,16,240,14.4,320)
+    statements=lambda text:[line for line in text.splitlines() if not line.startswith('*')]
+    pairs=list(zip(statements(before),statements(after)))
+    assert len(statements(before))==len(statements(after))
+    changed=[(a,b) for a,b in pairs if a!=b]
+    assert len(changed)==count
+    assert all(a.startswith('Xe2g_') and b.endswith('wn=24 wt=14.4 rload=320') for a,b in changed)
+    assert flow.fixture_signature(before)!=flow.fixture_signature(after)
+    assert flow.distribution(count,16,240,16.0,400.0)==before
+    spec=importlib.util.spec_from_file_location('stage_collector',ROOT/'verification/plotting/tx_parallel_serializer.py')
+    collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
+    plan=dict(clock_extra_2g=count,clock_output_wt=16,clock_output_r=240,clock_stage_wt=14.4,clock_stage_r=320)
+    assert collector.clock_extra_2g(plan,{'upstream':dict(plan)},after)==count
+    # Correctly signed metadata cannot hide one stale instance in a new chain.
+    stale=after.replace('wt=14.4 rload=320','wt=16 rload=400',1)
+    with pytest.raises(ValueError,match='sizes differ'):
+        collector.clock_extra_2g(plan,{'upstream':dict(plan)},stale)
+    flow.check_distribution_identity(plan,after)
+    with pytest.raises(ValueError,match='plan parameters'):
+        flow.check_distribution_identity({**plan,'clock_stage_wt':14},after)
+
+
+def test_extra_sizing_boundary_cannot_be_reused_for_different_stage_parameters(tmp_path,monkeypatch):
+    import json
+    assert flow.check_stage_identity({}, {'upstream':{}})==(16,400)
+    entry={'upstream':{'clock_stage_wt':14,'clock_stage_r':320}}
+    assert flow.check_stage_identity({'clock_stage_wt':14,'clock_stage_r':320},entry)==(14,320)
+    plan={'snapshot_files':{},'pdk_installation_id':'fake',
+          'boundary_sha256':hashlib.sha256(json.dumps(entry,sort_keys=True).encode()).hexdigest(),
+          'clock_stage_wt':14.4,'clock_stage_r':320}
+    monkeypatch.setattr(flow.project,'pdk_installation_id',lambda:'fake')
+    called=[];monkeypatch.setattr(flow.spice,'run',lambda *a,**k:called.append(True))
+    with pytest.raises(ValueError,match='extra-stage parameters differ'):
+        flow.execute(tmp_path,plan,None,entry)
+    assert not called
+    with pytest.raises(ValueError,match='registered probe'):
+        flow.check_stage_identity({'clock_stage_wt':14,'clock_stage_r':320},{'upstream':{}})
+
+
+@pytest.mark.parametrize('wt,resistance',[(True,320),(14,False),(0,320),(14,float('inf')),(float('nan'),320)])
+def test_invalid_extra_sizing_is_rejected_before_rendering(wt,resistance):
+    with pytest.raises(ValueError,match='positive and finite'):
+        flow.distribution(5,16,240,wt,resistance)
+
+
+def test_tapered_profile_binds_each_position_and_rejects_a_stale_stage():
+    profile=[[24,14,320]]+[[24,15.6,320] for _ in range(4)]
+    text=flow.distribution(5,16,240,stage_profile=profile)
+    plan=dict(clock_extra_2g=5,clock_output_wt=16,clock_output_r=240,clock_stage_profile=profile)
+    entry={'upstream':dict(plan)}
+    assert flow.check_stage_profile_identity(plan,entry)==profile
+    flow.check_distribution_identity(plan,text)
+    assert 'wn=24 wt=14 rload=320' in next(l for l in text.splitlines() if l.startswith('Xe2g_0 '))
+    assert all('wn=24 wt=15.6 rload=320' in l for l in text.splitlines() if l.startswith(tuple(f'Xe2g_{i} ' for i in range(1,5))))
+    spec=importlib.util.spec_from_file_location('matrix_collector',ROOT/'verification/plotting/tx_parallel_serializer.py')
+    collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
+    assert collector.clock_extra_2g(plan,entry,text)==5
+    wrong=[[24,14.4,320]]+profile[1:]
+    with pytest.raises(ValueError,match='profile differs'):
+        flow.check_stage_profile_identity(plan,{'upstream':{**plan,'clock_stage_profile':wrong}})
+    with pytest.raises(ValueError,match='profile differs'):
+        collector.clock_extra_2g(plan,{'upstream':{**plan,'clock_stage_profile':wrong}},text)
+    with pytest.raises(ValueError,match='sizes differ'):
+        collector.clock_extra_2g(plan,entry,text.replace('wt=14 rload=320','wt=15.6 rload=320',1))
+    with pytest.raises(ValueError,match='plan parameters'):
+        flow.check_distribution_identity({**plan,'clock_stage_profile':wrong},text)
+
+
+@pytest.mark.parametrize('profile',[
+    [[24,14,320]], [[True,14,320]]*5, [[24,float('nan'),320]]*5,
+    [[24,14,-1]]*5, 'not JSON', {'stages':[]},
+])
+def test_malformed_per_stage_profiles_cannot_render_a_full_chain(profile):
+    with pytest.raises(ValueError):flow.distribution(5,16,240,stage_profile=profile)

@@ -43,7 +43,8 @@ def collect(camp):
             row.update(summary_sha256=sha(run / "summary.json"), grade=st["grade"],
                        accepted_words=s["accepted_words"])
         rows.append(row)
-    data = dict(campaign=str(camp.relative_to(ROOT)), clock=plan["clock"], driver_params=plan["driver_params"], gates=plan["gates"],
+    data = dict(campaign=str(camp.relative_to(ROOT)), clock=plan["clock"], clock_stage=plan.get("clock_stage",[16,400]),
+                clock_stage_profile=plan.get("clock_stage_profile"), driver_params=plan["driver_params"], gates=plan["gates"],
                 sources=plan["sources"], collector_sha256=sha(Path(__file__)), rows=rows)
     DATA.write_text(json.dumps(data, indent=1) + "\n")
     return data

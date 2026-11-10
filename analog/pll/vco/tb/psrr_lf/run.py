@@ -1,7 +1,8 @@
 """Supply tone to the 4-bit VCO's frequency through the real k = 4 loop filter (PLL closure step 7).
 
     uv run python analog/pll/vco/tb/psrr_lf/run.py [--points tt_v1800_t27:tt,...] [--variants lf,gnd,vdd] [--freqs 20e6]
-        [--lf50] [--amp 5e-3] [--lf-cell pll_loop_filter_k4] [--workers 2] [--analyse C]
+        [--lf50] [--amp 5e-3] [--lf-cell pll_loop_filter_k4] [--cp "<pll_cp_steer params>"] [--iamp 1e-6] [--workers 2]
+        [--analyse C]
 
 4-bit ring (vco_ring4_4b + cap_bank_4b) with its four buffers, real bias and PDK resistors (the workmap / ISF bench), at
 the code-table code and Vctrl of each point (config/pll_code_table.json).  VDD carries a sine of --amp from 12 ns on;
@@ -12,6 +13,8 @@ the set code bits follow VDD.  Variants:
        Above the loop bandwidth this is what the VCO sees; the loop's own high-pass is applied separately
        (analog/pll/top/theory/supply_tolerance.py).
   gnd  ideal Vctrl source (alpha 0: control fixed to ground),  vdd  ideal Vctrl carrying the tone (alpha 1).
+  zin  as lf but VDD clean and a sine current of --iamp at fm injected into the control node: the impedance the CP
+       drives, Z = V(ctrl) / I by lock-in over the kept periods (the loop's own Z(f), incl. everything on the node).
 Fit as psrr_tone.py: K = w f0 (B - j A) / amp from the rising crossings after one dropped period.  gnd and vdd at the
 same point give the control line's gain and the alpha that nulls K; lf gives the actual K and, through
 K_lf = K_gnd + alpha_eff (K_vdd - K_gnd), the effective alpha of the real network.
@@ -75,12 +78,26 @@ def latest(camp, cond, rc, var, fm):
     return good[-1] if good else None
 
 
+def zin(d, fm, periods, iamp):
+    """Z = V(ctrl) / I_inj at fm: lock-in over the kept periods (the first after SETTLE dropped)."""
+    w = spice.Waves(d / "tone.raw")
+    t, v = np.asarray(w.t), np.asarray(w["v(ctrl)"])
+    sel = (t >= SETTLE + 1 / fm) & (t <= SETTLE + (periods + 1) / fm)
+    t, v = t[sel], v[sel]
+    ph = 2 * np.pi * fm * (t - SETTLE)
+    span = t[-1] - t[0]
+    x = 2 / span * np.trapezoid(v * np.cos(ph), t)
+    y = 2 / span * np.trapezoid(v * np.sin(ph), t)
+    return (y + 1j * x) / iamp                                  # i = iamp sin(ph): V phasor (x - j y) over (-j iamp)
+
+
 def name(variant, fm):
     return f"{variant}_{fm / 1e6:g}M"
 
 
-def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_filter_k4"):
-    text = spice.render(wm.TEMPLATE, **spice.corner_values(c), VCTRL=vctrl, INJECT="", PROBES="v(ctrl)" + (" v(z)" if variant == "lf" else ""),
+def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_filter_k4", cp=CP_PARAMS, iamp=1e-6):
+    loaded = variant in ("lf", "zin")
+    text = spice.render(wm.TEMPLATE, **spice.corner_values(c), VCTRL=vctrl, INJECT="", PROBES="v(ctrl)" + (" v(z)" if loaded else ""),
                         TSTEP="1p", STOP=f"{stop:.5e}", SAVE_FROM=f"{SETTLE:.5e}", OUT="tone.raw", CFG0=0, CFG1=0, CFG2=0)
     old = "ctrl cfg0 cfg1 cfg2 vbias vdd 0 pll_vco_ring4_pvt_candidate"
     assert text.count(old) == 1
@@ -89,11 +106,13 @@ def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_fil
     assert text.count(inc) == 1
     extra = [inc.replace("analog/pll/vco/spice/vco_ring4_pvt_candidate.spice", f) for f in INCLUDES]
     text = text.replace(inc, "\n".join([inc.replace("vco_ring4_pvt_candidate", "cap_bank_4b"), inc.replace("vco_ring4_pvt_candidate", "vco_ring4_4b")] + extra))
-    rep = {f"Vdd vdd 0 {c.supply}": f"Vdd vdd 0 DC {c.supply} SIN({c.supply} {amp:.5e} {fm:.5e} {SETTLE:.5e})"}
+    rep = {} if variant == "zin" else {f"Vdd vdd 0 {c.supply}": f"Vdd vdd 0 DC {c.supply} SIN({c.supply} {amp:.5e} {fm:.5e} {SETTLE:.5e})"}
     for k in range(4):                                         # a set bit is tied to VDD, a clear bit to ground
         rep[f"Vb{k} cfg{k} 0 0"] = f"Vb{k} cfg{k} vdd 0" if (code >> k) & 1 else f"Vb{k} cfg{k} 0 0"
-    if variant == "lf":
-        rep[f"Vctrl ctrl 0 {vctrl}"] = LF_BLOCK.format(supply=c.supply, cp=CP_PARAMS, v=vctrl, lf=lf_cell)
+    if loaded:
+        rep[f"Vctrl ctrl 0 {vctrl}"] = LF_BLOCK.format(supply=c.supply, cp=cp, v=vctrl, lf=lf_cell)
+        if variant == "zin":
+            rep[f"Vctrl ctrl 0 {vctrl}"] += f"Iinj 0 ctrl DC 0 SIN(0 {iamp:.5e} {fm:.5e} {SETTLE:.5e})\n"
     elif variant == "vdd":
         rep[f"Vctrl ctrl 0 {vctrl}"] = f"Vctrl ctrl 0 DC {vctrl} SIN({vctrl} {amp:.5e} {fm:.5e} {SETTLE:.5e})"
     for o, n in rep.items():
@@ -101,7 +120,7 @@ def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_fil
         text = text.replace(o, n)
     camp.mkdir(parents=True, exist_ok=True)
     text = bias.section(rcorner.to_pdk(bias.real(text), camp), c.process, rc)
-    if variant == "lf":
+    if loaded:
         hold = f"XIbcp ibcp vgi_bias vdd serdes_bias_pcopy n=4\nRhold ctrl hold 100Meg\nVhold hold 0 {vctrl}\n"
         text = text.replace(".control", hold + ".control", 1)
     return text
@@ -115,6 +134,8 @@ def main():
     ap.add_argument("--lf50", action="store_true", help="also the lf variant at 50 MHz")
     ap.add_argument("--amp", type=float, default=5e-3)
     ap.add_argument("--lf-cell", default="pll_loop_filter_k4", help="loop-filter subcircuit for the lf variant (pll_loop_filter_k4_s7: 7 / 11 split)")
+    ap.add_argument("--cp", default=CP_PARAMS, help="pll_cp_steer parameters on the control node (lf / zin)")
+    ap.add_argument("--iamp", type=float, default=1e-6, help="zin: injected current amplitude, A")
     ap.add_argument("--periods", type=int, default=2)
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--analyse")
@@ -140,8 +161,9 @@ def main():
                 continue
             if d.exists():                                      # interrupted: keep it, run again beside it
                 d = spice.next_run_dir(camp / f"{cond}_{rc}", name(var, fm))
-            jobs.append((deck(c, rc, code, v, var, fm, a.amp, stop, camp / "snap" / f"{cond}_{rc}_{name(var, fm)}", a.lf_cell), d,
-                         dict(timeout_s=3600, meta=dict(point=f"{cond}:{rc}", code=code, vctrl=v, variant=var, fm=fm, amp=a.amp, lf_cell=a.lf_cell))))
+            jobs.append((deck(c, rc, code, v, var, fm, a.amp, stop, camp / "snap" / f"{cond}_{rc}_{name(var, fm)}", a.lf_cell, a.cp, a.iamp), d,
+                         dict(timeout_s=3600, meta=dict(point=f"{cond}:{rc}", code=code, vctrl=v, variant=var, fm=fm, amp=a.amp, lf_cell=a.lf_cell,
+                                                        cp=a.cp, iamp=a.iamp))))
         for ex in spice.run_many(jobs, workers=a.workers, smoke=True):
             if not ex.ok:
                 print(f"FAILED {ex.run_dir.relative_to(ROOT)}: {ex.log_failures[:3]}", flush=True)
@@ -151,6 +173,11 @@ def main():
     for cond, rc, code, v, var, fm in plan:
         d = latest(camp, cond, rc, var, fm)
         if d is None:
+            continue
+        if var == "zin":
+            z = zin(d, fm, a.periods, a.iamp)
+            rows[f"{cond}:{rc}:{name(var, fm)}"] = dict(z_real=float(z.real), z_imag=float(z.imag), code=code, vctrl=v)
+            print(f"{cond + ':' + rc:24s} {code:4d} {v:6.3f} {var:>4s} {fm / 1e6:6.1f}   Z {abs(z) / 1e3:7.3f} kOhm at {np.degrees(np.angle(z)):6.1f} deg", flush=True)
             continue
         q = pt.fit(d, fm, SETTLE)
         k = 2 * np.pi * fm * q["f0"] * (q["cos"] - 1j * q["sin"]) / a.amp

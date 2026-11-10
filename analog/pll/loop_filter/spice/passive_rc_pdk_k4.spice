@@ -92,3 +92,48 @@ Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
 Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
 Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
 .ends pll_loop_filter_k4_s7
+
+* Option-2 candidate (PLL closure step 7, analog/pll/top/theory/loop_psrr.py): k = 8 loop, Rz 2.17 kOhm (high_po
+* 0.69 x 3.587 um, R = 415 + 489 l at tt 27 C), Ci 33 MIM units (~33 pF) split 22 to VDD / 11 to ground (2 / 3).
+* Not adopted; for the supply-tone and control-node impedance benches only (the CP must be resized for 400 uA).
+.subckt pll_loop_filter_k8c cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=3.587 cside=22.1965 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg00 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg01 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg02 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg03 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg04 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg05 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg06 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg07 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg08 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg09 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg10 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv00 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv01 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv02 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv03 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv04 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv05 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv06 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv07 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv08 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv09 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv10 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv11 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv12 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv13 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv14 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv15 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv16 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv17 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv18 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv19 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv20 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv21 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k8c

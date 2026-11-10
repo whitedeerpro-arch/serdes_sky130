@@ -4,17 +4,20 @@ capacitor to ground and the Ci split, such that the worst phase margin and the 2
     uv run python analog/pll/top/theory/loop_psrr.py [--ks 4,6,8] [--pm-min 52] [--k-max 120e6] [--top 4]
 
 Phase margin: loop_design.py's plant set (every condition x RC section x usable code, LF sections incl. hl / lh,
-2 ns PFD delay), control node = VCO input (--ctrl-load) + precharge gate (--c-pre) + CP output (--c-cp at k = 4,
-scaled with k) + dC.  Supply: supply_split.py's two-node model at --freq, Cp and Cpv per stress point fitted to the
-measured splits (12 / 6, 11 / 7, 23 / 36); the CP-output change from k = 4 is added to Cp, half of it to VDD.  Kg and
+2 ns PFD delay), control node = VCO input (--ctrl-load, interpolated) + --c-extra at k = 4 + --c-cp-per-k x (k - 4)
++ dC.  --c-extra 150 fF is the conservative end of what the measured node needs on top of the interpolation (control-
+node impedance at 4 points, analog/pll/vco/tb/psrr_lf zin: 73-154 fF; CP + precharge gate alone 47-63 fF, analog/pll/
+cp/tb/out_cap); the CP output grows by ~3.4 fF per unit of k (out_cap cp4 / cp8).  Supply: supply_split.py's
+two-node model at --freq, Cp and Cpv per point fitted to the measured splits (an effective Cp, ~100 fF above the node's
+physical C); the CP-output change from k = 4 is added to Cp, half of it to VDD.  Kg and
 Kl (the VCO's own supply and control-line gains) do not depend on the loop.  The split is searched in steps of
 1 / --units of Ci.  Noise: loop_design.jitter on its seven noise corners (PLL rms 10 kHz .. 1 GHz, before the CDR).
 
 Feasible: PM min >= --pm-min, |K| max <= --k-max over the fitted points.  Printed per k: the smallest total
 capacitance (Ci + dC) whose worst rms is within --rms-slack of the best feasible one, and the largest PM; the current
 loop (k 4, Rz 4.13 k, Ci 18.38 p, no dC, 24 / 36 and 23 / 36) for reference.  Model limits: Kg, Kl and Cp come
-from the seven stress points only (the other 38 conditions are not fitted); the CP output C at k != 4 is scaled, not
-measured; capture, precharge and CP headroom with the new values are not checked here.
+from the decomposed points only (--base); capture, precharge and CP headroom with the new values are not checked
+here.
 """
 import argparse
 import importlib.util
@@ -38,6 +41,7 @@ ld = _load("loop_design", "analog/pll/top/theory/loop_design.py")
 OUT = ROOT / "results/analog/pll/top/loop_psrr"
 CTRL_LOAD = "results/analog/pll/vco/ctrl_load/20261108T011936Z"
 SPLITS = f"{ss.OTHER},results/analog/pll/vco/psrr_lf/20261109T192257Z:{23 / 36:.6f}"
+BASES = ",".join(f"results/analog/pll/vco/psrr_lf/{c}" for c in ("20261109T145047Z", "20261109T214035Z", "20261109T222343Z", "20261109T225851Z"))
 
 
 def main():
@@ -47,10 +51,10 @@ def main():
     ap.add_argument("--k-max", type=float, default=120e6, help="|K| bound at --freq over the fitted points, Hz/V")
     ap.add_argument("--freq", type=float, default=20e6)
     ap.add_argument("--units", type=int, default=72)
-    ap.add_argument("--c-pre", type=float, default=40e-15, help="precharge gate on the control node, F")
-    ap.add_argument("--c-cp", type=float, default=110e-15, help="CP output on the control node at k = 4, F (scaled with k)")
+    ap.add_argument("--c-extra", type=float, default=150e-15, help="control-node C beyond the interpolated VCO input at k = 4, F")
+    ap.add_argument("--c-cp-per-k", type=float, default=3.4e-15, help="CP output C per unit of k, F")
     ap.add_argument("--ctrl-load", default=CTRL_LOAD)
-    ap.add_argument("--base", default=ss.BASE, help="psrr_lf campaigns with gnd / vdd / 12-6 lf runs (comma separated)")
+    ap.add_argument("--base", default=BASES, help="psrr_lf campaigns with gnd / vdd runs (comma separated)")
     ap.add_argument("--other", default=SPLITS)
     ap.add_argument("--delay", type=float, default=2e-9)
     ap.add_argument("--floor", type=float, default=-125.0)
@@ -60,7 +64,7 @@ def main():
     base = ss.rows(a.base)
     others = [(json.loads((ROOT / c / "summary.json").read_text())["rows"], float(x)) for c, x in (s.rsplit(":", 1) for s in a.other.split(","))]
     fits = ss.fit(base, others, a.freq)
-    extra = lambda k: a.c_pre + a.c_cp * k / 4
+    extra = lambda k: a.c_extra + a.c_cp_per_k * (k - 4)
     print(f"supply model: {len(fits)} points fitted (residual <= {max(v['resid'] for v in fits.values()):.4f}); control node extra "
           + ", ".join(f"k {k} {extra(float(k)) * 1e15:.0f} fF" for k in a.ks.split(",")), flush=True)
 

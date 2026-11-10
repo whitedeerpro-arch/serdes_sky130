@@ -817,13 +817,13 @@
       "parent": "pll",
       "name": "安静供电 / LDO",
       "subtitle": "静态3.3→1.8 V / 外供同源直连",
-      "state": "r4局部候选",
-      "summary": "参考RC＋独立6bit电压修调、PDK无源；1215点输出1.776–1.815V，255点AC最差38.44dB/PM71.28°。独立尾偏置滤波候选与引脚电容约束已有，尚未改接现行PLL。",
+      "state": "r4／TT原生闭环候选",
+      "summary": "r4静态供电/参考RC/6bit电压码；DC1215与AC255、额外100pF端点425点已有。quiet PLL候选r5k4q的TT hv/ext原生预充闭环均锁定，压力角进行中；真实冷启动/原生噪声仍开。",
       "facts": {
         "设计": "HV18 r4；静态Vin/quiet双配置、无串联开关",
         "PVT": "DC1215/AC255；额外100pF端点5MOS×5RC共425点",
         "失配": "电压码＋TT±90mV范围压力；HV/PNP统计覆盖未完成",
-        "噪声": "真实参考DC谱200–246µVrms；PLL相关噪声/抖动未合并"
+        "噪声": "器件谱已有；新增抖动模型≤0.23ps，原生噪声/host定时耦合未闭合"
       },
       "boundary": {
         "inputs": [
@@ -837,7 +837,7 @@
           "仅初始化配置；不支持Vin0且quiet独立供电。",
           "片上100pF；额外100pF端点425点PM最低65.07°，电容区间/ESR/pad/ESD仍开；不能任意外接nF。",
           "使能前设置电压码；PLL等待quiet及tail建立；UVLO/ready未实现。",
-          "瞬态为六压力条件、电阻负载和明确gate/vgi代理；未改现行PLL。"
+          "局部LDO动态为电阻负载及gate/vgi代理；quiet PLL TT两配置已预充锁定，非真实冷启动。"
         ]
       },
       "planning": {
@@ -886,6 +886,10 @@
         {
           "title": "r1–r3历史",
           "path": "docs/design/ldo.md"
+        },
+        {
+          "title": "TT原生闭环与离线窗口复核",
+          "path": "docs/data/native_pll_cost.json"
         }
       ],
       "iterations": [
@@ -945,6 +949,27 @@
             {
               "title": "逐点索引",
               "path": "results/catalog/ldo_r4_pin_cap.json"
+            }
+          ]
+        },
+        {
+          "id": "hv18-r4-native-tt-20261110",
+          "title": "quiet域原生PLL的TT预充捕获",
+          "date": "2026-11-10",
+          "stage": "验证",
+          "problem": "局部稳压不能代替实际VCO/CP/LF及host接口加载。",
+          "model": "VCO/首buffer/CP/LF和码驱动在quiet，定时逻辑在host；偏置/LDO从已建立OP开始。",
+          "change": "新增r5k4q与r5q前端候选，接入r4及尾偏置滤波，原基线保留。",
+          "validation": "TT hv/ext各1.5us原生闭环，均约2GHz；HV捕获310ns、quiet1.8011V/1.527mVpp；外供捕获118ns。",
+          "conclusion": "TT预充闭环已有，三个压力角两配置在跑；冷启动、原生噪声、完整供电纹波验证未闭合。",
+          "attachments": [
+            {
+              "title": "LDO当前接入状态",
+              "path": "docs/design/ldo_r4.md"
+            },
+            {
+              "title": "TT波形窗口复核",
+              "path": "docs/data/native_pll_cost.json"
             }
           ]
         }

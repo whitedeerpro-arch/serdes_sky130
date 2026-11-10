@@ -1,6 +1,6 @@
 # HV18 PLL 供电候选
 
-当前为 **r4：静态供电引脚、参考 RC、电压修调、PDK 无源**，尚未进入现行 PLL。详见[设计与边界](../../../docs/design/ldo_r4.md)、[工作修订](../../../config/ldo_working_revision.toml)、[交接包](../../../docs/work_packages/WP-LDO-002-r4-handoff.md)。
+当前为 **r4：静态供电引脚、参考RC、电压修调、PDK无源**。quiet PLL候选`r5k4q`已接入并完成TT两配置原生预充闭环，压力角进行中；原基线保留。详见[设计与边界](../../../docs/design/ldo_r4.md)、[工作修订](../../../config/ldo_working_revision.toml)、[交接包](../../../docs/work_packages/WP-LDO-002-r4-handoff.md)。
 
 高压配置：Vin3.0–3.6 V，quiet为输出，enable高。外供配置：板上将Vin和quiet同接一条合格1.65–1.95 V电源，enable=0。只在初始化确定配置；不支持Vin=0而quiet单独供电。quiet高压模式的额外电容必须计入稳定性，目前没有任意外接去耦保证。
 

@@ -1,6 +1,6 @@
 module = "pll_supply_hv18"
 working_revision = "hv18_r4_static_pins_ref_rc_voltage_trim"
-status = "local_circuit_candidate; not connected to the active PLL"
+status = "local_screen_and_TT_r5k4q_quiet_PLL_precharged_native_closure; stress_running; baseline_retained"
 design_document = "docs/design/ldo_r4.md"
 history_document = "docs/design/ldo.md"
 power_document = "docs/design/power_audit.md"
@@ -63,7 +63,7 @@ extra_capacitance_endpoint_pm_deg = [65.06629794669055, 79.15714970390086]
 extra_capacitance_status = "100pF ideal endpoint screened at425 boundary/nominal points; interval, pad/ESD/PEX, ESR and startup open;1nF minimum35.85deg in original two-boundary study"
 local_mismatch = "not qualified; HV direct Vth and PNP model gaps; deterministic +/-90mV stress is not MC"
 uvlo_quiet_bias_ready = "not implemented"
-real_pll_load_and_jitter = "not done"
+real_pll_load_and_jitter = "TT hv/ext native capture and quiet ripple measured; pressure grid running; full cold-start and native noise open"
 
 [interface_constraints]
 configuration = "static at initialization; no runtime HV/external switching"

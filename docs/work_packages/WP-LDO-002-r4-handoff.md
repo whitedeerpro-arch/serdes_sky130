@@ -1,6 +1,6 @@
 # WP-LDO-002：r4 交接与下一步集成
 
-**r4 的局部电路、无源、校准、扩展电源网格和启动结果已可复核；现行 PLL 未改接。** 本包接替 r3 的[WP-LDO-001](WP-LDO-001-waveform-review.md)。主文档为[ldo_r4.md](../design/ldo_r4.md)，当前选择为[ldo_working_revision.toml](../../config/ldo_working_revision.toml)。
+**r4局部电路与数据已可复核；quiet PLL候选`r5k4q`的TT两配置原生预充闭环也已完成，压力角进行中。** 原PLL基线保留。本包接替r3的[WP-LDO-001](WP-LDO-001-waveform-review.md)，入口为[ldo_r4.md](../design/ldo_r4.md)和[工作修订](../../config/ldo_working_revision.toml)。
 
 ## 已完成与边界
 
@@ -8,7 +8,7 @@
 - 参考1MΩ/16pF＋关断隔离/放电；核心关断夹镜像偏置；6bit独立电压修调；物理high_po/MIM。
 - 校准1088点；每MOS/RC固定名义校准码后，DC1215点输出1.776–1.815V；AC255点、20MHz最差38.44dB、PM最低71.28°。
 - 六压力条件×三独立bench的360µs启动/同模式使能循环/静态旁路，共18条。电阻负载、12pF vgi和1pF尾栅代理，不是实际PLL。
-- 独立尾偏置1MΩ/16pF候选，三个真实gate AC边界；1MHz改善41–44dB；尚未插入当前PLL。
+- 尾偏置1MΩ/16pF已接入quiet PLL候选；三个真实gate AC边界，1MHz改善41–44dB；TT原生闭环有纹波数据，非原生噪声签核。
 - 六条件输出/尾偏置共18条纯DC噪声谱；逐次pass电流一致，1k–199.5MHz。没有完整慢节点逐点认证或PLL抖动结论。
 - quiet额外电容两边界扫描；1nF时最差PM35.85°，不能任意挂外部去耦。100pF端点另补MOS五角×RC五段共425条DC/AC，最差PM65.07°；电容区间、ESR/真实引脚和启动仍开。
 

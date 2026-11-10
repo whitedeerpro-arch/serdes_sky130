@@ -26,7 +26,7 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 | [÷8 prescaler](docs/design/pll_divider.md) | r3结构；首级W40/后级W80 | 真实偏置/PDK R、标准输入hh/ll各45点；六压力点MC共1048样本正确分频 | FF冷失配数值缺失；原生全角/启动、FS冷尾管余量 |
 | [时钟接收器](docs/design/clock_receiver.md) | PLL r4 | 反馈 45/45，全速 45/45；原生 VCO 5 个工作点全部正常 | SS 热角幅度余量约 110 mV；1.95 V 过冲 |
 | [PFD/CP/LF/启动](docs/design/pll_loop.md) | r5/k4转向CP、4.13kΩ/18pF PDK LF候选 | 行为VCO闭环135/135锁定；原生预充闭环三点；CP三点各200样本MC；粗码RTL与监测积木已有 | 自动粗搜接入真实闭环、从零启动、新环路噪声/供电抑制；转向CP窗口 |
-| [PLL 安静供电](docs/design/ldo_r4.md) | HV18 r4静态引脚、参考RC＋6bit电压修调 | DC1215输出1.776–1.815V；AC255最差38.44dB/PM71.28°；六压力启动与噪声 | 真实PLL供电域/负载与新增抖动、引脚电容端点PVT、UVLO/ready、完整失配 |
+| [PLL 安静供电](docs/design/ldo_r4.md) | HV18 r4静态引脚、参考RC＋6bit电压修调 | DC1215、AC255；额外100pF端点425条AC最差PM65.07°/38.44dB；TT两种供电原生预充闭环 | 原生压力角进行中；真实从零启动、引脚/电容区间、UVLO/ready、完整噪声/失配 |
 | [TX 字入口](docs/design/tx_word_capture.md) | 16位捕获＋两组8位保持；extra5整链候选 | 首级6压力48字；B关闭12组；[完整TX](docs/design/tx_parallel_serializer.md)在理想2GHz、真实偏置/PDK R tt下45/45串化器与焊盘过门槛，每点256 bit | 内部幅度I-17；原生源/电阻角、物理guard/blank、建立保持、失配/噪声 |
 | [TX 时钟分发](docs/design/tx_clock_distribution.md) | v3同步计数器、extra5/WT16/R240候选 | r4抽头回放15点；r5原生静态8点计数；理想2GHz整链45点眼图/位序正确 | 原生静态2个FF冷角数值缺失；原生动态/启动、内部幅度、功耗/噪声 |
 | [TX 串化器](docs/design/tx_serializer.md) | TX r2 | 固定理想 TT 时钟边界下 45/45 满足 75 mV / 0.15 UI（128 bit） | 原生分发见上；FS 热角长码型：串化器 0.115 UI，远端 0.147 UI |

@@ -1,0 +1,62 @@
+module = "pll_supply_hv18"
+working_revision = "hv18_r3_separate_cascode_filter"
+status = "local_circuit_candidate; not connected to the active PLL"
+design_document = "docs/design/ldo.md"
+power_document = "docs/design/power_audit.md"
+core = "analog/common/ldo/spice/ldo_hv18_core.spice"
+isolation = "analog/common/ldo/spice/ldo_power_switch.spice"
+macro = "analog/common/ldo/spice/pll_supply_hv18.spice"
+future_low_voltage = "lv15_core remains planned; pass topology/headroom must be redesigned"
+
+[parameters]
+vin_v = [3.0, 3.3, 3.6]
+host_reference_qualified_v = [1.8] # Other host voltages remain open.
+target_vout_v = 1.8
+screen_load_ma = [2.0, 6.0, 10.0]
+nominal_planned_load_ma = 5.74 # Sizing estimate, not a guaranteed load limit.
+rhv_ohm = 1000
+chv_pf = 50
+rcas_ohm = 10000
+ccas_pf = 50
+cout_pf = 100
+cc_pf = 2
+rz_ohm = 2000
+feedback_top_ohm = 38000
+feedback_bottom_ohm = 82000
+switch_pfet_fingers = 1000 # Two PFETs per path, two paths; W/finger15um,L0.5um.
+
+[verification]
+mos_hv_vt_conditions = 45 # Five MOS corners x three HV inputs x three temperatures.
+dc_ac_points_per_reference_boundary = 135
+ideal_reference_dc_ac = "complete local screen"
+real_bandgap_dc_ac = "complete local screen; host fixed1.8V, ideal feedback/filter passives"
+dual_injection_points = 135
+dual_injection_pm_deg = [75.05458214525386, 82.36363494469873]
+real_reference_output_v = [1.7934087255436582, 1.8147108843165531]
+real_reference_worst_20mhz_psrr_db = 39.90236959670783
+dynamic_conditions = 6
+dynamic_tests_per_condition = 6
+startup_uncontrolled_core_peak_v = 1.8915068430186084
+startup_status = "needs enable sequencing; final convergence is not startup qualification"
+switch_dc_conditions = 45
+macro_modes = "TT real-bandgap pilot: HV, bypass without HV, off, reset-required change"
+mc = "not done; audit availability of HV/native statistical models first"
+pdk_passives = "not mapped/qualified for LDO feedback and filters"
+uvlo_mode_controller = "not implemented"
+real_pll_load_and_jitter = "not done"
+
+[interface_constraints]
+select_hv_and_external = "mutually exclusive; both zero disables; external controller qualifies HV/ref-ready"
+mode_change = "hold PLL reset; break before make; output interruption expected"
+bypass_voltage = "qualified external1.8V; account for up to31.4mV measured switch drop at10mA; source1.65V does not guarantee local1.65V"
+lf_bias_code_precharge = "assign every return/driver to its real supply domain before PLL integration"
+
+[evidence]
+published = "docs/data/ldo_characterization.json"
+catalog = "results/catalog/ldo_characterization.json"
+ideal_reference_campaign = "results/analog/common/ldo/regulation/20261110T073605.591612Z_37993e10"
+real_reference_campaign = "results/analog/common/ldo/regulation/20261110T073605.249951Z_4cbaf4bf"
+stability_campaign = "results/analog/common/ldo/stability/20261110T073954.533719Z_d5efea42"
+dynamic_campaign = "results/analog/common/ldo/dynamic/20261110T073954.902636Z_326ca852"
+switch_campaign = "results/analog/common/ldo/power_switch/20261110T073010.712346Z_837940e3"
+macro_modes_campaign = "results/analog/common/ldo/modes/20261110T074133.103769Z_e7a8f050"

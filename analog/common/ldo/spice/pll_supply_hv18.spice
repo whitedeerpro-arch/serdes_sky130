@@ -1,0 +1,17 @@
+* HV18 r3 integration candidate. Include core, power switch, CMOS/bias helpers.
+* External global Vbg/vgi belong to host 1.8 V. Local 10uA copy stays in host.
+* sel_hv/sel_ext: mutually exclusive, host logic levels. Both 0 powers down.
+* Controller must qualify reference/HV and reset PLL before any mode change.
+* UVLO, reference-ready, voltage trim and mode controller are not in this cell.
+* R/C are initial electrical values: PDK passive/MC mapping remains required.
+.subckt serdes_pll_supply_hv18 vin host ext out ref vgi sel_hv sel_ext vss
+Xcopy ibias vgi host serdes_bias_pcopy n=4
+Xinv sel_hv off host vss serdes_cmos_inv
+Xcore vin reg ref ibias fb off vss serdes_ldo_hv18_core
+Xhv reg out sel_hv vss serdes_ldo_power_switch
+Xext ext out sel_ext vss serdes_ldo_power_switch
+Rtop out fb 38k
+Rbottom fb vss 82k
+Rbleed out vss 100k
+Cout out vss 100p
+.ends serdes_pll_supply_hv18

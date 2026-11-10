@@ -1,0 +1,24 @@
+digraph HV18 {
+  graph [rankdir=LR, bgcolor="#fafbfc", pad="0.3", nodesep="0.45", ranksep="0.65", label="HV18 r3: core, isolation and supply-macro candidate", labelloc=t, fontsize=20, fontname="DejaVu Sans"];
+  node [shape=box, style="rounded,filled", fillcolor="#e5f1f5", color="#336c82", fontname="DejaVu Sans", fontsize=12, margin="0.15,0.12"];
+  edge [color="#556677", fontname="DejaVu Sans", fontsize=10];
+  hv [label="Analog input\n3.0-3.6 V"];
+  rc [label="Amplifier supply filter\n1 kohm / 50 pF"];
+  rcg [label="Separate gate-only filter\n10 kohm / 50 pF\nno amplifier DC drop"];
+  cas [label="5 V native NMOS\ncascode W2000 / L0.9"];
+  pass [label="5 V native NMOS\npass W1000 / L0.9"];
+  amp [label="HV two-stage amplifier\nCc 2 pF / Rz 2 kohm"];
+  ref [label="Host 1.8 V domain\nVref ~1.23 V / Ibias ~10 uA",fillcolor="#f4eedc",color="#a08343"];
+  div [label="Feedback 38k / 82k\nvoltage trim: next"];
+  out [label="Internal regulated node\ncore screened at 2/6/10 mA"];
+  quiet [label="Quiet PLL supply ~1.8 V\nCout 100 pF\nmacro feedback sensed here"];
+  iso [label="Back-to-back HV PMOS paths\nDC45 + TT mode pilot\nUVLO / controller: NEXT",fillcolor="#f4eedc",color="#a08343"];
+  bypass [label="Qualified external 1.8 V\nallow switch voltage drop",fillcolor="#e5f1f5"];
+  pll [label="Planned quiet PLL domain\nVCO + 4 first buffers + CP/LF\nreal load/noise validation: NEXT",fillcolor="#f4eedc",color="#a08343"];
+  hv -> cas -> pass -> out;
+  hv -> rc; rc -> amp [label="supply"]; hv -> rcg; rcg -> cas [label="gate bias"];
+  ref -> amp [label="reference + current"];
+  quiet -> div -> amp [label="sense"];
+  amp -> pass [label="gate control"];
+  out -> iso -> quiet -> pll; bypass -> iso;
+}

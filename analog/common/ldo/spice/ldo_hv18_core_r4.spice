@@ -1,0 +1,33 @@
+* HV18 r4: cascoded native 5 V NMOS pass with a separately filtered cascode gate.
+* All dimensions are total width; nf selects characterized per-finger bins.
+* External: 1.23 V reference, 10 uA into ibias from host 1.8 V,
+* feedback divider, output capacitor and load. off=0 enables regulation.
+* Static bypass ties vin/out externally. Off clamps gate AND mirror bias.
+* PDK passives require ldo_passives.spice. UVLO is outside this core.
+* No 1.8 V transistor has a terminal connected to the HV supply.
+.subckt serdes_ldo_hv18_core_r4 vin out ref ibias fb off vss params: lp=0.9
+Xrhv vin va vss serdes_ldo_res r=1k
+Xchv va vss serdes_ldo_mim50
+* Gate-only filter has no amplifier DC current/drop, preserving low-Vin headroom.
+Xrcas vin casg vss serdes_ldo_res r=10k
+Xccas casg vss serdes_ldo_mim50
+Xnb ibias ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xnr bp ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xpd bp bp va va sky130_fd_pr__pfet_g5v0d10v5 w=60 l=4 nf=40 ad=17.4 as=17.4 pd=143.2 ps=143.2
+Xpt tail bp va va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=4 nf=80 ad=34.8 as=34.8 pd=286.4 ps=286.4
+Xpl d fb tail va sky130_fd_pr__pfet_g5v0d10v5 w=15 l=1 nf=1 ad=4.35 as=4.35 pd=30.58 ps=30.58
+Xpr x ref tail va sky130_fd_pr__pfet_g5v0d10v5 w=15 l=1 nf=1 ad=4.35 as=4.35 pd=30.58 ps=30.58
+Xnl d d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xnm x d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xn2 gate x vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=0.5 nf=6 ad=17.4 as=17.4 pd=123.48 ps=123.48
+Xp2 gate bp va va sky130_fd_pr__pfet_g5v0d10v5 w=360 l=4 nf=240 ad=104.4 as=104.4 pd=859.2 ps=859.2
+Xrzero x cz vss serdes_ldo_res r=2k
+Xccomp cz gate serdes_ldo_mim2
+* Cascode source follower isolates pass drain and Cgd from the noisy input.
+* Its gate uses a separate HV RC; headroom and startup still need checking.
+Xcas vin casg mid vss sky130_fd_pr__nfet_05v0_nvt w=2000 l=0.9 nf=200 ad=580 as=580 pd=4116 ps=4116
+Xpass mid gate out vss sky130_fd_pr__nfet_05v0_nvt w=1000 l={lp} nf=100 ad=290 as=290 pd=2058 ps=2058
+Xoff gate off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.9 as=2.9 pd=20.58 ps=20.58
+* Disable the mirror while off; the host copy still supplies ~10uA into clamp.
+Xboff ibias off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.9 as=2.9 pd=20.58 ps=20.58
+.ends serdes_ldo_hv18_core_r4

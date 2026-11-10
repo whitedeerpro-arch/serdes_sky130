@@ -1,29 +1,54 @@
 # HV18 PLL 供电候选
 
-当前 r3 为3.3→1.8 V局部设计，尚未进入现行PLL。详见[设计记录](../../../docs/design/ldo.md)与[工作修订](../../../config/ldo_working_revision.toml)。
+当前为 **r4：静态供电引脚、参考 RC、电压修调、PDK 无源**，尚未进入现行 PLL。详见[设计与边界](../../../docs/design/ldo_r4.md)、[工作修订](../../../config/ldo_working_revision.toml)、[交接包](../../../docs/work_packages/WP-LDO-002-r4-handoff.md)。
 
-电路在 `spice/`：`ldo_hv18_core.spice`为当前核心，r1/r2文件是可比较的历史电路，保留相同subckt名，比较时每次只能include其中一个；`ldo_power_switch.spice`为双向隔离单元，`pll_supply_hv18.spice`为含稳压/旁路、输出电容及反馈的集成候选。三个文件和已有CMOS/bias helpers由bench显式include。DUT无电源源、激励或负载。
+高压配置：Vin3.0–3.6 V，quiet为输出，enable高。外供配置：板上将Vin和quiet同接一条合格1.65–1.95 V电源，enable=0。只在初始化确定配置；不支持Vin=0而quiet单独供电。quiet高压模式的额外电容必须计入稳定性，目前没有任意外接去耦保证。
 
-测试入口均先`--prepare`保存源、PDK身份和deck，再运行打印出的campaign路径。每个campaign追加结果；不要直接复用历史绝对路径deck启动。最多占2个ngspice名额，全机不超过4个。
+## 当前电路
+
+| 文件 | 作用 |
+|---|---|
+| `spice/ldo_passives.spice` | high_po电阻、32段1MΩ、显式1pF叶MIM及组合 |
+| `spice/ldo_hv18_core_r4.spice` | 双5V原生NMOS核心，独立隔离级gate RC，关断夹gate和偏置 |
+| `spice/pll_supply_hv18_r4.spice` | 静态供电宏、参考传输门/RC/放电、6bit反馈电压码及100pF输出电容 |
+| `spice/pll_bias_filter_r4.spice` | 独立1MΩ/16pF尾管栅滤波候选；未接入当前PLL |
+
+生产cell `serdes_pll_supply_hv18_r4`；`_probe`只把反馈断点引出用于双注入。DUT中没有电源源、激励或负载。依赖已有`sky130_primitives.spice`、`sky130_pfet_lvt.spice`、`cmos_logic.spice`和`bias_dist.spice`；真实参考bench另引入`bandgap.spice`。无源卡明确实际模型值，不能用`mf`倍乘名义MIM。
+
+## 复跑与读取
+
+`--prepare`冻结source、PDK、runtime与deck，打印campaign路径；`--resume`只补完整性检查未通过的条件。当前分工最多占2个ngspice，全机不超过4个，启动前检查进程。短DC/AC按MOS/RC合deck，所有仿真单线程。
 
 ```bash
-uv run python analog/common/ldo/tb/pass_map/run.py --prepare
-uv run python analog/common/ldo/tb/pass_map/run.py --resume <campaign> --workers 2
-uv run python analog/common/ldo/tb/regulation/run.py --prepare --rhv-ohm 1000 --chv-pf 50
-uv run python analog/common/ldo/tb/regulation/run.py --prepare --real-bias --rhv-ohm 1000 --chv-pf 50
-uv run python analog/common/ldo/tb/regulation/run.py --resume <campaign> --workers 2
-uv run python analog/common/ldo/tb/stability/run.py --prepare-from <completed-ideal-reference-campaign>
-uv run python analog/common/ldo/tb/stability/run.py --resume <campaign> --workers 2
-uv run python analog/common/ldo/tb/dynamic/run.py --prepare-from <completed-ideal-reference-campaign>
-uv run python analog/common/ldo/tb/dynamic/run.py --resume <campaign> --workers 2
-uv run python analog/common/ldo/tb/power_switch/run.py --prepare
-uv run python analog/common/ldo/tb/power_switch/run.py --resume <campaign> --workers 2
-uv run python analog/common/ldo/tb/modes/run.py --prepare
-uv run python analog/common/ldo/tb/modes/run.py --run <campaign>
+uv run python analog/common/ldo/tb/r4/run.py --prepare calibration
+uv run python analog/common/ldo/tb/r4/run.py --resume <calibration-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/run.py --prepare grid --calibration <complete-calibration-summary.json>
+uv run python analog/common/ldo/tb/r4/run.py --resume <grid-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/startup.py --prepare <complete-calibration-summary.json>
+uv run python analog/common/ldo/tb/r4/startup.py --resume <startup-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/dc_noise.py --prepare <startup-campaign>
+uv run python analog/common/ldo/tb/r4/dc_noise.py --resume <dc-noise-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/bias_filter.py --prepare --slow
+uv run python analog/common/ldo/tb/r4/bias_filter.py --resume <bias-filter-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/cap_load.py --prepare <complete-grid-summary.json>
+uv run python analog/common/ldo/tb/r4/cap_load.py --run <cap-load-campaign> --workers 2
+uv run python analog/common/ldo/tb/r4/card.py --help
+uv run python analog/common/ldo/tb/r4/noise_check.py --help
 ```
 
-`regulation`把同MOS角的VT和负载合并，`dynamic`把独立阶跃/单音/启动bench放在同一个deck且只共理想地，降低模型解析成本。波形由`spice.Waves`校验finite和单调，另查完整扫描网格/终点、源、deck和execution身份。
+历史campaign若runtime已变，不要关闭身份检查强行续跑。完整结果可直接读取；`run.py/startup.py/dc_noise.py/cap_load.py --analyse <campaign>`追加新分析而不改原deck/raw。本次清理删除startup末尾无效noise流程，并让noise汇总准确表述为“逐次比对pass电流”；已运行的原始source/deck仍保留在各campaign，发布清单选择清理后的分析。
 
-续跑前锁定runtime身份；更改runner/shared helper后须新建campaign或恢复记录的版本。`--analyse`允许独立重读旧数据，分析器身份另记。早期试跑曾有noise save列表和raw别名校验问题：失败记录保留，不能作为缺测数据的通过证据。已发布汇总只引用完整结果。
+从[明确清单](../../../config/ldo_r4_evidence.json)发布数据与图，无需新仿真：
 
-结果目录为`results/analog/common/ldo/`，发布索引为`results/catalog/ldo_characterization.json`；可分享的图与数据在`docs/figures/clocking/pll/core/ldo*`及`docs/data/ldo_characterization.json`。
+```bash
+uv run python verification/plotting/ldo_r4.py
+dot -Tpng docs/figures/clocking/pll/core/ldo_hv18_r4.dot -o docs/figures/clocking/pll/core/ldo_hv18_r4.png
+```
+
+发布脚本核对source/PDK/deck/execution/输出SHA和网格坐标。结果本体在`results/analog/common/ldo/`（不入git），索引为`results/catalog/ldo_r4.json`，小数据和图为`docs/data/ldo_r4.json`及`docs/figures/clocking/pll/core/ldo_r4*.png`。
+
+## 历史与限制
+
+r1/r2/r3核心、`ldo_power_switch.spice`、`pll_supply_hv18.spice`及原有pass_map/regulation/stability/dynamic/power_switch/modes测试台保留作[历史证据](../../../docs/design/ldo.md)，不再是当前供电接口。旧WP-LDO-001复核的是r3，不把它的开关/模式要求用于r4。
+
+本轮不含真实PLL负载/新增抖动、完整MC、PEX/ESD/封装或UVLO/ready控制器。慢RC使noise分析的默认瞬态工作点回退不可靠；`dc_noise.py`改为纯DC源、300µs回退并逐谱比对两条pass电流。早期startup后约6µV的noise无效，禁止引用；逐条pass电流检查也不等于逐个慢节点都已认证。

@@ -1121,58 +1121,72 @@ window.DESIGN_CATALOG = {
       "id": "pll.supply",
       "parent": "pll",
       "name": "安静供电 / LDO",
-      "subtitle": "3.3→1.8 V + 外供旁路",
-      "state": "r3局部候选",
-      "summary": "双原生NMOS及独立栅滤波；真实带隙135点输出1.793–1.815V、20MHz最差39.9dB。隔离DC45与供电宏TT模式pilot完成，尚未进入现行PLL。",
+      "subtitle": "静态3.3→1.8 V / 外供同源直连",
+      "state": "r4局部候选",
+      "summary": "参考RC＋独立6bit电压修调、PDK无源；1215点输出1.776–1.815V，255点AC最差38.44dB/PM71.28°。独立尾偏置滤波候选与引脚电容约束已有，尚未改接现行PLL。",
       "facts": {
-        "设计": "HV18 r3＋背靠背隔离＋旁路宏",
-        "PVT": "45个HV-VT条件×3负载；宿主暂固定1.8V",
-        "失配": "HV/native模型、参考电压修调待做",
-        "噪声": "双注入PM75–82°；完整PLL新增抖动待合并"
+        "设计": "HV18 r4；静态Vin/quiet双配置、无串联开关",
+        "PVT": "DC1215；AC255；独立HV/host、MOS五角与RC三段",
+        "失配": "电压码＋TT±90mV范围压力；HV/PNP统计覆盖未完成",
+        "噪声": "真实参考DC谱200–246µVrms；PLL相关噪声/抖动未合并"
       },
       "boundary": {
         "inputs": [
-          "3.0–3.6V模拟输入；host1.8V的Vbg/vgi；合格外供1.8V；互斥选择"
+          "HV配置Vin3.0–3.6V；host1.65–1.95V提供BG/vgi/逻辑",
+          "外供配置板上Vin与quiet同接合格1.65–1.95V，enable0"
         ],
         "outputs": [
-          "安静PLL域：VCO/四首级buffer/CP/LF及本地接口"
+          "quiet供电候选：VCO/四首buffer/CP/LF/本地接口；尾偏置另需滤波"
         ],
         "assumptions": [
-          "核心R/C为电气初值，PDK无源/ll/hh/MC未闭合。",
-          "供电宏TT验证；HV/ref-ready/UVLO与模式控制器待做，切换须复位PLL。",
-          "旁路计入开关压降，1.65V源不保证负载端仍有1.65V。"
+          "仅初始化配置；不支持Vin0且quiet独立供电。",
+          "片上100pF；额外100pF仅规划，需补PVT/pad/ESD；不能任意外接nF去耦。",
+          "使能前设置电压码；PLL等待quiet及tail建立；UVLO/ready未实现。",
+          "瞬态为六压力条件、电阻负载和明确gate/vgi代理；未改现行PLL。"
         ]
       },
       "planning": {
-        "question": "怎样隔离供电纹波，同时保留1.8V设计点和外供退路？",
-        "model": "调整管DC地图→局部反馈/供电传递→双注入/动态→真实参考与模式→PDK/MC/真实PLL边界。",
-        "parameters": "Rhv1k/50pF，独立Rcas10k/50pF，Cout100pF，Cc2pF/Rz2k。",
-        "verification": "135点DC/AC及双注入、六压力角动态、隔离DC45、TT真实带隙供电宏；非整PLL通过。"
+        "question": "分别控制高压输入、共享参考和宿主尾偏置噪声，保留静态外供接口。",
+        "model": "固定每模型名义电压码→独立HV/host网格→双注入/冷启动/噪声工作点→真实负载和引脚模型。",
+        "parameters": "核心1k/50p＋10k/50p；Cout100p；参考1M/16p；6bit反馈；尾滤波候选1M/16p。",
+        "verification": "DC1215/AC255、校准1088、无源27、启动18、DC噪声18、tail AC3和额外电容两边界。"
       },
       "references": [
         {
-          "title": "LDO设计与剩余闭合项",
-          "path": "docs/design/ldo.md"
+          "title": "r4设计、约束与下一步",
+          "path": "docs/design/ldo_r4.md"
         },
         {
-          "title": "供电结构",
-          "path": "docs/figures/clocking/pll/core/ldo_hv18.png"
+          "title": "静态供电与独立偏置结构",
+          "path": "docs/figures/clocking/pll/core/ldo_hv18_r4.png"
         },
         {
-          "title": "电压/抑制/动态/稳定性",
-          "path": "docs/figures/clocking/pll/core/ldo_characterization.png"
+          "title": "电压、供电传递及修调",
+          "path": "docs/figures/clocking/pll/core/ldo_r4_characterization.png"
         },
         {
-          "title": "真实参考供电宏模式",
-          "path": "docs/figures/clocking/pll/core/ldo_modes.png"
+          "title": "启动、噪声与tail滤波",
+          "path": "docs/figures/clocking/pll/core/ldo_r4_startup_noise_bias.png"
+        },
+        {
+          "title": "quiet额外电容与PM",
+          "path": "docs/figures/clocking/pll/core/ldo_r4_cap_load.png"
         },
         {
           "title": "工作修订",
           "path": "config/ldo_working_revision.toml"
         },
         {
+          "title": "交接/外发复核包",
+          "path": "docs/work_packages/WP-LDO-002-r4-handoff.md"
+        },
+        {
           "title": "功耗审计",
           "path": "docs/design/power_audit.md"
+        },
+        {
+          "title": "r1–r3历史",
+          "path": "docs/design/ldo.md"
         }
       ],
       "iterations": [
@@ -1190,6 +1204,27 @@ window.DESIGN_CATALOG = {
             {
               "title": "设计与证据",
               "path": "docs/design/ldo.md"
+            }
+          ]
+        },
+        {
+          "id": "hv18-r4-static-20261110",
+          "title": "静态供电、参考滤波、电压码与物理无源",
+          "date": "2026-11-10",
+          "stage": "验证",
+          "problem": "宿主经Vbg和tail偏置绕过LDO；带隙电压失配需要独立电压修调。",
+          "model": "去掉运行时供电开关；逐模型一次校准并固定码，独立扫HV/host/T/load。",
+          "change": "静态Vin/quiet接口；参考1M/16p隔离/复位；6bit反馈；high_po/MIM；尾偏置低通候选。",
+          "validation": "DC1215、AC255、校准1088、无源27；六条件18条启动及18谱噪声；tail三点、Cload两边界。",
+          "conclusion": "输出1.776–1.815V、PSRR最差38.44dB、PM最低71.28°；引脚电容需限制，真实PLL负载/抖动与ready控制仍待接手。",
+          "attachments": [
+            {
+              "title": "设计与证据",
+              "path": "docs/design/ldo_r4.md"
+            },
+            {
+              "title": "交接",
+              "path": "docs/work_packages/WP-LDO-002-r4-handoff.md"
             }
           ]
         }

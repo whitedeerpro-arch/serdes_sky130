@@ -411,7 +411,7 @@
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
       "state": "MOS45点动态确认",
-      "summary": "v3同步计数器与extra5/WT16R240在完整TX MOS45点眼图/位序通过。Xe2联合尺寸卡TT/FS降至338/316mVpp，后一级仍473/414mVpp；级联待验。原生r5静态8完整/2数值缺失。",
+      "summary": "当前extra5/WT16R240与输出级候选完整TX MOS45点通过。Xe2单级减幅模型已校准；五级统一WT12.8/R320在FS局部69.75mV/0.212UI失败，不采用，需保留更多增益。原生静态8完整/2数值缺失。",
       "facts": {
         "设计": "v3 同步结构",
         "PVT": "当前完整TX MOS45点；原生静态8点",
@@ -475,6 +475,22 @@
         {
           "title": "Xe2联合幅度/时序图",
           "path": "docs/figures/tx/ingress/tx_buffer_joint.png"
+        },
+        {
+          "title": "级联减幅失败与后续约束",
+          "path": "docs/design/tx_buffer_cascade.md"
+        },
+        {
+          "title": "级联沿链幅度/时序",
+          "path": "docs/figures/tx/ingress/tx_buffer_cascade.png"
+        },
+        {
+          "title": "级联数据与门槛观察",
+          "path": "docs/data/tx_buffer_cascade.json"
+        },
+        {
+          "title": "仿真前幅度模型",
+          "path": "docs/data/tx_buffer_cascade_plan.json"
         }
       ],
       "iterations": [

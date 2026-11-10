@@ -394,3 +394,21 @@ joint_a_amplitude_prediction_error_mv_upper = 0.235
 bit_errors_each_8bit_window = 0
 scope = "same calibrated actual-loaded TT/FS extra5 ideal-PWL cuts; no full TX/PVT or upstream impedance qualification"
 adopted = false
+
+[retime_clock_iteration.buffer_cascade_card]
+status = "WT12.8_R320_all_extra5_rejected_FS_local_69.75mV_0.212UI; I17_open"
+report = "docs/design/tx_buffer_cascade.md"
+data = "docs/data/tx_buffer_cascade.json"
+model = "docs/data/tx_buffer_cascade_plan.json"
+index = "results/catalog/tx_buffer_cascade.json"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_cascade_card.py"
+campaign = "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f"
+boundary_id = "tx_i17_extra5_xe2_xe3_cascade_proposal"
+changed_instances = "baseline; Xe2_Xe3; Xe0_to_Xe4; all changed stages WN24_WT12.8_R320; Xiso_Xout unchanged"
+FS_five_stage_margin_mv = 69.746999
+FS_five_stage_spread_ui = 0.212036
+FS_two_stage_margin_mv = 96.289491
+FS_two_stage_spread_ui = 0.126711
+TT_FS_two_stage_model_error_percent_upper = 3.493
+scope = "TT/FS archived loaded cuts; fixed ideal PWL; eight-bit contract only; not full TX or independent 16bit mapping"
+adopted = false

@@ -1,0 +1,1218 @@
+{
+  "scope": "TT and FS hot low-voltage, archived loaded extra5 replay with ideal recorded PWL inputs, bias and supplies. Eight-bit fixed contract only; full TX mapping and I-17 remain open. Five-stage model is an unqualified proxy.",
+  "status": "measurement_complete",
+  "campaign": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f",
+  "summary": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f/analysis/20261110T165149Z_31761fae/summary.json",
+  "summary_sha256": "0b518244cb2b36f0f0c1dbc63fc8b08e66f336acd6ec8878ac54bd13733141eb",
+  "prediction": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f/sizing_model_before_run.json",
+  "prediction_sha256": "0257750787faf7cf92c4d8f57d637d8f815a9f0147daa926c437bd28f44ec28d",
+  "prediction_generator_sha256": "1a9792ea8ab9db14c2066360540cbb2702acc36381a0e1336880d487a79ab494",
+  "prediction_sources": {
+    "docs/data/tx_buffer_local.json": "45742c329bb4528009e9dda302001ae37e6e6238a97448817d6d927608ef846d",
+    "docs/data/tx_buffer_joint.json": "84a788293c060dedeef053b9f22d5b138ef0becdb9cf6fb940d821890ac7e99b"
+  },
+  "runner_sha256": "9cd3cce3f1e001b87d871206f3b8a8d372ff8d80dd07865604efd365c13050e0",
+  "publisher_sha256": "e670272ae2ab66f563dec7dc248f48953a2c9ea4ba7db0dd1c59ca405fab1bec",
+  "plan_sha256": "2a764c2b6cfd18a7d9964ca576087fa50f0a8e53866f84e0f37c69f93f58a277",
+  "cascade_plan_sha256": "bfb77fca277198bb08fd44c7eca6b90810e09c7877f2dda46895de96836aba01",
+  "parent_identity": {
+    "data_sha256": "84a788293c060dedeef053b9f22d5b138ef0becdb9cf6fb940d821890ac7e99b",
+    "joint_plan_sha256": "1ec11a8b8a5b75f56aba297cce357552145336b22230cdf0438b088c64659851",
+    "plan_sha256": "07192015ffa1231bbab2877f37e00aa00308969f18eb456e50238c69898cfc5e",
+    "summary_sha256": "0d6e1994bce77ae64a42f4f403157fea78bade26a9367238ebf3783350af126e",
+    "evidence": {
+      "tt_v1800_t27": {
+        "tt_v1800_t27.raw": "c65ec26337850edfbb2418a4ac50c8a91b782bc5b985b3db17f1b21539ecd875",
+        "execution.json": "9700e5ed1aea423a9bc51bb2000cc044f8cde8951fda174f955af71f69d00173",
+        "tb.cir": "ee32ac1225bfb61b0e88f781e27debd04f63ac404165b43542e34896b288203b",
+        "simulator.log": "d16b136adbcf6e0d13363ab33145f87e89d5449b4e05431c2caaef4549a8f0d9"
+      },
+      "fs_v1650_t85": {
+        "fs_v1650_t85.raw": "4f40138c38ca8c400c9c5b4700e68ce51f5cc9f1276c5edf36b14313f5e0a45a",
+        "execution.json": "7640b94dcdc9c16922f661ac0d8547201839959e29bd24f7d3418beda3f7e4b8",
+        "tb.cir": "927a2ffd92ffc4e4a1c07a622a22377142dea310475ced3217b6212cf2a1dff4",
+        "simulator.log": "9cb1fe1c25aabbb3874521e02d539cb83bcc98ae766e3f6b4bf1c5a719fd43ae"
+      }
+    }
+  },
+  "evidence": {
+    "tt_v1800_t27": {
+      "tt_v1800_t27.raw": "d2b70967b997cc4980260dd0c6a830f405e87a2e483c1ebaad6538d2c73cd957",
+      "execution.json": "44ad20fe81d32b28c57004eac084e6ecc601c019b67db5eeb226d65e85832035",
+      "tb.cir": "a2a0c87e74cd8803d9d7ae6e45f4b677922cdd1dbaf6918282524f5c0e3d50f8",
+      "simulator.log": "5e144843b149eede13e17f00111b6452c1bb23588a266db5dbf08a31f81326a4"
+    },
+    "fs_v1650_t85": {
+      "fs_v1650_t85.raw": "780a0d8284fa0a4c68d019cc99c81f57df9679058292325bb15b8a56e54e623a",
+      "execution.json": "fca73cb00afb5eea04b067cd3f58d256619ea42cb82f7fbbc4861085cc440db8",
+      "tb.cir": "e07d9994b616a425ac01d92f288067f251a7d036486fa65aa42e488e1cb2583f",
+      "simulator.log": "37da8c1a3bc9e5ec05b62c3eeec53bf048b243ed70ddeedafee494df3023ef0c"
+    }
+  },
+  "results": [
+    {
+      "condition": "tt_v1800_t27",
+      "raw": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f/tt_v1800_t27/tt_v1800_t27.raw",
+      "raw_sha256": "d2b70967b997cc4980260dd0c6a830f405e87a2e483c1ebaad6538d2c73cd957",
+      "result": {
+        "input_max_error_v": {
+          "ap": 4.993537463304776e-06,
+          "an": 4.98775422896891e-06,
+          "bp": 4.971347152382677e-06,
+          "bn": 4.977915441184422e-06,
+          "vbias": 4.996710775362345e-06,
+          "vbias_logic": 4.9973076429177254e-06,
+          "vdd": 0.0,
+          "rp": 4.9940255153479995e-06,
+          "rn": 4.988005974704279e-06
+        },
+        "baseline_max_error_v": {
+          "sp1": 2.6080451576149244e-08,
+          "sn1": 3.413817495356852e-08,
+          "qp1": 1.5653025986495095e-08,
+          "qn1": 2.7054087858857656e-08,
+          "xslice1.xfinal.ahp": 7.532461765435983e-09,
+          "xslice1.xfinal.ahn": 1.3918291630332646e-08,
+          "xslice1.xfinal.bhp": 1.5179404622145398e-08,
+          "xslice1.xfinal.bhn": 2.6949192433178837e-08,
+          "xslice1.xfinal.sap": 1.7506476712725316e-08,
+          "xslice1.xfinal.san": 2.152673950206463e-08
+        },
+        "baseline_matches": true,
+        "branches": [
+          {
+            "branch": "baseline",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.5277843822538382,
+                "common_mode_mean_v": 1.664968693519944,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5272937828552506,
+                  "max_pp_v": 0.5275308575811419,
+                  "mean_pp_v": 0.5273810171897679
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.5330943138356583,
+                "common_mode_mean_v": 1.6650416683802458,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5326423484756757,
+                  "max_pp_v": 0.5328458542330599,
+                  "mean_pp_v": 0.532719623952615
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.5332713242417932,
+                "common_mode_mean_v": 1.6648671502979098,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5328131966439364,
+                  "max_pp_v": 0.5329024997496346,
+                  "mean_pp_v": 0.5328484523379763
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.5359404098063141,
+                "common_mode_mean_v": 1.6648016089485462,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5354876669862292,
+                  "max_pp_v": 0.535566774084177,
+                  "mean_pp_v": 0.5355353304677758
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.5386870123292724,
+                "common_mode_mean_v": 1.6647873701431102,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5382956108588495,
+                  "max_pp_v": 0.5383811166027415,
+                  "mean_pp_v": 0.538326069946142
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.5408743299011158,
+                "common_mode_mean_v": 1.6647828591472595,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5403068467941059,
+                  "max_pp_v": 0.5405588884581543,
+                  "mean_pp_v": 0.5404403527667995
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.36893528536743747,
+                "common_mode_mean_v": 1.7182637830740284,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.36838469924429185,
+                  "max_pp_v": 0.3686592399077002,
+                  "mean_pp_v": 0.36857725734814584
+                }
+              }
+            },
+            "clock_fall_shift_s": -5.8658297183697505e-18,
+            "clock_shift_min_s": -8.4940712104845e-18,
+            "clock_shift_max_s": -2.181589603935104e-19,
+            "clock_total_shift_from_source_s": 3.082291398601053e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.4833536966489231,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.14005424365010605,
+              "transition_spread_ui": 0.031658177228455694,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.49777382118468e-09,
+                4.747773821184686e-09,
+                4.997773821184678e-09,
+                5.2477738211846835e-09,
+                5.497773821184676e-09,
+                5.747773821184681e-09,
+                5.997773821184687e-09,
+                6.247773821184679e-09
+              ],
+              "sample_voltage_v": [
+                -0.1491103602131659,
+                0.15229834583005852,
+                -0.14966761766224346,
+                0.14005424365010605,
+                0.14151352630939704,
+                -0.1424049406806711,
+                0.2012751367353019,
+                0.18266899138065096
+              ],
+              "signed_margin_v": [
+                0.1491103602131659,
+                0.15229834583005852,
+                0.14966761766224346,
+                0.14005424365010605,
+                0.14151352630939704,
+                0.1424049406806711,
+                0.2012751367353019,
+                0.18266899138065096
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.03246998918653006,
+                -0.008670264185292416,
+                -0.01292024672593649,
+                -0.00791012443430841,
+                -0.022458721807763964,
+                -0.03956830166276411
+              ]
+            }
+          },
+          {
+            "branch": "two_stages",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.5277930851185708,
+                "common_mode_mean_v": 1.6649687479610211,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5273024624756584,
+                  "max_pp_v": 0.5275395525599913,
+                  "mean_pp_v": 0.5273897057856229
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.5332538437313039,
+                "common_mode_mean_v": 1.6650422701606522,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5327995765451268,
+                  "max_pp_v": 0.5330052757893191,
+                  "mean_pp_v": 0.5328766515897084
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.5333237073046935,
+                "common_mode_mean_v": 1.6648682494700295,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.532866144467963,
+                  "max_pp_v": 0.5329555839519371,
+                  "mean_pp_v": 0.5329011239587932
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.33768757351579226,
+                "common_mode_mean_v": 1.7155453896612038,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3374190053200259,
+                  "max_pp_v": 0.33747182211276283,
+                  "mean_pp_v": 0.3374481704107486
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.30818889248260306,
+                "common_mode_mean_v": 1.7154958179979802,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3079181636643584,
+                  "max_pp_v": 0.3079711548830024,
+                  "mean_pp_v": 0.30793715334532107
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.4491154934150092,
+                "common_mode_mean_v": 1.6647910494924563,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4485688805699819,
+                  "max_pp_v": 0.4487724010717482,
+                  "mean_pp_v": 0.4486748105453991
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.3604099117161921,
+                "common_mode_mean_v": 1.7183619685018556,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.3596859439943183,
+                  "max_pp_v": 0.3601553064035936,
+                  "mean_pp_v": 0.3599775003933097
+                }
+              }
+            },
+            "clock_fall_shift_s": -8.500295972291969e-13,
+            "clock_shift_min_s": -8.510336144172713e-13,
+            "clock_shift_max_s": -8.088174974116234e-13,
+            "clock_total_shift_from_source_s": 2.997907887152337e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.4799783561909743,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.1385980304982334,
+              "transition_spread_ui": 0.03406611108892032,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.4969299860702004e-09,
+                4.746929986070206e-09,
+                4.996929986070198e-09,
+                5.246929986070204e-09,
+                5.496929986070196e-09,
+                5.746929986070202e-09,
+                5.996929986070207e-09,
+                6.2469299860701995e-09
+              ],
+              "sample_voltage_v": [
+                -0.1475504647707287,
+                0.1506529332524491,
+                -0.1480705971143575,
+                0.1385980304982334,
+                0.1398939647259241,
+                -0.14075933497195947,
+                0.20060291999008317,
+                0.18154788558064694
+              ],
+              "signed_margin_v": [
+                0.1475504647707287,
+                0.1506529332524491,
+                0.1480705971143575,
+                0.1385980304982334,
+                0.1398939647259241,
+                0.14075933497195947,
+                0.20060291999008317,
+                0.18154788558064694
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.035041428402056915,
+                -0.011600207142504725,
+                -0.015766895301966583,
+                -0.010882796815928632,
+                -0.025267531524534207,
+                -0.04494890790484895
+              ]
+            }
+          },
+          {
+            "branch": "extra5",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.5282747816630018,
+                "common_mode_mean_v": 1.6649638919635084,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5277880801085222,
+                  "max_pp_v": 0.5280207585383447,
+                  "mean_pp_v": 0.5278719305620326
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.33537399226782805,
+                "common_mode_mean_v": 1.7157737596873819,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3350910517775232,
+                  "max_pp_v": 0.3352190104475532,
+                  "mean_pp_v": 0.3351439546301212
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.30474731185708226,
+                "common_mode_mean_v": 1.7155242846316963,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3044608179064814,
+                  "max_pp_v": 0.3045691615324826,
+                  "mean_pp_v": 0.30450395264820357
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.29271546851132646,
+                "common_mode_mean_v": 1.7155296063039305,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.2923893279201757,
+                  "max_pp_v": 0.2924681994199907,
+                  "mean_pp_v": 0.2924158776661298
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.2871913622537523,
+                "common_mode_mean_v": 1.7155355136908417,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.28677795510399195,
+                  "max_pp_v": 0.28683880391513394,
+                  "mean_pp_v": 0.2868149445051362
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.2844257318217418,
+                "common_mode_mean_v": 1.715546336989044,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.2840506032285499,
+                  "max_pp_v": 0.2841982973121504,
+                  "mean_pp_v": 0.2841304617560881
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.31169069571437147,
+                "common_mode_mean_v": 1.7182631330068054,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.31059588277034234,
+                  "max_pp_v": 0.31154514594710947,
+                  "mean_pp_v": 0.31110613397871134
+                }
+              }
+            },
+            "clock_fall_shift_s": -3.4357425466146756e-12,
+            "clock_shift_min_s": -3.4737516029500326e-12,
+            "clock_shift_max_s": -3.3513000233790137e-12,
+            "clock_total_shift_from_source_s": 2.7409081409347896e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.4696983663422725,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.12961859924137806,
+              "transition_spread_ui": 0.04588983243867899,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.494359988608025e-09,
+                4.7443599886080305e-09,
+                4.994359988608023e-09,
+                5.244359988608028e-09,
+                5.494359988608034e-09,
+                5.744359988608026e-09,
+                5.994359988608032e-09,
+                6.244359988608024e-09
+              ],
+              "sample_voltage_v": [
+                -0.13859264814059383,
+                0.14132968564507906,
+                -0.1389453399436799,
+                0.12961859924137806,
+                0.13035145617686517,
+                -0.1301589600791003,
+                0.1971079592728553,
+                0.17610673631163368
+              ],
+              "signed_margin_v": [
+                0.13859264814059383,
+                0.14132968564507906,
+                0.1389453399436799,
+                0.12961859924137806,
+                0.13035145617686517,
+                0.1301589600791003,
+                0.1971079592728553,
+                0.17610673631163368
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.041496695218559906,
+                -0.018709492019397925,
+                -0.022405196045519406,
+                -0.018092283493936986,
+                -0.03150008842548438,
+                -0.06398211593261598
+              ]
+            }
+          }
+        ],
+        "ungraded": [
+          "physical resistance",
+          "tail Vdsat and Id",
+          "current and power",
+          "noise"
+        ],
+        "baseline_serial_edge_error_s": 1.2947231124603452e-17,
+        "old_extra5_metrics": {
+          "scope": "local_window_only",
+          "delay_ui": 1.4833537055629622,
+          "first_bit": 296,
+          "end_bit": 304,
+          "bit_errors": 0,
+          "minimum_signed_margin_v": 0.14005424482456666,
+          "transition_spread_ui": 0.03165814758092281,
+          "matched_transitions": 6,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "functional": true,
+          "edge_match_half_width_ui": 0.45,
+          "phase_fitted": false
+        },
+        "source_to_old_extra5_clock_shift_s": 3.08229162145203e-11,
+        "status": "measurement_complete"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "raw": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f/fs_v1650_t85/fs_v1650_t85.raw",
+      "raw_sha256": "780a0d8284fa0a4c68d019cc99c81f57df9679058292325bb15b8a56e54e623a",
+      "result": {
+        "input_max_error_v": {
+          "ap": 4.991544635180034e-06,
+          "an": 4.99345625559755e-06,
+          "bp": 4.99857782165769e-06,
+          "bn": 4.99623296978946e-06,
+          "vbias": 4.991974214663131e-06,
+          "vbias_logic": 4.990816238614748e-06,
+          "vdd": 2.220446049250313e-16,
+          "rp": 4.9919675120246865e-06,
+          "rn": 4.998308776649196e-06
+        },
+        "baseline_max_error_v": {
+          "sp1": 2.3253920344856738e-08,
+          "sn1": 3.332819220602801e-08,
+          "qp1": 7.428123530051067e-06,
+          "qn1": 5.704659444383253e-06,
+          "xslice1.xfinal.ahp": 4.803554953802802e-07,
+          "xslice1.xfinal.ahn": 7.20112496299663e-07,
+          "xslice1.xfinal.bhp": 5.326564493923769e-07,
+          "xslice1.xfinal.bhn": 5.913165812554411e-07,
+          "xslice1.xfinal.sap": 2.6411302700424244e-08,
+          "xslice1.xfinal.san": 9.496418307275434e-08
+        },
+        "baseline_matches": true,
+        "branches": [
+          {
+            "branch": "baseline",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.4527093703797824,
+                "common_mode_mean_v": 1.5188691095699596,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.45211187863790436,
+                  "max_pp_v": 0.4524753286961374,
+                  "mean_pp_v": 0.45231872019736336
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.4856861540081743,
+                "common_mode_mean_v": 1.519134016196333,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4850892155749522,
+                  "max_pp_v": 0.4853411295642438,
+                  "mean_pp_v": 0.4852465907741677
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.49736574714531057,
+                "common_mode_mean_v": 1.5190353186446275,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.49683776225601606,
+                  "max_pp_v": 0.49700087753839783,
+                  "mean_pp_v": 0.49693593720518203
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.50084442472792,
+                "common_mode_mean_v": 1.5188693039131576,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5003870751035138,
+                  "max_pp_v": 0.5004805731125641,
+                  "mean_pp_v": 0.5004399189263191
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.5022558109866504,
+                "common_mode_mean_v": 1.518758484163134,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5015522278268865,
+                  "max_pp_v": 0.5018827632477534,
+                  "mean_pp_v": 0.5017653628481199
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.501117023317097,
+                "common_mode_mean_v": 1.5186857434318213,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4996598776447416,
+                  "max_pp_v": 0.5007062130802098,
+                  "mean_pp_v": 0.5003506540854052
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.35108759896678743,
+                "common_mode_mean_v": 1.5705580720912191,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.34978920637609945,
+                  "max_pp_v": 0.3507949051313668,
+                  "mean_pp_v": 0.35038033113326883
+                }
+              }
+            },
+            "clock_fall_shift_s": 3.495120983806035e-18,
+            "clock_shift_min_s": -1.9226895168315194e-18,
+            "clock_shift_max_s": 4.337925383768964e-18,
+            "clock_total_shift_from_source_s": 3.8555774208649353e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.686646767115507,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.10592297098374269,
+              "transition_spread_ui": 0.10522257126700933,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.54978542304674e-09,
+                4.799785423046732e-09,
+                5.0497854230467375e-09,
+                5.29978542304673e-09,
+                5.549785423046735e-09,
+                5.799785423046741e-09,
+                6.049785423046733e-09,
+                6.299785423046739e-09
+              ],
+              "sample_voltage_v": [
+                -0.12025484670426649,
+                0.1154550872306927,
+                -0.11340334187318343,
+                0.11271778341433378,
+                0.11709569212008587,
+                -0.10592297098374269,
+                0.17666655648109164,
+                0.15388783238719675
+              ],
+              "signed_margin_v": [
+                0.12025484670426649,
+                0.1154550872306927,
+                0.11340334187318343,
+                0.11271778341433378,
+                0.11709569212008587,
+                0.10592297098374269,
+                0.17666655648109164,
+                0.15388783238719675
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.01002882497496564,
+                -0.00824747289738781,
+                -0.025612812808129475,
+                -0.012980359942586263,
+                -0.03606611377041714,
+                -0.09519374629204369
+              ]
+            }
+          },
+          {
+            "branch": "two_stages",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.4526909779438575,
+                "common_mode_mean_v": 1.5188691141081996,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.4520935207672201,
+                  "max_pp_v": 0.45245697287583075,
+                  "mean_pp_v": 0.45230037552684965
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.4859585447541046,
+                "common_mode_mean_v": 1.519134045564108,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4853605297104533,
+                  "max_pp_v": 0.48561326290450424,
+                  "mean_pp_v": 0.4855183381957853
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.49894243053597087,
+                "common_mode_mean_v": 1.519038314452077,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4984059384734192,
+                  "max_pp_v": 0.4985771397897225,
+                  "mean_pp_v": 0.49851008666303026
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.3166193836745832,
+                "common_mode_mean_v": 1.5683829225802761,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.31629996639946434,
+                  "max_pp_v": 0.3163911999558675,
+                  "mean_pp_v": 0.3163503845162115
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.27067372773324094,
+                "common_mode_mean_v": 1.5682157017261862,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.27029610967375506,
+                  "max_pp_v": 0.27043827873957405,
+                  "mean_pp_v": 0.2703829838276502
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.37070584019188013,
+                "common_mode_mean_v": 1.5186279978440431,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.369490107054566,
+                  "max_pp_v": 0.3702992685491793,
+                  "mean_pp_v": 0.3700119357863705
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.31887352937818436,
+                "common_mode_mean_v": 1.570721645012634,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.31730575064009914,
+                  "max_pp_v": 0.3185236760007,
+                  "mean_pp_v": 0.31800996575101326
+                }
+              }
+            },
+            "clock_fall_shift_s": -9.805813985864637e-13,
+            "clock_shift_min_s": -9.90498776554139e-13,
+            "clock_shift_max_s": -9.521260269616225e-13,
+            "clock_total_shift_from_source_s": 3.756902840477922e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6826997839000264,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.09628949050913056,
+              "transition_spread_ui": 0.12671077348533313,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.548798677242869e-09,
+                4.798798677242861e-09,
+                5.0487986772428665e-09,
+                5.298798677242859e-09,
+                5.548798677242864e-09,
+                5.79879867724287e-09,
+                6.048798677242862e-09,
+                6.298798677242868e-09
+              ],
+              "sample_voltage_v": [
+                -0.11214264055432886,
+                0.10687691129504524,
+                -0.10497432331521321,
+                0.10460223172274298,
+                0.10818313705112688,
+                -0.09628949050913056,
+                0.17289852267429567,
+                0.14831349607636732
+              ],
+              "signed_margin_v": [
+                0.11214264055432886,
+                0.10687691129504524,
+                0.10497432331521321,
+                0.10460223172274298,
+                0.10818313705112688,
+                0.09628949050913056,
+                0.17289852267429567,
+                0.14831349607636732
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.009988206347282055,
+                -0.014808845626130225,
+                -0.03272907845241061,
+                -0.020687503650032357,
+                -0.04321406671266682,
+                -0.11672256713805108
+              ]
+            }
+          },
+          {
+            "branch": "extra5",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.45505505506975874,
+                "common_mode_mean_v": 1.5188601327048101,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.4544566879416747,
+                  "max_pp_v": 0.45481828030886695,
+                  "mean_pp_v": 0.4546626350142582
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.3110890732945599,
+                "common_mode_mean_v": 1.5686519845752758,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.31071072180220605,
+                  "max_pp_v": 0.3108705513687873,
+                  "mean_pp_v": 0.31081100880364315
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.26794118428601577,
+                "common_mode_mean_v": 1.5683073799946778,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.2675804534444117,
+                  "max_pp_v": 0.2677049213889615,
+                  "mean_pp_v": 0.26765963383270114
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.2449441050535941,
+                "common_mode_mean_v": 1.568301214267519,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.24457582658037258,
+                  "max_pp_v": 0.24468190664697587,
+                  "mean_pp_v": 0.2446394197119198
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.2306196381597143,
+                "common_mode_mean_v": 1.5682943584074065,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.23025488007494332,
+                  "max_pp_v": 0.23033875178119945,
+                  "mean_pp_v": 0.23030367407421584
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.21785476147311367,
+                "common_mode_mean_v": 1.5682966553051265,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.2173394574272729,
+                  "max_pp_v": 0.21756297821818182,
+                  "mean_pp_v": 0.21745007843960287
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.23201867933321174,
+                "common_mode_mean_v": 1.5705369443051274,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.23056303206367423,
+                  "max_pp_v": 0.23165406297382773,
+                  "mean_pp_v": 0.2310909524893925
+                }
+              }
+            },
+            "clock_fall_shift_s": -5.383170226344009e-12,
+            "clock_shift_min_s": -5.464949892863594e-12,
+            "clock_shift_max_s": -5.276747281815442e-12,
+            "clock_total_shift_from_source_s": 3.317204130915207e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6651118355175178,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.0697469991723191,
+              "transition_spread_ui": 0.21203622236879063,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.544401690147228e-09,
+                4.794401690147234e-09,
+                5.044401690147226e-09,
+                5.294401690147232e-09,
+                5.544401690147237e-09,
+                5.7944016901472295e-09,
+                6.044401690147235e-09,
+                6.294401690147227e-09
+              ],
+              "sample_voltage_v": [
+                -0.0905238175232004,
+                0.0837868655871099,
+                -0.08246455725360229,
+                0.08262893793307498,
+                0.08501497990339266,
+                -0.0697469991723191,
+                0.16627771757031343,
+                0.13630616733311213
+              ],
+              "signed_margin_v": [
+                0.0905238175232004,
+                0.0837868655871099,
+                0.08246455725360229,
+                0.08262893793307498,
+                0.08501497990339266,
+                0.0697469991723191,
+                0.16627771757031343,
+                0.13630616733311213
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.027992847852987064,
+                -0.02398974836092172,
+                -0.04435756371598557,
+                -0.03373942634506242,
+                -0.055503865413288604,
+                -0.18404337451580358
+              ]
+            }
+          }
+        ],
+        "ungraded": [
+          "physical resistance",
+          "tail Vdsat and Id",
+          "current and power",
+          "noise"
+        ],
+        "baseline_serial_edge_error_s": 1.2936271660559935e-15,
+        "old_extra5_metrics": {
+          "scope": "local_window_only",
+          "delay_ui": 1.6866467523453237,
+          "first_bit": 296,
+          "end_bit": 304,
+          "bit_errors": 0,
+          "minimum_signed_margin_v": 0.10592106769455516,
+          "transition_spread_ui": 0.10521819772330118,
+          "matched_transitions": 6,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "functional": true,
+          "edge_match_half_width_ui": 0.45,
+          "phase_fitted": false
+        },
+        "source_to_old_extra5_clock_shift_s": 3.855577051610352e-11,
+        "status": "measurement_complete"
+      }
+    }
+  ],
+  "local_gate_observations": {
+    "tt_v1800_t27": [
+      {
+        "branch": "baseline",
+        "functional": true,
+        "margin_75mv_observed": true,
+        "spread_015ui_observed": true,
+        "local_serial_gate_observed": true,
+        "observed_over_400mv_nodes": [
+          "iso",
+          "e0",
+          "e1",
+          "e2",
+          "e3",
+          "e4"
+        ],
+        "observed_below_200mv_cycle_nodes": [],
+        "observed_below_150mv_cycle_nodes": [],
+        "qualification": "local eight-bit observations only; full TX and I-17 remain open"
+      },
+      {
+        "branch": "two_stages",
+        "functional": true,
+        "margin_75mv_observed": true,
+        "spread_015ui_observed": true,
+        "local_serial_gate_observed": true,
+        "observed_over_400mv_nodes": [
+          "iso",
+          "e0",
+          "e1",
+          "e4"
+        ],
+        "observed_below_200mv_cycle_nodes": [],
+        "observed_below_150mv_cycle_nodes": [],
+        "qualification": "local eight-bit observations only; full TX and I-17 remain open"
+      },
+      {
+        "branch": "extra5",
+        "functional": true,
+        "margin_75mv_observed": true,
+        "spread_015ui_observed": true,
+        "local_serial_gate_observed": true,
+        "observed_over_400mv_nodes": [
+          "iso"
+        ],
+        "observed_below_200mv_cycle_nodes": [],
+        "observed_below_150mv_cycle_nodes": [],
+        "qualification": "local eight-bit observations only; full TX and I-17 remain open"
+      }
+    ],
+    "fs_v1650_t85": [
+      {
+        "branch": "baseline",
+        "functional": true,
+        "margin_75mv_observed": true,
+        "spread_015ui_observed": true,
+        "local_serial_gate_observed": true,
+        "observed_over_400mv_nodes": [
+          "iso",
+          "e0",
+          "e1",
+          "e2",
+          "e3",
+          "e4"
+        ],
+        "observed_below_200mv_cycle_nodes": [],
+        "observed_below_150mv_cycle_nodes": [],
+        "qualification": "local eight-bit observations only; full TX and I-17 remain open"
+      },
+      {
+        "branch": "two_stages",
+        "functional": true,
+        "margin_75mv_observed": true,
+        "spread_015ui_observed": true,
+        "local_serial_gate_observed": true,
+        "observed_over_400mv_nodes": [
+          "iso",
+          "e0",
+          "e1"
+        ],
+        "observed_below_200mv_cycle_nodes": [],
+        "observed_below_150mv_cycle_nodes": [],
+        "qualification": "local eight-bit observations only; full TX and I-17 remain open"
+      },
+      {
+        "branch": "extra5",
+        "functional": true,
+        "margin_75mv_observed": false,
+        "spread_015ui_observed": false,
+        "local_serial_gate_observed": false,
+        "observed_over_400mv_nodes": [
+          "iso"
+        ],
+        "observed_below_200mv_cycle_nodes": [],
+        "observed_below_150mv_cycle_nodes": [],
+        "qualification": "local eight-bit observations only; full TX and I-17 remain open"
+      }
+    ]
+  },
+  "two_stage_xe3_prediction_residuals": {
+    "tt_v1800_t27": {
+      "predicted_v": 0.29782368150995403,
+      "measured_v": 0.30818889248260306,
+      "residual_mv": 10.365210972649031,
+      "residual_percent_of_prediction": 3.480317925054794,
+      "branch_status": "measurement_complete"
+    },
+    "fs_v1650_t85": {
+      "predicted_v": 0.26153953593411583,
+      "measured_v": 0.27067372773324094,
+      "residual_mv": 9.134191799125112,
+      "residual_percent_of_prediction": 3.4924707526536634,
+      "branch_status": "measurement_complete"
+    }
+  },
+  "prediction_assumptions": [
+    "2 GHz recorded TT/FS PWL boundaries only; dynamic waveform shape reduced to amplitude",
+    "tanh fit to unchanged Xe3 observations; fit residual is in-sample, not prediction error",
+    "modified-stage transfer assumed to scale by the single measured joint-A amplitude ratio",
+    "five-stage iso input approximated by baseline Xe2 input; final Xe4 has heavier WN32 load",
+    "no c2g, slew, delay, regeneration, PVT, mismatch or noise qualification",
+    "small-amplitude modified transfer and repeated-stage approximation need the new SPICE card"
+  ],
+  "ungraded": [
+    "resistance",
+    "power",
+    "noise",
+    "upstream impedance",
+    "new bias",
+    "full TX",
+    "I-17 closure"
+  ]
+}

@@ -15,6 +15,10 @@ the set code bits follow VDD.  Variants:
   gnd  ideal Vctrl source (alpha 0: control fixed to ground),  vdd  ideal Vctrl carrying the tone (alpha 1).
   zin  as lf but VDD clean and a sine current of --iamp at fm injected into the control node: the impedance the CP
        drives, Z = V(ctrl) / I by lock-in over the kept periods (the loop's own Z(f), incl. everything on the node).
+  host / quiet  as lf with two supply domains, the partition of a regulated PLL rail (docs/design/ldo.md): the bias
+       reference (serdes_bias_ref) and every PMOS current copy (serdes_bias_pcopy) on node host, everything else (VCO,
+       buffers, CP, LF, the CML / CP diodes) on vdd.  host: the tone on host, vdd clean -- the path that bypasses a
+       regulator.  quiet: the tone on vdd, host clean -- what the regulated rail's own ripple does.  lf = host + quiet.
 Fit as psrr_tone.py: K = w f0 (B - j A) / amp from the rising crossings after one dropped period.  gnd and vdd at the
 same point give the control line's gain and the alpha that nulls K; lf gives the actual K and, through
 K_lf = K_gnd + alpha_eff (K_vdd - K_gnd), the effective alpha of the real network.
@@ -96,7 +100,7 @@ def name(variant, fm):
 
 
 def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_filter_k4", cp=CP_PARAMS, iamp=1e-6):
-    loaded = variant in ("lf", "zin")
+    loaded = variant in ("lf", "zin", "host", "quiet")
     text = spice.render(wm.TEMPLATE, **spice.corner_values(c), VCTRL=vctrl, INJECT="", PROBES="v(ctrl)" + (" v(z)" if loaded else ""),
                         TSTEP="1p", STOP=f"{stop:.5e}", SAVE_FROM=f"{SETTLE:.5e}", OUT="tone.raw", CFG0=0, CFG1=0, CFG2=0)
     old = "ctrl cfg0 cfg1 cfg2 vbias vdd 0 pll_vco_ring4_pvt_candidate"
@@ -106,7 +110,7 @@ def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_fil
     assert text.count(inc) == 1
     extra = [inc.replace("analog/pll/vco/spice/vco_ring4_pvt_candidate.spice", f) for f in INCLUDES]
     text = text.replace(inc, "\n".join([inc.replace("vco_ring4_pvt_candidate", "cap_bank_4b"), inc.replace("vco_ring4_pvt_candidate", "vco_ring4_4b")] + extra))
-    rep = {} if variant == "zin" else {f"Vdd vdd 0 {c.supply}": f"Vdd vdd 0 DC {c.supply} SIN({c.supply} {amp:.5e} {fm:.5e} {SETTLE:.5e})"}
+    rep = {} if variant in ("zin", "host") else {f"Vdd vdd 0 {c.supply}": f"Vdd vdd 0 DC {c.supply} SIN({c.supply} {amp:.5e} {fm:.5e} {SETTLE:.5e})"}
     for k in range(4):                                         # a set bit is tied to VDD, a clear bit to ground
         rep[f"Vb{k} cfg{k} 0 0"] = f"Vb{k} cfg{k} vdd 0" if (code >> k) & 1 else f"Vb{k} cfg{k} 0 0"
     if loaded:
@@ -123,6 +127,12 @@ def deck(c, rc, code, vctrl, variant, fm, amp, stop, camp, lf_cell="pll_loop_fil
     if loaded:
         hold = f"XIbcp ibcp vgi_bias vdd serdes_bias_pcopy n=4\nRhold ctrl hold 100Meg\nVhold hold 0 {vctrl}\n"
         text = text.replace(".control", hold + ".control", 1)
+    if variant in ("host", "quiet"):
+        n_ref, n_copy = text.count(" vgi_bias vdd 0 serdes_bias_ref"), text.count(" vgi_bias vdd serdes_bias_pcopy")
+        assert n_ref == 1 and n_copy >= 3, (n_ref, n_copy)
+        text = text.replace(" vgi_bias vdd 0 serdes_bias_ref", " vgi_bias host 0 serdes_bias_ref").replace(" vgi_bias vdd serdes_bias_pcopy", " vgi_bias host serdes_bias_pcopy")
+        src = f"Vhost host 0 DC {c.supply} SIN({c.supply} {amp:.5e} {fm:.5e} {SETTLE:.5e})" if variant == "host" else f"Vhost host 0 {c.supply}"
+        text = text.replace(".control", src + "\n.control", 1)
     return text
 
 

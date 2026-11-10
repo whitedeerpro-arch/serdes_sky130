@@ -1,0 +1,32 @@
+digraph supply_variants {
+  graph [rankdir=LR, bgcolor="white", pad="0.28", nodesep="0.42", ranksep="0.55", fontname="DejaVu Sans", label="PLL supply VARs - architecture planning only; no new simulation", labelloc=t, fontsize=17];
+  node [shape=box, style="rounded,filled", fillcolor="#f4f7fa", color="#6b7c8f", fontname="DejaVu Sans", fontsize=11, margin="0.16,0.12"];
+  edge [color="#55687a", arrowsize=0.8, fontname="DejaVu Sans", fontsize=10];
+  subgraph cluster_a {
+    label="A: 3.3 V -> quiet 1.8 V, with external-1.8 V option";
+    color="#3d8b91"; style="rounded"; fontsize=14;
+    a_in [label="Analog 3.3 V input\nproposed 3.0-3.6 V"];
+    a_reg [label="HV pass + regulator\noutput / startup protection", fillcolor="#dceeed"];
+    a_ext [label="Qualified external 1.8 V\nripple / PSD contract required"];
+    a_sel [label="Mode isolation\nreverse blocking", fillcolor="#f8edda"];
+    a_q [label="Quiet 1.8 V island\nVCO + CP + LF\nlocal bias / precharge boundary", fillcolor="#dceeed"];
+    a_buf [label="First clock buffers\n1.8 V host or quiet rail\nsource / load to be decided"];
+    a_host [label="Host 1.8 V\ndividers / TX / RX / digital", fillcolor="#e6ebf3"];
+    a_in -> a_reg -> a_sel -> a_q;
+    a_ext -> a_sel [label="bypass mode"];
+    a_q -> a_buf [label="clock"];
+    a_buf -> a_host [label="clock"];
+  }
+  subgraph cluster_b {
+    label="B: host 1.8 V -> quiet 1.5 V; keep the rest at 1.8 V";
+    color="#b58045"; style="rounded"; fontsize=14;
+    b_in [label="Host 1.8 V input\n1.65-1.95 V"];
+    b_reg [label="Low-headroom regulator\n1.5 V target (+/-2% example)", fillcolor="#f8edda"];
+    b_q [label="B-core: VCO at quiet 1.5 V\nCP/LF kept at 1.8 V\nmixed-rail coupling to be planned", fillcolor="#f8edda"];
+    b_buf [label="1.5 -> 1.8 V clock boundary\nfirst CML buffer / common mode\ncap-bank drive also explicit", fillcolor="#f8edda"];
+    b_host [label="Host 1.8 V\ndividers / TX / RX / digital", fillcolor="#e6ebf3"];
+    b_all [label="B-island alternative\nVCO + CP + LF at 1.5 V\nmore window / startup changes", fillcolor="#f8edda"];
+    b_in -> b_reg -> b_q -> b_buf -> b_host;
+    b_reg -> b_all [style=dashed, label="broader scope"];
+  }
+}

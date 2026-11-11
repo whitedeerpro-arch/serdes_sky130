@@ -44,6 +44,8 @@ Xe4尾流均值为TT659.9→661.5µA、FS623.2→625.5µA，尾管VDS−VDSAT在
 
 ## 证据与复算
 
+后续[实际负载弱输入/共模卡](tx_loaded_clock.md)已在当前driver边界校准FS/SS原样基线，继续分离幅度、共模与定宽电阻实现；本卡的WN扫描和七级功耗范围保持原定义。
+
 新campaign：`results/analog/tx/buffer_heavy_card/20261111T130949Z_13eba6a8`，边界ID `tx_extra5_heavy_wn24_32_40_v1`。两角WN24与父卡同绝对时间比较，最大单端差0.000103/0.000041mV、最大c2g绝对沿差0.0000082/0.0000044ps，均远小于5mV/2ps门槛；并保留原始extra5来源的独立基线检查。
 
 每点保留deck、执行状态、完整终点、原始二进制波形和SHA。发布器重新核对全部身份，并从原始数据重算幅度、供电功率、尾流、尾管最小余量、上下沿传播及固定八位有符号裕量。完整逐事件数据在campaign的`analysis/measurement/summary.json`；[小数据](../data/tx_buffer_heavy.json)与[索引](../../results/catalog/tx_buffer_heavy.json)保存摘要和哈希。

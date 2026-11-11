@@ -102,3 +102,5 @@
 - 2026-11-12 00:50 Codex：已最小复现固定R的AC根因：项目ngspice47/HSA在负底数pow(x,3)上DC/瞬态正确、AC导数反号；x*x*x或**3的AC/FD/瞬态一致，pow2正常。证据linearization_probe/20261111T164456.854485Z_452ce563。新overlay/20261111T164932.207264Z_a0c98cb1只在独立模型树把1p41/2p85接触项pow立方改显式乘积，原PDK不改；将跑同24网络全5RC/3T/3压降的1080个AC↔DC微分对照及10条TT微小瞬态，单worker，Codex占1名额（Claude3，全机最多4）。不改正在跑的workmap/MC或全局默认模型。
 
 - 2026-11-12 00:54 Codex：独立2p85/1p41接触pow立方→乘积的模型副本验证完成：同24网络、5RC×3T×3压降共1080点，DC相对变化≤1.83e-14、C不变，AC与±100uV DC微分相对差≤1.59e-9；旧卡最大差22.81%（240Ω单只/hh/−40°C/.5V）。10个TT 1mV/2GHz瞬态与修正AC差≤4.73e-8，C差≤3.29e-6。此项修正仅独立overlay，原PDK和当前workmap/MC完全不改；不是新电路尺寸或噪声/PVT资格。Codex名额已释放，后续物理负载/弱输入模型可显式引用经记录的overlay库。
+
+- 2026-11-12 01:13 Codex：loaded_clock_card/20261111T171205.027336Z_8881ed25已准备，Terra只读核对源边界：FS/SS完整分级候选，切e2g_2，保留实际Xe3/Xe4/Xout、当前pre120/WT60/out192和全部driver/pad/RLC16。原通用R、固定短R、固定长R三独立数学分支；固定R只改时钟三单元，bias及输入仍为明确PWL。用已验证cube overlay；源本身不是已采用候选。先两角原样6.5ns baseline（4ns历史、word18 B窗；同绝对沿≤2ps/单端≤5mV和受检保持/qp），再准弱0.8/CM−25mV DOE；pad不作资格。原SS输入有2.86mV微小超轨保留，扰动严格检查轨内。单worker、Codex最多1名额，Claude3工作不动。

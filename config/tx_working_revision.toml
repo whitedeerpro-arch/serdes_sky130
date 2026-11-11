@@ -533,3 +533,16 @@ max_AC_vs_DC_differential_relative_error = 1.58141e-9
 original_max_AC_vs_DC_differential_relative_error = 0.22811191
 next_step = "explicit_overlay_and_legal_parallel_loads_in_current_load_weak_input_common_mode_card; actual_bias_tracking_and_full_TX_confirmation_required"
 adopted = false
+
+[retime_clock_iteration.loaded_clock_card]
+status = "FS_SS_baseline_raw_and_absolute_edges_reviewed; weak_input_CM_DOE_running; no_dimensions_adopted"
+report = "docs/design/tx_loaded_clock.md"
+runner = "analog/tx/input_register/tb/loaded_clock_card/run.py"
+reviewer = "verification/analysis/loaded_clock_review.py"
+baseline_data = "docs/data/tx_loaded_clock_baseline.json"
+campaign = "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25"
+boundary_id = "tx_loaded_clock_20261111T171205_027336Z_8881ed25"
+FS_SS_max_baseline_voltage_error_mv = [0.045152, 0.32717]
+FS_SS_max_baseline_e3_e4_c2g_edge_error_ps = [0.013705, 0.023005]
+scope = "e2g_2_prescribed_voltage_cut; Xe3_Xe4_Xout; current_pre120_WT60_out192_load; fixed_R_only_in_clock; tt_RC; rejected_source_clock_iteration"
+adopted = false

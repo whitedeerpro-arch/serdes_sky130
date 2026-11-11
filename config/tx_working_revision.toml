@@ -414,7 +414,7 @@ scope = "TT/FS archived loaded cuts; fixed ideal PWL; eight-bit contract only; n
 adopted = false
 
 [retime_clock_iteration.buffer_sizing_audit]
-status = "graded_tail_not_adopted; full_FS_pad_DDJ_fail_and_SS_cold_internal_overamplitude; joint_model_incomplete"
+status = "graded_tail_not_adopted; full_FS_pad_DDJ_fail; SS_cold_over_old_400mV_target_under_review; joint_model_incomplete"
 report = "docs/design/tx_buffer_sizing.md"
 data = "docs/data/tx_buffer_sizing_gap.json"
 index = "results/catalog/tx_buffer_sizing_gap.json"
@@ -432,7 +432,51 @@ FS_full_pad_spread_ui = 0.17985714
 SS_full_serializer_spread_ui = 0.04023048
 SS_full_pad_spread_ui = 0.05188186
 SS_full_max_extra_pp_mv = 435.89
+internal_400mV_ceiling_status = "applicability_under_review; historical_scores_retained; no_new_limit_adopted"
 missing_models = "clock slew/phase, data setup/hold, pattern-dependent pad response, PVT/actual bias/passive corners, branch currents/cost"
 next_step = "complete joint constraints and measured model validity before choosing next sizing candidate"
 scope = "ideal2GHz, real bias/PDK R tt, initialized counter and RTL replay, two full stress points only"
 adopted = false
+
+[retime_clock_iteration.buffer_dynamic_model]
+status = "TT_FS_light_load_e0_to_e3_fit_and_heldout_verified; incomplete_for_sizing"
+report = "docs/design/tx_retime_demand.md"
+source = "analog/tx/clock_distribution/theory/buffer_dynamic_model.py"
+data = "docs/data/tx_buffer_dynamic_model.json"
+index = "results/catalog/tx_buffer_dynamic_model.json"
+training = "baseline16_R400; uniform12.8_14_14.4_R320; separate_TT_FS_fits"
+heldout = "uniform15_R320_and15.6_R300; graded_first14_or14.4_then15.6_R320"
+TT_FS_one_stage_max_amplitude_error_mv = [12.1515, 12.0857]
+TT_FS_four_stage_max_amplitude_error_mv = [18.9842, 24.2605]
+TT_FS_four_stage_max_crossing_error_ps = [1.7019, 1.6900]
+missing = "e4_WN32_load, Xout, common_mode, remaining_PVT, upstream_impedance, bias_feedback, branch_power, noise_mismatch"
+scope = "WN24_driving_WN24_only; recorded_PWL; empirical_holdout_error_not_guaranteed_bound"
+
+[retime_clock_iteration.consumer_demand]
+status = "FS_SS_whole_payload_8point_demand_measured; FS_one_narrow_input_point; SS_all_eye_and_mapping_pass; internal_400mV_ceiling_under_review; no_physical_dimensions_selected"
+report = "docs/design/tx_retime_demand.md"
+runner = "analog/tx/input_register/tb/retime_demand/run.py"
+series_renderer = "analog/tx/input_register/tb/retime_demand/series_pwl.py"
+baseline_campaign = "results/analog/tx/retime_demand/20261111T065010.025374Z_05fb2e30"
+baseline_data = "docs/data/tx_retime_demand_baseline.json"
+FS_surface_data = "docs/data/tx_retime_demand_fs_surface.json"
+SS_surface_data = "docs/data/tx_retime_demand_ss_surface.json"
+series_FS_campaign = "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032"
+series_SS_campaign = "results/analog/tx/retime_demand/20261111T072051.838757Z_46c5f09d"
+FS_SS_max_single_ended_baseline_error_mv = [0.515771, 0.932453]
+FS_SS_max_baseline_absolute_edge_error_ps = [0.187549, 0.132681]
+per_point_payload_bits = 256
+FS_observed_input_point_delay_ps = 20
+FS_observed_input_point_differential_scale = 1.1
+FS_input_point_serializer_margin_mv = 94.937
+FS_input_point_serializer_spread_ui = 0.11507729
+FS_input_point_pad_margin_mv = 130.638
+FS_input_point_pad_spread_ui = 0.14703195
+FS_input_point_pad_spread_headroom_ps = 0.742
+FS_input_point_status = "observed_prescribed_voltage_point_only; insufficient_model_guard_for_physical_selection"
+SS_scale1p1_c2g_pp_mv = 424.451
+SS_input_clock_screen_failures = "historical_200to400_screen_only: scale110_and_late20_scale110; eye_and_mapping_pass; upper_limit_under_review"
+amplitude_basis_report = "docs/design/cml_swing_target.md"
+new_amplitude_upper_limit_adopted = false
+scope = "prescribed_g3_clock_bias_supply_ports; current_final_rank_driver_package_RLC16; training_only_phase; independent_mapping"
+physical_dimensions_selected = false

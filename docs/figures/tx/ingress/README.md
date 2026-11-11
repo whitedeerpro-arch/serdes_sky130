@@ -25,5 +25,10 @@
 | [分级尾宽](tx_buffer_taper.png) | 首级限幅、后级保留增益是否有局部交集？ | 两候选八位窗满足；完整回接仍失败 |
 | [局部尺寸约束交叠](tx_buffer_tradeoff.png) | 均匀与分级方案落在什么可行区？ | TT幅度/FS八位时序的局部观察；不是45点资格 |
 | [尺寸模型缺口](tx_buffer_sizing_gap.png) | 局部幅度模型漏掉了哪些完整链路约束？ | 完整FS焊盘散布失败、SS冷内部超幅；两端逐位传播与[联合规划合同](../../../design/tx_buffer_sizing.md) |
+| [动态模型留出误差](tx_buffer_dynamic_model.png) | 单级拟合能否连续预测四级幅度和延迟？ | TT/FS e0–e3，四组留出profile；重末级/共模尚缺，非尺寸资格 |
+| [末级消费方基线](tx_retime_demand_baseline.png) | 保留当前driver/整个载荷后，切片是否复现完整TX？ | FS/SS两角，单端<0.94mV、绝对沿<0.19ps；自然映射正确 |
+| [FS相位与幅度需求](tx_retime_demand_fs_surface.png) | 两端门槛能否由同一个时钟输入满足？ | 八点/256bit，+20ps×1.1点满足但焊盘仅0.74ps余量；物理尺寸未选 |
+| [SS需求对照](tx_retime_demand_ss_surface.png) | 强条件可以同步提高时钟幅度么？ | 八点眼图/位序均满足；红叉仅表示424mVpp越过旧幅度筛查，上界复核中 |
+| [最差边沿与数据历史](tx_retime_demand_events.png) | 最早与最晚转换都来自新g3数据么？ | FS bit212沿用偶分支值，bit296为新值；关闭间隔非setup门限 |
 
 图名按对象与用途命名，UTC运行身份在对应数据索引中。当前结论见[完整字入口](../../../design/tx_word_capture.md)、[关闭切片](../../../design/tx_launch_hold.md)。图脚本与来源哈希放在各自小数据中，`.svg`可用于导出。

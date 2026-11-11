@@ -41,7 +41,7 @@
 | RX 物理 CDR 冒烟 | `ac_rk`＋deser16＋实际 RTL；TT、理想锚点/数据/参考、KP=65536 | 120–140 ns 中跨扇区/回卷，17/22 个 payload 字正确 | 生产 KP=8192、ppm 频偏、真实偏置/RC 未验证 |
 | RX 校准联调 | `ac_trim_rk`＋deser16＋两边沿顺序 SAR；注入电流代替失配 | TT、SS 低压热的 mV 残差与短 payload | 不是实际随机失配下的完整校准 MC；不是 135 点启动 |
 
-TX的[内部摆幅逐节点观察](../design/tx_cml_amplitude.md)已独立建立：extra3三个压力点眼图通过仍有多层超幅。T02.1输出WT16/R240在extra3完整TT/FS中把c2g降至369/349mVpp，但FS散布0.18025UI失败；随后extra5和输出级改进在45个MOS条件满足串化器/焊盘门槛。原失败保留，当前45点的眼图资格仍不关闭T03树/保持等节点的超幅。 [局部尺寸与级联](../design/tx_buffer_cascade.md)已验证：单级338/316mVpp模型有效，五级统一12.8/320的FS69.75mV/0.212UI失败，不采用；继续保留增益与幅度上界联合定心。
+TX的[内部摆幅逐节点观察](../design/tx_cml_amplitude.md)已独立建立：extra3三个压力点眼图通过仍有多层超幅。T02.1输出WT16/R240在extra3完整TT/FS中把c2g降至369/349mVpp，但FS散布0.18025UI失败；随后extra5和输出级改进在45个MOS条件满足串化器/焊盘门槛。原失败保留，当前45点眼图资格仍不关闭T03树/保持等节点的幅度适用性及器件余量；内部400mV上界正复核。[局部级联](../design/tx_buffer_cascade.md)的统一减幅及分级尾宽候选均未通过。2026-11-11新增[联合规划需求卡](../design/tx_retime_demand.md)：完整载荷末级回放在FS/SS各八点，FS受检+20ps×1.1输入满足但焊盘仅0.74ps余量，SS八点眼图/位序均满足，倍率1.1达424mVpp仅偏离旧目标；TT/FS前四级动态模型已有尺寸留出，重末级/共模及其他PVT仍缺，尚未选新物理尺寸。
 
 **近期改进的归属**：VCO 为 r5/4 bit 工作区改进，TX 分发为 v3 同步时钟结构，RX 为 CTLE EQ3＋PI120f＋ac_trim/c2＋W40/deser16 的局部改进。已有 PLL 顶层及其闭环记录继续保留；每项改进附上自己的模型、参数和回归证据。配置入口：[PLL](../../config/pll_working_revision.toml)、[TX](../../config/tx_working_revision.toml)、[RX](../../config/rx_working_revision.toml)、[偏置](../../config/bias_working_revision.toml)。
 

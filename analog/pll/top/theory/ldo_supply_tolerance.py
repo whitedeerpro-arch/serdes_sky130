@@ -35,7 +35,13 @@ PLL noise budget and not repeated here.
 Checks printed against psrr_lf measurements (CHECKS): 12 MHz (23 / 36 split, 3 points), 4 MHz (12 / 18, 4 points) and
 the 4 MHz host / quiet split (2 points).  Kg and Kl are frequency independent (quasi-static VCO); the LDO transfer is
 the worst of its own grid at every frequency, not matched to the PLL condition.  Host paths into the quiet domain other
-than the LDO and the tail line (CP bias copies, code drivers, divider, clock receivers) are not included.
+than the LDO and the tail line (CP bias copies, code drivers, divider, clock receivers) are not included, except
+with --host-timing: the in-loop host timing cells' delay sensitivity reaches the output through the closed-loop
+transfer |L / (1 + L)| and is added in magnitude to the host rows (*_kd) and to the direct row (direct_kd).  Per supply
+point, VCO edge shift per volt of host Kd(f) = Kd_pfd - Kd_h - Kd_b vbias / host (f) with the point's own measurement
+(host_timing: VCO -> fb0 delay vs host and vs the host cells' vbias, or with --kd-part prescaler only VCO -> d08;
+--pfd-cp: PFD + CP zero-charge phase vs host, 0 if not given); points without a measurement take
+|Kd_pfd| + |Kd_h| + |Kd_b| |vbias / host| of the worst measured.
 """
 import argparse
 import glob
@@ -151,6 +157,10 @@ def main():
     ap.add_argument("--rj", type=float, default=3e-12, help="rms for the white-density figure")
     ap.add_argument("--c-extra", type=float, default=150e-15)
     ap.add_argument("--loop", default="4,4.13e3,18.38e-12,0", help="k, Rz, Ci, Cf")
+    ap.add_argument("--host-timing", default="", help="host_timing campaign(s), comma separated, later ones win per point")
+    ap.add_argument("--kd-part", default="total", choices=("total", "prescaler"),
+                    help="prescaler: only the VCO -> d08 share (feedback receiver balanced or on quiet)")
+    ap.add_argument("--pfd-cp", default="", help="host_timing_pfd_cp campaign (PFD + CP balance point vs host)")
     a = ap.parse_args()
     f = np.logspace(3, np.log10(2e8), 700)
     target = a.dj * UI * 2 * np.pi * F0                       # rad peak
@@ -167,7 +177,19 @@ def main():
     s = 2j * np.pi * f[None, :]
     R, Ci, Cf = rz * p["rf"][:, None], ci * p["cf"][:, None], cf * p["cf"][:, None] + p["cctrl"][:, None]
     z = (1 + s * R * Ci) / (s * (Ci + Cf) * (1 + s * R * Ci * Cf / (Ci + Cf)))
-    err = np.abs(1 / (1 + ld.ICP0 * k * p["g"][:, None] * z / (s * ld.N) * np.exp(-s * 2e-9)))
+    e = 1 / (1 + ld.ICP0 * k * p["g"][:, None] * z / (s * ld.N) * np.exp(-s * 2e-9))
+    err, comp = np.abs(e), np.abs(1 - e)
+    kd = None
+    if a.host_timing:
+        kr = {}
+        for c in a.host_timing.split(","):
+            kr.update(json.loads((ROOT / c / "summary.json").read_text())["rows"])
+        if a.kd_part == "prescaler":
+            kr = {q: dict(r, kd_h=r["kd8_h"], kd_b=r["kd8_b"]) for q, r in kr.items() if "kd8_h" in r and np.isfinite(r["kd8_h"])}
+        kp = json.loads((ROOT / a.pfd_cp / "summary.json").read_text())["rows"] if a.pfd_cp else {}
+        kd = {q: (kp[q]["kd_pfd"] if q in kp else 0.0, r["kd_h"], r["kd_b"]) for q, r in kr.items()}
+        worst = (max([abs(r["kd_pfd"]) for r in kp.values()] or [0.0]), max(abs(r["kd_h"]) for r in kr.values()),
+                 max(abs(r["kd_b"]) for r in kr.values()))
     table = json.loads(TABLE.read_text())["table"]
 
     def quiet(v, x, alpha, brow, lf=(ss.RZ, ss.CI, 4.0)):
@@ -205,6 +227,7 @@ def main():
         idx = [i for i, l in enumerate(p["label"]) if l.startswith(f"{key} code {code} LF ")]
         idx = idx or [i for i, l in enumerate(p["label"]) if l.startswith(f"{key} code ")]
         S = err[idx].max(axis=0)
+        Tc = comp[idx].max(axis=0)
         kq = quiet(v, f, a.alpha, bias[key], (rz, ci, k))
         kb = a.kb * tail_line(bias[key], f)
         kflat = np.abs(kq + a.kb * tail_line(bias[key], 20e6))
@@ -223,6 +246,13 @@ def main():
             K[f"host_rc{fc / 1e3:g}k"] = np.abs(kb) + h_host * rc * np.abs(kq)
             for fb in bias_rc:
                 K[f"host_rc{fc / 1e3:g}k_vb{fb / 1e3:g}k"] = np.abs(kb * lowpass(f, fb)) + h_host * rc * np.abs(kq)
+        if kd is not None:                                 # delay path as an equivalent |K|: 2 pi F0 Kd |T| = |K| S / f
+            vb = tail_line(bias[key], f)
+            kdv = np.abs(kd[key][0] - kd[key][1] - kd[key][2] * vb) if key in kd else worst[0] + worst[1] + worst[2] * np.abs(vb)
+            kdd = 2 * np.pi * F0 * kdv * Tc * f / S
+            for n in [n for n in K if n.startswith("host") or n == "direct"]:
+                K[f"{n}_kd"] = K[n] + kdd
+            K["kd_only"] = kdd
         gq = np.abs(kq) / f * S                            # rad peak per V peak on the quiet rail
         gb = a.kb / f * S                                  # ... on the tail line
         per[key] = dict(code=code, K=K, tol={n: target / (x / f * S) for n, x in K.items()},
@@ -256,7 +286,7 @@ def main():
     camp = OUT / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     camp.mkdir(parents=True)
     (camp / "summary.json").write_text(json.dumps(dict(
-        args=vars(a), inputs=dict(**(dict(regulation=REG, dynamic=DYN, bias_noise=BIAS_NOISE) if a.ldo == "r3" else
+        args=vars(a), kd_s_per_v=dict(points=kd, worst=worst) if kd else None, inputs=dict(**(dict(regulation=REG, dynamic=DYN, bias_noise=BIAS_NOISE) if a.ldo == "r3" else
                                      dict(regulation=R4, noise=R4_NOISE, tail_filter=R4_TAIL, tail_measured=sorted(tails))),
                                   bias_ac=BIAS_AC, checks=CHECKS, supply_bases=lp.BASES, splits=lp.SPLITS),
         tolerance=summary, noise_rms_s=noise, white_v_rthz=min(r["white"] for r in per.values()),

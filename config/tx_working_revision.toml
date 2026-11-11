@@ -495,3 +495,24 @@ largest_adjacent_condition = "FS_minus40; bit296_even_new0; 1.65_to_1.80V"
 largest_adjacent_clock_interval_abs_ps_per_mv = 0.01491370
 next_local_card_conditions = ["fs_v1650_t-40", "fs_v1650_t85", "ss_v1650_t-40"]
 scope = "VDD_bias_input_levels_common_mode_load_co_vary; relative_clock_phase_modulo500ps_not_absolute_latency; no_new_dimensions"
+
+[retime_clock_iteration.heavy_width_card]
+status = "TT_FS_strong_input_WN24_32_40_measured_and_raw_recomputed; no_dimensions_adopted"
+report = "docs/design/tx_buffer_heavy.md"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_heavy_card.py"
+measurement_library = "src/serdes_flow/stage_metrics.py"
+data = "docs/data/tx_buffer_heavy.json"
+index = "results/catalog/tx_buffer_heavy.json"
+campaign = "results/analog/tx/buffer_heavy_card/20261111T130949Z_13eba6a8"
+boundary_id = "tx_extra5_heavy_wn24_32_40_v1"
+changed_instance = "Xe4_WN24_32_40_per_input_MOS_NF4; WT16_R400_fixed; uniform_extra5; Xiso_and_Xout_fixed"
+legacy_driver = "pre150_WT48_out256; not_current_full_TX_driver"
+resistance = "frozen_generic_high_po_tt; fixed_width_cards_not_validated_here"
+TT_FS_WN24_to_40_c2g_fall_shift_ps = [8.09172, 10.31085]
+TT_FS_WN24_to_40_chain_rail_power_increase_uw = [3.71323, 4.58578]
+TT_FS_WN24_chain_rail_power_mw = [8.31107, 7.19552]
+TT_FS_WN24_Xe4_min_tail_VDS_minus_VDSAT_mv = [601.64374, 338.65140]
+FS_local_8bit_spread_WN24_32_40_ui = [0.10522258, 0.09905274, 0.09373087]
+missing = "weak_input_and_independent_common_mode_transfer; physical_fixed_resistor_corners; current_full_TX_load_and_payload; bias_source_impedance; PVT_noise_mismatch"
+scope = "recorded_ideal_PWL; strong_input_legacy_local_8bit; branch_rail_power_only; not_an_I17_closure"
+adopted = false

@@ -106,13 +106,27 @@ CML 负载必须是高阻多晶（与带隙 r_ref 同类型，恒摆幅偏置靠
 
 **顺序：** 先改单元（`cap_unit` 新尺寸＋方向，`varactor` 4 指）→ 单元过检查器 → `cap_bank` 修总线短路后过检查器 → `pll_vco_ring4_4b` → `pll_vco_core`。每一级在 README 里列出相位节点的提取电容（对地、对 vdd、对相邻节点分开写）。
 
+## T4　PFD（标准单元，正式下发，2026-11-11）
+
+**电路已定：用标准单元。** 网表 `analog/pll/pfd/spice/pfd_sc.spice`（`pll_pfd_sc`）；与原 `pll_pfd` 对比仿真 7 个角：静态相差差 0–11 ps，无死区（结论见 [PLL 环路](../design/pll_loop.md)）。
+- 单元：`dfrtp_1` ×2、`nand2_1`、`inv_1` ×2（复位延迟，**不加电容**）、`and2_1`、输出每路 `inv_4` → `inv_8`。
+- 参考网表：`analog/pll/pfd/layout/pll_pfd_sc_ref.spice`（层次，`.include` 库的 SPICE）。检查器能否直接做层次比对先试；不行就把问题写进状态表，等 Claude 处理，不要改成平面网表绕过。
+
+要求：
+1. **按标准单元行摆**：行高 2.72 µm，电源轨首尾对接；一行放不下就两行，上下翻转共用轨；每 ≤ 15 µm 一个 `sky130_fd_sc_hd__tapvpwrvgnd_1`，空位用 `decap`/`fill`（[手册](cookbook.md) 第 2 节）。你之前 54 处 LU.2/LU.3 就是缺 tap。
+2. **UP、DN 两路对称**：两个 DFF 镜像摆放，`up`、`dn` 引出到单元边的走线等长（它们去 CP 的开关驱动，失配直接变成静态相差）。
+3. PFD 的 vdd 单独引脚（宿主域，可能改接，见 first_batch 2.3）。
+4. 提取后列出 `up`、`dn`、`clear_b` 的寄生电容；`up` 与 `dn` 相差 ≤ 0.5 fF。
+
+验收：检查器四行；面积；上面第 4 条的电容表。
+
 ## T3 以后（等 Claude 给参考网表再开始）
 
 | 任务 | 前提 |
 |---|---|
 | 尾线滤波 `serdes_pll_bias_lowpass_slow_r4` | **草稿已按器件表改完**（等 Claude 确认参考网表）：`analog/common/ldo/layout/`，1.41 µm 宽 / **L=134.73 µm × 32 只**（每只 31.253 kΩ，链 1.0001 MΩ）+ 16 个 MIM，DRC 0、LVS 匹配；提取版 −3 dB **9.65 kHz**（同器件原理图 9.70、设计原理图 9.80；对同器件 100 kHz 内最大偏差 0.056 dB），面积 0.0344 mm²。详见其 [layout README](../../analog/common/ldo/layout/README.md) |
 | VCO＋四个首级 buffer | Claude 给出参考网表（CML 负载 400/600 Ω 用 2.85 µm 宽高阻，见 [high_po_notes](high_po_notes.md) §4）。相位节点寄生预算见 first_batch.md 3.3，是硬约束；走线标定与预算用法见 [vco_phase_budget](vco_phase_budget.md)（0.4 µm m2 约 0.082 fF/µm） | **已做三块（等参考网表确认）**：`pll_vco_delay_stage`（677 µm²，4.4 fF/节点，负载 `res_high_po_2p85 l=2.44`）、`serdes_cml_buffer`（714 µm²，3.6 fF/节点，`l=4.22`）、`pll_vco_cap_unit`（109 µm²），都是 DRC 0 / LVS 匹配，见 [vco/layout README](../../analog/pll/vco/layout/README.md)。电容阵列总线、变容管（手画版已验证）、四级环未完成 |
-| PFD | 待定：手画堆叠逻辑，或改用 `sky130_fd_sc_hd` 标准单元（需要 Claude 先重做 PFD＋CP 仿真）。版图侧数据见 [pfd_options](pfd_options.md)：标准单元 2 DFF + 6 门 ≈ 65 µm²、单行约 20 × 5 µm，代价是复位脉宽改由单元延迟定、LVS 改层次比对 |
+| PFD | **已定为标准单元，见 T4**。版图侧数据见 [pfd_options](pfd_options.md)：标准单元 2 DFF + 6 门 ≈ 65 µm²、单行约 20 × 5 µm，代价是复位脉宽改由单元延迟定、LVS 改层次比对 |
 
 写参考网表前请看 [high_po_notes](high_po_notes.md)（固定宽度高阻的生成器 DRC 实测）：0.35/0.69 µm 的生成器单元单独就不干净，只有 1.41/2.85 可用；400/600 Ω 直接一只 2.85 µm 宽单元（`l=2.44/4.22`），**不需要并联**——“779.8 Ω 地板”是误读，文件顶部已作废。高阻是 3 端器件（`r0 r1 b`），参考网表里电阻实例要用 `X… vss …` 写，体端接 vss。
 
@@ -124,6 +138,7 @@ CML 负载必须是高阻多晶（与带隙 r_ref 同类型，恒摆幅偏置靠
 | T2 | **验收通过** | `DRC_TOTAL 0`；`LVS_MATCH True  LVS_PROPERTY_ERRORS False`；检查器退出码 0。单元 5.85 × 16.15 µm | 1) 手画版 `inv_std` 用 paint 脚本（`analog/common/layout_practice/build_inv_std.py`），未用器件生成器。2) `make_practice.py` 的 `units microns` 已移到摆位阶段（生成器调用前不再改单位）；`inv_practice.mag` 重新生成后器件单独 DRC 只剩每个器件 6 个 met1.6。3) 单元偏高是因为 W8 的 PMOS 沟道宽 8 µm；若要压高度需要把 PMOS 折指，参考网表也要跟着改。 |
 | T2b | **验收通过**（Codex 的 D 端口复核已修） | `DRC_TOTAL 0`；`LVS_MATCH True  LVS_PROPERTY_ERRORS False`；检查器退出码 0；`inverter_audit.py` → `status: pass` | 1) **D 端口**：原版标签打在孤立 m1 岛上（提取网表四个指都接 `a_430_320#`，netgen 报 `disconnected node: d` 却仍匹配）；已把 `d` 移到 P/N 之间真实共漏 m1 条（y=4.6），重建后审计 `d` 被 X0.D / X1.S / X2.S / X3.D 使用，输出结面积 N 1.7 / P 3.4 µm²。2) `inv_std2` 5.10 × 10.55 µm，比 `inv_std` 的 5.85 × 16.15 µm **矮 5.6 µm（35%）**，宽度也窄 0.75 µm。3) 源漏接触排满：PMOS 每侧 2 排 × 4 个、NMOS 每侧 2 排 × 3 个，全单元扩散接触 **28 个**（`inv_std` 只有 4 个）。4) 折指后两指共用中间漏极，栅用顶部 poly 总线连到左侧焊盘；参考网表按 T2b 要求写 `nf=2`，器件值未变（w=4 / w=8，l=0.15）。5) 踩到并修掉的：`viali` 是 li→m1 接触（不是 mcon）；接触排离栅要留 0.15（licon.11 要 0.055）；栅焊盘不能落在 vdd 轨上（会把栅和 vdd 短起来）；n+ 抽头不能压在栅总线下（会被 magic 认成变容管）。6) 另做改进版 `inv_std3`（Claude 折指 VAR 的中间引栅 + 加宽 m1）：5.10 × 10.70 µm / 54.6 µm²，DRC 0 / LVS 匹配 / 审计 pass；C(vdd,g) 0.701→0.454 fF、C(g,d) 0.101→0.142 fF（栅侧合计 −26 %），但 C(d) 1.346→1.503 fF（加宽金属的代价），详见 [layout_practice README](../../analog/common/layout_practice/README.md)。 |
 | T3 | 待做（VCO 核心，见 T3） | | |
+| T4 | 待做（PFD 标准单元，见 T4；在 T3 之后或与之交替） | | |
 
 ## T2b补充复核：外部D端口（Codex，2026-11-11）
 

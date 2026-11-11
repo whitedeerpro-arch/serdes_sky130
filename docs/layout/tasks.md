@@ -2,6 +2,8 @@
 
 由 Claude 派发和验收。背景与约束见[版图起步](first_batch.md)，Magic 操作见[速查](magic_quickstart.md)。**一次只做一个任务，按顺序做；做完在文末状态表更新自己那一行，然后停下等验收。**
 
+DeepSeek等执行者的入门课见[DS-01工作单](training/DS-01-inverter.md)和[配图教材](deepseek_training.md)。该课只操作独立教学副本，不替代下面T1/T2等生产任务的范围、参考或验收。
+
 ## 规则（每个任务都适用）
 
 1. **判定只看检查器。** 运行

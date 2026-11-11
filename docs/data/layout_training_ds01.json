@@ -1,0 +1,219 @@
+{
+  "status": "baseline_and_contact_example_DRC_LVS_pass; deliberate_open_detected; teaching_only",
+  "workspace": "results/layout_training/ds01/20261111T120947.870840Z_d29f6771",
+  "manifest_sha256": "b4eb52795d947944d828a1f2f0dd5055ccefc0dba06c2ab40628fe10ac9ed8f7",
+  "manifest": {
+    "schema": 1,
+    "lesson": "DS-01",
+    "cell": "inv_std",
+    "created_utc": "2026-11-11T12:09:47.873860+00:00",
+    "source_root": "/home/host/Desktop/workspace/simple_serdes_fork1",
+    "inputs_sha256": {
+      "analog/common/layout_practice/build_inv_std.py": "46c9998a9c285ffd0ec29ec746f737c0f3935d9a80d4a787bcb69104e73aeaae",
+      "analog/common/layout_practice/inv_std_ref.spice": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+      "verification/layout/check.py": "d228e61990eedcb7dd5a88f2bf7cddf243ef5e38649b1fda01e685cce9b9abe9",
+      "verification/layout/magicutil.py": "e6b47720eca75949f6ee5da085d17752353735fa572302911645ccc890b86a86",
+      "verification/layout/plot_mag.py": "7e8e417a6e2f5b087f8657e76f0bc859620766343d3b4cbbc4f5de63037c9e2f",
+      "config/pdk.toml": "2694ed33d49f877af4eefaffa8d3d158c4c5bda867674618d3e8bc9fb008c3c9",
+      "docs/layout/tasks.md": "818a02c3743585a185b4878db4b4695de2e60955158aa2419bfaccc2d1716b61",
+      "docs/layout/cookbook.md": "ea8a5c51a9f99d3f58277677c5ad9ccc7ff7d126b06727540fb4fddafb61fb7d"
+    },
+    "pdk_files_sha256": {
+      "/home/host/.volare/sky130A/libs.tech/magic/sky130A.magicrc": "7b5165a7a01b95165c5fa37437750f64aeffbc609766e509be8adb1e301d1fed",
+      "/home/host/.volare/sky130A/libs.tech/magic/sky130A.tech": "31287ea98453d1a4a0fe9e18f8e2a9a0aa411bea3e5eae9db3dd5e450bcd57c0",
+      "/home/host/.volare/sky130A/libs.tech/netgen/sky130A_setup.tcl": "7a33f3f54fab57a9d9b0887ac7b7b64ce6c454110e8b7f01f3cfb90a1282dc94"
+    },
+    "seed_origin_sha256": "1ada585046c36cc5934b9ed9725e3688d49fac724e906953abbb00a43c6539df",
+    "student_editable": [
+      "analog/common/layout_practice/build_inv_std.py"
+    ],
+    "reference": "analog/common/layout_practice/inv_std_ref.spice",
+    "scope": "Local-host layout exercise; frozen checker/reference; no production DUT changes or circuit signoff.",
+    "runner_sha256": "cd94015a446528ed8cb713de69e6276d7dd283ba82a52d3fa3bed105f6bc1f0c"
+  },
+  "cases": {
+    "baseline": {
+      "summary": "results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121012.774941Z_50ad832c/summary.json",
+      "summary_sha256": "9d1b9da38c354dfe7ae054b0962aa2a155235224b69b2d957bb136c0e0ce5084",
+      "result": {
+        "status": "layout_checks_pass",
+        "view": "baseline",
+        "build": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/analog/common/layout_practice/build_inv_std.py"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121012.774941Z_50ad832c/build.log"
+        },
+        "check": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/verification/layout/check.py",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/analog/common/layout_practice",
+            "inv_std",
+            "--ref",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/analog/common/layout_practice/inv_std_ref.spice"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121012.774941Z_50ad832c/check.log"
+        },
+        "plot": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/verification/layout/plot_mag.py",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/analog/common/layout_practice/inv_std.mag",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121012.774941Z_50ad832c/layout.png"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121012.774941Z_50ad832c/plot.log"
+        },
+        "fields": {
+          "DRC_TOTAL": 0,
+          "LVS_MATCH": true,
+          "LVS_PROPERTY_ERRORS": false
+        },
+        "runner_sha256": "7ccc6e7c03ed3d8445020aadc495327372387cd3182fc2da9d2dccb994ca73ba",
+        "files_sha256": {
+          "baseline/analog/common/layout_practice/build_inv_std.py": "46c9998a9c285ffd0ec29ec746f737c0f3935d9a80d4a787bcb69104e73aeaae",
+          "baseline/analog/common/layout_practice/inv_std.mag": "cf7029e08718197d0048f058ee97f3661ebe6db7419c6f6f010a9b2cb571e3b6",
+          "baseline/analog/common/layout_practice/inv_std_ref.spice": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+          "baseline/analog/common/layout_practice/inv_std_lvs.spice": "d837898ac5bc11f5487843c75d21640f6d280b7e3ae16b82f9ba2c32112125d1",
+          "baseline/analog/common/layout_practice/inv_std_pex.spice": "d83a87c780a76d7f36855c1fe39147a4248e046f9cd6a56337c4e5bb0eb68031"
+        },
+        "reference_sha256": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+        "scope": "DRC/LVS training only; no current capacity, PVT, timing, noise or complete extracted-RC qualification."
+      }
+    },
+    "student": {
+      "summary": "results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121158.013952Z_a6bd54f1/summary.json",
+      "summary_sha256": "9d2b84e79d1a3db3440bbe9be31f582d8f176271220791421285d3a1185fa0a5",
+      "result": {
+        "status": "layout_checks_pass",
+        "view": "student",
+        "build": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/student/analog/common/layout_practice/build_inv_std.py"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121158.013952Z_a6bd54f1/build.log"
+        },
+        "check": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/verification/layout/check.py",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/student/analog/common/layout_practice",
+            "inv_std",
+            "--ref",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/analog/common/layout_practice/inv_std_ref.spice"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121158.013952Z_a6bd54f1/check.log"
+        },
+        "plot": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/verification/layout/plot_mag.py",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/student/analog/common/layout_practice/inv_std.mag",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121158.013952Z_a6bd54f1/layout.png"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121158.013952Z_a6bd54f1/plot.log"
+        },
+        "fields": {
+          "DRC_TOTAL": 0,
+          "LVS_MATCH": true,
+          "LVS_PROPERTY_ERRORS": false
+        },
+        "runner_sha256": "7ccc6e7c03ed3d8445020aadc495327372387cd3182fc2da9d2dccb994ca73ba",
+        "files_sha256": {
+          "student/analog/common/layout_practice/build_inv_std.py": "5e50d5a37a85a571681ed6d5e8f9534b54549e7fc1f4aa05898d425ceae6c4e1",
+          "student/analog/common/layout_practice/inv_std.mag": "4cfdbf759ac7b912b4ee77ee10d5eb361be8eb873df1da63586b58dbad4e7b6f",
+          "baseline/analog/common/layout_practice/inv_std_ref.spice": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+          "student/analog/common/layout_practice/inv_std_lvs.spice": "d837898ac5bc11f5487843c75d21640f6d280b7e3ae16b82f9ba2c32112125d1",
+          "student/analog/common/layout_practice/inv_std_pex.spice": "044cd1cefeffde4374865f352f95f669ae7ac407eaab2b6b27ad1f506f0ca39f"
+        },
+        "reference_sha256": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+        "scope": "DRC/LVS training only; no current capacity, PVT, timing, noise or complete extracted-RC qualification."
+      }
+    },
+    "fault": {
+      "summary": "results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121508.913956Z_e5274c97/summary.json",
+      "summary_sha256": "06dc0f2c743d393ed6e213636ac9dd097668638b7ff1b1bb02e218f520454f86",
+      "result": {
+        "status": "expected_open_detected",
+        "view": "faults/20261111T121508.910894Z_6e28fbe4",
+        "build": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice/build_inv_std.py"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121508.913956Z_e5274c97/build.log"
+        },
+        "check": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/verification/layout/check.py",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice",
+            "inv_std",
+            "--ref",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/analog/common/layout_practice/inv_std_ref.spice"
+          ],
+          "returncode": 1,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121508.913956Z_e5274c97/check.log"
+        },
+        "plot": {
+          "argv": [
+            "/home/host/Desktop/workspace/simple_serdes_fork1/.venv/bin/python3",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/baseline/verification/layout/plot_mag.py",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice/inv_std.mag",
+            "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121508.913956Z_e5274c97/layout.png"
+          ],
+          "returncode": 0,
+          "log": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout_training/ds01/20261111T120947.870840Z_d29f6771/attempts/20261111T121508.913956Z_e5274c97/plot.log"
+        },
+        "fields": {
+          "DRC_TOTAL": 0,
+          "LVS_MATCH": false,
+          "LVS_PROPERTY_ERRORS": false
+        },
+        "runner_sha256": "7ccc6e7c03ed3d8445020aadc495327372387cd3182fc2da9d2dccb994ca73ba",
+        "files_sha256": {
+          "faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice/build_inv_std.py": "2210c55987a2686c98ae6fc986beaa73d0e047506685d0fc26e422c2e9a162dc",
+          "faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice/inv_std.mag": "f6c4c0f96e35e7caec2f8f0c01dc32f0caa7138ce973be5366a8fa63ff7a3ba0",
+          "baseline/analog/common/layout_practice/inv_std_ref.spice": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+          "faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice/inv_std_lvs.spice": "eaa1a1e16206b44668b9e7f266f3d7e1971647efcc0142aa40abd98ff67df033",
+          "faults/20261111T121508.910894Z_6e28fbe4/analog/common/layout_practice/inv_std_pex.spice": "e4ca58d0edb1ad47724f549ea6f8af5a60293223a5f54689d3906a4d1c5bc4c1"
+        },
+        "reference_sha256": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+        "scope": "DRC/LVS training only; no current capacity, PVT, timing, noise or complete extracted-RC qualification."
+      }
+    }
+  },
+  "publisher_sha256": "aacf92a4a204aabaac7fb8352779acfbffb168cbb77dc72fe3c2ba18de2122c2",
+  "publisher_snapshot": "results/layout_training/publication/20261111T121620.092758Z/publisher.py",
+  "measured_source_drain_contact_counts": {
+    "baseline": {
+      "ndiffc": 2,
+      "pdiffc": 2
+    },
+    "student": {
+      "ndiffc": 18,
+      "pdiffc": 38
+    }
+  },
+  "contact_plan": {
+    "nfet_contacts_per_source_or_drain": 9,
+    "pfet_contacts_per_source_or_drain": 19,
+    "sd_contacts_total": 56,
+    "contact_pitch_um": 0.4,
+    "edge_margin_um": 0.35,
+    "nfet_total_w_um": 4,
+    "pfet_total_w_um": 8,
+    "channel_l_um": 0.15,
+    "fingers": 1,
+    "scope": "Contact coverage exercise; no current-capacity or speed qualification"
+  }
+}

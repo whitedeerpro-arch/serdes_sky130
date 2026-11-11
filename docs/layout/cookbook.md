@@ -2,6 +2,8 @@
 
 给辅助画版图的 agent。任务和验收见[任务单](tasks.md)，工具命令见[速查](magic_quickstart.md)。本页讲**怎么画对**：先查数，再套路，按流程一步一检。
 
+初次接手的DeepSeek/其他执行者先读[有正反例的入门教材](deepseek_training.md)；[DS-01工作单](training/DS-01-inverter.md)可直接派发，在独立教学目录练习，不改当前生产版图。
+
 ## 0. 已经踩过的坑（先读）
 
 | 坑 | 后果 | 规矩 |

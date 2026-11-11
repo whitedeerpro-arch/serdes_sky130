@@ -480,3 +480,18 @@ amplitude_basis_report = "docs/design/cml_swing_target.md"
 new_amplitude_upper_limit_adopted = false
 scope = "prescribed_g3_clock_bias_supply_ports; current_final_rank_driver_package_RLC16; training_only_phase; independent_mapping"
 physical_dimensions_selected = false
+
+[retime_clock_iteration.supply_delay_screen]
+status = "45_existing_full_TX_records_remeasured; joint_DC_screen_only; not_independent_rail_Kd_or_AC_PSRR"
+report = "docs/design/tx_relative_timing_screen.md"
+analysis = "verification/analysis/tx_relative_timing_screen.py"
+data = "docs/data/tx_relative_timing_screen.json"
+index = "results/catalog/tx_relative_timing_screen.json"
+source_campaign = "results/analog/tx/full_pvt45/20261107T200334Z"
+same_process_temperature_voltage_triplets = 15
+common_new_input_events_per_triplet = 64
+largest_adjacent_close_minus_g3_ps_per_mv = 0.11082192
+largest_adjacent_condition = "FS_minus40; bit296_even_new0; 1.65_to_1.80V"
+largest_adjacent_clock_interval_abs_ps_per_mv = 0.01491370
+next_local_card_conditions = ["fs_v1650_t-40", "fs_v1650_t85", "ss_v1650_t-40"]
+scope = "VDD_bias_input_levels_common_mode_load_co_vary; relative_clock_phase_modulo500ps_not_absolute_latency; no_new_dimensions"

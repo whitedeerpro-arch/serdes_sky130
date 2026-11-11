@@ -13,3 +13,5 @@
 | pll_balanced_extraction [PNG](pll_balanced_extraction.png) / [SVG](pll_balanced_extraction.svg) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../../../../history/pll_first_debug.md) |
 | pll_mixed_acquisition [PNG](pll_mixed_acquisition.png) / [SVG](pll_mixed_acquisition.svg) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../../../../history/pll_first_debug.md) |
 | pll_transistor_first_response [PNG](pll_transistor_first_response.png) / [SVG](pll_transistor_first_response.svg) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../../../../history/pll_first_debug.md) |
+| [宿主延迟及预算口径](pll_timing_supply_review.png) | 路径分拆与单位复核 | 7个局部DC工况的原始Kd复算；单PLL峰值/峰峰值和双PLL相对量分开；[报告](../../../../design/pll_timing_supply_review.md) |
+| [参考副本的残余导数](pll_reference_replica_review.png) | 改进候选比较 | 7点×4负载原始交越独立复算；宿主导数减小，偏置项仍开；未作供电容限签核；[报告](../../../../design/pll_timing_supply_review.md#参考副本已看到的改进及剩余限制) |

@@ -30,5 +30,6 @@
 | [FS相位与幅度需求](tx_retime_demand_fs_surface.png) | 两端门槛能否由同一个时钟输入满足？ | 八点/256bit，+20ps×1.1点满足但焊盘仅0.74ps余量；物理尺寸未选 |
 | [SS需求对照](tx_retime_demand_ss_surface.png) | 强条件可以同步提高时钟幅度么？ | 八点眼图/位序均满足；红叉仅表示424mVpp越过旧幅度筛查，上界复核中 |
 | [最差边沿与数据历史](tx_retime_demand_events.png) | 最早与最晚转换都来自新g3数据么？ | FS bit212沿用偶分支值，bit296为新值；关闭间隔非setup门限 |
+| [供电与相对时序筛选](tx_relative_timing_screen.png) | 同位号的关闭−数据到达随三档电压如何变化？ | 45条旧波形、每组三电压64个新事件；最大相邻0.1108ps/mV在FS冷；非AC PSRR/建立保持资格 |
 
 图名按对象与用途命名，UTC运行身份在对应数据索引中。当前结论见[完整字入口](../../../design/tx_word_capture.md)、[关闭切片](../../../design/tx_launch_hold.md)。图脚本与来源哈希放在各自小数据中，`.svg`可用于导出。

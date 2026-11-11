@@ -411,7 +411,7 @@
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
       "state": "45点眼图；尺寸迭代未收敛",
-      "summary": "当前extra5/WT16R240与输出级MOS45点眼图通过。分级尾宽完整FS散布失败，未采用。整载荷需求卡两角各八点：FS仅+20ps×1.1点满足且焊盘仅0.74ps余量；SS八点眼图/位序均满足，424mV偏离旧目标，内部400mV上界复核中。动态模型缺重末级/共模/供电相对延迟及其他PVT，未选新尺寸。",
+      "summary": "当前extra5/WT16R240与输出级MOS45点眼图通过。分级尾宽完整FS散布失败，未采用。整载荷需求卡两角各八点：FS仅+20ps×1.1点满足且焊盘仅0.74ps余量；SS八点眼图/位序均满足，424mV偏离旧目标，内部400mV上界复核中。动态模型缺重末级/共模/供电相对延迟及其他PVT，未选新尺寸。旧45点相对时序已筛15组三电压/每组64新事件，FS冷最敏感；仅作局部补测选择。",
       "facts": {
         "设计": "v3 同步结构",
         "PVT": "当前完整TX MOS45点；原生静态8点",
@@ -531,6 +531,10 @@
         {
           "title": "400mV目标与内部幅度依据",
           "path": "docs/design/cml_swing_target.md"
+        },
+        {
+          "title": "45点相对时序直流筛选",
+          "path": "docs/design/tx_relative_timing_screen.md"
         }
       ],
       "iterations": [
@@ -893,8 +897,8 @@
       "parent": "pll",
       "name": "安静供电 / LDO",
       "subtitle": "静态3.3→1.8 V / 外供同源直连",
-      "state": "r4／TT原生闭环候选",
-      "summary": "r4静态供电/参考RC/6bit电压码；DC1215与AC255、额外100pF端点425点已有。quiet PLL候选r5k4q的TT hv/ext原生预充闭环均锁定，压力角进行中；真实冷启动/原生噪声仍开。",
+      "state": "r4／四工况双供电原生闭环候选",
+      "summary": "r4静态供电/参考RC/6bit电压码；DC1215/AC255、额外100pF端点425条AC。quiet PLL r5k4q四工况×hv/ext共8条原生预充闭环锁定。宿主反馈延迟及参考副本已局部表征，实际参考接口/偏置残差/环外分发供电预算、从零启动与原生噪声仍开。",
       "facts": {
         "设计": "HV18 r4；静态Vin/quiet双配置、无串联开关",
         "PVT": "DC1215/AC255；额外100pF端点5MOS×5RC共425点",
@@ -920,7 +924,7 @@
         "question": "分别控制高压输入、共享参考和宿主尾偏置噪声，保留静态外供接口。",
         "model": "固定每模型名义电压码→独立HV/host网格→双注入/冷启动/噪声工作点→真实负载和引脚模型。",
         "parameters": "核心1k/50p＋10k/50p；Cout100p；参考1M/16p；6bit反馈；尾滤波候选1M/16p。",
-        "verification": "DC1215/AC255、校准1088、启动18/噪声18；额外100pF端点425点含hl/lh，非真实PLL通过。"
+        "verification": "DC1215/AC255、额外100pF端点425条AC，四工况双供电8条原生预充锁定；宿主/副本7点局部DC卡。未作实际参考接口、动态供电容限或冷启动资格。"
       },
       "references": [
         {
@@ -966,6 +970,10 @@
         {
           "title": "TT原生闭环与离线窗口复核",
           "path": "docs/data/native_pll_cost.json"
+        },
+        {
+          "title": "宿主延迟与参考副本独立复核",
+          "path": "docs/design/pll_timing_supply_review.md"
         }
       ],
       "iterations": [
@@ -1305,7 +1313,7 @@
       "name": "鉴相与环路",
       "subtitle": "PFD → CP → LF → Vctrl",
       "state": "当前候选闭环验证",
-      "summary": "r5/k4转向CP/PDK LF接校准行为VCO，135点锁定；原生预充三点捕获118/418/254ns。粗码/真实启动和新环路噪声仍待闭合。",
+      "summary": "r5/k4转向CP/PDK LF接行为VCO135点锁定；quiet/直供四工况共8条原生预充闭环锁定。宿主Kd及参考副本7点×4负载已独立复算；实际参考输入、偏置残差、当前噪声与从零启动仍开。",
       "facts": {
         "设计": "k4转向CP / 4.13kΩ / 18pF",
         "PVT": "分层135点；原生预充3点",
@@ -1324,7 +1332,7 @@
         ]
       },
       "planning": {
-        "question": "新 Kvco 下怎样兼顾抖动、稳定性、CP 电荷与预充？",
+        "question": "稳定性、CP/预充与实际参考/反馈供电延迟如何共同满足相对抖动预算？",
         "model": "逐角 VCO plant + 实际 CP/LF；线性噪声与延迟敏感性分析。",
         "parameters": "Icp200µA、Rz4.13kΩ、Ci18pF，无外加Cf；控制端负载计入。",
         "verification": "转向CP窗口/门限、启动链、供电抑制及当前码噪声。"
@@ -1337,6 +1345,10 @@
         {
           "title": "模型与耦合分析",
           "path": "verification/design_coupling_review.py"
+        },
+        {
+          "title": "宿主延迟与参考副本独立复核",
+          "path": "docs/design/pll_timing_supply_review.md"
         }
       ],
       "iterations": []
@@ -1468,7 +1480,7 @@
       "key": "C04",
       "subtitle": "250 MHz / 保留 pvt_candidate 尺寸",
       "state": "结构已实现",
-      "summary": "在 ÷8 后转换为 PFD 的 250 MHz CMOS 反馈。",
+      "summary": "÷8后转换为250MHz反馈；7点局部卡发现宿主Kd低压冷约2.1ps/mV。参考副本可显著减小导数差，仍待实际参考接口、偏置滤波、动态响应/噪声与失配验证。",
       "facts": {
         "设计": "反馈接收器已有",
         "PVT": "标准 45 与 hh/ll 分频回归",
@@ -1490,6 +1502,10 @@
         {
           "title": "反馈电路",
           "path": "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice"
+        },
+        {
+          "title": "宿主延迟与参考副本独立复核",
+          "path": "docs/design/pll_timing_supply_review.md"
         }
       ],
       "iterations": []

@@ -62,6 +62,64 @@ def _pdk_cell(text: str) -> str:
     return "\n".join(out) + "\n"
 
 
+# Fixed-width high_po cards, the devices Magic extracts from layout: R = head + slope * L (ohm, um) at tt / 27 C, fitted
+# with ngspice (2026-11-11; 1p41 from L 16-18 um, 2p85 from L 1-3 um, within 0.5 % at 410 / 611 / 4126 / 31250 ohm).
+# Their resistor corners spread wider than the generic card's (hh / ll about +-15 %, short 2p85 +-17.5 %, against +-12.5 %).
+FIXED_CARDS = {"2p85": (137.6, 111.8), "1p41": (256.0, 230.04)}
+_GENERIC = re.compile(r"\bsky130_fd_pr__res_high_po(?=\s)")
+
+
+def _join_continuations(text: str) -> list[str]:
+    out = []
+    for line in text.splitlines():
+        if line.startswith("+") and out:
+            out[-1] = out[-1] + " " + line[1:].strip()
+        else:
+            out.append(line)
+    return out
+
+
+def _brace(v: str) -> str:
+    return v[1:-1] if v.startswith("{") and v.endswith("}") else v
+
+
+def _fixed_cell(text: str) -> str:
+    """Ideal R and generic high_po instances -> fixed-width cards with the same tt / 27 C value.
+
+    Ideal R: 2p85 below 2 kOhm or when the value is a parameter expression (the project's parametric R are CML loads),
+    1p41 above.  Generic `sky130_fd_pr__res_high_po w= l=` (bandgap, references): 1p41 with the length that gives the
+    generic card's value (378 + 317 l) / w.
+    """
+    out = []
+    for line in _join_continuations(text):
+        t = line.split()
+        if t and t[0][0] in "Rr" and len(t) >= 4 and "=" not in t[3]:
+            val = _brace(t[3])
+            try:
+                num = float(val.lower().replace("meg", "e6").replace("g", "e9").replace("t", "e12").replace("k", "e3"))
+            except ValueError:
+                num = None
+            if num is None or num <= 1e7:
+                card = "2p85" if num is None or num < 2000 else "1p41"
+                h, sl = FIXED_CARDS[card]
+                line = f"X{t[0]} {t[1]} {t[2]} 0 sky130_fd_pr__res_high_po_{card} l={{(({val})-{h})/{sl}}}"
+        elif _GENERIC.search(line):
+            mw = re.search(r"\bw=(\{[^}]*\}|\S+)", line)
+            ml = re.search(r"\bl=(\{[^}]*\}|\S+)", line)
+            if mw and ml:
+                h, sl = FIXED_CARDS["1p41"]
+                w, l = _brace(mw[1]), _brace(ml[1])
+                head = _GENERIC.sub("sky130_fd_pr__res_high_po_1p41", line[:min(mw.start(), ml.start())]).rstrip()
+                line = f"{head} l={{((378+317*({l}))/({w})-{h})/{sl}}}"
+        out.append(line)
+    return "\n".join(out) + "\n"
+
+
+def to_pdk_fixed(deck: str, workdir: Path) -> str:
+    """As to_pdk, but every resistor of the project cells as a fixed-width high_po card (layout-equivalent corners)."""
+    return _swap_includes(deck, Path(workdir) / "pdk_fixed_resistors", _fixed_cell)
+
+
 def _swap_includes(deck: str, dest: Path, rewrite) -> str:
     analog = (ROOT / "analog").resolve()
 

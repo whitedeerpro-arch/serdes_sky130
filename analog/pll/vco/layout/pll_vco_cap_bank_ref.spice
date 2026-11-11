@@ -1,0 +1,35 @@
+* Official layout reference (Claude, 2026-11-11; docs/layout/tasks.md T3).  Device values from analog/pll/vco/spice/vco_ring4_4b.spice
+* (bank x1.15 of 2026-11-11) and the tasks.md device table; resistors are the fixed-width high_po cards (3 terminals, body vss).
+* 15 units 1:2:4:8 on b0..b3; MIM top plate (first pin) on 'node' in every unit.
+.subckt pll_vco_cap_bank node b0 b1 b2 b3 vss
+Xc00 node p00 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs00 p00 b0 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc01 node p01 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs01 p01 b1 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc02 node p02 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs02 p02 b1 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc03 node p03 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs03 p03 b2 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc04 node p04 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs04 p04 b2 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc05 node p05 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs05 p05 b2 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc06 node p06 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs06 p06 b2 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc07 node p07 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs07 p07 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc08 node p08 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs08 p08 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc09 node p09 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs09 p09 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc10 node p10 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs10 p10 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc11 node p11 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs11 p11 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc12 node p12 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs12 p12 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc13 node p13 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs13 p13 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+Xc14 node p14 sky130_fd_pr__cap_mim_m3_1 w=2.52 l=2.68
+Xs14 p14 b3 vss vss sky130_fd_pr__nfet_01v8 w=2.68 l=0.15
+.ends pll_vco_cap_bank

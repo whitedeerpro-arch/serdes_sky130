@@ -1,0 +1,14 @@
+* Draft reference for the hand-placed CML delay stage of the ring VCO.
+* One stage of pll_vco_ring4_4b (analog/pll/vco/spice/vco_ring4_4b.spice):
+*   serdes_cml_delay with wn=40 nfin=8 wt=20 lt=0.5 rload=400.
+* The generator leaves every finger on its own gate net, so the layout straps
+* them; netgen then combines the eight w=5 fingers into w=40.
+* Loads are 2.85 um wide high-po, l=2.44 (410 ohm, Claude's device table);
+* the third resistor node is the substrate (vss).
+.subckt pll_vco_delay_stage inp inn outp outn vbias vdd vss
+Xmp outp inp tail vss sky130_fd_pr__nfet_01v8_lvt w=40 l=0.15
+Xmn outn inn tail vss sky130_fd_pr__nfet_01v8_lvt w=40 l=0.15
+Xtail tail vbias vss vss sky130_fd_pr__nfet_01v8 w=20 l=0.5
+Xrp vdd outp vss sky130_fd_pr__res_high_po_2p85 l=2.44
+Xrn vdd outn vss sky130_fd_pr__res_high_po_2p85 l=2.44
+.ends pll_vco_delay_stage

@@ -516,3 +516,20 @@ FS_local_8bit_spread_WN24_32_40_ui = [0.10522258, 0.09905274, 0.09373087]
 missing = "weak_input_and_independent_common_mode_transfer; physical_fixed_resistor_corners; current_full_TX_load_and_payload; bias_source_impedance; PVT_noise_mismatch"
 scope = "recorded_ideal_PWL; strong_input_legacy_local_8bit; branch_rail_power_only; not_an_I17_closure"
 adopted = false
+
+[retime_clock_iteration.physical_resistor_transition]
+status = "legal_parallel_geometry_and_passive_cards_measured; signed_cube_overlay_numerically_verified; no_production_adoption"
+report = "docs/design/fixed_load_resistors.md"
+overlay_report = "docs/design/fixed_poly_ac_overlay.md"
+overlay_data = "docs/data/fixed_load_overlay.json"
+overlay_index = "results/catalog/fixed_load_overlay.json"
+passive_campaign = "results/analog/common/devices/fixed_load_card/20261111T133044.144773Z_20c38295"
+overlay_campaign = "results/analog/common/devices/fixed_load_overlay/20261111T164932.207264Z_a0c98cb1"
+model_overlay_id = "fixed_high_po_signed_contact_cube_v1"
+model_overlay_scope = "independent_copy_of_1p41_and_2p85_contact_dynamic_cube_only; source_PDK_and_default_library_unchanged"
+verified_passive_points = 1080
+verified_TT_tiny_transient_networks = 10
+max_AC_vs_DC_differential_relative_error = 1.58141e-9
+original_max_AC_vs_DC_differential_relative_error = 0.22811191
+next_step = "explicit_overlay_and_legal_parallel_loads_in_current_load_weak_input_common_mode_card; actual_bias_tracking_and_full_TX_confirmation_required"
+adopted = false

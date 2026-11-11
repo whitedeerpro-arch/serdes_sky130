@@ -1,0 +1,2701 @@
+{
+  "status": "passive_and_TT_transient_verified; fixed_card_AC_resistance_not_validated",
+  "adopted": false,
+  "campaign": "results/analog/common/devices/fixed_load_card/20261111T133044.144773Z_20c38295",
+  "summary": "results/analog/common/devices/fixed_load_card/20261111T133044.144773Z_20c38295/analysis/measurement/summary.json",
+  "summary_sha256": "b8d526d120e888ad12c3ea71fd2485aed60a6918a8490d8c79dba48ab9667533",
+  "diagnostic": "results/analog/common/devices/fixed_load_ac_check/20261111T133339.231456Z_e705b415/analysis/20261111T162846.908951Z_30fb9ba0/summary.json",
+  "diagnostic_sha256": "38f441d88c3da732c48d9fccaa2114adab746d72adb7daea6d2eb7f608badabc",
+  "plan_sha256": "49ba28f7bdc1aadbec45ecfdc28702e3b54495ed0a8ade11eb4ca0f7a7199a3b",
+  "networks_sha256": "98969877337ee68d090ee572f1d2a7126106db6c10358278d790d461939036e5",
+  "runner_sha256": "0e7059c8a60a4f574e666b2a37e159b82d6e212f5727384db4a09fbc8d2115e8",
+  "publisher_sha256": "68a263e1fb05d8e7f198319970521d714a7b513d0dba10da3372bee1bf16096a",
+  "calibrated_length_formula": "R=A+B*L+C/L; TT27C,250mV; longer monotonic root, L>=0.5um, 0.01um grid",
+  "coefficients_ohm": [
+    130.35999999999962,
+    113.56946451625,
+    18.689448975763376
+  ],
+  "fit_max_error_ohm": 1.0231815394945443e-12,
+  "illegal_choices": [
+    {
+      "nominal_ohm": 50,
+      "legacy_TT250mV_ohm": 52.08974464795383,
+      "parallel_count": 3,
+      "status": "no_legal_geometry",
+      "geometry": null
+    },
+    {
+      "nominal_ohm": 50,
+      "legacy_TT250mV_ohm": 52.08974464795383,
+      "parallel_count": 4,
+      "status": "no_legal_geometry",
+      "geometry": null
+    },
+    {
+      "nominal_ohm": 120,
+      "legacy_TT250mV_ohm": 124.51162704588863,
+      "parallel_count": 1,
+      "status": "no_legal_geometry",
+      "geometry": null
+    },
+    {
+      "nominal_ohm": 150,
+      "legacy_TT250mV_ohm": 155.5710623190597,
+      "parallel_count": 1,
+      "status": "no_legal_geometry",
+      "geometry": null
+    }
+  ],
+  "parts": [
+    {
+      "id": "generic50",
+      "kind": "legacy_generic",
+      "nominal_ohm": 50,
+      "parallel_count": null,
+      "length_um": 2.1198738170347005,
+      "TT27C_250mV_resistance_ohm": 52.08974464795383,
+      "TT27C_250mV_node_capacitance_f": 8.364405198732703e-15,
+      "resistance_relative_range_all_45": [
+        0.8749999999999958,
+        1.1548490343111342
+      ],
+      "reference_ratio_range_15": [
+        0.9741424773259273,
+        1.0652316037983154
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0371476399969968
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9937159054686797
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0652316037983154
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674969
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.020068178649919
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0163077637541758
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095803
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9741424773259273
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0163077637541758
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095803
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9741424773259273
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0652316037983154
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674969
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.020068178649919
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 52.08974464795391
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 52.08974464795383
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 52.08974464795383
+        }
+      ]
+    },
+    {
+      "id": "r50_n5",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 50,
+      "parallel_count": 5,
+      "length_um": 0.98,
+      "TT27C_250mV_resistance_ohm": 52.1457883055447,
+      "TT27C_250mV_node_capacitance_f": 6.422805000000001e-15,
+      "resistance_relative_range_all_45": [
+        0.7275512770998476,
+        1.3293113189754773
+      ],
+      "reference_ratio_range_15": [
+        0.8504127620870909,
+        1.1796960541322157
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.062200470739249
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9801127161628553
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9038625961580811
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.8633891669578604
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.8504127620870909
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.1796960541322157
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.1014189134509262
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0764487215525946
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.1796960541322157
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.1014189134509262
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0764487215525946
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9038625961580811
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.8633891669578604
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.8504127620870909
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 52.43897478955041
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 52.1457883055447
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 51.37290966057464
+        }
+      ]
+    },
+    {
+      "id": "r50_n6",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 50,
+      "parallel_count": 6,
+      "length_um": 1.49,
+      "TT27C_250mV_resistance_ohm": 52.020292745893535,
+      "TT27C_250mV_node_capacitance_f": 8.364195e-15,
+      "resistance_relative_range_all_45": [
+        0.7708441422603928,
+        1.2467432829029408
+      ],
+      "reference_ratio_range_15": [
+        0.9051084914221675,
+        1.1110040649727422
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.038077943382856
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9847690479817617
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.939802189005173
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9150309591031492
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9051084914221675
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.1110040649727422
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.063080413264654
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0439377644301169
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.1110040649727422
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.063080413264654
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0439377644301169
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.939802189005173
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9150309591031492
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9051084914221675
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 52.18017575318588
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 52.020292745893535
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 51.598111786399436
+        }
+      ]
+    },
+    {
+      "id": "r50_n8",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 50,
+      "parallel_count": 8,
+      "length_um": 2.45,
+      "TT27C_250mV_resistance_ohm": 52.02919182319129,
+      "TT27C_250mV_node_capacitance_f": 1.2800772000000001e-14,
+      "resistance_relative_range_all_45": [
+        0.8061899050179834,
+        1.2031794421027746
+      ],
+      "reference_ratio_range_15": [
+        0.9574946007116197,
+        1.0524185197837204
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0205919408844375
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9894946015621523
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9777022193086973
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9643195384467568
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9574946007116197
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0524185197837204
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0264889215706792
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0132629388478132
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0524185197837204
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0264889215706792
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0132629388478132
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9777022193086973
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9643195384467568
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9574946007116197
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 52.1010059052268
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 52.02919182319129
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 51.838587666109945
+        }
+      ]
+    },
+    {
+      "id": "generic120",
+      "kind": "legacy_generic",
+      "nominal_ohm": 120,
+      "parallel_count": null,
+      "length_um": 2.2145110410094637,
+      "TT27C_250mV_resistance_ohm": 124.51162704588863,
+      "TT27C_250mV_node_capacitance_f": 3.815517123028674e-15,
+      "resistance_relative_range_all_45": [
+        0.8749999999999967,
+        1.155111474198342
+      ],
+      "reference_ratio_range_15": [
+        0.9743638515785606,
+        1.063950659844609
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0359004670875405
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9939417277903908
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.063950659844609
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674964
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.0202999895358416
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.015085650853615
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.980096010109579
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9743638515785606
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.015085650853615
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.980096010109579
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9743638515785606
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.063950659844609
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674964
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0202999895358416
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 124.51162704588917
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 124.51162704588863
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 124.51162704588847
+        }
+      ]
+    },
+    {
+      "id": "r120_n2",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 120,
+      "parallel_count": 2,
+      "length_um": 0.85,
+      "TT27C_250mV_resistance_ohm": 124.44081593456126,
+      "TT27C_250mV_node_capacitance_f": 2.513313e-15,
+      "resistance_relative_range_all_45": [
+        0.7101787520400864,
+        1.3622967286515644
+      ],
+      "reference_ratio_range_15": [
+        0.8309329676059071,
+        1.2068107017815943
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0729043407601824
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9784303112240551
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.8924511868223332
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.845012643779873
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.8309329676059071
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.2068107017815943
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.1150615139110431
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.087985514932693
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.2068107017815943
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.1150615139110431
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.087985514932693
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.8924511868223332
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.845012643779873
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.8309329676059071
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 125.28668934397207
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 124.44081593456126
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 122.21168409350257
+        }
+      ]
+    },
+    {
+      "id": "r120_n3",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 120,
+      "parallel_count": 3,
+      "length_um": 2.06,
+      "TT27C_250mV_resistance_ohm": 124.46188164998743,
+      "TT27C_250mV_node_capacitance_f": 4.549149e-15,
+      "resistance_relative_range_all_45": [
+        0.7952161725856506,
+        1.2149303755698975
+      ],
+      "reference_ratio_range_15": [
+        0.9412895260713938,
+        1.0699873264302784
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0255888664519457
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9879607121331517
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.965757189510231
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9491194428744487
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9412895260713938
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0699873264302784
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0377733647071725
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.022626226581717
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0699873264302784
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0377733647071725
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.022626226581717
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.965757189510231
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9491194428744487
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9412895260713938
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 124.69128174674016
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 124.46188164998743
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 123.85448286165183
+        }
+      ]
+    },
+    {
+      "id": "r120_n4",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 120,
+      "parallel_count": 4,
+      "length_um": 3.19,
+      "TT27C_250mV_resistance_ohm": 124.62633831031175,
+      "TT27C_250mV_node_capacitance_f": 7.035750000000001e-15,
+      "resistance_relative_range_all_45": [
+        0.819584086253888,
+        1.1892320509713319
+      ],
+      "reference_ratio_range_15": [
+        0.9774155079483415,
+        1.031270392806922
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.014728946368498
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9915812867829871
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9924375768044266
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9828745135411637
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9774155079483415
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.031270392806922
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0127138396735922
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.002103068042576
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.031270392806922
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0127138396735922
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.002103068042576
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9924375768044266
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9828745135411637
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9774155079483415
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 124.73476334432665
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 124.62633831031175
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 124.3368862896764
+        }
+      ]
+    },
+    {
+      "id": "generic150",
+      "kind": "legacy_generic",
+      "nominal_ohm": 150,
+      "parallel_count": null,
+      "length_um": 2.1198738170347005,
+      "TT27C_250mV_resistance_ohm": 155.5710623190597,
+      "TT27C_250mV_node_capacitance_f": 2.999138826496442e-15,
+      "resistance_relative_range_all_45": [
+        0.8749999999999959,
+        1.1549279077449408
+      ],
+      "reference_ratio_range_15": [
+        0.9742090089330199,
+        1.0648466301222022
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.036772815838366
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9937837738942162
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0648466301222022
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674984
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.0201378468728386
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0159404711067552
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095779
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9742090089330199
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0159404711067552
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095779
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9742090089330199
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0648466301222022
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674984
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0201378468728386
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 155.57106231906022
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 155.5710623190597
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 155.57106231905962
+        }
+      ]
+    },
+    {
+      "id": "r150_n2",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 150,
+      "parallel_count": 2,
+      "length_um": 1.48,
+      "TT27C_250mV_resistance_ohm": 155.53540677437763,
+      "TT27C_250mV_node_capacitance_f": 2.7837720000000003e-15,
+      "resistance_relative_range_all_45": [
+        0.7702951933269219,
+        1.2478950246384728
+      ],
+      "reference_ratio_range_15": [
+        0.9042865002083503,
+        1.111970532790433
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0383883963177523
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9846985248146917
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9392285916699618
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9142552180389
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9042865002083503
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.111970532790433
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0636563179283058
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0444254020605503
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.111970532790433
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0636563179283058
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0444254020605503
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9392285916699618
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9142552180389
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9042865002083503
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 156.01835449300103
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 155.53540677437763
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 154.26020415856925
+        }
+      ]
+    },
+    {
+      "id": "r150_n3",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 150,
+      "parallel_count": 3,
+      "length_um": 2.91,
+      "TT27C_250mV_resistance_ohm": 155.75654426641702,
+      "TT27C_250mV_node_capacitance_f": 5.096506500000001e-15,
+      "resistance_relative_range_all_45": [
+        0.8153887456864157,
+        1.1935457109947272
+      ],
+      "reference_ratio_range_15": [
+        0.97113998919181,
+        1.0378953536036264
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.01655966058206
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9908892904506844
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9878075306023928
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9770517801552427
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.97113998919181
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0378953536036264
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0170365956378464
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.005558291731955
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0378953536036264
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0170365956378464
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.005558291731955
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9878075306023928
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9770517801552427
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.97113998919181
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 155.91614869779707
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 155.75654426641702
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 155.33148432282866
+        }
+      ]
+    },
+    {
+      "id": "generic240",
+      "kind": "legacy_generic",
+      "nominal_ohm": 240,
+      "parallel_count": null,
+      "length_um": 2.593059936908517,
+      "TT27C_250mV_resistance_ohm": 247.223418004859,
+      "TT27C_250mV_node_capacitance_f": 2.381915104101414e-15,
+      "resistance_relative_range_all_45": [
+        0.8749999999999989,
+        1.1559161948253738
+      ],
+      "reference_ratio_range_15": [
+        0.9750426524623833,
+        1.0600228955380147
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.032076255088455
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9946341678087638
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0600228955380147
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.026810587367498
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.0210107923160723
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.011338280474482
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095816
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9750426524623833
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.011338280474482
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095816
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9750426524623833
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0600228955380147
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.026810587367498
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0210107923160723
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 247.22341800485944
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 247.223418004859
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 247.2234180048588
+        }
+      ]
+    },
+    {
+      "id": "r240_n1",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 240,
+      "parallel_count": 1,
+      "length_um": 0.8300000000000001,
+      "TT27C_250mV_resistance_ohm": 247.14006395302061,
+      "TT27C_250mV_node_capacitance_f": 1.2523634999999999e-15,
+      "resistance_relative_range_all_45": [
+        0.7072450515613717,
+        1.368051525558608
+      ],
+      "reference_ratio_range_15": [
+        0.8276690497776763,
+        1.2115228642198321
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0748331982144623
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9781451599708061
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.8906292429039625
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.8419356978611146
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.8276690497776763
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.2115228642198321
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.1173458167359296
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0899128738909343
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.2115228642198321
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.1173458167359296
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0899128738909343
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.8906292429039625
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.8419356978611146
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.8276690497776763
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 248.87280905391637
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 247.14006395302061
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 242.57396064378096
+        }
+      ]
+    },
+    {
+      "id": "r240_n2",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 240,
+      "parallel_count": 2,
+      "length_um": 3.15,
+      "TT27C_250mV_resistance_ohm": 247.0184858155959,
+      "TT27C_250mV_node_capacitance_f": 3.5007029999999997e-15,
+      "resistance_relative_range_all_45": [
+        0.8190373863634282,
+        1.1897908297594673
+      ],
+      "reference_ratio_range_15": [
+        0.9765948580934906,
+        1.032135571083748
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.014968333911331
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9914884071583396
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9918336443526522
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9821146239268936
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9765948580934906
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.032135571083748
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0132779763332245
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0025507474128705
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.032135571083748
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0132779763332245
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0025507474128705
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9918336443526522
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9821146239268936
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9765948580934906
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 247.23832152003044
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 247.0184858155959
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 246.43182134300872
+        }
+      ]
+    },
+    {
+      "id": "generic320",
+      "kind": "legacy_generic",
+      "nominal_ohm": 320,
+      "parallel_count": null,
+      "length_um": 2.8454258675078865,
+      "TT27C_250mV_resistance_ohm": 328.4136032202735,
+      "TT27C_250mV_node_capacitance_f": 2.039823747634624e-15,
+      "resistance_relative_range_all_45": [
+        0.8749999999999992,
+        1.156366529497476
+      ],
+      "reference_ratio_range_15": [
+        0.9754225204105534,
+        1.0578248551353002
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.029936164231064
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9950216684371225
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0578248551353002
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674986
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.0214085690428238
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0092411914298476
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095806
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9754225204105534
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0092411914298476
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095806
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9754225204105534
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0578248551353002
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873674986
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0214085690428238
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 328.41360322027464
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 328.4136032202735
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 328.4136032202739
+        }
+      ]
+    },
+    {
+      "id": "r320_n1",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 320,
+      "parallel_count": 1,
+      "length_um": 1.6400000000000001,
+      "TT27C_250mV_resistance_ohm": 328.00992727967605,
+      "TT27C_250mV_node_capacitance_f": 1.4262300000000001e-15,
+      "resistance_relative_range_all_45": [
+        0.7785027313658323,
+        1.233308720133842
+      ],
+      "reference_ratio_range_15": [
+        0.9165364692116836,
+        1.0977390813306411
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0338955479074883
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9857559398676525
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.947859553225334
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.925811761738821
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9165364692116836
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0977390813306411
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0550768218576514
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0371694299163283
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0977390813306411
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0550768218576514
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.0371694299163283
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.947859553225334
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.925811761738821
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9165364692116836
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 328.8798348062129
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 328.00992727967605
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 325.7114368576326
+        }
+      ]
+    },
+    {
+      "id": "r320_n2",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 320,
+      "parallel_count": 2,
+      "length_um": 4.6000000000000005,
+      "TT27C_250mV_resistance_ohm": 328.4212302325668,
+      "TT27C_250mV_node_capacitance_f": 4.123188e-15,
+      "resistance_relative_range_all_45": [
+        0.8315441539246794,
+        1.1773795023633349
+      ],
+      "reference_ratio_range_15": [
+        0.9926187289410425,
+        1.0118090637479256
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0091900228703807
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.993980882344065
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0056605849628777
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9997056429685033
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9958147889203316
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0118090637479256
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0002185285722678
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9926187289410425
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0118090637479256
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0002185285722678
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9926187289410425
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0056605849628777
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9997056429685033
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9958147889203316
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 328.5647305488972
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 328.4212302325668
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 328.03191146968925
+        }
+      ]
+    },
+    {
+      "id": "generic400",
+      "kind": "legacy_generic",
+      "nominal_ohm": 400,
+      "parallel_count": null,
+      "length_um": 2.593059936908517,
+      "TT27C_250mV_resistance_ohm": 409.88135978839773,
+      "TT27C_250mV_node_capacitance_f": 1.565290750788954e-15,
+      "resistance_relative_range_all_45": [
+        0.8750000000000007,
+        1.1560148491560085
+      ],
+      "reference_ratio_range_15": [
+        0.9751258697238527,
+        1.0595413731990138
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.031607427693812
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9947190571532449
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0595413731990138
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873675002
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.021097932834344
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0108788734405572
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095808
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9751258697238527
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0108788734405572
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095808
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9751258697238527
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0595413731990138
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873675002
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.021097932834344
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 409.88135978839773
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 409.88135978839773
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 409.88135978839773
+        }
+      ]
+    },
+    {
+      "id": "r400_n1",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 400,
+      "parallel_count": 1,
+      "length_um": 2.39,
+      "TT27C_250mV_resistance_ohm": 409.6108733217725,
+      "TT27C_250mV_node_capacitance_f": 1.5872175e-15,
+      "resistance_relative_range_all_45": [
+        0.8047224758154936,
+        1.2047355093386933
+      ],
+      "reference_ratio_range_15": [
+        0.9553257029938121,
+        1.0547472081783584
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0212450693431046
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9892830762086241
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 0.9760973514126692
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.962289190564273
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9553257029938121
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0547472081783584
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0279962374370901
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 1.014505272410275
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0547472081783584
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.0279962374370901
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 1.014505272410275
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9760973514126692
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.962289190564273
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9553257029938121
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 410.2005091340083
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 409.6108733217725
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 408.0465243575028
+        }
+      ]
+    },
+    {
+      "id": "r400_n2",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 400,
+      "parallel_count": 2,
+      "length_um": 6.04,
+      "TT27C_250mV_resistance_ohm": 409.7069226549491,
+      "TT27C_250mV_node_capacitance_f": 4.7413800000000005e-15,
+      "resistance_relative_range_all_45": [
+        0.8362123493292729,
+        1.1731772265447253
+      ],
+      "reference_ratio_range_15": [
+        0.9892970585212499,
+        1.0107691227871758
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.006432470400537
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9954164509725152
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0107691227871758
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0066096999446759
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.003655166255436
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0032144311064677
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9950930056445908
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9892970585212499
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0032144311064677
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9950930056445908
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9892970585212499
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0107691227871758
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0066096999446759
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.003655166255436
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 409.80890147114786
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 409.7069226549491
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 409.4233170816256
+        }
+      ]
+    },
+    {
+      "id": "generic600",
+      "kind": "legacy_generic",
+      "nominal_ohm": 600,
+      "parallel_count": null,
+      "length_um": 2.593059936908517,
+      "TT27C_250mV_resistance_ohm": 610.9540471020124,
+      "TT27C_250mV_node_capacitance_f": 1.1569785741327241e-15,
+      "resistance_relative_range_all_45": [
+        0.874999999999999,
+        1.1561342596279216
+      ],
+      "reference_ratio_range_15": [
+        0.9752265952814557,
+        1.0589585421224006
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0310399624839304
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9948218065877557
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0589585421224006
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873675009
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.021203407072946
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0103228105655855
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095789
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9752265952814557
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0103228105655855
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.9800960101095789
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9752265952814557
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0589585421224006
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0268105873675009
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.021203407072946
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 610.954047102015
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 610.9540471020124
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 610.954047102012
+        }
+      ]
+    },
+    {
+      "id": "r600_n1",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 600,
+      "parallel_count": 1,
+      "length_um": 4.19,
+      "TT27C_250mV_resistance_ohm": 610.6765453387828,
+      "TT27C_250mV_node_capacitance_f": 1.9735875000000002e-15,
+      "resistance_relative_range_all_45": [
+        0.8291757345856718,
+        1.1796493676921938
+      ],
+      "reference_ratio_range_15": [
+        0.9920647714417401,
+        1.0158096009131359
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.0103726443821643
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9934219853520067
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0030457635203913
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 0.9963205584473086
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 0.9920647714417401
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0158096009131359
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 1.002731591309932
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9944300702623281
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 1.0158096009131359
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 1.002731591309932
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.9944300702623281
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0030457635203913
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 0.9963205584473086
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 0.9920647714417401
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 610.9965864574012
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 610.6765453387828
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 609.8129715731671
+        }
+      ]
+    },
+    {
+      "id": "r600_n2",
+      "kind": "fixed_parallel",
+      "nominal_ohm": 600,
+      "parallel_count": 2,
+      "length_um": 9.59,
+      "TT27C_250mV_resistance_ohm": 610.7200061810576,
+      "TT27C_250mV_node_capacitance_f": 6.2653950000000005e-15,
+      "resistance_relative_range_all_45": [
+        0.8387198268955474,
+        1.171736994275827
+      ],
+      "reference_ratio_range_15": [
+        0.988285206223647,
+        1.0133173046425055
+      ],
+      "reference_ratios": [
+        {
+          "corner": "tt",
+          "temp_c": -40,
+          "normalized_ratio": 1.003438202251902
+        },
+        {
+          "corner": "tt",
+          "temp_c": 27,
+          "normalized_ratio": 1.0
+        },
+        {
+          "corner": "tt",
+          "temp_c": 85,
+          "normalized_ratio": 0.9972648720002338
+        },
+        {
+          "corner": "ll",
+          "temp_c": -40,
+          "normalized_ratio": 1.0133173046425055
+        },
+        {
+          "corner": "ll",
+          "temp_c": 27,
+          "normalized_ratio": 1.0111059393732154
+        },
+        {
+          "corner": "ll",
+          "temp_c": 85,
+          "normalized_ratio": 1.0093544560983718
+        },
+        {
+          "corner": "hh",
+          "temp_c": -40,
+          "normalized_ratio": 0.9961073542039923
+        },
+        {
+          "corner": "hh",
+          "temp_c": 27,
+          "normalized_ratio": 0.991755029385295
+        },
+        {
+          "corner": "hh",
+          "temp_c": 85,
+          "normalized_ratio": 0.988285206223647
+        },
+        {
+          "corner": "hl",
+          "temp_c": -40,
+          "normalized_ratio": 0.9961073542039923
+        },
+        {
+          "corner": "hl",
+          "temp_c": 27,
+          "normalized_ratio": 0.991755029385295
+        },
+        {
+          "corner": "hl",
+          "temp_c": 85,
+          "normalized_ratio": 0.988285206223647
+        },
+        {
+          "corner": "lh",
+          "temp_c": -40,
+          "normalized_ratio": 1.0133173046425055
+        },
+        {
+          "corner": "lh",
+          "temp_c": 27,
+          "normalized_ratio": 1.0111059393732154
+        },
+        {
+          "corner": "lh",
+          "temp_c": 85,
+          "normalized_ratio": 1.0093544560983718
+        }
+      ],
+      "TT27C_voltage_curve": [
+        {
+          "drop_v": 0.1,
+          "resistance_ohm": 610.7675626901171
+        },
+        {
+          "drop_v": 0.25,
+          "resistance_ohm": 610.7200061810576
+        },
+        {
+          "drop_v": 0.5,
+          "resistance_ohm": 610.5707979059327
+        }
+      ]
+    }
+  ],
+  "AC_cross_check": [
+    {
+      "id": "generic50",
+      "DC_resistance_ohm": 52.08974464795383,
+      "DC_differential_resistance_ohm": 52.08974464794939,
+      "AC_resistance_ohm": 52.089744647953815,
+      "AC_capacitance_f": 8.364405198732703e-15,
+      "transient": {
+        "resistance_ohm": 52.089744647949956,
+        "capacitance_f": 8.364432702357972e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 1.1943827401947776e-13
+      },
+      "AC_vs_DC_differential_relative": 8.504308368628699e-14,
+      "transient_vs_DC_differential_relative": 1.0880185641326534e-14
+    },
+    {
+      "id": "r50_n5",
+      "DC_resistance_ohm": 52.1457883055447,
+      "DC_differential_resistance_ohm": 51.53838274304907,
+      "AC_resistance_ohm": 46.56392032173842,
+      "AC_capacitance_f": 6.422805000000001e-15,
+      "transient": {
+        "resistance_ohm": 51.53838584063684,
+        "capacitance_f": 6.422839975052664e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 4.2380147863163606e-10
+      },
+      "AC_vs_DC_differential_relative": -0.09651956768048853,
+      "transient_vs_DC_differential_relative": 6.010254116617375e-08
+    },
+    {
+      "id": "r50_n6",
+      "DC_resistance_ohm": 52.020292745893535,
+      "DC_differential_resistance_ohm": 51.686983642395134,
+      "AC_resistance_ohm": 48.80705904711056,
+      "AC_capacitance_f": 8.364195e-15,
+      "transient": {
+        "resistance_ohm": 51.68698534639001,
+        "capacitance_f": 8.364230133947427e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 2.317194719640672e-10
+      },
+      "AC_vs_DC_differential_relative": -0.055718565726524116,
+      "transient_vs_DC_differential_relative": 3.296758199766714e-08
+    },
+    {
+      "id": "r50_n8",
+      "DC_resistance_ohm": 52.02919182319129,
+      "DC_differential_resistance_ohm": 51.87851358733985,
+      "AC_resistance_ohm": 50.51439280177756,
+      "AC_capacitance_f": 1.2800772000000001e-14,
+      "transient": {
+        "resistance_ohm": 51.8785143662878,
+        "capacitance_f": 1.280081757067839e-14,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 1.0434930048416219e-10
+      },
+      "AC_vs_DC_differential_relative": -0.026294523324492225,
+      "transient_vs_DC_differential_relative": 1.5014847143390853e-08
+    },
+    {
+      "id": "generic120",
+      "DC_resistance_ohm": 124.51162704588863,
+      "DC_differential_resistance_ohm": 124.51162704587679,
+      "AC_resistance_ohm": 124.51162704588842,
+      "AC_capacitance_f": 3.815517123028674e-15,
+      "transient": {
+        "resistance_ohm": 124.51162704588167,
+        "capacitance_f": 3.815529669113938e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 5.4289428772248476e-14
+      },
+      "AC_vs_DC_differential_relative": 9.325873406851315e-14,
+      "transient_vs_DC_differential_relative": 3.907985046680551e-14
+    },
+    {
+      "id": "r120_n2",
+      "DC_resistance_ohm": 124.44081593456126,
+      "DC_differential_resistance_ohm": 122.69295122987242,
+      "AC_resistance_ohm": 108.70098201072071,
+      "AC_capacitance_f": 2.513313e-15,
+      "transient": {
+        "resistance_ohm": 122.69296014313193,
+        "capacitance_f": 2.5133282770037293e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 2.1502568156748053e-10
+      },
+      "AC_vs_DC_differential_relative": -0.11404053027412264,
+      "transient_vs_DC_differential_relative": 7.264687518215851e-08
+    },
+    {
+      "id": "r120_n3",
+      "DC_resistance_ohm": 124.46188164998743,
+      "DC_differential_resistance_ohm": 123.98168066074179,
+      "AC_resistance_ohm": 119.7002228077882,
+      "AC_capacitance_f": 4.549149e-15,
+      "transient": {
+        "resistance_ohm": 123.9816831297563,
+        "capacitance_f": 4.5491658868409754e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 5.8139927372034196e-11
+      },
+      "AC_vs_DC_differential_relative": -0.03453298769734536,
+      "transient_vs_DC_differential_relative": 1.9914349502769824e-08
+    },
+    {
+      "id": "r120_n4",
+      "DC_resistance_ohm": 124.62633831031175,
+      "DC_differential_resistance_ohm": 124.39784705841346,
+      "AC_resistance_ohm": 122.27806373617447,
+      "AC_capacitance_f": 7.035750000000001e-15,
+      "transient": {
+        "resistance_ohm": 124.39784825530147,
+        "capacitance_f": 7.035774066259819e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 2.7611584077805312e-11
+      },
+      "AC_vs_DC_differential_relative": -0.017040353771103467,
+      "transient_vs_DC_differential_relative": 9.621452745633974e-09
+    },
+    {
+      "id": "generic400",
+      "DC_resistance_ohm": 409.88135978839773,
+      "DC_differential_resistance_ohm": 409.8813597883744,
+      "AC_resistance_ohm": 409.88135978839824,
+      "AC_capacitance_f": 1.565290750788954e-15,
+      "transient": {
+        "resistance_ohm": 409.8813597883602,
+        "capacitance_f": 1.5652958977307512e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 2.2062268502654007e-14
+      },
+      "AC_vs_DC_differential_relative": 5.81756864903582e-14,
+      "transient_vs_DC_differential_relative": -3.4638958368304884e-14
+    },
+    {
+      "id": "r400_n1",
+      "DC_resistance_ohm": 409.6108733217725,
+      "DC_differential_resistance_ohm": 408.37414932707253,
+      "AC_resistance_ohm": 397.20218816654585,
+      "AC_capacitance_f": 1.5872175e-15,
+      "transient": {
+        "resistance_ohm": 408.3741557142929,
+        "capacitance_f": 1.5872231794264648e-15,
+        "input_amplitude_v": 0.0009999999999999994,
+        "current_fit_rms_a": 1.381868647311326e-11
+      },
+      "AC_vs_DC_differential_relative": -0.027357170327593106,
+      "transient_vs_DC_differential_relative": 1.5640609030143082e-08
+    }
+  ],
+  "scope": "Five RC corners x three temperatures x three voltage drops; 24 passive networks; no MOS PVT or full circuit qualification.",
+  "reference_proxy": "1p41 L42.36 at 250mV, normalized at TT27C. This is a geometric tracking proxy, not the actual 112k+trim reference, Vbg or bias-loop response.",
+  "AC_policy": "Retain AC results as measurements; do not use fixed-card AC real part for physical impedance selection. TT DC slope and 1mV/2GHz transient agree; cause of AC discrepancy remains unresolved.",
+  "capacitance_scope": "One load-end admittance to AC-ground rail/body at 2GHz, PDK intrinsic parasitics only; no layout routing or MOS capacitance.",
+  "ungraded": [
+    "full TX/PLL/bias circuit response",
+    "layout routing and DRC/LVS",
+    "EM/current density",
+    "noise and mismatch",
+    "supply response and temperature self-heating",
+    "new dimensions adoption"
+  ],
+  "publisher_snapshot": "results/analog/common/devices/fixed_load_card/20261111T133044.144773Z_20c38295/publication_sources/68a263e1fb05d8e7f198319970521d714a7b513d0dba10da3372bee1bf16096a.py"
+}

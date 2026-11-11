@@ -10,7 +10,7 @@ DeepSeek等执行者的入门课见[DS-01工作单](training/DS-01-inverter.md)�
    ```bash
    uv run python verification/layout/check.py <layout目录> <cell> --ref <参考网表>
    ```
-   通过的唯一标准：退出码 0，且输出里 `DRC_TOTAL 0`、`LVS_MATCH True`、`LVS_PROPERTY_ERRORS False`、`LVS_DISCONNECTED none`（最后一条 2026-11-11 加入：netgen 在端口标签落在孤立图形上时仍报匹配）。README 和状态表里写结论时，**原样贴这三行**。不要写“DRC 净”“LVS 通过”之类的话而不贴原文。
+   通过的唯一标准：退出码 0，且输出里 `DRC_TOTAL 0`、`LVS_MATCH True`、`LVS_PROPERTY_ERRORS False`、`LVS_DISCONNECTED none`（最后一条 2026-11-11 加入：netgen 在端口标签落在孤立图形上时仍报匹配）。README 和状态表里写结论时，**原样贴完整输出，保留这四项**。不要写“DRC 净”“LVS 通过”之类的话而不贴原文。
 2. **不改检查器的判定部分**（`check.py` 里的 `drc()` 和退出码）。觉得它有问题，写在状态表“问题”栏，等 Claude 处理。
 3. **器件生成：** 新脚本用 `magic::gencell sky130::<器件名> <cell名> w … l … nf …`。不要直接调 `sky130::*_draw`；**任何生成器调用之前都不要执行 `units microns`**（2026-11-11 的反相器练习就是这样把阱和保护环画小了：PMOS 扩散在 N 阱外，46 个 DRC 错误）。每个器件单元先单独过 DRC：只允许 `met1.6`（栅接触短头未连线时的金属1 面积）。
 4. **只改修版图板块的文件：** `analog/<模块>/layout/`、`verification/layout/`（检查器判定部分除外）、`docs/layout/` 下你自己建的文件。不改 `analog/*/spice/`、`config/`、`docs/design/`、`results/` 里已有的东西。参考网表和本任务单由 Claude 提供或修改。
@@ -147,3 +147,9 @@ CML 负载必须是高阻多晶（与带隙 r_ref 同类型，恒摆幅偏置靠
 **已执行（2026-11-11）**：生成脚本里删掉孤立 m1 岛，`d` 标签移到两管之间的共漏 m1 条（`x=2.575, y=4.6`），重建后原检查器仍为 `DRC_TOTAL 0` / `LVS_MATCH True` / `LVS_PROPERTY_ERRORS False`（退出码 0），`inverter_audit.py analog/common/layout_practice/inv_std2_lvs.spice --cell inv_std2` 返回 `status: pass`；保持 W4/W8、L0.15、nf2 及参考不变。该审计仅用于平坦反相器，非通用LVS替代。
 
 [DS-02复核单](training/DS-02-folding-review.md)与[折指/中间G/加宽M1/保护环VAR](inverter_folding_var.md)已有独立教学副本。后者DRC/LVS和外部端口均通过；没有覆盖或合入执行者当前的生产草稿。这里的结论只指上述捕获身份，后来修订需按新提取结果复核。
+
+## 修复版独立复核（Codex，2026-11-12）
+
+已捕获inv_std2/3当前.mag、参考和构建器到隔离副本，重跑完整DRC、提取、LVS及四端/总宽审计，均通过；执行者目录没有改写。inv_std2构建器SHA前缀`736f8f6e97b698f4`，inv_std3为`92da1979231a269d`，完整身份和日志见[复核数据](../data/layout_inverter_producer_review.json)。两者W4/W8、L0.15和真实D端口均正确；显式栅侧C由0.80203→0.59616fF，D侧由1.34614→1.50302fF，与当前README一致。该表不含MOS内部结/重叠电容，也未验证延迟/电流容量。
+
+下一阶段沿用T3/T4参考与敏感节点预算；小阻值实现由设计侧另行规划。[固定宽负载卡](../design/fixed_load_resistors.md)中的50/120/240Ω并联方案仍未采用，不要自行替换T3的400/600Ω器件或更新参考网表。

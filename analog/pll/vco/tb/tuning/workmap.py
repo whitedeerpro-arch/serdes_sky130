@@ -37,6 +37,7 @@ from serdes_flow.waves import crossings
 TEMPLATE = ROOT / "analog/pll/vco/tb/phase_noise/tb_vco_isf_ngspice.cir.in"
 RESULTS = ROOT / "results/analog/pll/vco/workmap"
 STOP, START = 24e-9, 14e-9
+CARDS = "generic"   # --cards; module level so extend() / run_points() decks follow it
 TARGET = 2e9
 BANKS = {3: dict(codes=8, coarse=(0, 3, 7)), 4: dict(codes=16, coarse=(0, 6, 15))}
 
@@ -58,7 +59,8 @@ def deck(process, rc, points, camp, bank=3):
         assert text.count(inc) == 1
         text = text.replace(inc, inc.replace("vco_ring4_pvt_candidate", "cap_bank_4b") + "\n" + inc.replace("vco_ring4_pvt_candidate", "vco_ring4_4b"))
     camp.mkdir(parents=True, exist_ok=True)
-    text = bias.section(rcorner.to_pdk(bias.real(text), camp), process, rc)
+    to_pdk = rcorner.to_pdk_fixed if CARDS == "fixed" else rcorner.to_pdk
+    text = bias.section(to_pdk(bias.real(text), camp), process, rc)
     lines = [".control", "set num_threads=1", "set filetype=binary"]
     for c, code, v in points:
         lines += [f"option temp={c.temp}", f"alter Vdd dc={c.supply}", f"alter Vref dc={c.supply}"]
@@ -190,7 +192,11 @@ def main():
     ap.add_argument("--extend", help="more Vctrl points, see above; needs --resume")
     ap.add_argument("--cp-window")
     ap.add_argument("--bank", type=int, default=3, choices=sorted(BANKS))
+    ap.add_argument("--cards", default="generic", choices=("generic", "fixed"),
+                    help="resistor cards: generic high_po (to_pdk) or the layout-equivalent fixed-width ones (to_pdk_fixed)")
     a = ap.parse_args()
+    global CARDS
+    CARDS = a.cards
     camp = ROOT / a.resume if a.resume else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     conds = [Condition.parse(x) for x in a.conds.split(",")] if a.conds else grid45()
     passive = a.passive.split(",")

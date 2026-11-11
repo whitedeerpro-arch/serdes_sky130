@@ -50,6 +50,10 @@ def pwl(times, shifts, vdd):
     return " ".join(f"{x:.6e} {y:.4g}" for x, y in pts)
 
 
+SC_LIB = "/home/host/.volare/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice"
+PFD = "custom"   # --pfd: custom pll_pfd or the standard-cell pll_pfd_sc (analog/pll/pfd/spice/pfd_sc.spice)
+
+
 def netlist(c, vout):
     t, ph = edges()
     text = spice.render(TEMPLATE, **spice.corner_values(c), REF_PWL=pwl(t, [0.0] * len(t), c.supply), FB_PWL=pwl(t, ph, c.supply),
@@ -58,6 +62,11 @@ def netlist(c, vout):
     old = "Ibuf vdd ibuf 10u"
     assert text.count(old) == 1 and "vgi_bias" in text
     text = text.replace(old, "XIbuf ibuf vgi_bias vdd serdes_bias_pcopy n=4")
+    if PFD == "sc":
+        old = "Xpfd ref fb rst_b up dn vdd 0 pll_pfd"
+        assert text.count(old) == 1
+        inc = f'.include "{SC_LIB}"\n.include "{ROOT / "analog/pll/pfd/spice/pfd_sc.spice"}"\n'
+        text = text.replace(old, inc + "Xpfd ref fb rst_b up dn vdd 0 pll_pfd_sc")
     text, n = re.subn(r'^(\.lib\s+"[^"]+"\s+)(\w+)\s*$', lambda m: m[1] + f"{c.process}_mm", text, count=1, flags=re.M | re.I)
     assert n == 1
     return text
@@ -113,7 +122,10 @@ def main():
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--analyse")
     ap.add_argument("--resume", help="campaign to continue (mc.run_many resumes by chunk identity)")
+    ap.add_argument("--pfd", default="custom", choices=("custom", "sc"))
     a = ap.parse_args()
+    global PFD
+    PFD = a.pfd
     camp = (ROOT / (a.analyse or a.resume)) if (a.analyse or a.resume) else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     lets = {f"q{i}": f"q{i}" for i in range(len(PHASES))} | {"upw": "upw", "dnw": "dnw"}
     jobs, owners = [], []

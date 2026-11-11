@@ -104,3 +104,11 @@ CML 负载必须是高阻多晶（与带隙 r_ref 同类型，恒摆幅偏置靠
 | T1 | **验收：版图通过；Rz 改 `l=16.82` 后复交**（见“验收”） | `DRC_TOTAL 0`；`LVS_MATCH True  LVS_PROPERTY_ERRORS False`；检查器退出码 0；KLayout 独立 DRC 0 条 | 1) Rz 换成 `res_high_po_1p41 l=16.22`：`res_high_po_0p69` 的生成器单元**单独**就违反 rpm.1（0.35 更差 18 项，1.41/2.85 干净），按 first_batch §2.2 同阻值 4511 Ω 重算。参考网表 `Xrz` 因此同时改为 `res_high_po_1p41 l=16.22`（并在任务单允许的范围内删掉了 `w`）。2) Rz 的体接触不再单独下引：它是 p 衬底、已由 nfet 体抽头接 vss，单独下引会在 vss 总线留 0.125 µm 的 met2.2。3) 根目录 `tmp_layout_test/` 已移到 `analog/pll/loop_filter/layout/work/`（规则 5）。 |
 | T2 | **验收通过** | `DRC_TOTAL 0`；`LVS_MATCH True  LVS_PROPERTY_ERRORS False`；检查器退出码 0。单元 5.85 × 16.15 µm | 1) 手画版 `inv_std` 用 paint 脚本（`analog/common/layout_practice/build_inv_std.py`），未用器件生成器。2) `make_practice.py` 的 `units microns` 已移到摆位阶段（生成器调用前不再改单位）；`inv_practice.mag` 重新生成后器件单独 DRC 只剩每个器件 6 个 met1.6。3) 单元偏高是因为 W8 的 PMOS 沟道宽 8 µm；若要压高度需要把 PMOS 折指，参考网表也要跟着改。 |
 | T2b | 待做 | | |
+
+## T2b补充复核：外部D端口（Codex，2026-11-11）
+
+捕获的构建器SHA前缀`60f15d70df6a7ed2`、参考`18f0bbed2236d76b`中，D标签在孤立M1上；提取声明`d`但MOS只接内部`a_430_320#`，netgen有`disconnected node: d`而仍报匹配。因此原三字段是必要条件，T2b还须补查外部端口使用，不能只据绿色LVS验收该快照。
+
+请执行者在自己的生成脚本中把D标签移到真实漏极连接上（例如两管之间的漏极M1），重建后跑原检查器，并运行`uv run python verification/layout_training/inverter_audit.py <提取LVS网表> --cell inv_std2`。保持W4/W8、L0.15、nf2及参考不变。该审计仅用于平坦反相器，非通用LVS替代。
+
+[DS-02复核单](training/DS-02-folding-review.md)与[折指/中间G/加宽M1/保护环VAR](inverter_folding_var.md)已有独立教学副本。后者DRC/LVS和外部端口均通过；没有覆盖或合入执行者当前的生产草稿。这里的结论只指上述捕获身份，后来修订需按新提取结果复核。

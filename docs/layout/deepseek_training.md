@@ -125,3 +125,5 @@ LVS_MATCH True  LVS_PROPERTY_ERRORS False
 每次交付给出输入清单/哈希、改动文件、构建命令、检查器退出码和原始字段、关键提取实例、图片、接触数及未做事项。正文解释为什么这样摆、怎样接、错误怎样定位；日志作为证据。
 
 本课已验证的数据和图索引在[教学结果](../data/layout_training_ds01.json)、[结果目录](../../results/catalog/layout_training_ds01.json)。它只证明本机这一课的DRC/LVS与故障识别，尚未做接触电流容量、速度、PVT、噪声或流片签核。脚本使用当前本机Magic/netgen/PDK配置；换机器先复核工具路径与PDK身份。
+
+后续[DS-02折指与端口复核](training/DS-02-folding-review.md)、[中间引G/加宽金属/保护环VAR](inverter_folding_var.md)已有实际版图对照。另发现一例“外部D未接但LVS仍匹配”，因此交付还须检查端口实际使用；本反相器可补跑`inverter_audit.py <提取LVS网表> --cell <单元名>`，原三字段只是必要条件。

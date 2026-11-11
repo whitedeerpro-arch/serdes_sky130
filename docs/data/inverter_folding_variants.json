@@ -1,0 +1,812 @@
+{
+  "status": "local_layout_VARs_verified; no_production_adoption",
+  "summary": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/summary.json",
+  "summary_sha256": "eda2962b140fc44e85339a9ecca87b95d4313827b2fec9998c0ccb5d3c50b718",
+  "rows": {
+    "captured_seed": {
+      "build_exit": 0,
+      "checker_exit": 0,
+      "port_and_width_audit": {
+        "status": "fail",
+        "errors": [
+          "unused exported port: d",
+          "X0: does not connect the exported inverter nets",
+          "X1: does not connect the exported inverter nets",
+          "X2: does not connect the exported inverter nets",
+          "X3: does not connect the exported inverter nets"
+        ],
+        "ports": [
+          "d",
+          "g",
+          "vdd",
+          "vss"
+        ],
+        "port_usage": {
+          "d": [],
+          "g": [
+            "X0.G",
+            "X1.G",
+            "X2.G",
+            "X3.G"
+          ],
+          "vdd": [
+            "X1.D",
+            "X1.B",
+            "X3.S",
+            "X3.B"
+          ],
+          "vss": [
+            "X0.S",
+            "X0.B",
+            "X2.D",
+            "X2.B"
+          ]
+        },
+        "devices": [
+          {
+            "instance": "X0",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "a_430_320#",
+              "G": "g",
+              "S": "vss",
+              "B": "vss"
+            },
+            "w_um": 2.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 0.85,
+              "pd": 2.85,
+              "as": 1.6,
+              "ps": 5.6,
+              "w": 2.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X1",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "vdd",
+              "G": "g",
+              "S": "a_430_320#",
+              "B": "vdd"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 5.8,
+              "pd": 10.9,
+              "as": 1.7,
+              "ps": 4.85,
+              "w": 4.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X2",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "vss",
+              "G": "g",
+              "S": "a_430_320#",
+              "B": "vss"
+            },
+            "w_um": 2.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 2.9,
+              "pd": 6.9,
+              "as": 0.85,
+              "ps": 2.85,
+              "w": 2.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X3",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "a_430_320#",
+              "G": "g",
+              "S": "vdd",
+              "B": "vdd"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 1.7,
+              "pd": 4.85,
+              "as": 3.2,
+              "ps": 9.6,
+              "w": 4.0,
+              "l": 0.15
+            }
+          }
+        ],
+        "total_w_um": {
+          "n": 4.0,
+          "p": 8.0
+        },
+        "output_junction": {
+          "n": {
+            "output_diffusion_area_um2": null,
+            "output_diffusion_perimeter_um": null,
+            "reason": "exported D has no device connection"
+          },
+          "p": {
+            "output_diffusion_area_um2": null,
+            "output_diffusion_perimeter_um": null,
+            "reason": "exported D has no device connection"
+          }
+        },
+        "scope": "Flat inverter D/G/S/B and N4/P8/L0.15 only; AD/AS are \u00b5m\u00b2 and PD/PS \u00b5m in this Magic view; no arbitrary hierarchy or electrical signoff."
+      },
+      "cell": "inv_std2",
+      "paths": {
+        "builder": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/build_inv_std2.py",
+        "reference": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2_ref.spice",
+        "mag": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2.mag",
+        "lvs": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2_lvs.spice",
+        "pex": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2_pex.spice",
+        "log": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/check.log"
+      },
+      "files_sha256": {
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/build_inv_std2.py": "60f15d70df6a7ed2dc182dae476f9e85046f58ed248b1f1513bbaafcae019dea",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2_ref.spice": "18f0bbed2236d76b97bb7f345b66944c40b4aa16f47bac61a438b2717da11ccb",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2.mag": "052af97fa1a5fc2973275fc566f2237c82459c72b44c3a275f57697b82a2abbe",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2_lvs.spice": "b8cbe7b1d605e6c1cf8a5e0c2ac416cc77a79136b0e3a45640f366c6d4ef9dea",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/analog/common/layout_practice/inv_std2_pex.spice": "f847b0b73564f298f05b642010e546d6ac4183f832844fba92ca74285c6257c7",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/captured_seed/check.log": "cb8a37c27a71b7f79227e0cd6ff567a6aaa5f760a2fe03f0b96b9a9ba03f9af7"
+      },
+      "audit_reproduced": true,
+      "drawn_bounds_um": [
+        0.3,
+        0.85,
+        5.4,
+        11.4
+      ],
+      "drawn_bbox_area_um2": 53.80500000000001,
+      "explicit_cap": null
+    },
+    "straight_compact_mid_wide": {
+      "build_exit": 0,
+      "checker_exit": 0,
+      "port_and_width_audit": {
+        "status": "pass",
+        "errors": [],
+        "ports": [
+          "d",
+          "g",
+          "vdd",
+          "vss"
+        ],
+        "port_usage": {
+          "d": [
+            "X0.D",
+            "X1.D"
+          ],
+          "g": [
+            "X0.G",
+            "X1.G"
+          ],
+          "vdd": [
+            "X0.S",
+            "X0.B"
+          ],
+          "vss": [
+            "X1.S",
+            "X1.B"
+          ]
+        },
+        "devices": [
+          {
+            "instance": "X0",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "d",
+              "G": "g",
+              "S": "vdd",
+              "B": "vdd"
+            },
+            "w_um": 8.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 6.8,
+              "pd": 17.7,
+              "as": 11.2,
+              "ps": 18.8,
+              "w": 8.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X1",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "d",
+              "G": "g",
+              "S": "vss",
+              "B": "vss"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 3.4,
+              "pd": 9.7,
+              "as": 5.6,
+              "ps": 10.8,
+              "w": 4.0,
+              "l": 0.15
+            }
+          }
+        ],
+        "total_w_um": {
+          "n": 4.0,
+          "p": 8.0
+        },
+        "output_junction": {
+          "n": {
+            "output_diffusion_area_um2": 3.4,
+            "output_diffusion_perimeter_um": 9.7
+          },
+          "p": {
+            "output_diffusion_area_um2": 6.8,
+            "output_diffusion_perimeter_um": 17.7
+          }
+        },
+        "scope": "Flat inverter D/G/S/B and N4/P8/L0.15 only; AD/AS are \u00b5m\u00b2 and PD/PS \u00b5m in this Magic view; no arbitrary hierarchy or electrical signoff."
+      },
+      "cell": "inv_std",
+      "paths": {
+        "builder": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/build_inv_std.py",
+        "reference": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std_ref.spice",
+        "mag": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std.mag",
+        "lvs": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std_lvs.spice",
+        "pex": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std_pex.spice",
+        "log": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/check.log"
+      },
+      "files_sha256": {
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/build_inv_std.py": "767e3f41a42802c4b3531de55d8899b563bcd3b5a07b052978b7d67b378593a8",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std_ref.spice": "576398a5a71026e0eca559712b9fa8d21479d1b4675f761eeede20c16a4fa4df",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std.mag": "a1c5147af899441f826d13a317fa2d7f07505766e037c9fe4f05b929f060bfe4",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std_lvs.spice": "ed7c3fdb0e4e533c7bf7d0b46e073c7e1a9eda06e873047745646515316b54fa",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/analog/common/layout_practice/inv_std_pex.spice": "19cc0c4c15b6b6e38e0b887b0bcfd2fbdc53134e6ace1b990c5bc5f2dc6e6256",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/straight_compact_mid_wide/check.log": "bbc79f658c94280f3f0ced428c3b71507acdfcef915d64ffd7b9c855f4c3d180"
+      },
+      "audit_reproduced": true,
+      "drawn_bounds_um": [
+        0.2,
+        0.175,
+        6.4,
+        16.625
+      ],
+      "drawn_bbox_area_um2": 101.99,
+      "explicit_cap": {
+        "explicit_output_cap_sum_fF": 2.20098,
+        "elements": [
+          {
+            "instance": "C0",
+            "nodes": [
+              "g",
+              "d"
+            ],
+            "fF": 0.15425000000000003
+          },
+          {
+            "instance": "C2",
+            "nodes": [
+              "vdd",
+              "d"
+            ],
+            "fF": 0.90581
+          },
+          {
+            "instance": "C3",
+            "nodes": [
+              "d",
+              "vss"
+            ],
+            "fF": 1.14092
+          }
+        ],
+        "scope": "Explicit Magic capacitors incident on D only; not total or bias-dependent Cout; MOS junction/overlap models remain separate."
+      }
+    },
+    "fold2_mid_wide": {
+      "build_exit": 0,
+      "checker_exit": 0,
+      "port_and_width_audit": {
+        "status": "pass",
+        "errors": [],
+        "ports": [
+          "d",
+          "g",
+          "vdd",
+          "vss"
+        ],
+        "port_usage": {
+          "d": [
+            "X0.D",
+            "X1.S",
+            "X2.S",
+            "X3.D"
+          ],
+          "g": [
+            "X0.G",
+            "X1.G",
+            "X2.G",
+            "X3.G"
+          ],
+          "vdd": [
+            "X1.D",
+            "X1.B",
+            "X3.S",
+            "X3.B"
+          ],
+          "vss": [
+            "X0.S",
+            "X0.B",
+            "X2.D",
+            "X2.B"
+          ]
+        },
+        "devices": [
+          {
+            "instance": "X0",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "d",
+              "G": "g",
+              "S": "vss",
+              "B": "vss"
+            },
+            "w_um": 2.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 0.85,
+              "pd": 2.85,
+              "as": 1.6,
+              "ps": 5.6,
+              "w": 2.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X1",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "vdd",
+              "G": "g",
+              "S": "d",
+              "B": "vdd"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 5.8,
+              "pd": 10.9,
+              "as": 1.7,
+              "ps": 4.85,
+              "w": 4.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X2",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "vss",
+              "G": "g",
+              "S": "d",
+              "B": "vss"
+            },
+            "w_um": 2.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 2.9,
+              "pd": 6.9,
+              "as": 0.85,
+              "ps": 2.85,
+              "w": 2.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X3",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "d",
+              "G": "g",
+              "S": "vdd",
+              "B": "vdd"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 1.7,
+              "pd": 4.85,
+              "as": 3.2,
+              "ps": 9.6,
+              "w": 4.0,
+              "l": 0.15
+            }
+          }
+        ],
+        "total_w_um": {
+          "n": 4.0,
+          "p": 8.0
+        },
+        "output_junction": {
+          "n": {
+            "output_diffusion_area_um2": 1.7,
+            "output_diffusion_perimeter_um": 5.7
+          },
+          "p": {
+            "output_diffusion_area_um2": 3.4,
+            "output_diffusion_perimeter_um": 9.7
+          }
+        },
+        "scope": "Flat inverter D/G/S/B and N4/P8/L0.15 only; AD/AS are \u00b5m\u00b2 and PD/PS \u00b5m in this Magic view; no arbitrary hierarchy or electrical signoff."
+      },
+      "cell": "inv_std2",
+      "paths": {
+        "builder": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/build_inv_std2.py",
+        "reference": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2_ref.spice",
+        "mag": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2.mag",
+        "lvs": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2_lvs.spice",
+        "pex": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2_pex.spice",
+        "log": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/check.log"
+      },
+      "files_sha256": {
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/build_inv_std2.py": "4f3c7a80cd9503d0e7db82d91fc384e21b5a06616b6b0ea89b6fa1733a919bdb",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2_ref.spice": "18f0bbed2236d76b97bb7f345b66944c40b4aa16f47bac61a438b2717da11ccb",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2.mag": "501dcf28a083878c64faf50b6280538d4f46049732b76aacd16057dad9178aad",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2_lvs.spice": "92aaeb2c2244cc9151685195ebe780e758d819537944f071b0bc0d5a6ac1cc9a",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/analog/common/layout_practice/inv_std2_pex.spice": "aeffaee0c8c9dfec91455d76442643a73f9474e1a9b0733b05a6c99fcda36e65",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide/check.log": "2b73d2362e22575fc696bb5adbe41da6668c242a88f7c77d63037d9342cff1bc"
+      },
+      "audit_reproduced": true,
+      "drawn_bounds_um": [
+        -0.2,
+        0.675,
+        5.4,
+        11.4
+      ],
+      "drawn_bbox_area_um2": 60.06,
+      "explicit_cap": {
+        "explicit_output_cap_sum_fF": 1.5535100000000002,
+        "elements": [
+          {
+            "instance": "C0",
+            "nodes": [
+              "g",
+              "d"
+            ],
+            "fF": 0.14366000000000004
+          },
+          {
+            "instance": "C2",
+            "nodes": [
+              "vdd",
+              "d"
+            ],
+            "fF": 0.45126000000000005
+          },
+          {
+            "instance": "C3",
+            "nodes": [
+              "d",
+              "vss"
+            ],
+            "fF": 0.95859
+          }
+        ],
+        "scope": "Explicit Magic capacitors incident on D only; not total or bias-dependent Cout; MOS junction/overlap models remain separate."
+      }
+    },
+    "fold2_mid_wide_ring": {
+      "build_exit": 0,
+      "checker_exit": 0,
+      "port_and_width_audit": {
+        "status": "pass",
+        "errors": [],
+        "ports": [
+          "d",
+          "g",
+          "vdd",
+          "vss"
+        ],
+        "port_usage": {
+          "d": [
+            "X0.D",
+            "X1.S",
+            "X2.S",
+            "X3.D"
+          ],
+          "g": [
+            "X0.G",
+            "X1.G",
+            "X2.G",
+            "X3.G"
+          ],
+          "vdd": [
+            "X1.D",
+            "X1.B",
+            "X3.S",
+            "X3.B"
+          ],
+          "vss": [
+            "X0.S",
+            "X0.B",
+            "X2.D",
+            "X2.B"
+          ]
+        },
+        "devices": [
+          {
+            "instance": "X0",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "d",
+              "G": "g",
+              "S": "vss",
+              "B": "vss"
+            },
+            "w_um": 2.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 0.85,
+              "pd": 2.85,
+              "as": 1.6,
+              "ps": 5.6,
+              "w": 2.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X1",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "vdd",
+              "G": "g",
+              "S": "d",
+              "B": "vdd"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 5.8,
+              "pd": 10.9,
+              "as": 1.7,
+              "ps": 4.85,
+              "w": 4.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X2",
+            "kind": "n",
+            "model": "sky130_fd_pr__nfet_01v8",
+            "terminals": {
+              "D": "vss",
+              "G": "g",
+              "S": "d",
+              "B": "vss"
+            },
+            "w_um": 2.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 2.9,
+              "pd": 6.9,
+              "as": 0.85,
+              "ps": 2.85,
+              "w": 2.0,
+              "l": 0.15
+            }
+          },
+          {
+            "instance": "X3",
+            "kind": "p",
+            "model": "sky130_fd_pr__pfet_01v8",
+            "terminals": {
+              "D": "d",
+              "G": "g",
+              "S": "vdd",
+              "B": "vdd"
+            },
+            "w_um": 4.0,
+            "l_um": 0.15,
+            "params": {
+              "ad": 1.7,
+              "pd": 4.85,
+              "as": 3.2,
+              "ps": 9.6,
+              "w": 4.0,
+              "l": 0.15
+            }
+          }
+        ],
+        "total_w_um": {
+          "n": 4.0,
+          "p": 8.0
+        },
+        "output_junction": {
+          "n": {
+            "output_diffusion_area_um2": 1.7,
+            "output_diffusion_perimeter_um": 5.7
+          },
+          "p": {
+            "output_diffusion_area_um2": 3.4,
+            "output_diffusion_perimeter_um": 9.7
+          }
+        },
+        "scope": "Flat inverter D/G/S/B and N4/P8/L0.15 only; AD/AS are \u00b5m\u00b2 and PD/PS \u00b5m in this Magic view; no arbitrary hierarchy or electrical signoff."
+      },
+      "cell": "inv_std2",
+      "paths": {
+        "builder": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/build_inv_std2.py",
+        "reference": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2_ref.spice",
+        "mag": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2.mag",
+        "lvs": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2_lvs.spice",
+        "pex": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2_pex.spice",
+        "log": "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/check.log"
+      },
+      "files_sha256": {
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/build_inv_std2.py": "a441119dc5646f536e026e15528f9649ceff156789b53118461349e64b5b84c6",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2_ref.spice": "18f0bbed2236d76b97bb7f345b66944c40b4aa16f47bac61a438b2717da11ccb",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2.mag": "3c307ec162776c6fd872829794e5c998634a80969502c3bc0bf8bbcf2d9c221b",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2_lvs.spice": "92aaeb2c2244cc9151685195ebe780e758d819537944f071b0bc0d5a6ac1cc9a",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/analog/common/layout_practice/inv_std2_pex.spice": "928233bce39525f7e4776ec09398529e63f008422a10f9b1a884bf957989f170",
+        "results/layout_training/folded/20261111T123749.246896Z_cc6dd642/fold2_mid_wide_ring/check.log": "7f4c887ca3b5b1c028f8dd040ae9d55c21803860f5f85f441e3f502c6c7cc523"
+      },
+      "audit_reproduced": true,
+      "drawn_bounds_um": [
+        -2.6,
+        -1.2,
+        8.3,
+        13.1
+      ],
+      "drawn_bbox_area_um2": 155.87,
+      "explicit_cap": {
+        "explicit_output_cap_sum_fF": 2.44275,
+        "elements": [
+          {
+            "instance": "C0",
+            "nodes": [
+              "vdd",
+              "d"
+            ],
+            "fF": 0.49801000000000006
+          },
+          {
+            "instance": "C1",
+            "nodes": [
+              "g",
+              "d"
+            ],
+            "fF": 0.16175
+          },
+          {
+            "instance": "C3",
+            "nodes": [
+              "d",
+              "vss"
+            ],
+            "fF": 1.7829900000000003
+          }
+        ],
+        "scope": "Explicit Magic capacitors incident on D only; not total or bias-dependent Cout; MOS junction/overlap models remain separate."
+      }
+    }
+  },
+  "original_straight": {
+    "mag": "results/layout_training/ds01/20261111T120947.870840Z_d29f6771/student/analog/common/layout_practice/inv_std.mag",
+    "mag_sha256": "4cfdbf759ac7b912b4ee77ee10d5eb361be8eb873df1da63586b58dbad4e7b6f",
+    "lvs": "results/layout_training/ds01/20261111T120947.870840Z_d29f6771/student/analog/common/layout_practice/inv_std_lvs.spice",
+    "lvs_sha256": "d837898ac5bc11f5487843c75d21640f6d280b7e3ae16b82f9ba2c32112125d1",
+    "audit": {
+      "status": "pass",
+      "errors": [],
+      "ports": [
+        "d",
+        "g",
+        "vdd",
+        "vss"
+      ],
+      "port_usage": {
+        "d": [
+          "X0.D",
+          "X1.D"
+        ],
+        "g": [
+          "X0.G",
+          "X1.G"
+        ],
+        "vdd": [
+          "X0.S",
+          "X0.B"
+        ],
+        "vss": [
+          "X1.S",
+          "X1.B"
+        ]
+      },
+      "devices": [
+        {
+          "instance": "X0",
+          "kind": "p",
+          "model": "sky130_fd_pr__pfet_01v8",
+          "terminals": {
+            "D": "d",
+            "G": "g",
+            "S": "vdd",
+            "B": "vdd"
+          },
+          "w_um": 8.0,
+          "l_um": 0.15,
+          "params": {
+            "ad": 14.8,
+            "pd": 19.7,
+            "as": 11.2,
+            "ps": 18.8,
+            "w": 8.0,
+            "l": 0.15
+          }
+        },
+        {
+          "instance": "X1",
+          "kind": "n",
+          "model": "sky130_fd_pr__nfet_01v8",
+          "terminals": {
+            "D": "d",
+            "G": "g",
+            "S": "vss",
+            "B": "vss"
+          },
+          "w_um": 4.0,
+          "l_um": 0.15,
+          "params": {
+            "ad": 7.4,
+            "pd": 11.7,
+            "as": 5.6,
+            "ps": 10.8,
+            "w": 4.0,
+            "l": 0.15
+          }
+        }
+      ],
+      "total_w_um": {
+        "n": 4.0,
+        "p": 8.0
+      },
+      "output_junction": {
+        "n": {
+          "output_diffusion_area_um2": 7.4,
+          "output_diffusion_perimeter_um": 11.7
+        },
+        "p": {
+          "output_diffusion_area_um2": 14.8,
+          "output_diffusion_perimeter_um": 19.7
+        }
+      },
+      "scope": "Flat inverter D/G/S/B and N4/P8/L0.15 only; AD/AS are \u00b5m\u00b2 and PD/PS \u00b5m in this Magic view; no arbitrary hierarchy or electrical signoff."
+    }
+  },
+  "publisher_snapshot": "results/layout_training/folded_publication/20261111T124913.423372Z/publisher.py",
+  "publisher_sha256": "b7e6b7015d34496f6df6c1c62af9b8a2eb238ee58e1ec7b822426df6d414227a",
+  "audit_source_sha256": "dbc9e1d663b357b9e8ce4970fc1ee14ae676554c0059d56148513e452cd4ab90",
+  "scope": "Compared extracted AD/AS and PD/PS of actual output terminals, including reversed D/S fingers. Explicit PEX capacitors are separate from MOS intrinsic junction/overlap capacitance. Wider metal, central G and ring routing are candidates, not timing/noise/current/latch-up qualification."
+}

@@ -45,7 +45,7 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 | 想看 | 去哪里 |
 |---|---|
-| DeepSeek/其他执行者如何开始画版图 | [配图入门与实际正反例](docs/layout/deepseek_training.md)、[可直接派发的DS-01](docs/layout/training/DS-01-inverter.md)、[生产任务单](docs/layout/tasks.md) |
+| DeepSeek/其他执行者如何开始画版图 | [入门与正反例](docs/layout/deepseek_training.md)、[DS-01](docs/layout/training/DS-01-inverter.md)、[折指/中间G/保护环VAR](docs/layout/inverter_folding_var.md)、[生产任务单](docs/layout/tasks.md) |
 | 规格、架构、版本 | [docs/overview](docs/overview/) |
 | 模块层次、边界、模型与迭代 | [交互工作台](web/design/index.html)、[使用说明](web/design/README.md)、[详细验证范围](docs/overview/development_map.md) |
 | 各模块当前设计 | [docs/design](docs/design/) |

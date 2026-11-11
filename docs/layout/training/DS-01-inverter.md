@@ -22,7 +22,7 @@ Xp d g vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
 3. 阅读`<工作目录>/student/analog/common/layout_practice/build_inv_std.py`。指出阱、有源区、栅、接触、漏极连接和四个端口分别由哪段代码生成。
 4. 用`contacts_example.py <工作目录>`学习已验证的接触列解答，再执行`run <工作目录>`。你也可另建新目录自己重做，只改学生构建器；已有编辑时解答不会覆盖。
 5. 用`fault-demo <工作目录>`看断开漏极的反例。解释为什么DRC仍为0，而LVS的网络数从4变5。保留检查器真实退出码；教学程序捕获预期失败不等于故障版图通过。
-6. 用`verify <工作目录>`确认参考、工具和PDK指纹未变。查看对应`attempts/<id>/summary.json`及日志，完成交付。
+6. 用`verify <工作目录>`确认参考、工具和PDK指纹未变；另跑`uv run python verification/layout_training/inverter_audit.py <student目录里的inv_std_lvs.spice> --cell inv_std`，补查外部引脚实际使用。查看对应`attempts/<id>/summary.json`及日志，完成交付。
 
 以上子命令均指`uv run python verification/layout_training/run.py …`；解答入口是`uv run python verification/layout_training/contacts_example.py …`。每次明确传工作目录，不扫描“最新一次”。
 

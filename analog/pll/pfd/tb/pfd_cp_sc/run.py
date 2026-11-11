@@ -48,10 +48,14 @@ VARIANTS = {
     "custom": None,
     "sc": SC.format(dly="", rdx="rd2"),
     "sc_dly": SC.format(dly="Xd3 rd2 vss vss vdd vdd rd3 sky130_fd_sc_hd__dlygate4sd1_1\n", rdx="rd3"),
+    "sc8_dly": None,  # filled below from sc8
     "sc8": SC.format(dly="", rdx="rd2").replace("vdd ub sky130_fd_sc_hd__inv_2", "vdd ub sky130_fd_sc_hd__inv_4")
           .replace("vdd db sky130_fd_sc_hd__inv_2", "vdd db sky130_fd_sc_hd__inv_4")
           .replace("vdd up sky130_fd_sc_hd__inv_4", "vdd up sky130_fd_sc_hd__inv_8").replace("vdd dn sky130_fd_sc_hd__inv_4", "vdd dn sky130_fd_sc_hd__inv_8"),
 }
+
+
+VARIANTS["sc8_dly"] = VARIANTS["sc8"].replace("Xclear rst_b rd2 vss", "Xd3 rd2 vss vss vdd vdd rd3 sky130_fd_sc_hd__dlygate4sd1_1\nXclear rst_b rd3 vss")
 
 
 def deck(c, vout, variant):

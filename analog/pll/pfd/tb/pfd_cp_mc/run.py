@@ -62,11 +62,11 @@ def netlist(c, vout):
     old = "Ibuf vdd ibuf 10u"
     assert text.count(old) == 1 and "vgi_bias" in text
     text = text.replace(old, "XIbuf ibuf vgi_bias vdd serdes_bias_pcopy n=4")
-    if PFD == "sc":
+    if PFD in ("sc", "sc_dly"):
         old = "Xpfd ref fb rst_b up dn vdd 0 pll_pfd"
         assert text.count(old) == 1
         inc = f'.include "{SC_LIB}"\n.include "{ROOT / "analog/pll/pfd/spice/pfd_sc.spice"}"\n'
-        text = text.replace(old, inc + "Xpfd ref fb rst_b up dn vdd 0 pll_pfd_sc")
+        text = text.replace(old, inc + f"Xpfd ref fb rst_b up dn vdd 0 pll_pfd_{PFD}")
     text, n = re.subn(r'^(\.lib\s+"[^"]+"\s+)(\w+)\s*$', lambda m: m[1] + f"{c.process}_mm", text, count=1, flags=re.M | re.I)
     assert n == 1
     return text
@@ -122,7 +122,7 @@ def main():
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--analyse")
     ap.add_argument("--resume", help="campaign to continue (mc.run_many resumes by chunk identity)")
-    ap.add_argument("--pfd", default="custom", choices=("custom", "sc"))
+    ap.add_argument("--pfd", default="custom", choices=("custom", "sc", "sc_dly"))
     a = ap.parse_args()
     global PFD
     PFD = a.pfd

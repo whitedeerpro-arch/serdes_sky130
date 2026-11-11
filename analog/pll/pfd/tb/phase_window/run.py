@@ -9,6 +9,7 @@ The spacer keeps fb's low time >= 1.1 ns: back-to-back +800 / -800 ps periods le
 ~0.8 ns at SS 1.65 V -40 C) missed an fb edge.  Per test period the xor pulse width (integral of e / VDD over the
 period) is checked against |phase| (a missed edge gives a ns-long pulse).  Threshold = midpoint between the largest
 |phase| that leaves the flag clear and the smallest that sets it (per sign); a non-monotonic flag pattern is reported.
+--pfd sc_dly replaces pll_pfd by the standard-cell pll_pfd_sc_dly (analog/pll/pfd/spice/pfd_sc.spice, layout choice).
 Requirement (pll_lock_detect.sv): the threshold above the locked static offset at every condition (PFD + CP MC:
 |mean| + k sd 51-189 ps), far below acquisition errors (ns).
 """
@@ -26,6 +27,8 @@ from serdes_flow.project import ROOT
 HERE = Path(__file__).resolve().parent
 TEMPLATE = HERE / "tb_phase_window_ngspice.cir.in"
 RESULTS = ROOT / "results/analog/pll/pfd/phase_window"
+SC_LIB = "/home/host/.volare/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice"
+PFD = "custom"
 MAG = [0, 60, 120, 150, 180, 210, 240, 270, 300, 350, 400, 450, 500, 600, 700, 800, 900]
 PHASES = [0.0] + [s * m * 1e-12 for m in MAG[1:] for s in (1, -1)]
 TREF, T0, TR, TREAD, WARM = 4e-9, 2e-9, 30e-12, 2.5e-9, 2
@@ -61,6 +64,11 @@ def pwls(v):
 def deck(proc, v, params):
     ref, fb, clr, times, tend = pwls(v)
     text = spice.render(TEMPLATE, **spice.corner_values(Condition(proc, v, 27)), REF_PWL=ref, FB_PWL=fb, CLR_PWL=clr, PW_PARAMS=params)
+    if PFD != "custom":
+        inst = "Xpfd ref fb rst_b up dn vdd 0 pll_pfd"
+        assert text.count(inst + "\n") == 1
+        inc = f'.include "{SC_LIB}"\n.include "{ROOT / "analog/pll/pfd/spice/pfd_sc.spice"}"\n'
+        text = text.replace(inst + "\n", inc + f"{inst}_{PFD}\n")
     lines = [".control", "set num_threads=1", "set wr_vecnames", "set wr_singlescale"]
     names = [f"f{k}" for k in range(len(PHASES))] + [f"a{k}" for k in range(len(PHASES))]
     for t in TEMP_C:
@@ -87,7 +95,10 @@ def main():
     ap.add_argument("--params", default="cd=10f")
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--analyse", help="campaign to re-read without simulating")
+    ap.add_argument("--pfd", default="custom", choices=("custom", "sc_dly"))
     a = ap.parse_args()
+    global PFD
+    PFD = a.pfd
     camp = ROOT / a.analyse if a.analyse else RESULTS / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     if not a.analyse:
         jobs = [(deck(p, v, a.params), camp / f"{p}_v{round(v * 1000)}", dict(timeout_s=3600, meta=dict(process=p, supply=v)))
@@ -112,7 +123,7 @@ def main():
                 tn, mn = threshold(flags, -1)
                 rows.append(dict(process=p, supply=v, temp=t, flags=flags, th_pos=tp, th_neg=tn, monotonic=bool(mp and mn),
                                  zero_clear=not flags[0], xor_width_dev_s=[min(dev), max(dev)], pulses_ok=all(abs(d) < PULSE_TOL for d in dev)))
-    (camp / "summary.json").write_text(json.dumps(dict(params=a.params, phases=PHASES, rows=rows), indent=1))
+    (camp / "summary.json").write_text(json.dumps(dict(params=a.params, pfd=a.pfd, phases=PHASES, rows=rows), indent=1))
     ths = [x for r in rows for x in (r["th_pos"], r["th_neg"]) if x is not None]
     lo = min(rows, key=lambda r: min(x for x in (r["th_pos"], r["th_neg"]) if x is not None) if ths else 0)
     hi = max(rows, key=lambda r: max(x for x in (r["th_pos"], r["th_neg"]) if x is not None) if ths else 0)

@@ -4,6 +4,7 @@ Not an AC PSRR measurement, setup/hold qualification or independent-rail Kd.
 Only same-bit, unique events are compared. No simulator is launched.
 """
 from datetime import datetime, timezone
+from collections import Counter
 import hashlib
 import importlib.util
 import json
@@ -162,7 +163,20 @@ def main():
     body = json.dumps(result, indent=2, allow_nan=False) + '\n'
     (out / 'summary.json').write_text(body)
     data = ROOT / 'docs/data/tx_relative_timing_screen.json'
-    data.write_text(body)
+    # Detailed per-event records stay in the append-only results tree. Publish
+    # small corner summaries and fixed examples, rather than duplicating all
+    # 5,850 events plus the voltage-matched records in git.
+    compact = dict(result)
+    compact['rows'] = [dict({k: v for k, v in r.items() if k != 'events'},
+        event_status_counts=dict(Counter(e['status'] for e in r['events'])),
+        bit296_example=next(e for e in r['events'] if e['bit'] == 296)) for r in result['rows']]
+    compact['groups'] = {tag: dict({k: v for k, v in g.items() if k != 'matched_events'},
+        common_events_by_branch_value={f'{b}_{v}': sum(e['branch'] == b and e['value'] == v for e in g['matched_events'])
+                                      for b in ('a', 'b') for v in (0, 1)},
+        bit296_example=next(e for e in g['matched_events'] if e['bit'] == 296)) for tag, g in result['groups'].items()}
+    compact['analysis_sha256'] = sha(out / 'summary.json')
+    compact['publication_scope'] = 'Corner summaries and fixed bit296 examples; complete per-event records remain in analysis.'
+    data.write_text(json.dumps(compact, indent=2, allow_nan=False) + '\n')
     groups = sorted(result['groups'].items())
     fig, axes = plt.subplots(2, 1, figsize=(11.5, 6.5), layout='constrained')
     for direction, marker in [(0, 'o'), (1, 's')]:

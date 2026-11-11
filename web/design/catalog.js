@@ -595,7 +595,7 @@ window.DESIGN_CATALOG = {
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
       "state": "45点眼图；尺寸迭代未收敛",
-      "summary": "当前extra5/WT16R240与输出级候选MOS45点眼图通过，内部幅度I-17仍开。分级尾宽局部八位满足，完整FS焊盘0.179857UI失败、SS冷extra最高436mV超幅，不采用。先补幅度/时序/负载联合模型再选参数；原生静态8完整/2数值缺失。",
+      "summary": "当前extra5/WT16R240与输出级MOS45点眼图通过，I-17仍开。分级尾宽候选完整FS散布/SS冷幅度失败。整载荷需求卡FS/SS各八点已测：FS仅+20ps×1.1输入点满足且焊盘仅0.74ps余量；SS×1.1达424mV超幅。动态模型仍缺重末级/共模/其他PVT，未选新尺寸。",
       "facts": {
         "设计": "v3 同步结构",
         "PVT": "当前完整TX MOS45点；原生静态8点",
@@ -615,9 +615,9 @@ window.DESIGN_CATALOG = {
       },
       "planning": {
         "question": "幅度上下界与关闭时序在各压力角有没有共同可行区？",
-        "model": "已有路径结构比较和TT/FS幅度卡；当前缺slew/数据到达与关闭、模式相关焊盘响应及跨角误差。",
+        "model": "前四级TT/FS动态模型有尺寸留出；末级/driver整载荷需求卡两角各八点已测，时钟幅度、位序和两端眼图分别评分。重负载/共模及其他PVT未建。",
         "parameters": "各级WN/WT/R与输出尺寸；已试分级尾宽未采用，先补联合约束与模型可信域。",
-        "verification": "局部卡校准及留出验证，再按各约束压力角、45条件和原生接口回归；幅度资格与眼图分开。"
+        "verification": "原始波形和绝对沿先校准；位映射、时钟幅度及两端眼图分别检查；再把消费方需求映射到物理尺寸，留出误差不可忽略。"
       },
       "references": [
         {
@@ -691,6 +691,26 @@ window.DESIGN_CATALOG = {
         {
           "title": "完整压力点复算",
           "path": "docs/data/tx_buffer_sizing_gap.json"
+        },
+        {
+          "title": "末级需求卡与动态模型",
+          "path": "docs/design/tx_retime_demand.md"
+        },
+        {
+          "title": "FS相位与幅度需求",
+          "path": "docs/figures/tx/ingress/tx_retime_demand_fs_surface.png"
+        },
+        {
+          "title": "动态模型留出误差",
+          "path": "docs/figures/tx/ingress/tx_buffer_dynamic_model.png"
+        },
+        {
+          "title": "新数据与沿用值的差异",
+          "path": "docs/figures/tx/ingress/tx_retime_demand_events.png"
+        },
+        {
+          "title": "SS需求与输入超幅",
+          "path": "docs/figures/tx/ingress/tx_retime_demand_ss_surface.png"
         }
       ],
       "iterations": [
@@ -925,6 +945,37 @@ window.DESIGN_CATALOG = {
             {
               "title": "完整压力点复算",
               "path": "docs/data/tx_buffer_sizing_gap.json"
+            }
+          ]
+        },
+        {
+          "id": "20261111T073643Z_64d51af37f",
+          "module": "tx.clocking",
+          "date": "2026-11-11",
+          "timestamp": "2026-11-11T07:36:43.589531+00:00",
+          "title": "整载荷末级需求卡与有留出的动态模型",
+          "phase": "model",
+          "problem": "仅幅度模型与八位切片不能约束完整TX时序，先建立消费方需求及动态预测误差。",
+          "model": "WN24前四级一阶RC+tanh模型，保留整组尺寸留出；消费卡回放整载荷g3/clock/bias，含当前driver及完整直接负载。",
+          "changes": "未改采用DUT。新增原样校准、输入相位/差分scale卡；精确串联PWL分段保留10uV激励精度以降低计算成本。",
+          "validation": "两角基线单端最大0.94mV、绝对沿最大0.19ps，独立自然位序。FS八点仅+20ps×1.1点满足：串化0.1151UI、焊盘0.1470UI；SS同组扫描中。动态模型留出四级误差TT/FS约19/24mV及1.70/1.69ps。",
+          "conclusion": "FS受检输入点焊盘余量仅0.74ps，不直接选物理尺寸。继续SS需求、重末级/共模及模型保护带，再求联合可行区。",
+          "attachments": [
+            {
+              "title": "末级需求卡与动态模型",
+              "path": "docs/design/tx_retime_demand.md"
+            },
+            {
+              "title": "FS相位与幅度需求",
+              "path": "docs/figures/tx/ingress/tx_retime_demand_fs_surface.png"
+            },
+            {
+              "title": "动态模型留出误差",
+              "path": "docs/figures/tx/ingress/tx_buffer_dynamic_model.png"
+            },
+            {
+              "title": "新数据与沿用值的差异",
+              "path": "docs/figures/tx/ingress/tx_retime_demand_events.png"
             }
           ]
         }

@@ -1,0 +1,1204 @@
+{
+  "scope": "TT and FS hot low voltage, ideal recorded PWL local loaded extra5 cut; eight-bit fixed contract only. Local screen is functional plus 75 mV and 0.15 UI; isolation amplitude and full TX/PVT/noise remain open; I-17 is not closed.",
+  "status": "measurement_complete",
+  "campaign": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785",
+  "summary": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785/analysis/20261110T171614Z_e7e517c0/summary.json",
+  "summary_sha256": "1e9d05fed96032a6f8df060053feac6ea01f706eef838e8d4c05d83e5434f5d5",
+  "plan_sha256": "774c06cfe8ab5d455477050931a40db69b449d1613c9937028a3c56e3ea1962f",
+  "sizing_plan_sha256": "5b5cc32878be7a4450fd5cb2e57ea2a08545da1e35631cf4f195a33414b62467",
+  "profile_sha256": "6b826c0b59789d05d01f05d9e0c3012b8809979798990ef0577aa35a0c6bc126",
+  "profile": {
+    "id": "tx_i17_extra5_gain_comparison_v1",
+    "branches": [
+      {
+        "label": "baseline",
+        "wn_um": 24,
+        "wt_um": 16,
+        "r_nominal_ohm": 400
+      },
+      {
+        "label": "tail15",
+        "wn_um": 24,
+        "wt_um": 15,
+        "r_nominal_ohm": 320
+      },
+      {
+        "label": "tail15p6_r300",
+        "wn_um": 24,
+        "wt_um": 15.6,
+        "r_nominal_ohm": 300
+      }
+    ]
+  },
+  "runner_sha256": "c8f11bfb0a49742f3cb144b34a97f5fefe578ba2bc3e341345b81a803edf07f9",
+  "cascade_sha256": "9cd3cce3f1e001b87d871206f3b8a8d372ff8d80dd07865604efd365c13050e0",
+  "publisher_sha256": "801e6de92e6aff1493eca60d89e25b092d0f1b6889fe60c2ee01a92d0b1494b4",
+  "publisher_snapshot": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785/publication_sources/801e6de92e6aff1493eca60d89e25b092d0f1b6889fe60c2ee01a92d0b1494b4.py",
+  "parent_identity": {
+    "data_sha256": "d691b2a8e782bc5c2c8e400c731aeebd05991d1528cc09b8b0681b9c832c8f8d",
+    "summary_sha256": "0b518244cb2b36f0f0c1dbc63fc8b08e66f336acd6ec8878ac54bd13733141eb",
+    "plan_sha256": "2a764c2b6cfd18a7d9964ca576087fa50f0a8e53866f84e0f37c69f93f58a277",
+    "cascade_plan_sha256": "bfb77fca277198bb08fd44c7eca6b90810e09c7877f2dda46895de96836aba01",
+    "evidence": {
+      "tt_v1800_t27": {
+        "tt_v1800_t27.raw": "d2b70967b997cc4980260dd0c6a830f405e87a2e483c1ebaad6538d2c73cd957",
+        "execution.json": "44ad20fe81d32b28c57004eac084e6ecc601c019b67db5eeb226d65e85832035",
+        "tb.cir": "a2a0c87e74cd8803d9d7ae6e45f4b677922cdd1dbaf6918282524f5c0e3d50f8",
+        "simulator.log": "5e144843b149eede13e17f00111b6452c1bb23588a266db5dbf08a31f81326a4"
+      },
+      "fs_v1650_t85": {
+        "fs_v1650_t85.raw": "780a0d8284fa0a4c68d019cc99c81f57df9679058292325bb15b8a56e54e623a",
+        "execution.json": "fca73cb00afb5eea04b067cd3f58d256619ea42cb82f7fbbc4861085cc440db8",
+        "tb.cir": "e07d9994b616a425ac01d92f288067f251a7d036486fa65aa42e488e1cb2583f",
+        "simulator.log": "37da8c1a3bc9e5ec05b62c3eeec53bf048b243ed70ddeedafee494df3023ef0c"
+      }
+    }
+  },
+  "evidence": {
+    "tt_v1800_t27": {
+      "tt_v1800_t27.raw": "1a12b3eb8c566823675aa8da9fa98df3e1d31aa3013abb0b65174a1027e903e4",
+      "execution.json": "4eadd0cf001a99880c2d498c6b62d34acefc7391483d4e198ad89f7acfe175ca",
+      "tb.cir": "096d785839e347c7d7b1ea81d837aba61ab1c4fa942bd2bf8b8246f248f0ce92",
+      "simulator.log": "1d2302e7a4bdaef664702858c78619eaafc676ab6b8ecf76a0cf15a81c9bc3c1"
+    },
+    "fs_v1650_t85": {
+      "fs_v1650_t85.raw": "2b0f6677c0bf0922e9c25a2189419985d73bedb97667e661114554c5884a89a5",
+      "execution.json": "6191f08e2618b2685549850afe111d5f420d6772189722968a967ab623249311",
+      "tb.cir": "929cce7d6cbbef847154d1a9d376fd9604c3fa0cc2287c05d99a28ef49a53f68",
+      "simulator.log": "502043be8b8a5a4edb8759cc0510a00b9143359272166c58685dfe7d5cafd93e"
+    }
+  },
+  "local_window_screen": {
+    "tt_v1800_t27": {
+      "baseline": {
+        "status": "pass",
+        "scope": "8-bit fixed contract local window",
+        "functional": true,
+        "minimum_signed_margin_v": 0.1400542434524772,
+        "transition_spread_ui": 0.03165816712437503,
+        "branch_status": "measurement_complete"
+      },
+      "tail15": {
+        "status": "pass",
+        "scope": "8-bit fixed contract local window",
+        "functional": true,
+        "minimum_signed_margin_v": 0.1352533622703072,
+        "transition_spread_ui": 0.037058500429296204,
+        "branch_status": "measurement_complete"
+      },
+      "tail15p6_r300": {
+        "status": "pass",
+        "scope": "8-bit fixed contract local window",
+        "functional": true,
+        "minimum_signed_margin_v": 0.13417738983094582,
+        "transition_spread_ui": 0.03804896497076633,
+        "branch_status": "measurement_complete"
+      }
+    },
+    "fs_v1650_t85": {
+      "baseline": {
+        "status": "pass",
+        "scope": "8-bit fixed contract local window",
+        "functional": true,
+        "minimum_signed_margin_v": 0.10592106601680626,
+        "transition_spread_ui": 0.10521820397349774,
+        "branch_status": "measurement_complete"
+      },
+      "tail15": {
+        "status": "fail",
+        "scope": "8-bit fixed contract local window",
+        "functional": true,
+        "minimum_signed_margin_v": 0.09200338872680343,
+        "transition_spread_ui": 0.15317782156226778,
+        "branch_status": "measurement_complete"
+      },
+      "tail15p6_r300": {
+        "status": "fail",
+        "scope": "8-bit fixed contract local window",
+        "functional": true,
+        "minimum_signed_margin_v": 0.09065560524042392,
+        "transition_spread_ui": 0.16674078008098878,
+        "branch_status": "measurement_complete"
+      }
+    }
+  },
+  "results": [
+    {
+      "condition": "tt_v1800_t27",
+      "raw": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785/tt_v1800_t27/tt_v1800_t27.raw",
+      "raw_sha256": "1a12b3eb8c566823675aa8da9fa98df3e1d31aa3013abb0b65174a1027e903e4",
+      "result": {
+        "input_max_error_v": {
+          "ap": 4.993537463304776e-06,
+          "an": 4.98775422896891e-06,
+          "bp": 4.971347152382677e-06,
+          "bn": 4.977915441184422e-06,
+          "vbias": 4.996710775362345e-06,
+          "vbias_logic": 4.9973076429177254e-06,
+          "vdd": 0.0,
+          "rp": 4.9940255153479995e-06,
+          "rn": 4.988005974704279e-06
+        },
+        "baseline_max_error_v": {
+          "sp1": 2.6870300873227393e-08,
+          "sn1": 3.659520642074199e-08,
+          "qp1": 1.984340558536246e-08,
+          "qn1": 2.933021203688213e-08,
+          "xslice1.xfinal.ahp": 1.1431241286885552e-08,
+          "xslice1.xfinal.ahn": 1.2121393000441572e-08,
+          "xslice1.xfinal.bhp": 1.4721972974029995e-08,
+          "xslice1.xfinal.bhn": 2.942352828050332e-08,
+          "xslice1.xfinal.sap": 1.8038913252027555e-08,
+          "xslice1.xfinal.san": 2.285603262208724e-08
+        },
+        "baseline_matches": true,
+        "branches": [
+          {
+            "branch": "baseline",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.527784382329473,
+                "common_mode_mean_v": 1.6649686935308399,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5272937826552628,
+                  "max_pp_v": 0.5275308576970561,
+                  "mean_pp_v": 0.5273810172506027
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.5330943139723794,
+                "common_mode_mean_v": 1.6650416683787563,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5326423483095117,
+                  "max_pp_v": 0.5328458543117292,
+                  "mean_pp_v": 0.5327196238121329
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.5332713242748202,
+                "common_mode_mean_v": 1.6648671504046715,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5328131964818081,
+                  "max_pp_v": 0.5329024997036946,
+                  "mean_pp_v": 0.5328484522285628
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.5359404096399274,
+                "common_mode_mean_v": 1.6648016087943347,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5354876669893422,
+                  "max_pp_v": 0.535566774074206,
+                  "mean_pp_v": 0.5355353304364827
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.5386870106365642,
+                "common_mode_mean_v": 1.664787370110811,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5382956110411525,
+                  "max_pp_v": 0.5383811165264534,
+                  "mean_pp_v": 0.5383260702337546
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.5408743321462939,
+                "common_mode_mean_v": 1.664782859917879,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5403068466150305,
+                  "max_pp_v": 0.5405588884473551,
+                  "mean_pp_v": 0.5404403526730761
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.3689352853226311,
+                "common_mode_mean_v": 1.7182637824106926,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.3683846991361803,
+                  "max_pp_v": 0.36865924000932204,
+                  "mean_pp_v": 0.36857725730943647
+                }
+              }
+            },
+            "clock_fall_shift_s": -4.835268554247085e-18,
+            "clock_shift_min_s": -8.752948963711546e-18,
+            "clock_shift_max_s": -4.243097398345885e-19,
+            "clock_total_shift_from_source_s": 3.08229132350695e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.483353693645159,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.1400542434524772,
+              "transition_spread_ui": 0.03165816712437503,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.4977738204337325e-09,
+                4.747773820433738e-09,
+                4.997773820433744e-09,
+                5.247773820433736e-09,
+                5.4977738204337414e-09,
+                5.747773820433734e-09,
+                5.997773820433739e-09,
+                6.247773820433732e-09
+              ],
+              "sample_voltage_v": [
+                -0.14911035997768998,
+                0.15229834525234537,
+                -0.1496676175180303,
+                0.1400542434524772,
+                0.14151352694139874,
+                -0.1424049408537214,
+                0.20127513744159656,
+                0.18266898886136473
+              ],
+              "signed_margin_v": [
+                0.14911035997768998,
+                0.15229834525234537,
+                0.1496676175180303,
+                0.1400542434524772,
+                0.14151352694139874,
+                0.1424049408537214,
+                0.20127513744159656,
+                0.18266898886136473
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.032469988057038095,
+                -0.00867026006042725,
+                -0.012920254557553489,
+                -0.007910130713065863,
+                -0.02245871991124727,
+                -0.0395682978374409
+              ]
+            },
+            "actual_parameters": {
+              "label": "baseline",
+              "wn_um": 24,
+              "wt_um": 16,
+              "r_nominal_ohm": 400
+            }
+          },
+          {
+            "branch": "tail15",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.5281687421761145,
+                "common_mode_mean_v": 1.6649645314769637,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5276807261582672,
+                  "max_pp_v": 0.5279147655139773,
+                  "mean_pp_v": 0.5277656587939638
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.39937292333717145,
+                "common_mode_mean_v": 1.6993204588945932,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3990355301102688,
+                  "max_pp_v": 0.399187738122035,
+                  "mean_pp_v": 0.3990978791254615
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.37965033827036354,
+                "common_mode_mean_v": 1.699090522517683,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.37931515430301976,
+                  "max_pp_v": 0.3794351562044507,
+                  "mean_pp_v": 0.3793632725815906
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.3740150172223349,
+                "common_mode_mean_v": 1.6990804626257574,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.37360146480223255,
+                  "max_pp_v": 0.3736759680230024,
+                  "mean_pp_v": 0.37363782282424146
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.372599972120657,
+                "common_mode_mean_v": 1.6990819860845663,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3722390557708488,
+                  "max_pp_v": 0.37230556143856375,
+                  "mean_pp_v": 0.3722758414848875
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.3726694272084219,
+                "common_mode_mean_v": 1.6991006565607352,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3722696814139519,
+                  "max_pp_v": 0.37242067399748535,
+                  "mean_pp_v": 0.37234494683514624
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.3470127459679324,
+                "common_mode_mean_v": 1.718270798042241,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.34626898568368314,
+                  "max_pp_v": 0.3467764718623181,
+                  "mean_pp_v": 0.3465610228234666
+                }
+              }
+            },
+            "clock_fall_shift_s": -6.926349909897047e-12,
+            "clock_shift_min_s": -6.967569079501584e-12,
+            "clock_shift_max_s": -6.902072836365475e-12,
+            "clock_total_shift_from_source_s": 2.388688854519321e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.4556095948856538,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.1352533622703072,
+              "transition_spread_ui": 0.037058500429296204,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.4908377957438595e-09,
+                4.740837795743865e-09,
+                4.990837795743857e-09,
+                5.240837795743863e-09,
+                5.490837795743855e-09,
+                5.740837795743861e-09,
+                5.990837795743866e-09,
+                6.240837795743859e-09
+              ],
+              "sample_voltage_v": [
+                -0.1453706774547245,
+                0.14808829094848128,
+                -0.14570691677832387,
+                0.1352533622703072,
+                0.137686929200814,
+                -0.13894145268020744,
+                0.19960638175215978,
+                0.17847797885747296
+              ],
+              "signed_margin_v": [
+                0.1453706774547245,
+                0.14808829094848128,
+                0.14570691677832387,
+                0.1352533622703072,
+                0.137686929200814,
+                0.13894145268020744,
+                0.19960638175215978,
+                0.17847797885747296
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.03511786406436865,
+                -0.013816757624225922,
+                -0.018361192504889892,
+                -0.013294038338824737,
+                -0.027388324925960023,
+                -0.05035253876812094
+              ]
+            },
+            "actual_parameters": {
+              "label": "tail15",
+              "wn_um": 24,
+              "wt_um": 15,
+              "r_nominal_ohm": 320
+            }
+          },
+          {
+            "branch": "tail15p6_r300",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.528192262225714,
+                "common_mode_mean_v": 1.6649639271837051,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5277039579875378,
+                  "max_pp_v": 0.5279382614476513,
+                  "mean_pp_v": 0.5277888454014658
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.39151177773451185,
+                "common_mode_mean_v": 1.7012406797457933,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3911835721472048,
+                  "max_pp_v": 0.391330468469433,
+                  "mean_pp_v": 0.3912442531903031
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.36944790438451025,
+                "common_mode_mean_v": 1.7010124533641866,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.36911840633387305,
+                  "max_pp_v": 0.3692402075538006,
+                  "mean_pp_v": 0.3691680114847305
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.3624515872337284,
+                "common_mode_mean_v": 1.7010055150691445,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3620845336436407,
+                  "max_pp_v": 0.362167624669105,
+                  "mean_pp_v": 0.36211300047036626
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.3601872243092017,
+                "common_mode_mean_v": 1.7010074514148248,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.35974892315584617,
+                  "max_pp_v": 0.3598143961355649,
+                  "mean_pp_v": 0.3597888398613744
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.3597390247318184,
+                "common_mode_mean_v": 1.7010273673603602,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.359348004423373,
+                  "max_pp_v": 0.35949445472334984,
+                  "mean_pp_v": 0.35942139725003663
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.34362706986647673,
+                "common_mode_mean_v": 1.7182761795136512,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.34291313073116303,
+                  "max_pp_v": 0.3433999280771134,
+                  "mean_pp_v": 0.34318648654586975
+                }
+              }
+            },
+            "clock_fall_shift_s": -1.022025419130645e-11,
+            "clock_shift_min_s": -1.0272323962015845e-11,
+            "clock_shift_max_s": -1.019668244193635e-11,
+            "clock_total_shift_from_source_s": 2.0582822812032437e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.4423933319530107,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.13417738983094582,
+              "transition_spread_ui": 0.03804896497076633,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.487533730010694e-09,
+                4.737533730010699e-09,
+                4.987533730010705e-09,
+                5.237533730010697e-09,
+                5.487533730010703e-09,
+                5.737533730010695e-09,
+                5.9875337300107006e-09,
+                6.237533730010693e-09
+              ],
+              "sample_voltage_v": [
+                -0.1448189865478443,
+                0.14736119468238695,
+                -0.14504712371451897,
+                0.13417738983094582,
+                0.13717368918180403,
+                -0.1388057622645202,
+                0.1993045858071452,
+                0.1772721207595516
+              ],
+              "signed_margin_v": [
+                0.1448189865478443,
+                0.14736119468238695,
+                0.14504712371451897,
+                0.13417738983094582,
+                0.13717368918180403,
+                0.1388057622645202,
+                0.1993045858071452,
+                0.1772721207595516
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                -0.03422890262504181,
+                -0.01427973766015767,
+                -0.019059504059708954,
+                -0.013854175400948087,
+                -0.02787936158160299,
+                -0.05190314037171442
+              ]
+            },
+            "actual_parameters": {
+              "label": "tail15p6_r300",
+              "wn_um": 24,
+              "wt_um": 15.6,
+              "r_nominal_ohm": 300
+            }
+          }
+        ],
+        "ungraded": [
+          "physical resistance",
+          "tail Vdsat and Id",
+          "current and power",
+          "noise"
+        ],
+        "baseline_serial_edge_error_s": 1.0973119925935321e-17,
+        "old_extra5_metrics": {
+          "scope": "local_window_only",
+          "delay_ui": 1.4833537055629622,
+          "first_bit": 296,
+          "end_bit": 304,
+          "bit_errors": 0,
+          "minimum_signed_margin_v": 0.14005424482456666,
+          "transition_spread_ui": 0.03165814758092281,
+          "matched_transitions": 6,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "functional": true,
+          "edge_match_half_width_ui": 0.45,
+          "phase_fitted": false
+        },
+        "source_to_old_extra5_clock_shift_s": 3.08229162145203e-11,
+        "status": "measurement_complete"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "raw": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785/fs_v1650_t85/fs_v1650_t85.raw",
+      "raw_sha256": "2b0f6677c0bf0922e9c25a2189419985d73bedb97667e661114554c5884a89a5",
+      "result": {
+        "input_max_error_v": {
+          "ap": 4.991544635180034e-06,
+          "an": 4.99345625559755e-06,
+          "bp": 4.99857782165769e-06,
+          "bn": 4.99623296978946e-06,
+          "vbias": 4.991974214663131e-06,
+          "vbias_logic": 4.990816238614748e-06,
+          "vdd": 2.220446049250313e-16,
+          "rp": 4.9919675120246865e-06,
+          "rn": 4.998308776649196e-06
+        },
+        "baseline_max_error_v": {
+          "sp1": 8.501198411892119e-09,
+          "sn1": 1.3261584275170435e-08,
+          "qp1": 8.629434278262238e-09,
+          "qn1": 1.274311789423166e-08,
+          "xslice1.xfinal.ahp": 9.460098038260867e-09,
+          "xslice1.xfinal.ahn": 2.1364672919688132e-08,
+          "xslice1.xfinal.bhp": 1.501014290639091e-08,
+          "xslice1.xfinal.bhn": 1.7966147014547573e-08,
+          "xslice1.xfinal.sap": 7.60365970187138e-09,
+          "xslice1.xfinal.san": 8.522357042295425e-09
+        },
+        "baseline_matches": true,
+        "branches": [
+          {
+            "branch": "baseline",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.45270937067620176,
+                "common_mode_mean_v": 1.518869109471132,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.452111878209821,
+                  "max_pp_v": 0.45247532889417164,
+                  "mean_pp_v": 0.45231872008672463
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.4856861541525721,
+                "common_mode_mean_v": 1.519134016082828,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.4850892155301416,
+                  "max_pp_v": 0.48534112974080745,
+                  "mean_pp_v": 0.48524659079441523
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.4973657471640238,
+                "common_mode_mean_v": 1.5190353186375452,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.49683776223475773,
+                  "max_pp_v": 0.49700087755485134,
+                  "mean_pp_v": 0.49693593735268565
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.5008444241368273,
+                "common_mode_mean_v": 1.5188693038982797,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.5003870746383909,
+                  "max_pp_v": 0.5004805725833852,
+                  "mean_pp_v": 0.5004399185097649
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.502255810858433,
+                "common_mode_mean_v": 1.518758484193174,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.501552228252415,
+                  "max_pp_v": 0.5018827631612468,
+                  "mean_pp_v": 0.501765363417039
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.501117023470804,
+                "common_mode_mean_v": 1.518685743198058,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.49965987742065665,
+                  "max_pp_v": 0.5007062131488991,
+                  "mean_pp_v": 0.5003506541006489
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.3510875937289142,
+                "common_mode_mean_v": 1.5705580723360153,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.34978921172576305,
+                  "max_pp_v": 0.3507949052323862,
+                  "mean_pp_v": 0.3503803292743517
+                }
+              }
+            },
+            "clock_fall_shift_s": 1.3178236200694686e-18,
+            "clock_shift_min_s": -1.1107588060515194e-18,
+            "clock_shift_max_s": 2.156377138864488e-18,
+            "clock_total_shift_from_source_s": 3.855577264304378e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6866467608530846,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.10592106601680626,
+              "transition_spread_ui": 0.10521820397349774,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.5497854214811315e-09,
+                4.799785421481124e-09,
+                5.049785421481129e-09,
+                5.299785421481122e-09,
+                5.549785421481127e-09,
+                5.7997854214811196e-09,
+                6.049785421481125e-09,
+                6.299785421481131e-09
+              ],
+              "sample_voltage_v": [
+                -0.12025251437115425,
+                0.11545686425727805,
+                -0.11340156777726444,
+                0.11271945786369664,
+                0.11709538455954592,
+                -0.10592106601680626,
+                0.17666867964559885,
+                0.1538878576550534
+              ],
+              "signed_margin_v": [
+                0.12025251437115425,
+                0.11545686425727805,
+                0.11340156777726444,
+                0.11271945786369664,
+                0.11709538455954592,
+                0.10592106601680626,
+                0.17666867964559885,
+                0.1538878576550534
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.010027749303546517,
+                -0.00824228463429157,
+                -0.025617279794113545,
+                -0.012975981215754466,
+                -0.03606776812268884,
+                -0.09519045466995123
+              ]
+            },
+            "actual_parameters": {
+              "label": "baseline",
+              "wn_um": 24,
+              "wt_um": 16,
+              "r_nominal_ohm": 400
+            }
+          },
+          {
+            "branch": "tail15",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.45441211547514704,
+                "common_mode_mean_v": 1.5188653731922281,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.4538139504519634,
+                  "max_pp_v": 0.45417577286770516,
+                  "mean_pp_v": 0.4540203936714068
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.3680041758722443,
+                "common_mode_mean_v": 1.5524414713273191,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3675540078119428,
+                  "max_pp_v": 0.3677441283345,
+                  "mean_pp_v": 0.36767286998612025
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.3408862066584777,
+                "common_mode_mean_v": 1.552146240580676,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3404585743448105,
+                  "max_pp_v": 0.34060285194653495,
+                  "mean_pp_v": 0.34054969066640806
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.3282585851311344,
+                "common_mode_mean_v": 1.5521226458445998,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.32783164482577365,
+                  "max_pp_v": 0.32794906157643977,
+                  "mean_pp_v": 0.3279007872976271
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.32178439012168414,
+                "common_mode_mean_v": 1.552101086647716,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3213777597278995,
+                  "max_pp_v": 0.32146243388024787,
+                  "mean_pp_v": 0.32142493121255783
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.3150046761187104,
+                "common_mode_mean_v": 1.5521021050325852,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.31431889509992317,
+                  "max_pp_v": 0.3146659462584056,
+                  "mean_pp_v": 0.3145205589890476
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.29665639511207886,
+                "common_mode_mean_v": 1.570547053045461,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.2950095451869541,
+                  "max_pp_v": 0.29628244325766273,
+                  "mean_pp_v": 0.29569605316353426
+                }
+              }
+            },
+            "clock_fall_shift_s": -9.030746525511537e-12,
+            "clock_shift_min_s": -9.072007500416433e-12,
+            "clock_shift_max_s": -8.994908189409318e-12,
+            "clock_total_shift_from_source_s": 2.9497250019568926e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6504126703591853,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.09200338872680343,
+              "transition_spread_ui": 0.15317782156226778,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.540726898857652e-09,
+                4.790726898857644e-09,
+                5.0407268988576496e-09,
+                5.290726898857655e-09,
+                5.5407268988576474e-09,
+                5.790726898857653e-09,
+                6.040726898857645e-09,
+                6.290726898857651e-09
+              ],
+              "sample_voltage_v": [
+                -0.10809197732429225,
+                0.10145966601629385,
+                -0.09988452743802378,
+                0.0990172100310891,
+                0.10406711505000914,
+                -0.09200338872680343,
+                0.17075866393167247,
+                0.14460149848919068
+              ],
+              "signed_margin_v": [
+                0.10809197732429225,
+                0.10145966601629385,
+                0.09988452743802378,
+                0.0990172100310891,
+                0.10406711505000914,
+                0.09200338872680343,
+                0.17075866393167247,
+                0.14460149848919068
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.025036893750860982,
+                -0.017401394518183084,
+                -0.036785020595490193,
+                -0.025270006644204458,
+                -0.046672747356891024,
+                -0.1281409278114068
+              ]
+            },
+            "actual_parameters": {
+              "label": "tail15",
+              "wn_um": 24,
+              "wt_um": 15,
+              "r_nominal_ohm": 320
+            }
+          },
+          {
+            "branch": "tail15p6_r300",
+            "status": "measurement_complete",
+            "nodes": {
+              "iso": {
+                "differential_pp_v": 0.45452594547902536,
+                "common_mode_mean_v": 1.5188663602062304,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.45392821122555826,
+                  "max_pp_v": 0.454289700887448,
+                  "mean_pp_v": 0.4541342621516644
+                }
+              },
+              "e0": {
+                "differential_pp_v": 0.3605227357099092,
+                "common_mode_mean_v": 1.5542816161506825,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.36008081030971373,
+                  "max_pp_v": 0.36026766437438806,
+                  "mean_pp_v": 0.36019742039725117
+                }
+              },
+              "e1": {
+                "differential_pp_v": 0.32999373326744785,
+                "common_mode_mean_v": 1.5539810316620508,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.32957217336900757,
+                  "max_pp_v": 0.3297164333445848,
+                  "mean_pp_v": 0.3296641529994242
+                }
+              },
+              "e2": {
+                "differential_pp_v": 0.31500220784997945,
+                "common_mode_mean_v": 1.55396623725021,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.3145753824391486,
+                  "max_pp_v": 0.31469742907481124,
+                  "mean_pp_v": 0.3146471636140948
+                }
+              },
+              "e3": {
+                "differential_pp_v": 0.30677662848171816,
+                "common_mode_mean_v": 1.5539509022260576,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.30636172358295966,
+                  "max_pp_v": 0.30645546401496637,
+                  "mean_pp_v": 0.3064167922138439
+                }
+              },
+              "e4": {
+                "differential_pp_v": 0.2987982375463625,
+                "common_mode_mean_v": 1.5539579719627676,
+                "cycles": {
+                  "complete_cycles": 3,
+                  "min_pp_v": 0.29823014778656787,
+                  "max_pp_v": 0.29845841434075027,
+                  "mean_pp_v": 0.2983486819848986
+                }
+              },
+              "c2g": {
+                "differential_pp_v": 0.2881788528648015,
+                "common_mode_mean_v": 1.570550869459025,
+                "cycles": {
+                  "complete_cycles": 4,
+                  "min_pp_v": 0.28651793895331634,
+                  "max_pp_v": 0.28779386361777703,
+                  "mean_pp_v": 0.2871791978542034
+                }
+              }
+            },
+            "clock_fall_shift_s": -1.3309735722374747e-11,
+            "clock_shift_min_s": -1.337497879830983e-11,
+            "clock_shift_max_s": -1.3273284240656004e-11,
+            "clock_total_shift_from_source_s": 2.5204107941685725e-11,
+            "metrics": {
+              "scope": "local_window_only",
+              "delay_ui": 1.6332401020476524,
+              "first_bit": 296,
+              "end_bit": 304,
+              "bit_errors": 0,
+              "minimum_signed_margin_v": 0.09065560524042392,
+              "transition_spread_ui": 0.16674078008098878,
+              "matched_transitions": 6,
+              "missing_transitions": 0,
+              "extra_crossings": 0,
+              "functional": true,
+              "edge_match_half_width_ui": 0.45,
+              "phase_fitted": false
+            },
+            "details": {
+              "bit_index": [
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303
+              ],
+              "sample_time_s": [
+                4.536433756779764e-09,
+                4.78643375677977e-09,
+                5.036433756779762e-09,
+                5.286433756779768e-09,
+                5.53643375677976e-09,
+                5.786433756779766e-09,
+                6.036433756779771e-09,
+                6.2864337567797635e-09
+              ],
+              "sample_voltage_v": [
+                -0.10661303056206835,
+                0.09930223904762245,
+                -0.09790386395952715,
+                0.09684235498458367,
+                0.10271628672357046,
+                -0.09065560524042392,
+                0.16996611775132686,
+                0.14328283071764497
+              ],
+              "signed_margin_v": [
+                0.10661303056206835,
+                0.09930223904762245,
+                0.09790386395952715,
+                0.09684235498458367,
+                0.10271628672357046,
+                0.09065560524042392,
+                0.16996611775132686,
+                0.14328283071764497
+              ],
+              "payload_transition_bits": [
+                296,
+                297,
+                298,
+                299,
+                301,
+                302
+              ],
+              "edge_residual_ui": [
+                0.03476437300313196,
+                -0.017941559372258383,
+                -0.03813478016396079,
+                -0.026891322755832222,
+                -0.047705395278029764,
+                -0.13197640707785682
+              ]
+            },
+            "actual_parameters": {
+              "label": "tail15p6_r300",
+              "wn_um": 24,
+              "wt_um": 15.6,
+              "r_nominal_ohm": 300
+            }
+          }
+        ],
+        "ungraded": [
+          "physical resistance",
+          "tail Vdsat and Id",
+          "current and power",
+          "noise"
+        ],
+        "baseline_serial_edge_error_s": 1.2613106404436628e-18,
+        "old_extra5_metrics": {
+          "scope": "local_window_only",
+          "delay_ui": 1.6866467523453237,
+          "first_bit": 296,
+          "end_bit": 304,
+          "bit_errors": 0,
+          "minimum_signed_margin_v": 0.10592106769455516,
+          "transition_spread_ui": 0.10521819772330118,
+          "matched_transitions": 6,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "functional": true,
+          "edge_match_half_width_ui": 0.45,
+          "phase_fitted": false
+        },
+        "source_to_old_extra5_clock_shift_s": 3.855577051610352e-11,
+        "status": "measurement_complete"
+      }
+    }
+  ],
+  "ungraded": [
+    "physical resistance",
+    "power",
+    "noise",
+    "upstream impedance",
+    "new bias",
+    "full TX",
+    "I-17 closure"
+  ]
+}

@@ -2,7 +2,7 @@
 
 > **当前修订**：TX r2 `serdes_cml_clock_distribution_tx_lowov`（[网表](../../analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice)，[配置](../../config/tx_working_revision.toml)）。2 GHz 支路比 v0.1 多两级 CML buffer。
 > **关键数字**：v0.1 时钟源 + 名义 trim [100, 500, 160, 270] fF 时，加载后相位 0 / 0.162 / 0.320 / 0.982 UI（目标 0 / 0.16 / 0.32 / 1.0 UI）。
-> **主要缺口**：r2 在原生 PLL r4 时钟下失败（I-07）。候选分发 v3 在 15 个 r4 时钟回放 V/T 点上按原始位序全部满足；r5＋真实偏置/PDK R 原生联合 bench 已有 8 个完整静态点连续计数，2 个 FF 冷角未完成。新实际字入口＋完整TX已做末级时序改进：extra2g=3在TT/FS的256 bit眼图与位映射满足，SS冷角动态在跑。45条件、内部摆幅I-17及功耗优化仍待验证。
+> **当前状态与缺口**：v3 已完成实际字入口＋完整TX的MOS45点眼图/位序，采用extra2g=5、末级WT16/R240与新输出级，边界为理想2GHz、真实偏置/PDK R tt、计数器初态及RTL事件。内部幅度I-17仍开：新分级尾宽候选的完整FS焊盘散布失败、SS冷extra超幅，不采用；下一轮先补[联合尺寸模型](tx_buffer_sizing.md)。r5原生联合bench仍为8个完整静态点连续计数、2个FF冷角未完成，不能以理想时钟45点替代原生接口/无源角、失配、噪声及功耗验证。r2在PLL r4原生源下的失败（I-07）保留为历史。
 
 ## 当前v3局部迭代
 

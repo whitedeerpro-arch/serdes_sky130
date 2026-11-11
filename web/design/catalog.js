@@ -594,8 +594,8 @@ window.DESIGN_CATALOG = {
       "name": "选择时钟分发",
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
-      "state": "MOS45点动态确认",
-      "summary": "当前extra5/WT16R240与输出级候选完整TX MOS45点通过。Xe2单级减幅模型已校准；五级统一WT12.8/R320在FS局部69.75mV/0.212UI失败，不采用，需保留更多增益。原生静态8完整/2数值缺失。",
+      "state": "45点眼图；尺寸迭代未收敛",
+      "summary": "当前extra5/WT16R240与输出级候选MOS45点眼图通过，内部幅度I-17仍开。分级尾宽局部八位满足，完整FS焊盘0.179857UI失败、SS冷extra最高436mV超幅，不采用。先补幅度/时序/负载联合模型再选参数；原生静态8完整/2数值缺失。",
       "facts": {
         "设计": "v3 同步结构",
         "PVT": "当前完整TX MOS45点；原生静态8点",
@@ -614,10 +614,10 @@ window.DESIGN_CATALOG = {
         ]
       },
       "planning": {
-        "question": "为什么固定延迟不能同时适配各 PVT？",
-        "model": "路径结构比较：buffer、分频 clk→q、重定时和复制单元的漂移分解。",
-        "parameters": "计数器/复制的同构时钟路径，隔离和对中级数。",
-        "verification": "原生动态接口、电阻角、内部幅度、功耗和附加抖动。"
+        "question": "幅度上下界与关闭时序在各压力角有没有共同可行区？",
+        "model": "已有路径结构比较和TT/FS幅度卡；当前缺slew/数据到达与关闭、模式相关焊盘响应及跨角误差。",
+        "parameters": "各级WN/WT/R与输出尺寸；已试分级尾宽未采用，先补联合约束与模型可信域。",
+        "verification": "局部卡校准及留出验证，再按各约束压力角、45条件和原生接口回归；幅度资格与眼图分开。"
       },
       "references": [
         {
@@ -675,6 +675,22 @@ window.DESIGN_CATALOG = {
         {
           "title": "仿真前幅度模型",
           "path": "docs/data/tx_buffer_cascade_plan.json"
+        },
+        {
+          "title": "联合尺寸规划与模型缺口",
+          "path": "docs/design/tx_buffer_sizing.md"
+        },
+        {
+          "title": "局部幅度与时序约束交叠",
+          "path": "docs/figures/tx/ingress/tx_buffer_tradeoff.png"
+        },
+        {
+          "title": "局部与完整链路的差异",
+          "path": "docs/figures/tx/ingress/tx_buffer_sizing_gap.png"
+        },
+        {
+          "title": "完整压力点复算",
+          "path": "docs/data/tx_buffer_sizing_gap.json"
         }
       ],
       "iterations": [
@@ -878,6 +894,37 @@ window.DESIGN_CATALOG = {
             {
               "title": "仿真前规划",
               "path": "docs/data/tx_buffer_cascade_plan.json"
+            }
+          ]
+        },
+        {
+          "id": "20261111T062550Z_3b2b3fbcb6",
+          "module": "tx.clocking",
+          "date": "2026-11-11",
+          "timestamp": "2026-11-11T06:25:50.745208+00:00",
+          "title": "分级尾宽回接失败：补齐联合尺寸模型",
+          "phase": "model",
+          "problem": "局部八位通过不能预测完整FS焊盘散布，TT幅度上界也未覆盖SS冷角。",
+          "model": "仿真前tanh幅度拟合比较分级尾宽；先复算局部与完整同位窗口和逐位serializer→pad传播，明确联合sizing缺口。",
+          "changes": "新增均匀/逐级profile局部卡和完整TX逐级参数身份；不改采用电路。",
+          "validation": "完整FS93.09mV/0.150051UI、焊盘127.25mV/0.179857UI；SS眼图满足但extra最高435.89mV。原deck/raw/BC复核，理想2GHz/真实偏置/PDK R tt。",
+          "conclusion": "分级候选不采用，I-17仍开。先补关闭/到达与输出模式相关响应及逐角幅度约束，再求参数；不是新增45点资格。",
+          "attachments": [
+            {
+              "title": "联合尺寸规划与模型缺口",
+              "path": "docs/design/tx_buffer_sizing.md"
+            },
+            {
+              "title": "局部幅度与时序约束交叠",
+              "path": "docs/figures/tx/ingress/tx_buffer_tradeoff.png"
+            },
+            {
+              "title": "局部与完整链路的差异",
+              "path": "docs/figures/tx/ingress/tx_buffer_sizing_gap.png"
+            },
+            {
+              "title": "完整压力点复算",
+              "path": "docs/data/tx_buffer_sizing_gap.json"
             }
           ]
         }

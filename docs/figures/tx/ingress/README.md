@@ -20,5 +20,10 @@
 | [Xe2单轴尺寸卡](tx_buffer_local.png) | 减尾宽和减R各怎样改变幅度与时序？ | TT/FS实际加载切片校准，单改仍超幅；八位合同 |
 | [Xe2联合尺寸卡](tx_buffer_joint.png) | 两项合用的模型预测是否成立？ | 338/316mVpp、模型残差<0.3mV；下一Xe3仍超幅 |
 | [沿链减幅与时序](tx_buffer_cascade.png) | 相邻级一起减幅会累积成什么？ | 五级FS虽八位零错，69.75mV/0.212UI失败、不采用；[报告](../../../design/tx_buffer_cascade.md) |
+| [均匀尾宽14/14.4](tx_buffer_sizing.png) | 保留更多增益能恢复FS时序么？ | TT/FS局部八位；FS散布仍失败 |
+| [保留增益比较](tx_buffer_gain_search.png) | 尾宽15/R320与15.6/R300的取舍如何？ | 两点均未满足FS局部散布 |
+| [分级尾宽](tx_buffer_taper.png) | 首级限幅、后级保留增益是否有局部交集？ | 两候选八位窗满足；完整回接仍失败 |
+| [局部尺寸约束交叠](tx_buffer_tradeoff.png) | 均匀与分级方案落在什么可行区？ | TT幅度/FS八位时序的局部观察；不是45点资格 |
+| [尺寸模型缺口](tx_buffer_sizing_gap.png) | 局部幅度模型漏掉了哪些完整链路约束？ | 完整FS焊盘散布失败、SS冷内部超幅；两端逐位传播与[联合规划合同](../../../design/tx_buffer_sizing.md) |
 
 图名按对象与用途命名，UTC运行身份在对应数据索引中。当前结论见[完整字入口](../../../design/tx_word_capture.md)、[关闭切片](../../../design/tx_launch_hold.md)。图脚本与来源哈希放在各自小数据中，`.svg`可用于导出。

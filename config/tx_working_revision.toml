@@ -412,3 +412,27 @@ FS_two_stage_spread_ui = 0.126711
 TT_FS_two_stage_model_error_percent_upper = 3.493
 scope = "TT/FS archived loaded cuts; fixed ideal PWL; eight-bit contract only; not full TX or independent 16bit mapping"
 adopted = false
+
+[retime_clock_iteration.buffer_sizing_audit]
+status = "graded_tail_not_adopted; full_FS_pad_DDJ_fail_and_SS_cold_internal_overamplitude; joint_model_incomplete"
+report = "docs/design/tx_buffer_sizing.md"
+data = "docs/data/tx_buffer_sizing_gap.json"
+index = "results/catalog/tx_buffer_sizing_gap.json"
+analysis = "verification/analysis/tx_buffer_sizing_gap.py"
+amplitude_model = "analog/tx/clock_distribution/theory/buffer_gain_plan.py"
+pre_run_prediction = "docs/data/tx_buffer_gain_plan.json"
+local_campaign = "results/analog/tx/buffer_matrix_card/20261110T172325Z_dda392af"
+full_campaign = "results/analog/tx/full_pvt45/20261110T173418Z"
+candidate_extra_profile = [[24, 14.4, 320], [24, 15.6, 320], [24, 15.6, 320], [24, 15.6, 320], [24, 15.6, 320]]
+FS_local_8bit_margin_mv = 95.291688
+FS_local_8bit_spread_ui = 0.14597372
+FS_full_same8_spread_ui = 0.14897490
+FS_full_serializer_spread_ui = 0.15005134
+FS_full_pad_spread_ui = 0.17985714
+SS_full_serializer_spread_ui = 0.04023048
+SS_full_pad_spread_ui = 0.05188186
+SS_full_max_extra_pp_mv = 435.89
+missing_models = "clock slew/phase, data setup/hold, pattern-dependent pad response, PVT/actual bias/passive corners, branch currents/cost"
+next_step = "complete joint constraints and measured model validity before choosing next sizing candidate"
+scope = "ideal2GHz, real bias/PDK R tt, initialized counter and RTL replay, two full stress points only"
+adopted = false

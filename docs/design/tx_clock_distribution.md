@@ -1,12 +1,12 @@
 # TX 时钟分发
 
-> **当前修订**：TX r2 `serdes_cml_clock_distribution_tx_lowov`（[网表](../../analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice)，[配置](../../config/tx_working_revision.toml)）。2 GHz 支路比 v0.1 多两级 CML buffer。
-> **关键数字**：v0.1 时钟源 + 名义 trim [100, 500, 160, 270] fF 时，加载后相位 0 / 0.162 / 0.320 / 0.982 UI（目标 0 / 0.16 / 0.32 / 1.0 UI）。
-> **当前状态与缺口**：v3 已完成实际字入口＋完整TX的MOS45点眼图/位序，采用extra2g=5、末级WT16/R240与新输出级，边界为理想2GHz、真实偏置/PDK R tt、计数器初态及RTL事件。内部幅度I-17仍开：新分级尾宽候选的完整FS焊盘散布失败、SS冷extra超幅，不采用；下一轮先补[联合尺寸模型](tx_buffer_sizing.md)。r5原生联合bench仍为8个完整静态点连续计数、2个FF冷角未完成，不能以理想时钟45点替代原生接口/无源角、失配、噪声及功耗验证。r2在PLL r4原生源下的失败（I-07）保留为历史。
+> **r2历史基线**：`serdes_cml_clock_distribution_tx_lowov`（[网表](../../analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice)，[配置](../../config/tx_working_revision.toml)）。2 GHz 支路比 v0.1 多两级 CML buffer。
+> **r2基线数字**：v0.1 时钟源 + 名义 trim [100, 500, 160, 270] fF 时，加载后相位 0 / 0.162 / 0.320 / 0.982 UI（目标 0 / 0.16 / 0.32 / 1.0 UI）。
+> **当前状态与缺口**：v3 已完成实际字入口＋完整TX的MOS45点眼图/位序，采用extra2g=5、末级WT16/R240与新输出级，边界为理想2GHz、真实偏置/PDK R tt、计数器初态及RTL事件。内部幅度I-17仍开：新分级尾宽候选因完整FS焊盘散布失败不采用；SS冷extra约436mV偏离400mV目标，未单凭此判失败。下一轮承接[联合尺寸模型](tx_buffer_sizing.md)与[实际负载弱输入/共模卡](tx_loaded_clock.md)。r5原生联合bench仍为8个完整静态点连续计数、2个FF冷角未完成，不能以理想时钟45点替代原生接口/无源角、失配、噪声及功耗验证。r2在PLL r4原生源下的失败（I-07）保留为历史。
 
 ## 当前v3局部迭代
 
-同步计数器/2G复制结构保留，2GHz输出前extra中间级由1→3；末级MUX尺寸不变。原样电压切片、实际级数对照、完整TT/FS回归及其边界见[末级改进](tx_final_retime.md)。内部c2g摆幅超过400mVpp，短切片联合比较输出尾宽与R后，Wtail16/R240在TT/FS局部为344–369mVpp，保留输出极性，但关闭提前约10–13ps；尚待完整TX确认。以下r2参数和旧源记录作为基线保留，状态/置换表不套到v3。
+同步计数器/2G复制结构保留，2GHz输出前extra中间级先由1→3，再推进到extra5；末级MUX尺寸不变。输出Wtail16/R240最初在TT/FS局部为344–369mVpp、关闭提前约10–13ps，现与pre120/WT60/out192 driver一起完成上述理想源MOS45点完整TX验证。原样电压切片、实际级数对照及其边界见[末级改进](tx_final_retime.md)。以下r2参数和旧源记录作为基线保留，状态/置换表不套到v3。
 
 ## 电路
 

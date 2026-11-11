@@ -27,6 +27,8 @@
 | [尺寸模型缺口](tx_buffer_sizing_gap.png) | 局部幅度模型漏掉了哪些完整链路约束？ | 完整FS焊盘散布失败、SS冷内部超幅；两端逐位传播与[联合规划合同](../../../design/tx_buffer_sizing.md) |
 | [动态模型留出误差](tx_buffer_dynamic_model.png) | 单级拟合能否连续预测四级幅度和延迟？ | TT/FS e0–e3，四组留出profile；重末级/共模尚缺，非尺寸资格 |
 | [重末级输入管宽](tx_buffer_heavy.png) | WN增加带来的gm、前级负担、延迟、余量和功耗如何取舍？ | TT/FS，Xe4 WN24/32/40、冻结旧generic R/driver强输入卡；无新尺寸采用，弱输入/独立共模仍缺 |
+| [实际负载弱输入与共模](tx_loaded_clock.png) | 两角的幅度、传播、共模和局部功耗如何随输入/电阻实现变化？ | FS热/SS冷，四输入×三种R，Xe3/e4/Xout与当前driver负载；24分支仅局部时钟通过；[报告](../../../design/tx_loaded_clock.md) |
+| [实际负载模型留出误差](tx_loaded_clock_model.png) | 差分和共模分开拟合后能否预测组合点及三级连续推演？ | FS/SS留出最大沿误差3.13/0.91ps，SS电压误差36.13mV；12/18拟合触边，不能选尺寸 |
 | [末级消费方基线](tx_retime_demand_baseline.png) | 保留当前driver/整个载荷后，切片是否复现完整TX？ | FS/SS两角，单端<0.94mV、绝对沿<0.19ps；自然映射正确 |
 | [FS相位与幅度需求](tx_retime_demand_fs_surface.png) | 两端门槛能否由同一个时钟输入满足？ | 八点/256bit，+20ps×1.1点满足但焊盘仅0.74ps余量；物理尺寸未选 |
 | [SS需求对照](tx_retime_demand_ss_surface.png) | 强条件可以同步提高时钟幅度么？ | 八点眼图/位序均满足；红叉仅表示424mVpp越过旧幅度筛查，上界复核中 |

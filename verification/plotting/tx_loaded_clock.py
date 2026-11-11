@@ -115,7 +115,7 @@ def main():
     data['publisher_snapshot'] = str((dest / HERE.name).relative_to(ROOT))
     output = ROOT / 'docs/data' / (name + '.json')
     figure = ROOT / 'docs/figures/tx/ingress' / (name + '.png')
-    plot(data).savefig(figure, dpi=170)
+    plot(data).savefig(figure, dpi=170, bbox_inches='tight', pad_inches=.15)
     plt.close('all')
     card.dump(output, data)
     card.dump(ROOT / 'results/catalog' / (name + '.json'),

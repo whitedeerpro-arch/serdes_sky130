@@ -144,6 +144,28 @@ mkdir -p "$run_dir/logs"
 
 Xyce 版本为 `verification/smoke/tb_stimuli_xyce.cir`。十项检查值见 [smoke README](../../verification/smoke/README.md)。
 
+## 仿真成本与精简模型库
+
+先确认器件/寄生可实现，再用局部模型定参数；长任务前量一次稳定时间、步长误差、模型加载及实际求解成本。头部写清已校准设置和观测窗口。输出只保存测量所需量；缩文件不等于加快求解。短OP/AC按角合deck，名义重复结构可比较倍数合并，但须先证明电气等价，不能直接用于独立失配样本。
+
+`serdes_flow.model_library.build`提供显式选择器件族的名义精简库：保留完整器件文件、共有参数及原include顺序，不改模型表达式或原PDK；不自动替换任何生产测试台。统计段拒绝生成，MC随机身份未认证；自定义网表须显式给全依赖，新增使用先与完整库对照。
+
+裁剪证明的是与输入库等价；固定电阻的已知AC导数问题仍需显式选用[已验证overlay](../design/fixed_poly_ac_overlay.md)作为输入，不能因两库相同就忽略原模型问题。
+
+2026-11-13实测（单worker、热缓存；[紧凑数据](../data/model_library_cost.json)直接链接完整结果）：
+
+| 测试 | 完整库 | 精简库 | 等价性 |
+|---|---:|---:|---|
+| 四器件族CML卡，TT/SS_hh/FF_ll，OP＋20MHz AC＋2ns瞬态 | 16.53–19.21s | 1.44–1.54s | 所存DC/AC/瞬态值逐项相同 |
+| 实际r6 VCO TT1.8V/27°C，K9/Vctrl1.163V，14ns/4ps单点新deck | 45.60s | 28.04s | 两端波形相同，均1.997120738GHz |
+
+短卡加载完成时ngspice程序大小约346→24MB；该值不是物理版图面积或整台机器内存预算。短卡提速11.5–12.5倍，VCO单deck仅1.63倍，不能把前者外推成整个campaign加速。VCO多工况合deck已摊销加载；稳定窗口、模型选点及求解器成本仍需分别优化。并发上限继续为全机4、Codex2。
+
+```bash
+uv run pytest -q tests/test_model_library.py
+uv run python verification/benchmarks/model_library.py
+```
+
 ## 历史脚本
 
 旧 campaign 的分析代码存放在各自的 `execution/*.txt`，路径指向已停用的原项目 `../simple_serdes`（经 `/tmp/serdes_*_campaign` 指针）。只作记录；复跑按 [AGENTS.md](../../AGENTS.md) 的说明在内存里重定向。结果目录的大波形以 gzip 存放（`spice.Waves` 直接读 `.gz`，判断用 `spice.has_waves`）。新代码写成正常的 `.py`。

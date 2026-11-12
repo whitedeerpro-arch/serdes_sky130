@@ -1,0 +1,107 @@
+{
+  "status": "three_corner_short_card_and_one_r6_VCO_equivalent_no_production_adoption",
+  "summary": "results/verification/model_library/20261112T160513.626840Z_5ace1b51/summary.json",
+  "summary_sha256": "464057628f37865036196fd8650cba63a69f798fd2754af596ee3a1963b1ef6c",
+  "scope": "nominal OP/20MHz AC/2ns transient, four primitive families; warm-cache short-card cost, not full SerDes or MC",
+  "short_card": [
+    {
+      "section": "tt",
+      "full_s": 16.529417753219604,
+      "reduced_s": 1.4395344257354736,
+      "speed_ratio": 11.482474790260433,
+      "full_setup": {
+        "setup_elapsed_s": 16.412,
+        "setup_program_mb": 346.129
+      },
+      "reduced_setup": {
+        "setup_elapsed_s": 1.336,
+        "setup_program_mb": 23.961
+      },
+      "equivalence_passed": true
+    },
+    {
+      "section": "ss_hh",
+      "full_s": 18.03482413291931,
+      "reduced_s": 1.4891529083251953,
+      "speed_ratio": 12.110794017252752,
+      "full_setup": {
+        "setup_elapsed_s": 17.881,
+        "setup_program_mb": 345.957
+      },
+      "reduced_setup": {
+        "setup_elapsed_s": 1.414,
+        "setup_program_mb": 23.707
+      },
+      "equivalence_passed": true
+    },
+    {
+      "section": "ff_ll",
+      "full_s": 19.206141233444214,
+      "reduced_s": 1.5414903163909912,
+      "speed_ratio": 12.459462786902563,
+      "full_setup": {
+        "setup_elapsed_s": 19.092,
+        "setup_program_mb": 345.766
+      },
+      "reduced_setup": {
+        "setup_elapsed_s": 1.453,
+        "setup_program_mb": 23.715
+      },
+      "equivalence_passed": true
+    }
+  ],
+  "vco": {
+    "identity": {
+      "code": 9,
+      "vctrl": 1.163,
+      "supply": 1.8,
+      "temp": 27,
+      "sources": {
+        "results/analog/pll/vco/r6/map_20261112T062237Z/tt_tt/tb.cir": "6f2b493b0355c565c73818a6563324cc9cfb3392beb1b7e6a41bd15d9a4be833",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/common/devices/spice/sky130_primitives.spice": "cfab9a4f2820fb9c836e182f8ca34cb480f430118d8c439a88b8c5531c9a1f99",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/common/cml_buffer/spice/cml_delay_resistive.spice": "0cd48d933e061629a9eb44ee67811ac6311d2d1082bc574250dd3996b14f61ad",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/common/cml_buffer/spice/cml_buffer.spice": "e6763361d8fc2da0b3ffe887395fa800f95ce4ba2fc8628d29ef917da8ca6e07",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/pll/vco/spice/cap_bank_3b.spice": "d93c1d569062ef4ab27090499cff7a6a028cbc3d9bfabcf7eac94d4f35216044",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/pll/vco/spice/cap_bank_5b.spice": "521947e524d1668573f88c80e59760b3d3f721f213539a686117f298cee50502",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/pll/vco/spice/vco_delay_r6.spice": "74bba2eba0324c879aacd9b40d67554e5b4f45c5236aeb793ddc2d24cc888bb3",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/pll/vco/spice/vco_ring4_r6.spice": "ed169ba9ec7e7bc2a415cea495d9f9088c3a3471a9df911f538f38b0d7797d32",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/common/devices/spice/sky130_pfet_lvt.spice": "50dfd3f8a0ebddd197bf5a4c2980d4253b9cc4fdc91377a076170192d0daf046",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/common/bias/spice/bandgap.spice": "553daa1afa8f3dd76f9e0cacd63964179ad0ca0f8c9ceede7307e70c0acb78fd",
+        "results/analog/pll/vco/r6/map_20261112T062237Z/snap/tt_tt/pdk_fixed_resistors/analog/common/bias/spice/bias_dist.spice": "ed5469a635f8fa4c819f15927e5b63e292188073601f37b0e9ace74eea505881"
+      }
+    },
+    "devices": [
+      "sky130_fd_pr__cap_mim_m3_1",
+      "sky130_fd_pr__cap_var_lvt",
+      "sky130_fd_pr__nfet_01v8",
+      "sky130_fd_pr__nfet_01v8_lvt",
+      "sky130_fd_pr__pfet_01v8",
+      "sky130_fd_pr__pfet_01v8_lvt",
+      "sky130_fd_pr__pnp_05v5_W3p40L3p40",
+      "sky130_fd_pr__res_high_po_1p41",
+      "sky130_fd_pr__res_high_po_2p85"
+    ],
+    "full_s": 45.60235357284546,
+    "reduced_s": 28.035021781921387,
+    "speed_ratio": 1.6266209431751721,
+    "comparison": {
+      "frequency_hz": [
+        1997120737.7800443,
+        1997120737.7800443
+      ],
+      "relative_frequency_error": 0.0,
+      "max_abs_node_error_v": {
+        "v0p": 0.0,
+        "v0n": 0.0
+      },
+      "limits": {
+        "node_v": 1e-06,
+        "relative_frequency": 1e-07
+      },
+      "passed": true
+    }
+  },
+  "production_default_changed": false,
+  "MC_qualified": false,
+  "publisher_sha256": "25ce7f09aba58921b808bb443ac2a531ffaebdc799bad6e513909f45ef000214"
+}

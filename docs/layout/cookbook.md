@@ -1,6 +1,6 @@
 # 版图手册：规则数值、套路、流程
 
-给辅助画版图的 agent。任务和验收见[任务单](tasks.md)，工具命令见[速查](magic_quickstart.md)。本页讲**怎么画对**：先查数，再套路，按流程一步一检。
+给辅助画版图的 agent。任务和验收见[任务单](tasks.md)，检查工具见[check.py](../../verification/layout/check.py)。本页讲**怎么画对**：先查数，再套路，按流程一步一检。
 
 初次接手的DeepSeek/其他执行者先读[有正反例的入门教材](deepseek_training.md)；[DS-01工作单](training/DS-01-inverter.md)可直接派发，在独立教学目录练习，不改当前生产版图。
 

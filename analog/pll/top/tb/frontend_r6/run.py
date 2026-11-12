@@ -60,9 +60,9 @@ def deck(c, rc, code, vctrl, variant, camp):
               "Iref vdd vbias .85m", "Xref vbias vbias 0 0 serdes_nfet w=20 l=.5 nf=4",
               f"Vctrl ctrl 0 {vctrl:.4f}", "Erst rst_b 0 vh 0 1"]
     lines += [f"Ecode{k} cfg{k} 0 vq 0 {code >> k & 1}" for k in range(5)]
-    if variant == "lean":
+    if variant.startswith("lean"):      # lean or lean:<dummy wck>
         lines += ["Xfe ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias fb0 vh vq 0 b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n "
-                  "pll_clock_frontend_r6q"]
+                  "pll_clock_frontend_r6q" + (f" wck={variant.split(':')[1]}" if ":" in variant else "")]
         bn = {f"b{k}{s}": f"b{k}{s}" for k in range(4) for s in "pn"}
     else:
         lines += ["Xfe ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias rst_b fb0 cm0p cm0n cm1p cm1n cm2p cm2n cm3p cm3n vh vq vdum 0 "
@@ -114,7 +114,7 @@ def measure(path, probes):
     return dict(f=1 / T, vco_swing=[float(np.ptp(x)) for x in v], buf_swing=[float(np.ptp(x)) for x in b],
                 vco_dev_s=grid_dev(t, v, T).tolist(), buf_dev_s=grid_dev(t, b, T).tolist(),
                 buf_delay_s=[float(np.median([(x - e[np.searchsorted(e, x) - 1]) % T for x in zero(t, b[0], True) if np.searchsorted(e, x) > 0]))],
-                fb_ratio=float(np.median(np.diff(fb)) / T) if len(fb) > 2 else None, i_host=cur["vh"] + cur["vdum"], i_quiet=cur["vq"])
+                fb_ratio=float(np.median(np.diff(fb)) / T) if len(fb) >= 2 else None, i_host=cur["vh"] + cur["vdum"], i_quiet=cur["vq"])
 
 
 def main():
@@ -130,7 +130,7 @@ def main():
         cond, rc, code, v = spec.split(":")
         c = Condition.parse(cond)
         for var in a.variants.split(","):
-            d = camp / f"{cond}_{rc}" / var
+            d = camp / f"{cond}_{rc}" / var.replace(":", "_")
             text, probes[var] = deck(c, rc, int(code), float(v), var, camp / "snap")
             if spice.case_output(d, "run", "out.raw", STOP) is None:
                 jobs.append((text, spice.next_run_dir(d, "run"), dict(timeout_s=3600, meta=dict(point=spec, variant=var))))
@@ -141,14 +141,16 @@ def main():
     for spec in a.points.split(","):
         cond, rc, code, v = spec.split(":")
         for var in a.variants.split(","):
-            p = spice.case_output(camp / f"{cond}_{rc}" / var, "run", "out.raw", STOP)
+            p = spice.case_output(camp / f"{cond}_{rc}" / var.replace(":", "_"), "run", "out.raw", STOP)
             if p is None:
                 print(f"{spec} {var}: missing")
                 continue
             m = measure(p, probes[var])
             rows.setdefault(spec, {})[var] = m
-            print(f"{spec:28s} {var:5s} f {m['f'] / 1e9:.4f} GHz, VCO {np.mean(m['vco_swing']) * 1e3:.0f} mVpp, phase grid +-{np.max(np.abs(m['vco_dev_s'])) * 1e12:.2f} ps | "
-                  f"buffers {min(m['buf_swing']) * 1e3:.0f}-{max(m['buf_swing']) * 1e3:.0f} mVpp, grid +-{np.max(np.abs(m['buf_dev_s'])) * 1e12:.2f} ps | "
+            bd = np.array(m["buf_dev_s"])
+            m["b0_late_s"] = float(bd[[0, 4]].mean() - bd[[1, 2, 3, 5, 6, 7]].mean())
+            print(f"{spec:28s} {var:9s} f {m['f'] / 1e9:.4f} GHz, VCO {np.mean(m['vco_swing']) * 1e3:.0f} mVpp, phase grid +-{np.max(np.abs(m['vco_dev_s'])) * 1e12:.2f} ps | "
+                  f"buffers {min(m['buf_swing']) * 1e3:.0f}-{max(m['buf_swing']) * 1e3:.0f} mVpp, grid +-{np.max(np.abs(m['buf_dev_s'])) * 1e12:.2f} ps, b0 later than b1..3 by {m['b0_late_s'] * 1e12:+.2f} ps | "
                   f"fb0 period / VCO {m['fb_ratio']} | host {m['i_host'] * 1e3:.2f} mA, quiet {m['i_quiet'] * 1e3:.2f} mA", flush=True)
     camp.mkdir(parents=True, exist_ok=True)
     (camp / "summary.json").write_text(json.dumps(dict(args=vars(a), rows=rows), indent=1))

@@ -1,0 +1,20 @@
+* PLL core r6 / k = 4 with a quiet supply domain (2026-11-12).  Against pll_core_r5k4q:
+*   - pll_clock_frontend_r6q (VCO r6 with a 5-bit bank cfg0..4, lean frontend: no full-rate CMOS receivers, light
+*     dummies);
+*   - the standard-cell PFD pll_pfd_sc_dly (analog/pll/pfd/spice/pfd_sc.spice);
+*   - the four buffer outputs b0..b3 (CML, 2 GHz) and the divider taps of branch 0 are ports.
+* quiet (vdd_q): VCO, extraction buffers, steering CP, k = 4 loop filter.  host (vdd): PFD, prescaler, feedback
+* receiver, dummies.  VCO / buffer tails behind the 1 MOhm / 16 pF tail filter.  The CP bias vbp must come from a diode
+* on vdd_q; vbn and ibias are current copies from host.  cfg0..4 are driven at the quiet level.  ref is the PFD's
+* reference input (the reference input path is outside).  Needs cap_bank_5b, vco_delay_r6, vco_ring4_r6,
+* clock_frontend_r6q, pfd_sc + the sky130_fd_sc_hd library, charge_pump_steer, passive_rc_pdk_k4, pll_bias_filter_r4.
+.subckt pll_core_r6k4q ref rst_b vbn vbp ibias vbias cfg0 cfg1 cfg2 cfg3 cfg4 pre_ref pre_en ctrl z up dn fb0
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n vdd vdd_q vss
+Xtail vbias vbias_q vss serdes_pll_bias_lowpass_slow_r4
+Xclock ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias_q fb0 vdd vdd_q vss
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n pll_clock_frontend_r6q
+Xpfd ref fb0 rst_b up dn vdd vss pll_pfd_sc_dly
+Xcp up dn cpo vbn vbp ibias vdd_q vss pll_cp_steer wn=20 wp=80 wsn=8 wsp=16 up_wn=2 up_wp=8 dn_wn=4 dn_wp=8 pnf=16 nnf=4
++ ntail=2 cdum=0.3p
+Xlf cpo ctrl z pre_ref pre_en vdd_q vss pll_loop_filter_k4
+.ends pll_core_r6k4q

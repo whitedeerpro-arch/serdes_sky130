@@ -23,7 +23,7 @@ Xcn vss ckn vss vss serdes_nfet_lvt w={wck} nf=4
 .ends pll_frontend_dummy_load
 
 .subckt pll_clock_frontend_r6q ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias_q fb0 vdd vdd_q vss
-+ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n params: cdiv=5f cfb=20f
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n params: cdiv=5f cfb=20f wck=64
 Xvco v0p v0n v1p v1n v2p v2n v3p v3n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias_q vdd_q vss pll_vco_ring4_r6
 Xbuf0 v0p v0n b0p b0n vbias_q vdd_q vss serdes_cml_buffer
 Xbuf1 v1p v1n b1p b1n vbias_q vdd_q vss serdes_cml_buffer
@@ -39,7 +39,7 @@ Cdiv04p d04p vss {cdiv}
 Cdiv04n d04n vss {cdiv}
 Cdiv08p d08p vss {cdiv}
 Cdiv08n d08n vss {cdiv}
-Xdum1 b1p b1n vbias vdd vss pll_frontend_dummy_load
-Xdum2 b2p b2n vbias vdd vss pll_frontend_dummy_load
-Xdum3 b3p b3n vbias vdd vss pll_frontend_dummy_load
+Xdum1 b1p b1n vbias vdd vss pll_frontend_dummy_load wck={wck}
+Xdum2 b2p b2n vbias vdd vss pll_frontend_dummy_load wck={wck}
+Xdum3 b3p b3n vbias vdd vss pll_frontend_dummy_load wck={wck}
 .ends pll_clock_frontend_r6q

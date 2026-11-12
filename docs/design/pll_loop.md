@@ -170,7 +170,7 @@ SS 热角高起点在原 1.2 µs 记录中未通过，延长到 2 µs 后通过�
 
   不加延迟版的同一 MC（`--pfd sc`）：TT 82、FF 85 °C 53、FS 85 °C 106、SS 冷 240 ps，SF 冷 5 个卡死样本（其余可分析）。σ 比原 PFD 大（SS 冷 38 vs 26 ps），来自标准单元的小尺寸器件。
 - 名义 7 角（[pfd_cp_sc](../../analog/pll/pfd/tb/pfd_cp_sc/run.py) `sc8` → `sc8_dly`）：零电荷相位 +3…+16 ps（最大在 SS/SF 冷），±5/±40 ps 增益比 0.96–1.14，UP/DN 宽度 TT 483/489、SS 冷 947/963、FF 冷 307/311 ps。
-- 锁定检测相位窗口是按原 PFD 测的（门限 225–750 ps）。按新上界，SF/SS 冷的门限/上界比从 3.9/4.0 降到 2.7/2.9。用新 PFD 重测 45 条件已排队（`phase_window --pfd sc_dly`）。
+- 锁定检测相位窗口用新 PFD 重测 45 条件（`phase_window --pfd sc_dly`，`results/analog/pll/pfd/phase_window/20261112T053834Z`）：门限 225–750 ps，与原 PFD 逐条件相同（仅一个点 +50 ps，在扫描量化内）；零相位 45/45 不置位，单调 45/45，xor 脉宽偏差 −30…+61 ps。按新的静态相差上界，SF/SS 1.65 V −40 °C 的门限/上界比为 650/239 = 2.7、750/256 = 2.9（原 PFD 3.9/4.0）。门限仍在上界 2.7 倍以上，不改窗口电路。
 - 结果：MC `results/analog/pll/pfd/pfd_cp_mc/20261111T154840Z`（sc）、`20261111T183506Z`（sc_dly）；名义 `results/analog/pll/pfd/pfd_cp_sc/20261111T194214Z`。
 
 以下是 11-11 不加延迟版的原始记录。

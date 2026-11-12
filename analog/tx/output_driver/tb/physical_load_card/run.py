@@ -102,8 +102,11 @@ def probes(mode,networks):
                 keys=[]
                 for j in range(count):
                     name=f'{group}_{side}{i}_{j}';instance=f'xr{side}' if mode=='generic' else f'xr{side}_{j}'
-                    element='rbody' if mode=='generic' else 'rhrpoly_'+card
-                    props.append((name,f'@r.{base}{instance}.{element}[i]'));keys.append(name)
+                    # ngspice expands voltage-dependent fixed-card R bodies
+                    # into B sources (confirmed by `show b` in probe_identity).
+                    probe=(f'@r.{base}{instance}.rbody[i]' if mode=='generic'
+                           else f'@b.{base}{instance}.brhrpoly_{card}[i]')
+                    props.append((name,probe));keys.append(name)
                 groups[f'{group}_{side}{i}']=keys
         for kind,path in (('itail',f'xdriver{i}.xt.xmos'),('pre_itail',f'xdriver{i}.xpre.xgain.xtail')):
             for parameter in ('id','vdsat'):

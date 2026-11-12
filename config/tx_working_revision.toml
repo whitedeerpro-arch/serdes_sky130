@@ -574,3 +574,21 @@ maximum_c2g_cycle_pp_change_mv = 0.716230
 maximum_mean_absolute_edge_change_ps = 0.0076
 scope = "ideal_equal_series_DC_sources_retain_adjacent_gate_loading; prescribed_external_sources; two_MOS_conditions_RCtt; training_only_not_physical_shifter_or_AC_PSRR"
 adopted = false
+
+[output_driver_iteration.coupling_state]
+status = "historical_45_finite_charge_state_reaudited; paired_clean_input_DC_initialization_measured; actual_serializer_settled_state_open"
+report = "docs/design/tx_coupling_state.md"
+runner = "analog/tx/output_driver/tb/coupling_state/run.py"
+campaign = "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343"
+data = "docs/data/tx_coupling_state.json"
+index = "results/catalog/tx_coupling_state.json"
+source_full_TX_conditions = 45
+source_full_TX_capture_s = [8e-9, 120e-9]
+AC_capacitance_per_leg_f = 10e-9
+local_clean_input_conditions = ["fs_v1650_t85", "ff_v1950_t-40"]
+local_clean_input_states = ["enable_4ns", "enabled_DC"]
+old_finite_record_peak_estimate_ma = 4.690257
+new_local_DC_initialized_peak_measured_ma = 6.618873
+hypothetical_equal_share_2p85_count_at_preferred_100uA_per_um = 24
+physical_resistor_count_adopted = false
+scope = "two_clean_input_conditions_shared_real_bias; DC_solution_is_initial_state_not_physical_startup_or_full_TX_steady_validation; native_resistor_and_tail_currents"

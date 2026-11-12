@@ -1,6 +1,6 @@
 # RX恢复字到宿主时钟域
 
-**独立FIFO积木已实现并验证数字功能，尚未接入物理RX。** [rx_async_word_fifo](../../digital/rx/rtl/rx_async_word_fifo.sv)保持字顺序，在共同复位后启动新数据纪元，满时拒收并报告溢出。它解决异步传输与有限缓存；连续频偏下的长期吞吐、空闲补偿、整帧失效和重训仍属于系统接口设计。
+**字映射→字对齐→FIFO已完成独立RTL集成，尚未接入物理混合仿真。** [rx_word_host_path](../../digital/rx/rtl/rx_word_host_path.sv)消费既有32位读出顺序，训练后输出宿主字；运行中重训或溢出使当前数据纪元报错。底层[rx_async_word_fifo](../../digital/rx/rtl/rx_async_word_fifo.sv)保持字顺序，解决异步传输与有限缓存；连续频偏下的长期吞吐、空闲补偿及系统恢复仍待完成。
 
 ## 接口和数据纪元
 
@@ -29,6 +29,21 @@
 若写入率`fw`、持续可用读出率`fr`，长期`fw > fr`时任何有限深度都会溢出。忽略同步信用延迟、控制余量和已有存量，理想容量上界为`D/(fw-fr)`；名义250MHz、远端快100/300ppm、D=16时约640/213µs。满速写入而宿主完全停读的理想空FIFO容量仅64ns。实际保证值还须扣掉已有占用、同步信用和恢复控制余量。
 
 可行系统接口需要足够宿主吞吐和受限停顿，或由明确协议提供可删除空闲、帧间隙等频偏补偿；不得自行删除任意payload字。后续接入点为`rx_word_align16`后的恢复字流，CDR投票器继续留在恢复字域。
+
+## 已集成的数字字路径
+
+`rx_word_host_path`连接原`rx_word_map`、`rx_word_align16`和FIFO，默认4次训练命中、16字缓存。`phys[31:0]`与原读出lane顺序相同；`training_enable`明确属于`word_clk`域，不能直接接异步宿主控制。物理读出必须满足字时钟捕获的建立保持；模块没有虚构模拟输出有效性检测。
+
+FIFO的`word_online`释放map/align复位，避免一端尚未就绪就开始训练。训练期间不向宿主发送payload；数据阶段不因CDR瞬时`locked`变化而丢弃字。`aligned`/`offset`属于恢复字域调试状态，不能当作已同步宿主状态。
+
+开始payload后重新拉高训练请求会置sticky源故障，包括首个对齐`word_valid`尚待FIFO接收时的边界。源故障或FIFO溢出后停止新写，宿主可以排空此前已接收字，但`host_error`经宿主域同步后声明整个纪元有缺口；不能据仍有`host_valid`认为流完整。重训需共同复位，复位丢弃缓存后才开始新纪元。宿主错误同步器也由本域online同步释放复位。
+
+[集成测试](../../digital/rx/tb/tb_rx_word_host_path.sv)使用独立bitstream生成物理32位输入：16个窗口起点共检查399个观察到的payload前缀字（起点0为24字，其余各25字）；每个窗口尾部未排空，不计作完整有限包验证。另覆盖宿主停顿、满错误、未读字共同复位、运行重训及首个pending字与重训同拍。默认训练参数已由集成者重跑，Icarus、Verilator和Yosys通用检查通过；[证据](../../results/catalog/rx_word_host_path.json)固定源码与工具日志。
+
+```bash
+uv run pytest -q tests/test_rx_word_host_path.py
+uv run python verification/analysis/rx_word_host_review.py
+```
 
 ## 已验证与剩余工作
 

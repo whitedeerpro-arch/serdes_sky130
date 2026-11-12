@@ -20,6 +20,8 @@ rx_word_map把物理读出（analog/rx/sampler/spice/rx_readout_deser16.spice，
 
 rx_async_word_fifo提供恢复字→宿主时钟域的独立FIFO积木，默认16字，Gray指针两级同步、共同复位/各域同步释放，满时拒收并在两域保留溢出标志。3项深度2/4/16回归覆盖异步时钟、停顿/停钟、回卷、复位换代及逐字守恒，另过通用综合检查和lint；尚未接物理RX，也未完成工艺CDC/STA或协议频偏补偿。接口、容量预算和证据见[宿主CDC](../../docs/design/rx_host_cdc.md)，回归入口`uv run pytest -q tests/test_rx_async_fifo_rtl.py`。
 
+rx_word_host_path已将rx_word_map、rx_word_align16和上述FIFO接成数字路径，消费原phys32，默认4次训练命中；training_enable在恢复字域，状态aligned/offset也在该域。开始payload后重训或溢出会使当前纪元报错并停止新写，宿主错误同步后仍可排空先前字；恢复需共同复位。16个窗口起点核对399个payload前缀字，另过重训/复位/满错误边界、lint和通用综合检查；尾部未逐窗口排空，尚未接物理cosim。回归`uv run pytest -q tests/test_rx_word_host_path.py`。
+
 tb_rx_cdr_closed_loop用既有PI实测曲线驱动行为采样事件，运行实际RTL，100 µs检查多圈、频偏、时延、确定抖动、同码和字流。它不包含真实晶体管/PCB/PLL长闭环。tb_rx_deserializer16覆盖16种bit偏移，tb_cdr_status检查保持、超时、恢复与限幅。失败探索快照保留在results，最终批次由结果文档指定。
 
 结果入口：[采样器与PI控制](../../docs/history/rx_sampler_control.md)。

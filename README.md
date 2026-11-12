@@ -22,10 +22,10 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 | 模块 | 当前修订 | 已验证到 | 主要缺口 |
 |---|---|---|---|
-| [VCO](docs/design/pll_vco.md) | PLL r5 / 4 bit 主线；3 bit仅历史参考 | 真实偏置/PDK R 工作区135点、宽窗口45组三温共同码；五压力点各200样本频率σ 0.75–1.12%；[较窄门限窗口](docs/design/pll_coarse_windows.md)另计 | 当前码表/负载噪声重验；实际门限与电压迟滞切码、慢端失配余量、hl/lh |
+| [VCO](docs/design/pll_vco.md) | r6 / 5bit / 版图寄生与成对长负载 | 近邻尺寸两端比较；14ns/4ps精度三角校准；最终尺寸约8.7%端点余量为插值估计 | 当前135条件工作图/码表；原生闭环、启动、失配/噪声与动态调码；旧r5证据仅历史 |
 | [÷8 prescaler](docs/design/pll_divider.md) | r3结构；首级W40/后级W80 | 真实偏置/PDK R、标准输入hh/ll各45点；六压力点MC共1048样本正确分频 | FF冷失配数值缺失；原生全角/启动、FS冷尾管余量 |
 | [时钟接收器](docs/design/clock_receiver.md) | PLL r4 | 反馈 45/45，全速 45/45；原生 VCO 5 个工作点全部正常 | SS 热角幅度余量约 110 mV；1.95 V 过冲 |
-| [PFD/CP/LF/启动](docs/design/pll_loop.md) | r5/k4转向CP、4.13kΩ/18pF PDK LF候选 | 行为VCO闭环135/135锁定；quiet/直供四工况共8条原生预充闭环锁定；CP三点各200样本MC；粗码RTL与监测积木已有 | 自动粗搜接入真实闭环、从零启动、新环路噪声/供电抑制；转向CP窗口 |
+| [PFD/CP/LF/启动](docs/design/pll_loop.md) | r6 quiet core / k4 / 标准单元延迟复位PFD / 4.13kΩ与18pF LF | 新PFD冷角MC两点各100样本；相位窗45点；5位数字搜索回归；旧r5闭环另作历史 | r6工作图后重校环路/原生闭环、实际粗搜/跨域驱动、从零启动、噪声/供电抑制 |
 | [PLL 安静供电](docs/design/ldo_r4.md) | HV18 r4静态引脚、参考RC＋6bit电压修调 | DC1215、AC255；额外100pF端点425条AC最差PM65.07°/38.44dB；四工况×hv/ext共8条原生预充闭环锁定 | 宿主定时路径/参考副本的供电预算；真实从零启动、引脚/电容区间、UVLO/ready、完整噪声/失配 |
 | [TX 字入口](docs/design/tx_word_capture.md) | 16位捕获＋两组8位保持；extra5整链候选 | 首级6压力48字；B关闭12组；[完整TX](docs/design/tx_parallel_serializer.md)在理想2GHz、真实偏置/PDK R tt下45/45串化器与焊盘过门槛，每点256 bit | 内部幅度I-17；原生源/电阻角、物理guard/blank、建立保持、失配/噪声 |
 | [TX 时钟分发](docs/design/tx_clock_distribution.md) | v3同步计数器、extra5/WT16/R240候选 | r4抽头回放15点；r5原生静态8点计数；理想2GHz整链45点眼图/位序正确 | 原生静态2个FF冷角数值缺失；原生动态/启动、内部幅度、功耗/噪声 |
@@ -34,7 +34,7 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 | [信道模型](docs/design/channel_model.md) | RLC16 + PCB 族 | C0–C5 构造与 TX 接入 | 链路级眼图门槛未定义 |
 | [RX 前端](docs/design/rx_frontend.md) | vcm 1.05 V | AC/DC 45 条件 × 4 档；C2 眼图 45 条件（默认 EQ3） | C3 未做；档位自适应；输入失调 σ 6.1 mV |
 | [RX PI 与采样](docs/design/rx_pi_sampler.md) | ac_trim/c2/120f；deser16/W40 | 无读出窗口135条件，最差0.8125 UI；当前W40的FS/FF冷hh均完成44.75ns，分别96/112数据位、49/55确定边沿零错 | 当前W40全网格、真实失配完整SAR、原生锚点/动态PVT与启动 |
-| [RX 数字](docs/design/rx_cdr_digital.md) | 首版 RTL | 行为采样闭环 10 组 100 µs 零错字；物理 deser16 TT 短时联调；[独立宿主FIFO](docs/design/rx_host_cdc.md)三种深度数字回归 | 生产参数/频偏的物理验证；目标库综合/STA；系统域接线/容量与工艺CDC |
+| [RX 数字](docs/design/rx_cdr_digital.md) | 首版RTL及宿主数字字路径 | 行为闭环10组100µs零错字；物理deser16 TT短时联调；[map→align→FIFO](docs/design/rx_host_cdc.md)16窗口399前缀字 | 生产参数/频偏的物理验证；宿主物理cosim/容量、目标库STA与工艺CDC |
 | [偏置](docs/design/bias.md) | 带隙 + 恒 I·R + vcm + 分配/B2（5 bit 修调） | 135条件上电；摆幅代理407–426 mV；分配MC200样本三温；多模块已接真实参考 | 当前整机动态/闭环/启动、ready与供电预算；B2目标匹配；PNP无失配模型；恒I·R不保证恒速度 |
 
 版图前推进与验收见 [工作包和完成条件](docs/status/prelayout_plan.md)。全部问题、优先级和阶段见 [待解决问题](docs/status/open_issues.md)；版本线见 [版本与基线](docs/overview/revisions.md)。

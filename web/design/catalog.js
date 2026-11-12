@@ -198,12 +198,12 @@ window.DESIGN_CATALOG = {
       "name": "PLL",
       "subtitle": "PFD / CP / LF / VCO / ÷8 / 粗调码",
       "state": "顶层集成已有",
-      "summary": "当前r5/4bit＋k4转向CP/PDK LF已集成：行为VCO闭环135点、原生预充闭环三点锁定。粗码RTL/监测已有，实际粗搜和从零启动待接。",
+      "summary": "PLL完整层次已有；当前r6为5bit带寄生VCO、quiet k4 core及标准单元PFD。当前工作图、前端与原生闭环按r6重验，旧r5锁定/噪声不转移。",
       "facts": {
-        "设计": "完整 PLL 顶层已具备",
-        "PVT": "行为VCO135点；原生预充3点",
-        "失配": "VCO5点 / CP3点 / 分频6点局部MC",
-        "噪声": "ISF + 环路 / CDR 模型"
+        "设计": "r6 quiet core / k4 / 5bit；顶层已有",
+        "PVT": "r6工作图/原生验证进行中；旧r5结果仅历史",
+        "失配": "r6待重验；新PFD冷角MC另有证据",
+        "噪声": "按r6 Kvco/输入导纳与噪声重算"
       },
       "boundary": {
         "inputs": [
@@ -1555,33 +1555,33 @@ window.DESIGN_CATALOG = {
       "parent": "pll",
       "name": "VCO 与粗调阵列",
       "key": "C01",
-      "subtitle": "四级 CML 环振 / r5 / 4 bit",
-      "state": "工作区改进",
-      "summary": "4bit主线，3bit仅历史参考。135点线性内插预测候选；H4有95点完整夹区在窗口内，40点边界确认中。电压迟滞采用相邻切码；当前负载噪声/动态切码仍待验证。",
+      "subtitle": "四级CML / r6 / 5bit / 版图寄生",
+      "state": "r6工作区验证",
+      "summary": "r6采用两只2p85 L4.77并联负载、尾W25.2、31个半单元及每相位12fF布线预算。近邻候选实测、最终尺寸插值与当前工作图分开记录；r5工作区只作历史。",
       "facts": {
-        "设计": "r5 / 4 bit主线；3 bit仅历史参考",
-        "PVT": "135条件；宽窗口45组三温共同码；较窄粗码窗口另计",
-        "失配": "五压力点各200样本；频率σ0.75–1.12%",
-        "噪声": "7 压力点 ISF"
+        "设计": "r6 / 5bit / 带版图寄生与成对长负载",
+        "PVT": "当前135条件×12点工作图在跑，未完成资格",
+        "失配": "当前r6待验；旧r5频率σ仅规划参考",
+        "噪声": "r6待重算；旧3/4bit ISF不转移"
       },
       "boundary": {
         "inputs": [
-          "Vctrl、粗调 cfg、局部偏置、四路对称抽出负载"
+          "Vctrl、cfg0…4、局部偏置、quiet供电与对称CML抽出负载"
         ],
         "outputs": [
           "约 2 GHz 四对差分 / 八相"
         ],
         "assumptions": [
-          "2 GHz 交点与 Kvco 由离散仿真点插值。",
-          "当前码表和 3 bit 噪声工作点分开记录。",
-          "VCO阵列K=0…15与上门限梯H=0…15独立；H=3/4不是位宽。"
+          "r6网表包含单元寄生及12fF/相位布线余量。",
+          "最终尺寸约8.7%端点余量为候选插值，须当前工作图确认。",
+          "K=0…31与门限梯H=0…15独立；旧r5码表不适用。"
         ]
       },
       "planning": {
-        "question": "4 bit阵列的损耗、量程、Kvco、CP窗口与电压迟滞如何共同选点？",
-        "model": "1/f 对码拟合用于选点；仿真确认工作区；ISF 加环路传递形成抖动预算。",
-        "parameters": "4 bit半单元：开关W2.5µm、MIM2.35×2.5µm，共15个；变容4.5×4指；实际门限与相邻码落点约束。",
-        "verification": "实测同码三温曲线的相邻切码落点、慢端失配、实际门限与当前负载噪声；hl/lh另验。"
+        "question": "版图寄生、5bit量程/步长与quiet域CP窗口如何联合闭合？",
+        "model": "三码1/f抛物线、Vctrl单调插值规划；独立锁点校准；再算环路/噪声。",
+        "parameters": "MIM2×2µm、开关W1.5/nf2共31单元；var5.2×4、tail25.2；R2p85×2 L4.77、cwire12fF。",
+        "verification": "当前r6工作图/内插校准、原生负载与闭环、动态调码、失配/噪声及实际PEX。"
       },
       "references": [
         {
@@ -1595,6 +1595,14 @@ window.DESIGN_CATALOG = {
         {
           "title": "粗码门限与实测控制范围",
           "path": "docs/design/pll_coarse_windows.md"
+        },
+        {
+          "title": "r6工作图入口",
+          "path": "analog/pll/vco/tb/tuning/r6.py"
+        },
+        {
+          "title": "r6 quiet core",
+          "path": "analog/pll/top/spice/pll_core_r6k4q.spice"
         }
       ],
       "iterations": [
@@ -1684,6 +1692,23 @@ window.DESIGN_CATALOG = {
             {
               "title": "vco_fixed_code_coverage.md",
               "path": "docs/history/vco_fixed_code_coverage.md"
+            }
+          ]
+        },
+        {
+          "id": "vco-r6-layout-20261112",
+          "title": "按实际寄生重新定中心与量程",
+          "date": "2026-11-12",
+          "phase": "circuit",
+          "problem": "r5慢端仅约8fF余量，现实寄生超过它；短固定电阻扩大角偏差。",
+          "model": "以1/f–C校准寄生，近邻候选端点筛选，再做当前工作图与原生校准。",
+          "changes": "成对长负载、31半单元5bit、每相位12fF预算及重新定尾管/变容。",
+          "validation": "近邻候选已实测；最终L4.77/WT25.2的约8.7%是插值估计，当前map未完成。",
+          "conclusion": "采用r6主线；旧r5码表/窗口/ISF仅历史，实际接线/噪声/动态/统计仍开。",
+          "attachments": [
+            {
+              "title": "r6设计与尺寸依据",
+              "path": "docs/design/pll_vco.md"
             }
           ]
         }
@@ -1965,9 +1990,9 @@ window.DESIGN_CATALOG = {
       "key": "C10",
       "subtitle": "慢端逐码搜索 / Vctrl窗口 / 温度粗分",
       "state": "RTL/监测已有，接口待接",
-      "summary": "pll_coarse_ctrl已实现慢端逐码上电搜索、温度档停止门限与持续越界切邻码，行为环路RTL测试通过；硬件窗口/环路与动态译码尚未联调。",
+      "summary": "慢端搜索与持续越界切邻码RTL支持参数化4/5bit；当前r6须CODE_BITS=5。全部32搜索结果/端点/超时数字回归通过，物理quiet电平、译码瞬态及闭环未联调。",
       "facts": {
-        "设计": "粗码RTL＋Vctrl窗口已有",
+        "设计": "r6集成需CODE_BITS=5；RTL默认4bit保留历史兼容",
         "PVT": "窗口三点功能×135条件",
         "失配": "门限/温感局部表征；策略待复核",
         "噪声": "切码CDR影响为模型"
@@ -1986,8 +2011,8 @@ window.DESIGN_CATALOG = {
       "planning": {
         "question": "一个码能覆盖多大温区，什么时候重新粗搜？",
         "model": "三温可用码曲线、迟滞重编码与温度分档上电模型；缺测处须补点。",
-        "parameters": "4bit0–15；vlo0.90V、vhi VDD−0.41V为候选，停止门限可配置。",
-        "verification": "门限误差与CP窗口交接；补码曲线后接入实际闭环；数字译码瞬态。"
+        "parameters": "r6 K0…31，门限梯仍4bit；quiet域窗口、温度档停止码与等待须按r6重校。",
+        "verification": "quiet驱动与门限/跨域、相邻码跨位瞬态、实际捕获/切码及联合失配。"
       },
       "references": [
         {
@@ -2693,11 +2718,11 @@ window.DESIGN_CATALOG = {
       "name": "系统域 FIFO / CDC",
       "key": "R07",
       "subtitle": "恢复字时钟 → 系统时钟",
-      "state": "RTL积木已验证",
-      "summary": "Gray FIFO独立数字回归已完成；共同复位、有限缓存及两域溢出报告。物理RX接入、宿主吞吐/停顿与协议频偏补偿仍开。",
+      "state": "数字字路径已联接",
+      "summary": "map→align→FIFO已有独立RTL集成，16窗口399个payload前缀字；运行中重训/溢出使纪元报错。物理cosim、容量/频偏政策与工艺CDC仍开。",
       "facts": {
-        "设计": "独立Gray FIFO，尚未接物理RX",
-        "PVT": "深度2/4/16功能、通用综合与lint；未工艺签核",
+        "设计": "数字map/align/FIFO联接，尚未接物理cosim",
+        "PVT": "16窗口399前缀字、通用综合/lint；不是物理PVT资格",
         "失配": "不适用模拟MC",
         "噪声": "关注时钟与CDC假设"
       },
@@ -2731,6 +2756,10 @@ window.DESIGN_CATALOG = {
         {
           "title": "FIFO验证证据",
           "path": "results/catalog/rx_async_word_fifo.json"
+        },
+        {
+          "title": "宿主数字路径证据",
+          "path": "results/catalog/rx_word_host_path.json"
         }
       ],
       "iterations": []

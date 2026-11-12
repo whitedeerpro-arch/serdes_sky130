@@ -3,13 +3,13 @@
 //                    without the common reset pulse) never lasted longer than tau_d.  The analog side samples the
 //                    xor pulse with a flop clocked by the same pulse delayed by tau_d and hands the sampled bit in as
 //                    pw_late_async (asynchronous to ref_clk: synchronized here).  Sampling (UP | DN) at "ref + tau"
-//                    instead would need tau above the reset width, which spans 290-746 ps over 45 conditions
-//                    (analog/pll/pfd/tb/reset_pvt): at FF that tau would pass ~600 ps of phase error.  The analog
+//                    instead would need tau above the common reset width (legacy PFD: 290-746 ps over 45
+//                    conditions, analog/pll/pfd/tb/reset_pvt), mixing reset timing with phase error. The analog
 //                    cell is pll_phase_window (analog/pll/pfd/spice/phase_window.spice, six inverters of 10 fF
-//                    each): driven by the real PFD its threshold is 225-750 ps over 45 conditions (FF 1.95 V -40 C
-//                    .. SS 1.65 V -40 C, analog/pll/pfd/tb/phase_window), >= 3.9x the locked static offset bound at
-//                    the same condition (PFD + CP mismatch |mean| + k sd 51-189 ps, analog/pll/pfd/tb/pfd_cp_mc) and
-//                    far below acquisition errors (ns).  An xor pulse that stays high after the clear has no new
+//                    each): with the adopted pll_pfd_sc_dly its threshold is 225-750 ps over 45 conditions
+//                    (analog/pll/pfd/tb/phase_window --pfd sc_dly). The SF/SS low-voltage cold thresholds are
+//                    650/750 ps against static mismatch bounds 239/256 ps, ratios 2.7/2.9. Legacy 3.9x and
+//                    51-189 ps bounds belong to the old PFD. An xor pulse that stays high after the clear has no new
 //                    edge and does not set the flag; that case (UP stuck, VCO stopped) puts Vctrl at a rail, which
 //                    frequency_good reports.
 //   frequency_good : the coarse search is over (coarse_ready) and the Vctrl window detector reported neither hi nor

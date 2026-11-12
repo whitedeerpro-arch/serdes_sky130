@@ -7,7 +7,7 @@
 
 ## r6（2026-11-12，当前主线）
 
-**r6 = r5 的环按版图重新定尺寸：寄生写进原理图，负载改成成对长电阻，阵列改 5 bit。** 网表 [vco_ring4_r6](../../analog/pll/vco/spice/vco_ring4_r6.spice)、[延迟级](../../analog/pll/vco/spice/vco_delay_r6.spice)、[阵列](../../analog/pll/vco/spice/cap_bank_5b.spice)。量程两端候选实测余量约 ±8%（r5 带现实寄生后慢端为 −4.9%，到不了 2 GHz）。本节以下各节的 r5/4 bit 数字（码表、工作区、相噪工作点）只作历史，按 r6 重算后替换。
+**r6 = r5 的环按版图重新定尺寸：寄生写进原理图，负载改成成对长电阻，阵列改 5 bit。** 网表 [vco_ring4_r6](../../analog/pll/vco/spice/vco_ring4_r6.spice)、[延迟级](../../analog/pll/vco/spice/vco_delay_r6.spice)、[阵列](../../analog/pll/vco/spice/cap_bank_5b.spice)。近邻候选实测两端余量约8%；最终L4.77/WT25.2的约8.7%是候选插值估计，须由其当前工作图确认（r5带现实寄生后慢端−4.9%）。本节以下各节的r5/4bit数字只作历史，不能转作r6码表、噪声或工作区资格。
 
 | 部分 | r6 | r5 |
 |---|---|---|

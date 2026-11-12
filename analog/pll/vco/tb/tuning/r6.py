@@ -75,7 +75,12 @@ UNSETTLED = []
 
 
 def read(camp, rc, c, code, v):
-    """(frequency, differential swing) over the last 5 ns, None without a complete waveform; notes unsettled points."""
+    """(frequency, differential swing), None without a complete waveform; notes unsettled points.
+
+    Over the last 5 ns when that holds six rising crossings (f > about 1.2 GHz); slower points (code 31 at the slow
+    corners, 0.82-1.2 GHz, found by Codex's r6_map_wave_audit) use the whole saved window (8..14 ns, settled from 7 ns)
+    and need four.  The drift check compares the two halves of the crossings either way.
+    """
     p = spice.case_output(camp, f"{c.process}_{rc}", wm.name(c, code, v), wm.STOP)
     if p is None:
         return None
@@ -85,7 +90,11 @@ def read(camp, rc, c, code, v):
     e, s = wm.crossings(w.t[sel], y[sel])
     r = e[s > 0]
     if len(r) < 6:
-        return None
+        sel = w.t >= wm.START
+        e, s = wm.crossings(w.t[sel], y[sel])
+        r = e[s > 0]
+        if len(r) < 4:
+            return None
     h = len(r) // 2
     f1, f2 = h / (r[h] - r[0]), (len(r) - 1 - h) / (r[-1] - r[h])
     if abs(f2 / f1 - 1) > DRIFT:

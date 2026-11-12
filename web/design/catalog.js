@@ -1665,6 +1665,23 @@ window.DESIGN_CATALOG = {
           ]
         },
         {
+          "id": "vco-r6-layout-20261112",
+          "title": "按实际寄生重新定中心与量程",
+          "date": "2026-11-12",
+          "phase": "circuit",
+          "problem": "r5慢端仅约8fF余量，现实寄生超过它；短固定电阻扩大角偏差。",
+          "model": "以1/f–C校准寄生，近邻候选端点筛选，再做当前工作图与原生校准。",
+          "changes": "成对长负载、31半单元5bit、每相位12fF预算及重新定尾管/变容。",
+          "validation": "近邻候选已实测；最终L4.77/WT25.2的约8.7%是插值估计，当前map未完成。",
+          "conclusion": "采用r6主线；旧r5码表/窗口/ISF仅历史，实际接线/噪声/动态/统计仍开。",
+          "attachments": [
+            {
+              "title": "r6设计与尺寸依据",
+              "path": "docs/design/pll_vco.md"
+            }
+          ]
+        },
+        {
           "id": "20261107T103653Z_3372acc0db",
           "module": "pll.vco",
           "date": "2026-11-07",
@@ -1692,23 +1709,6 @@ window.DESIGN_CATALOG = {
             {
               "title": "vco_fixed_code_coverage.md",
               "path": "docs/history/vco_fixed_code_coverage.md"
-            }
-          ]
-        },
-        {
-          "id": "vco-r6-layout-20261112",
-          "title": "按实际寄生重新定中心与量程",
-          "date": "2026-11-12",
-          "phase": "circuit",
-          "problem": "r5慢端仅约8fF余量，现实寄生超过它；短固定电阻扩大角偏差。",
-          "model": "以1/f–C校准寄生，近邻候选端点筛选，再做当前工作图与原生校准。",
-          "changes": "成对长负载、31半单元5bit、每相位12fF预算及重新定尾管/变容。",
-          "validation": "近邻候选已实测；最终L4.77/WT25.2的约8.7%是插值估计，当前map未完成。",
-          "conclusion": "采用r6主线；旧r5码表/窗口/ISF仅历史，实际接线/噪声/动态/统计仍开。",
-          "attachments": [
-            {
-              "title": "r6设计与尺寸依据",
-              "path": "docs/design/pll_vco.md"
             }
           ]
         }

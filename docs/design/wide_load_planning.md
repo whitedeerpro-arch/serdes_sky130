@@ -71,3 +71,5 @@ uv run python analog/common/devices/tb/passive_card/wide_load_card.py --resume r
 ```
 
 [发布器](../../verification/plotting/wide_load_card.py)已重新读取全部标量raw，重做校准和几何，核对2700行覆盖、数值符号、执行deck/日志及原语复核证据；[数据](../data/wide_load_card.json)与[索引](../../results/catalog/wide_load_card.json)保留身份。[完整参考局部卡](physical_reference_card.md)已完成TT/1.8V三温、五采样码对照，实际trim MOS/n85镜像下电流变化较小。只据联合比较缩小候选；采用前仍需实际负载/电路边界、全PVT、启动与网络版图验证。
+
+下一项[局部driver固定负载卡](tx_physical_load_card.md)已准备，保持原参考、分别替换前驱和本地端接网络；先过原样校准，再测实际电流和消费者动态。当前尚待电气完成。

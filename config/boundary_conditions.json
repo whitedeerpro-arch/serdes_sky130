@@ -24991,5 +24991,77 @@
    "series_voltage_error_v": 1e-09
   },
   "scope": "FS hot and SS cold, RC tt; generic/short/long clock loads, current driver downstream. Training/diagnosis only; no independent new model holdout."
+ },
+ {
+  "id": "tx_driver_clean_pair_20261112_v1",
+  "kind": "frozen_prescribed_input",
+  "description": "Copied ideal clean PWL from the measured two-initial-state driver card, not a serializer replay.",
+  "upstream": {
+   "module": "tx.output_driver.clean_fixture",
+   "revision": "pre120_wt60_out192_paired_20261112"
+  },
+  "nodes": {
+   "inputs": [
+    "qp",
+    "qn"
+   ],
+   "consumer_ports": [
+    "inp",
+    "inn"
+   ]
+  },
+  "load": {
+   "stages": [
+    "X inp inn _ _ _ _ _ serdes_cml_buffer rload={riso} wn={wiso} wt={wtiso}"
+   ],
+   "sha": "89de63369106e2a2"
+  },
+  "points": {
+   "fs_v1650_t85": {
+    "condition": "fs_v1650_t85",
+    "run": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/fs_v1650_t85",
+    "deck_sha256": "954c2870a5e337ac74df3c1953a8fdb2f595b81e17b0d68349e5633461598ebc",
+    "waveform_sha256": "898b64c2fcbaeeb4e1226873999edaf431df405c8d1ba4f63da8161693ba36fd",
+    "prepared_deck": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/prepared/fs_v1650_t85/tb.cir",
+    "prepared_deck_sha256": "954c2870a5e337ac74df3c1953a8fdb2f595b81e17b0d68349e5633461598ebc",
+    "stimulus": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/prepared/fs_v1650_t85/stimuli.inc",
+    "stimulus_sha256": "c60f2fa991c4fb691984560673f3cef6d64c6b988c3a03eef91ab72b89149a67",
+    "input_cell": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/snap/fs_v1650_t85/pdk_resistors/analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice",
+    "input_cell_sha256": "8e720e2c6ae3191f9dce0a07bc2d5f2b7b83e0e2ff1d80d27917ec5a9ce68c8d"
+   },
+   "ff_v1950_t-40": {
+    "condition": "ff_v1950_t-40",
+    "run": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/ff_v1950_t-40",
+    "deck_sha256": "b88cb4ec0c6312b4c526b390fb66a4bc1c538420831049e108c073e556be31bc",
+    "waveform_sha256": "70b4e6c764ad9f63f0ef646b34f4df45b9aa252dcaebff41d34f3859278f2726",
+    "prepared_deck": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/prepared/ff_v1950_t-40/tb.cir",
+    "prepared_deck_sha256": "b88cb4ec0c6312b4c526b390fb66a4bc1c538420831049e108c073e556be31bc",
+    "stimulus": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/prepared/ff_v1950_t-40/stimuli.inc",
+    "stimulus_sha256": "500e485e0089b0931faa9efaf2797ab981a1dddc9138f3d5b6b5b971ee312728",
+    "input_cell": "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343/snap/ff_v1950_t-40/pdk_resistors/analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice",
+    "input_cell_sha256": "8e720e2c6ae3191f9dce0a07bc2d5f2b7b83e0e2ff1d80d27917ec5a9ce68c8d"
+   }
+  },
+  "input": {
+   "differential_pp_v": 0.4,
+   "edge_0to100_s": 2e-11,
+   "cm_below_vdd_v": 0.12,
+   "source_impedance_ohm": 0,
+   "external_capacitance_each_f": 2e-15
+  },
+  "allowed_changes": [
+   "Only local driver Rp/Rn and Xpre.Xgain Rp/Rn; Xiso input branch, devices, source waveform and all other bias/resistors preserved."
+  ],
+  "processing": "Copy exact source stimuli. Each implementation solves its own DC OP for the off->4ns and enabled-DC pair; no copying capacitor charges between implementations.",
+  "valid_while": "Explicit two source tags, 92ns record, same pad/package/10nF/RLC16/remote load and shared per-mode original generic reference. Ideal input can drive changed Miller loading; this grants no real upstream-source qualification.",
+  "validation": {
+   "baseline_max_abs_node_error_v": 0.001,
+   "baseline_max_abs_edge_error_s": 2e-13,
+   "baseline_current_peak_rms_relative_error": 0.01
+  },
+  "source_data": {
+   "path": "docs/data/tx_coupling_state.json",
+   "sha256": "0d2888d9cba2d13a5e207b68a98b50ec1b53a8b1424efb05aa9117404cfdad35"
+  }
  }
 ]

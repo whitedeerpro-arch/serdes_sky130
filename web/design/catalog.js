@@ -2693,11 +2693,11 @@ window.DESIGN_CATALOG = {
       "name": "系统域 FIFO / CDC",
       "key": "R07",
       "subtitle": "恢复字时钟 → 系统时钟",
-      "state": "接口待定义",
-      "summary": "恢复字时钟跟随远端ppm，输出到系统域需要明确缓冲、流控或空闲补偿策略。",
+      "state": "RTL积木已验证",
+      "summary": "Gray FIFO独立数字回归已完成；共同复位、有限缓存及两域溢出报告。物理RX接入、宿主吞吐/停顿与协议频偏补偿仍开。",
       "facts": {
-        "设计": "待设计",
-        "PVT": "按数字时序方法",
+        "设计": "独立Gray FIFO，尚未接物理RX",
+        "PVT": "深度2/4/16功能、通用综合与lint；未工艺签核",
         "失配": "不适用模拟MC",
         "噪声": "关注时钟与CDC假设"
       },
@@ -2706,22 +2706,31 @@ window.DESIGN_CATALOG = {
           "恢复域16bit字、w、数据有效"
         ],
         "outputs": [
-          "系统域并行数据与流控"
+          "系统域并行字、valid/ready与sticky溢出标志"
         ],
         "assumptions": [
-          "当前前端/行为CDR结果不预设最终协议或系统时钟政策。"
+          "共同复位并各域同步释放；w_online后启用有效数据纪元。",
+          "FIFO不能无限吸收持续频差；宿主吞吐/停顿和协议补偿需单独定约。"
         ]
       },
       "planning": {
         "question": "两侧长期频差由谁吸收？",
         "model": "FIFO占用、ppm与最大无补偿间隔的离散模型。",
-        "parameters": "深度、空闲补偿 / 流控策略、同步器时序。",
-        "verification": "数字时序、CDC和溢出/欠载场景。"
+        "parameters": "默认16字、参数化深度；宿主吞吐/停顿、空闲补偿与物理同步器约束待定。",
+        "verification": "已过3深度异步功能/通用综合检查；实际RX接线、映射STA、Gray偏斜/MTBF及溢出恢复待完成。"
       },
       "references": [
         {
           "title": "RX数字接口",
           "path": "docs/design/rx_cdr_digital.md"
+        },
+        {
+          "title": "宿主CDC接口与容量边界",
+          "path": "docs/design/rx_host_cdc.md"
+        },
+        {
+          "title": "FIFO验证证据",
+          "path": "results/catalog/rx_async_word_fifo.json"
         }
       ],
       "iterations": []

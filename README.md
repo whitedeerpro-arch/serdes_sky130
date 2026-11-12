@@ -34,7 +34,7 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 | [信道模型](docs/design/channel_model.md) | RLC16 + PCB 族 | C0–C5 构造与 TX 接入 | 链路级眼图门槛未定义 |
 | [RX 前端](docs/design/rx_frontend.md) | vcm 1.05 V | AC/DC 45 条件 × 4 档；C2 眼图 45 条件（默认 EQ3） | C3 未做；档位自适应；输入失调 σ 6.1 mV |
 | [RX PI 与采样](docs/design/rx_pi_sampler.md) | ac_trim/c2/120f；deser16/W40 | 无读出窗口135条件，最差0.8125 UI；当前W40的FS/FF冷hh均完成44.75ns，分别96/112数据位、49/55确定边沿零错 | 当前W40全网格、真实失配完整SAR、原生锚点/动态PVT与启动 |
-| [RX 数字](docs/design/rx_cdr_digital.md) | 首版 RTL | 行为采样闭环 10 组 100 µs 零错字；物理 deser16 TT 短时联调与 PI 跨扇区/回卷 | 生产参数/频偏的物理验证；综合/STA；系统域 FIFO/CDC |
+| [RX 数字](docs/design/rx_cdr_digital.md) | 首版 RTL | 行为采样闭环 10 组 100 µs 零错字；物理 deser16 TT 短时联调；[独立宿主FIFO](docs/design/rx_host_cdc.md)三种深度数字回归 | 生产参数/频偏的物理验证；目标库综合/STA；系统域接线/容量与工艺CDC |
 | [偏置](docs/design/bias.md) | 带隙 + 恒 I·R + vcm + 分配/B2（5 bit 修调） | 135条件上电；摆幅代理407–426 mV；分配MC200样本三温；多模块已接真实参考 | 当前整机动态/闭环/启动、ready与供电预算；B2目标匹配；PNP无失配模型；恒I·R不保证恒速度 |
 
 版图前推进与验收见 [工作包和完成条件](docs/status/prelayout_plan.md)。全部问题、优先级和阶段见 [待解决问题](docs/status/open_issues.md)；版本线见 [版本与基线](docs/overview/revisions.md)。

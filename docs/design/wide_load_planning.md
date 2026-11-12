@@ -70,4 +70,4 @@ uv run pytest -q tests/test_poly_geometry.py tests/test_wide_load_card.py
 uv run python analog/common/devices/tb/passive_card/wide_load_card.py --resume results/analog/common/devices/wide_load_card/20261112T050902.564688Z_ea0db703
 ```
 
-[发布器](../../verification/plotting/wide_load_card.py)已重新读取全部标量raw，重做校准和几何，核对2700行覆盖、数值符号、执行deck/日志及原语复核证据；[数据](../data/wide_load_card.json)与[索引](../../results/catalog/wide_load_card.json)保留身份。只据联合比较缩小候选；采用前仍需真实参考、当前完整电路边界、全PVT与实际网络版图验证。
+[发布器](../../verification/plotting/wide_load_card.py)已重新读取全部标量raw，重做校准和几何，核对2700行覆盖、数值符号、执行deck/日志及原语复核证据；[数据](../data/wide_load_card.json)与[索引](../../results/catalog/wide_load_card.json)保留身份。[完整参考局部卡](physical_reference_card.md)已准备，保留实际trim MOS及n85镜像负载，尚待电气运行。只据联合比较缩小候选；采用前仍需真实参考、当前完整电路边界、全PVT与实际网络版图验证。

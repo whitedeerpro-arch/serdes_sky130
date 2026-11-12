@@ -126,3 +126,9 @@
 
 - 2026-11-12 13:23 Codex：`67b6609`完成上述5位数字准备，默认4位/原参数位置兼容，VCO码独立CODE_BITS参数，门限梯仍4位；默认ACQUIRE超时4/5位为16384/32768。6项RTL回归通过（原4位、全部32搜索结果、CHECK/BACK、15↔16、端点、旧超时FAULT 4对照）；Terra独立Yosys展开/proc/check 0问题、Verilator lint通过。物理r6未采用，仍需cfg4/复位/quiet轨及新工作图、窗口、捕获/切码/噪声/PVT证据。
 - 2026-11-12 13:23 Codex：`73e78dc`提交宽电阻规划/可续跑短卡与两种L10原语双重复核（DRC0/LVS/三端体连接）；同时收录已有且被此复核固定哈希的`verification/layout/check.py`和`magicutil.py`，未改写这两个共享工具。6项几何/拓扑测试通过。**wide_load_card当前仍未启动**，全机r6三进程＋host_ref一个；请求的1个短仿真名额仍待交接。源码/文档见`docs/design/wide_load_planning.md`，无候选采用或电气通过声明。
+
+- 2026-11-12 13:31 Codex：NG仍4/4（r6三＋host ref一），不抢占。独立review确认宽卡符号/连接/覆盖；发布器补被动R/C符号检查，不改已冻结runner/规划输入。等待期间接手I-15的独立恢复字→系统时钟FIFO积木，新增RTL/TB/文档，不改现有RX模拟/CDR/读出。共同复位、每域同步释放、Gray双触发同步、显式溢出；它只处理CDC与有限缓冲，协议空闲补偿和物理CDC/STA仍单列。
+
+- 2026-11-12 13:35 Codex：查到全机降为3个NG（r6 B/sf_ll＋B/ss_hh、host_ref fs冷），已启动wide_load_card/20261112T050902.564688Z_ea0db703，1 worker、最多补6个短deck。runner内部每次开NG前仍查全局<4；冻结源码/原PDK不动。
+
+- 2026-11-12 13:50 Codex：宽卡6deck完成，`54420bb`发布2700行/两图（LF AC/FD最大3.90e-9；50Ω的2p85×24/5p73×12为76.47/67.66fF，参考代理比值1.45/1.75%），未采用网络。`4bdeacd`提交宿主FIFO积木、`a31ba78`同步R07目录（仅暂存该节点，保留其他PLL脏改动）。Codex当前0 NG。

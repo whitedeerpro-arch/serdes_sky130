@@ -1,4 +1,8 @@
-"""Read-only snapshot audit of one explicitly named in-flight r6 map campaign."""
+"""Read-only r6 snapshot under the historical last-5ns/six-edge screen.
+
+This screen deliberately reproduces the pre-35d9dda reader. It does not audit
+the later whole-saved-window/four-edge fallback or qualify its code table.
+"""
 import argparse
 from collections import Counter
 from datetime import datetime,timezone
@@ -152,7 +156,7 @@ def audit(campaign,out):
     result=dict(status='partial_campaign_read_only_audit',campaign=str(campaign.relative_to(ROOT)),inventory_sha256=sha(out/'inventory.json'),
         source_hashes=sources,pdk_manifest_sha256=sha(out/'pdk_manifest.json'),ngspice=tool,expected_points=1620,counts=dict(counts),rows=rows,
         worst_absolute_drift=max(unsettled,key=lambda r:abs(r['drift_fraction'])) if unsettled else None,
-        scope='Frozen existing records only; missing/writing are not design failures. Settled means only last-5ns drift screen, not PVT/spec qualification. Source current reader returns frequencies for unsettled >=6-edge points; 4/5-edge points are skipped.')
+        scope='Frozen existing records under the historical pre-35d9dda last-5ns/six-edge reader screen; missing/writing are not design failures. Settled means only this drift screen, not PVT/spec qualification. Status labels refer to that historical reader; the later whole-saved-window/four-edge fallback and its table are not audited here.')
     (out/'summary.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     return result
 

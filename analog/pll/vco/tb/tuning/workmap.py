@@ -38,6 +38,7 @@ TEMPLATE = ROOT / "analog/pll/vco/tb/phase_noise/tb_vco_isf_ngspice.cir.in"
 RESULTS = ROOT / "results/analog/pll/vco/workmap"
 STOP, START = 24e-9, 14e-9
 CARDS = "generic"   # --cards; module level so extend() / run_points() decks follow it
+RING_PARAMS = ""    # bank 5 only: parameter overrides on the pll_vco_ring4_r6 instance (sizing candidates)
 TARGET = 2e9
 BANKS = {3: dict(codes=8, coarse=(0, 3, 7)), 4: dict(codes=16, coarse=(0, 6, 15))}
 
@@ -58,6 +59,14 @@ def deck(process, rc, points, camp, bank=3):
         inc = '.include "' + str(ROOT / "analog/pll/vco/spice/vco_ring4_pvt_candidate.spice") + '"'
         assert text.count(inc) == 1
         text = text.replace(inc, inc.replace("vco_ring4_pvt_candidate", "cap_bank_4b") + "\n" + inc.replace("vco_ring4_pvt_candidate", "vco_ring4_4b"))
+    if bank == 5:      # r6: 5-bit bank with layout parasitics, wiring allowance (vco_ring4_r6.spice); RING_PARAMS overrides its defaults
+        old = "ctrl cfg0 cfg1 cfg2 vbias vdd 0 pll_vco_ring4_pvt_candidate"
+        assert text.count(old) == 1
+        text = text.replace(old, "ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vdd 0 pll_vco_ring4_r6" + (" " + RING_PARAMS if RING_PARAMS else ""))
+        text = text.replace("Vb2 cfg2 0 0\n", "Vb2 cfg2 0 0\nVb3 cfg3 0 0\nVb4 cfg4 0 0\n")
+        inc = '.include "' + str(ROOT / "analog/pll/vco/spice/vco_ring4_pvt_candidate.spice") + '"'
+        assert text.count(inc) == 1
+        text = text.replace(inc, "\n".join(inc.replace("vco_ring4_pvt_candidate", f) for f in ("cap_bank_5b", "vco_delay_r6", "vco_ring4_r6")))
     camp.mkdir(parents=True, exist_ok=True)
     to_pdk = rcorner.to_pdk_fixed if CARDS == "fixed" else rcorner.to_pdk
     text = bias.section(to_pdk(bias.real(text), camp), process, rc)

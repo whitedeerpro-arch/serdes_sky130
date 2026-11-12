@@ -1,0 +1,35 @@
+* PLL VCO r6 delay stage (2026-11-12): serdes_cml_delay with the loads written as the devices the layout draws.
+* Each load is TWO sky130_fd_pr__res_high_po_2p85 in parallel, each of length lload (about 2 x the load value).
+* Why not one short resistor: the head (contact) resistance does not follow the sheet corner, so a short high_po
+* spreads wider over the resistor corners.  Measured at 27 C for about 337 ohm (ngspice, hh / ll against tt):
+*   1 x 2p85 l = 1.715       +-20.7 %   1.4 fF to substrate
+*   2 x 2p85 l = 4.8         +-14.7 %   4.2 fF
+*   1 x 5p73 l = 4.65        +-14.5 %   3.7 fF   (generator not DRC-checked)
+* The VCO's tuning range has to cover that spread at both ends, so the long pair buys about 2.4 % at the slow end and
+* 6.3 % at the fast end for 2.8 fF.  The loads now also track the bias reference resistor (a long 1p41) more closely,
+* which is what the constant-swing bias assumes.  Resistors are 3-terminal (body = vss).
+.subckt pll_vco_delay_r6 inp inn outp outn vbias vdd vss
++ params: wn=40 lin=0.15 nfin=8 wt=25.2 lt=0.5 nftail=4 lload=4.77
+Xrp1 vdd outp vss sky130_fd_pr__res_high_po_2p85 l={lload}
+Xrp2 vdd outp vss sky130_fd_pr__res_high_po_2p85 l={lload}
+Xrn1 vdd outn vss sky130_fd_pr__res_high_po_2p85 l={lload}
+Xrn2 vdd outn vss sky130_fd_pr__res_high_po_2p85 l={lload}
+Xmp outp inp tail vss sky130_fd_pr__nfet_01v8_lvt
++ w={wn} l={lin} nf={nfin}
++ ad={floor((nfin+1)/2)*(wn/nfin)*0.29}
++ as={floor((nfin+2)/2)*(wn/nfin)*0.29}
++ pd={2*floor((nfin+1)/2)*(wn/nfin+0.29)}
++ ps={2*floor((nfin+2)/2)*(wn/nfin+0.29)}
+Xmn outn inn tail vss sky130_fd_pr__nfet_01v8_lvt
++ w={wn} l={lin} nf={nfin}
++ ad={floor((nfin+1)/2)*(wn/nfin)*0.29}
++ as={floor((nfin+2)/2)*(wn/nfin)*0.29}
++ pd={2*floor((nfin+1)/2)*(wn/nfin+0.29)}
++ ps={2*floor((nfin+2)/2)*(wn/nfin+0.29)}
+Xtail tail vbias vss vss sky130_fd_pr__nfet_01v8
++ w={wt} l={lt} nf={nftail}
++ ad={floor((nftail+1)/2)*(wt/nftail)*0.29}
++ as={floor((nftail+2)/2)*(wt/nftail)*0.29}
++ pd={2*floor((nftail+1)/2)*(wt/nftail+0.29)}
++ ps={2*floor((nftail+2)/2)*(wt/nftail+0.29)}
+.ends pll_vco_delay_r6

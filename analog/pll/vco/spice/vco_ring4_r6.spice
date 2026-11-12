@@ -1,0 +1,49 @@
+* PLL VCO r6 (2026-11-12): the r5 ring re-centred for layout.  Differences from pll_vco_ring4_4b:
+*   - 5-bit bank of 31 half units with their layout parasitics (cap_bank_5b.spice);
+*   - an explicit wiring allowance cwire on each of the eight phase nodes (ring interconnect, delay-stage output,
+*     varactor / buffer-input / bank wiring).  Extracted netlists instantiate with cwire=0;
+*   - delay stage pll_vco_delay_r6 (vco_delay_r6.spice): each load two long 2p85 high_po in parallel (resistor-corner
+*     spread +-14.7 % instead of +-20.7 % for one short device), load and tail re-sized at constant swing.
+* Sizing and verification: docs/design/pll_vco.md "r6".  Dependencies are loaded by the testbench.
+.subckt pll_vco_ring4_r6 q0p q0n q1p q1n q2p q2n q3p q3n
++ vctrl b0 b1 b2 b3 b4 vbias vdd vss
++ params: wn=40 nfin=8 wt=25.2 lt=0.5 lload=4.77
++ varw=5.2 varl=0.5 varvm=4 capw=2.0 capl=2.0 sw=1.5 cwire=12f
+
+X0 q3n q3p q0p q0n vbias vdd vss pll_vco_delay_r6
++ wn={wn} nfin={nfin} wt={wt} lt={lt} lload={lload}
+X1 q0p q0n q1p q1n vbias vdd vss pll_vco_delay_r6
++ wn={wn} nfin={nfin} wt={wt} lt={lt} lload={lload}
+X2 q1p q1n q2p q2n vbias vdd vss pll_vco_delay_r6
++ wn={wn} nfin={nfin} wt={wt} lt={lt} lload={lload}
+X3 q2p q2n q3p q3n vbias vdd vss pll_vco_delay_r6
++ wn={wn} nfin={nfin} wt={wt} lt={lt} lload={lload}
+
+* Accumulation varactor: gate at the oscillator output, well / control at vctrl, substrate at vss.
+Xv0p q0p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv0n q0n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv1p q1p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv1n q1n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv2p q2p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv2n q2n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv3p q3p vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+Xv3n q3n vctrl vss sky130_fd_pr__cap_var_lvt w={varw} l={varl} vm={varvm}
+
+Xc0p q0p b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc0n q0n b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc1p q1p b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc1n q1n b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc2p q2p b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc2n q2n b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc3p q3p b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+Xc3n q3n b0 b1 b2 b3 b4 vss pll_vco_cap_bank5 capw={capw} capl={capl} sw={sw}
+
+Cw0p q0p vss {cwire}
+Cw0n q0n vss {cwire}
+Cw1p q1p vss {cwire}
+Cw1n q1n vss {cwire}
+Cw2p q2p vss {cwire}
+Cw2n q2n vss {cwire}
+Cw3p q3p vss {cwire}
+Cw3n q3n vss {cwire}
+.ends pll_vco_ring4_r6

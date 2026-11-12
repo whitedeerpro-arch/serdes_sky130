@@ -2,6 +2,8 @@
 
 **2026-11-08：extra5时钟与输出级候选下，完整TX在45个MOS条件全部满足串化器与焊盘门槛，最差FS 1.65 V 85 °C 103.1 mV / 0.115 UI（串化器）、136.0 mV / 0.138 UI（焊盘），见[45条件结果](tx_final_retime.md#45条件完整tx2026-11-08)。** 该结果使用理想2 GHz源、PDK电阻tt和RTL PWL；内部时钟摆幅、PLL原生时钟、电阻角、启动、失配和噪声仍未闭合。
 
+**原生联合调试已经做过。** [r5 VCO/分频前端＋TX v3同deck](../history/clocking_progress_20261106.md#原生联合仿真恢复)使用真实偏置/PDK电阻，8个完整46ns压力点均连续计数；另两个FF冷点数值未完成。该批固定Vctrl、静态数据，不是闭环PLL或本页的动态字入口/extra5组合。本页“没有接入PLL”只描述下面这批45点测试台，不能概括全部TX工作。当前接手点是将已有接口经验和明确边界承接到r6及当前字入口，按改动影响安排局部回归。
+
 此前三压力点演进：新字入口接实际v3完整TX后，末级选择时钟改进在TT、FS低压热角及SS低压冷角恢复串化器眼图门槛。FS原实现0.52 mV/0.333 UI失败；2 GHz路径额外中间缓冲从1增至3级后，128.29 mV/0.08961 UI，额外交越、训练/marker错误均消失。TT回归155.68 mV/0.03137 UI。该阶段仅覆盖三条件、各256 bit确定性工作态；原失败保留为对照。
 
 ## 电路和边界
@@ -68,6 +70,12 @@ SS低压冷角也完成120 ns动态验证：`parallel_serializer/20261107T103131
 ## 复跑入口
 
 电路：[capture_serializer16.spice](../../analog/tx/input_register/spice/capture_serializer16.spice)。测试：[full_serializer/run.py](../../analog/tx/input_register/tb/full_serializer/run.py)。每点 `probe → prepare → RTL producer → run`；probe 和 run 的源、负载、布线与计数器初态签名必须一致。`run --resume <campaign>` 保持已渲染快照，只补缺失或截断的运行；完整波形只生成新的分析记录，不再启动仿真。
+
+当前工作组合的probe必须显式带下列参数；CLI无覆盖值时保留早期基线语义，不会因工作修订号改变而偷偷改历史测试台：
+
+```bash
+uv run python analog/tx/input_register/tb/full_serializer/run.py probe --condition tt_v1800_t27 --clock-extra-2g 5 --clock-output-wt 16 --clock-output-r 240 --driver-params 'rpre=120 wtpre=60 wout=192'
+```
 
 内部幅度迭代可在probe指定`--clock-stage-wt`/`--clock-stage-r`统一调整2GHz extra级，或用`--clock-stage-profile '[[24,14.4,320],[24,15.6,320],[24,15.6,320],[24,15.6,320],[24,15.6,320]]'`指定各级WN/WT/名义R。两种选参方式互斥；Xiso、其他频段及最终输出独立。prepare、dynamic与resume继承并核对参数，登记前比对实际分发网表与plan；新尺寸必须重新probe，不能套用旧发数边界。45点编排器传同样参数、默认2worker，运行时仍须遵守全机4个/本agent2个限制。这里增加选参能力，不表示示例尺寸已通过完整TX。
 

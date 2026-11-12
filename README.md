@@ -4,6 +4,8 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 接手本项目先读 [AGENTS.md](AGENTS.md)（约定、环境、注意事项）。
 
+**当前推进基准：`baseline-prelayout-20261113`**。组合为PLL r6、TX v3/extra5及当前驱动、RX ac_trim/c2/W40及宿主字路径、Bias/B2与HV18 r4；[基准表与接下来三步](docs/status/prelayout_plan.md#当前推进基准2026-11-13)是接手入口。已有原生PLL→TX联合工作与各模块验证范围分别保留。
+
 **[打开交互设计工作台](web/design/index.html)**：自上而下浏览 SerDes → TX / Bias / RX / PLL / Channel → 子模块，查看边界、模型规划、参数、迭代与证据。需要内嵌阅读资料和保存模块迭代时，运行 `uv run python -m serdes_flow.design_viewer --open`；[使用说明](web/design/README.md)。
 
 ## 规格摘要
@@ -22,19 +24,19 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 | 模块 | 当前修订 | 已验证到 | 主要缺口 |
 |---|---|---|---|
-| [VCO](docs/design/pll_vco.md) | r6 / 5bit / 版图寄生与成对长负载 | 近邻尺寸两端比较；14ns/4ps精度三角校准；最终尺寸约8.7%端点余量为插值估计 | 当前135条件工作图/码表；原生闭环、启动、失配/噪声与动态调码；旧r5证据仅历史 |
+| [VCO](docs/design/pll_vco.md) | r6 / 5bit / 版图寄生与成对长负载 | 135条件工作图已生成；表中最差慢/快端余量8.23/8.63%，最小窗口/LSB 2.25 | 模型锁点/低频规则校验，当前尺寸噪声/失配、切码与启动 |
 | [÷8 prescaler](docs/design/pll_divider.md) | r3结构；首级W40/后级W80 | 真实偏置/PDK R、标准输入hh/ll各45点；六压力点MC共1048样本正确分频 | FF冷失配数值缺失；原生全角/启动、FS冷尾管余量 |
 | [时钟接收器](docs/design/clock_receiver.md) | PLL r4 | 反馈 45/45，全速 45/45；原生 VCO 5 个工作点全部正常 | SS 热角幅度余量约 110 mV；1.95 V 过冲 |
 | [PFD/CP/LF/启动](docs/design/pll_loop.md) | r6 quiet core / k4 / 标准单元延迟复位PFD / 4.13kΩ与18pF LF | 新PFD冷角MC两点各100样本；相位窗45点；5位数字搜索回归；旧r5闭环另作历史 | r6工作图后重校环路/原生闭环、实际粗搜/跨域驱动、从零启动、噪声/供电抑制 |
 | [PLL 安静供电](docs/design/ldo_r4.md) | HV18 r4静态引脚、参考RC＋6bit电压修调 | DC1215、AC255；额外100pF端点425条AC最差PM65.07°/38.44dB；四工况×hv/ext共8条原生预充闭环锁定 | 宿主定时路径/参考副本的供电预算；真实从零启动、引脚/电容区间、UVLO/ready、完整噪声/失配 |
 | [TX 字入口](docs/design/tx_word_capture.md) | 16位捕获＋两组8位保持；extra5整链候选 | 首级6压力48字；B关闭12组；[完整TX](docs/design/tx_parallel_serializer.md)在理想2GHz、真实偏置/PDK R tt下45/45串化器与焊盘过门槛，每点256 bit | 内部幅度I-17；原生源/电阻角、物理guard/blank、建立保持、失配/噪声 |
-| [TX 时钟分发](docs/design/tx_clock_distribution.md) | v3同步计数器、extra5/WT16/R240候选 | r4抽头回放15点；r5原生静态8点计数；理想2GHz整链45点眼图/位序正确 | 原生静态2个FF冷角数值缺失；原生动态/启动、内部幅度、功耗/噪声 |
+| [TX 时钟分发](docs/design/tx_clock_distribution.md) | v3同步计数器、extra5/WT16/R240工作组合 | r5原生VCO/分频前端＋TX同deck：8个完整静态压力点连续计数；另有理想2GHz完整TX动态MOS45点 | 已有联合调试承接到r6源/负载；两个旧FF冷点数值缺失；动态入口与物理控制、无源/噪声 |
 | [TX 串化器](docs/design/tx_serializer.md) | TX r2 | 固定理想 TT 时钟边界下 45/45 满足 75 mV / 0.15 UI（128 bit） | 原生分发见上；FS 热角长码型：串化器 0.115 UI，远端 0.147 UI |
 | [TX 输出级](docs/design/tx_output_driver.md) | r2使能；预驱120Ω/尾W60、输出W192候选 | 旧启用45点；新完整TX 45点焊盘过75mV/0.15UI门槛 | 幅度容差/内部超幅；实际焊盘/ESD、供电回流和电阻角 |
 | [信道模型](docs/design/channel_model.md) | RLC16 + PCB 族 | C0–C5 构造与 TX 接入 | 链路级眼图门槛未定义 |
 | [RX 前端](docs/design/rx_frontend.md) | vcm 1.05 V | AC/DC 45 条件 × 4 档；C2 眼图 45 条件（默认 EQ3） | C3 未做；档位自适应；输入失调 σ 6.1 mV |
 | [RX PI 与采样](docs/design/rx_pi_sampler.md) | ac_trim/c2/120f；deser16/W40 | 无读出窗口135条件，最差0.8125 UI；当前W40的FS/FF冷hh均完成44.75ns，分别96/112数据位、49/55确定边沿零错 | 当前W40全网格、真实失配完整SAR、原生锚点/动态PVT与启动 |
-| [RX 数字](docs/design/rx_cdr_digital.md) | 首版RTL及宿主数字字路径 | 行为闭环10组100µs零错字；物理deser16 TT短时联调；[map→align→FIFO](docs/design/rx_host_cdc.md)16窗口399前缀字 | 生产参数/频偏的物理验证；宿主物理cosim/容量、目标库STA与工艺CDC |
+| [RX 数字](docs/design/rx_cdr_digital.md) | CDR/校准RTL及map→align→FIFO | 行为10组100µs；物理TT短时联调；16窗口399前缀字；两种HD映射中优化后TT本域4ns满足 | SS本域setup、生产参数/频偏的物理验证；宿主物理cosim/容量与工艺CDC |
 | [偏置](docs/design/bias.md) | 带隙 + 恒 I·R + vcm + 分配/B2（5 bit 修调） | 135条件上电；摆幅代理407–426 mV；分配MC200样本三温；多模块已接真实参考 | 当前整机动态/闭环/启动、ready与供电预算；B2目标匹配；PNP无失配模型；恒I·R不保证恒速度 |
 
 版图前推进与验收见 [工作包和完成条件](docs/status/prelayout_plan.md)。全部问题、优先级和阶段见 [待解决问题](docs/status/open_issues.md)；版本线见 [版本与基线](docs/overview/revisions.md)。

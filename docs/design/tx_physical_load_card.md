@@ -1,6 +1,6 @@
 # 局部driver的固定电阻负载候选
 
-**生成器及四项离线检查已完成，已启动电气对照，尚无新网络通过结论。** [宽卡](wide_load_planning.md)和[实际参考串](physical_reference_card.md)已缩小器件不确定性；本卡将前驱/本地端接换成合法并联网络，测量实际电流、尾管余量与眼图。先保持原参考，隔离负载变化。
+**两角generic校准通过；fixed_2p85的FS热点完成，两种初态的局部眼图/位序均满足；FF冷点480s超时，5p73尚未运行，未采用新网络。** [宽卡](wide_load_planning.md)和[实际参考串](physical_reference_card.md)缩小了器件不确定性；本卡保持原参考，隔离合法并联负载变化。下一步先处理成本/数值瓶颈，不盲目延长整组超时。
 
 ## 冻结边界与比较对象
 
@@ -30,7 +30,9 @@ FS1.65V/85°C与FF1.95V/−40°C、RC tt，各实现独立deck；每deck保留�
 
 原队列结束后独立恢复运行，两角generic校准通过，但fixed_2p85冒烟因电流探针身份错误被拦下。单器件`probe_identity/run`的`show b`确认：ngspice把定宽卡的电压相关R主体展开为`b.<层次>.brhrpoly_<宽度>`，不能用普通R的`@r...`探针。已改成`@b...brhrpoly_[i]`对应的器件电流查询（实际语法为`@b.<层次>.brhrpoly_2p85[i]`或`5p73[i]`），保留原失败及波形。
 
-修正测量后新建`results/analog/tx/output_driver/physical_load_card/20261112T153555.198409Z_2da98456`；两角generic完整92ns已完成，首个固定候选1.001ns冒烟无探针错误，完整候选仍在运行。没有改DUT或原预登记校准门槛；旧campaign不能用新源码冒充原身份续跑。
+修正测量后新建`results/analog/tx/output_driver/physical_load_card/20261112T153555.198409Z_2da98456`；两角generic完整92ns约34/33s并通过原校准门。fixed_2p85 FS约435s完成、pad/remote两种初态均满足局部门槛与位序；FF约480s超时，未写完整结果，整组停止，5p73未启动。记录在该目录`analysis/measurement/summary.json`及各case执行记录；超时不判为功能失败。没有改DUT或门槛，旧campaign不能用新源码冒充原身份续跑。
+
+成本差别主要出现在新增行为电阻/内部节点的求解；精简库只解决加载部分。按[成本方法](../verification/methods.md#仿真成本与精简模型库)，下一步先在名义器件卡比较显式并联与倍数合并的DC/AC/瞬态等价性，再决定如何回接。独立失配不能直接合并。
 
 每case先1.001ns冒烟，再完整92ns；二进制raw、按实际终点续跑、不覆盖已有结果。单worker队列只在全局空位稳定后启动，每次运行前仍检查ngspice<4。队列日志在该目录`queue/events.jsonl`，不是仿真完成证据；完成以raw/执行记录和测量为准。
 

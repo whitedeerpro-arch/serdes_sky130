@@ -4,6 +4,8 @@
 > **关键数字**：45 条件全链功能 45/45；串化器满足 75 mV / 0.15 UI 草案 36/45 → 45/45；128 bit 下最小裕量 120.52 mV、最大散布 0.0953 UI。
 > **主要缺口**：FS/1.65 V/85 °C 的 1024 bit 记录中串化器散布 0.1149 UI、远端 0.1469 UI，接近 0.15 UI；这里的旧45点使用v0.1 TT时钟记录。后续实际字捕获/v3已接入完整TX，extra2g=3在TT/FS两点眼图回归满足，见[当前接口设计](tx_parallel_serializer.md)；内部摆幅I-17仍开。
 
+**当前组合入口：** [v3/extra5＋当前驱动的完整TX](tx_parallel_serializer.md)已过MOS45点、每点256bit；上面128bit与extra3数字为r2/早期迭代。r5原生VCO/分频前端＋TX同deck也已有8个完整静态压力点，两个FF冷点未完成。串化树保留r2单元，不表示源、分发和驱动仍停在旧r2版本。
+
 ## 电路
 
 16路CMOS数据经电平转换进入8＋4＋2级二选一树，最后接A/B重定时保持和最终二选一MUX。当前字入口与选择时钟边界见[层次框图](../figures/system/clock_tx_blocks.png)及[末级数据/时钟框图](../figures/tx/ingress/tx_final_retime_boundary.png)。

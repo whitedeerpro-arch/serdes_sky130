@@ -1,10 +1,10 @@
 # 版本与基线
 
-> 按模块维护工作修订与迭代：PLL完整顶层已有，近期为r5/4 bit＋k4转向CP/物理LF候选；TX为r2树、v3选择时钟与输出级改进；RX为ac_trim/c2/120f＋deser16/W40；偏置为带隙/恒I·R/分配/B2。修订是解决角点和约束问题的迭代记录，归属稳定的模块层次。见[设计工作台](../../web/design/index.html)与[详细验证边界](development_map.md)。v0.1为历史基线。
+> 当前工作组合（2026-11-13）：PLL r6/5bit带寄生VCO＋quiet k4 core及标准单元PFD；TX r2树＋v3/extra5/WT16R240＋预驱120Ω/尾W60/输出W192；RX ac_trim/c2/120f＋deser16/W40及宿主字路径；偏置带隙/恒I·R/分配/B2，供电HV18 r4。已有r5原生TX接口与PLL预充闭环继续作为明确边界的证据，改动后按受影响接口承接。配置首部指向当前组合，旧基线有独立字段，不再把候选更新藏在旧版本号下。
 
 ## 基线政策
 
-- 源码、文档、配置和小数据由 git 管理，`results/` 只留在磁盘（索引 `results/catalog/` 入库）。基线打 git 标签，当前为 `baseline-handover-20261030`。
+- 源码、文档、配置和小数据由git管理，`results/`只留磁盘（索引入库）。当前推进基准为`baseline-prelayout-20261113`；上次交接标签`baseline-handover-20261030`保留作历史，不再作为当前组合入口。
 - 每个模块的当前修订记录在 `config/*_working_revision.toml`，内容包括源文件、关键参数和状态。改电路时更新对应文件，不覆盖旧单元：新单元用新文件/子电路名，旧单元保留给依赖它的模块和历史证据。
 - 改动后在关键工况上重跑该模块的回归，再扩展到 45 条件。建议的关键工况取自历史上暴露问题的点：TT/1.8 V/27 °C、SS/1.65 V/−40 °C、SS/1.65 V/85 °C、FS/1.65 V/85 °C、FS/1.65 V/−40 °C（分频尾管余量），以及 FF/FS/1.95 V/−40 °C（CMOS 过冲）。
 - v0.1 曾以"冻结"形式发布，但之后分频器、VCO、转换器等都继续修改，冻结并未真正约束开发。保留其目录与哈希清单作为历史证据，不再新建冻结版本。
@@ -13,16 +13,17 @@
 
 | 模块组 | 当前修订 | 配置 | 上一版 |
 |---|---|---|---|
-| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r5/4bit候选；已有k4原生预充闭环三点，完整覆盖/启动待补 | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r4全速接收器，r3分频结构 |
-| PFD/CP/LF/启动 | k4转向CP、PDK LF4.13kΩ/18pF、粗码RTL/监测；行为VCO闭环135点 | [pll_working_revision.toml](../../config/pll_working_revision.toml)、[环路](../design/pll_loop.md)；旧启动参数保留 | v0.1 50µA/6.5kΩ/40p+2p |
-| TX 时钟分发、串化器、输出级 | r2树＋v3计数器；extra5/WT16R240与预驱/输出对改进，理想2GHz完整MOS45点 | [tx_working_revision.toml](../../config/tx_working_revision.toml) | r2旧理想时钟45点与extra3三压力点 |
+| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r6/5bit；31半单元、显式寄生、长负载对；135条件工作图已生成；轻dummy前端按新边界验证 | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r5/4bit前端；与TX同deck的8个完整静态压力点；r4接收器/原有分频局部结果 |
+| PFD/CP/LF/启动 | r6 quiet core：标准单元延迟复位PFD、k4转向CP、LF4.13kΩ/18pF、5bit搜索RTL | [pll_working_revision.toml](../../config/pll_working_revision.toml)、[环路](../design/pll_loop.md) | r5分层闭环135点与4条件×hv/ext共8条原生预充锁定；CP/分频局部统计保留 |
+| TX 时钟分发、串化器、输出级 | v3/extra5/WT16R240＋r2树＋预驱120Ω/尾W60/输出W192；完整动态MOS45点；原生接口证据另列 | [tx_working_revision.toml](../../config/tx_working_revision.toml) | `baseline_revision`保留r2旧基线；原生r5与TX已联合，r6按接口差异承接 |
+| PLL 安静供电 | HV18 r4；静态引脚、6bit修调、参考/尾偏置RC；本地网格及8条r5原生预充闭环 | [ldo_working_revision.toml](../../config/ldo_working_revision.toml) | r1–r3动态供电开关 |
 | RX 前端、PI、采样、读出、CDR | ac_trim/c2、PI120f、deser16/W40；行为与物理闭环范围不同 | [rx_working_revision.toml](../../config/rx_working_revision.toml)；旧夹具/参数见rx_frontend、rx_cdr配置 | stock、ac、旧pair读出 |
 | 偏置/带隙/参考缓冲 | 恒I·R＋5bit r_ref修调、模块电流拷贝、去耦、B2 | [bias_working_revision.toml](../../config/bias_working_revision.toml) | 理想电流参考 |
 | 信道模型 | RLC16 + 合成 PCB 族 | [channel_family.toml](../../config/channel_family.toml) | — |
 
 ### PLL 源文件与修订关系
 
-r5/4 bit原生候选为 [clock_frontend_r5.spice](../../analog/pll/top/spice/clock_frontend_r5.spice)＋[vco_ring4_4b.spice](../../analog/pll/vco/spice/vco_ring4_4b.spice)；全速接收器为r4。下面列出的r3文件保留其历史边界，不能仅凭同名VCO文件沿用旧码表或闭环结论。
+当前是[clock_frontend_r6q.spice](../../analog/pll/top/spice/clock_frontend_r6q.spice)＋[vco_ring4_r6.spice](../../analog/pll/vco/spice/vco_ring4_r6.spice)，完整环路为[pll_core_r6k4q.spice](../../analog/pll/top/spice/pll_core_r6k4q.spice)。r5/4bit与下面r3文件保留历史边界；未改动单元的局部结果继续按原输入/负载使用，受影响的源、加载、码表和噪声另验。
 
 | 单元 | 文件 |
 |---|---|
@@ -56,9 +57,9 @@ r5/4 bit原生候选为 [clock_frontend_r5.spice](../../analog/pll/top/spice/clo
 
 ## 修订之间的依赖
 
-- TX r2的45点基线使用v0.1 TT边沿理想化；r4原生接入暴露位置/质量问题。v3已有15点回放动态数据、r5原生8点静态计数，两者不能代替当前组合的全角动态资格，见[TX时钟分发](../design/tx_clock_distribution.md)。
+- PLL→TX已经有r5原生同deck联合调试；另有回放动态及当前完整TX理想2GHz的MOS45点。r6改变VCO、负载/相位和前端dummy，需针对这些接口差异回归，不将联合工作重记为从未做过，见[TX时钟分发](../design/tx_clock_distribution.md)。
 - RX 的 PI 锚点是理想相关的 2 GHz 多相源，没有接原生 PLL。
-- PLL r3的48ns原生记录为历史；当前r5/k4的135点为行为VCO分层闭环，原生晶体管闭环已有预充后三点，均不替代从零启动。
+- PLL已有r5/k4行为VCO分层135点及4条件×hv/ext共8条原生预充锁定；r6沿用未改动单元的局部证据，承接当前环路和启动。预充锁定与从零启动分别记录。
 
 ## v0.1 历史基线
 

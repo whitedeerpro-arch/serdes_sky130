@@ -2,7 +2,7 @@
 
 > **当前修订**：首版 RTL（[digital/rx/rtl](../../digital/rx/rtl/)，[说明](../../digital/rx/README.md)，[配置](../../config/rx_cdr.toml)）。
 > **关键数字**：实际 RTL + 行为采样 plant 的 10 组 100 µs 场景（0/±100/±300 ppm、确定扰动、孔径偏移）共 199360 个字全部正确；实时 Verilator ↔ ngspice 闭环接物理读出 deser16（TT）：PI 工作中步进 0→14 码（含跨扇区 7→8）和 0→63 回卷，训练释放后 22 / 17 个 payload 字全部正确、无重新对齐。
-> **主要缺口**：缺少目标库综合/STA；长时频偏验证仍用行为采样 plant，物理 deser16 已接入短时 TT 联调，生产参数/频偏/PVT 的物理动态尚未闭合；[宿主数字字路径](rx_host_cdc.md)已接map→align→FIFO并核对16窗口的399前缀字，尚未接物理cosim或完成系统容量/频偏补偿与工艺CDC。
+> **主要缺口**：CDR/校准的目标库时序仍开；[宿主字路径两种HD映射](rx_word_host_timing.md)已测，优化后TT本域4ns满足、两个SS库角仍负裕量。长时频偏仍用行为plant，物理deser16已有短时TT联调，生产参数/频偏/PVT动态另验；[map→align→FIFO](rx_host_cdc.md)16窗口399前缀字已有，宿主物理cosim、容量/频偏政策及工艺CDC待接。
 
 ## 结构
 

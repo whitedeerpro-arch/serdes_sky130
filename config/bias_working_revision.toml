@@ -1,5 +1,5 @@
 revision = "bandgap_constant_IR_dist_decoupled_B2_working"
-status = "module_topologies_implemented_and_characterized; full_system_loading_startup_noise_pending"
+status = "module_topologies_characterized; real_bias_in_RX_TX_and_native_PLL_benches; simultaneous_loading_ready_and_startup_handoff_open"
 report = "docs/design/bias.md"
 integration_map = "docs/overview/development_map.md"
 bandgap = "analog/common/bias/spice/bandgap.spice"
@@ -26,3 +26,9 @@ B2_pvt_scope = "405_conditions; codes0_7_15; within512ns_to10mV; 44_final_errors
 noise_psrr_scope = "90_conditions_bias_PSRR_characterization; VCO_bias_noise_in_7_corner_model; no_full_system_budget_closure"
 system_ready_detector_implemented = false
 full_system_startup_qualified = false
+
+[physical_reference_candidate]
+report = "docs/design/physical_reference_card.md"
+data = "docs/data/physical_reference_card.json"
+scope = "TT1.8V x three temperatures x five sampled trim codes x generic/fixed_s1/fixed_s8 = 45 OP; not MOS45, all32codes or startup"
+production_adopted = false

@@ -2,6 +2,8 @@
 
 **字映射→字对齐→FIFO已完成独立RTL集成，尚未接入物理混合仿真。** [rx_word_host_path](../../digital/rx/rtl/rx_word_host_path.sv)消费既有32位读出顺序，训练后输出宿主字；运行中重训或溢出使当前数据纪元报错。底层[rx_async_word_fifo](../../digital/rx/rtl/rx_async_word_fifo.sv)保持字顺序，解决异步传输与有限缓存；连续频偏下的长期吞吐、空闲补偿及系统恢复仍待完成。
 
+[首轮SKY130 HD映射时序](rx_word_host_timing.md)发现默认映射有负裕量；加入时序目标并扁平化后，TT本域setup满足假定4ns，两个SS库角仍不满足。后续比较更适合慢角的映射与结构，数字时序及物理CDC仍未收口。
+
 ## 接口和数据纪元
 
 | 信号 | 时钟域与含义 |
@@ -56,4 +58,4 @@ uv run pytest -q tests/test_rx_async_fifo_rtl.py
 uv run python verification/analysis/rx_async_fifo_review.py
 ```
 
-待完成：物理字输出的实际建立保持/接线，宿主时钟与容量契约，overflow后的系统控制，目标库映射/STA，Gray源寄存器到首级同步器的最大延迟/跨位偏斜约束、同步器放置/MTBF、复位恢复撤除及异步读存储器实现。异步时钟分组不能无意掩盖Gray总线的物理约束；RTL独立周期与固定初始相位测试不模拟亚稳态。
+待完成：物理字输出的实际建立保持/接线，宿主时钟与容量契约，overflow后的系统控制，目标库映射优化与本域时序闭合，Gray源寄存器到首级同步器的最大延迟/跨位偏斜约束、同步器放置/MTBF、复位恢复撤除及异步读存储器实现。异步时钟分组不能无意掩盖Gray总线的物理约束；RTL独立周期与固定初始相位测试不模拟亚稳态。

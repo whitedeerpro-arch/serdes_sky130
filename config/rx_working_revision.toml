@@ -90,7 +90,14 @@ behavioral_frequency_scope = "10_scenarios_100us; includes_plus_minus300ppm"
 physical_scope = "TT_short_windows; ideal_anchors_and_references; ac_rk; KP65536"
 calibration_cosim_scope = "TT_SS_low_voltage_hot; injected_offsets; ac_trim_rk; SS_long_run_interrupted_after_observed_payload"
 library_mapped_sta_completed = false
-system_fifo_cdc_implemented = false
+library_mapped_local_timing_measured = true
+library_mapped_setup_closed = false
+library_mapped_local_timing_report = "docs/design/rx_word_host_timing.md"
+system_fifo_cdc_implemented = true  # finite-buffer RTL path; not physical CDC qualification
+system_fifo_cdc_physical_qualified = false
+host_word_path = "digital/rx/rtl/rx_word_host_path.sv"
+host_word_path_report = "docs/design/rx_host_cdc.md"
+host_word_path_scope = "map/align/FIFO RTL functional integration; nominal 4ns local timing TT met after mapping optimization, SS library setup remains open; not connected to physical cosim"
 
 [variants]
 stock = "historical; follower_clock_shift_and_global_tail_bias; low_voltage_hot_window_failure"

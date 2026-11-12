@@ -31,8 +31,8 @@ verilator --lint-only --top-module pll_startup_supervisor digital/pll/rtl/pll_st
 ## 粗码控制
 
 RTL：`rtl/pll_coarse_ctrl.sv`（I-18），例化[公共监测单元](../common/README.md)的`mon_sync`/`mon_persist`。输入为[Vctrl窗口检测](../../analog/pll/coarse/README.md)的异步hi/lo、温度档`tclass`和各档停止门限（梯码+选用哪一侧比较器）；输出VCO粗码与两条门限梯的码。
-上电从码15逐码往快搜，每步等`SETTLE_CYCLES`；停止后梯码回到运行值，若低于vlo则退回一码。运行中hi/lo每`SAMPLE_DIV`周期采样、连续`PERSIST`次才切相邻码，切后`HOLD_CYCLES`内不再判；码0仍越上沿给`fast_end`，码15低于下沿给`slow_end`（快芯片的正常状态）。
-搜索须在环路闭合、CP开启时进行（监督器ACQUIRE内）；搜索期间由上层屏蔽送监督器的`quality_valid`。每个等待段装载后递减到零，再在下一拍判决，耗 `SETTLE_CYCLES + 1` 周期；16 个搜索码加 CHECK/BACK 最多 18 段。ACQUIRE 超时至少留出 `18 × (SETTLE_CYCLES + 1) + 8` 个参考周期，并另计上层交接和模拟建立余量。
+VCO粗码宽度由`CODE_BITS`决定，默认4位（0–15）；5位可表示0–31。`lo_code`、`hi_code`和`stop_code`中的每档门限仍是独立的4位电压梯码；H3/H4表示梯码数值。上电从最大粗码逐码往快搜，每步等`SETTLE_CYCLES`；停止后梯码回到运行值，若低于vlo则退回一码。运行中hi/lo每`SAMPLE_DIV`周期采样、连续`PERSIST`次才切相邻码，切后`HOLD_CYCLES`内不再判；码0仍越上沿给`fast_end`，最大码低于下沿给`slow_end`（快芯片的正常状态）。
+搜索须在环路闭合、CP开启时进行（监督器ACQUIRE内）；搜索期间由上层屏蔽送监督器的`quality_valid`。每个等待段装载后递减到零，再在下一拍判决，耗 `SETTLE_CYCLES + 1` 周期；`2**CODE_BITS`个搜索码加CHECK/BACK最多`2**CODE_BITS + 2`段。ACQUIRE超时至少留出`(2**CODE_BITS + 2) × (SETTLE_CYCLES + 1) + 8`个参考周期，并另计上层交接和模拟建立余量。控制顶层默认`ACQ_TIMEOUT_CYCLES=1024 × 2**CODE_BITS`，4位保持16384，5位为32768；修改等待时间后须另算预算，不能只靠默认缩放。
 
 滤波器在切码同一时钟沿同步清除，并在保持期、搜索期和 `track_en=0` 时持续清除；恢复跟踪后须重新取得 `PERSIST` 个采样点。同步器仍有两拍输入延迟，上层须允许比较器输出和环路在切码后建立。`hi` 与 `lo` 同时有效时保持高越界优先；这不作为合格模拟窗口输入。`SETTLE_CYCLES` 与 `HOLD_CYCLES` 是数字等待值，须结合模拟比较器与 PLL 再捕获时间逐角校准。
 
@@ -43,6 +43,8 @@ iverilog -g2012 -s tb_pll_coarse_ctrl -o /tmp/coarse.vvp digital/common/rtl/mon_
 `uv run pytest -q tests/test_pll_coarse_rtl.py`同时运行上述行为环路、公共滤波器清除检查及短HOLD/关闭再恢复跟踪回归。短HOLD用例取`HOLD_CYCLES=1、PERSIST=8`，检查一次已消失的越界不会被旧确认状态重复消费。
 
 `tb_pll_coarse_ctrl`对行为环路（每码锁定Vctrl随温度线性漂移、z一阶跟随300 ns、比较器±2 mV噪声）检查：三档温度×四种芯片偏移的上电码与独立实现的规则一致（门限±3 mV内两码都算对）；错档上电后−40→85→−40 °C扫描，升温往快码、降温往慢码，共3次切码，无两次间隔小于HOLD；码15下沿保持与码0上沿标志。
+
+`tb_pll_coarse_5bit`以抽象比较器规则覆盖全部32个搜索结果、CHECK/BACK的15→16与30→31、最大码回退钳位、运行中15↔16切换和0/31端点；同时检查搜索/运行门限梯仍为4位。`tb_pll_control_5bit`保留默认512周期等待，搜索31→0，要求搜索期间不能锁定、完成后仅一次搜索并保持锁定。第二个实例故意保留16384周期超时，必须进入FAULT 4；32768默认值须成功。两者及原4位控制顶层现纳入同一pytest入口，共6项。此处验证码算术和数字交接；物理r6的频率图、窗口、捕获、cfg4/复位/quiet轨接线及45点PVT仍须使用r6本身的证据，配置默认仍为4位。
 
 ## 启动链顶层
 

@@ -2,7 +2,7 @@
 
 > **当前修订**：首版 RTL（[digital/rx/rtl](../../digital/rx/rtl/)，[说明](../../digital/rx/README.md)，[配置](../../config/rx_cdr.toml)）。
 > **关键数字**：实际 RTL + 行为采样 plant 的 10 组 100 µs 场景（0/±100/±300 ppm、确定扰动、孔径偏移）共 199360 个字全部正确；实时 Verilator ↔ ngspice 闭环接物理读出 deser16（TT）：PI 工作中步进 0→14 码（含跨扇区 7→8）和 0→63 回卷，训练释放后 22 / 17 个 payload 字全部正确、无重新对齐。
-> **主要缺口**：无综合/STA；长时频偏验证仍用行为采样 plant，物理 deser16 已接入短时 TT 联调，生产参数/频偏/PVT 的物理动态尚未闭合；到系统时钟域的 FIFO/CDC 未设计。
+> **主要缺口**：缺少目标库综合/STA；长时频偏验证仍用行为采样 plant，物理 deser16 已接入短时 TT 联调，生产参数/频偏/PVT 的物理动态尚未闭合；[宿主FIFO积木](rx_host_cdc.md)已有独立RTL回归，尚未接入物理RX或完成系统容量/频偏补偿与工艺CDC。
 
 ## 结构
 
@@ -15,6 +15,7 @@
 | `rx_deserializer16` | 连续 4 个可编程训练字 0xb5e3 确定字边界；输出 bit0 最早；连续移位，不因 locked 抖动丢样本（吃 2 GHz pair 流，只用于行为闭环） |
 | `rx_word_map` | 物理读出 [rx_readout_deser16](../../analog/rx/sampler/spice/rx_readout_deser16.spice) 的 32 位（8 通道 × 4 级）→ 按时间排序的 16 数据 + 16 边沿；edge[0] 和 previous_data 取自上一字 |
 | `rx_word_align16` | 物理字是数据流中任意一个 16 UI 窗口；在 {上一字, 本字} 的 32 位里找训练字 0xb5e3 的位置（同一偏移连续 4 次），输出对齐字，比输入晚一字 |
+| `rx_async_word_fifo` | 独立恢复字→宿主CDC积木，默认16字，Gray指针、共同复位及两域溢出报告；3种深度数字回归通过，尚未接物理RX或签核 |
 
 控制运行在恢复字时钟域（标称 250 MHz / 16 UI），不调共享 VCO。物理路径：读出字时钟 w（PI 后时钟 ÷2 再 ÷4）→ `rx_word_map` → 投票器（不需要字边界）与 `rx_word_align16`（数据输出）。
 
@@ -75,5 +76,5 @@
 
 - 物理 16 UI 降速：读出 [rx_readout_deser16](../../analog/rx/sampler/spice/rx_readout_deser16.spice) + `rx_word_map` / `rx_word_align16` 已有并接入实时联调（TT）；长时闭环（行为 plant）仍用 pair 流；联调只有 TT、无频偏。
 - 综合与 STA（I-16）。
-- 系统时钟域弹性 FIFO、空闲补偿（I-15）。
+- 系统时钟域FIFO接线、容量/时钟契约、溢出恢复、工艺CDC和协议空闲补偿（I-15）；[独立积木与证据](rx_host_cdc.md)已有。
 - 鉴相零点校准（I-23）。

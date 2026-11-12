@@ -1,0 +1,3613 @@
+{
+  "status": "reproduced_offline_CM_diagnostic_no_adoption",
+  "delivery": "results/analysis/tx_loaded_cm/20261111T175329.518122Z_44f69ca4/summary.json",
+  "delivery_sha256": "82ac06ca38b8d3522c90dfc70d534a262a23fd17f4770fe08bdb273e4988a11c",
+  "reproduced": "results/analysis/tx_loaded_cm/20261111T175942.096166Z_67b32829/summary.json",
+  "reproduced_sha256": "82ac06ca38b8d3522c90dfc70d534a262a23fd17f4770fe08bdb273e4988a11c",
+  "input_sha256": {
+    "verification/analysis/tx_loaded_cm_review.py": "df353783a6766ab4f17354380b0459d070e6a293f197beb14f734917d53b17a9",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/review/20261111T174430.556183Z_29ee993e/summary.json": "467d5655ee0bca36657d4c431236b0eca017b305986d65863995ee427f41e716",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/model/20261111T174505.452906Z_84e06f0b/summary.json": "5a7cf0d38b6a440c830bb543494dec5ff5c15c85061f15ba0486ebd6b76f6312",
+    "analog/tx/clock_distribution/theory/loaded_buffer_model.py": "816e1c14f31f3ca24f7eff3931e1284ad995e91b6129b2760ca29f308781eff4",
+    "verification/plotting/tx_loaded_clock_model.py": "fde5cb60d59785f54da7539ccc8a7c3e6ad5aef811c547818824d68a8f1df47a",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/plan.json": "f5fef263caf9d79d28a1f54ae62fe8743a6761a0cade88d2437e86ce550814b2",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/model_plan.json": "6b1a1a75c4fd726039a8389fa981187892dedd88bdd116e1c236716e26bc877f",
+    "docs/data/tx_loaded_clock.json": "92d5bd8f0034c284cbe030e2432596af120ccb5cd76bfe4b2e87bf25a9b35258",
+    "docs/data/tx_loaded_clock_model.json": "e3771acb67e229fb137e012d3fa395fdb0a6b97fe8148fd4598a561bb2a1a84b",
+    "results/catalog/tx_loaded_clock.json": "7c240ae50c03bc8cfe342b1718d915e15aae2ef6e9bcf67ca95fc6ce900ccb98",
+    "results/catalog/tx_loaded_clock_model.json": "985cc99a054ca198e31d00637e7e141a7918654486fa6e9ee89e1a200b80f234",
+    "docs/work_packages/WP-TX-CM-001-loaded-clock-review.md": "c89062ea28ecb6fd6801eba859338373470d5f086db84ea3034e2033d23f67cc",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/fs_v1650_t85_baseline/baseline.raw": "e37455d5f93b11afee16d9e89ec0ef18f7d737195bb9b0ca959dee5037d08f10",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/ss_v1650_t-40_baseline/baseline.raw": "600dc308370396176b48eb461f953f7ff4c9288b9d11a5ffd7a117629fe7459b",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/fs_v1650_t85_weak080/weak080.raw": "86501834542981e64ff2c561fea2a56aecca5433062ad75270e3dae45064478f",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/ss_v1650_t-40_weak080/weak080.raw": "84137cee37eef8dca65711b956e7a084cf45db73d00f99635c5281cee4a6ef8e",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/fs_v1650_t85_cm_m25/cm_m25.raw": "822021a24072f19e5a2c27cb45aa657f1e0eedcb110fe42e3ef2d3668db9fb9a",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/ss_v1650_t-40_cm_m25/cm_m25.raw": "7d863b2a651aacdafd857bcc9c661d508652e41d1dce935257ec7ede2235d4e8",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/fs_v1650_t85_weak080_cm_m25/weak080_cm_m25.raw": "2fa0f6ebe4fa8db85dc6922f29a7a209e711dff54c9976629e21224515b9baeb",
+    "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/ss_v1650_t-40_weak080_cm_m25/weak080_cm_m25.raw": "be79d1883bbf7f2d40fccf933473dde5bc38180f1629172dd36f1c609c728170",
+    "verification/analysis/loaded_clock_review.py": "296e810ee8629a7031c9227a920c1dd32ae63e88e7b07b6bd3591db965ffbef7",
+    "analog/tx/input_register/tb/loaded_clock_card/run.py": "6f8bdb721941ee35fbbca740271c76b8fdbb3e252b1c53c7129a87f118914a45",
+    "src/serdes_flow/cml_dynamic.py": "c9b101c5784496fa664987a6ebd0dd53294e5a6d26c4d07bc64b7b420b4ac109",
+    "src/serdes_flow/clock_transfer.py": "0b720c564e541a1111585051d68ee57dcd8742dc59b77dc01d550875782fc044",
+    "src/serdes_flow/stage_metrics.py": "b3e0016e155f15b0040e5ccda592308cafb5da40056bb0e8f8a11d6b8f856655",
+    "src/serdes_flow/clock.py": "5b23a947c3dcd7a76f41ed25901c02cc3e12ac1a42d9e6b38aa7ad8b0b326673",
+    "src/serdes_flow/spice.py": "7d97d104f9b938f912515862bc03a9a74c84d1b3de2d43039f9ae3b0b7204d2f"
+  },
+  "inputs": [
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "baseline",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.547743937509621,
+        "minimum": 1.5430544638374675,
+        "maximum": 1.5523930977946285,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.0005900256967088747,
+        "minimum": -0.1719351373313165,
+        "maximum": 0.17172414112583773,
+        "peak_to_peak": 0.3436592784571542
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "baseline",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5477153880043049,
+        "minimum": 1.5428492522472892,
+        "maximum": 1.5524974312285276,
+        "peak_to_peak": 0.009648178981238376
+      },
+      "differential_v": {
+        "mean": 0.0012561874085754911,
+        "minimum": -0.17117572526848665,
+        "maximum": 0.17100443212609537,
+        "peak_to_peak": 0.342180157394582
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "baseline",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5477112112010756,
+        "minimum": 1.5419918712100198,
+        "maximum": 1.5519564932526977,
+        "peak_to_peak": 0.009964622042677895
+      },
+      "differential_v": {
+        "mean": 0.003138464823353026,
+        "minimum": -0.1691321493133916,
+        "maximum": 0.16899777677870156,
+        "peak_to_peak": 0.33812992609209314
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5477439347826956,
+        "minimum": 1.5430544638374675,
+        "maximum": 1.5523930977946285,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.00047205779440865974,
+        "minimum": -0.1375490499355351,
+        "maximum": 0.1373824280843976,
+        "peak_to_peak": 0.2749314780199327
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.54779056410621,
+        "minimum": 1.5446383044987206,
+        "maximum": 1.5504891141011938,
+        "peak_to_peak": 0.005850809602473195
+      },
+      "differential_v": {
+        "mean": 0.0010949932780964552,
+        "minimum": -0.14937678758243042,
+        "maximum": 0.1492044665304432,
+        "peak_to_peak": 0.2985812541128736
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5477680941733643,
+        "minimum": 1.5434085502814368,
+        "maximum": 1.5505609815352752,
+        "peak_to_peak": 0.007152431253838465
+      },
+      "differential_v": {
+        "mean": 0.002855078209455807,
+        "minimum": -0.1559827421376466,
+        "maximum": 0.15581245340321623,
+        "peak_to_peak": 0.3117951955408628
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.522743937509621,
+        "minimum": 1.5180544638374676,
+        "maximum": 1.5273930977946286,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.0005900256967088747,
+        "minimum": -0.1719351373313165,
+        "maximum": 0.17172414112583773,
+        "peak_to_peak": 0.3436592784571542
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5479452524863788,
+        "minimum": 1.5430885958836111,
+        "maximum": 1.5527614515027084,
+        "peak_to_peak": 0.009672855619097254
+      },
+      "differential_v": {
+        "mean": 0.0012539134610278146,
+        "minimum": -0.17084939806128913,
+        "maximum": 0.17067854001456148,
+        "peak_to_peak": 0.3415279380758506
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5477100384809381,
+        "minimum": 1.5420090912146065,
+        "maximum": 1.551927637105289,
+        "peak_to_peak": 0.009918545890682529
+      },
+      "differential_v": {
+        "mean": 0.0031354004145515077,
+        "minimum": -0.16896339099367852,
+        "maximum": 0.1688288732425471,
+        "peak_to_peak": 0.33779226423622566
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5227439347826959,
+        "minimum": 1.5180544638374676,
+        "maximum": 1.5273930977946286,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.00047205779440865974,
+        "minimum": -0.1375490499355351,
+        "maximum": 0.1373824280843976,
+        "peak_to_peak": 0.2749314780199327
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5480243006971213,
+        "minimum": 1.5448795226365288,
+        "maximum": 1.5507456066486103,
+        "peak_to_peak": 0.005866084012081441
+      },
+      "differential_v": {
+        "mean": 0.0010933181755283915,
+        "minimum": -0.14910932446357844,
+        "maximum": 0.1489373942971982,
+        "peak_to_peak": 0.29804671876077665
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.547766571649844,
+        "minimum": 1.5434210263004233,
+        "maximum": 1.5505427722932543,
+        "peak_to_peak": 0.007121745992830997
+      },
+      "differential_v": {
+        "mean": 0.0028520517418217043,
+        "minimum": -0.1558084153770463,
+        "maximum": 0.1556381021215722,
+        "peak_to_peak": 0.3114465174986185
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "baseline",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.547743937509621,
+        "minimum": 1.5430544638374675,
+        "maximum": 1.5523930977946285,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.0005900256967088747,
+        "minimum": -0.1719351373313165,
+        "maximum": 0.17172414112583773,
+        "peak_to_peak": 0.3436592784571542
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "baseline",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5486173846201832,
+        "minimum": 1.5437551513252321,
+        "maximum": 1.5533936593574378,
+        "peak_to_peak": 0.009638508032205673
+      },
+      "differential_v": {
+        "mean": 0.0012162573386098276,
+        "minimum": -0.1696258207910443,
+        "maximum": 0.16945575190058318,
+        "peak_to_peak": 0.3390815726916275
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "baseline",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5486057778232039,
+        "minimum": 1.5429793761461714,
+        "maximum": 1.5527571624797956,
+        "peak_to_peak": 0.009777786333624139
+      },
+      "differential_v": {
+        "mean": 0.003051686696629507,
+        "minimum": -0.16685727404932207,
+        "maximum": 0.1667223974429153,
+        "peak_to_peak": 0.3335796714922374
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5477439347826956,
+        "minimum": 1.5430544638374675,
+        "maximum": 1.5523930977946285,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.00047205779440865974,
+        "minimum": -0.1375490499355351,
+        "maximum": 0.1373824280843976,
+        "peak_to_peak": 0.2749314780199327
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5486714590449107,
+        "minimum": 1.5455229277544686,
+        "maximum": 1.5513711113301842,
+        "peak_to_peak": 0.005848183575715593
+      },
+      "differential_v": {
+        "mean": 0.0010606964568299615,
+        "minimum": -0.1480532157426596,
+        "maximum": 0.14788166115328175,
+        "peak_to_peak": 0.29593487689594133
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.548647483377737,
+        "minimum": 1.544367580205452,
+        "maximum": 1.55138766386247,
+        "peak_to_peak": 0.007020083657018006
+      },
+      "differential_v": {
+        "mean": 0.002774509469624075,
+        "minimum": -0.15378817142685033,
+        "maximum": 0.1536161944882777,
+        "peak_to_peak": 0.30740436591512804
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.522743937509621,
+        "minimum": 1.5180544638374676,
+        "maximum": 1.5273930977946286,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.0005900256967088747,
+        "minimum": -0.1719351373313165,
+        "maximum": 0.17172414112583773,
+        "peak_to_peak": 0.3436592784571542
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5488447031897215,
+        "minimum": 1.5439913229545943,
+        "maximum": 1.5536551396357425,
+        "peak_to_peak": 0.00966381668114824
+      },
+      "differential_v": {
+        "mean": 0.0012140550727711321,
+        "minimum": -0.16930319648043568,
+        "maximum": 0.16913351738653323,
+        "peak_to_peak": 0.33843671386696894
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5486044576292297,
+        "minimum": 1.542996204315674,
+        "maximum": 1.5527290414027703,
+        "peak_to_peak": 0.00973283708709638
+      },
+      "differential_v": {
+        "mean": 0.0030486836912195876,
+        "minimum": -0.16668906090649452,
+        "maximum": 0.1665540826393209,
+        "peak_to_peak": 0.3332431435458154
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5227439347826959,
+        "minimum": 1.5180544638374676,
+        "maximum": 1.5273930977946286,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.00047205779440865974,
+        "minimum": -0.1375490499355351,
+        "maximum": 0.1373824280843976,
+        "peak_to_peak": 0.2749314780199327
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.548902725331985,
+        "minimum": 1.5457612395983997,
+        "maximum": 1.5516242261741713,
+        "peak_to_peak": 0.005862986575771556
+      },
+      "differential_v": {
+        "mean": 0.0010590763784243834,
+        "minimum": -0.1477885867614908,
+        "maximum": 0.1476174052597746,
+        "peak_to_peak": 0.2954059920212654
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5486458390305577,
+        "minimum": 1.5443798555900439,
+        "maximum": 1.5513696352260633,
+        "peak_to_peak": 0.006989779636019433
+      },
+      "differential_v": {
+        "mean": 0.002771555260556861,
+        "minimum": -0.1536151115383171,
+        "maximum": 0.15344308800650666,
+        "peak_to_peak": 0.3070581995448238
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "baseline",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.547743937509621,
+        "minimum": 1.5430544638374675,
+        "maximum": 1.5523930977946285,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.0005900256967088747,
+        "minimum": -0.1719351373313165,
+        "maximum": 0.17172414112583773,
+        "peak_to_peak": 0.3436592784571542
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "baseline",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5477913665360497,
+        "minimum": 1.542935633625709,
+        "maximum": 1.5525493565146604,
+        "peak_to_peak": 0.00961372288895146
+      },
+      "differential_v": {
+        "mean": 0.0013098123654952598,
+        "minimum": -0.1709689969206023,
+        "maximum": 0.17079845419845383,
+        "peak_to_peak": 0.34176745111905615
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "baseline",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5477849770893848,
+        "minimum": 1.5421572331537006,
+        "maximum": 1.5519968671753457,
+        "peak_to_peak": 0.009839634021645116
+      },
+      "differential_v": {
+        "mean": 0.0032148443816630316,
+        "minimum": -0.16883436723940248,
+        "maximum": 0.16869998197880023,
+        "peak_to_peak": 0.3375343492182027
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5477439347826956,
+        "minimum": 1.5430544638374675,
+        "maximum": 1.5523930977946285,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.00047205779440865974,
+        "minimum": -0.1375490499355351,
+        "maximum": 0.1373824280843976,
+        "peak_to_peak": 0.2749314780199327
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5478632985039398,
+        "minimum": 1.5447052188269592,
+        "maximum": 1.5505597495363541,
+        "peak_to_peak": 0.005854530709394901
+      },
+      "differential_v": {
+        "mean": 0.0011406592716944513,
+        "minimum": -0.14919232327532472,
+        "maximum": 0.14902090180895297,
+        "peak_to_peak": 0.2982132250842777
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5478397621810396,
+        "minimum": 1.5435385477950738,
+        "maximum": 1.5506218019814715,
+        "peak_to_peak": 0.007083254186397658
+      },
+      "differential_v": {
+        "mean": 0.002923282322757371,
+        "minimum": -0.1556744173548064,
+        "maximum": 0.15550241411598528,
+        "peak_to_peak": 0.31117683147079167
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.522743937509621,
+        "minimum": 1.5180544638374676,
+        "maximum": 1.5273930977946286,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.0005900256967088747,
+        "minimum": -0.1719351373313165,
+        "maximum": 0.17172414112583773,
+        "peak_to_peak": 0.3436592784571542
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.548020964717571,
+        "minimum": 1.543173924157017,
+        "maximum": 1.5528119698285257,
+        "peak_to_peak": 0.00963804567150861
+      },
+      "differential_v": {
+        "mean": 0.001307461935074683,
+        "minimum": -0.1706431898784667,
+        "maximum": 0.17047304612857656,
+        "peak_to_peak": 0.3411162360070432
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.547783783388242,
+        "minimum": 1.5421738849718942,
+        "maximum": 1.551968770487206,
+        "peak_to_peak": 0.009794885515311824
+      },
+      "differential_v": {
+        "mean": 0.0032116921505952615,
+        "minimum": -0.16866564371408785,
+        "maximum": 0.1685311487661285,
+        "peak_to_peak": 0.3371967924802164
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5227439347826959,
+        "minimum": 1.5180544638374676,
+        "maximum": 1.5273930977946286,
+        "peak_to_peak": 0.009338633957161058
+      },
+      "differential_v": {
+        "mean": -0.00047205779440865974,
+        "minimum": -0.1375490499355351,
+        "maximum": 0.1373824280843976,
+        "peak_to_peak": 0.2749314780199327
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5480967874579363,
+        "minimum": 1.5449456135133959,
+        "maximum": 1.5508151830098142,
+        "peak_to_peak": 0.00586956949641837
+      },
+      "differential_v": {
+        "mean": 0.001138923329922367,
+        "minimum": -0.1489252778307808,
+        "maximum": 0.14875424797145667,
+        "peak_to_peak": 0.29767952580223744
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5478382213348918,
+        "minimum": 1.543550666609276,
+        "maximum": 1.5506037401545647,
+        "peak_to_peak": 0.007053073545288724
+      },
+      "differential_v": {
+        "mean": 0.002920173712365759,
+        "minimum": -0.1555002461921343,
+        "maximum": 0.15532818942178256,
+        "peak_to_peak": 0.3108284356139168
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "baseline",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5406797268677308,
+        "minimum": 1.5271042055878976,
+        "maximum": 1.554897155541437,
+        "peak_to_peak": 0.027792949953539425
+      },
+      "differential_v": {
+        "mean": -0.0011897011886607583,
+        "minimum": -0.21451651925294823,
+        "maximum": 0.21460543234752413,
+        "peak_to_peak": 0.4291219516004724
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "baseline",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5406586429167577,
+        "minimum": 1.5265088266475084,
+        "maximum": 1.5565430431017666,
+        "peak_to_peak": 0.03003421645425819
+      },
+      "differential_v": {
+        "mean": 0.000922215083804373,
+        "minimum": -0.21615899970849817,
+        "maximum": 0.21624412497599554,
+        "peak_to_peak": 0.4324031246844937
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "baseline",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.540675378003017,
+        "minimum": 1.524270894181771,
+        "maximum": 1.5557503313848202,
+        "peak_to_peak": 0.03147943720304913
+      },
+      "differential_v": {
+        "mean": 0.0032050272905866945,
+        "minimum": -0.2169161748655468,
+        "maximum": 0.21702077045666845,
+        "peak_to_peak": 0.4339369453222153
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.540679911478378,
+        "minimum": 1.5271042055878974,
+        "maximum": 1.5548971555414375,
+        "peak_to_peak": 0.02779294995354009
+      },
+      "differential_v": {
+        "mean": -0.0009518080539150274,
+        "minimum": -0.17161321540235913,
+        "maximum": 0.1716843458780194,
+        "peak_to_peak": 0.3432975612803785
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5408094282264733,
+        "minimum": 1.5302403010442862,
+        "maximum": 1.5497940663122172,
+        "peak_to_peak": 0.019553765267930956
+      },
+      "differential_v": {
+        "mean": 0.0009708247832262351,
+        "minimum": -0.20506903998120216,
+        "maximum": 0.20515106210186743,
+        "peak_to_peak": 0.4102201020830696
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.540719770216239,
+        "minimum": 1.525731844980281,
+        "maximum": 1.5537875142563864,
+        "peak_to_peak": 0.028055669276105366
+      },
+      "differential_v": {
+        "mean": 0.0032435892499919176,
+        "minimum": -0.21392231606754983,
+        "maximum": 0.214007271947603,
+        "peak_to_peak": 0.4279295880151528
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5156797268677311,
+        "minimum": 1.5021042055878977,
+        "maximum": 1.5298971555414371,
+        "peak_to_peak": 0.027792949953539425
+      },
+      "differential_v": {
+        "mean": -0.0011897011886607583,
+        "minimum": -0.21451651925294823,
+        "maximum": 0.21460543234752413,
+        "peak_to_peak": 0.4291219516004724
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5408769585827982,
+        "minimum": 1.526752682406196,
+        "maximum": 1.5568229231630821,
+        "peak_to_peak": 0.030070240756886024
+      },
+      "differential_v": {
+        "mean": 0.0009197525053846234,
+        "minimum": -0.21575847420109676,
+        "maximum": 0.21584310084001088,
+        "peak_to_peak": 0.43160157504110763
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5406751332800608,
+        "minimum": 1.5242914068102342,
+        "maximum": 1.5556705610929666,
+        "peak_to_peak": 0.03137915428273241
+      },
+      "differential_v": {
+        "mean": 0.0032049884619094623,
+        "minimum": -0.2168625339487532,
+        "maximum": 0.2169671794683835,
+        "peak_to_peak": 0.4338297134171367
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5156799114783779,
+        "minimum": 1.5021042055878975,
+        "maximum": 1.5298971555414376,
+        "peak_to_peak": 0.02779294995354009
+      },
+      "differential_v": {
+        "mean": -0.0009518080539150274,
+        "minimum": -0.17161321540235913,
+        "maximum": 0.1716843458780194,
+        "peak_to_peak": 0.3432975612803785
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5410330794819118,
+        "minimum": 1.5304917975631116,
+        "maximum": 1.5500667701674895,
+        "peak_to_peak": 0.019574972604377905
+      },
+      "differential_v": {
+        "mean": 0.0009688614881100152,
+        "minimum": -0.20470639860706458,
+        "maximum": 0.20478904586789437,
+        "peak_to_peak": 0.40949544447495895
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.54071928331169,
+        "minimum": 1.5257508369578374,
+        "maximum": 1.5537213620226302,
+        "peak_to_peak": 0.027970525064792806
+      },
+      "differential_v": {
+        "mean": 0.003243439512371578,
+        "minimum": -0.2138605083776044,
+        "maximum": 0.21394549901507728,
+        "peak_to_peak": 0.4278060073926817
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "baseline",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5406797268677308,
+        "minimum": 1.5271042055878976,
+        "maximum": 1.554897155541437,
+        "peak_to_peak": 0.027792949953539425
+      },
+      "differential_v": {
+        "mean": -0.0011897011886607583,
+        "minimum": -0.21451651925294823,
+        "maximum": 0.21460543234752413,
+        "peak_to_peak": 0.4291219516004724
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "baseline",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5401939945248262,
+        "minimum": 1.52558239704005,
+        "maximum": 1.5562258501661552,
+        "peak_to_peak": 0.03064345312610528
+      },
+      "differential_v": {
+        "mean": 0.0009089764851004489,
+        "minimum": -0.21695772108777436,
+        "maximum": 0.21704222665622702,
+        "peak_to_peak": 0.4339999477440014
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "baseline",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5402022846052903,
+        "minimum": 1.5233554468266763,
+        "maximum": 1.5555620257536003,
+        "peak_to_peak": 0.03220657892692391
+      },
+      "differential_v": {
+        "mean": 0.003189011626932533,
+        "minimum": -0.21777331981432027,
+        "maximum": 0.21787345044338166,
+        "peak_to_peak": 0.43564677025770193
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.540679911478378,
+        "minimum": 1.5271042055878974,
+        "maximum": 1.5548971555414375,
+        "peak_to_peak": 0.02779294995354009
+      },
+      "differential_v": {
+        "mean": -0.0009518080539150274,
+        "minimum": -0.17161321540235913,
+        "maximum": 0.1716843458780194,
+        "peak_to_peak": 0.3432975612803785
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5403139018964065,
+        "minimum": 1.5293556057226945,
+        "maximum": 1.5493746778181448,
+        "peak_to_peak": 0.020019072095450285
+      },
+      "differential_v": {
+        "mean": 0.0009587049225392146,
+        "minimum": -0.20582558217911429,
+        "maximum": 0.20590746076468538,
+        "peak_to_peak": 0.41173304294379964
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5402387961452784,
+        "minimum": 1.5248266061837787,
+        "maximum": 1.553563040694969,
+        "peak_to_peak": 0.028736434511190234
+      },
+      "differential_v": {
+        "mean": 0.0032285255032236193,
+        "minimum": -0.21476236549680608,
+        "maximum": 0.21484350940323543,
+        "peak_to_peak": 0.42960587490004154
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5156797268677311,
+        "minimum": 1.5021042055878977,
+        "maximum": 1.5298971555414371,
+        "peak_to_peak": 0.027792949953539425
+      },
+      "differential_v": {
+        "mean": -0.0011897011886607583,
+        "minimum": -0.21451651925294823,
+        "maximum": 0.21460543234752413,
+        "peak_to_peak": 0.4291219516004724
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.540411984103622,
+        "minimum": 1.5258261542781777,
+        "maximum": 1.5565064704414389,
+        "peak_to_peak": 0.030680316163261168
+      },
+      "differential_v": {
+        "mean": 0.0009065755740890729,
+        "minimum": -0.21655877825945238,
+        "maximum": 0.21664279378902832,
+        "peak_to_peak": 0.4332015720484807
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5402018716462498,
+        "minimum": 1.523374343539118,
+        "maximum": 1.5554809971264714,
+        "peak_to_peak": 0.03210665358735332
+      },
+      "differential_v": {
+        "mean": 0.003189029317625091,
+        "minimum": -0.2177209489849584,
+        "maximum": 0.21782112925297004,
+        "peak_to_peak": 0.43554207823792845
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5156799114783779,
+        "minimum": 1.5021042055878975,
+        "maximum": 1.5298971555414376,
+        "peak_to_peak": 0.02779294995354009
+      },
+      "differential_v": {
+        "mean": -0.0009518080539150274,
+        "minimum": -0.17161321540235913,
+        "maximum": 0.1716843458780194,
+        "peak_to_peak": 0.3432975612803785
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5405374264105958,
+        "minimum": 1.5296072006580073,
+        "maximum": 1.5496481017659471,
+        "peak_to_peak": 0.02004090110793988
+      },
+      "differential_v": {
+        "mean": 0.0009568007824042246,
+        "minimum": -0.20546464184944463,
+        "maximum": 0.20554715267319365,
+        "peak_to_peak": 0.41101179452263825
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.540238117825251,
+        "minimum": 1.524844375084977,
+        "maximum": 1.5534982455912132,
+        "peak_to_peak": 0.028653870506236245
+      },
+      "differential_v": {
+        "mean": 0.0032284359689958627,
+        "minimum": -0.21470195094484973,
+        "maximum": 0.2147833672081688,
+        "peak_to_peak": 0.4294853181530185
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "baseline",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5406797268677308,
+        "minimum": 1.5271042055878976,
+        "maximum": 1.554897155541437,
+        "peak_to_peak": 0.027792949953539425
+      },
+      "differential_v": {
+        "mean": -0.0011897011886607583,
+        "minimum": -0.21451651925294823,
+        "maximum": 0.21460543234752413,
+        "peak_to_peak": 0.4291219516004724
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "baseline",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.542823302233831,
+        "minimum": 1.5294385909309187,
+        "maximum": 1.5582109642918618,
+        "peak_to_peak": 0.02877237336094307
+      },
+      "differential_v": {
+        "mean": 0.0009473197707958465,
+        "minimum": -0.211874746605007,
+        "maximum": 0.21195543432664823,
+        "peak_to_peak": 0.42383018093165525
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "baseline",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5428342520437066,
+        "minimum": 1.527684213753654,
+        "maximum": 1.5568090296643025,
+        "peak_to_peak": 0.029124815910648527
+      },
+      "differential_v": {
+        "mean": 0.003208233532641542,
+        "minimum": -0.2119096130593841,
+        "maximum": 0.21201285190930189,
+        "peak_to_peak": 0.423922464968686
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.540679911478378,
+        "minimum": 1.5271042055878974,
+        "maximum": 1.5548971555414375,
+        "peak_to_peak": 0.02779294995354009
+      },
+      "differential_v": {
+        "mean": -0.0009518080539150274,
+        "minimum": -0.17161321540235913,
+        "maximum": 0.1716843458780194,
+        "peak_to_peak": 0.3432975612803785
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.542966052318122,
+        "minimum": 1.5330074521110943,
+        "maximum": 1.5517183886572745,
+        "peak_to_peak": 0.018710936546180168
+      },
+      "differential_v": {
+        "mean": 0.0009915067891881119,
+        "minimum": -0.20105808554590338,
+        "maximum": 0.20114037284729339,
+        "peak_to_peak": 0.4021984583931968
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5428747294749907,
+        "minimum": 1.5290356071100857,
+        "maximum": 1.554996852452786,
+        "peak_to_peak": 0.02596124534270028
+      },
+      "differential_v": {
+        "mean": 0.0032416411595007394,
+        "minimum": -0.20892449823487688,
+        "maximum": 0.20900896637366817,
+        "peak_to_peak": 0.4179334646085451
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5156797268677311,
+        "minimum": 1.5021042055878977,
+        "maximum": 1.5298971555414371,
+        "peak_to_peak": 0.027792949953539425
+      },
+      "differential_v": {
+        "mean": -0.0011897011886607583,
+        "minimum": -0.21451651925294823,
+        "maximum": 0.21460543234752413,
+        "peak_to_peak": 0.4291219516004724
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5430370299157679,
+        "minimum": 1.529673051096104,
+        "maximum": 1.5584907726708457,
+        "peak_to_peak": 0.028817721574741606
+      },
+      "differential_v": {
+        "mean": 0.000944825011331374,
+        "minimum": -0.21148215386891148,
+        "maximum": 0.21156235814245067,
+        "peak_to_peak": 0.4230445120113622
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5428339789070047,
+        "minimum": 1.5277024902556113,
+        "maximum": 1.5567348843450723,
+        "peak_to_peak": 0.02903239408946101
+      },
+      "differential_v": {
+        "mean": 0.0032080395615555206,
+        "minimum": -0.21185193152507,
+        "maximum": 0.21195522007357806,
+        "peak_to_peak": 0.42380715159864807
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "stage": "e3",
+      "common_mode_v": {
+        "mean": 1.5156799114783779,
+        "minimum": 1.5021042055878975,
+        "maximum": 1.5298971555414376,
+        "peak_to_peak": 0.02779294995354009
+      },
+      "differential_v": {
+        "mean": -0.0009518080539150274,
+        "minimum": -0.17161321540235913,
+        "maximum": 0.1716843458780194,
+        "peak_to_peak": 0.3432975612803785
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "stage": "e4",
+      "common_mode_v": {
+        "mean": 1.5431850394342241,
+        "minimum": 1.533249843117544,
+        "maximum": 1.5519834825310184,
+        "peak_to_peak": 0.01873363941347428
+      },
+      "differential_v": {
+        "mean": 0.0009895054988181397,
+        "minimum": -0.2007018643519857,
+        "maximum": 0.20078474624668854,
+        "peak_to_peak": 0.40148661059867424
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "stage": "c2g",
+      "common_mode_v": {
+        "mean": 1.5428742200707009,
+        "minimum": 1.5290527518174921,
+        "maximum": 1.5549352494766886,
+        "peak_to_peak": 0.02588249765919648
+      },
+      "differential_v": {
+        "mean": 0.0032413325258999473,
+        "minimum": -0.2088585549919422,
+        "maximum": 0.20894305615036618,
+        "peak_to_peak": 0.4178016111423084
+      }
+    }
+  ],
+  "paired_cm": [
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00022986448207401708,
+        "minimum": 0.00019816693757812587,
+        "maximum": 0.00028908805713911967,
+        "peak_to_peak": 9.09211195609938e-05
+      },
+      "cm_max_abs_delta_v": 0.00028908805713911967,
+      "differential_delta_v": {
+        "mean": -2.2739475476718426e-06,
+        "minimum": -0.0003259876736929346,
+        "maximum": 0.00032641261060406546,
+        "peak_to_peak": 0.000652400284297
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -1.1727201375303505e-06,
+        "minimum": -2.9565852316393304e-05,
+        "maximum": 1.7532886385396296e-05,
+        "peak_to_peak": 4.70987387017896e-05
+      },
+      "cm_max_abs_delta_v": 2.9565852316393304e-05,
+      "differential_delta_v": {
+        "mean": -3.0644088015128076e-06,
+        "minimum": -0.0001708457336554725,
+        "maximum": 0.00017075853297873755,
+        "peak_to_peak": 0.00034160426663421006
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00023373659091143614,
+        "minimum": 0.00021070781718135478,
+        "maximum": 0.0002756827204097867,
+        "peak_to_peak": 6.497490322843191e-05
+      },
+      "cm_max_abs_delta_v": 0.0002756827204097867,
+      "differential_delta_v": {
+        "mean": -1.675102568067424e-06,
+        "minimum": -0.00026709128832630435,
+        "maximum": 0.0002674710394849622,
+        "peak_to_peak": 0.0005345623278112666
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -1.5225235203012195e-06,
+        "minimum": -1.897735701850145e-05,
+        "maximum": 1.2668567192397617e-05,
+        "peak_to_peak": 3.164592421089907e-05
+      },
+      "cm_max_abs_delta_v": 1.897735701850145e-05,
+      "differential_delta_v": {
+        "mean": -3.026467634103559e-06,
+        "minimum": -0.0001745633046613959,
+        "maximum": 0.00017451022054854048,
+        "peak_to_peak": 0.0003490735252099364
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00022731856953830452,
+        "minimum": 0.00019597218128253324,
+        "maximum": 0.00028629543354541376,
+        "peak_to_peak": 9.032325226288052e-05
+      },
+      "cm_max_abs_delta_v": 0.00028629543354541376,
+      "differential_delta_v": {
+        "mean": -2.2022658386956885e-06,
+        "minimum": -0.0003223116275899718,
+        "maximum": 0.0003227308693608266,
+        "peak_to_peak": 0.0006450424969507984
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -1.3201939742690819e-06,
+        "minimum": -2.9063555761155158e-05,
+        "maximum": 1.7236873131487584e-05,
+        "peak_to_peak": 4.630042889264274e-05
+      },
+      "cm_max_abs_delta_v": 2.9063555761155158e-05,
+      "differential_delta_v": {
+        "mean": -3.0030054099161317e-06,
+        "minimum": -0.00017006845996744846,
+        "maximum": 0.0001699870260422065,
+        "peak_to_peak": 0.00034005548600965496
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00023126628707458277,
+        "minimum": 0.00020850631465996194,
+        "maximum": 0.0002730408698599085,
+        "peak_to_peak": 6.453455519994655e-05
+      },
+      "cm_max_abs_delta_v": 0.0002730408698599085,
+      "differential_delta_v": {
+        "mean": -1.620078405574006e-06,
+        "minimum": -0.000264257281186453,
+        "maximum": 0.00026463210809629656,
+        "peak_to_peak": 0.0005288893892827495
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -1.6443471792390314e-06,
+        "minimum": -1.868080423128582e-05,
+        "maximum": 1.2395912288631905e-05,
+        "peak_to_peak": 3.1076716519917724e-05
+      },
+      "cm_max_abs_delta_v": 1.868080423128582e-05,
+      "differential_delta_v": {
+        "mean": -2.954209067215196e-06,
+        "minimum": -0.00017326466820169473,
+        "maximum": 0.00017321975247971966,
+        "peak_to_peak": 0.0003464844206814144
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.0002295981815211198,
+        "minimum": 0.00019864129573510247,
+        "maximum": 0.0002879914624625002,
+        "peak_to_peak": 8.93501667273977e-05
+      },
+      "cm_max_abs_delta_v": 0.0002879914624625002,
+      "differential_delta_v": {
+        "mean": -2.3504304205742725e-06,
+        "minimum": -0.0003254632131084456,
+        "maximum": 0.0003258870722111229,
+        "peak_to_peak": 0.0006513502853195685
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -1.1937011428379136e-06,
+        "minimum": -2.900951603601598e-05,
+        "maximum": 1.7032007294748297e-05,
+        "peak_to_peak": 4.604152333076428e-05
+      },
+      "cm_max_abs_delta_v": 2.900951603601598e-05,
+      "differential_delta_v": {
+        "mean": -3.1522310677706117e-06,
+        "minimum": -0.00017068311814727455,
+        "maximum": 0.0001705952604140748,
+        "peak_to_peak": 0.00034127837856134935
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.0002334889539966014,
+        "minimum": 0.00021099860094997425,
+        "maximum": 0.00027486214551286636,
+        "peak_to_peak": 6.386354456289212e-05
+      },
+      "cm_max_abs_delta_v": 0.00027486214551286636,
+      "differential_delta_v": {
+        "mean": -1.7359417720901176e-06,
+        "minimum": -0.00026667691580875563,
+        "maximum": 0.0002670570803322836,
+        "peak_to_peak": 0.0005337339961410392
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -1.5408461477819475e-06,
+        "minimum": -1.8696072473955994e-05,
+        "maximum": 1.2352189949549341e-05,
+        "peak_to_peak": 3.1048262423505335e-05
+      },
+      "cm_max_abs_delta_v": 1.8696072473955994e-05,
+      "differential_delta_v": {
+        "mean": -3.1086103916099657e-06,
+        "minimum": -0.00017442471873729826,
+        "maximum": 0.00017437334102679558,
+        "peak_to_peak": 0.00034879805976409384
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00021831566604053884,
+        "minimum": 0.00016818016968156435,
+        "maximum": 0.0003408239103210864,
+        "peak_to_peak": 0.00017264374063952204
+      },
+      "cm_max_abs_delta_v": 0.0003408239103210864,
+      "differential_delta_v": {
+        "mean": -2.4625784197477697e-06,
+        "minimum": -0.0004099765070350314,
+        "maximum": 0.00040985005223900806,
+        "peak_to_peak": 0.0008198265592740395
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -2.447229562958026e-07,
+        "minimum": -8.397533758608411e-05,
+        "maximum": 2.7335217345214602e-05,
+        "peak_to_peak": 0.00011131055493129871
+      },
+      "cm_max_abs_delta_v": 8.397533758608411e-05,
+      "differential_delta_v": {
+        "mean": -3.882867723213719e-08,
+        "minimum": -0.00011585374651179592,
+        "maximum": 0.00011600272699854863,
+        "peak_to_peak": 0.00023185647351034455
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.0002236512554385119,
+        "minimum": 0.00018116371275489485,
+        "maximum": 0.0003219412700616875,
+        "peak_to_peak": 0.00014077755730679264
+      },
+      "cm_max_abs_delta_v": 0.0003219412700616875,
+      "differential_delta_v": {
+        "mean": -1.9632951162165617e-06,
+        "minimum": -0.00037249614244483364,
+        "maximum": 0.00037236331572251813,
+        "peak_to_peak": 0.0007448594581673518
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -4.869045488241632e-07,
+        "minimum": -6.896934673772392e-05,
+        "maximum": 2.3390830974134857e-05,
+        "peak_to_peak": 9.236017771185878e-05
+      },
+      "cm_max_abs_delta_v": 6.896934673772392e-05,
+      "differential_delta_v": {
+        "mean": -1.4973762034896245e-07,
+        "minimum": -0.00012484404099979973,
+        "maximum": 0.00012499675235153052,
+        "peak_to_peak": 0.00024984079335133025
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.0002179895787957332,
+        "minimum": 0.00016782856706987204,
+        "maximum": 0.00034222872341693744,
+        "peak_to_peak": 0.0001744001563470654
+      },
+      "cm_max_abs_delta_v": 0.00034222872341693744,
+      "differential_delta_v": {
+        "mean": -2.400911011369611e-06,
+        "minimum": -0.00040842590580489335,
+        "maximum": 0.00040830137317116044,
+        "peak_to_peak": 0.0008167272789760538
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -4.12959040746879e-07,
+        "minimum": -8.501053931597724e-05,
+        "maximum": 2.735961652189367e-05,
+        "peak_to_peak": 0.00011237015583787091
+      },
+      "cm_max_abs_delta_v": 8.501053931597724e-05,
+      "differential_delta_v": {
+        "mean": 1.7690692563246434e-08,
+        "minimum": -0.00011645791328407373,
+        "maximum": 0.00011661453278447032,
+        "peak_to_peak": 0.00023307244606854405
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.0002235245141893115,
+        "minimum": 0.0001810586728183683,
+        "maximum": 0.00032319738317365676,
+        "peak_to_peak": 0.00014213871035528847
+      },
+      "cm_max_abs_delta_v": 0.00032319738317365676,
+      "differential_delta_v": {
+        "mean": -1.904140134987468e-06,
+        "minimum": -0.0003708713449832035,
+        "maximum": 0.00037074040162179966,
+        "peak_to_peak": 0.0007416117466050032
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -6.783200271539104e-07,
+        "minimum": -6.981823408014343e-05,
+        "maximum": 2.3367479975666683e-05,
+        "peak_to_peak": 9.318571405581011e-05
+      },
+      "cm_max_abs_delta_v": 6.981823408014343e-05,
+      "differential_delta_v": {
+        "mean": -8.953422776728812e-08,
+        "minimum": -0.00012514827002668705,
+        "maximum": 0.0001253078592019785,
+        "peak_to_peak": 0.00025045612922866556
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00021372768193678954,
+        "minimum": 0.00016614015976568197,
+        "maximum": 0.0003315568515076528,
+        "peak_to_peak": 0.00016541669174197082
+      },
+      "cm_max_abs_delta_v": 0.0003315568515076528,
+      "differential_delta_v": {
+        "mean": -2.494759464472225e-06,
+        "minimum": -0.0004016737550122107,
+        "maximum": 0.00040155123743709775,
+        "peak_to_peak": 0.0008032249924493085
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "cm_m25",
+      "reference": "baseline",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -2.7313670181778487e-07,
+        "minimum": -7.857145778089603e-05,
+        "maximum": 2.574828976542598e-05,
+        "peak_to_peak": 0.000104319747546322
+      },
+      "cm_max_abs_delta_v": 7.857145778089603e-05,
+      "differential_delta_v": {
+        "mean": -1.9397108601995483e-07,
+        "minimum": -0.00011300630937324807,
+        "maximum": 0.00011313511540436694,
+        "peak_to_peak": 0.000226141424777615
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e3",
+      "cm_delta_v": {
+        "mean": -0.024999999999999904,
+        "minimum": -0.02499999999999991,
+        "maximum": -0.02499999999999991,
+        "peak_to_peak": 0.0
+      },
+      "cm_max_abs_delta_v": 0.02499999999999991,
+      "differential_delta_v": {
+        "mean": 0.0,
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "peak_to_peak": 0.0
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "e4",
+      "cm_delta_v": {
+        "mean": 0.00021898711610205573,
+        "minimum": 0.00017869637628598056,
+        "maximum": 0.00031355942515221,
+        "peak_to_peak": 0.00013486304886622946
+      },
+      "cm_max_abs_delta_v": 0.00031355942515221,
+      "differential_delta_v": {
+        "mean": -2.0012903699796905e-06,
+        "minimum": -0.0003656628375487969,
+        "maximum": 0.0003655341626954689,
+        "peak_to_peak": 0.0007311970002442658
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "point": "weak080_cm_m25",
+      "reference": "weak080",
+      "stage": "c2g",
+      "cm_delta_v": {
+        "mean": -5.094042899238347e-07,
+        "minimum": -6.454736786820625e-05,
+        "maximum": 2.2165797529005715e-05,
+        "peak_to_peak": 8.671316539721197e-05
+      },
+      "cm_max_abs_delta_v": 6.454736786820625e-05,
+      "differential_delta_v": {
+        "mean": -3.086336007958388e-07,
+        "minimum": -0.00012246214258082588,
+        "maximum": 0.0001226011387142345,
+        "peak_to_peak": 0.0002450632812950604
+      }
+    }
+  ],
+  "heldout_errors": [
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "stage": "e3",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.24499612201285795,
+              "minimum_ps": -0.24747715711901205,
+              "maximum_ps": -0.2394665741495069,
+              "errors_ps": [
+                -0.24747715711901205,
+                -0.24542048278742024,
+                -0.2394665741495069,
+                -0.24519128896054976,
+                -0.24742510704780085
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.24511386426660686,
+              "minimum_ps": -0.24543295002176618,
+              "maximum_ps": -0.24468156961383547,
+              "errors_ps": [
+                -0.24543295002176618,
+                -0.24470882045955775,
+                -0.24536699283050906,
+                -0.24508412387490267,
+                -0.24540872879907005,
+                -0.24468156961383547
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.790412919913556,
+            "common_mode_max_error_mv": 3.5941092960702914,
+            "crossing_error_max_abs_ps": 0.24747715711901205
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.24499612201285795,
+              "minimum_ps": -0.24747715711901205,
+              "maximum_ps": -0.2394665741495069,
+              "errors_ps": [
+                -0.24747715711901205,
+                -0.24542048278742024,
+                -0.2394665741495069,
+                -0.24519128896054976,
+                -0.24742510704780085
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.24511386426660686,
+              "minimum_ps": -0.24543295002176618,
+              "maximum_ps": -0.24468156961383547,
+              "errors_ps": [
+                -0.24543295002176618,
+                -0.24470882045955775,
+                -0.24536699283050906,
+                -0.24508412387490267,
+                -0.24540872879907005,
+                -0.24468156961383547
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.790412919913556,
+            "common_mode_max_error_mv": 3.5941092960702914,
+            "crossing_error_max_abs_ps": 0.24747715711901205
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "stage": "e4",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2586248764774223,
+              "minimum_ps": -0.2687388780120224,
+              "maximum_ps": -0.24311906502145103,
+              "errors_ps": [
+                -0.2687388780120224,
+                -0.24738922931378585,
+                -0.24311906502145103,
+                -0.2655677130796512,
+                -0.2683094969602011
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2463687660643865,
+              "minimum_ps": -0.24969837149828306,
+              "maximum_ps": -0.24200040009755097,
+              "errors_ps": [
+                -0.24969837149828306,
+                -0.2428639564771581,
+                -0.24822371630763762,
+                -0.24591427172906952,
+                -0.24951188027661994,
+                -0.24200040009755097
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 2.6740691778878722,
+            "common_mode_max_error_mv": 1.8357997168767515,
+            "crossing_error_max_abs_ps": 0.2687388780120224
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.7933625990049074,
+              "minimum_ps": -0.8041601241124123,
+              "maximum_ps": -0.7693767283392916,
+              "errors_ps": [
+                -0.8041601241124123,
+                -0.7865364939745503,
+                -0.7693767283392916,
+                -0.8029205681589481,
+                -0.8038190804393345
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.7842902906843167,
+              "minimum_ps": -0.7872534266894758,
+              "maximum_ps": -0.7808038261709879,
+              "errors_ps": [
+                -0.7872534266894758,
+                -0.7815141778584668,
+                -0.7853478224996883,
+                -0.7836665211336145,
+                -0.7871559697536669,
+                -0.7808038261709879
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.825962117492574,
+            "common_mode_max_error_mv": 3.7506417196673247,
+            "crossing_error_max_abs_ps": 0.8041601241124123
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "generic",
+      "stage": "c2g",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.2267435926624564,
+              "minimum_ps": -2.6176835176791733,
+              "maximum_ps": -2.0399073552053184,
+              "errors_ps": [
+                -2.0399073552053184,
+                -2.0533724013341943,
+                -2.6176835176791733,
+                -2.5231812051026923,
+                -2.069080889307471,
+                -2.057236187345886
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.3564210532339325,
+              "minimum_ps": -2.5398164939704664,
+              "maximum_ps": -2.237605533513469,
+              "errors_ps": [
+                -2.237605533513469,
+                -2.2915949681140186,
+                -2.5398164939704664,
+                -2.5082838867868826,
+                -2.2901656278311293,
+                -2.271059809187631
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 11.621092084917976,
+            "common_mode_max_error_mv": 3.469188273400814,
+            "crossing_error_max_abs_ps": 2.6176835176791733
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.7355777199375324,
+              "minimum_ps": -3.131062810356404,
+              "maximum_ps": -2.556685458476081,
+              "errors_ps": [
+                -2.556685458476081,
+                -2.5834255807371016,
+                -3.131062810356404,
+                -2.969456329210788,
+                -2.585948030020195,
+                -2.5868881108246256
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.8742925836975686,
+              "minimum_ps": -3.0579240223196114,
+              "maximum_ps": -2.7636424899991194,
+              "errors_ps": [
+                -2.7636424899991194,
+                -2.8031671649756467,
+                -3.0579240223196114,
+                -3.01953750545558,
+                -2.8179513431013956,
+                -2.7835329763340586
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 14.833781312685826,
+            "common_mode_max_error_mv": 5.551196022298255,
+            "crossing_error_max_abs_ps": 3.131062810356404
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "stage": "e3",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2408779629607277,
+              "minimum_ps": -0.24315750693016533,
+              "maximum_ps": -0.23539334449959365,
+              "errors_ps": [
+                -0.24315750693016533,
+                -0.24157933055404313,
+                -0.23539334449959365,
+                -0.2411523707492103,
+                -0.243107262070626
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.24107858161511345,
+              "minimum_ps": -0.2414609713452493,
+              "maximum_ps": -0.2404841346557356,
+              "errors_ps": [
+                -0.2414609713452493,
+                -0.24051284226329672,
+                -0.24130265506446955,
+                -0.24127888646549203,
+                -0.24143199989643768,
+                -0.2404841346557356
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.745064616907602,
+            "common_mode_max_error_mv": 3.590765156778586,
+            "crossing_error_max_abs_ps": 0.24315750693016533
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2408779629607277,
+              "minimum_ps": -0.24315750693016533,
+              "maximum_ps": -0.23539334449959365,
+              "errors_ps": [
+                -0.24315750693016533,
+                -0.24157933055404313,
+                -0.23539334449959365,
+                -0.2411523707492103,
+                -0.243107262070626
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.24107858161511345,
+              "minimum_ps": -0.2414609713452493,
+              "maximum_ps": -0.2404841346557356,
+              "errors_ps": [
+                -0.2414609713452493,
+                -0.24051284226329672,
+                -0.24130265506446955,
+                -0.24127888646549203,
+                -0.24143199989643768,
+                -0.2404841346557356
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.745064616907602,
+            "common_mode_max_error_mv": 3.590765156778586,
+            "crossing_error_max_abs_ps": 0.24315750693016533
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "stage": "e4",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2628141156333983,
+              "minimum_ps": -0.27223378638476836,
+              "maximum_ps": -0.2475209155880113,
+              "errors_ps": [
+                -0.27223378638476836,
+                -0.25221547594309507,
+                -0.2475209155880113,
+                -0.270268476372813,
+                -0.27183192387830385
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.251528903782339,
+              "minimum_ps": -0.25475558616423244,
+              "maximum_ps": -0.2471993873753672,
+              "errors_ps": [
+                -0.25475558616423244,
+                -0.24802270773948787,
+                -0.253379736958257,
+                -0.2512243280218918,
+                -0.25459167643479746,
+                -0.2471993873753672
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 2.607632802738083,
+            "common_mode_max_error_mv": 1.7785067229723062,
+            "crossing_error_max_abs_ps": 0.27223378638476836
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.7908878322163597,
+              "minimum_ps": -0.8015279919274828,
+              "maximum_ps": -0.7678858149170151,
+              "errors_ps": [
+                -0.8015279919274828,
+                -0.783323993719375,
+                -0.7678858149170151,
+                -0.8005052579326094,
+                -0.8011961025853163
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.7820592893469533,
+              "minimum_ps": -0.7847595089617851,
+              "maximum_ps": -0.7789735930631324,
+              "errors_ps": [
+                -0.7847595089617851,
+                -0.7796528308324621,
+                -0.783281638242166,
+                -0.7810057278874041,
+                -0.7846824370947704,
+                -0.7789735930631324
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.769103128991634,
+            "common_mode_max_error_mv": 3.682504460260194,
+            "crossing_error_max_abs_ps": 0.8015279919274828
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_short",
+      "stage": "c2g",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.190404877564325,
+              "minimum_ps": -2.585987295053028,
+              "maximum_ps": -2.00463963179108,
+              "errors_ps": [
+                -2.00463963179108,
+                -2.015754956859812,
+                -2.585987295053028,
+                -2.4814670410913093,
+                -2.035056325843261,
+                -2.0195240147474602
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.3143726317124718,
+              "minimum_ps": -2.4982644890360257,
+              "maximum_ps": -2.1986363807254032,
+              "errors_ps": [
+                -2.1986363807254032,
+                -2.2453530514926827,
+                -2.4982644890360257,
+                -2.4653794618391767,
+                -2.250422379149158,
+                -2.2281800280323862
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 11.416533361397862,
+            "common_mode_max_error_mv": 3.3874600872596528,
+            "crossing_error_max_abs_ps": 2.585987295053028
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.7199029927755105,
+              "minimum_ps": -3.1200923656328166,
+              "maximum_ps": -2.5421570257686885,
+              "errors_ps": [
+                -2.5421570257686885,
+                -2.5655211925448635,
+                -3.1200923656328166,
+                -2.949976017285192,
+                -2.572743160577429,
+                -2.5689281948440725
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.852708301341448,
+              "minimum_ps": -3.0368448363840153,
+              "maximum_ps": -2.7449098328818953,
+              "errors_ps": [
+                -2.7449098328818953,
+                -2.7775134996408406,
+                -3.0368448363840153,
+                -2.9974908130907036,
+                -2.7983944904803337,
+                -2.7610963355709006
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 14.501593998227271,
+            "common_mode_max_error_mv": 5.405727405037197,
+            "crossing_error_max_abs_ps": 3.1200923656328166
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "stage": "e3",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2560252756952984,
+              "minimum_ps": -0.2581929929873613,
+              "maximum_ps": -0.249751998643926,
+              "errors_ps": [
+                -0.2581929929873613,
+                -0.25750773843281466,
+                -0.249751998643926,
+                -0.2565246849561515,
+                -0.25814896345623844
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2566002128235513,
+              "minimum_ps": -0.2571270678345585,
+              "maximum_ps": -0.25573037769559015,
+              "errors_ps": [
+                -0.2571270678345585,
+                -0.255756819479264,
+                -0.2567871210236524,
+                -0.2571041851418811,
+                -0.2570957057663614,
+                -0.25573037769559015
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.748579548472756,
+            "common_mode_max_error_mv": 3.604399175174633,
+            "crossing_error_max_abs_ps": 0.2581929929873613
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2560252756952984,
+              "minimum_ps": -0.2581929929873613,
+              "maximum_ps": -0.249751998643926,
+              "errors_ps": [
+                -0.2581929929873613,
+                -0.25750773843281466,
+                -0.249751998643926,
+                -0.2565246849561515,
+                -0.25814896345623844
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2566002128235513,
+              "minimum_ps": -0.2571270678345585,
+              "maximum_ps": -0.25573037769559015,
+              "errors_ps": [
+                -0.2571270678345585,
+                -0.255756819479264,
+                -0.2567871210236524,
+                -0.2571041851418811,
+                -0.2570957057663614,
+                -0.25573037769559015
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.748579548472756,
+            "common_mode_max_error_mv": 3.604399175174633,
+            "crossing_error_max_abs_ps": 0.2581929929873613
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "stage": "e4",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2555424866288972,
+              "minimum_ps": -0.2659738996603601,
+              "maximum_ps": -0.23960139514212328,
+              "errors_ps": [
+                -0.2659738996603601,
+                -0.24383051407733616,
+                -0.23960139514212328,
+                -0.2627678352334828,
+                -0.26553878903118383
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.24307378859565332,
+              "minimum_ps": -0.24650848756542992,
+              "maximum_ps": -0.2387557656374727,
+              "errors_ps": [
+                -0.24650848756542992,
+                -0.23971572701655047,
+                -0.24514016321073354,
+                -0.2419857630481035,
+                -0.24633682509562996,
+                -0.2387557656374727
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 2.639863889734459,
+            "common_mode_max_error_mv": 1.800799952878629,
+            "crossing_error_max_abs_ps": 0.2659738996603601
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.7998223974981593,
+              "minimum_ps": -0.8109862850663,
+              "maximum_ps": -0.7751748619917224,
+              "errors_ps": [
+                -0.8109862850663,
+                -0.7926262653075398,
+                -0.7751748619917224,
+                -0.809681101914117,
+                -0.8106434732111176
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.7905847434505962,
+              "minimum_ps": -0.7936683140863486,
+              "maximum_ps": -0.7871526363580734,
+              "errors_ps": [
+                -0.7936683140863486,
+                -0.7879561143103514,
+                -0.7918534176316602,
+                -0.7892896838940616,
+                -0.793588294423082,
+                -0.7871526363580734
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 4.7218122565267775,
+            "common_mode_max_error_mv": 3.7488510743528547,
+            "crossing_error_max_abs_ps": 0.8109862850663
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "mode": "fixed_long",
+      "stage": "c2g",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.2091242365404873,
+              "minimum_ps": -2.598644028481782,
+              "maximum_ps": -2.022256690589021,
+              "errors_ps": [
+                -2.022256690589021,
+                -2.037384414179481,
+                -2.598644028481782,
+                -2.5075478034908176,
+                -2.047620749009309,
+                -2.04129173349251
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.3355079877111096,
+              "minimum_ps": -2.518845894187031,
+              "maximum_ps": -2.2099583119365036,
+              "errors_ps": [
+                -2.2099583119365036,
+                -2.2771150520455703,
+                -2.518845894187031,
+                -2.4928649133456986,
+                -2.261567542159487,
+                -2.2526962125923684
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 11.354367271799838,
+            "common_mode_max_error_mv": 3.380896035471981,
+            "crossing_error_max_abs_ps": 2.598644028481782
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.7224731868016203,
+              "minimum_ps": -3.1157065232577317,
+              "maximum_ps": -2.543572056141723,
+              "errors_ps": [
+                -2.543572056141723,
+                -2.5722811216417583,
+                -3.1157065232577317,
+                -2.9582834379615086,
+                -2.569194421326937,
+                -2.575801560480062
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -2.8570920110279165,
+              "minimum_ps": -3.040757794920634,
+              "maximum_ps": -2.7397537177283726,
+              "errors_ps": [
+                -2.7397537177283726,
+                -2.7928445753555673,
+                -3.040757794920634,
+                -3.006853124434677,
+                -2.7931048110721806,
+                -2.7692380426560694
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 14.508162877274758,
+            "common_mode_max_error_mv": 5.55580568668268,
+            "crossing_error_max_abs_ps": 3.1157065232577317
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "stage": "e3",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2984020850935217,
+              "minimum_ps": -0.2998410766092745,
+              "maximum_ps": -0.29555154398877587,
+              "errors_ps": [
+                -0.2998410766092745,
+                -0.2977536700537553,
+                -0.2990493013692477,
+                -0.29555154398877587,
+                -0.29981483344655496
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2958811570410835,
+              "minimum_ps": -0.2972269729560765,
+              "maximum_ps": -0.2944830370795498,
+              "errors_ps": [
+                -0.2972269729560765,
+                -0.2944830370795498,
+                -0.2965367378027186,
+                -0.2955797906441504,
+                -0.2969055906378265,
+                -0.2945548131261791
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 8.23645866501868,
+            "common_mode_max_error_mv": 11.433399408234735,
+            "crossing_error_max_abs_ps": 0.2998410766092745
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2984020850935217,
+              "minimum_ps": -0.2998410766092745,
+              "maximum_ps": -0.29555154398877587,
+              "errors_ps": [
+                -0.2998410766092745,
+                -0.2977536700537553,
+                -0.2990493013692477,
+                -0.29555154398877587,
+                -0.29981483344655496
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2958811570410835,
+              "minimum_ps": -0.2972269729560765,
+              "maximum_ps": -0.2944830370795498,
+              "errors_ps": [
+                -0.2972269729560765,
+                -0.2944830370795498,
+                -0.2965367378027186,
+                -0.2955797906441504,
+                -0.2969055906378265,
+                -0.2945548131261791
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 8.23645866501868,
+            "common_mode_max_error_mv": 11.433399408234735,
+            "crossing_error_max_abs_ps": 0.2998410766092745
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "stage": "e4",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": 0.157028694836805,
+              "minimum_ps": 0.14776245930204662,
+              "maximum_ps": 0.16717981064497922,
+              "errors_ps": [
+                0.14869450227417802,
+                0.16628273252041265,
+                0.15522396944240863,
+                0.16717981064497922,
+                0.14776245930204662
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": 0.16873165361952558,
+              "minimum_ps": 0.1634646374142249,
+              "maximum_ps": 0.17579111271256062,
+              "errors_ps": [
+                0.16499467774051194,
+                0.17579111271256062,
+                0.1634646374142249,
+                0.16930744637850995,
+                0.16446672179636354,
+                0.17436532567498253
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 9.766490239774495,
+            "common_mode_max_error_mv": 7.750229530945507,
+            "crossing_error_max_abs_ps": 0.17579111271256062
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.3639689353142139,
+              "minimum_ps": -0.37197772413889657,
+              "maximum_ps": -0.35482905406366516,
+              "errors_ps": [
+                -0.37146307049108357,
+                -0.3570088125643481,
+                -0.36456601531307614,
+                -0.35482905406366516,
+                -0.37197772413889657
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.3538414846479388,
+              "minimum_ps": -0.36009607053125103,
+              "maximum_ps": -0.34866089856395305,
+              "errors_ps": [
+                -0.35842146014560694,
+                -0.34866089856395305,
+                -0.35661300115372524,
+                -0.3500266416378551,
+                -0.36009607053125103,
+                -0.3492308358552416
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 12.97198945502931,
+            "common_mode_max_error_mv": 16.274378076243103,
+            "crossing_error_max_abs_ps": 0.37197772413889657
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "generic",
+      "stage": "c2g",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -1.885159565508248,
+              "minimum_ps": -2.032491417434746,
+              "maximum_ps": -1.809395268781494,
+              "errors_ps": [
+                -1.809395268781494,
+                -1.8200756084425462,
+                -1.9838310671340535,
+                -2.032491417434746,
+                -1.8450141289372202,
+                -1.8201499023194265
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -1.8133600020902436,
+              "minimum_ps": -1.9051728738742615,
+              "maximum_ps": -1.7472115264585253,
+              "errors_ps": [
+                -1.7525005487527452,
+                -1.8090447642098944,
+                -1.8934729796834757,
+                -1.9051728738742615,
+                -1.7727573195625592,
+                -1.7472115264585253
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 16.33131877472395,
+            "common_mode_max_error_mv": 6.4550343077334205,
+            "crossing_error_max_abs_ps": 2.032491417434746
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.6397240158080565,
+              "minimum_ps": -0.798119510420062,
+              "maximum_ps": -0.5506809999679851,
+              "errors_ps": [
+                -0.5506809999679851,
+                -0.5894829237662982,
+                -0.7444768300828414,
+                -0.798119510420062,
+                -0.5662898240226448,
+                -0.5892940065885074
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.5635105015784402,
+              "minimum_ps": -0.6497164131082763,
+              "maximum_ps": -0.5012417820269269,
+              "errors_ps": [
+                -0.5059349572780012,
+                -0.5606015004427977,
+                -0.6379271870881528,
+                -0.6497164131082763,
+                -0.5256411695264865,
+                -0.5012417820269269
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 33.76812967421766,
+            "common_mode_max_error_mv": 13.07859688770252,
+            "crossing_error_max_abs_ps": 0.798119510420062
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "stage": "e3",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2855525673802249,
+              "minimum_ps": -0.28726817921773296,
+              "maximum_ps": -0.28301483519399534,
+              "errors_ps": [
+                -0.28726817921773296,
+                -0.2839510801195614,
+                -0.2862808819463582,
+                -0.28301483519399534,
+                -0.28724786042347655
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2820563815376995,
+              "minimum_ps": -0.2826420239067456,
+              "maximum_ps": -0.2813714012712809,
+              "errors_ps": [
+                -0.2826420239067456,
+                -0.2813714012712809,
+                -0.2819925664088072,
+                -0.28256516901830453,
+                -0.28193475886109326,
+                -0.2818323697599659
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 8.37267810878506,
+            "common_mode_max_error_mv": 11.638216100968046,
+            "crossing_error_max_abs_ps": 0.28726817921773296
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.2855525673802249,
+              "minimum_ps": -0.28726817921773296,
+              "maximum_ps": -0.28301483519399534,
+              "errors_ps": [
+                -0.28726817921773296,
+                -0.2839510801195614,
+                -0.2862808819463582,
+                -0.28301483519399534,
+                -0.28724786042347655
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.2820563815376995,
+              "minimum_ps": -0.2826420239067456,
+              "maximum_ps": -0.2813714012712809,
+              "errors_ps": [
+                -0.2826420239067456,
+                -0.2813714012712809,
+                -0.2819925664088072,
+                -0.28256516901830453,
+                -0.28193475886109326,
+                -0.2818323697599659
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 8.37267810878506,
+            "common_mode_max_error_mv": 11.638216100968046,
+            "crossing_error_max_abs_ps": 0.28726817921773296
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "stage": "e4",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": 0.18038514512057918,
+              "minimum_ps": 0.17015249899664794,
+              "maximum_ps": 0.19119681966399035,
+              "errors_ps": [
+                0.17149966143835935,
+                0.19119681966399035,
+                0.17981606248950482,
+                0.18926068301439333,
+                0.17015249899664794
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": 0.19371733870747587,
+              "minimum_ps": 0.1883250164774998,
+              "maximum_ps": 0.2008181432475232,
+              "errors_ps": [
+                0.1898987210325125,
+                0.2008181432475232,
+                0.1883250164774998,
+                0.19436468850495928,
+                0.18951200605594842,
+                0.19938545692641202
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 10.06464817154254,
+            "common_mode_max_error_mv": 7.903801897489959,
+            "crossing_error_max_abs_ps": 0.2008181432475232
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.35166314376453695,
+              "minimum_ps": -0.36003553652013753,
+              "maximum_ps": -0.3427203074371217,
+              "errors_ps": [
+                -0.3595183273466257,
+                -0.34424136721611304,
+                -0.35180018030268684,
+                -0.3427203074371217,
+                -0.36003553652013753
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.3411333257807989,
+              "minimum_ps": -0.34754908947427005,
+              "maximum_ps": -0.3357787208667603,
+              "errors_ps": [
+                -0.34588489606648815,
+                -0.3357787208667603,
+                -0.34405193450793164,
+                -0.33720852221019676,
+                -0.34754908947427005,
+                -0.33632679155914674
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 12.796286724055944,
+            "common_mode_max_error_mv": 16.682078251322174,
+            "crossing_error_max_abs_ps": 0.36003553652013753
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_short",
+      "stage": "c2g",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -1.9427307279779347,
+              "minimum_ps": -2.100188179614156,
+              "maximum_ps": -1.8623064990424132,
+              "errors_ps": [
+                -1.8623064990424132,
+                -1.8703991831871019,
+                -2.049132747836154,
+                -2.100188179614156,
+                -1.9037684538284216,
+                -1.8705893043593613
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -1.870346367229775,
+              "minimum_ps": -1.9619550842764533,
+              "maximum_ps": -1.7997464878949891,
+              "errors_ps": [
+                -1.810170835223444,
+                -1.8612060933178303,
+                -1.9565714390035986,
+                -1.9619550842764533,
+                -1.8324282636623348,
+                -1.7997464878949891
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 17.157306460888616,
+            "common_mode_max_error_mv": 6.871591324441928,
+            "crossing_error_max_abs_ps": 2.100188179614156
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.6134382164113962,
+              "minimum_ps": -0.7824930334489423,
+              "maximum_ps": -0.521332201603905,
+              "errors_ps": [
+                -0.521332201603905,
+                -0.5572139315692124,
+                -0.7268530371599706,
+                -0.7824930334489423,
+                -0.5359807624230835,
+                -0.5567563322632629
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.5383778010450152,
+              "minimum_ps": -0.6238788026699807,
+              "maximum_ps": -0.4713570518401594,
+              "errors_ps": [
+                -0.4821817116453173,
+                -0.530361649299033,
+                -0.6187591327129167,
+                -0.6238788026699807,
+                -0.5037284581026835,
+                -0.4713570518401594
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 36.12689549315637,
+            "common_mode_max_error_mv": 14.04668236244544,
+            "crossing_error_max_abs_ps": 0.7824930334489423
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "stage": "e3",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.30551592535870975,
+              "minimum_ps": -0.30691439079552113,
+              "maximum_ps": -0.30243350991672013,
+              "errors_ps": [
+                -0.30691439079552113,
+                -0.304630820807844,
+                -0.3066892530504387,
+                -0.30243350991672013,
+                -0.3069116522230246
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.30321514343805395,
+              "minimum_ps": -0.30632749861199066,
+              "maximum_ps": -0.30133355352284985,
+              "errors_ps": [
+                -0.30443356876009137,
+                -0.30133355352284985,
+                -0.30332272312861325,
+                -0.30241088464430377,
+                -0.30632749861199066,
+                -0.30146263196047457
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 7.938866149977242,
+            "common_mode_max_error_mv": 11.078341465525776,
+            "crossing_error_max_abs_ps": 0.30691439079552113
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.30551592535870975,
+              "minimum_ps": -0.30691439079552113,
+              "maximum_ps": -0.30243350991672013,
+              "errors_ps": [
+                -0.30691439079552113,
+                -0.304630820807844,
+                -0.3066892530504387,
+                -0.30243350991672013,
+                -0.3069116522230246
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.30321514343805395,
+              "minimum_ps": -0.30632749861199066,
+              "maximum_ps": -0.30133355352284985,
+              "errors_ps": [
+                -0.30443356876009137,
+                -0.30133355352284985,
+                -0.30332272312861325,
+                -0.30241088464430377,
+                -0.30632749861199066,
+                -0.30146263196047457
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 7.938866149977242,
+            "common_mode_max_error_mv": 11.078341465525776,
+            "crossing_error_max_abs_ps": 0.30691439079552113
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "stage": "e4",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": 0.14325671252352518,
+              "minimum_ps": 0.13352777168698218,
+              "maximum_ps": 0.15340870259443978,
+              "errors_ps": [
+                0.1348620487533072,
+                0.15340870259443978,
+                0.14199695290214043,
+                0.15248808668075636,
+                0.13352777168698218
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": 0.1559320737488881,
+              "minimum_ps": 0.15074927902862922,
+              "maximum_ps": 0.16303082105800942,
+              "errors_ps": [
+                0.15211313361403758,
+                0.16303082105800942,
+                0.15074927902862922,
+                0.1566740486445873,
+                0.15149648380856182,
+                0.16152867633950316
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 8.807479365027266,
+            "common_mode_max_error_mv": 7.106608432120742,
+            "crossing_error_max_abs_ps": 0.16303082105800942
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 5,
+              "mean_ps": -0.38329328169457916,
+              "minimum_ps": -0.39138739768568204,
+              "maximum_ps": -0.3732991264351179,
+              "errors_ps": [
+                -0.3909247749069095,
+                -0.3766437010503651,
+                -0.384211408394821,
+                -0.3732991264351179,
+                -0.39138739768568204
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.3722939289195906,
+              "minimum_ps": -0.3768170934277955,
+              "maximum_ps": -0.3678124411957255,
+              "errors_ps": [
+                -0.3762331436787323,
+                -0.3678124411957255,
+                -0.3753769661861133,
+                -0.36912053674083023,
+                -0.3768170934277955,
+                -0.3684033922883473
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 11.929001141041478,
+            "common_mode_max_error_mv": 15.082780746898505,
+            "crossing_error_max_abs_ps": 0.39138739768568204
+          },
+          "clock_qualified": true
+        }
+      }
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "mode": "fixed_long",
+      "stage": "c2g",
+      "methods": {
+        "one_step": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -1.942478178130062,
+              "minimum_ps": -2.0847105361149345,
+              "maximum_ps": -1.8677725158010812,
+              "errors_ps": [
+                -1.8677725158010812,
+                -1.88120288867183,
+                -2.0366930967467316,
+                -2.0847105361149345,
+                -1.9031152536169713,
+                -1.8813747778288223
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -1.8678323676527493,
+              "minimum_ps": -1.9587014939939213,
+              "maximum_ps": -1.803214242718305,
+              "errors_ps": [
+                -1.8058245595357638,
+                -1.8666177775285997,
+                -1.94760084620043,
+                -1.9587014939939213,
+                -1.8250352859394758,
+                -1.803214242718305
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 15.94807925190929,
+            "common_mode_max_error_mv": 6.1763745548435445,
+            "crossing_error_max_abs_ps": 2.0847105361149345
+          },
+          "clock_qualified": true
+        },
+        "cascade": {
+          "signed_edges": {
+            "rising": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.7559901335450313,
+              "minimum_ps": -0.9097751845473867,
+              "maximum_ps": -0.6686636507049568,
+              "errors_ps": [
+                -0.6686636507049568,
+                -0.7094086483804154,
+                -0.8570676501799662,
+                -0.9097751845473867,
+                -0.6821833722509902,
+                -0.7088422952064728
+              ]
+            },
+            "falling": {
+              "paired": true,
+              "count": 6,
+              "mean_ps": -0.6772166072807342,
+              "minimum_ps": -0.7623614787463071,
+              "maximum_ps": -0.6160369214402276,
+              "errors_ps": [
+                -0.6187652908682636,
+                -0.6770909110568348,
+                -0.7514430528231949,
+                -0.7623614787463071,
+                -0.6376019887495771,
+                -0.6160369214402276
+              ]
+            }
+          },
+          "maxima": {
+            "differential_max_error_mv": 32.12149407778544,
+            "common_mode_max_error_mv": 12.3759677864419,
+            "crossing_error_max_abs_ps": 0.9097751845473867
+          },
+          "clock_qualified": true
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "window_s": [
+    3.5000000000000003e-09,
+    6.4e-09
+  ],
+  "scope": "Prescribed input voltage; two MOS corners, tt resistor corner; no full-TX, pad, startup or size qualification.",
+  "interpretation": "CM perturbation is applied only to e2g_2; paired differences include resulting correlated differential changes. Repeated periods are not independent samples.",
+  "publisher_sha256": "49a17de42b7d8192df81b191d145ab84a32c71720a68e335416ffe8e783ed1e8",
+  "figures": {
+    "docs/figures/tx/ingress/tx_loaded_cm_excitation.png": "f60f0164d93705d097a473945a674461b555f44f982e77a6b44e190842081723",
+    "docs/figures/tx/ingress/tx_loaded_cm_fs_waveforms.png": "d786fb241ccb1f26e76f9d2adef4aa23926e371c3e5d7ee9a802c6d8e7945159",
+    "docs/figures/tx/ingress/tx_loaded_cm_ss_waveforms.png": "fbedcc95b5113dc2538e92f104aaca614d5c6a92f915e96f324a2b856890b3df"
+  }
+}

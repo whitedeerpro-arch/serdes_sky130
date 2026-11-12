@@ -559,3 +559,18 @@ model_optimizer_failed_fits = 0
 next_step = "separate_CM_and_loaded_response_mechanisms; new_holdout_for_new_model; actual_reference_tracking_and_WN_WT_R_feasibility_before_adoption"
 scope = "e2g_2_prescribed_voltage_cut; Xe3_Xe4_Xout; current_pre120_WT60_out192_load; fixed_R_only_in_clock; tt_RC; rejected_source_clock_iteration"
 adopted = false
+
+[retime_clock_iteration.direct_stage_CM]
+status = "FS_SS_zero_shift_calibrated_and_direct_Xe4_Xout_CM_measured; 18of18_local_clocks; no_size_adoption"
+report = "docs/design/tx_loaded_clock.md"
+runner = "analog/tx/input_register/tb/loaded_stage_cm/run.py"
+campaign = "results/analog/tx/loaded_stage_cm/20261111T175916.434499Z_a555bbcc"
+data = "docs/data/tx_direct_stage_cm.json"
+diagnostic_data = "docs/data/tx_loaded_cm.json"
+independent_CM_shift_mv = -25
+local_clock_branches = 18
+local_clock_passes = 18
+maximum_c2g_cycle_pp_change_mv = 0.716230
+maximum_mean_absolute_edge_change_ps = 0.0076
+scope = "ideal_equal_series_DC_sources_retain_adjacent_gate_loading; prescribed_external_sources; two_MOS_conditions_RCtt; training_only_not_physical_shifter_or_AC_PSRR"
+adopted = false

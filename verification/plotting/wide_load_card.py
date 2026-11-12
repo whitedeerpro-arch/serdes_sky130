@@ -57,6 +57,18 @@ def collect(summary, delivery, repeated):
     expected = {(p['id'], rc, t, d) for p in model['parts'] for rc in card.CORNERS for t in card.TEMPS for d in card.DROPS}
     indexed = {(r['id'], r['corner'], r['temp_c'], r['load_drop_grid_v']): r for r in rows}
     if set(indexed) != expected or len(indexed) != len(rows): raise ValueError('missing or duplicated passive grid points')
+    # Every network contains only passive R/C devices and grounded rails/body.
+    # Check admittance signs separately from the LF derivative agreement gate.
+    quantities = ('resistance_ohm', 'FD_resistance_ohm', 'LF_incremental_resistance_ohm',
+                  'RF_real_admittance_inverse_ohm', 'RF_effective_node_capacitance_f')
+    physical_minima = {}
+    for quantity in quantities:
+        row = min(rows, key=lambda r: r[quantity]); value = row[quantity]
+        if value < 0 or (quantity != 'RF_effective_node_capacitance_f' and value == 0):
+            raise ValueError(f'nonphysical passive result: {quantity}={value}, '
+                             f'{row["id"]}/{row["corner"]}/{row["temp_c"]}/{row["load_drop_grid_v"]}')
+        physical_minima[quantity] = {k: row[k] for k in
+                                    ('id', 'corner', 'temp_c', 'load_drop_grid_v', quantity)}
     parts = []
     for p in model['parts']:
         name = p['id']; nominal = indexed[name, 'tt', 27, .25]
@@ -80,6 +92,7 @@ def collect(summary, delivery, repeated):
                 curves=model['curves'], parts=parts, choices=model['choices'],
                 measured_rows=len(rows), current_boundary=plan['current_boundary'], overlay=plan['overlay'],
                 max_LF_AC_vs_FD_relative_error=max(r['LF_AC_vs_FD_relative_error'] for r in rows),
+                passive_physical_minima=physical_minima,
                 reference_scope=plan['reference_scope'], geometry_scope=plan['geometry_scope'], ungraded=plan['ungraded'],
                 current_density_scope='Prescribed 6.619mA local two-condition clean-input peak, assumed equal sharing; no fixed-network full-PVT current prediction or EM.',
                 capacitance_scope='Port-effective PDK admittance at 2GHz with rail/body AC-grounded, not routed PEX. Reference series networks have distributed RC; RF inverse conductance need not equal DC slope.',
@@ -97,13 +110,14 @@ def plots(data):
             error = p['tracking_proxies']['reference_fixed_s8']['max_abs_percent']
             for ax, x, y in ((axes[0], cap, j), (axes[1], area, cap), (axes[2], cap, error)):
                 ax.scatter(x, y, color=color, s=35)
-                ax.annotate(str(p['parallel_count']), (x, y), xytext=(4, 4), textcoords='offset points', fontsize=8)
+                ax.annotate(str(p['parallel_count']), (x, y), xytext=(4, 5 if width == '2p85' else -12),
+                            textcoords='offset points', fontsize=8)
         axes[0].plot([], [], 'o', color=color, label='Width ' + str(card.geometry.WIDTHS[width]) + 'um')
     axes[0].axhline(100, color='#555', ls='--', lw=.8); axes[0].axhline(500, color='#888', ls=':', lw=.8)
     axes[0].set(xlabel='Port C at 2GHz (fF)', ylabel='Hypothetical peak current / width (uA/um)'); axes[0].legend(fontsize=8)
     axes[1].set(xlabel='Resistive film area only (um²)', ylabel='Port C at 2GHz (fF)')
     axes[2].set(xlabel='Port C at 2GHz (fF)', ylabel='Maximum reference-ratio deviation (%)')
-    for ax in axes: ax.grid(alpha=.2)
+    for ax in axes: ax.grid(alpha=.2); ax.margins(x=.12, y=.12)
     fig.suptitle('Local 50-ohm termination planning: separately calibrated widths / explicit counts')
     fig.supxlabel('TT geometry matched to legacy electrical R. 100/500 are preferred/model current guidance; same prescribed peak for all points. Ratio uses controlled code15 R-only string, not the bias loop.', fontsize=8)
     other, axs = plt.subplots(2, 3, figsize=(13.5, 7), layout='constrained')
@@ -114,10 +128,11 @@ def plots(data):
                 cap = p['TT27C_load250mV_node_capacitance_f'] * 1e15
                 error = p['tracking_proxies']['reference_fixed_s8']['max_abs_percent']
                 ax.scatter(cap, error, color=color, s=30)
-                ax.annotate(str(p['parallel_count']), (cap, error), xytext=(3, 3), textcoords='offset points', fontsize=7)
+                ax.annotate(str(p['parallel_count']), (cap, error), xytext=(3, 5 if width == '2p85' else -10),
+                            textcoords='offset points', fontsize=7)
             ax.plot([], [], 'o', color=color, label=width)
         ax.set(title=str(target) + ' ohm nominal', xlabel='Port C at 2GHz (fF)', ylabel='Reference-ratio max deviation (%)')
-        ax.grid(alpha=.2)
+        ax.grid(alpha=.2); ax.margins(x=.12, y=.15)
     axs[0, 0].legend(fontsize=7)
     other.suptitle('Load / controlled-reference tracking: 5 RC corners x 3 temperatures')
     other.supxlabel('Counts label explicit parallel devices; matching is at TT27C/250mV, reference-string drop is 1.23V. No adopted network, full circuit or routed layout qualification.', fontsize=8)

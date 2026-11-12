@@ -14,7 +14,9 @@ Requirement (pll_lock_detect.sv): the threshold above the locked static offset a
 |mean| + k sd 51-189 ps), far below acquisition errors (ns).
 """
 import argparse
+import gzip
 import json
+import re
 import time
 from pathlib import Path
 
@@ -69,13 +71,14 @@ def deck(proc, v, params):
         assert text.count(inst + "\n") == 1
         inc = f'.include "{SC_LIB}"\n.include "{ROOT / "analog/pll/pfd/spice/pfd_sc.spice"}"\n'
         text = text.replace(inst + "\n", inc + f"{inst}_{PFD}\n")
-    lines = [".control", "set num_threads=1", "set wr_vecnames", "set wr_singlescale"]
+    lines = [".control", "set num_threads=1"]
     names = [f"f{k}" for k in range(len(PHASES))] + [f"a{k}" for k in range(len(PHASES))]
     for t in TEMP_C:
         lines += [f"option temp={t}", f"tran 2p {tend:.5e} 0 5p"]
         lines += [f"meas tran f{k} find v(late) at={tk + TREAD:.5e}" for k, tk in enumerate(times)]
         lines += [f"meas tran a{k} integ v(xw.e) from={tk - 1.0e-9:.5e} to={tk + TREAD:.5e}" for k, tk in enumerate(times)]
-        lines += [f"wrdata {proc}_v{round(v * 1000)}_t{t}.tsv " + " ".join(names), "destroy all"]
+        # the measures as "name = value" lines: wrdata repeats the scalars on every time point (60 MB per temperature)
+        lines += [f"print {' '.join(names)} > {proc}_v{round(v * 1000)}_t{t}.txt", "destroy all"]
     return text + "\n".join(lines + ["quit", ".endc", ".end", ""])
 
 
@@ -111,10 +114,15 @@ def main():
         for v in SUPPLY_V:
             for t in TEMP_C:
                 f = camp / f"{p}_v{round(v * 1000)}" / f"{p}_v{round(v * 1000)}_t{t}.tsv"
-                if not f.exists():
+                gz = f.with_name(f.name + ".gz")
+                if f.exists() or gz.exists():                   # campaigns before 2026-11-12: header + one row per time point
+                    with (f.open() if f.exists() else gzip.open(gz, "rt")) as fh:
+                        head, data = fh.readline(), fh.readline()
+                    col = dict(zip(head.split(), (float(x) for x in data.split())))
+                elif f.with_suffix(".txt").exists():
+                    col = {k: float(x) for k, x in re.findall(r"^(\w+) = ([-+0-9.eE]+)", f.with_suffix(".txt").read_text(), re.M)}
+                else:
                     continue
-                head, data = f.read_text().split("\n")[:2]
-                col = dict(zip(head.split(), (float(x) for x in data.split())))
                 n = len(PHASES)
                 flags = [col[f"f{k}"] > v / 2 for k in range(n)]
                 width = [col[f"a{k}"] / v for k in range(n)]               # xor pulse width, s

@@ -75,6 +75,24 @@ def extract(work: Path, cell: str, cellname: str) -> None:
     mu.run_magic(script, work).need("extraction")
 
 
+def exported_ports(path: Path, cell: str) -> list[str]:
+    """Read the extracted top interface; internal labels are not ports.
+
+    Netgen can match a labelled graph whose .subckt header has no pins. Such a
+    cell is unusable hierarchically, even when its internal devices match.
+    """
+    logical = re.sub(r"\n[ \t]*\+", " ", path.read_text())
+    header = re.search(rf"^\.subckt[ \t]+{re.escape(cell)}(?:[ \t]+([^\n]*))?$", logical, re.M | re.I)
+    if header is None:
+        return []
+    ports = []
+    for token in (header[1] or "").split():
+        if token.lower() == "params:" or "=" in token:
+            break
+        ports.append(token)
+    return ports
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("layout_dir", type=Path)
@@ -102,9 +120,11 @@ def main() -> None:
         # netgen still reports a unique match when a port label sits on an isolated shape ("disconnected node: d",
         # found by Codex's inverter audit, 2026-11-11): count it as a failure.
         disc = sorted(set(re.findall(r"disconnected node:\s*(\S+)", text, re.I)))
-        lvs_ok = "Circuits match uniquely" in res.stdout and not prop_err and not disc
+        ports = exported_ports(work / f"{cell}_lvs.spice", cell)
+        lvs_ok = "Circuits match uniquely" in res.stdout and not prop_err and not disc and bool(ports)
         print(f"LVS_MATCH {'Circuits match uniquely' in res.stdout}  LVS_PROPERTY_ERRORS {prop_err}  (see {log.name})")
         print(f"LVS_DISCONNECTED {' '.join(disc) if disc else 'none'}")
+        print(f"LVS_EXPORTED_PORTS {' '.join(ports) if ports else 'none (invalid DUT interface)'}")
     else:
         lvs_ok = None
     # Exit status is the verdict: nonzero unless DRC is 0 and (with --ref) LVS matches uniquely.

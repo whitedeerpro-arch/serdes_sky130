@@ -14,6 +14,7 @@ from serdes_flow.spice import spice_number
 REPO = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(REPO / "verification/layout"))
 from geometry import Cell, pdk_device  # noqa: E402
+from flat_cap_export import export as export_capacitance  # noqa: E402
 
 CELL = "pll_vco_cap_unit_r6_pdk"
 REF = REPO / "analog/pll/vco/layout/pll_vco_cap_unit_ref.spice"
@@ -91,7 +92,9 @@ def build(work: Path, mim_y: float = 0, compact_bottom: bool = False, switch_x: 
     mos = re.findall(r"^X\S+ (\S+) en (\S+) vss sky130_fd_pr__nfet_01v8 .* w=([\d.]+) l=([\d.]+)$", extracted, re.M)
     if len(mos) != 2 or any(set(m[:2]) != {cap[1], "vss"} or m[2:] != ("0.75", "0.15") for m in mos):
         raise ValueError("Switch topology, total width, fingers or body differs from r6")
-    pex = (work / f"{CELL}_pex.spice").read_text()
+    audit = export_capacitance(work / f"{CELL}.ext", work / f"{CELL}_lvs.spice", work / f"{CELL}_cap.spice")
+    (work / "cap_export_audit.json").write_text(json.dumps(audit, indent=2) + "\n")
+    pex = (work / f"{CELL}_cap.spice").read_text()
     caps = [(a, b, spice_number(v)) for a, b, v in re.findall(r"^C\S+ (\S+) (\S+) (\S+)$", pex, re.M)]
     def coupling(a, b):
         return sum(v * 1e15 for x, y, v in caps if {a, b} == {x, y})
@@ -101,6 +104,7 @@ def build(work: Path, mim_y: float = 0, compact_bottom: bool = False, switch_x: 
                    plate_to_vss_fF=coupling(cap[1], "vss"),
                    node_to_plate_fF=coupling("node", cap[1]),
                    gate_to_plate_fF=coupling("en", cap[1]))
+    summary["capacitance_source"] = f"{CELL}_cap.spice (flat EXT matrix, not legacy ext2spice _pex)"
     (work / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     if proc.returncode:
         raise RuntimeError(f"Physical check failed: {work / 'check.log'}")

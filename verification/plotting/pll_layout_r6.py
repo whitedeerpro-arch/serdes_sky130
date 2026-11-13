@@ -21,7 +21,7 @@ def main() -> None:
     ]:
         canvas = load_mag_as_canvas(source / f"{name}.mag", name)
         plot_canvas(ax, canvas, text, "Full-rule DRC / LVS / exported ports checked", show_cuts=True)
-    fig.text(.07, .15, "Compact contact candidate; tuning-range margin not met.\nNot a complete PLL layout.",
+    fig.text(.07, .15, "Compact contact candidate; electrical adoption pending.\nNot a complete PLL layout.",
              fontsize=9, va="top")
     fig.text(.56, .15, "Invalid guard-crossing dummy bars removed.\nElectrical matching/noise remain separate checks.",
              fontsize=9, va="top")

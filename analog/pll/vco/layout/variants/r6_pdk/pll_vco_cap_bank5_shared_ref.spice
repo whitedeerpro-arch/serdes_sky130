@@ -1,0 +1,63 @@
+* Shared-bottom circuit iteration, not the adopted independent-plate reference.
+.subckt pll_vco_cap_group1 node en vss
+Xc0 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=.15 nf=2
+.ends pll_vco_cap_group1
+
+* Shared-bottom circuit iteration, not the adopted independent-plate reference.
+.subckt pll_vco_cap_group2 node en vss
+Xc0 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc1 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=3 l=.15 nf=4
+.ends pll_vco_cap_group2
+
+* Shared-bottom circuit iteration, not the adopted independent-plate reference.
+.subckt pll_vco_cap_group4 node en vss
+Xc0 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc1 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc2 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc3 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=6 l=.15 nf=8
+.ends pll_vco_cap_group4
+
+* Shared-bottom circuit iteration, not the adopted independent-plate reference.
+.subckt pll_vco_cap_group8 node en vss
+Xc0 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc1 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc2 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc3 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc4 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc5 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc6 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc7 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=12 l=.15 nf=16
+.ends pll_vco_cap_group8
+
+* Shared-bottom circuit iteration, not the adopted independent-plate reference.
+.subckt pll_vco_cap_group16 node en vss
+Xc0 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc1 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc2 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc3 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc4 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc5 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc6 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc7 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc8 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc9 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc10 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc11 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc12 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc13 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc14 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xc15 node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=24 l=.15 nf=32
+.ends pll_vco_cap_group16
+
+.subckt pll_vco_cap_bank5_shared node b0 b1 b2 b3 b4 vss
+Xg0 node b0 vss pll_vco_cap_group1
+Xg1 node b1 vss pll_vco_cap_group2
+Xg2 node b2 vss pll_vco_cap_group4
+Xg3 node b3 vss pll_vco_cap_group8
+Xg4 node b4 vss pll_vco_cap_group16
+.ends pll_vco_cap_bank5_shared

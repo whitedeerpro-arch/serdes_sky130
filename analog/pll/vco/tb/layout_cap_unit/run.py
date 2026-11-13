@@ -18,6 +18,24 @@ from serdes_flow import spice
 from serdes_flow.project import ROOT, model_library
 
 
+def validated_netlist(path: Path) -> str:
+    text = path.read_text()
+    if not text.startswith("* Capacitance matrix from flat EXT node/cap records;"):
+        raise ValueError("Use the audited _cap.spice from flat_cap_export.py; legacy _pex may have wrong capacitance nets")
+    return text
+
+
+def read_capacitance_row(path, names, freq):
+    table = np.atleast_2d(np.loadtxt(path, skiprows=1))
+    if table.shape != (1, 2 * len(names) + 1) or not np.isfinite(table).all():
+        raise ValueError("Incomplete AC result")
+    if not np.allclose(table[:, 2::2], 0, atol=1e-25, rtol=0):
+        raise ValueError("Expected real-valued effective capacitance")
+    if abs(table[0, 0] / freq - 1) > 1e-9:
+        raise ValueError("AC frequency mismatch")
+    return {name: float(table[0, 2*i+1] * 1e15) for i,name in enumerate(names)}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--layout", action="append", required=True, help="name=path/to/pex.spice")
@@ -31,21 +49,24 @@ def main() -> None:
     names = ["planning"]
     lines += [f"Vp0 n0 0 dc {args.node_dc} ac 1", "Ven en 0 0", "X0 n0 en 0 pll_vco_cap_unit6"]
     sources = {}
+    units = {"planning": 1}
     for i, item in enumerate(args.layout, 1):
         name, path = item.split("=", 1)
         if not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name in names:
             raise ValueError(f"Invalid/duplicate name: {name}")
-        text = Path(path).read_text()
+        text = validated_netlist(Path(path))
         top = re.search(r"^\.subckt (\S+) node en vss$", text, re.M)
         cap = re.search(r"^X\S+ node (\S+) sky130_fd_pr__cap_mim_m3_1\b", text, re.M)
         if not top or not cap:
             raise ValueError(f"Expected a validated half-unit PEX: {path}")
+        count = len(re.findall(r"^X\S+ node \S+ sky130_fd_pr__cap_mim_m3_1\b", text, re.M))
         text = re.sub(rf"\b{re.escape(top[1])}\b", f"unit_{name}", text)
         snapshot = out / f"{name}.spice"
         snapshot.write_text(text)
         lines += [f'.include "{snapshot}"', f"Vp{i} n{i} 0 dc {args.node_dc} ac 1",
-                  f"X{i} n{i} en 0 unit_{name}", f"Rop{i} x{i}.{cap[1]} 0 1T"]
+                  f"X{i} n{i} en 0 unit_{name}", f"Rop{i} x{i}.{cap[1]} 0 {1e12/count:.12g}"]
         names.append(name)
+        units[name] = count
         sources[name] = str(Path(path).resolve())
     lines += [".control", "set num_threads=1", "set wr_singlescale", "set wr_vecnames", "set numdgt=12"]
     for state, level in [("off", 0), ("on", 1.8)]:
@@ -62,20 +83,16 @@ def main() -> None:
     for state in ["off", "on"]:
         measurements[state] = {name: {} for name in names}
         for freq, field in [(1e6, "c_1MHz_fF"), (2e9, "c_2GHz_fF")]:
-            table = np.atleast_2d(np.loadtxt(result.run_dir / f"{state}_{int(freq)}.tsv", skiprows=1))
             # ngspice keeps the AC plot complex even after imag() conversion;
             # wrdata emits real/imaginary pairs. Require the unused part zero.
-            if table.shape != (1, 2 * len(names) + 1) or not np.isfinite(table).all():
-                raise ValueError("Incomplete AC result")
-            if not np.allclose(table[:, 2::2], 0, atol=1e-25, rtol=0):
-                raise ValueError("Expected real-valued effective capacitance")
-            if abs(table[0, 0] / freq - 1) > 1e-9:
-                raise ValueError("AC frequency mismatch")
-            for i, name in enumerate(names):
-                measurements[state][name][field] = float(table[0, 2 * i + 1] * 1e15)
+            row = read_capacitance_row(result.run_dir / f"{state}_{int(freq)}.tsv", names, freq)
+            for name in names:
+                measurements[state][name][field] = row[name]
+    normalized = {state: {name: {key: value/units[name] for key,value in row.items()}
+                          for name,row in rows.items()} for state,rows in measurements.items()}
     report = dict(scope="TT/27C DC-biased AC, not oscillating VCO or PVT qualification",
                   node_dc=args.node_dc, gate_on_v=1.8, off_plate_dc_reference_ohm=1e12,
-                  sources=sources, measurements=measurements)
+                  sources=sources, units=units, measurements=measurements, per_unit=normalized)
     (out / "summary.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
 

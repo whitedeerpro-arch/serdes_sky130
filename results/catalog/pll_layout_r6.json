@@ -1,0 +1,293 @@
+{
+  "date": "2026-11-13",
+  "goal": "physical layout of current pll_core_r6k4q; in progress",
+  "source_variants": "analog/pll/vco/layout/variants/r6_pdk",
+  "qualification": "leaf DRC/LVS/ports only; complete PLL layout not yet built; candidate half-unit range check fails at FS hot",
+  "evidence": {
+    "first_stacked_unit": {
+      "run": "results/layout/pll_r6/cap_unit_20261113T083410Z",
+      "summary": {
+        "cell": "pll_vco_cap_unit_r6_pdk",
+        "reference": "analog/pll/vco/layout/pll_vco_cap_unit_ref.spice",
+        "checker_exit": 0,
+        "bbox_um": [
+          -1.315,
+          -1.425,
+          2.66,
+          1.96
+        ],
+        "ports": [
+          "node",
+          "en",
+          "vss"
+        ]
+      }
+    },
+    "compact_unit": {
+      "run": "results/layout/pll_r6/cap_compact_x0_20261113T085600Z",
+      "summary": {
+        "cell": "pll_vco_cap_unit_r6_pdk",
+        "reference": "analog/pll/vco/layout/pll_vco_cap_unit_ref.spice",
+        "checker_exit": 0,
+        "mim_y_um": 0,
+        "compact_bottom": true,
+        "switch_x_um": 0.0,
+        "bbox_um": [
+          -2.52,
+          -1.425,
+          1.315,
+          1.96
+        ],
+        "ports": [
+          "node",
+          "en",
+          "vss"
+        ]
+      }
+    },
+    "clean_varactor": {
+      "run": "results/layout/pll_r6/varactor_clean_20261113T084500Z",
+      "summary": {
+        "cell": "pll_vco_varactor_clean",
+        "checker_exit": 0,
+        "removed_dummy_shapes": {
+          "poly": 2,
+          "polycont": 4,
+          "locali": 4
+        },
+        "bbox_um": [
+          0.0,
+          0.0,
+          7.7,
+          8.4
+        ],
+        "retained": "four real varactor fingers, matching core placement, gate/cathode straps and body guard"
+      }
+    },
+    "local_ac_comparison": {
+      "run": "results/layout/pll_r6/cap_unit_ac_20261113T084600Z",
+      "summary": {
+        "scope": "TT/27C DC-biased AC, not oscillating VCO or PVT qualification",
+        "node_dc": 1.5,
+        "gate_on_v": 1.8,
+        "off_plate_dc_reference_ohm": 1000000000000.0,
+        "sources": {
+          "stacked": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/pll_r6/cap_unit_20261113T083410Z/pll_vco_cap_unit_r6_pdk_pex.spice",
+          "separate3": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/pll_r6/cap_unit_separate3_20261113T083920Z/pll_vco_cap_unit_r6_pdk_pex.spice",
+          "separate5": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/pll_r6/cap_unit_separate5_20261113T083920Z/pll_vco_cap_unit_r6_pdk_pex.spice"
+        },
+        "measurements": {
+          "off": {
+            "planning": {
+              "c_1MHz_fF": 1.5382023868149999,
+              "c_2GHz_fF": 1.538202289509
+            },
+            "stacked": {
+              "c_1MHz_fF": 2.5704965878309998,
+              "c_2GHz_fF": 2.5704965658070003
+            },
+            "separate3": {
+              "c_1MHz_fF": 2.498875248104,
+              "c_2GHz_fF": 2.498875225561
+            },
+            "separate5": {
+              "c_1MHz_fF": 2.5500636634769998,
+              "c_2GHz_fF": 2.550063641307
+            }
+          },
+          "on": {
+            "planning": {
+              "c_1MHz_fF": 9.950249988467,
+              "c_2GHz_fF": 9.904390501006
+            },
+            "stacked": {
+              "c_1MHz_fF": 9.773819987888,
+              "c_2GHz_fF": 9.725713527795
+            },
+            "separate3": {
+              "c_1MHz_fF": 9.779219987995,
+              "c_2GHz_fF": 9.731531616155001
+            },
+            "separate5": {
+              "c_1MHz_fF": 9.775479987918,
+              "c_2GHz_fF": 9.727489480554
+            }
+          }
+        }
+      }
+    },
+    "first_unit_endpoints": {
+      "run": "results/layout/pll_r6/cap_unit_ends_20261113T084700Z",
+      "summary": {
+        "scope": "r6 open-loop ring + four 30fF-loaded buffers; physical half-unit only",
+        "rows": {
+          "fs_v1650_t85:hh": {
+            "code": 0,
+            "vctrl": 1.21,
+            "frequency_hz": 1837567500.9010377,
+            "swing_vpp": 0.4456354455278726,
+            "margin": -0.08121624954948115,
+            "planning_baseline_hz": 2164625701.8145013
+          },
+          "sf_v1650_t-40:ll": {
+            "code": 31,
+            "vctrl": 0.9,
+            "frequency_hz": 1852203127.454997,
+            "swing_vpp": 0.4919154497883984,
+            "margin": 0.07389843627250148,
+            "planning_baseline_hz": 1827351498.6896837
+          }
+        },
+        "retained": "12fF/phase wiring allowance; original ring devices/varactors/buffers/real bias",
+        "replaced": "half-unit physical devices, AD/AS/PD/PS and extracted capacitances; remove its estimated Cfr/Cbp",
+        "drift_warnings": [],
+        "full_ring_or_PLL_qualified": false
+      }
+    },
+    "compact_unit_endpoints": {
+      "run": "results/layout/pll_r6/cap_compact_ends_20261113T090500Z",
+      "summary": {
+        "scope": "r6 open-loop ring + four 30fF-loaded buffers; physical half-unit only",
+        "rows": {
+          "fs_v1650_t85:hh": {
+            "code": 0,
+            "vctrl": 1.21,
+            "frequency_hz": 1932661491.2957065,
+            "swing_vpp": 0.43897763581990423,
+            "margin": -0.03366925435214674,
+            "planning_baseline_hz": 2164625701.8145013
+          },
+          "sf_v1650_t-40:ll": {
+            "code": 31,
+            "vctrl": 0.9,
+            "frequency_hz": 1861042312.8081744,
+            "swing_vpp": 0.4918661077244175,
+            "margin": 0.06947884359591283,
+            "planning_baseline_hz": 1827351498.6896837
+          }
+        },
+        "retained": "12fF/phase wiring allowance; original ring devices/varactors/buffers/real bias",
+        "replaced": "half-unit physical devices, AD/AS/PD/PS and extracted capacitances; remove its estimated Cfr/Cbp",
+        "drift_warnings": [],
+        "full_ring_or_PLL_qualified": false
+      }
+    },
+    "source_decomposition": {
+      "run": "results/layout/pll_r6/cap_decomposition_20261113T085911Z",
+      "summary": {
+        "bare_mim": {
+          "plate_vss_fF": 0.93242,
+          "caps": [
+            [
+              "plate",
+              "node",
+              0.46782000000000007
+            ],
+            [
+              "plate",
+              "vss",
+              0.93242
+            ]
+          ]
+        },
+        "switch_and_route": {
+          "plate_vss_fF": 1.01752,
+          "caps": [
+            [
+              "plate",
+              "en",
+              0.13424000000000003
+            ],
+            [
+              "plate",
+              "vss",
+              1.01752
+            ]
+          ]
+        },
+        "full_no_channel": {
+          "plate_vss_fF": 1.71464,
+          "caps": [
+            [
+              "plate",
+              "node",
+              0.46841000000000005
+            ],
+            [
+              "en",
+              "plate",
+              0.21412
+            ],
+            [
+              "en",
+              "node",
+              0.00316
+            ],
+            [
+              "plate",
+              "vss",
+              1.71464
+            ],
+            [
+              "en",
+              "vss",
+              1.07763
+            ]
+          ]
+        },
+        "full": {
+          "plate_vss_fF": 2.1721200000000005,
+          "caps": [
+            [
+              "en",
+              "plate",
+              0.20864
+            ],
+            [
+              "en",
+              "node",
+              0.00316
+            ],
+            [
+              "plate",
+              "node",
+              0.46841000000000005
+            ],
+            [
+              "plate",
+              "vss",
+              2.1721200000000005
+            ]
+          ]
+        }
+      }
+    },
+    "published_compact_unit": {
+      "run": "results/layout/pll_r6/cap_compact_verified_final",
+      "summary": {
+        "cell": "pll_vco_cap_unit_r6_pdk",
+        "reference": "analog/pll/vco/layout/pll_vco_cap_unit_ref.spice",
+        "checker_exit": 0,
+        "mim_y_um": 0,
+        "compact_bottom": true,
+        "switch_x_um": 0,
+        "bbox_um": [
+          -2.52,
+          -1.425,
+          1.315,
+          1.96
+        ],
+        "ports": [
+          "node",
+          "en",
+          "vss"
+        ],
+        "plate_to_vss_fF": 1.6383000000000003,
+        "node_to_plate_fF": 0.40643,
+        "gate_to_plate_fF": 0.18327
+      }
+    }
+  },
+  "decomposition_scope": "removal experiments change shielding; numbers are not an additive partition; MOS model junction capacitances are separate from explicit extracted C",
+  "next": "resolve unit off-capacitance versus range budget with Fable; continue actual delay/buffer/PFD cells; no production circuit parameter changes"
+}

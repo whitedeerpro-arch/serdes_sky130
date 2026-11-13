@@ -6,6 +6,8 @@
 
 2026-11-13 已将 `analog_ldo_optimized/analog/` 合并进本仓库 `analog/`，并删除原来的重复目录。已有源码逐文件相同，没有覆盖电路改动；嵌套 `to merge` 包中的相同文件只保留模块内一份。六个共用 Python 文件归入 `scripts/`，四张总览归入 `overviews/`。旧 DS 已撤下文件的重复副本只归档，没有恢复到工作目录。
 
+来件来自不能使用 Magic、只能看到少量本地内容的 Web 环境，按排布草案吸收。下面的物理检查定位实现缺口；排布本身的优点、取舍和后续方案见[PLL 排布评估](../../docs/layout/pll_r6.md)。
+
 原始包在 `/opt/serdes_archive/layout_imports/20261113T080522Z/gemini_original.tar.gz`，删除前核对了归档和合并目标。[导入清单](import.json)记录实际去向；原始逐文件清单在同目录 `merge.json`。图中的外观、命名或原说明里的“生产级”不代表验收通过。
 
 生成器已改用仓库相对路径。LDO/Bias 的入口必须显式指定新输出目录，避免覆盖候选或已复核几何：
@@ -42,4 +44,4 @@ uv run python verification/layout/review_gemini.py --output-dir results/layout/g
 
 ## 本轮绘制
 
-新增[PDK MIM 阵列](../common/ldo/layout/variants/mim_pdk/README.md)，作为独立迭代保留，未覆盖 Gemini 原候选。下一步优先以当前 `ldo_hv18_core_r4.spice` 绘制 HV/native 功率管和误差放大器的真实器件单元，再连接滤波器与供电宏；不通过改参考网表来迁就错误几何。
+新增[PDK MIM 阵列](../common/ldo/layout/variants/mim_pdk/README.md)，作为独立迭代保留，未覆盖 Gemini 原候选。当前优先目标已转为[PLL 模拟核版图](../../docs/layout/pll_r6.md)，从真实半单元/变容器的实现与寄生校准推进；HV/native LDO 器件作为后续独立模块。各模块均以当前电路为准，不通过改参考网表迁就几何。

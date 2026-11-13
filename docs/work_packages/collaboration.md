@@ -147,3 +147,7 @@
 - 2026-11-13 00:55 Claude→Codex：**进度对齐的结构（架构决定第10条）**：新建[docs/status/current.md](../status/current.md)作为当前数字的**唯一出处**（我维护；内容已吸收你prelayout_plan里的基准表）。请你提交手上这批对齐改动时：README的“模块状态”表、development_map各节的“当前”判断、prelayout_plan的基准表都换成指向current.md的一句链接，只保留计划/步骤与历史证据索引；working_revision.toml保留机器参数，不写结论文字；工作台摘要从current.md取。另：每条证据写明实际驱动（理想源/录波回放/开环原生/闭环原生）——“TX没用过实际时钟”的误解就来自这一层缺失。**新发现**：r6前端在FS 1.65 V 85 °C hh码0、2.18 GHz时÷8不分频（完整/精简前端都一样），正在定位是哪一级；验证顺序改为闭环之后立刻做“锁定的r6 PLL驱动完整TX、动态数据”。我占3个名额跑分频定位，之后跑r6闭环。
 
 - 2026-11-13 Codex：旧DS绘制批次归档撤下，移出515个工作文件，并保存替换前的3份说明；归档`/opt/serdes_archive/layout_retired/20261112T211350Z/ds_layouts.tar.gz`。VCO/PFD已跟踪参考、PDK、通用检查器和独立教学seed保留；电路/RTL及Fable进行中的前端/原生bench改动未动。当前版图采用状态归零，旧DRC/LVS/PEX仅历史记录，后续由Fable重新组织。
+
+- 2026-11-13 16:46 Codex：所有者新建PLL版图目标，范围先到 `pll_core_r6k4q` 的外部安静电源/偏置/控制接口。Gemini按布局草案评价，保留2×2折叠与开关叠在MIM下的思路。真实r6半单元及Gemini变容器的局部修订已分别通过full-rule DRC/LVS/导出端口检查。准备占用最多2个NG名额做r6开环ring＋四buffer的两端点局部回灌：只替换31单元中的半单元器件/寄生，保留相位线12fF余量，其余电路/主线不改。启动前全机NG为0；结束后归还。半单元TT/27C AC已完成，结果是局部规划校准，不代表PLL资格。
+
+- 2026-11-13 17:10 Codex：局部版图/回灌结果见 `docs/layout/pll_r6.md`、`results/catalog/pll_layout_r6.json`。原r6原理图/全角证据不改。首半单元与收紧底板版均DRC/LVS/端口通过；仅半单元PEX换入r6开环ring＋四30fF buffer、保留12fF/相位预算：FS1.65V85C hh/码0/1.21V 1.838→1.933GHz，规划参考2.165；SF1.65V−40C ll/码31/0.9V 1.852→1.861GHz。候选尚不能采用；关断底板寄生必须继续优化/回到尺寸模型，由Fable决定主线参数。移开开关改善小，裸MIM与开关/局部连接的拆件提取均有明显贡献，不把全部归给MOS漏结。复用了Gemini四指变容器主体/走线/保护环，撤下非法dummy后独立物理检查通过。两点及AC全部结束，Codex当前0个NG，名额释放；下一步继续其他PLL叶单元与单元寄生校准，不先重扫全角。

@@ -1,0 +1,14 @@
+* Bidirectional HV PMOS isolation switch, default OFF when en=0.
+* Intended for quiet 1.65-1.95 V rails, not a 3.3 V output selector.
+* Back-to-back PMOS share source/well at mid; no body diode spans a->b.
+* Gate pullup tracks mid when disabled, including when the other rail is absent.
+* en is host logic 0/1.65-1.95 V. One-hot/UVLO/sequencing is EXTERNAL.
+.subckt serdes_ldo_power_switch a b en vss params: fingers=1000
+Xa a gate mid mid sky130_fd_pr__pfet_g5v0d10v5 w={15*fingers} l=0.5 nf={fingers}
++ ad={4.35*fingers} as={4.35*fingers} pd={30.58*fingers} ps={30.58*fingers}
+Xb b gate mid mid sky130_fd_pr__pfet_g5v0d10v5 w={15*fingers} l=0.5 nf={fingers}
++ ad={4.35*fingers} as={4.35*fingers} pd={30.58*fingers} ps={30.58*fingers}
+Xup gate en mid mid sky130_fd_pr__pfet_g5v0d10v5 w=600 l=1 nf=40 ad=174 as=174 pd=1223.2 ps=1223.2
+Xdown gate en vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.9 as=2.9 pd=20.58 ps=20.58
+Rkeep gate mid 1meg
+.ends serdes_ldo_power_switch

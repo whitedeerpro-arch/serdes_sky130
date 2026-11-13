@@ -14,13 +14,16 @@ from __future__ import annotations
 
 import re
 import subprocess
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 PDK = Path("/home/host/.volare/sky130A")
 RCFILE = PDK / "libs.tech/magic/sky130A.magicrc"
-MAGIC = "magic"
+with (REPO / "config/tools.toml").open("rb") as _stream:
+    _layout_tools = tomllib.load(_stream)["layout"]
+MAGIC = _layout_tools.get("magic_batch", _layout_tools["magic"])
 NGC = Path.home() / ".local/eda/netgen/usr/lib/netgen"
 NETGENEXEC = NGC / "tcl/netgenexec"
 NETGEN_TCL = NGC / "tcl/netgen.tcl"

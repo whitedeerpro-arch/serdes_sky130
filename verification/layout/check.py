@@ -73,6 +73,9 @@ def extract(work: Path, cell: str, cellname: str) -> None:
         ]) + "\n"
     )
     mu.run_magic(script, work).need("extraction")
+    if "capfix" not in mu.MAGIC:
+        print("PEX_CAUTION unvalidated ext2spice may misassign modeled-device self capacitance; "
+              "_pex.spice is diagnostic only. For supported flat MOS/MIM cells use flat_cap_export.py.")
 
 
 def exported_ports(path: Path, cell: str) -> list[str]:

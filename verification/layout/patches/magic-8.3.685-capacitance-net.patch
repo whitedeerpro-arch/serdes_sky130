@@ -1,0 +1,25 @@
+diff --git a/ext2spice/ext2hier.c b/ext2spice/ext2hier.c
+index e0ab7db..9a74c49 100644
+--- a/ext2spice/ext2hier.c
++++ b/ext2spice/ext2hier.c
+@@ -1028,7 +1028,7 @@ spcdevHierVisit(
+ 		if (sdM != 1.0)
+ 		    fprintf(esSpiceF, " M=%g", sdM);
+ 	    }
+-	    else
++	    else if (dev->dev_class == DEV_RSUBCKT)
+ 	    {
+ 		spcdevResPi(hc->hc_hierName, gate->dterm_node->efnode_name->efnn_hier,
+ 			source->dterm_node->efnode_name->efnn_hier,
+diff --git a/ext2spice/ext2spice.c b/ext2spice/ext2spice.c
+index fd128e5..fddeca9 100644
+--- a/ext2spice/ext2spice.c
++++ b/ext2spice/ext2spice.c
+@@ -2999,6 +2999,7 @@ spcdevVisit(
+ 		    spcdevOutNode(hierName, drain->dterm_node->efnode_name->efnn_hier,
+ 				name, esSpiceF);
+ 
++		    if (dev->dev_class == DEV_RSUBCKT)
+ 		    spcdevResPi(hierName, gate->dterm_node->efnode_name->efnn_hier,
+ 				source->dterm_node->efnode_name->efnn_hier,
+ 				drain->dterm_node->efnode_name->efnn_hier,

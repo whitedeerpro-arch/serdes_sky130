@@ -72,10 +72,13 @@ def execute(cases, out: Path, *, workers=2, timeout_s=1200):
         record.write_text(json.dumps(identity, indent=2) + "\n")
     if len(watch.ngspice_cwds()) + workers > 4:
         raise RuntimeError("ngspice quota occupied")
-    for ex in spice.run_many(jobs, workers=workers):
-        print(ex.run_dir.name, ex.ok, round(ex.elapsed_s, 1), flush=True)
-        if not ex.ok:
-            raise RuntimeError(f"simulation failed: {ex.run_dir}")
+    # Do not release a whole long queue after the first numerical or model
+    # failure. Only one worker batch can already be in flight.
+    for start in range(0,len(jobs),workers):
+        for ex in spice.run_many(jobs[start:start+workers], workers=workers, smoke=start==0):
+            print(ex.run_dir.name, ex.ok, round(ex.elapsed_s, 1), flush=True)
+            if not ex.ok:
+                raise RuntimeError(f"simulation failed: {ex.run_dir}")
     for key, path in paths.items():
         if spice.Waves(path).t[-1] < cases[key][1] * (1-1e-6):
             raise ValueError(f"truncated: {path}")

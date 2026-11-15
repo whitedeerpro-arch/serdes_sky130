@@ -21,8 +21,12 @@ def export(ext: Path, lvs: Path, output: Path) -> dict:
     rows = [shlex.split(line) for line in ext.read_text().splitlines() if line.strip()]
     if any(r[0] in {"use", "equiv", "merge", "killnode", "subcap", "resist"} for r in rows):
         raise ValueError("Only flat, unaliased MOS/MIM extraction supported")
-    classes = {r[1] for r in rows if r[0] == "device"}
-    if classes - {"msubckt", "csubckt"}:
+    classes = {
+        r[1] if not (r[1] == "subckt" and r[2].startswith("sky130_fd_pr__cap_var")) else "varsubckt"
+        for r in rows
+        if r[0] == "device"
+    }
+    if classes - {"msubckt", "csubckt", "varsubckt"}:
         raise ValueError(f"Unsupported device bodies: {classes}")
     scales = [r for r in rows if r[0] == "scale"]
     subs = [r[1] for r in rows if r[0] == "substrate"]

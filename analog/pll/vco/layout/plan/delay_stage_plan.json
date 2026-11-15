@@ -1,0 +1,66 @@
+{
+  "core_candidates": [
+    {
+      "name": "Core Plan A (4-Island ABBA + S/D Sep)",
+      "width_um": 22.8,
+      "height_um": 36.4,
+      "area_um2": 829.9,
+      "symmetry": "Common-Centroid ABBA (4 separate guard rings)",
+      "outp_span_um": 16.8,
+      "outn_span_um": 16.8,
+      "est_c_out_total_ff": 7.6
+    },
+    {
+      "name": "Core Plan B (Fused 16-Finger Shared-Guard ABBA)",
+      "width_top_um": 17.2,
+      "width_mid_um": 9.35,
+      "width_bot_um": 4.83,
+      "height_um": 33.6,
+      "area_um2": 577.9,
+      "symmetry": "Common-Centroid ABBA (1 shared active region & guard ring, -25% tail S/D)",
+      "outp_span_um": 12.6,
+      "outn_span_um": 4.2,
+      "est_c_out_total_ff": 5.0
+    },
+    {
+      "name": "Core Plan C (Left-Right Mirror Split [P | N])",
+      "width_um": 17.2,
+      "height_um": 32.6,
+      "area_um2": 560.7,
+      "symmetry": "Left-Right Mirror Symmetric (Zero outp/outn or inp/inn crossover)",
+      "outp_span_um": 4.2,
+      "outn_span_um": 4.2,
+      "est_c_out_total_ff": 4.1
+    }
+  ],
+  "stage_docking_candidates": [
+    {
+      "name": "Stage Docking Plan I (Left-Right Interlocked Inward-Recess / 左右互补咬合式)",
+      "width_um": 46.46,
+      "height_um": 37.48,
+      "area_um2": 1741.3,
+      "aspect_ratio": 1.24,
+      "highlights": [
+        "T-shaped Delay Core (wide top resistors 16.6u, narrow mid diff pair 9.35u, narrow bot tail 4.83u) interlocks with the two inward-facing Half-Tank recesses",
+        "Half-Tank width (37.48 um) matches Delay Core height (~33.6 um) almost 1:1",
+        "outp and outn M4 connections from Delay Core to Half-Tank recess `node` are < 1.5 um long",
+        "All digital control buses (b0..b4, vctrl) sit on the far left/right outer edges"
+      ]
+    },
+    {
+      "name": "Stage Docking Plan II (Top-Bottom Opposing-Recess / 上下对咬夹心式)",
+      "width_um": 37.48,
+      "height_um": 68.06,
+      "area_um2": 2550.9,
+      "aspect_ratio": 0.55,
+      "highlights": [
+        "Narrow horizontal pitch (37.48 um), tall vertical height (68.06 um)",
+        "outn has to route downward across the input/tail region (~18 um M4) to reach bottom Tank-N recess"
+      ]
+    }
+  ],
+  "recommendation": {
+    "core": "Core Plan B (Fused 16-Finger Shared-Guard ABBA) or Core Plan C (Left-Right Mirror Split [P | N])",
+    "docking": "Stage Docking Plan I (Left-Right Interlocked Inward-Recess / 左右互补咬合式)"
+  }
+}

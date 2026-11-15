@@ -1,0 +1,180 @@
+{
+  "cell": "pll_vco_core_sym9_s32p5_clean",
+  "inputs": {
+    "pll_vco_core_sym9_s32p5_clean.mag": {
+      "source": "results/layout_review/pll_20261115/vco_clean/pll_vco_core_sym9_s32p5_clean.mag",
+      "sha256": "a67c89c850f433fde45c2329a04683d35fe004fdc1df3eea46a2e3b1be258786"
+    },
+    "reference.spice": {
+      "source": "results/layout_review/pll_20261115/vco_clean/reference.spice",
+      "sha256": "f66710603508b4182c6f4bb5fdd7aa9ae56d5512e0506d8021955013fde169e5"
+    }
+  },
+  "checker_exit": 0,
+  "physical_passed": true,
+  "ports": [
+    "ctrl",
+    "cfg0",
+    "cfg1",
+    "cfg2",
+    "cfg3",
+    "cfg4",
+    "vbias_q",
+    "b0p",
+    "b0n",
+    "b1p",
+    "b1n",
+    "b2p",
+    "b2n",
+    "b3p",
+    "b3n",
+    "vdd_q",
+    "vss"
+  ],
+  "bbox_um": [
+    -54.3,
+    -39.9,
+    54.3,
+    39.9
+  ],
+  "size_um": [
+    108.6,
+    79.8
+  ],
+  "magic": "/home/host/.local/opt/magic-8.3.685-capfix/bin/magic-capfix",
+  "extraction": "C + device AD/AS/PD/PS; wire R not extracted",
+  "parasitics": {
+    "extracted_mos_segments": 272,
+    "ad_um2": 168.38,
+    "as_um2": 168.38,
+    "pd_um": 1185.48,
+    "ps_um": 1185.48,
+    "pex_cap_elements": 1046,
+    "total_substrate_cap_fF": 497.065,
+    "total_coupling_cap_fF": 359.998,
+    "port_caps_fF": {
+      "ctrl": {
+        "to_substrate_fF": 46.366,
+        "coupling_sum_fF": 59.382,
+        "total_node_fF": 105.748
+      },
+      "cfg0": {
+        "to_substrate_fF": 22.962,
+        "coupling_sum_fF": 25.183,
+        "total_node_fF": 48.146
+      },
+      "cfg1": {
+        "to_substrate_fF": 19.689,
+        "coupling_sum_fF": 38.954,
+        "total_node_fF": 58.643
+      },
+      "cfg2": {
+        "to_substrate_fF": 23.071,
+        "coupling_sum_fF": 37.477,
+        "total_node_fF": 60.548
+      },
+      "cfg3": {
+        "to_substrate_fF": 22.629,
+        "coupling_sum_fF": 38.585,
+        "total_node_fF": 61.214
+      },
+      "cfg4": {
+        "to_substrate_fF": 29.827,
+        "coupling_sum_fF": 32.846,
+        "total_node_fF": 62.673
+      },
+      "vbias_q": {
+        "to_substrate_fF": 26.516,
+        "coupling_sum_fF": 14.337,
+        "total_node_fF": 40.854
+      },
+      "b0p": {
+        "to_substrate_fF": 3.662,
+        "coupling_sum_fF": 2.16,
+        "total_node_fF": 5.822
+      },
+      "b0n": {
+        "to_substrate_fF": 3.661,
+        "coupling_sum_fF": 2.16,
+        "total_node_fF": 5.82
+      },
+      "b1p": {
+        "to_substrate_fF": 3.662,
+        "coupling_sum_fF": 2.16,
+        "total_node_fF": 5.822
+      },
+      "b1n": {
+        "to_substrate_fF": 3.662,
+        "coupling_sum_fF": 2.16,
+        "total_node_fF": 5.822
+      },
+      "b2p": {
+        "to_substrate_fF": 3.661,
+        "coupling_sum_fF": 2.202,
+        "total_node_fF": 5.863
+      },
+      "b2n": {
+        "to_substrate_fF": 3.66,
+        "coupling_sum_fF": 2.205,
+        "total_node_fF": 5.865
+      },
+      "b3p": {
+        "to_substrate_fF": 3.66,
+        "coupling_sum_fF": 2.205,
+        "total_node_fF": 5.866
+      },
+      "b3n": {
+        "to_substrate_fF": 3.661,
+        "coupling_sum_fF": 2.202,
+        "total_node_fF": 5.862
+      },
+      "vdd_q": {
+        "to_substrate_fF": 53.425,
+        "coupling_sum_fF": 18.441,
+        "total_node_fF": 71.867
+      }
+    },
+    "top_coupling_fF": [
+      {
+        "node_a": "cfg3",
+        "node_b": "cfg4",
+        "cap_fF": 16.11
+      },
+      {
+        "node_a": "cfg1",
+        "node_b": "cfg2",
+        "cap_fF": 16.018
+      },
+      {
+        "node_a": "cfg0",
+        "node_b": "cfg1",
+        "cap_fF": 16.009
+      },
+      {
+        "node_a": "cfg2",
+        "node_b": "cfg3",
+        "cap_fF": 12.229
+      },
+      {
+        "node_a": "a_n5033_3370#",
+        "node_b": "ctrl",
+        "cap_fF": 6.677
+      },
+      {
+        "node_a": "a_n8760_n4271#",
+        "node_b": "ctrl",
+        "cap_fF": 6.641
+      },
+      {
+        "node_a": "a_n5096_n3348#",
+        "node_b": "ctrl",
+        "cap_fF": 6.625
+      },
+      {
+        "node_a": "a_5324_n3348#",
+        "node_b": "ctrl",
+        "cap_fF": 6.484
+      }
+    ]
+  }
+}

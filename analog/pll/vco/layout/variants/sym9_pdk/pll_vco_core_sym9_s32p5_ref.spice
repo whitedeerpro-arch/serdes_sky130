@@ -1,0 +1,75 @@
+.subckt pll_vco_sym9_s32p5_b4_u8 node en vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w=7.65 l=4.6
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=8 l=0.15 nf=2
+.ends pll_vco_sym9_s32p5_b4_u8
+
+.subckt pll_vco_sym9_s32p5_b3_u4 node en vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w=6.58 l=2.6
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15 nf=2
+.ends pll_vco_sym9_s32p5_b3_u4
+
+.subckt pll_vco_sym9_s32p5_b2_u2 node en vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w=4.15 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=2 l=0.15 nf=2
+.ends pll_vco_sym9_s32p5_b2_u2
+
+.subckt pll_vco_sym9_s32p5_b1_u1 node en vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+.ends pll_vco_sym9_s32p5_b1_u1
+
+.subckt pll_vco_sym9_s32p5_b0_u1 node en vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w=2 l=2
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+.ends pll_vco_sym9_s32p5_b0_u1
+
+.subckt pll_vco_half_tank_sym9_s32p5 node vctrl b0 b1 b2 b3 b4 vss
+Xb4_L node b4 vss pll_vco_sym9_s32p5_b4_u8
+Xb3_L node b3 vss pll_vco_sym9_s32p5_b3_u4
+Xb2_L node b2 vss pll_vco_sym9_s32p5_b2_u2
+Xb1_L node b1 vss pll_vco_sym9_s32p5_b1_u1
+Xb0_C node b0 vss pll_vco_sym9_s32p5_b0_u1
+Xb1_R node b1 vss pll_vco_sym9_s32p5_b1_u1
+Xb2_R node b2 vss pll_vco_sym9_s32p5_b2_u2
+Xb3_R node b3 vss pll_vco_sym9_s32p5_b3_u4
+Xb4_R node b4 vss pll_vco_sym9_s32p5_b4_u8
+Xv0 node vctrl vss sky130_fd_pr__cap_var_lvt w=5.2 l=0.5
+Xv1 node vctrl vss sky130_fd_pr__cap_var_lvt w=5.2 l=0.5
+Xv2 node vctrl vss sky130_fd_pr__cap_var_lvt w=5.2 l=0.5
+Xv3 node vctrl vss sky130_fd_pr__cap_var_lvt w=5.2 l=0.5
+.ends pll_vco_half_tank_sym9_s32p5
+
+.subckt pll_vco_delay_sym9_c inp inn outp outn vbias vdd vss
+Xp outp inp tail vss sky130_fd_pr__nfet_01v8_lvt w=40 l=0.15
+Xn outn inn tail vss sky130_fd_pr__nfet_01v8_lvt w=40 l=0.15
+Xt tail vbias vss vss sky130_fd_pr__nfet_01v8 w=25.2 l=0.5
+Xrp1 vdd outp vss sky130_fd_pr__res_high_po_2p85 l=4.77
+Xrp2 vdd outp vss sky130_fd_pr__res_high_po_2p85 l=4.77
+Xrn1 vdd outn vss sky130_fd_pr__res_high_po_2p85 l=4.77
+Xrn2 vdd outn vss sky130_fd_pr__res_high_po_2p85 l=4.77
+.ends pll_vco_delay_sym9_c
+.subckt serdes_cml_buffer inp inn outp outn vbias vdd vss
+Xmp outn inp tail vss sky130_fd_pr__nfet_01v8_lvt w=12 l=0.15
+Xmn outp inn tail vss sky130_fd_pr__nfet_01v8_lvt w=12 l=0.15
+Xtail tail vbias vss vss sky130_fd_pr__nfet_01v8 w=12 l=0.5
+Xrp vdd outn vss sky130_fd_pr__res_high_po_2p85 l=4.22
+Xrn vdd outp vss sky130_fd_pr__res_high_po_2p85 l=4.22
+.ends serdes_cml_buffer
+.subckt pll_vco_core_sym9_s32p5 ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias_q b0p b0n b1p b1n b2p b2n b3p b3n vdd_q vss
+X0 v3n v3p v0p v0n vbias_q vdd_q vss pll_vco_delay_sym9_c
+X1 v0p v0n v1p v1n vbias_q vdd_q vss pll_vco_delay_sym9_c
+X2 v1p v1n v2p v2n vbias_q vdd_q vss pll_vco_delay_sym9_c
+X3 v2p v2n v3p v3n vbias_q vdd_q vss pll_vco_delay_sym9_c
+Xtank0p v0p ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank0n v0n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank1p v1p ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank1n v1n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank2p v2p ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank2n v2n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank3p v3p ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xtank3n v3n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vss pll_vco_half_tank_sym9_s32p5
+Xbuf0 v0p v0n b0p b0n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf1 v1p v1n b1p b1n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf2 v2p v2n b2p b2n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf3 v3p v3n b3p b3n vbias_q vdd_q vss serdes_cml_buffer
+.ends pll_vco_core_sym9_s32p5

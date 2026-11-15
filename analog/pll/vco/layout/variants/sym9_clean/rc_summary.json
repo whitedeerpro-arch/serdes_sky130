@@ -1,0 +1,22 @@
+{
+  "method": "Magic native reduced RC",
+  "threshold_ohm": 1,
+  "minres_ohm": 1,
+  "resistor_count": 5414,
+  "resistor_nets": [
+    "a_1660_3469#",
+    "a_5324_n3348#",
+    "a_n5033_3370#",
+    "a_n5096_n3348#",
+    "a_n6092_3282#",
+    "a_n6092_n3348#",
+    "a_n8760_3469#",
+    "a_n8760_n4271#",
+    "ctrl",
+    "vss"
+  ],
+  "devices_preserved": true,
+  "cpex_sha256": "507eb1f2178b5aedc7143b53e48114238ffb559e88c98136aff45fab3438a716",
+  "rcx_sha256": "f734ac2a976b42619fa7b4a921c6885708c9c150f05de831ef3ba2263f09f6ff",
+  "limits": "Native extresist redistributes/grounds C on extracted nets; use alongside coupled CPEX, not as exact coupled-RC signoff"
+}

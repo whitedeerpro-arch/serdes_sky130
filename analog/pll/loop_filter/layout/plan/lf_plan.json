@@ -1,0 +1,109 @@
+{
+  "legacy": {
+    "cell": "pll_loop_filter_k4_pdk",
+    "bbox_um": [
+      -78.9,
+      -42.26,
+      75.52,
+      38.2
+    ],
+    "size_um": [
+      154.42,
+      80.46
+    ],
+    "area_um2": 12424.63,
+    "mim_units": 18
+  },
+  "fused": {
+    "cell": "pll_loop_filter_k4_fused_pdk",
+    "bbox_um": [
+      -50.4,
+      -34.48,
+      47.94,
+      35.62
+    ],
+    "size_um": [
+      98.34,
+      70.1
+    ],
+    "area_um2": 6893.63,
+    "area_reduction_pct": -44.5,
+    "mim_sites": 6,
+    "mim_layers": "cap_mim_m3_1 + cap_mim_m3_2 (w=l=27.22 um)",
+    "column_split": [
+      "Col 0: VDD (6 pF)",
+      "Col 1: VSS (6 pF)",
+      "Col 2: VDD (6 pF)"
+    ],
+    "under_mim_tracks_y": {
+      "rz_vss_m1": -6.8,
+      "nmos_vss_guard_m1": -5.2,
+      "pre_en_m1": -0.96,
+      "pre_b_m1": -0.48,
+      "pre_ref_m1": 0.0,
+      "ctrl_m1": 0.48,
+      "z_m1": 0.96,
+      "pmos_vdd_guard_m1": 5.2,
+      "vdd_bridge_m1": 7.2,
+      "z_bridge_m2": 8.4
+    },
+    "xrz_layout": {
+      "dx_um": -10.8,
+      "dy_um": 0.0,
+      "poly_dummies_x_um": [
+        -12.45,
+        -9.15
+      ]
+    },
+    "cmos_island": {
+      "nwell_um": [
+        -7.1,
+        1.45,
+        10.3,
+        5.65
+      ],
+      "guard_frame_um": [
+        -6.65,
+        -5.2,
+        9.85,
+        5.2
+      ],
+      "dy_n_um": -3.1,
+      "dy_p_um": 3.1,
+      "pmos_mirror_y": true,
+      "devices_dx_um": {
+        "Xfast": -3.8,
+        "Xinv": 0.5,
+        "Xint": 6.0
+      },
+      "poly_dummies_n_count": 6,
+      "poly_dummies_p_count": 4
+    },
+    "ports": {
+      "ctrl": [
+        -10.8,
+        -34.22
+      ],
+      "z": [
+        -33.59,
+        31.22
+      ],
+      "pre_ref": [
+        -49.6,
+        0.0
+      ],
+      "pre_en": [
+        -49.6,
+        -0.96
+      ],
+      "vdd": [
+        -18.28,
+        -32.42
+      ],
+      "vss": [
+        14.43,
+        34.82
+      ]
+    }
+  }
+}

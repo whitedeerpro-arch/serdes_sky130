@@ -137,3 +137,27 @@ Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
 Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
 Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
 .ends pll_loop_filter_k8c
+
+* Stacked PCell-compliant capacitor-fusion candidate for k = 4 (18 x 1 pF -> 6 stacked 27.22 x 27.22 um sites = 12 units):
+* 2 sites (2 MIM1 + 2 MIM2 = 6.00 pF) to VSS + 4 sites (4 MIM1 + 4 MIM2 = 12.00 pF) to VDD, keeping 1:2 supply split
+* and w/l = 27.22 um <= 30.0 um PDK PCell guard while halving 2D footprint via M3(vdd/vss)-M4(z)-M5(vdd/vss) stacking.
+.subckt pll_loop_filter_k4_fused cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=7.594 cside=27.22 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg1_0 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg1_1 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg2_0 vss z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcg2_1 vss z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv1_0 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv1_1 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv1_2 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv1_3 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv2_0 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv2_1 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv2_2 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv2_3 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k4_fused

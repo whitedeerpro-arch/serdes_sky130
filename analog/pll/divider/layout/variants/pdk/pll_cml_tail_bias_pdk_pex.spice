@@ -1,0 +1,70 @@
+* NGSPICE file created from pll_cml_tail_bias_pdk.ext - technology: sky130A
+
+.subckt pll_cml_tail_bias_pdk vbias_sf vbias_logic vdd vss
+X0 vdd a_n5001_4543# vbias_logic vdd sky130_fd_pr__pfet_01v8 ad=1.74 pd=12.58 as=0.87 ps=6.29 w=6 l=0.5
+X1 vdd a_n5001_4543# a_n5001_4543# vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X2 vdd a_n5001_4543# vbias_logic vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X3 vbias_logic a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X4 vdd a_n5001_4543# a_n5001_4543# vdd sky130_fd_pr__pfet_01v8 ad=1.74 pd=12.58 as=0.87 ps=6.29 w=6 l=0.5
+X5 vbias_logic a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=1.74 ps=12.58 w=6 l=0.5
+X6 a_n5001_4543# a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=1.74 ps=12.58 w=6 l=0.5
+X7 a_n5001_4543# vbias_sf vss vss sky130_fd_pr__nfet_01v8 ad=0.9686 pd=7.26 as=0.9686 ps=7.26 w=3.34 l=0.5
+X8 vbias_logic vbias_logic vss vss sky130_fd_pr__nfet_01v8 ad=0.58 pd=4.29 as=0.58 ps=4.29 w=4 l=0.5
+X9 a_n5001_4543# a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X10 vdd a_n5001_4543# vbias_logic vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X11 a_n5001_4543# a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X12 a_n5001_4543# a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X13 vdd a_n5001_4543# vbias_logic vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X14 vss vbias_logic vbias_logic vss sky130_fd_pr__nfet_01v8 ad=0.58 pd=4.29 as=0.58 ps=4.29 w=4 l=0.5
+X15 vdd a_n5001_4543# a_n5001_4543# vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X16 vbias_logic a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X17 vdd a_n5001_4543# a_n5001_4543# vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X18 vbias_logic a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X19 vbias_logic vbias_logic vss vss sky130_fd_pr__nfet_01v8 ad=1.16 pd=8.58 as=0.58 ps=4.29 w=4 l=0.5
+X20 a_n5001_4543# a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X21 vdd a_n5001_4543# a_n5001_4543# vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X22 vbias_logic a_n5001_4543# vdd vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X23 vdd a_n5001_4543# vbias_logic vdd sky130_fd_pr__pfet_01v8 ad=0.87 pd=6.29 as=0.87 ps=6.29 w=6 l=0.5
+X24 vss vbias_logic vbias_logic vss sky130_fd_pr__nfet_01v8 ad=0.58 pd=4.29 as=0.58 ps=4.29 w=4 l=0.5
+X25 vbias_logic vbias_logic vss vss sky130_fd_pr__nfet_01v8 ad=0.58 pd=4.29 as=1.16 ps=8.58 w=4 l=0.5
+C0 a_n5001_4543# a_3890_3342# 0.00551f
+C1 a_n5001_4543# vdd 11.1888f
+C2 a_n5001_4543# vbias_logic 2.81018f
+C3 vbias_sf a_n4814_3408# 0.01758f
+C4 a_n4452_3408# a_n4814_3408# 0.0204f
+C5 a_n5001_4543# vbias_sf 0.12993f
+C6 a_n5001_4543# a_n4452_3408# 0.13203f
+C7 a_n5001_4543# a_n3398_4640# 0.07744f
+C8 vdd a_3890_3342# 0.00434f
+C9 vbias_logic a_3890_3342# 0.09457f
+C10 a_n5001_4543# a_3298_4640# 0.00873f
+C11 vbias_logic vdd 3.0174f
+C12 a_n5001_4543# a_n4814_3408# 0.0217f
+C13 a_n5001_4543# a_4884_3342# 0.00168f
+C14 a_n5001_4543# a_n5182_4640# 0.04623f
+C15 vdd vbias_sf 0.0098f
+C16 vdd a_n4452_3408# 0.00374f
+C17 vdd a_n3398_4640# 1.18768f
+C18 a_5082_4640# vdd 1.25445f
+C19 vbias_logic a_5082_4640# 0.05036f
+C20 vdd a_3298_4640# 1.18768f
+C21 vbias_logic a_3298_4640# 0.05096f
+C22 vdd a_n4814_3408# 0.00544f
+C23 a_3890_3342# a_4884_3342# 0.00716f
+C24 vdd a_4884_3342# 0.00457f
+C25 vbias_logic a_4884_3342# 0.17259f
+C26 vdd a_n5182_4640# 1.25445f
+C27 vbias_sf vss 2.74522f
+C28 vbias_logic vss 5.98268f
+C29 vdd vss 24.7559f
+C30 a_4884_3342# vss 0.88704f ; **FLOATING
+C31 a_3890_3342# vss 0.92314f ; **FLOATING
+C32 a_n4452_3408# vss 0.66662f ; **FLOATING
+C33 a_n4814_3408# vss 0.78306f ; **FLOATING
+C34 a_5082_4640# vss 0.19962f ; **FLOATING
+C35 a_3298_4640# vss 0.19168f ; **FLOATING
+C36 a_n3398_4640# vss 0.19168f ; **FLOATING
+C37 a_n5182_4640# vss 0.19965f ; **FLOATING
+C38 a_n5001_4543# vss 4.70193f
+.ends
+

@@ -1,0 +1,27 @@
+* NGSPICE file created from pll_div_buffer_pdk.ext - technology: sky130A
+
+.subckt pll_div_buffer_pdk inp inn outp outn vbias vdd vss
+X0 a_n5076_n300# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X1 outn inp a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.93 ps=6.62 w=3 l=0.15
+X2 outp inn a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.93 ps=6.62 w=3 l=0.15
+X3 vdd outn vss sky130_fd_pr__res_high_po_2p85 l=4.14
+X4 a_n5076_n300# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X5 vdd outp vss sky130_fd_pr__res_high_po_2p85 l=4.14
+X6 a_n5076_n300# vbias vss vss sky130_fd_pr__nfet_01v8 ad=0.435 pd=3.29 as=0.87 ps=6.58 w=3 l=0.5
+X7 outp inn a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X8 a_n5076_n300# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X9 outn inp a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X10 a_n5076_n300# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.93 pd=6.62 as=0.495 ps=3.33 w=3 l=0.15
+X11 a_n5076_n300# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X12 vss vbias a_n5076_n300# vss sky130_fd_pr__nfet_01v8 ad=0.87 pd=6.58 as=0.435 ps=3.29 w=3 l=0.5
+X13 a_n5076_n300# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X14 outn inp a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X15 a_n5076_n300# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X16 a_n5076_n300# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.93 pd=6.62 as=0.495 ps=3.33 w=3 l=0.15
+X17 outp inn a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X18 outp inn a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X19 outn inp a_n5076_n300# vss sky130_fd_pr__nfet_01v8_lvt ad=0.495 pd=3.33 as=0.495 ps=3.33 w=3 l=0.15
+X20 a_n5076_n300# vbias vss vss sky130_fd_pr__nfet_01v8 ad=0.435 pd=3.29 as=0.87 ps=6.58 w=3 l=0.5
+X21 vss vbias a_n5076_n300# vss sky130_fd_pr__nfet_01v8 ad=0.87 pd=6.58 as=0.435 ps=3.29 w=3 l=0.5
+.ends
+

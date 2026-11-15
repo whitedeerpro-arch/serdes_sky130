@@ -1,0 +1,142 @@
+* NGSPICE file created from pll_frontend_dummy_load_pdk.ext - technology: sky130A
+
+.subckt pll_frontend_dummy_load_pdk clkp clkn vbias vdd vss
+X0 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X1 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X2 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X3 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X4 vss vbias a_85_1828# vss sky130_fd_pr__nfet_01v8 ad=1.16 pd=8.58 as=1.16 ps=8.58 w=4 l=0.5
+X5 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X6 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X7 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X8 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=1.55 pd=10.62 as=0.825 ps=5.33 w=5 l=0.15
+X9 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X10 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X11 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X12 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=1.55 pd=10.62 as=0.825 ps=5.33 w=5 l=0.15
+X13 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X14 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X15 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X16 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X17 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=1.55 ps=10.62 w=5 l=0.15
+X18 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X19 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=46.88 ps=311.44 w=4 l=0.15
+X20 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X21 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X22 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X23 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X24 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X25 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X26 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X27 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.24 pd=8.62 as=0 ps=0 w=4 l=0.15
+X28 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X29 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X30 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X31 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X32 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X33 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X34 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X35 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X36 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X37 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X38 a_85_1828# clkn vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X39 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X40 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X41 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X42 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X43 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.24 pd=8.62 as=0 ps=0 w=4 l=0.15
+X44 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X45 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X46 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X47 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X48 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X49 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X50 a_n1679_1828# vbias vss vss sky130_fd_pr__nfet_01v8 ad=1.16 pd=8.58 as=1.16 ps=8.58 w=4 l=0.5
+X51 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X52 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X53 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X54 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X55 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X56 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X57 vss a_85_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X58 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X59 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X60 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X61 vss a_n1679_1828# vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.66 pd=4.33 as=0 ps=0 w=4 l=0.15
+X62 a_n1679_1828# clkp vdd vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X63 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+X64 vdd clkn a_85_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=1.55 ps=10.62 w=5 l=0.15
+X65 vdd clkp a_n1679_1828# vss sky130_fd_pr__nfet_01v8_lvt ad=0.825 pd=5.33 as=0.825 ps=5.33 w=5 l=0.15
+C0 a_36_714# a_n1679_1828# 0.00351f
+C1 vbias a_n751_n400# 0.01827f
+C2 vbias a_n1679_1828# 0.22307f
+C3 a_1698_1828# clkn 0.00628f
+C4 a_n66_714# a_36_714# 0.08889f
+C5 vbias a_n66_714# 0
+C6 clkp clkn 0.00755f
+C7 a_36_1828# a_n1679_1828# 0.00404f
+C8 clkp a_n1728_1828# 0.00628f
+C9 a_n389_n400# a_85_1828# 0.00495f
+C10 a_1698_714# a_85_1828# 0.00982f
+C11 clkp a_n1679_1828# 1.46475f
+C12 clkn a_85_1828# 1.46475f
+C13 vdd a_36_1828# 0.0436f
+C14 vbias a_36_714# 0
+C15 a_289_n400# a_85_1828# 0.14493f
+C16 a_1698_1828# vdd 0.03103f
+C17 a_n66_1828# a_n1679_1828# 0.07641f
+C18 a_36_714# a_36_1828# 0
+C19 a_n66_714# a_n66_1828# 0
+C20 clkp vdd 1.51307f
+C21 a_n1728_714# a_n1728_1828# 0
+C22 a_85_1828# a_n1679_1828# 0.15915f
+C23 a_651_n400# a_85_1828# 0.04762f
+C24 clkn a_1698_714# 0
+C25 a_n66_714# a_85_1828# 0.00351f
+C26 a_289_n400# a_n389_n400# 0.01107f
+C27 vdd a_n66_1828# 0.0436f
+C28 a_n1728_714# a_n1679_1828# 0.00982f
+C29 a_n751_n400# a_n389_n400# 0.02443f
+C30 a_n389_n400# a_n1679_1828# 0.14493f
+C31 vdd a_85_1828# 4.04922f
+C32 clkn a_n1679_1828# 0.00349f
+C33 a_36_714# a_85_1828# 0.00532f
+C34 a_n1728_1828# a_n1679_1828# 0.07624f
+C35 vbias a_85_1828# 0.19866f
+C36 a_n66_1828# a_36_1828# 0.11111f
+C37 a_289_n400# a_n1679_1828# 0.00495f
+C38 a_289_n400# a_651_n400# 0.02443f
+C39 a_85_1828# a_36_1828# 0.07641f
+C40 a_n751_n400# a_n1679_1828# 0.04762f
+C41 vbias a_n1728_714# 0
+C42 clkn vdd 1.51307f
+C43 vbias a_n389_n400# 0.01827f
+C44 vdd a_n1728_1828# 0.03103f
+C45 a_1698_1828# a_85_1828# 0.07624f
+C46 a_n66_714# a_n1679_1828# 0.00532f
+C47 clkp a_85_1828# 0.00349f
+C48 vdd a_n1679_1828# 4.04922f
+C49 a_85_1828# a_n66_1828# 0.00404f
+C50 a_1698_1828# a_1698_714# 0
+C51 clkp a_n1728_714# 0
+C52 a_289_n400# vbias 0.01827f
+C53 vbias vss 1.82808f
+C54 clkn vss 2.35421f
+C55 vdd vss 2.92709f
+C56 clkp vss 2.35421f
+C57 a_651_n400# vss 0.90362f ; **FLOATING
+C58 a_289_n400# vss 0.77649f ; **FLOATING
+C59 a_n389_n400# vss 0.77649f ; **FLOATING
+C60 a_n751_n400# vss 0.89563f ; **FLOATING
+C61 a_1698_714# vss 0.70106f ; **FLOATING
+C62 a_36_714# vss 0.54546f ; **FLOATING
+C63 a_n66_714# vss 0.54546f ; **FLOATING
+C64 a_n1728_714# vss 0.70106f ; **FLOATING
+C65 a_1698_1828# vss 0.75032f ; **FLOATING
+C66 a_85_1828# vss 6.86513f
+C67 a_36_1828# vss 0.55677f ; **FLOATING
+C68 a_n66_1828# vss 0.55677f ; **FLOATING
+C69 a_n1679_1828# vss 6.83003f
+C70 a_n1728_1828# vss 0.75032f ; **FLOATING
+.ends
+

@@ -1,0 +1,6 @@
+.subckt pll_cml_tail_bias_pdk vbias_sf vbias_logic vdd vss
+Xsink pdiode vbias_sf vss vss sky130_fd_pr__nfet_01v8 w=3.333333333 l=0.5
+Xpd pdiode pdiode vdd vdd sky130_fd_pr__pfet_01v8 w=60 l=0.5
+Xpm vbias_logic pdiode vdd vdd sky130_fd_pr__pfet_01v8 w=60 l=0.5
+Xref vbias_logic vbias_logic vss vss sky130_fd_pr__nfet_01v8 w=20 l=0.5
+.ends pll_cml_tail_bias_pdk

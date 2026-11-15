@@ -1,0 +1,11 @@
+.subckt pll_cml_latch_h40_pdk dp dn qp qn clk_track clk_hold vbias vdd vss
+Xrp vdd qp vss sky130_fd_pr__res_high_po_2p85 l=4.14
+Xrn vdd qn vss sky130_fd_pr__res_high_po_2p85 l=4.14
+Xdp qn dp track vss sky130_fd_pr__nfet_01v8_lvt w=20 l=0.15
+Xdn qp dn track vss sky130_fd_pr__nfet_01v8_lvt w=20 l=0.15
+Xhp qn qp hold vss sky130_fd_pr__nfet_01v8_lvt w=40 l=0.15
+Xhn qp qn hold vss sky130_fd_pr__nfet_01v8_lvt w=40 l=0.15
+Xct track clk_track tail vss sky130_fd_pr__nfet_01v8_lvt w=64 l=0.15
+Xch hold clk_hold tail vss sky130_fd_pr__nfet_01v8_lvt w=64 l=0.15
+Xtail tail vbias vss vss sky130_fd_pr__nfet_01v8 w=72 l=0.5
+.ends pll_cml_latch_h40_pdk

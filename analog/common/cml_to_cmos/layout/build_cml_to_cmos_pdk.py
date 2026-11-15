@@ -1037,7 +1037,7 @@ def main() -> None:
         inst.mkdir(parents=True, exist_ok=True)
         shutil.copy2(out / "summary.json", inst / "summary.json")
         cdir = out / r["cell"]
-        for ext in (".mag", ".png", "_ref.spice", "_lvs.spice", "_lvs.log", "_pex.spice"):
+        for ext in (".mag", ".png", "_ref.spice", "_lvs.spice", "_pex.spice"):
             src = cdir / f"{r['cell']}{ext}"
             if src.exists():
                 shutil.copy2(src, inst / src.name)

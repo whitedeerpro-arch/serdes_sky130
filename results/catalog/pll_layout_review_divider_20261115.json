@@ -1,6 +1,6 @@
 {
-  "export": "results/layout_review/pll_20261115/exports/20261115T151921.550589Z/summary.json",
-  "export_sha256": "e9f9a95bf8753bd7948bfb2919ad35c5a4e2f60681e4632a77b7a75fc00498a7",
+  "export": "results/layout_review/pll_20261115/exports/20261115T152404.512280Z/summary.json",
+  "export_sha256": "f1a3539dfa5c1890387bea1eddc7b9ae28ac4c1de234eca32d1c506cfbe9ae7a",
   "rows": {
     "tt_cpex": {
       "input": {
@@ -388,6 +388,21 @@
       "execution_qualified": false,
       "observed_functional_passed": false
     }
+  },
+  "rc_discretization": {
+    "physical_resistor_instances": 16,
+    "parasitic_resistor_segments": 5744,
+    "vss_segments": 2443,
+    "vdd_segments": 65,
+    "other_segments": 3236,
+    "threshold_ohm": 1,
+    "interpretation": "Discretized network; layer/terminal semantics and reduction convergence not validated"
+  },
+  "handoff": {
+    "id": "LAYOUT-PLL-DIV-RC-01",
+    "status": "suspect_pending_layout_review",
+    "full_rc_simulation": "paused",
+    "physical_failure_confirmed": false
   },
   "scope": "Local TT/FS-hot CPEX /8 with CPEX feedback receiver; 300mVpp sine via schematic buffer; real schematic bias; no MOS45/MC/noise signoff",
   "review_date": "2026-11-15",

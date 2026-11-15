@@ -25063,5 +25063,62 @@
    "path": "docs/data/tx_coupling_state.json",
    "sha256": "0d2888d9cba2d13a5e207b68a98b50ec1b53a8b1424efb05aa9117404cfdad35"
   }
+ },
+ {
+  "id": "pll_sym9_dc_bias@layout_review_20261115",
+  "kind": "calibrated_dc_bias",
+  "description": "DC gate-bias clamp from the same sym9 schematic point; isolates excluded BG transient numerics. Not transient/noise bias qualification.",
+  "upstream": {
+   "module": "pll.vco.sym9_s32p5",
+   "revision": "layout_review_20261115"
+  },
+  "nodes": {
+   "source": "vbias",
+   "consumer": "vbias_q"
+  },
+  "load": {
+   "stages": [
+    "X _ vbias _ _ sky130_fd_pr__nfet_01v8 l=0.5 w=148.8"
+   ],
+   "sha": "787d92ac36eb4b9f"
+  },
+  "points": {
+   "fs_v1650_t85:hh:0:1.21": {
+    "run": "results/layout_review/pll_20261115/vco_clean_anchored/fs_v1650_t85_hh_0_1.21_schematic",
+    "git_revision": "02ad6a7-dirty",
+    "deck_sha256": "77b80f259794cecf80b74fef1ad6f5efe3658b61a4d88154b1722b5d124eae48",
+    "condition": "fs_v1650_t85",
+    "code": 0,
+    "vctrl_v": 1.21,
+    "voltage_v": 1.0632178309109666,
+    "waveform_sha256": "799720f8daa4bfb912944b6bc863aeb1ab758017768c5107eb34a05946c0a24c"
+   },
+   "sf_v1650_t-40:ll:31:0.90": {
+    "run": "results/layout_review/pll_20261115/vco_clean_anchored/sf_v1650_t-40_ll_31_0.90_schematic",
+    "git_revision": "02ad6a7-dirty",
+    "deck_sha256": "03d8f9abe7b7770acfddee3293b63aa403e525039e62a0f7d03c587d6532d091",
+    "condition": "sf_v1650_t-40",
+    "code": 31,
+    "vctrl_v": 0.9,
+    "voltage_v": 1.0133808081339672,
+    "waveform_sha256": "f15107231b7dda1e14d84989a4c45a6194f26e03acb92d83df5a79f12c8a6761"
+   }
+  },
+  "processing": {
+   "mean_window_s": [
+    1.4e-08,
+    2.4e-08
+   ],
+   "physical_load_signature": "Parallel-finger aggregated nfet model/W/L/source/body on bias gate; DC-only, excludes dynamic Miller and wire capacitance"
+  },
+  "validation": {
+   "reference_and_physical_dc_gate_load_match": true,
+   "full_bias_transient_qualified": false
+  },
+  "valid_while": [
+   "Same tail model/W/L and source/body configuration",
+   "Same PVT/code/ctrl and 30 fF/output proxy",
+   "DC-clamped local comparison only; not upstream droop/noise replay"
+  ]
  }
 ]

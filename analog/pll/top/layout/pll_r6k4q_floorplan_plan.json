@@ -1,0 +1,690 @@
+{
+  "Xvco": {
+    "inst": "Xvco",
+    "kind": "vco",
+    "domain": "quiet",
+    "dx": 0.0,
+    "dy": 0.0,
+    "mx": false,
+    "my": false,
+    "title": "Xvco\n211.16 \u00d7 130.74 \u00b5m",
+    "bbox": [
+      -106.5,
+      -65.24,
+      104.66,
+      65.5
+    ],
+    "pins": {
+      "q0p": [
+        -29.9,
+        65.0
+      ],
+      "q0n": [
+        -31.2,
+        65.0
+      ],
+      "q1p": [
+        29.9,
+        65.0
+      ],
+      "q1n": [
+        31.2,
+        65.0
+      ],
+      "q2p": [
+        29.9,
+        -65.0
+      ],
+      "q2n": [
+        31.2,
+        -65.0
+      ],
+      "q3p": [
+        -29.9,
+        -65.0
+      ],
+      "q3n": [
+        -31.2,
+        -65.0
+      ],
+      "vctrl": [
+        -106.2,
+        -56.8
+      ],
+      "b0": [
+        -99.2,
+        58.5
+      ],
+      "b1": [
+        -100.5,
+        59.7
+      ],
+      "b2": [
+        -101.8,
+        60.9
+      ],
+      "b3": [
+        -103.1,
+        62.1
+      ],
+      "b4": [
+        -104.4,
+        63.3
+      ],
+      "vbias": [
+        -106.2,
+        -6.8
+      ],
+      "vdd": [
+        0.0,
+        65.0
+      ],
+      "vss": [
+        -96.8,
+        65.0
+      ]
+    },
+    "source": "analog/pll/vco/layout/variants/r6_pdk/pll_vco_ring4_r6_pdk.mag",
+    "sha256": "34ea09b71445914b39b90eb6590f26a0aa08ca75a25c09a7613cb7d0bae6d8db"
+  },
+  "Xbuf0": {
+    "inst": "Xbuf0",
+    "kind": "buf",
+    "domain": "quiet",
+    "dx": -30.55,
+    "dy": 84.0,
+    "mx": false,
+    "my": false,
+    "title": "Xbuf0\n16.20 \u00d7 30.47 \u00b5m",
+    "bbox": [
+      -38.65,
+      69.6,
+      -22.45,
+      100.07
+    ],
+    "pins": {
+      "inp": [
+        -30.55,
+        79.8
+      ],
+      "inn": [
+        -30.55,
+        78.8
+      ],
+      "outp": [
+        -35.65,
+        88.4
+      ],
+      "outn": [
+        -25.45,
+        87.4
+      ],
+      "vbias": [
+        -33.765,
+        71.1
+      ],
+      "vdd": [
+        -30.55,
+        99.57
+      ],
+      "vss": [
+        -30.55,
+        70.1
+      ]
+    },
+    "source": "analog/pll/vco/layout/variants/r6_pdk/pll_buffer_r6_pdk.mag",
+    "sha256": "57ddcbc38e41b3215d2393f5e674760273382b7c9409e7939d30d1b91e307ab8"
+  },
+  "Xbuf1": {
+    "inst": "Xbuf1",
+    "kind": "buf",
+    "domain": "quiet",
+    "dx": 30.55,
+    "dy": 84.0,
+    "mx": false,
+    "my": false,
+    "title": "Xbuf1\n16.20 \u00d7 30.47 \u00b5m",
+    "bbox": [
+      22.45,
+      69.6,
+      38.65,
+      100.07
+    ],
+    "pins": {
+      "inp": [
+        30.55,
+        79.8
+      ],
+      "inn": [
+        30.55,
+        78.8
+      ],
+      "outp": [
+        25.45,
+        88.4
+      ],
+      "outn": [
+        35.65,
+        87.4
+      ],
+      "vbias": [
+        27.335,
+        71.1
+      ],
+      "vdd": [
+        30.55,
+        99.57
+      ],
+      "vss": [
+        30.55,
+        70.1
+      ]
+    },
+    "source": "analog/pll/vco/layout/variants/r6_pdk/pll_buffer_r6_pdk.mag",
+    "sha256": "57ddcbc38e41b3215d2393f5e674760273382b7c9409e7939d30d1b91e307ab8"
+  },
+  "Xbuf2": {
+    "inst": "Xbuf2",
+    "kind": "buf",
+    "domain": "quiet",
+    "dx": 30.55,
+    "dy": -84.0,
+    "mx": false,
+    "my": true,
+    "title": "Xbuf2\n16.20 \u00d7 30.47 \u00b5m",
+    "bbox": [
+      22.45,
+      -100.07,
+      38.65,
+      -69.6
+    ],
+    "pins": {
+      "inp": [
+        30.55,
+        -79.8
+      ],
+      "inn": [
+        30.55,
+        -78.8
+      ],
+      "outp": [
+        25.45,
+        -88.4
+      ],
+      "outn": [
+        35.65,
+        -87.4
+      ],
+      "vbias": [
+        27.335,
+        -71.1
+      ],
+      "vdd": [
+        30.55,
+        -99.57
+      ],
+      "vss": [
+        30.55,
+        -70.1
+      ]
+    },
+    "source": "analog/pll/vco/layout/variants/r6_pdk/pll_buffer_r6_pdk.mag",
+    "sha256": "57ddcbc38e41b3215d2393f5e674760273382b7c9409e7939d30d1b91e307ab8"
+  },
+  "Xbuf3": {
+    "inst": "Xbuf3",
+    "kind": "buf",
+    "domain": "quiet",
+    "dx": -30.55,
+    "dy": -84.0,
+    "mx": false,
+    "my": true,
+    "title": "Xbuf3\n16.20 \u00d7 30.47 \u00b5m",
+    "bbox": [
+      -38.65,
+      -100.07,
+      -22.45,
+      -69.6
+    ],
+    "pins": {
+      "inp": [
+        -30.55,
+        -79.8
+      ],
+      "inn": [
+        -30.55,
+        -78.8
+      ],
+      "outp": [
+        -35.65,
+        -88.4
+      ],
+      "outn": [
+        -25.45,
+        -87.4
+      ],
+      "vbias": [
+        -33.765,
+        -71.1
+      ],
+      "vdd": [
+        -30.55,
+        -99.57
+      ],
+      "vss": [
+        -30.55,
+        -70.1
+      ]
+    },
+    "source": "analog/pll/vco/layout/variants/r6_pdk/pll_buffer_r6_pdk.mag",
+    "sha256": "57ddcbc38e41b3215d2393f5e674760273382b7c9409e7939d30d1b91e307ab8"
+  },
+  "Xtail": {
+    "inst": "Xtail",
+    "kind": "tail",
+    "domain": "quiet",
+    "dx": -176.0,
+    "dy": 84.0,
+    "mx": false,
+    "my": false,
+    "title": "Xtail\n100.18 \u00d7 103.21 \u00b5m",
+    "bbox": [
+      -225.92,
+      32.395,
+      -125.74,
+      135.605
+    ],
+    "pins": {
+      "original": [
+        -198.94,
+        134.6
+      ],
+      "filtered": [
+        -153.06,
+        133.6
+      ],
+      "vss": [
+        -176.0,
+        34.4
+      ]
+    },
+    "source": "analog/common/ldo/layout/variants/smallcap_pdk/serdes_pll_bias_lowpass_slow_r4_pdk.mag",
+    "sha256": "c7df660d6cf2651627309f82ba53a6cf8094be89ad355924e257ca55e2178748"
+  },
+  "Xcp": {
+    "inst": "Xcp",
+    "kind": "cp",
+    "domain": "quiet",
+    "dx": -242.0,
+    "dy": -10.0,
+    "mx": false,
+    "my": false,
+    "title": "Xcp: pll_cp_steer_pdk (k=4, 200\u00b5A)\n127.58 \u00d7 40.60 \u00b5m",
+    "bbox": [
+      -244.8,
+      -16.5,
+      -117.22,
+      24.1
+    ],
+    "pins": {
+      "up": [
+        -243.0,
+        -3.8
+      ],
+      "dn": [
+        -243.0,
+        -1.7
+      ],
+      "out": [
+        -117.5,
+        9.85
+      ],
+      "vbn": [
+        -243.0,
+        1.45
+      ],
+      "vbp": [
+        -243.0,
+        3.55
+      ],
+      "ibias": [
+        -243.0,
+        5.65
+      ],
+      "vdd": [
+        -244.5,
+        23.8
+      ],
+      "vss": [
+        -244.5,
+        -16.2
+      ]
+    },
+    "source": "analog/pll/cp/layout/variants/pdk/pll_cp_steer_pdk.mag",
+    "sha256": "ab37b0655b57d667f1c64b0da6a732473170fb2cad52f76044121a990e3e8f0e"
+  },
+  "Xlf": {
+    "inst": "Xlf",
+    "kind": "lf",
+    "domain": "quiet",
+    "dx": -172.0,
+    "dy": -64.0,
+    "mx": false,
+    "my": false,
+    "title": "Xlf: pll_loop_filter_k4_fused_pdk\n98.34 \u00d7 70.10 \u00b5m",
+    "bbox": [
+      -222.4,
+      -98.48,
+      -124.06,
+      -28.38
+    ],
+    "pins": {
+      "ctrl": [
+        -182.8,
+        -98.22
+      ],
+      "z": [
+        -205.59,
+        -32.78
+      ],
+      "pre_ref": [
+        -221.6,
+        -64.0
+      ],
+      "pre_en": [
+        -221.6,
+        -64.96
+      ],
+      "vdd": [
+        -190.28,
+        -96.42
+      ],
+      "vss": [
+        -157.57,
+        -29.18
+      ]
+    },
+    "source": "analog/pll/loop_filter/layout/variants/fused_pdk/pll_loop_filter_k4_fused_pdk.mag",
+    "sha256": "4c55dc1ddb2b29b46d1ea60464db1302b5c7c258368ed0eb4c05a1562e66ed01"
+  },
+  "Xdum1": {
+    "inst": "Xdum1",
+    "kind": "dum",
+    "domain": "host",
+    "dx": 66.0,
+    "dy": 76.0,
+    "mx": false,
+    "my": false,
+    "title": "Xdum1\n20.40 \u00d7 20.40 \u00b5m",
+    "bbox": [
+      55.8,
+      72.0,
+      76.2,
+      92.4
+    ],
+    "pins": {
+      "clkp": [
+        57.1,
+        84.865
+      ],
+      "clkn": [
+        74.9,
+        84.865
+      ],
+      "vbias": [
+        57.1,
+        73.725
+      ],
+      "vdd": [
+        66.0,
+        92.0
+      ],
+      "vss": [
+        66.0,
+        72.4
+      ]
+    },
+    "source": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.mag",
+    "sha256": "edfea480641f81f36e35ca71ad9c129d0eae50644a26fae69f0b46845a03793f"
+  },
+  "Xdum2": {
+    "inst": "Xdum2",
+    "kind": "dum",
+    "domain": "host",
+    "dx": 66.0,
+    "dy": -76.0,
+    "mx": false,
+    "my": true,
+    "title": "Xdum2\n20.40 \u00d7 20.40 \u00b5m",
+    "bbox": [
+      55.8,
+      -92.4,
+      76.2,
+      -72.0
+    ],
+    "pins": {
+      "clkp": [
+        57.1,
+        -84.865
+      ],
+      "clkn": [
+        74.9,
+        -84.865
+      ],
+      "vbias": [
+        57.1,
+        -73.725
+      ],
+      "vdd": [
+        66.0,
+        -92.0
+      ],
+      "vss": [
+        66.0,
+        -72.4
+      ]
+    },
+    "source": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.mag",
+    "sha256": "edfea480641f81f36e35ca71ad9c129d0eae50644a26fae69f0b46845a03793f"
+  },
+  "Xdum3": {
+    "inst": "Xdum3",
+    "kind": "dum",
+    "domain": "host",
+    "dx": -66.0,
+    "dy": -76.0,
+    "mx": false,
+    "my": true,
+    "title": "Xdum3\n20.40 \u00d7 20.40 \u00b5m",
+    "bbox": [
+      -76.2,
+      -92.4,
+      -55.8,
+      -72.0
+    ],
+    "pins": {
+      "clkp": [
+        -74.9,
+        -84.865
+      ],
+      "clkn": [
+        -57.1,
+        -84.865
+      ],
+      "vbias": [
+        -74.9,
+        -73.725
+      ],
+      "vdd": [
+        -66.0,
+        -92.0
+      ],
+      "vss": [
+        -66.0,
+        -72.4
+      ]
+    },
+    "source": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.mag",
+    "sha256": "edfea480641f81f36e35ca71ad9c129d0eae50644a26fae69f0b46845a03793f"
+  },
+  "Xpre0": {
+    "inst": "Xpre0",
+    "kind": "pre",
+    "domain": "host",
+    "dx": -30.55,
+    "dy": 128.0,
+    "mx": false,
+    "my": false,
+    "title": "Xpre0: pll_cml_prescaler8_pdk (/2 h40 \u2192 buf \u2192 /4 h80 \u2192 buf \u2192 /8 h80)\n162.77 \u00d7 34.80 \u00b5m",
+    "bbox": [
+      -57.945,
+      124.5,
+      104.825,
+      159.3
+    ],
+    "pins": {
+      "clkp": [
+        -56.115,
+        137.865
+      ],
+      "clkn": [
+        -4.985,
+        137.865
+      ],
+      "q2p": [
+        -3.555,
+        154.7
+      ],
+      "q2n": [
+        -3.555,
+        155.8
+      ],
+      "q4p": [
+        50.435,
+        154.7
+      ],
+      "q4n": [
+        50.435,
+        155.8
+      ],
+      "q8p": [
+        104.425,
+        154.7
+      ],
+      "q8n": [
+        104.425,
+        155.8
+      ],
+      "vbias": [
+        -57.545,
+        125.45
+      ],
+      "vdd": [
+        -57.545,
+        158.9
+      ],
+      "vss": [
+        -57.545,
+        124.9
+      ]
+    },
+    "source": "analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk.mag",
+    "sha256": "ca4651fcf168edebffe110741bfb48f916e2acfd362a5867df608f7d4d973f33"
+  },
+  "Xfb0": {
+    "inst": "Xfb0",
+    "kind": "fb",
+    "domain": "host",
+    "dx": 278.0,
+    "dy": 52.0,
+    "mx": true,
+    "my": false,
+    "title": "Xfb0: CML\u2192CMOS Feedback Rx\n51.94 \u00d7 14.11 \u00b5m",
+    "bbox": [
+      226.055,
+      44.945,
+      278.0,
+      59.055
+    ],
+    "pins": {
+      "inp": [
+        276.34,
+        55.9
+      ],
+      "inn": [
+        276.34,
+        48.1
+      ],
+      "outp": [
+        226.505,
+        55.32
+      ],
+      "outn": [
+        226.505,
+        48.68
+      ],
+      "vbias": [
+        277.1,
+        55.32
+      ],
+      "vdd": [
+        227.225,
+        58.69
+      ],
+      "vss": [
+        277.735,
+        52.0
+      ]
+    },
+    "source": "analog/common/cml_to_cmos/layout/variants/pdk/serdes_cml_to_cmos_pvt_candidate_pdk.mag",
+    "sha256": "8aeb76985c5041fcf30aceef6eb3c783fa270ac2a89e74cb1ba3c7cf79126811"
+  },
+  "Xpfd": {
+    "inst": "Xpfd",
+    "kind": "pfd",
+    "domain": "host",
+    "dx": -276.0,
+    "dy": -4.0,
+    "mx": false,
+    "my": false,
+    "title": "Xpfd\n25.25 \u00d7 5.94 \u00b5m",
+    "bbox": [
+      -277.45,
+      -4.25,
+      -252.2,
+      1.69
+    ],
+    "pins": {
+      "ref": [
+        -276.45,
+        -2.47
+      ],
+      "fb": [
+        -276.45,
+        -0.09
+      ],
+      "rst_b": [
+        -276.45,
+        -0.52
+      ],
+      "up": [
+        -252.4,
+        -2.81
+      ],
+      "dn": [
+        -252.4,
+        0.25
+      ],
+      "vdd": [
+        -275.8,
+        -1.28
+      ],
+      "vss": [
+        -277.2,
+        -1.28
+      ]
+    },
+    "source": "analog/pll/pfd/layout/variants/pdk/pll_pfd_sc_dly_pdk.mag",
+    "sha256": "f47ef10ecf6e064278947d933345da333ce93771791d57c4d0387ec15c318656"
+  }
+}

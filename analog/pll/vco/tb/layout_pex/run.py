@@ -14,7 +14,7 @@ import re
 import sys
 
 import numpy as np
-from serdes_flow import bias, clock, project, rcorner, spice
+from serdes_flow import bias, boundary, clock, netlist, project, rcorner, spice
 from serdes_flow.corners import Condition
 from serdes_flow.phase_grid import spacing
 
@@ -26,6 +26,28 @@ TOP = "pll_vco_core_sym9_s32p5"
 STOP, START = 24e-9, 14e-9
 POINTS = ["tt_v1800_t27:tt:9:1.166", "fs_v1650_t85:hh:0:1.21", "sf_v1650_t-40:ll:31:0.90",
           "ss_v1650_t85:hh:16:1.055", "sf_v1650_t85:hh:16:1.055"]
+
+
+def bias_load_signature(path,top):
+    """DC-only bias gate signature, folding equivalent parallel fingers.
+
+    This intentionally excludes dynamic Miller/metal loading; it is only valid
+    for the calibrated DC voltage clamp, never a bias transient/noise replay.
+    """
+    devices,unknown=netlist.flatten(netlist.parse([path]),top)
+    if unknown:raise ValueError(f"Unknown load definitions: {unknown}")
+    groups=defaultdict(float)
+    for device in devices:
+        if "nfet" in device.model and len(device.nodes)==4 and device.nodes[1]=="vbias_q":
+            if "vss" not in (device.nodes[0],device.nodes[2]) or device.nodes[3]!="vss":
+                raise ValueError("Bias tail source/body changed")
+            groups[(device.model,device.l)]+=device.w*device.nf
+    if not groups:raise ValueError("No bias gate load")
+    lines=[".subckt dc_bias_load vbias vss"]
+    for i,((model,length),width) in enumerate(sorted(groups.items())):
+        lines.append(f"Xg{i} _ vbias vss vss {model} w={width:.9g} l={length:.9g}")
+    lines.append(".ends")
+    return boundary.input_stage_signature("\n".join(lines),"dc_bias_load",["vbias"])
 
 
 def deck(point, variant, physical, out, method="gear", bias_voltage=None, ramp=False):
@@ -146,6 +168,7 @@ def main():
     ap.add_argument("--top", default=TOP)
     ap.add_argument("--method", choices=("trap","gear"), default="gear")
     ap.add_argument("--bias-reference",type=Path,help="Explicit completed schematic campaign; clamp bias to its measured mean")
+    ap.add_argument("--bias-id",help="Registered calibrated DC source; required for new clamp runs")
     ap.add_argument("--ramp",action="store_true",help="Ramp local rail/bias/ctrl/config over 5 ns, kick at 6 ns")
     ap.add_argument("--output-dir", type=Path, required=True)
     ap.add_argument("--points", nargs="+", default=POINTS)
@@ -153,16 +176,26 @@ def main():
     ap.add_argument("--workers", type=int, default=2, choices=(1,2))
     a = ap.parse_args()
     TOP = a.top
+    if a.bias_reference and not a.bias_id:
+        raise ValueError("Register the explicit DC calibration and use --bias-id; direct historical source paths alone are not accepted")
+    if a.bias_id:
+        bc=boundary.get(a.bias_id)
+        if bc["kind"]!="calibrated_dc_bias":raise ValueError("Expected a calibrated DC bias boundary")
+        boundary.check_load(a.bias_id,bias_load_signature(a.physical_dir/(TOP+"_pex.spice"),TOP))
     cases, ids, calibration = {}, {}, {}
     for point in a.points:
         voltage=None
-        if a.bias_reference:
-            key=point.replace(":","_")+"_schematic"
-            source=spice.case_output(a.bias_reference,key,"waveforms.raw",t_end=STOP)
-            if source is None:raise ValueError(f"Missing completed real-bias calibration: {key}")
-            source=source.resolve()
+        if a.bias_id:
+            record=bc["points"][point]
+            source=boundary.point_run(a.bias_id,point)/"waveforms.raw"
+            ex=json.loads(source.with_name("execution.json").read_text())
+            if ex["exit_code"]!=0 or ex["log_failures"]:raise ValueError("Invalid bias calibration execution")
+            if hashlib.sha256(source.read_bytes()).hexdigest()!=record["waveform_sha256"]:
+                raise ValueError("Calibration waveform changed")
             w=spice.Waves(source)
+            if w.t[-1]<STOP*(1-1e-6):raise ValueError("Calibration waveform truncated")
             voltage=float(np.mean(w["vbias"][w.t>=START]))
+            if abs(voltage-record["voltage_v"])>1e-12:raise ValueError("Calibration processing changed")
             calibration[point]=dict(path=str(source.relative_to(ROOT)),sha256=hashlib.sha256(source.read_bytes()).hexdigest(),voltage=voltage)
         for variant in a.variants:
             key = point.replace(":","_")+"_"+variant
@@ -170,7 +203,7 @@ def main():
             ids[key] = point,variant
     paths = execute(cases,a.output_dir,workers=a.workers)
     rows = {key:measure(path) for key,path in paths.items()}
-    save_analysis(a.output_dir,dict(scope=__doc__,cases=ids,rows=rows,bias_calibration=calibration))
+    save_analysis(a.output_dir,dict(scope=__doc__,cases=ids,rows=rows,bias_calibration=calibration,boundary_id=a.bias_id))
 
 
 if __name__ == "__main__":

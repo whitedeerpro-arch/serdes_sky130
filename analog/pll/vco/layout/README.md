@@ -25,3 +25,14 @@ uv run python verification/layout/clean_field_poly.py \
 ```
 
 这条清理链使原生成器与原几何可追溯，不在生成后手工改网表凑 LVS。后续重新规划接地 dummy 时须重新生成独立几何；不能恢复原浮空条并继承清理候选的性能数字。
+
+寄生端点台的新钳位运行使用 `--bias-id pll_sym9_dc_bias@layout_review_20261115 --ramp`，从边界注册表解析固定来源并检查 DC 栅负载签名/波形哈希。`--bias-reference` 仅保留历史参数名，单独给一个来源路径不再接受为新运行的边界身份。
+
+```bash
+uv run python analog/pll/vco/tb/layout_pex/run.py \
+  --physical-dir results/layout_review/vco_clean_new/physical \
+  --top pll_vco_core_sym9_s32p5_clean \
+  --output-dir results/layout_review/vco_ends_new \
+  --points fs_v1650_t85:hh:0:1.21 sf_v1650_t-40:ll:31:0.90 \
+  --variants cpex --bias-id pll_sym9_dc_bias@layout_review_20261115 --ramp
+```

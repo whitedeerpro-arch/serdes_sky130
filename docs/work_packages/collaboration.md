@@ -155,3 +155,5 @@
 - 2026-11-13 Codex：所有者继续要求解决cap bank。准备同bit共用底板/集中折指开关的明确电气迭代，仍31颗2×2 MIM、总开关宽与各bit权重不变；独立参考与当前r6分开，先物理检查和局部AC/两端回灌，不修改主线器件参数。全机当前0 NG，后续最多占2名额，完成后归还。
 
 - 2026-11-13 Codex：cap bank共底板候选完成，31颗MIM/62开关指/五bit连接与整体DRC0/LVS/7端口通过。发现旧Magic的ext2hier/ext2spice将非电阻子电路电容误作电阻体π分配：17:10条中的2.17fF及1.933GHz等电气结论撤回；源代码两路修复已独立安装，10项相关回归通过。采用独立EXT矩阵回灌，按12fF预算分账的FS/SF两端2.199/1.827GHz；完整额外12fF的三电源六压力点均覆盖2GHz（最紧+6.96%）。同bit共底板是明确候选电路迭代，未改主线SPICE/配置参数；全角窗口/切码动态/失配待Fable评审。全部NG已结束，当前0个，归还名额。入口docs/layout/pll_r6.md。
+
+- 2026-11-15 / Codex / PLL 版图审阅交付：范围为 PFD、VCO/buffer、÷8/轻 dummy、反馈接收器、LF 与顶层规划；LDO/Bias/CP 版图未改。各模块有 layout/README.md、review.md 和固定 catalog；原型、独立清理候选、波形及数值失败留在 results/layout_review/pll_20261115/。PFD、VCO、接收器、LF、÷8 已分模块提交，目录/边界注册/总入口另作整理提交。LAYOUT-PLL-DIV-RC-01 标注疑点待版图核查，全量 RC 分支按暂停交接，不续跑、不扩大扫描；FS RC 完整异常波形的驱动回执缺失单列，未伪造 execution.json。所有本任务 ngspice/driver 已结束，实时 NG=0，无后台任务或占用名额；其余既有未提交改动保留。

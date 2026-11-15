@@ -1,6 +1,6 @@
 {
-  "export": "results/layout_review/pll_20261115/exports/20261115T145051.124525Z/summary.json",
-  "export_sha256": "86fa213601ba089a1e09b43e8cc5ce4f53507355afcb0f61e4032495c77ba252",
+  "export": "results/layout_review/pll_20261115/exports/20261115T152404.779217Z/summary.json",
+  "export_sha256": "16fba3b609601ee9e3314be48643bf27c3bc2bb155f6bf782b4856a0a755624b",
   "rows": {
     "tt_cpex": {
       "input": {
@@ -191,7 +191,218 @@
       "functional_passed": true,
       "local_150mV_screen_passed": true,
       "feedback_rail_passed": true
+    },
+    "tt_v1800_t27_tt_native_rc": {
+      "input": {
+        "period": {
+          "cycles": 35,
+          "frequency_hz": 1999998531.8072512,
+          "period_mean_s": 5.000003670484566e-10,
+          "period_pp_s": 3.396597456499812e-14,
+          "period_rms_s": 1.5600551355022186e-14,
+          "duty": 0.5001783646869167,
+          "amplitude_pp_v": 0.44147552787184985
+        },
+        "amplitude": {
+          "complete_cycles": 35,
+          "min_pp_v": 0.44134003490933327,
+          "max_pp_v": 0.4414407659356394,
+          "mean_pp_v": 0.4413862211233321
+        },
+        "frequency_passed": true
+      },
+      "q2": {
+        "period": {
+          "cycles": 17,
+          "frequency_hz": 999989405.7690499,
+          "period_mean_s": 1.000010594343189e-09,
+          "period_pp_s": 3.594469939822448e-13,
+          "period_rms_s": 1.7771036427683764e-13,
+          "duty": 0.49962530253746495,
+          "amplitude_pp_v": 0.30318090606539494
+        },
+        "amplitude": {
+          "complete_cycles": 17,
+          "min_pp_v": 0.3024739968768211,
+          "max_pp_v": 0.30318090606539494,
+          "mean_pp_v": 0.30284400961530183
+        },
+        "frequency_passed": true
+      },
+      "q4": {
+        "period": {
+          "cycles": 8,
+          "frequency_hz": 499999973.62215203,
+          "period_mean_s": 2.0000001055113975e-09,
+          "period_pp_s": 5.504448658827763e-14,
+          "period_rms_s": 2.3951001645296893e-14,
+          "duty": 0.5005851638909804,
+          "amplitude_pp_v": 0.25472671834721905
+        },
+        "amplitude": {
+          "complete_cycles": 8,
+          "min_pp_v": 0.2545153459972431,
+          "max_pp_v": 0.2546823228666588,
+          "mean_pp_v": 0.25459787850711346
+        },
+        "frequency_passed": true
+      },
+      "q8": {
+        "period": {
+          "cycles": 3,
+          "frequency_hz": 249999999.3996247,
+          "period_mean_s": 4.000000009606005e-09,
+          "period_pp_s": 4.582414528763997e-15,
+          "period_rms_s": 1.874111460392312e-15,
+          "duty": 0.5001676727969349,
+          "amplitude_pp_v": 0.24168233098089753
+        },
+        "amplitude": {
+          "complete_cycles": 3,
+          "min_pp_v": 0.24168089963186423,
+          "max_pp_v": 0.24168233098089753,
+          "mean_pp_v": 0.24168151585799427
+        },
+        "frequency_passed": true
+      },
+      "feedback": {
+        "period": {
+          "cycles": 3,
+          "frequency_hz": 249999998.07123923,
+          "period_mean_s": 4.0000000308601725e-09,
+          "period_pp_s": 1.0297755556224661e-14,
+          "period_rms_s": 4.248233507615249e-15,
+          "duty": 0.5001102291790854,
+          "amplitude_pp_v": 3.796635266520848
+        },
+        "amplitude": {
+          "complete_cycles": 3,
+          "min_pp_v": 3.79511362347567,
+          "max_pp_v": 3.796635266520848,
+          "mean_pp_v": 3.7957414080671246
+        },
+        "frequency_passed": true
+      },
+      "functional_passed": true,
+      "local_150mV_screen_passed": true,
+      "feedback_rail_passed": true
+    },
+    "fs_v1650_t85_hh_native_rc_observation": {
+      "input": {
+        "period": {
+          "cycles": 35,
+          "frequency_hz": 1999997142.5824068,
+          "period_mean_s": 5.000007143554189e-10,
+          "period_pp_s": 4.9875221190346034e-14,
+          "period_rms_s": 2.4672913534698766e-14,
+          "duty": 0.5000606798359151,
+          "amplitude_pp_v": 0.3715678185957203
+        },
+        "amplitude": {
+          "complete_cycles": 35,
+          "min_pp_v": 0.37150851219175807,
+          "max_pp_v": 0.3715678185957203,
+          "mean_pp_v": 0.37153856757309744
+        },
+        "frequency_passed": true
+      },
+      "q2": {
+        "period": {
+          "cycles": 17,
+          "frequency_hz": 999990004.4547561,
+          "period_mean_s": 1.0000099956451558e-09,
+          "period_pp_s": 3.3949085068166537e-13,
+          "period_rms_s": 1.6941660426002388e-13,
+          "duty": 0.5002108678053416,
+          "amplitude_pp_v": 0.18114565724792997
+        },
+        "amplitude": {
+          "complete_cycles": 17,
+          "min_pp_v": 0.1809378023180499,
+          "max_pp_v": 0.18110926732156263,
+          "mean_pp_v": 0.18102791211158015
+        },
+        "frequency_passed": true
+      },
+      "q4": {
+        "period": {
+          "cycles": 8,
+          "frequency_hz": 500000026.9338115,
+          "period_mean_s": 1.99999989226476e-09,
+          "period_pp_s": 4.464222297543766e-16,
+          "period_rms_s": 1.4917807984121168e-16,
+          "duty": 0.501265869266903,
+          "amplitude_pp_v": 0.10898899850656196
+        },
+        "amplitude": {
+          "complete_cycles": 8,
+          "min_pp_v": 0.10898346920971025,
+          "max_pp_v": 0.10898899850656196,
+          "mean_pp_v": 0.10898497419146472
+        },
+        "frequency_passed": true
+      },
+      "q8": {
+        "period": {
+          "cycles": 8,
+          "frequency_hz": 500002612.55297005,
+          "period_mean_s": 1.999989549842723e-09,
+          "period_pp_s": 3.4609128481793323e-14,
+          "period_rms_s": 1.1979881325325952e-14,
+          "duty": 0.39957292027055646,
+          "amplitude_pp_v": 0.0010438708755104997
+        },
+        "amplitude": {
+          "complete_cycles": 8,
+          "min_pp_v": 0.0010437757487982147,
+          "max_pp_v": 0.0010438708755104997,
+          "mean_pp_v": 0.0010437996564250651
+        },
+        "frequency_passed": false
+      },
+      "feedback": {
+        "period": null,
+        "amplitude": null,
+        "frequency_passed": false
+      },
+      "functional_passed": false,
+      "local_150mV_screen_passed": false,
+      "feedback_rail_passed": false
     }
+  },
+  "native_rc": {
+    "tt_v1800_t27_tt": {
+      "exit_code": 0,
+      "elapsed_s": 833.1281621456146,
+      "log_failures": [],
+      "timed_out": false,
+      "ngspice": "/opt/ngspice47/bin/ngspice",
+      "model_library": "/home/host/.volare/sky130A/libs.tech/ngspice/sky130.lib.spice",
+      "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b",
+      "git_revision": "5b33d03-dirty",
+      "deck_sha256": "79f5547cbd73e63535c204b97cc2491c299bb4b530ef2bd4840d7f07180066e2",
+      "inputs_sha256": {}
+    },
+    "fs_v1650_t85_hh": {
+      "status": "complete_waveform_missing_driver_receipt",
+      "execution_qualified": false,
+      "observed_functional_passed": false
+    }
+  },
+  "rc_discretization": {
+    "physical_resistor_instances": 16,
+    "parasitic_resistor_segments": 5744,
+    "vss_segments": 2443,
+    "vdd_segments": 65,
+    "other_segments": 3236,
+    "threshold_ohm": 1,
+    "interpretation": "Discretized network; layer/terminal semantics and reduction convergence not validated"
+  },
+  "handoff": {
+    "id": "LAYOUT-PLL-DIV-RC-01",
+    "status": "suspect_pending_layout_review",
+    "full_rc_simulation": "paused",
+    "physical_failure_confirmed": false
   },
   "scope": "Local TT/FS-hot CPEX /8 with CPEX feedback receiver; 300mVpp sine via schematic buffer; real schematic bias; no MOS45/MC/noise signoff",
   "rc_status": "rejected: native RC changed AS/PS of two fully supply-shorted dummy MOS",
@@ -356,6 +567,28 @@
     "results/layout_review/pll_20261115/divider_fs_cpex/inputs/cd60730e9e4d_pll_cml_prescaler8_pdk_clean_pex.spice": "28bfc9c1570891beec1fa48ff9c2840a019db4947802ecc15d90cb2542859ec2",
     "results/layout_review/pll_20261115/divider_fs_cpex/inputs/f4e9cab86a4a_cml_to_cmos.spice": "f7a2149d9efb4657c7db2a80beacc105fd7a91ffbb25cdc9bca85d08ae78d8af",
     "results/layout_review/pll_20261115/divider_fs_cpex/inputs/f7fc63ee814e_sky130_pfet_lvt.spice": "50dfd3f8a0ebddd197bf5a4c2980d4253b9cc4fdc91377a076170192d0daf046",
+    "results/layout_review/pll_20261115/divider_rc_gear/fs_v1650_t85_hh_rcx/recovered_waveform_audit.json": "005fdb99785dd3e51a56c41d82c3485f8a1b8d6fd2b2db8a66aa750894ae3c72",
+    "results/layout_review/pll_20261115/divider_rc_gear/fs_v1650_t85_hh_rcx/simulator.log": "a1eaed2f6d82bfb820d6f325ecec4649740320127b4ddd6880c25adc1f3f9b96",
+    "results/layout_review/pll_20261115/divider_rc_gear/fs_v1650_t85_hh_rcx/tb.cir": "bb32c8d419540575271c182150a120e68dd1d4f9ee673e424add63ca1acc1f21",
+    "results/layout_review/pll_20261115/divider_rc_gear/fs_v1650_t85_hh_rcx/waveforms.raw": "1a977c05e9ea1d10fcd71dc85a167c00c52213628abe0da5e6283098c5b6b2f6",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/039e3816edd7_bias_dist.spice": "ed5469a635f8fa4c819f15927e5b63e292188073601f37b0e9ace74eea505881",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/099dff5fdc67_cml_delay_resistive.spice": "0cd48d933e061629a9eb44ee67811ac6311d2d1082bc574250dd3996b14f61ad",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/16f8aefc7813_cml_div2.spice": "0a4ab9d5f09a60cff3370d421e0d752eeab6e0fbc1fa2c46e6c01026659db9e9",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/28f85a598841_cml_latch.spice": "e9f5bbf45f935f629994573bb6266944595326b308a6600ad2905c72d906141e",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/3725cdd19b2a_serdes_cml_to_cmos_pvt_candidate_pdk_pex.spice": "f3910a06425ed04716d155f1b86f0a85769b4f6481fa912353436c4602057766",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/5127af616c6f_cml_to_cmos.spice": "f7a2149d9efb4657c7db2a80beacc105fd7a91ffbb25cdc9bca85d08ae78d8af",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/5726290e6239_cml_prescaler8.spice": "b8cb06687cd85ca281100806db82574c2d7e2a07e82aa32927bff2165de52442",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/5b561dc37dfa_sky130_pfet_lvt.spice": "50dfd3f8a0ebddd197bf5a4c2980d4253b9cc4fdc91377a076170192d0daf046",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/6b8d57f4cef1_cml_buffer.spice": "e6763361d8fc2da0b3ffe887395fa800f95ce4ba2fc8628d29ef917da8ca6e07",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/812f6b70d4b9_cml_to_cmos_pvt_candidate.spice": "f4bc4c6d288460b4ed7bfa8fb88c29a6c756c6ba0759b15f6bf606d78ecaa644",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/9548bdda8f19_sky130_primitives.spice": "cfab9a4f2820fb9c836e182f8ca34cb480f430118d8c439a88b8c5531c9a1f99",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/968aaa07e2f6_bandgap.spice": "553daa1afa8f3dd76f9e0cacd63964179ad0ca0f8c9ceede7307e70c0acb78fd",
+    "results/layout_review/pll_20261115/divider_rc_gear/inputs/c8ed658b964e_pll_cml_prescaler8_pdk_clean_rcx.spice": "7b1c07c9ac48c3ec84663bade5d53e6ae878b41da892fdfd5a7e2ff1491721fd",
+    "results/layout_review/pll_20261115/divider_rc_gear/tt_v1800_t27_tt_rcx/execution.json": "53bad9908f6dd56db8273ab7ab7cfff9cfba416752b0ff0b8816b11bfc93d4b8",
+    "results/layout_review/pll_20261115/divider_rc_gear/tt_v1800_t27_tt_rcx/tb.cir": "79f5547cbd73e63535c204b97cc2491c299bb4b530ef2bd4840d7f07180066e2",
+    "results/layout_review/pll_20261115/divider_rc_gear/tt_v1800_t27_tt_rcx/waveforms.raw": "115550ba4aba97a2fbdfac88c9b0acdb2deb901c3b5c4c3d9b74241e061da661",
+    "results/layout_review/pll_20261115/divider_rebuild/pll_cml_prescaler8_pdk/check.log": "c70fc9ecf753e0e1f6f36e8dbb8f1c32c35c487bb5c0ee32df67a4cc226bf689",
+    "results/layout_review/pll_20261115/divider_rebuild/pll_cml_prescaler8_pdk/pll_cml_prescaler8_pdk.mag": "ca4651fcf168edebffe110741bfb48f916e2acfd362a5867df608f7d4d973f33",
     "results/layout_review/pll_20261115/receiver/rc.log": "0b2c5cd2a9c0167764f7583d1830ba6b54334346fcb62c3634dcca6cf88f891f",
     "results/layout_review/pll_20261115/receiver/serdes_cml_to_cmos_pvt_candidate_pdk_rcx.spice": "97dc9651c08337700c9aaa069e64765d1e26fb026581985efba452a866cbb4af",
     "results/layout_review/pll_20261115/receiver/summary.json": "99ab75a87d3ad43db7a34cae027636ff5d6cf44af24f80ac6c771d235d2c5095"

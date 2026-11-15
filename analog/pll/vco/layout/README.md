@@ -7,7 +7,7 @@
 | [plan/](plan/) | 参数化摆位、尺寸和走线通道规划，不存放实际版图截图 |
 | [variants/sym9_pdk/](variants/sym9_pdk/) | 本次审阅的原几何、独立参考和视图 |
 | [variants/sym9_clean/](variants/sym9_clean/) | 撤除浮空 field-poly 的独立候选及清理清单 |
-| [variants/r6_pdk/](variants/r6_pdk/README.md) | 先前 31 单元共底板 bank、大环及 CML 叶单元；保留原身份 |
+| [variants/r6_pdk/](variants/r6_pdk/README.md) | 独立 bank、变容器及 CML 叶单元；错误的大环组装已撤销 |
 | `build_*_sym9_pdk.py` | 分层生成 bank → half-tank → delay/buffer → ring/core |
 | [清理工具](../../../../verification/layout/clean_field_poly.py) | 由 EXT 确认非器件、无接触孔的 field-poly 岛后，另建候选并重跑 DRC/LVS |
 | [layout_pex/run.py](../tb/layout_pex/run.py) | 完整物理核的器件几何／CPEX／原生 RC 比较，固定偏置校准来源 |

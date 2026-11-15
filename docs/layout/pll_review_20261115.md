@@ -9,7 +9,7 @@
 | [÷8＋轻 dummy](../../analog/pll/divider/layout/review.md) | 撤除浮空条；CPEX 两点正确；全量 RC 异常标注 `LAYOUT-PLL-DIV-RC-01`，暂停仿真、待版图核查提取及供电接入 |
 | [反馈接收器](../../analog/common/cml_to_cmos/layout/review.md) | 护环/偏置 dummy 合理；与提取 ÷8 联合通过两个局部点；原生 RC 扩散分配变化未审清 |
 | [LF](../../analog/pll/loop_filter/layout/review.md) | 原版与堆叠候选分别审阅，阻抗/电源分配与预充的边界单列；不自动采用新电容族 |
-| [顶层规划](../../analog/pll/top/layout/README.md) | 仍引用旧大环，反馈跨块路径偏长；更新真实尺寸与输入身份，不能把箭头图当布线/PEX |
+| [顶层规划](../../analog/pll/top/layout/README.md) | 错误大环及其顶层摆位草案已撤销；须围绕 sym9 内嵌 buffer 候选重新规划，尚无完整布线/PEX |
 
 各模块报告和固定 JSON 是详细证据入口，不把不同版本、偏置、激励和初始化下的通过数拼成 PLL 通过。完整 RC、当前实际负载、MOS45/无源角、失配、相噪/抖动和最终闭环仍需按所属模块完成；这次未修改 Fable 的电路采用参数。
 

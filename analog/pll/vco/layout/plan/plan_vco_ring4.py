@@ -1,8 +1,6 @@
 """Generate 1:1 physical floorplan for the 4-Stage Ring VCO (`pll_vco_ring4_sym9_s32p5`).
 
-Compares:
-1. Baseline 4-Stage Ring (`pll_vco_ring4_r6_pdk`: 211.2 x 130.6 um = 27,582 um^2)
-2. New 2x2 Interlocked 4-Stage Ring (`pll_vco_ring4_sym9_s32p5`: 103.3 x 89.2 um = 9,214 um^2, -66.6% area)
+Schematic placement of the sym9 bare ring; no comparison with the rejected large ring.
 
 Outputs:
 - analog/pll/vco/layout/plan/vco_ring4_plan.png
@@ -77,50 +75,7 @@ def draw_stage_macro(ax: plt.Axes, cx: float, cy: float, mirror_y: bool, q_name:
 
 
 def main() -> None:
-    fig, (ax_cmp, ax_ring) = plt.subplots(1, 2, figsize=(18, 8.5), dpi=150, gridspec_kw={"width_ratios": [1.0, 1.25]})
-
-    # Left Panel: 1:1 Footprint Comparison (Baseline 211.2 x 130.6 um vs New 103.3 x 89.2 um)
-    ax_cmp.set_title(
-        "1:1 Footprint Comparison: Baseline r6_pdk vs New Sym9 4-Ring\n"
-        "(27,582 um^2 -> 9,214 um^2 | -66.6% Area Reduction!)",
-        fontsize=10.5,
-        fontweight="bold",
-    )
-    add_box(
-        ax_cmp,
-        -105.6,
-        -65.3,
-        211.2,
-        130.6,
-        "Baseline pll_vco_ring4_r6_pdk\n211.2 x 130.6 um (27,582 um^2)\n\n(31-unit 2x2um banks)",
-        fc="#fee2e2",
-        ec="#b91c1c",
-        lw=1.5,
-        ls="--",
-        alpha=0.45,
-        fontsize=9.0,
-        text_color="#7f1d1d",
-    )
-    add_box(
-        ax_cmp,
-        -51.65,
-        -44.6,
-        103.3,
-        89.2,
-        "New pll_vco_ring4_sym9_s32p5\n103.3 x 89.2 um (9,214 um^2)\n(-66.6% Area!)\n\n4x Interlocked Sym9 Stages",
-        fc="#dbeafe",
-        ec="#1d4ed8",
-        lw=2.0,
-        alpha=0.85,
-        fontsize=9.0,
-        text_color="#1e3a8a",
-    )
-    ax_cmp.set_xlim(-118, 118)
-    ax_cmp.set_ylim(-78, 78)
-    ax_cmp.set_aspect("equal")
-    ax_cmp.grid(True, linestyle=":", alpha=0.4)
-    ax_cmp.set_xlabel("x (um)")
-    ax_cmp.set_ylabel("y (um)")
+    fig, ax_ring = plt.subplots(figsize=(10, 8.5), dpi=150)
 
     # Right Panel: Detailed 1:1 Floorplan of the New 2x2 Interlocked 4-Stage Ring
     ax_ring.set_title(
@@ -178,11 +133,8 @@ def main() -> None:
 
     plan_meta = dict(
         cell="pll_vco_ring4_sym9_s32p5",
-        baseline_bbox_um=[211.2, 130.6],
-        baseline_area_um2=27582.7,
         new_bbox_um=[103.3, 89.2],
         new_area_um2=9214.4,
-        area_reduction_pct=-66.6,
         quadrant_centers_um=dict(
             X0=[-26.2, 21.0],
             X1=[26.2, 21.0],

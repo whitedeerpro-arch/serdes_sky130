@@ -1,6 +1,6 @@
 # 版图文档入口
 
-[2026-11-15 PLL 独立审阅](pll_review_20261115.md)连接各模块的布局判断、提取与局部电气结果。项目级采用状态仍只查 [current.md](../status/current.md)，执行顺序查 [计划](../status/prelayout_plan.md)。
+[四模块阶段验收](pll_acceptance_20261115.md)与[2026-11-15 PLL 独立审阅](pll_review_20261115.md)连接各模块的布局判断、提取与局部电气结果。项目级采用状态仍只查 [current.md](../status/current.md)，执行顺序查 [计划](../status/prelayout_plan.md)。
 
 模块的 `analog/.../layout/README.md` 是稳定入口；`review.md` 写人工结论与边界；`plan/` 放规划；`variants/<身份>/` 放几何、独立参考和必要预览/小摘要。运行日志、EXT、临时脚本及波形留在追加式 `results/`，通过 `results/catalog/` 的固定路径和哈希引用。历史生成快照不反向改写。
 

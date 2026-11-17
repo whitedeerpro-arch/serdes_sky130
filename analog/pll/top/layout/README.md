@@ -6,4 +6,4 @@
 
 后续须围绕 [sym9 内嵌四缓冲候选](../../vco/layout/variants/sym9_clean/README.md)、[÷8 清理候选](../../divider/layout/variants/review_clean/README.md)和[反馈接收器](../../../common/cml_to_cmos/layout/README.md)重新规划，核对端口映射、真实负载、三路轻 dummy、控制线与电源回流。子模块通过不代表整核性能通过。
 
-根目录 `pll_core_r6k4q.mag` / `.tcl` 是更早导入的历史草案，未获当前 r6 整核资格。颜色不证明衬底隔离、护环或独立地已实现。
+更早导入的 `pll_core_r6k4q.mag` / `.tcl` 历史草案也已退出现行目录，原件、路径和哈希见[退役清单](../../../../results/catalog/retired_pll_top_20261117.json)。初始 Gemini 导入审计按该清单读取归档，不能据历史颜色图恢复为当前实现。

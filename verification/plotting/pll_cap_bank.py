@@ -51,7 +51,7 @@ def main() -> None:
     fig.text(.08, .035, "AC boundary: TT / 27 C, phase DC 1.5 V, control 0 / 1.8 V. Geometry shown is one phase-node bank.\n"
              "Independent floating plates are joined only within each bit. Dynamic code switching / mismatch / full PLL remain separate checks.", fontsize=9)
     fig.subplots_adjust(top=.89, bottom=.13)
-    out = ROOT / "docs/figures/layout/pll_r6_cap_bank.png"
+    out = ROOT / "docs/figures/layout/pll/pll_r6_cap_bank.png"
     fig.savefig(out, bbox_inches="tight")
     plt.close(fig)
     print(out)

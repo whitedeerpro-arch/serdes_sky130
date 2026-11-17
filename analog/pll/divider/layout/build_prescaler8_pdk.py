@@ -25,7 +25,7 @@ import shutil
 import subprocess
 import sys
 
-REPO = Path("/home/host/Desktop/workspace/simple_serdes_fork1")
+REPO = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(REPO / "verification/layout"))
 from geometry import Cell, pdk_device  # noqa: E402
 

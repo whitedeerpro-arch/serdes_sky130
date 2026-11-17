@@ -28,7 +28,7 @@ def main() -> None:
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=6, fontsize=8, frameon=False)
     fig.subplots_adjust(bottom=.26, top=.90, wspace=.25)
-    out = ROOT / "docs/figures/layout/pll_r6_leaves.png"
+    out = ROOT / "docs/figures/layout/pll/pll_r6_leaves.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, bbox_inches="tight")
     plt.close(fig)

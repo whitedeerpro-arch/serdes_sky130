@@ -10,6 +10,8 @@
 
 原始包在 `/opt/serdes_archive/layout_imports/20261113T080522Z/gemini_original.tar.gz`，删除前核对了归档和合并目标。[导入清单](import.json)记录实际去向；原始逐文件清单在同目录 `merge.json`。图中的外观、命名或原说明里的“生产级”不代表验收通过。
 
+该清单记录的是导入时位置。已失效的完整 PLL 草案随后移入[退役归档](../../results/catalog/retired_pll_top_20261117.json)，初始审计按哈希读取原件；VCO 目录的重复 CML buffer 种子改为指向 `common/cml_buffer/layout/` 的相对链接。现行候选仍从模块 README 进入，不从历史来件恢复覆盖。
+
 生成器已改用仓库相对路径。LDO/Bias 的入口必须显式指定新输出目录，避免覆盖候选或已复核几何：
 
 ```bash

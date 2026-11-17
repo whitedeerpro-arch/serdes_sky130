@@ -144,6 +144,7 @@ LAYER_STYLE = {
     "pmoslvt":       dict(fc="#f43f5e", ec="#9f1239", alpha=0.35, z=5, label="pmos/lvt"),
     "varactor":      dict(fc="#f97316", ec="#c2410c", alpha=0.45, z=5, label="varactor"),
     "xhrpoly":       dict(fc="#d946ef", ec="#86198f", alpha=0.72, z=4, label="high_po resistor"),
+    "ppolyres":      dict(fc="#d8b4fe", ec="#7e22ce", alpha=0.72, z=4, label="high_po resistor"),
     "xpolycontact":  dict(fc="#a21caf", ec="#4a044e", alpha=0.85, z=6, label="res contact"),
     "locali":        dict(fc="#a78bfa", ec="#6d28d9", alpha=0.55, z=6, label="li1 (locali)"),
     "polycont":      dict(fc="#78350f", ec="#451a03", alpha=0.92, z=7, label="licon (contact)"),

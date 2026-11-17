@@ -15,3 +15,10 @@ docs/figures/**/*.svg
 # Release tarball duplicates the tracked release directory.
 releases/*.tar.gz
 .history_sta
+
+# Raw layout extraction and root waveforms belong in append-only results/.
+/analog/**/layout/**/*.log
+/analog/**/layout/**/*.ext
+/*.vcd
+/*.raw
+/*.fst

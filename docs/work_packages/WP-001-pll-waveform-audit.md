@@ -1,6 +1,6 @@
 # WP-001：PLL 冷角原始波形只读复核
 
-你是局部证据复核执行者。目标是独立重算两个已有工作态测试，不设计电路、不启动仿真。工作目录是 `/home/host/Desktop/workspace/simple_serdes_fork1`；环境命令用 `uv run python`。遵守[工作包约定](README.md)。
+你是局部证据复核执行者。目标是独立重算两个已有工作态测试，不设计电路、不启动仿真。工作目录是 本仓库根目录；环境命令用 `uv run python`。遵守[工作包约定](README.md)。
 
 ## 输入
 

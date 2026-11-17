@@ -28,6 +28,9 @@ vvp /tmp/pll_startup.vvp
 verilator --lint-only --top-module pll_startup_supervisor digital/pll/rtl/pll_startup_supervisor.sv
 ```
 
+默认不生成波形。需要调试时先建立新的结果目录，再运行
+`vvp /tmp/pll_startup.vvp +VCD=results/digital/pll/<run_id>/supervisor.vcd`；不再向仓库根目录写 `supervisor.vcd`。
+
 ## 粗码控制
 
 RTL：`rtl/pll_coarse_ctrl.sv`（I-18），例化[公共监测单元](../common/README.md)的`mon_sync`/`mon_persist`。输入为[Vctrl窗口检测](../../analog/pll/coarse/README.md)的异步hi/lo、温度档`tclass`和各档停止门限（梯码+选用哪一侧比较器）；输出VCO粗码与两条门限梯的码。

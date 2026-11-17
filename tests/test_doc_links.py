@@ -26,6 +26,9 @@ def test_relative_links_resolve():
     broken = []
     for p in _markdown_files():
         for target in LINK.findall(FENCE.sub("", p.read_text(errors="replace"))):
+            if target.lower().startswith("file:"):
+                broken.append(f"{p.relative_to(ROOT)} -> local file URL; use a relative link: {target}")
+                continue
             if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target) or target.startswith("#"):
                 continue
             path = unquote(target.split("#", 1)[0])

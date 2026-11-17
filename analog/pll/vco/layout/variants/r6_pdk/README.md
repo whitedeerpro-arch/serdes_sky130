@@ -27,7 +27,7 @@ uv run python analog/pll/vco/tb/layout_cap_unit/ends.py --pex results/layout/pll
 
 `pll_vco_cap_bank5_shared.mag`及对应参考是新的同bit共底板候选。每个bit有一块浮动M3板和集中折指开关，31颗2×2 MIM与原总开关宽不变；这与原31个独立浮动板的参考有电气差异，不能称作原电路的LVS等价几何。五组分别检查，再检查整体和未合并器件数。生成器同时输出独立EXT矩阵的`_cap.spice`，用于上述局部台；旧工具产生的`_pex.spice`有节点错移，不能用于结论。
 
-完整bank输入时，端点台默认按原12fF预算扣除bank已覆盖的连接，保留其余相位连线预算；`--keep-full-wire`则把12fF完整保留为额外负载压力。原理图与原r6全角证据不改，候选仍需全角窗口、切码动态及失配复核。实际几何及电容图见[bank图](../../../../../../docs/figures/layout/pll_r6_cap_bank.png)。
+完整bank输入时，端点台默认按原12fF预算扣除bank已覆盖的连接，保留其余相位连线预算；`--keep-full-wire`则把12fF完整保留为额外负载压力。原理图与原r6全角证据不改，候选仍需全角窗口、切码动态及失配复核。实际几何及电容图见[bank图](../../../../../../docs/figures/layout/pll/pll_r6_cap_bank.png)。
 
 ## 已撤销的旧大环
 

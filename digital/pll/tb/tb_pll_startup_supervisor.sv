@@ -7,6 +7,7 @@ module tb_pll_startup_supervisor;
     wire precharge_en, pfd_rst_b, cp_en, locked, busy, fault;
     wire [2:0] state_id, fault_code;
     integer seen;
+    string vcd_path;
     pll_startup_supervisor #(
         .PRECHARGE_CYCLES(4), .GAP_CYCLES(2), .PFD_FLUSH_CYCLES(2),
         .GOOD_WINDOWS(3), .BAD_WINDOWS(2), .QUALITY_TIMEOUT_CYCLES(6),
@@ -38,7 +39,9 @@ module tb_pll_startup_supervisor;
         if (fault && (cp_en || precharge_en || locked)) $fatal(1,"Fault did not clamp outputs");
     end
     initial begin
-        $dumpfile("supervisor.vcd"); $dumpvars(0,tb_pll_startup_supervisor);
+        if ($value$plusargs("VCD=%s", vcd_path)) begin
+            $dumpfile(vcd_path); $dumpvars(0,tb_pll_startup_supervisor);
+        end
         tick(2); rst_n=1; enable=1; restart();
         tick(2);
         if (state_id!=1 || precharge_en) $fatal(1,"Started before readiness");

@@ -22,7 +22,7 @@
 
 [生成器与候选几何](../../analog/pll/vco/layout/variants/r6_pdk/README.md)包括真正的 r6 电容半单元，以及沿用 Gemini 对称主体的变容器。半单元有两指共享漏极、正确的 MIM 上/下极板与三个外部端口；变容器去掉穿入保护环的错误 dummy，保留四个真实指、走线与保护环。
 
-![本轮真实叶单元几何](../figures/layout/pll_r6_leaves.png)
+![本轮真实叶单元几何](../figures/layout/pll/pll_r6_leaves.png)
 
 半单元同时进行了放置对照和局部回灌。它的结构是振荡节点→MIM→浮动底板/开关漏极→NMOS→VSS。关断时相位节点看到的是 MIM 与底板回地寄生的串联，再加直接寄生；不能把底板当理想悬空，也不能直接把整颗 MIM 算到地。裸 MIM、开关/局部连接的拆件提取用于辨识来源，拆件改变场与屏蔽，不能将两个结果当成严格可加的分账。
 
@@ -36,7 +36,7 @@
 
 实际bank为51.07×18.61 µm，五组和整体均full-rule DRC 0、LVS/导出端口通过；另外核对31颗MIM、62指0.75/0.15 NMOS、体接VSS及五组连接。共用底板减少重复接触和小单元的周长开销；MIM上极板接相位，底板经NMOS接地的拓扑保留。
 
-![实际bank及局部电容校准](../figures/layout/pll_r6_cap_bank.png)
+![实际bank及局部电容校准](../figures/layout/pll/pll_r6_cap_bank.png)
 
 当前2×2 µm MIM的TT标称为9.30225 fF：PDK面积项2 fF/µm²，周长项0.19 fF/µm，含尺寸修正−0.025 µm。不是仅用面积4×2=8 fF，也不是5 fF/µm²。
 

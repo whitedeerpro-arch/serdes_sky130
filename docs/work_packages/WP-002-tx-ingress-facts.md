@@ -1,6 +1,6 @@
 # WP-002：TX 字入口事实与理想选择表
 
-你是事实提取执行者。本包给实际字捕获设计准备可复核输入；不选架构、不声称模拟时序满足。工作目录 `/home/host/Desktop/workspace/simple_serdes_fork1`，命令用 `uv run python`，遵守[工作包约定](README.md)。
+你是事实提取执行者。本包给实际字捕获设计准备可复核输入；不选架构、不声称模拟时序满足。工作目录 本仓库根目录，命令用 `uv run python`，遵守[工作包约定](README.md)。
 
 ## 固定输入
 

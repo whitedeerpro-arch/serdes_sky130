@@ -7,6 +7,7 @@ Full-chip cells are deliberately outside this first leaf-level review.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -32,6 +33,24 @@ CASES = [
 ]
 
 
+def imported_mags(manifest):
+    """Keep the historical import audit reproducible after a draft is retired."""
+    catalog = REPO / "results/catalog/retired_pll_top_20261117.json"
+    retired = {r["former_path"]: r for r in json.loads(catalog.read_text())["files"]} if catalog.exists() else {}
+    paths = []
+    for relative in manifest["imported_files"]:
+        if not relative.endswith(".mag"):
+            continue
+        path = REPO / relative
+        if not path.is_file():
+            record = retired[relative]
+            path = (REPO / record["archive"]).resolve()
+            if not path.is_relative_to(REPO / "results") or hashlib.sha256(path.read_bytes()).hexdigest() != record["sha256"]:
+                raise ValueError(f"Retired import identity changed: {relative}")
+        paths.append(path)
+    return paths
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output-dir", type=Path, required=True)
@@ -40,7 +59,7 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=False)
     shutil.copy2(__file__, out / "review.py")
     manifest = json.loads((REPO / "analog/layout/import.json").read_text())
-    mag_paths = [REPO / p for p in manifest["imported_files"] if p.endswith(".mag")]
+    mag_paths = imported_mags(manifest)
     report = {
         "scope": "initial six leaf cells; not full-chip validation",
         "imported_mag_count": len(mag_paths),

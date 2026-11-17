@@ -163,3 +163,5 @@
 - 2026-11-17 / Codex / 继续审阅提交：验证工具与 LF 已分批提交；新版 LF 七点 AC 完整、28 组 100 ns 预充筛查通过，未提取新 RC。r4/r5/CMOS 几何独立 DRC/LVS 通过，r5/CMOS 生成器重建身份匹配；固定旧波形重算 19＋59 份，r5 冷角 RC 失败及旧 hh/ll 标签未应用/include 未冻结的限制保留。新 bench 冻结身份、补无源角与双极性检查，尚未运行新 MOS45/MC。sync2 新旧几何身份不同，未移植旧通过结论。结果追加 results/layout_review/pll_pending_20261117/，入口 docs/layout/pll_pending_review_20261117.md；LDO/Bias/CP 未审阅，旧 divider RC 仍暂停，本任务 NG/driver 已结束，无后台名额占用。
 
 - 2026-11-17 / Codex / 本轮收尾：dabbd8f、b350157、e19cd36、84a53f7 分别提交工具、LF、新接收器/CMOS 候选与旧训练清理；完整工作区 350 项测试通过，570 份固定证据哈希核对通过。剩余 409 个未提交文件（49 修改/360 未跟踪）按目录记录于 docs/history/worktree_review_20261117.md 与 results/catalog/worktree_inventory_20261117.json。sync2 身份差异及 r5 冷角 RC 失败仍开，LDO/Bias/CP 未验收，原 divider RC 分支暂停，无本任务后台进程。
+
+- 2026-11-17 / Codex / 仓库维护交付：dc60735 归档 29 个源码运行产物与两份失效 PLL 草案，六组相同内容改相对别名，撤下 28 个冗余占位；bc4c3df 整理导航/旧状态入口并保留历史。supervisor 波形改显式路径导出，源码产物审计 0。完整工作区 350 项测试、导航 18 项、两种 RTL 波形模式通过；历史导入 40 MAG 可读，570 份既有 PLL 证据及工作修订哈希不变。明细见 docs/history/repository_maintenance_20261117.md 与 results/catalog/repository_cleanup_20261117.json。剩余 347 个未提交文件（39 修改/308 未跟踪）保留待分别审阅；无新模拟仿真/后台资源占用，divider RC 仍暂停。

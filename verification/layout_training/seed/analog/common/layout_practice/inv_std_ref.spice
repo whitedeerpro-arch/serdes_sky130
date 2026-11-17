@@ -1,7 +1,0 @@
-* Reference netlist for the hand-drawn stacked inverter (T2 of docs/layout/tasks.md).
-* Same circuit as inv_practice_ref.spice, subcircuit renamed to inv_std.
-* Port order: d g vdd vss.
-.subckt inv_std d g vdd vss
-Xn d g vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15
-Xp d g vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
-.ends inv_std

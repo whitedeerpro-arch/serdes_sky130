@@ -85,7 +85,7 @@ def netgen(layout: Path, top: str, ref: Path, out_log: Path, cwd: Path) -> subpr
     The packaged netgen here was installed under ~/.local/eda but its startup
     script still loads /usr/lib/netgen/tcl/tclnetgen.so and netgenexec never
     sources it, so ``netgen -batch`` exits silently.  We source a copy with the
-    library path fixed; see docs/layout/first_batch.md.
+    library path fixed.
     """
     shim = cwd / "_netgen_local.tcl"
     text = NETGEN_TCL.read_text().replace(

@@ -1,6 +1,0 @@
-* T2b practice reference: same circuit as inv_std, both devices folded into
-* two fingers (device values unchanged: nfet w=4, pfet w=8, l=0.15).
-.subckt inv_std2 d g vdd vss
-Xn d g vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15 nf=2
-Xp d g vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15 nf=2
-.ends inv_std2

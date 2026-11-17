@@ -47,7 +47,7 @@ SKY130、1.8 V、4 Gb/s NRZ 的 SerDes 电路设计：250 MHz 参考 → 2 GHz �
 
 | 想看 | 去哪里 |
 |---|---|
-| 版图状态与后续安排 | [当前任务状态](docs/layout/tasks.md)、[旧批次清理记录](docs/layout/batch_status.md)；[教学材料](docs/layout/deepseek_training.md)独立保留 |
+| 版图审阅与后续安排 | [版图文档入口](docs/layout/README.md)、[当前状态](docs/status/current.md)、[执行计划](docs/status/prelayout_plan.md) |
 | 规格、架构、版本 | [docs/overview](docs/overview/) |
 | 模块层次、边界、模型与迭代 | [交互工作台](web/design/index.html)、[使用说明](web/design/README.md)、[详细验证范围](docs/overview/development_map.md) |
 | 各模块当前设计 | [docs/design](docs/design/) |

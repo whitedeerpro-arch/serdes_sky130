@@ -1,5 +1,9 @@
 # 实验记录（历史）
 
+- [仓库文件维护（2026-11-17）](repository_maintenance_20261117.md)：运行产物归档、失效草案退役、共享资源去重、导航与可复现路径维护，不改变电路采用或验收资格。
+
+- [工作流与文档整理（2026-11-13）](workflow_reorganization_20261113.md)：入口职责、执行里程碑、完整旧计划/状态/协作日志快照及核对范围。当前项目采用/验证看[current.md](../status/current.md)，工程任务看[执行计划](../status/prelayout_plan.md)。
+
 - [VCO共同码三温覆盖补齐](vco_fixed_code_coverage.md)：12点补测将原42组补为45组静态可达，阵列未增位，闭环和动态接管另行验证。
 
 - [末级建立时间与选择时钟改进](tx_final_retime_characterization.md)：原样校准→时移→实际缓冲→完整TT/FS眼图回归；保留数值失败和局限。

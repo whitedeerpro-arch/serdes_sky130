@@ -1,6 +1,6 @@
 # 当前状态（唯一入口）
 
-**这一页是项目当前数字的唯一出处。** README、development_map、prelayout_plan、工作台、`config/*_working_revision.toml` 只链接到这里，不再复述数字；设计文档写原理与历史，结论变了先改这里。规则见[架构决定](architecture_decisions.md)第 10 条。
+**这一页是项目级采用状态和验证数字的唯一汇总。** README、模块地图、计划和工作台引用本页；模块设计文档保留详细结论与实际边界，工作修订保留机器参数和历史身份。规则见[架构决定](architecture_decisions.md)第10条与[文档职责](../README.md)。采用候选前先更新模块证据，接受后同步本页；执行队列见[计划](prelayout_plan.md)。
 
 基准组合：本地标签 `baseline-prelayout-20261113`（PLL r6、TX v3/extra5＋当前驱动、RX ac_trim/c2/W40＋宿主字路径、Bias/B2、HV18 r4）。更新于 2026-11-13。
 

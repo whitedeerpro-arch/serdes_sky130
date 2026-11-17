@@ -1,4 +1,4 @@
-"""Find runtime artifacts in source directories; archive them with byte receipts.
+"""Audit source artifacts and retired paths; archive runtime files with receipts.
 
 Only layout logs/EXT and repository-root waveform files are selected. Test
 fixtures, circuit sources, results and release baselines are outside this set.
@@ -29,6 +29,20 @@ def runtime_files():
     files.update(p for p in ROOT.iterdir()
                  if p.is_file() and not p.is_symlink() and p.suffix in (".vcd", ".raw", ".fst"))
     return sorted(files)
+
+
+def restored_retired_files():
+    """Detect regeneration even when a retired path is ignored or a broken link."""
+    restored = set()
+    for catalog in sorted((ROOT / "results/catalog").glob("retired_*.json")):
+        for row in json.loads(catalog.read_text())["files"]:
+            relative = Path(row["former_path"])
+            if relative.is_absolute() or ".." in relative.parts:
+                raise ValueError(f"Invalid retired path in {catalog}: {relative}")
+            path = ROOT / relative
+            if path.exists() or path.is_symlink():
+                restored.add(path)
+    return sorted(restored)
 
 
 def archive(output):
@@ -72,7 +86,11 @@ def main():
         for path in files:
             print(path.relative_to(ROOT))
         print(f"Runtime artifacts in source directories: {len(files)}")
-        raise SystemExit(bool(files))
+        restored = restored_retired_files()
+        for path in restored:
+            print(f"Retired path restored: {path.relative_to(ROOT)}")
+        print(f"Restored retired artifacts: {len(restored)}")
+        raise SystemExit(bool(files or restored))
 
 
 if __name__ == "__main__":

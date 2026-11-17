@@ -1,5 +1,7 @@
 # 实验记录（历史）
 
+- [旧版图总览与生成链清退（2026-11-17）](legacy_layout_retirement_20261117.md)：失效图表、生成脚本和 LDO/Bias 原交付声明的证据、依赖边界与追溯方式。
+
 - [仓库文件维护（2026-11-17）](repository_maintenance_20261117.md)：运行产物归档、失效草案退役、共享资源去重、导航与可复现路径维护，不改变电路采用或验收资格。
 
 - [工作流与文档整理（2026-11-13）](workflow_reorganization_20261113.md)：入口职责、执行里程碑、完整旧计划/状态/协作日志快照及核对范围。当前项目采用/验证看[current.md](../status/current.md)，工程任务看[执行计划](../status/prelayout_plan.md)。

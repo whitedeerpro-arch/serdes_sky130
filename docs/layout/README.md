@@ -11,3 +11,5 @@
 PFD、接收器、÷8 和 LF 的源码候选目录中原有的原始 EXT/日志已移入结果归档，逐文件哈希与旧/新位置见 [迁移清单](../../results/catalog/pll_layout_source_exports_20261115.json)。生成器安装步骤同步停止复制原始日志；几何和电气快照的身份不变。
 
 [2026-11-17 待提交工作复核](pll_pending_review_20261117.md)记录新版 LF、全速接收器/CMOS 分频候选与验证工具；原三叠层 divider 的 RC 暂停状态不变。
+
+[旧总览与生成链清退](../history/legacy_layout_retirement_20261117.md)记录 `ldo_bias_tx_master_overview` 等六张失效总览、七个旧生成器及 LDO/Bias 原交付说明的审查。历史导入清单保留原始路径，退役清单提供归档位置与哈希；现行绘图库和几何种子保留。

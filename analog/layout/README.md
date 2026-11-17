@@ -1,10 +1,10 @@
 # 版图入口
 
-当前采用状态见[项目当前状态](../../docs/status/current.md)。模块几何放在各自的 `layout/`；本目录只放共用绘图库、交付来源和总览。生成/检查输出放 `results/layout/`，不在源码目录提取。
+当前采用状态见[项目当前状态](../../docs/status/current.md)，PLL 审阅见[版图文档入口](../../docs/layout/README.md)。模块几何放在各自的 `layout/`；本目录保留共用绘图库和历史交付来源。生成/检查输出放 `results/layout/`，不在源码目录提取。
 
 ## Gemini 来件合并
 
-2026-11-13 已将 `analog_ldo_optimized/analog/` 合并进本仓库 `analog/`，并删除原来的重复目录。已有源码逐文件相同，没有覆盖电路改动；嵌套 `to merge` 包中的相同文件只保留模块内一份。六个共用 Python 文件归入 `scripts/`，四张总览归入 `overviews/`。旧 DS 已撤下文件的重复副本只归档，没有恢复到工作目录。
+2026-11-13 已将 `analog_ldo_optimized/analog/` 合并进本仓库 `analog/`，并删除原来的重复目录。已有源码逐文件相同，没有覆盖电路改动；嵌套 `to merge` 包中的相同文件只保留模块内一份。导入时六个共用 Python 文件归入 `scripts/`，四张总览归入 `overviews/`。旧 DS 已撤下文件的重复副本只归档，没有恢复到工作目录。
 
 来件来自不能使用 Magic、只能看到少量本地内容的 Web 环境，按排布草案吸收。下面的物理检查定位实现缺口；排布本身的优点、取舍和后续方案见[PLL 排布评估](../../docs/layout/pll_r6.md)。
 
@@ -12,14 +12,9 @@
 
 该清单记录的是导入时位置。已失效的完整 PLL 草案随后移入[退役归档](../../results/catalog/retired_pll_top_20261117.json)，初始审计按哈希读取原件；VCO 目录的重复 CML buffer 种子改为指向 `common/cml_buffer/layout/` 的相对链接。现行候选仍从模块 README 进入，不从历史来件恢复覆盖。
 
-生成器已改用仓库相对路径。LDO/Bias 的入口必须显式指定新输出目录，避免覆盖候选或已复核几何：
+2026-11-17 已撤下七个旧 suite/打包生成器和六张总览，包括 `ldo_bias_tx_master_overview`。它们使用通用 MOS 绘图、硬编码面积和未验证的器件/等价声明；运行整包还会重新生成已否决的 PLL 顶层。原件与 SHA256 见[退役清单](../../results/catalog/retired_layout_suites_20261117.json)，判断依据和恢复方法见[审查记录](../../docs/history/legacy_layout_retirement_20261117.md)。旧模块 README 的原文也已归档，不再作为现行物理指标。
 
-```bash
-uv run python analog/common/ldo/layout/build_ldo_suite.py --output-dir results/layout/gemini_ldo_redraw/new_run
-uv run python analog/common/bias/layout/build_bandgap_suite.py --output-dir results/layout/gemini_bias_redraw/new_run
-```
-
-`scripts/` 中的旧打包入口仍按其先后依赖生成中间包，输出限定在忽略的 `analog/layout/work/`，只用于复现原候选。当前单元改进直接放对应模块，不从旧整包覆盖回来。
+`scripts/layout_core.py` 仍是当前 PDK 阵列预览和 PLL 绘图工具的公共依赖，继续维护。保留的原始 MAG/TCL/参考网表用于导入审计及明确引用它们的几何种子；禁止从历史整包恢复覆盖现行候选。各模块入口区分历史种子、PDK 迭代与验收证据。
 
 ## 首轮独立复核（2026-11-13）
 

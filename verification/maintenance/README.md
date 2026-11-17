@@ -10,6 +10,8 @@ uv run python verification/maintenance/repository_hygiene.py audit
 
 检查会发现 `analog/**/layout/` 的原始日志/EXT，以及仓库根目录的 VCD/raw/fst 波形，包括已被 Git 忽略的文件；发现时返回非零。测试目录的 EXT fixture、器件参考、几何与提取网表不在清理集合。
 
+检查同时读取 `results/catalog/retired_*.json` 的 `files[].former_path`，拒绝已清退文件重新出现在源码区（包括软链接）。旧大环顶层、旧整包生成器与失效总览因此不会被悄悄恢复。退役清单记录明确判定过的文件，不按文件年龄或所有未提交文件自动删除。下方 `archive` 只搬运行产物；重新出现的退役文件需复核来源，不能直接当作原件覆盖归档。
+
 需要清理时显式给新目录：
 
 ```bash

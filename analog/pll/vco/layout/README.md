@@ -12,7 +12,7 @@
 | [清理工具](../../../../verification/layout/clean_field_poly.py) | 由 EXT 确认非器件、无接触孔的 field-poly 岛后，另建候选并重跑 DRC/LVS |
 | [layout_pex/run.py](../tb/layout_pex/run.py) | 完整物理核的器件几何／CPEX／原生 RC 比较，固定偏置校准来源 |
 
-运行中间文件、EXT、检查日志、波形和失败尝试统一留在 `results/` 的新目录。实际几何预览已从 `plan/` 移到 `variants/sym9_pdk/views/`，所有文档引用同步检查；源码依赖通过 `project.ROOT` 或 `__file__` 解析，不依赖工作目录和原项目绝对路径。
+运行中间文件、EXT、检查日志、波形和失败尝试统一留在 `results/` 的新目录。实际几何预览已从 `plan/` 移到 `variants/sym9_clean/views/`，所有文档引用同步检查；源码依赖通过 `project.ROOT` 或 `__file__` 解析，不依赖工作目录和原项目绝对路径。
 
 ```bash
 uv run python verification/layout/review_cell.py \

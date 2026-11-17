@@ -1,8 +1,0 @@
-* Current baseline: THREE fixed CML /2 cells, taps /2 /4 /8.
-* No /16 cell and no full-rate programmable CML counter on this path.
-* Tap outputs need explicit receiver/fanout loading in the bench.
-.subckt pll_cml_prescaler8 clkp clkn q2p q2n q4p q4n q8p q8n vbias vdd vss
-X2 clkp clkn q2p q2n m2p m2n vbias vdd vss pll_cml_div2
-X4 q2p q2n q4p q4n m4p m4n vbias vdd vss pll_cml_div2
-X8 q4p q4n q8p q8n m8p m8n vbias vdd vss pll_cml_div2
-.ends pll_cml_prescaler8

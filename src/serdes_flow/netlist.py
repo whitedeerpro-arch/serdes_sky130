@@ -4,7 +4,7 @@ Reads the project's .spice files (subcircuits with `+ params:` defaults, instanc
 {expr} overrides, R / C elements), flattens a top subcircuit and returns primitive devices with
 hierarchical node names.  Leaves are PDK devices (sky130_fd_pr__*) and R / C elements; anything
 else that is not defined is reported as unknown.  Expressions are evaluated with SPICE number
-suffixes and floor / sqrt / min / max / abs.  Enough for the project's netlists, not a SPICE parser.
+suffixes and floor / ceil / sqrt / min / max / abs.  Enough for the project's netlists, not a SPICE parser.
 """
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def _expr(text: str, scope: dict) -> float:
     # SPICE literals with suffixes inside expressions, e.g. 0.6p
     s = re.sub(r"(?<![\w.])(\d+\.?\d*|\.\d+)(meg|[tgkmunpf])(?![\w(])",
                lambda m: repr(float(m[1]) * _SUFFIX[m[2].lower()]), s)
-    env = dict(floor=math.floor, sqrt=math.sqrt, min=min, max=max, abs=abs, __builtins__={})
+    env = dict(floor=math.floor, ceil=math.ceil, sqrt=math.sqrt, min=min, max=max, abs=abs, __builtins__={})
     return float(eval(s, env, dict(scope)))
 
 

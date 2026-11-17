@@ -18,7 +18,7 @@ import time
 
 import numpy as np
 
-from serdes_flow import bias, rcorner, spice
+from serdes_flow import bias, clock, rcorner, spice
 from serdes_flow.corners import Condition
 from serdes_flow.project import ROOT
 from serdes_flow.waves import crossings
@@ -70,6 +70,9 @@ def deck(c, rc, code, vctrl, variant, trim, a, camp):
     lines += ["Xpll ref rst_b vbn vbp ibuf vbias cfg0 cfg1 cfg2 cfg3 cfg4 pre_ref pre_en ctrl z up dn fb0 "
               "b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n vdd vq 0 pll_core_r6k4q",
               "Ikick xpll.xclock.v0p xpll.xclock.v0n PWL(0 1u 20p 1u 21p 0)",
+              # the simulator has no noise: a CML divider latch can sit at its symmetric operating point for 10-20 ns
+              # (FS 1.65 V 85 C hh, frontend_r6/divider_fs_hot*); 20 uA for 40 ps breaks it, as noise does on chip
+              *[f"Ikick{n} {n}p {n}n PWL(0 0 1n 0 1.01n 20u 1.05n 20u 1.06n 0)" for n in ("d02", "d04", "d08")],
               ".nodeset v(xpll.xclock.xfb0.xrestore.qp)=0 v(xpll.xclock.xfb0.xrestore.qn)={supply}"]
     for k in range(4):
         for sd in ("p", "n"):
@@ -91,16 +94,7 @@ def analyse(path, a):
     w = spice.Waves(path)
     t = w.t
     ref, fb = nk.rising(t, w["v(ref)"]), nk.rising(t, w["v(fb0)"])
-    ref, fb = ref[ref > 55e-9], fb[fb > 55e-9]
-    idx = np.clip(np.searchsorted(fb, ref), 1, len(fb) - 1)
-    near = np.where(np.abs(fb[idx] - ref) < np.abs(fb[idx - 1] - ref), fb[idx], fb[idx - 1])
-    e = near - ref
-    e_final = float(np.median(e[-40:]))
-    per = np.diff(near, prepend=near[0] - nk.TREF)
-    cum = np.cumsum(per)
-    mean16 = np.array([(cum[i] - (cum[i - 16] if i >= 16 else 0.0)) / min(i + 1, 16) for i in range(len(per))])
-    bad = (np.abs(e - e_final) > 20e-12) | (np.abs(mean16 / nk.TREF - 1) > 1e-4)
-    capture = float(ref[bad].max() - 52e-9) if bad.any() else 0.0
+    lock = clock.feedback_lock(ref, fb, start=55e-9, stop=float(t[-1]), period=nk.TREF)
     late = t > t[-1] - 200e-9
     b0 = w["v(b0p)"][late] - w["v(b0n)"][late]
     v0 = w["v(xpll.xclock.v0p)"][late] - w["v(xpll.xclock.v0n)"][late]
@@ -108,9 +102,14 @@ def analyse(path, a):
     r = ed[sg > 0]
     q, vb = w["v(vq)"][late], w["v(xpll.vbias_q)"][late]
     ctrl = w["v(ctrl)"][t > t[-1] - 100e-9]
-    return dict(capture_s=capture, locked_at_end=bool(not bad[-60:].any()), offset_s=e_final, e_pp_last_s=float(np.ptp(e[-40:])),
-                vctrl_final=float(np.mean(ctrl)), vctrl_ripple=float(np.ptp(ctrl)), f_out=float((len(r) - 1) / (r[-1] - r[0])) if len(r) > 2 else float("nan"),
+    return dict(**lock,
+                vctrl_final=float(np.mean(ctrl)), vctrl_ripple=float(np.ptp(ctrl)), f_out=float((len(r) - 1) / (r[-1] - r[0])) if len(r) > 2 else None,
                 vco_swing=float(np.ptp(v0)), buf_swing=float(np.ptp(b0)), vq_mean=float(np.mean(q)), vq_pp=float(np.ptp(q)), vbias_q_pp=float(np.ptp(vb)))
+
+
+def case_dir(camp, spec, variant, offset=0):
+    suffix = f"_o{offset:+d}" if offset else ""
+    return camp / f"{spec.replace(':', '_')}_{variant}{suffix}"
 
 
 def main():
@@ -135,7 +134,7 @@ def main():
         c = Condition.parse(cond)
         key, code, vctrl = ent[(spec, var)] = entry(table, spec, var, a.code_offset)
         trim = trims[f"{c.process}:{rc}"]["trim"]
-        d = camp / f"{spec.replace(':', '_')}_{var}" + (f"_o{a.code_offset:+d}" if a.code_offset else "")
+        d = case_dir(camp, spec, var, a.code_offset)
         if spice.case_output(d, "run", "loop.raw", a.stop) is not None:
             continue
         jobs.append((deck(c, rc, code, vctrl, var, trim, a, camp / "snap"), spice.next_run_dir(d, "run"),
@@ -145,7 +144,7 @@ def main():
             print(f"FAILED {ex.run_dir}: {ex.log_failures[:2]}", flush=True)
     rows = {}
     for spec, var in plan:
-        d = camp / f"{spec.replace(':', '_')}_{var}" + (f"_o{a.code_offset:+d}" if a.code_offset else "")
+        d = case_dir(camp, spec, var, a.code_offset)
         p = spice.case_output(d, "run", "loop.raw", a.stop)
         if p is None:
             print(f"{spec} {var}: missing")
@@ -153,9 +152,7 @@ def main():
         key, code, vctrl = ent[(spec, var)]
         r = analyse(p, a)
         rows[f"{spec}:{var}"] = dict(vco_entry=key, code=code, vctrl_model=vctrl, **r)
-        print(f"{spec:18s} {var:3s} code {code:2d}: capture {r['capture_s'] * 1e9:6.0f} ns, locked {r['locked_at_end']}, offset {r['offset_s'] * 1e12:6.1f} ps "
-              f"(pp {r['e_pp_last_s'] * 1e12:.2f}), Vctrl {r['vctrl_final']:.3f} V (model {vctrl:.3f}, ripple {r['vctrl_ripple'] * 1e3:.1f} mV), "
-              f"f {r['f_out'] / 1e9:.5f} GHz, VCO {r['vco_swing'] * 1e3:.0f} / buffer {r['buf_swing'] * 1e3:.0f} mVpp, vq {r['vq_mean']:.4f} V pp {r['vq_pp'] * 1e3:.2f} mV", flush=True)
+        print(spec, var, code, json.dumps(r, allow_nan=False), flush=True)
     camp.mkdir(parents=True, exist_ok=True)
     (camp / "summary.json").write_text(json.dumps(dict(args=vars(a), rows=rows), indent=1))
     print(camp.relative_to(ROOT))

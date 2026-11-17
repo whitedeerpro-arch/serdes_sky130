@@ -15,6 +15,55 @@ def edges(t, y, polarity=1, start=None, stop=None):
     return times
 
 
+def feedback_lock(ref, fb, *, start, stop, period=4e-9, release=52e-9,
+                  phase_tolerance=20e-12, frequency_tolerance=1e-4,
+                  average_periods=16, final_edges=60, offset_edges=40):
+    """Assess lock with complete edge history and one-to-one feedback pairing.
+
+    Phase is relative to the final median, as in the native PLL benches. The
+    frequency test uses full trailing windows; repeated/skipped feedback edges
+    cannot pass even when a nearest-edge phase trace looks stationary. Short
+    records are explicitly unassessed, rather than passing a shorter tail.
+    """
+    ref, fb = np.asarray(ref, dtype=float), np.asarray(fb, dtype=float)
+    for values in (ref, fb):
+        if (values.ndim != 1 or not np.all(np.isfinite(values)) or
+                np.any(np.diff(values) <= 0)):
+            raise ValueError('invalid edge sequence')
+    if not start < stop or period <= 0 or min(average_periods, final_edges, offset_edges) < 1:
+        raise ValueError('invalid lock measurement window')
+    ref = ref[(ref > start) & (ref <= stop)]
+    fb = fb[(fb >= start - period) & (fb <= stop)]
+    out = dict(locked_at_end=False, lock_assessed=False, lock_status='insufficient_reference_window',
+               reference_edges=len(ref), feedback_edges=len(fb), offset_s=None,
+               capture_s=None, e_pp_last_s=None, final_frequency_error=None,
+               final_pairing_errors=None)
+    if len(ref) < final_edges + average_periods:
+        return out
+    out['lock_assessed'] = True
+    if stop - ref[-1] > period * (1 + frequency_tolerance):
+        return dict(out, lock_status='missing_reference_tail')
+    if len(fb) < 2:
+        return dict(out, lock_status='missing_feedback')
+    right = np.clip(np.searchsorted(fb, ref), 1, len(fb) - 1)
+    idx = np.where(np.abs(fb[right] - ref) < np.abs(fb[right - 1] - ref), right, right - 1)
+    near = fb[idx]
+    error = near - ref
+    offset = float(np.median(error[-offset_edges:]))
+    means = (near[average_periods:] - near[:-average_periods]) / average_periods
+    consecutive = np.diff(idx) == 1
+    valid = np.convolve(consecutive.astype(int), np.ones(average_periods, dtype=int), mode='valid') == average_periods
+    bad = np.ones(len(ref), dtype=bool)
+    bad[average_periods:] = ((np.abs(error[average_periods:] - offset) > phase_tolerance) |
+                            (np.abs(means / period - 1) > frequency_tolerance) | ~valid)
+    locked = bool(not bad[-final_edges:].any())
+    return dict(out, locked_at_end=locked, lock_status='locked' if locked else 'not_locked',
+                offset_s=offset, e_pp_last_s=float(np.ptp(error[-offset_edges:])),
+                capture_s=float(max(0, ref[bad].max() - release)) if locked else None,
+                final_frequency_error=float(np.max(np.abs(means[-final_edges:] / period - 1))),
+                final_pairing_errors=int(np.count_nonzero(np.diff(idx[-final_edges - 1:]) != 1)))
+
+
 def period_stats(t, y, start=None, stop=None, min_cycles=3):
     """Mean frequency, period spread and duty cycle from rising/falling edges.
 

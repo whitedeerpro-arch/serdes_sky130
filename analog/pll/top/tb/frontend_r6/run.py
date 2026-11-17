@@ -70,6 +70,10 @@ def deck(c, rc, code, vctrl, variant, camp):
         bn = {f"b{k}{s}": ("b0" + s if k == 0 else f"xfe.b{k}{s}") for k in range(4) for s in "pn"}
     probes = [f"v(xfe.{n})" if n[0] == "v" else f"v({bn[n]})" for n in NODES] + ["v(fb0)", "i(Vh)", "i(Vq)", "i(Vdum)"]
     lines += ["Ikick xfe.v0p xfe.v0n PWL(0 1u 20p 1u 21p 0)"]
+    # no noise in the simulator: a divider latch can sit at its symmetric point for 10-20 ns (FS hot hh: fb0 looked
+    # static at 2.18 GHz, 2026-11-13); 20 uA for 40 ps on each tap breaks it, as noise does on chip
+    taps = ("d02", "d04", "d08") if variant.startswith("lean") else ("d02", "d04", "d08", "d22", "d24", "d32")
+    lines += [f"Ikick{n} {n}p {n}n PWL(0 0 1n 0 1.01n 20u 1.05n 20u 1.06n 0)" for n in taps]
     for k in range(4):
         for sd in "pn":
             lines += [f".nodeset v(xfe.v{k}{sd})={{supply-0.12}}"]

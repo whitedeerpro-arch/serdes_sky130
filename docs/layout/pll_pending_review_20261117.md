@@ -24,3 +24,5 @@ r5 七点联调旧记录的 hh/ll 标签没有应用到 deck，实际只是对�
 几何、独立参考、必要预览及小摘要位于 `variants/<身份>/`；当前边界在对应 README。所有新复核、重建、AC/短预充、旧波形重算和源码快照追加至 `results/layout_review/pll_pending_20261117/`，通过固定 catalog 引用；旧数据不覆盖。生成器的新顶层输出目录必须不存在，不能在旧结果中覆盖生成。只读发布器为 [pll_pending_review.py](../../verification/analysis/pll_pending_review.py)。
 
 本批未审阅 LDO/Bias/CP，未重启暂停的 divider 全量 RC，未启动新接收器的 45 点或 MC 扫描。其他未提交工作保留原状，随后按独立主题继续复核，不整包提交。
+
+四批提交与剩余文件清单见[收尾记录](../history/worktree_review_20261117.md)。另已独立确认并提交此前 35 个旧训练资料删除项，修正 README 导航，未删除现行版图检查器或电路源码。

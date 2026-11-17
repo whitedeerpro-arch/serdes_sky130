@@ -9,3 +9,5 @@
 本次把 VCO 的实际几何截图从 `plan/` 移到 `variants/sym9_pdk/views/`，直接引用统一迁移并检查。无需引入复杂路径注册系统，也不靠人工逐次发现断链。
 
 PFD、接收器、÷8 和 LF 的源码候选目录中原有的原始 EXT/日志已移入结果归档，逐文件哈希与旧/新位置见 [迁移清单](../../results/catalog/pll_layout_source_exports_20261115.json)。生成器安装步骤同步停止复制原始日志；几何和电气快照的身份不变。
+
+[2026-11-17 待提交工作复核](pll_pending_review_20261117.md)记录新版 LF、全速接收器/CMOS 分频候选与验证工具；原三叠层 divider 的 RC 暂停状态不变。

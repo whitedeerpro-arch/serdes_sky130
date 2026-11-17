@@ -2,6 +2,8 @@
 
 当前原型为 [双翼 prescaler](variants/pdk/README.md)，独立清理候选在 [variants/review_clean/](variants/review_clean/)。布局与寄生后结论见 [review.md](review.md)，不以生成时的 DRC/LVS 摘要替代电气验收。
 
+全速电平转换后接 [CMOS ÷8 候选](variants/cmos_2g_pdk/README.md)是一条独立替代研究，10 端口接口不能直接替换当前 11 端口 CML 分频器。它的重建/双极性波形复核及尚未验收的 sync2 身份差异见[本批复核](../../../../docs/layout/pll_pending_review_20261117.md)；未切换工作修订，原全量 RC 疑点继续暂停。
+
 | 位置 | 职责 |
 |---|---|
 | [build_prescaler8_pdk.py](build_prescaler8_pdk.py) | r6q 的 h40/h80 latch、三级 ÷2、级间 buffer、本地偏置及轻 dummy |

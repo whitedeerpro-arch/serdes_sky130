@@ -159,3 +159,5 @@
 - 2026-11-15 / Codex / PLL 版图审阅交付：范围为 PFD、VCO/buffer、÷8/轻 dummy、反馈接收器、LF 与顶层规划；LDO/Bias/CP 版图未改。各模块有 layout/README.md、review.md 和固定 catalog；原型、独立清理候选、波形及数值失败留在 results/layout_review/pll_20261115/。PFD、VCO、接收器、LF、÷8 已分模块提交，目录/边界注册/总入口另作整理提交。LAYOUT-PLL-DIV-RC-01 标注疑点待版图核查，全量 RC 分支按暂停交接，不续跑、不扩大扫描；FS RC 完整异常波形的驱动回执缺失单列，未伪造 execution.json。所有本任务 ngspice/driver 已结束，实时 NG=0，无后台任务或占用名额；其余既有未提交改动保留。
 
 - 2026-11-15 / Codex / 四模块阶段验收与清理：六份现行几何重新 DRC/LVS/端口检查通过，215 份固定证据哈希核对通过；记录在 docs/layout/pll_acceptance_20261115.md。撤销错误大环和依赖规划共 11 个文件，独立 r6 叶单元保留。清理前既有未提交工作 414 文件的分类及逐项清单见 docs/history/worktree_inventory_20261115.md。仅提交本轮范围，其他改动保留；divider 全量 RC 继续暂停，无新 ngspice 仿真或后台任务。
+
+- 2026-11-17 / Codex / 继续审阅提交：验证工具与 LF 已分批提交；新版 LF 七点 AC 完整、28 组 100 ns 预充筛查通过，未提取新 RC。r4/r5/CMOS 几何独立 DRC/LVS 通过，r5/CMOS 生成器重建身份匹配；固定旧波形重算 19＋59 份，r5 冷角 RC 失败及旧 hh/ll 标签未应用/include 未冻结的限制保留。新 bench 冻结身份、补无源角与双极性检查，尚未运行新 MOS45/MC。sync2 新旧几何身份不同，未移植旧通过结论。结果追加 results/layout_review/pll_pending_20261117/，入口 docs/layout/pll_pending_review_20261117.md；LDO/Bias/CP 未审阅，旧 divider RC 仍暂停，本任务 NG/driver 已结束，无后台名额占用。

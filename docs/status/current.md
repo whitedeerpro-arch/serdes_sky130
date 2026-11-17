@@ -64,3 +64,5 @@
 ÷8 全量原生 RC 的异常标注 `LAYOUT-PLL-DIV-RC-01`，**疑点待版图核查，该仿真分支暂停**；5744 个是离散寄生网段，实体 PDK 电阻为 16 个，提取语义和简化收敛未验证，不能直接判实际版图失败。完整 PLL 布线与可靠耦合 RC 尚未完成。LDO、Bias、CP 不在本次版图审阅范围。
 
 [LF、divider、VCO 与 CML→CMOS 的阶段验收](../layout/pll_acceptance_20261115.md)接受六份局部几何交付；电气资格保持报告所列边界。错误大环及其依赖顶层规划已撤销，未切换电路工作修订。
+
+2026-11-17 [待提交工作复核](../layout/pll_pending_review_20261117.md)：新版 LF 已重建并通过局部预充筛查；r4/r5 全速转换及 CMOS ÷8 为独立候选，未切换 PLL 采用参数。r5 冷角原生 RC 功能失败保持 changes requested，旧无源角标签与运行时 include 身份缺口已明确，旧三叠层 divider 全量 RC 继续暂停。

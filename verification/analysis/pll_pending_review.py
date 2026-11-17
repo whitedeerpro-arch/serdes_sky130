@@ -25,6 +25,14 @@ def digest(path):
     return h.hexdigest()
 
 
+def bench():
+    path = ROOT / "analog/common/cml_to_cmos/tb/r5_pex/verify_r5_pdk.py"
+    spec = importlib.util.spec_from_file_location("r5_review_measure", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def complete(directory, evidence):
     deck, receipt = directory / "tb.cir", directory / "execution.json"
     text = deck.read_text()
@@ -75,17 +83,89 @@ def lf(evidence):
                 scope="Seven local AC/precharge points; no new native RC, full-loop, MC or noise qualification")
 
 
+def receiver(evidence):
+    module = bench()
+    campaign = ROOT / "results/analog/common/cml_to_cmos/r5_pdk/20261117T1451Z"
+    rows = []
+    for directory in sorted((campaign / "6corners").iterdir()):
+        if not (directory / "execution.json").exists():
+            continue
+        mode, tag = directory.name.split("_", 1)
+        w, section, identity = complete(directory, evidence)
+        r = module._eval_rx_wave(directory / "waveforms.raw", corners.Condition.parse(tag))
+        rows.append(dict(mode=mode, actual_model_section=section,
+                         execution_include_hashes_present=identity, **r))
+    chain = []
+    for directory in sorted((campaign / "chain_div8").iterdir()):
+        if not (directory / "execution.json").exists():
+            continue
+        c = corners.Condition.parse(directory.name)
+        w, section, identity = complete(directory, evidence)
+        metrics = {f"{node}{side}": module.logic_metrics(w.t, w[f"v({node}{side})"], c.supply, hz, 14e-9)
+                   for node, hz in [("clk", 2e9), ("q2", 1e9), ("q4", .5e9), ("q8", .25e9)]
+                   for side in ("p", "n")}
+        chain.append(dict(condition=c.tag, actual_model_section=section,
+                          execution_include_hashes_present=identity, signals=metrics,
+                          both_polarities_passed=all(r["ok"] for r in metrics.values())))
+    if len(rows) != 12 or len(chain) != 7:
+        raise ValueError("Missing receiver review cases")
+    source_evidence(ROOT / "analog/common/cml_to_cmos/layout/variants/r5_pdk", evidence)
+    source_evidence(BASE / "receiver_r5", evidence)
+    source_evidence(BASE / "receiver_r4", evidence)
+    source_evidence(BASE / "r5_rebuild/serdes_cml_to_cmos_r5_pdk", evidence)
+    return dict(status="changes_requested", issue="LAYOUT-PLL-RX-R5-01", rows=rows, chain=chain,
+                scope="Candidate only: SS cold RCX functional failure; old chain hh/ll labels not applied; execution-time include identities absent; no MOS45/PEX MC signoff")
+
+
+def cmos(evidence):
+    module = bench()
+    base = ROOT / "results/analog/pll/divider/cmos_prescaler8_2g_pdk"
+    rows = []
+    for campaign_name, count in [("20261116T223053Z_45corners", 45), ("20261116T221934Z_7corners", 14)]:
+        campaign = base / campaign_name
+        cases = [p.parent for p in sorted(campaign.glob("*/execution.json"))]
+        if len(cases) != count:
+            raise ValueError("Missing CMOS divider cases")
+        for directory in cases:
+            mode, tag = directory.name.split("_", 1) if count == 14 else ("cpex", directory.name)
+            c = corners.Condition.parse(tag)
+            w, section, identity = complete(directory, evidence)
+            metrics = {f"{node}{side}": module.logic_metrics(w.t, w[f"v({node}{side})"], c.supply, hz, 14e-9)
+                       for node, hz in [("out", 2e9), ("q2", 1e9), ("q4", .5e9), ("q8", .25e9)]
+                       for side in ("p", "n")}
+            rows.append(dict(campaign=campaign_name, condition=c.tag, mode=mode,
+                             actual_model_section=section, signals=metrics,
+                             both_polarities_passed=all(v["ok"] for v in metrics.values()),
+                             power_mw=float(np.mean(w["pdiv"][w.t >= 14e-9]) * 1e3),
+                             execution_include_hashes_present=identity))
+    source_evidence(ROOT / "analog/pll/divider/layout/variants/cmos_2g_pdk", evidence)
+    source_evidence(BASE / "divider_cmos", evidence)
+    source_evidence(BASE / "cmos_rebuild/pll_cmos_prescaler8_2g_pdk", evidence)
+    return dict(status="candidate_geometry_accepted_electrical_evidence_limited", rows=rows,
+                scope="r4 CPEX driver + CMOS divider: recomputed both polarities and all periods; original includes not hashed at execution; no final full-RC/MC/startup signoff or adoption")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("module", choices=("lf",))
+    ap.add_argument("module", choices=("lf", "receiver", "cmos"))
     args = ap.parse_args()
     output = BASE / "exports" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     output.mkdir(parents=True, exist_ok=False)
     evidence = {}
     result = globals()[args.module](evidence)
     sources = [Path(__file__).resolve(), ROOT / "src/serdes_flow/clock.py"]
+    if args.module == "lf":
+        sources.extend(ROOT / p for p in ["analog/pll/loop_filter/layout/build_lf_fused_pdk.py",
+                                          "analog/pll/loop_filter/tb/layout_pex/run.py"])
     if args.module != "lf":
         sources.append(ROOT / "analog/common/cml_to_cmos/tb/r5_pex/verify_r5_pdk.py")
+        sources.extend(ROOT / p for p in [
+            "analog/common/cml_to_cmos/layout/build_cml_to_cmos_r4_pdk.py",
+            "analog/common/cml_to_cmos/layout/build_cml_to_cmos_r5_pdk.py",
+            "analog/common/cml_to_cmos/spice/cml_to_cmos_r4_v4.spice",
+            "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice",
+            "analog/pll/divider/layout/build_cmos_prescaler8_2g_pdk.py",
+            "analog/pll/divider/spice/cmos_prescaler8_2g.spice"])
     for source in sources:
         target = output / source.name
         shutil.copy2(source, target)

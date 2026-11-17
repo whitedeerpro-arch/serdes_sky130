@@ -1,0 +1,56 @@
+* Full-rate 2 GHz CML-to-CMOS clock receiver, revision r5 (AC-coupled self-biased pre-driver + skew-locked restorer).
+* Candidate addressing ss_v1650_t-40_mm mismatch sensitivity found in r4_v4 / v4_1d_final:
+*   1. AC-coupled MIM cap (sky130_fd_pr__cap_mim_m3_1 w=7.0 l=7.0, ~100 fF) + 20 kOhm poly feedback resistor
+*      (sky130_fd_pr__res_high_po_0p35 l=18.0) around Xbp/Xbn blocks Diff-to-SE DC/mismatch offset and biases
+*      near the Xbp switching threshold (continuous >= 1 GHz clock only; not for DC data).
+*      This is a candidate bias mechanism, not a guarantee across all PVT/mismatch/startup states.
+*   2. Weak cross-coupled inverters (Xk_bp/Xk_bn, Xk_rp/Xk_rn) interlock complementary pre-driver edges,
+*      intended to reduce edge imbalance; PEX mismatch qualification remains open.
+* Dependencies: sky130_primitives.spice, cml_to_cmos.spice, cml_to_cmos_r4_v4.spice.
+
+.subckt serdes_rx_clock_restorer_r5 rawp rawn outp outn vdd vss params: out_wn=4 out_wp=8
+Xdp1 rawp dp1 vdd vss serdes_rx_inverter wn=1.2 wp=3.2 nfn=1 nfp=2
+Xdp2 dp1  dp2 vdd vss serdes_rx_inverter wn=1.2 wp=3.2 nfn=1 nfp=2
+Xdp3 dp2  dp3 vdd vss serdes_rx_inverter wn=1.2 wp=3.2 nfn=1 nfp=2
+Xdn1 rawn dn1 vdd vss serdes_rx_inverter wn=1.2 wp=3.2 nfn=1 nfp=2
+Xdn2 dn1  dn2 vdd vss serdes_rx_inverter wn=1.2 wp=3.2 nfn=1 nfp=2
+Xdn3 dn2  dn3 vdd vss serdes_rx_inverter wn=1.2 wp=3.2 nfn=1 nfp=2
+Xset   rawp dp3 set_b   vdd vss serdes_rx_nand2_v4 wn=4.5 wp=4.5 nfn=3 nfp=3
+Xreset rawn dn3 reset_b vdd vss serdes_rx_nand2_v4 wn=4.5 wp=4.5 nfn=3 nfp=3
+Xqp set_b   qn qp vdd vss serdes_rx_nand2_v4 wn=6 wp=9 nfn=3 nfp=3
+Xqn reset_b qp qn vdd vss serdes_rx_nand2_v4 wn=6 wp=9 nfn=3 nfp=3
+Xrp1 qp rp1 vdd vss serdes_rx_inverter wn=2.4 wp=7.2 nfn=1 nfp=3
+Xrp2 rp1 rp2 vdd vss serdes_rx_inverter wn=1.5 wp=4.5 nfn=1 nfp=2
+Xrn1 qn rn1 vdd vss serdes_rx_inverter wn=2.4 wp=7.2 nfn=1 nfp=3
+Xrn2 rn1 rn2 vdd vss serdes_rx_inverter wn=1.5 wp=4.5 nfn=1 nfp=2
+Xbp qp rp2 bp vdd vss serdes_rx_nand2_v4 wn=2.4 wp=3.6 nfn=1 nfp=2
+Xbn qn rn2 bn vdd vss serdes_rx_nand2_v4 wn=2.4 wp=3.6 nfn=1 nfp=2
+Xop bp outp vdd vss serdes_rx_inverter wn={out_wn} wp={out_wp} nfn=2 nfp=4
+Xon bn outn vdd vss serdes_rx_inverter wn={out_wn} wp={out_wp} nfn=2 nfp=4
+.ends serdes_rx_clock_restorer_r5
+
+.subckt serdes_cml_to_cmos_r5 inp inn outp outn vbias vdd vss
++ params: wsf=32 wsf_sink=3 win=16 wload=32 wtail=32
+Xfp vdd inp fp vss serdes_nfet_lvt w={wsf} nf=8
+Xfn vdd inn fn vss serdes_nfet_lvt w={wsf} nf=8
+Xsp fp vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1
+Xsn fn vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1
+Xap fp fn ap vbias vdd vss serdes_rx_diff_to_se_v4
++ win={win} nfin=4 wload={wload} nfload=8 wtail={wtail} nftail=10
+Xan fn fp an vbias vdd vss serdes_rx_diff_to_se_v4
++ win={win} nfin=4 wload={wload} nfload=8 wtail={wtail} nftail=10
+* AC-coupled self-biased pre-driver (~100 fF MIM + ~20 kOhm poly R)
+XCac_p ap_ac ap sky130_fd_pr__cap_mim_m3_1 w=7.0 l=7.0
+XCac_n an_ac an sky130_fd_pr__cap_mim_m3_1 w=7.0 l=7.0
+XRfb_p ap_ac bp vss sky130_fd_pr__res_high_po_0p35 l=18.0
+XRfb_n an_ac bn vss sky130_fd_pr__res_high_po_0p35 l=18.0
+Xbp ap_ac bp vdd vss serdes_rx_inverter wn=6.0 wp=7.2 nfn=3 nfp=4
+Xbn an_ac bn vdd vss serdes_rx_inverter wn=6.0 wp=7.2 nfn=3 nfp=4
+Xk_bp bn bp vdd vss serdes_rx_inverter wn=0.6 wp=1.2 nfn=1 nfp=1
+Xk_bn bp bn vdd vss serdes_rx_inverter wn=0.6 wp=1.2 nfn=1 nfp=1
+Xop bp rawp vdd vss serdes_rx_inverter wn=3.6 wp=6.4 nfn=2 nfp=4
+Xon bn rawn vdd vss serdes_rx_inverter wn=3.6 wp=6.4 nfn=2 nfp=4
+Xk_rp rawn rawp vdd vss serdes_rx_inverter wn=0.6 wp=1.2 nfn=1 nfp=1
+Xk_rn rawp rawn vdd vss serdes_rx_inverter wn=0.6 wp=1.2 nfn=1 nfp=1
+Xrestore rawp rawn outp outn vdd vss serdes_rx_clock_restorer_r5 out_wn=4 out_wp=8
+.ends serdes_cml_to_cmos_r5

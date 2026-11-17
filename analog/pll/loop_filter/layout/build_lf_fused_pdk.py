@@ -125,6 +125,12 @@ def place_w2_mos(
     df_layer = "pdiff" if is_pmos else "ndiff"
     x_df_min = min(r[0] for r in prim.rects[df_layer]) + dx
     x_df_max = max(r[2] for r in prim.rects[df_layer]) + dx
+    mk = next(k for k in ("pmoslvt", "pmos", "nmoslvt", "nmos") if k in prim.rects)
+    l_f = grid(prim.rects[mk][0][2] - prim.rects[mk][0][0])
+    py_lo = min(r[1] for r in prim.rects["poly"])
+    py_hi = max(r[3] for r in prim.rects["poly"])
+    poly_y1 = grid(dy - py_hi) if is_pmos else grid(dy + py_lo)
+    poly_y2 = grid(dy - py_lo) if is_pmos else grid(dy + py_hi)
     gx_esc = grid(x_df_min - 0.85) if dx < -2.0 else grid(x_df_min - 0.50)
     c.wire("metal1", [(gx_esc, gy), (gx0, gy)], 0.20)
     c.via1(gx_esc, gy)
@@ -137,6 +143,9 @@ def place_w2_mos(
         "g_pt": (gx_esc, gy),
         "x_min": grid(x_df_min),
         "x_max": grid(x_df_max),
+        "l_f": l_f,
+        "poly_y1": poly_y1,
+        "poly_y2": poly_y2,
     }
 
 
@@ -147,18 +156,22 @@ def add_mos_poly_dummy(
     dy: float,
     is_pmos: bool,
     y_rail: float,
+    y_poly_inner: float,
+    side_sign: int = 0,
 ) -> None:
-    """Place biased field-poly dummy gate (overhangs diff in Y) tied to VDD (PMOS) or VSS (NMOS)."""
+    """Place biased field-poly dummy gate (matching transistor L and inner poly span) tied to VDD/VSS."""
     hw = grid(l_f / 2.0)
-    y_cont = grid(dy + 1.55) if is_pmos else grid(dy - 1.55)
+    y_cont = grid(dy + 1.45) if is_pmos else grid(dy - 1.45)
     if is_pmos:
-        c.rect("poly", grid(x_dum - hw), grid(dy - 1.13), grid(x_dum + hw), grid(y_cont + 0.17))
+        c.rect("poly", grid(x_dum - hw), grid(y_poly_inner), grid(x_dum + hw), grid(y_cont + 0.17))
     else:
-        c.rect("poly", grid(x_dum - hw), grid(y_cont - 0.17), grid(x_dum + hw), grid(dy + 1.13))
-    c.pad("poly", x_dum, y_cont, 0.28, 0.34)
-    c.pad("polycont", x_dum, y_cont, 0.17, 0.17)
-    c.pad("locali", x_dum, y_cont, 0.18, 0.34)
-    c.rect("locali", grid(x_dum - 0.085), min(y_cont, y_rail), grid(x_dum + 0.085), max(y_cont, y_rail))
+        c.rect("poly", grid(x_dum - hw), grid(y_cont - 0.17), grid(x_dum + hw), grid(y_poly_inner))
+    # For narrow gates (L < 0.28), flare contact pad outward so inner edge clears poly.2 (0.21) & li.3 (0.17)
+    x_cont = grid(x_dum + side_sign * 0.060) if l_f < 0.28 else x_dum
+    c.pad("poly", x_cont, y_cont, 0.28, 0.34)
+    c.pad("polycont", x_cont, y_cont, 0.17, 0.17)
+    c.pad("locali", x_cont, y_cont, 0.18, 0.34)
+    c.rect("locali", grid(x_cont - 0.085), min(y_cont, y_rail), grid(x_cont + 0.085), max(y_cont, y_rail))
 
 
 def draw_compact_np_frame(
@@ -304,19 +317,22 @@ def build_lf_k4_fused(out: Path) -> dict:
     it_p = place_w2_mos(c, pl8, "pdiffc", dx_int, dy_p, True)
 
     # Biased field-poly dummy gates flanking EVERY NMOS (-> VSS) and EVERY PMOS (-> VDD)
-    for x_nd in (
-        grid(fn["x_min"] - 0.28), grid(fn["x_max"] + 0.28),
-        grid(in_n["x_min"] - 0.28), grid(in_n["x_max"] + 0.28),
-        grid(it_n["x_min"] - 0.28), grid(it_n["x_max"] + 0.28),
+    dum_gap = 0.075  # minimum SKY130 poly.5 spacing from field-poly edge to active diff edge
+    for dev, dy_m, is_p, y_rail in (
+        (fn, dy_n, False, y_nmos_vss_m1),
+        (in_n, dy_n, False, y_nmos_vss_m1),
+        (it_n, dy_n, False, y_nmos_vss_m1),
+        (fp, dy_p, True, y_pmos_vdd_m1),
+        (in_p, dy_p, True, y_pmos_vdd_m1),
+        (it_p, dy_p, True, y_pmos_vdd_m1),
     ):
-        add_mos_poly_dummy(c, x_nd, 0.15, dy_n, False, y_nmos_vss_m1)
-    for x_pd, lf in (
-        (grid(fp["x_min"] - 0.30), 0.35),
-        (-1.50, 0.25),
-        (2.35, 0.25),
-        (grid(it_p["x_max"] + 0.30), 0.35),
-    ):
-        add_mos_poly_dummy(c, x_pd, lf, dy_p, True, y_pmos_vdd_m1)
+        lf = dev["l_f"]
+        y_inner = dev["poly_y1"] if is_p else dev["poly_y2"]
+        for side_sign, x_d in (
+            (-1, grid(dev["x_min"] - dum_gap - lf / 2.0)),
+            (+1, grid(dev["x_max"] + dum_gap + lf / 2.0)),
+        ):
+            add_mos_poly_dummy(c, x_d, lf, dy_m, is_p, y_rail, y_inner, side_sign=side_sign)
 
     gr_x1, gr_x2 = -6.65, 9.85
     c.rect("nwell", grid(gr_x1 - 0.45), 1.45, grid(gr_x2 + 0.45), 5.65)

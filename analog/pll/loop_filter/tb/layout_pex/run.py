@@ -23,11 +23,13 @@ POINTS = ["tt_v1800_t27:tt", "ss_v1650_t-40:hh", "sf_v1650_t-40:ll", "fs_v1650_t
           "ss_v1650_t85:hh", "ff_v1950_t-40:ll", "ff_v1950_t85:ll"]
 
 
-def models(physical, out):
+def models(physical, out, variants=("schematic", "cpex", "rcx")):
     entries = []
     out.mkdir(parents=True, exist_ok=True)
     for label,cell in [("original","pll_loop_filter_k4_pdk"),("fused","pll_loop_filter_k4_fused_pdk")]:
         for variant,file in [("schematic","reference.spice"),("cpex",cell+"_pex.spice"),("rcx",cell+"_rcx.spice")]:
+            if variant not in variants:
+                continue
             alias = f"lf_{label}_{variant}"
             text = re.sub(rf"\b{cell}\b", alias, (physical / cell / file).read_text())
             path = out / (alias+".spice")
@@ -96,10 +98,12 @@ def main():
     ap.add_argument("--workers",type=int,default=2,choices=(1,2))
     ap.add_argument("--method",choices=("trap","gear"),default="gear")
     ap.add_argument("--kind",choices=("both","ac","precharge"),default="both")
+    ap.add_argument("--variants", nargs="+", choices=("schematic", "cpex", "rcx"),
+                    default=("schematic", "cpex", "rcx"))
     ap.add_argument("--precharge-ns",type=float,default=2000.)
     ap.add_argument("--hold-ns",type=float,default=1000.)
     a=ap.parse_args();out=a.output_dir.resolve()
-    entries=models(a.physical_dir.resolve(),out/"models")
+    entries=models(a.physical_dir.resolve(),out/"models",a.variants)
     if a.kind=="precharge":
         release=a.precharge_ns*1e-9;tend=release+a.hold_ns*1e-9
         sample=release-1e-9

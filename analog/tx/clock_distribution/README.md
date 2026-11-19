@@ -1,5 +1,11 @@
 # CML相位路由与时钟分发
 
+当前工作版本（v3 / S4 同步计数器＋2 GHz 副本）规范生成器入口：[tx_clock_dist_v3.py](spice/tx_clock_dist_v3.py)（原 `analog/tx/serializer/tb/clock_replay/variants/dist_v3.py` 保留薄兼容 shim；历史 r2 基线见 `spice/cml_clock_distribution_tx_lowov.spice`）。
+
+---
+
+## 历史 r2 固定相位路由说明
+
 测试路径为原生PLL连续边沿记录 → 理想CML边沿源 → 实际MOS预驱动/电容微调 → 实际MOS扇出buffer → 串化器选择端。
 每路两级非反相CML buffer，共8级；直接连接现有串化器8/4/2/3组本地时钟源跟随器负载。
 2GHz路的3组包括末级选择器和两只重定时锁存器。

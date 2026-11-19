@@ -759,7 +759,7 @@ window.DESIGN_CATALOG = {
             },
             {
               "title": "v3 电路生成器",
-              "path": "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py"
+              "path": "analog/tx/clock_distribution/spice/tx_clock_dist_v3.py"
             },
             {
               "title": "原生静态结果",

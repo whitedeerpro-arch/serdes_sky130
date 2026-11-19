@@ -10,7 +10,7 @@
 
 模型中包含电阻温度/电压依赖、poly对衬底电容以及MIM边缘电容/串联电阻；完整布线、底板耦合和版图寄生仍需提取。该MIM模型的电容量温度系数为0，本轮不能据此证明真实硅上没有温漂。[SKY130器件说明](https://skywater-pdk.readthedocs.io/en/main/rules/device-details.html)
 
-候选见[物理LF模型](../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice)，原[理想LF](../../analog/pll/loop_filter/spice/passive_rc.spice)保持原值，用于对照。候选尚未提升为冻结基线。
+候选见物理LF模型 (`../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice`, retired in `retired_legacy_vars_20261120.json`)，原[理想LF](../../analog/pll/loop_filter/spice/passive_rc.spice)保持原值，用于对照。候选尚未提升为冻结基线。
 
 ## 测试边界
 
@@ -86,6 +86,6 @@ TT分层环路中，理想LF与物理LF候选均在约0.542µs出现后续持续
 
 ## 数据与复现
 
-测试定义：[PLL PVT](../../analog/pll/top/tb/pvt/case.toml)、[LF映射](../../analog/pll/loop_filter/tb/pdk_mapping/case.toml)、[环境矩阵](../../verification/corners/pvt_plan.toml)。每次运行保存展开网表、原生子电路快照、模型库段/供电/温度、命令、日志、结构化指标和SHA256。数据按gzip无损压缩，压缩后完整读回核对原始字节哈希，再移走未压缩副本。
+测试定义：PLL PVT (`../../analog/pll/top/tb/pvt/case.toml`, retired in `retired_legacy_vars_20261120.json`)、LF映射 (`../../analog/pll/loop_filter/tb/pdk_mapping/case.toml`, retired in `retired_legacy_vars_20261120.json`)、[环境矩阵](../../verification/corners/pvt_plan.toml)。每次运行保存展开网表、原生子电路快照、模型库段/供电/温度、命令、日志、结构化指标和SHA256。数据按gzip无损压缩，压缩后完整读回核对原始字节哈希，再移走未压缩副本。
 
 首轮中测试表达式、依赖或夹具连法导致的准备失败与数值求解器诊断均保留日志，并从有效PVT测量中排除。未发现目标覆盖的角保留为覆盖缺口，不通过改尺寸/偏置或拟合外推将其记为通过。完整45环境组合、无源交叉、真实偏置参考、随机失配、噪声与版图仍是后续范围。

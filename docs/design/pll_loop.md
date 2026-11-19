@@ -4,7 +4,7 @@
 
 > **2026-11-14主线复核**：r6原生runner路径错误已修复；TT码9/ext的1 ns冒烟与100 ns预充释放短窗完成，仍不足320 ns持续锁定评分。当前完整TX的单2 GHz接口及r6控制导纳/噪声/失配输入缺口见[闭环与动态链复核](r6_mainline_review.md)，旧r5集成结论按原边界保留。
 
-> **模块集成**：PLL 已有包含VCO、粗调码接口、分频反馈、PFD/CP/LF的[完整电路顶层](../../analog/pll/top/spice/pll_balanced_core.spice)及[双节点预充启动顶层](../../analog/pll/top/spice/pll_balanced_startup_core.spice)。下面记录已实现参数、分层/原生验证与近期局部迭代；模型用于选参和降低验证成本。层次、边界与迭代可从[设计工作台](../../web/design/index.html#pll)进入。
+> **模块集成**：PLL 已有包含VCO、粗调码接口、分频反馈、PFD/CP/LF的完整电路顶层 (`../../analog/pll/top/spice/pll_balanced_core.spice`, retired in `retired_legacy_vars_20261120.json`)及双节点预充启动顶层 (`../../analog/pll/top/spice/pll_balanced_startup_core.spice`, retired in `retired_legacy_vars_20261120.json`)。下面记录已实现参数、分层/原生验证与近期局部迭代；模型用于选参和降低验证成本。层次、边界与迭代可从[设计工作台](../../web/design/index.html#pll)进入。
 
 > **当前主线**：r6／5bit带寄生VCO、标准单元延迟复位PFD、k4转向CP及LF4.13kΩ/18pF。quiet core为[pll_core_r6k4q](../../analog/pll/top/spice/pll_core_r6k4q.spice)，cfg0…4及四对CML/分频抽头已有；135条件表已生成。承接当前plant、前端负载和控制接口，再做闭环/粗搜、启动和相应噪声。
 > **已有集成证据继续保留**：r5分层135点锁定；四条件×hv/ext共8条原生预充闭环锁定，另有r5原生前端＋TX v3同deck的8个完整静态压力点。它们说明集成已做，按具体电路改动承接，不等同r6全部验证或从零启动。CP三点MC、分频局部MC等未改单元证据按原激励边界复用；VCO改尺寸后的噪声/统计另验。
@@ -35,9 +35,9 @@
 |---|---|---|
 | PFD [pfd_cmos.spice](../../analog/pll/pfd/spice/pfd_cmos.spice) | 静态 CMOS 上升沿三态 PFD：两个 D=1 的 DFF，主从锁存都异步清零；UP/DN 同时置位后经 NAND 与两级反相器延迟产生公共清零 | 复位延迟节点各 5 fF（理想）；零相差附近保留公共短脉冲 |
 | CP [charge_pump.spice](../../analog/pll/cp/spice/charge_pump.spice) | 长沟道电流镜 + 输出串联开关 | N 镜 W/L = 5/1 µm、P 镜 W/L = 20/1 µm（4 指）；开关 N/P = 2/4 µm；UP 驱动 NFET 0.5/0.88、PFET 2/0.15 µm（TT/1.3 V 附近的名义补偿）；外部理想 N/P 参考各 50 µA |
-| 可禁用 CP [charge_pump_enabled.spice](../../analog/pll/cp/spice/charge_pump_enabled.spice) | 实际 CMOS AND 门控 UP/DN | 用于启动序列 |
+| 可禁用 CP charge_pump_enabled.spice (`../../analog/pll/cp/spice/charge_pump_enabled.spice`, retired in `retired_legacy_vars_20261120.json`) | 实际 CMOS AND 门控 UP/DN | 用于启动序列 |
 | LF [passive_rc_precharge.spice](../../analog/pll/loop_filter/spice/passive_rc_precharge.spice) | 二阶无源：Cf = 2 pF 并 (Rz = 6.5 kΩ 串 Ci = 40 pF)；ctrl 与积分节点 z 各一个 CMOS 传输门预充 | 预充门 ctrl 4/8 µm、z 16/32 µm；R/C 为理想元件 |
-| 物理 LF 候选 [passive_rc_pdk_candidate.spice](../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice) | `res_high_po_0p69`（W 0.69、L 12.44 µm）；42 个约 1 pF 的 `cap_mim_m3_1`（边长 22.1965 µm），40 个作 Ci、2 个作 Cf | 板面积约 0.0207 mm²（不含间距布线） |
+| 物理 LF 候选 passive_rc_pdk_candidate.spice (`../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice`, retired in `retired_legacy_vars_20261120.json`) | `res_high_po_0p69`（W 0.69、L 12.44 µm）；42 个约 1 pF 的 `cap_mim_m3_1`（边长 22.1965 µm），40 个作 Ci、2 个作 Cf | 板面积约 0.0207 mm²（不含间距布线） |
 | 启动监督 [pll_startup_supervisor.sv](../../digital/pll/rtl/pll_startup_supervisor.sv) | 参考时钟域状态机 | 预充 128 周期 → 断开 2 周期 → PFD 运行 2 周期 → 开 CP → ACQUIRE/TRACK/FAULT |
 
 UP 高有效、注入电荷；VCO Kvco 为正，反馈偏慢时 Vctrl 上升，方向一致。

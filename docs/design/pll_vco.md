@@ -72,7 +72,7 @@ r3 在 SF 1.65 V 85 °C、R hh 只有 237 mVpp、−77.2 dBc/Hz，CDR 后 14.07�
 
 ### 抽出与负载
 
-每路差分输出接一个 `serdes_cml_buffer`，再接一个全速 CML→CMOS 接收器和一条 ÷8 prescaler。支路 0 是真实反馈，支路 1–3 是带偏置的供电 dummy，负载完全相同，保证八相负载对称。每根线另有 0.5 fF 残余布线电容。见 [clock_frontend_lowov.spice](../../analog/pll/top/spice/clock_frontend_lowov.spice)。
+每路差分输出接一个 `serdes_cml_buffer`，再接一个全速 CML→CMOS 接收器和一条 ÷8 prescaler。支路 0 是真实反馈，支路 1–3 是带偏置的供电 dummy，负载完全相同，保证八相负载对称。每根线另有 0.5 fF 残余布线电容。见 clock_frontend_lowov.spice (`../../analog/pll/top/spice/clock_frontend_lowov.spice`, retired in `retired_legacy_vars_20261120.json`)。
 
 ## 已验证结果
 

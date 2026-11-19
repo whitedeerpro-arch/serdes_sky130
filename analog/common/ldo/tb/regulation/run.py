@@ -18,7 +18,7 @@ from serdes_flow import project, spice, watch
 
 ROOT = project.ROOT
 SELF = Path(__file__).resolve()
-CORE = ROOT / "analog/common/ldo/spice/ldo_hv18_core.spice"
+CORE = ROOT / "analog/common/ldo/spice/ldo_hv18_core_r4.spice"
 BIAS = [ROOT/('analog/common/'+p) for p in ('devices/spice/sky130_primitives.spice','devices/spice/sky130_pfet_lvt.spice','devices/spice/cmos_logic.spice','bias/spice/bandgap.spice','bias/spice/bias_dist.spice')]
 SOURCES = [SELF, CORE, *BIAS, ROOT/"src/serdes_flow/spice.py", ROOT/"src/serdes_flow/project.py", ROOT/"src/serdes_flow/watch.py", ROOT/"config/pdk.toml", ROOT/"config/tools.toml"]
 OUT = ROOT/"results/analog/common/ldo/regulation"

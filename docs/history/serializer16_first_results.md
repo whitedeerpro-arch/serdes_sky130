@@ -10,7 +10,7 @@ TT、1.8 V、27°C、理想相关 CML 时钟、每端 20 fF 片内负载下完�
 
 - [2:1 CML 单元](../../analog/common/cml_mux/spice/cml_mux2.spice)：数据非反相，正选择差分选择 B、负选择差分选择 A。选择端用本地源跟随器平移共模，各级由尾电流和负载重新建立输出共模。
 - [静态 CMOS→CML](../../analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice)：用于并行数据，没有把时钟专用恢复器当作静态数据接口。
-- [16:1 树](../../analog/tx/serializer/spice/serializer16_tree.spice)：四级 8+4+2+1 个选择器。
+- 16:1 树 (`../../analog/tx/serializer/spice/serializer16_tree.spice`, retired in `retired_legacy_vars_20261120.json`)：四级 8+4+2+1 个选择器。
 - [测试定义](../../analog/tx/serializer/tb/functional/case.toml)、[参数配置](../../config/serializer16.toml)。
 
 | 级次 | 配对 | 选择时钟周期 | 每路数据周期 |

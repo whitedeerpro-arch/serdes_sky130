@@ -10,7 +10,7 @@
 - [cml_div2.spice](../../analog/pll/divider/spice/cml_div2.spice)的分频尾管改为总宽度 72 µm、24 指。输入源跟随器继续使用原偏置，锁存尾管使用独立的低过驱动偏置。
 - 偏置由 NMOS 复制原参考的一部分，经 PMOS 镜注入 W/L=20/0.5 µm 的真实 NMOS 二极管产生；没有在分频器内部放理想电压源或理想参考电流源。[cml_prescaler8.spice](../../analog/pll/divider/spice/cml_prescaler8.spice)中三级共享一个本地偏置镜。
 - PVT 扩扫暴露 FS 低压热角的时钟共模不足，源跟随输入管总宽度再从 40 增至 80 µm，仍为 4 指，下拉管宽度保持 4 µm。单独 ÷2 和旧二进制链的参数入口同步更新；旧实验数据保留原源快照。
-- [clock_frontend_lowov.spice](../../analog/pll/top/spice/clock_frontend_lowov.spice)连接上轮 VCO、转换器修整版及本轮分频器；四路真实抽出和三路供电 dummy 均保留，每路 prescaler 都有同样的偏置镜。
+- clock_frontend_lowov.spice (`../../analog/pll/top/spice/clock_frontend_lowov.spice`, retired in `retired_legacy_vars_20261120.json`)连接上轮 VCO、转换器修整版及本轮分频器；四路真实抽出和三路供电 dummy 均保留，每路 prescaler 都有同样的偏置镜。
 
 分频器外部引脚保持兼容。网表是本轮工作设计依据，分频器内部原理图尚需同步；没有把旧原理图视图标为已更新。
 
@@ -74,7 +74,7 @@ TSPC 等动态 CMOS 也是后续功耗/面积比较方向，但动态节点的�
 - 没有执行完整单片晶体管级 PLL 的 45 条件闭环捕获网格；PFD/CP/LF 的新 PVT 网格也尚未扩扫。
 - 电源和偏置在 DC 工作点已建立，再启动时钟/振荡；没有验证电源爬升或偏置使能瞬态。启动时的短周期与稳态周期分开记录，不能把它们误记为随机抖动。
 
-全部渲染 TB、输入 SPICE 快照、模拟器日志及命令记录在 [campaign](../../results/analog/pll/pvt_lowov/20261029T114507Z)。单元 [PVT 模板](../../analog/pll/divider/tb/pvt/tb_prescaler8_lowov_ngspice.cir.in)和 [原生前端模板](../../analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in)已加入层级测试目录。
+全部渲染 TB、输入 SPICE 快照、模拟器日志及命令记录在 [campaign](../../results/analog/pll/pvt_lowov/20261029T114507Z)。单元 [PVT 模板](../../analog/pll/divider/tb/pvt/tb_prescaler8_lowov_ngspice.cir.in)和 原生前端模板 (`../../analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`)已加入层级测试目录。
 
 ## 最终原生回接测点与恢复检查
 

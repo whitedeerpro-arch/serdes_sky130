@@ -14,8 +14,8 @@ spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schemat
 |---|---|---|
 | [pfd_cp](tb/pfd_cp/case.toml) | integration | net_charge_vs_phase, source_sink_polarity, minimum_effective_pulse |
 | [pfd_cp_lf](tb/pfd_cp_lf/case.toml) | integration | cycle_charge, control_voltage, ripple；不含 VCO 闭环 |
-| [vco_divider](tb/vco_divider/case.toml) | integration | vco_frequency, feedback_frequency, division_ratio, interface_swing |
-| [acquisition](tb/acquisition/case.toml) | system | lock_time, frequency_error, phase_error, cycle_slips, control_voltage, power |
+| vco_divider (`tb/vco_divider/case.toml`, retired in `retired_legacy_vars_20261120.json`) | integration | vco_frequency, feedback_frequency, division_ratio, interface_swing |
+| acquisition (`tb/acquisition/case.toml`, retired in `retired_legacy_vars_20261120.json`) | system | lock_time, frequency_error, phase_error, cycle_slips, control_voltage, power |
 | [tracking](tb/tracking/case.toml) | system | tracking_bandwidth, peaking, phase_margin, recovery_time |
 | [jitter](tb/jitter/case.toml) | system | tie_rms, period_jitter_rms, cycle_to_cycle_jitter_rms, jitter_psd |
 | [spurs](tb/spurs/case.toml) | system | reference_spur, harmonic_spurs, control_voltage_ripple |

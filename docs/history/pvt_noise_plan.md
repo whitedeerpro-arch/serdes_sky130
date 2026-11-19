@@ -33,7 +33,7 @@ VCO先保留原设计电流和尺寸，测未校准状态，再允许调电容�
 ## 复用TB前需要补齐的内容
 
 - 统一参数入口：已有多份TB支持模型库/工艺角替换，但温度、供电和部分激励仍硬编码；pilot前逐项参数化，不直接把TT字符串替成SS就认作完整PVT。
-- 保留实际加载和对称dummy。起步使用[带载时钟前端](../../analog/pll/top/spice/clock_frontend_balanced.spice)，不把早期20fF代理负载的裸VCO图充作当前带载版本。
+- 保留实际加载和对称dummy。起步使用带载时钟前端 (`../../analog/pll/top/spice/clock_frontend_balanced.spice`, retired in `retired_legacy_vars_20261120.json`)，不把早期20fF代理负载的裸VCO图充作当前带载版本。
 - 理想参考电流、共模参考和环路无源必须注明。PDK本机基本TT/SS/FF/SF/FS库段使用typical R/C；当前大量电阻和LF电容本身还是理想器件。MOS角不自动覆盖这些无源变化。后续独立做PDK无源角或有依据的参数扰动，不能称第一轮已验证全器件PVT。
 - CMOS激励与复位幅度随VDD调整。RX理想CML锚点的共模/摆幅取同角带载输出或明确的接口条件；当前实时桥0.54/1.26V阈值对应1.8V，改供电时应按既定0.3/0.7比例更新，不直接沿用固定值。
 - 全局工艺角与局部失配分开；PVT扫描不开Monte Carlo。独立的参考电流误差、电源扰动和负载压力也单列，不偷换为工艺角。

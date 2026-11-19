@@ -8,9 +8,9 @@
 
 ## 实现与比较边界
 
-- [CMOS选择单元](../../analog/common/cml_mux/spice/cml_mux2_cmos_select.spice)保留原有四只数据管、两只选择管和公共尾源，去掉本地选择端源跟随器及其偏置支路。
+- CMOS选择单元 (`../../analog/common/cml_mux/spice/cml_mux2_cmos_select.spice`, retired in `retired_legacy_vars_20261120.json`)保留原有四只数据管、两只选择管和公共尾源，去掉本地选择端源跟随器及其偏置支路。
 - 选择端由理想互补0–1.8V源直接驱动：sp高选B、sn高选A。数据端和输出仍为CML。
-- [CMOS选择树](../../analog/tx/serializer/spice/serializer16_tree_cmos_select.spice)保留8+4+2+1结构与d0先出位序，没有重定时锁存器或并行字捕获。
+- CMOS选择树 (`../../analog/tx/serializer/spice/serializer16_tree_cmos_select.spice`, retired in `retired_legacy_vars_20261120.json`)保留8+4+2+1结构与d0先出位序，没有重定时锁存器或并行字捕获。
 - 对照版本保留原来的CML选择电平和本地源跟随器。两者Wdata=40µm、Wselect=64µm、Wtail=12µm，尾管L=0.5µm。
 - 单级R=400Ω；树中间级R=500Ω、末级400Ω，输出每端20fF。外部偏置参考仍为0.85mA。
 - 各级时钟均50%占空比，边沿完整转换长度0.08 UI，四级相位偏移全部为零，不进行相位优化。

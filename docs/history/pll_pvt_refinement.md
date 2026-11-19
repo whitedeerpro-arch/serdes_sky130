@@ -4,7 +4,7 @@
 
 ## VCO：小幅增大变容管，对称补充节点电容
 
-候选为 [vco_ring4_pvt_candidate.spice](../../analog/pll/vco/spice/vco_ring4_pvt_candidate.spice)：变容管 W/L 从 15/0.5 改为 18/0.5 µm；粗调 MIM 单元从 2×5 改为 2.35×5 µm；八个振荡节点各增加一颗 2.5×2.5 µm 的真实 MIM 电容。电流、延迟单元及抽出结构保持原参数，三个供电 dummy 分支仍完整保留。
+候选为 vco_ring4_pvt_candidate.spice (`../../analog/pll/vco/spice/vco_ring4_pvt_candidate.spice`, retired in `retired_legacy_vars_20261120.json`)：变容管 W/L 从 15/0.5 改为 18/0.5 µm；粗调 MIM 单元从 2×5 改为 2.35×5 µm；八个振荡节点各增加一颗 2.5×2.5 µm 的真实 MIM 电容。电流、延迟单元及抽出结构保持原参数，三个供电 dummy 分支仍完整保留。
 
 TT、27°C、1 GHz 小信号器件表征中，新增 MIM 每颗为 14.132 fF；粗调单元为 25.908 fF，原值为 22.292 fF。变容管在输出直流偏置 1.5 V、控制 0.3–1.6 V 时，原尺寸约为 63.136→11.514 fF，新尺寸约为 74.700→13.623 fF。这是指定偏置下的小信号电容，不等于环振大信号周期中的有效电容。
 
@@ -73,7 +73,7 @@ SS、1.65 V、85°C 的实际 buffer 输出共模约为 1.511 V，差分摆幅�
 
 ## 证据与适用范围
 
-运行目录：[本轮 campaign](../../results/analog/pll/pvt_refinement/20261029T100030Z)。其中保存独立源快照、每次完整 TB、日志、数值结果及 `execution/*.txt` 命令记录；没有增加持久 Python 源文件。转换器 [单元模板](../../analog/common/cml_to_cmos/tb/pvt/tb_cml_to_cmos_candidate_ngspice.cir.in) 和前端 [联调模板](../../analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in) 可供后续模型拓展。
+运行目录：[本轮 campaign](../../results/analog/pll/pvt_refinement/20261029T100030Z)。其中保存独立源快照、每次完整 TB、日志、数值结果及 `execution/*.txt` 命令记录；没有增加持久 Python 源文件。转换器 [单元模板](../../analog/common/cml_to_cmos/tb/pvt/tb_cml_to_cmos_candidate_ngspice.cir.in) 和前端 联调模板 (`../../analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`) 可供后续模型拓展。
 
 测试中的 CML 电阻仍为理想名义值，偏置参考电流仍为外部理想电流源，未开启随机噪声或失配，未包含提取寄生。1.95 V 冷角的 CMOS 节点仍可上冲至约 2.026 V，器件端电压适用范围检查尚未收口。未完成 45 环境网格、闭环捕获 PVT、无扰跳码或相位噪声签核。当前候选不替换冻结版本。
 

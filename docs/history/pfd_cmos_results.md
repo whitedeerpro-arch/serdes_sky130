@@ -97,7 +97,7 @@ CLEAR_B 低电平持续约 438.98 ps。它们与端口 UP/DN 脉宽是不同的�
 
 ## 真实分频器 → 转换器 → PFD
 
-测试台为 [tb_divider_pfd_ngspice.cir.in](../../analog/pll/top/tb/divider_pfd/tb_divider_pfd_ngspice.cir.in)。
+测试台为 tb_divider_pfd_ngspice.cir.in (`../../analog/pll/top/tb/divider_pfd/tb_divider_pfd_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`)。
 使用已有晶体管级整数 CML 计数器和原封不动的 `serdes_cml_to_cmos` 时钟接收器。
 RX 输出真正驱动 PFD 输入晶体管，另外正端 5 fF、负端 20 fF；不是理想 CMOS 波形替换。
 分频器 CML 输出每端另有 5 fF。

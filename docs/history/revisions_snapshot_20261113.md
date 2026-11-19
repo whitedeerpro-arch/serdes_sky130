@@ -29,12 +29,12 @@
 
 | 单元 | 文件 |
 |---|---|
-| 原生时钟前端（四路抽出、三路供电 dummy） | [clock_frontend_lowov.spice](../../analog/pll/top/spice/clock_frontend_lowov.spice) |
-| VCO | [vco_ring4_pvt_candidate.spice](../../analog/pll/vco/spice/vco_ring4_pvt_candidate.spice) |
+| 原生时钟前端（四路抽出、三路供电 dummy） | clock_frontend_lowov.spice (`../../analog/pll/top/spice/clock_frontend_lowov.spice`, retired in `retired_legacy_vars_20261120.json`) |
+| VCO | vco_ring4_pvt_candidate.spice (`../../analog/pll/vco/spice/vco_ring4_pvt_candidate.spice`, retired in `retired_legacy_vars_20261120.json`) |
 | 时钟接收器（全速与反馈） | [cml_to_cmos_pvt_candidate.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice) |
 | ÷8 prescaler（含级间 buffer、本地偏置） | [cml_prescaler8.spice](../../analog/pll/divider/spice/cml_prescaler8.spice)、[cml_div2.spice](../../analog/pll/divider/spice/cml_div2.spice)、[cml_latch.spice](../../analog/pll/divider/spice/cml_latch.spice) |
 | PFD / CP / LF | [pfd_cmos.spice](../../analog/pll/pfd/spice/pfd_cmos.spice)、[charge_pump.spice](../../analog/pll/cp/spice/charge_pump.spice)、[passive_rc_precharge.spice](../../analog/pll/loop_filter/spice/passive_rc_precharge.spice) |
-| 物理 LF 候选（未采用） | [passive_rc_pdk_candidate.spice](../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice) |
+| 物理 LF 候选（未采用） | passive_rc_pdk_candidate.spice (`../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice`, retired in `retired_legacy_vars_20261120.json`) |
 | 启动监督 RTL | [pll_startup_supervisor.sv](../../digital/pll/rtl/pll_startup_supervisor.sv) |
 
 ### TX r2 源文件

@@ -7,8 +7,8 @@
 原单点预充从ctrl经6.5kΩ给40pF积分电容充电。新电路对ctrl与积分节点z分别设置实际SKY130 CMOS传输门，启动时旁路这条慢充电路径，关闭后保留原RC拓扑及开关寄生。旧电路保留，新版独立存在。
 
 - [双节点LF](../../analog/pll/loop_filter/spice/passive_rc_precharge.spice)：ctrl端NMOS/PMOS宽4/8µm，z端16/32µm。
-- [可禁用CP](../../analog/pll/cp/spice/charge_pump_enabled.spice)：实际CMOS AND门控制UP/DN，禁用不等于零漏电。
-- [平衡核心的新接口](../../analog/pll/top/spice/pll_balanced_startup_core.spice)：暴露pre_ref、pre_en、cp_en、PFD复位和z状态，保留四路匹配抽出/dummy。
+- 可禁用CP (`../../analog/pll/cp/spice/charge_pump_enabled.spice`, retired in `retired_legacy_vars_20261120.json`)：实际CMOS AND门控制UP/DN，禁用不等于零漏电。
+- 平衡核心的新接口 (`../../analog/pll/top/spice/pll_balanced_startup_core.spice`, retired in `retired_legacy_vars_20261120.json`)：暴露pre_ref、pre_en、cp_en、PFD复位和z状态，保留四路匹配抽出/dummy。
 - [可综合监督器](../../digital/pll/rtl/pll_startup_supervisor.sv)：独立参考时钟域RTL。
 
 ![预充及释放，固定UI尺度](../figures/clocking/pll/startup/pll_startup_precharge_optimization_ui.png)
@@ -62,10 +62,10 @@ Icarus已验证正常交接、频率正确但相位错误不误锁、连续好/�
 | 层次 | 测试入口 | 本轮状态 |
 |---|---|---|
 | LF冷充/释放 | [双节点模板](../../analog/pll/loop_filter/tb/precharge/tb_lf_dual_precharge_ngspice.cir.in) | TT冷充和512ns释放已运行 |
-| PFD/CP/LF接管 | [校准混合视图](../../analog/pll/top/tb/startup/tb_pll_startup_mixed_ngspice.cir.in) | 实际PFD/CP，局部行为VCO/理想÷8 |
-| 完整原生闭环 | [原生冷启动模板](../../analog/pll/top/tb/startup/tb_pll_startup_native_ngspice.cir.in) | 本轮未运行，保留Sparse和四路匹配负载 |
+| PFD/CP/LF接管 | 校准混合视图 (`../../analog/pll/top/tb/startup/tb_pll_startup_mixed_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`) | 实际PFD/CP，局部行为VCO/理想÷8 |
+| 完整原生闭环 | 原生冷启动模板 (`../../analog/pll/top/tb/startup/tb_pll_startup_native_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`) | 本轮未运行，保留Sparse和四路匹配负载 |
 | RTL控制与故障 | [功能场景](../../digital/pll/tb/tb_pll_startup_supervisor.sv)、[默认时序](../../digital/pll/tb/tb_pll_startup_default_timing.sv) | 功能/lint/通用综合检查通过 |
-| 条件与收集 | [contract](../../verification/contracts/pll_startup.toml)、[case](../../analog/pll/top/tb/startup/case.toml) | 外部依赖及收集量明确 |
+| 条件与收集 | [contract](../../verification/contracts/pll_startup.toml)、case (`../../analog/pll/top/tb/startup/case.toml`, retired in `retired_legacy_vars_20261120.json`) | 外部依赖及收集量明确 |
 
 模板的@MODEL_LIBRARY@、@PROJECT_ROOT@、@CORNER@按已有约定展开，.spiceinit使用hsa兼容模式。应保存两个LF状态、全部接管控制和参考源电流，并冻结输入文件与哈希。退出码0或Vctrl平坦不能代替判锁。
 

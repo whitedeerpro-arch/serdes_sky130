@@ -96,7 +96,7 @@ clk_out 占空比变化约 0.00031 个百分点，平均功耗变化约 0.15%。
 
 ## 真实 CML ÷8 → 接收器 → CMOS → PFD
 
-[耦合测试台](../../analog/pll/top/tb/hybrid_divider_pfd/tb_hybrid_divider_pfd_ngspice.cir.in)
+耦合测试台 (`../../analog/pll/top/tb/hybrid_divider_pfd/tb_hybrid_divider_pfd_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`)
 使用 2 GHz、400 mV 差分峰峰值、1.632 V 共模的理想差分激励。
 三级 CML 输出每端 5 fF，前两级还带下一级输入的真实晶体管负载，第三级带接收器输入。
 RX 正端额外 5 fF 并驱动 CMOS 后级，负端 20 fF；tick/clk_out 各 20 fF，tick 还驱动真实 PFD。

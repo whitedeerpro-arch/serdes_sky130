@@ -85,8 +85,8 @@ FS弱角的2GHz时钟平均周期仍约2UI、周期散布约0.002UI，而数据�
 
 理想钳位没有实现成电路，也不能当作修复通过。实际MOS候选有两种，默认设计均未替换：
 
-- [独立井偏置开关](../../analog/tx/output_driver/spice/cml_line_driver_biaswell_candidate.spice)：PMOS单独井接参考偏置，以改变模拟传输门的体偏置；保留实际NMOS/PMOS和关断下拉。独立SS冷角约50ns、完整TX约71ns后进入所测1%误差带，仍不算快速接管完成。需要单独井布局、偏置供电时序及全角开关瞬态验证。
-- [源端footer](../../analog/tx/output_driver/spice/cml_line_driver_footer_candidate.spice)：尾管门极保持参考偏置，增加受CMOS轨到轨控制的源端开关；当前只在SS冷角测了一点，独立远端裕量约175mV。新增源端电压和体效应、关断残流及面积/电流代价尚未做全角比较。
+- 独立井偏置开关 (`../../analog/tx/output_driver/spice/cml_line_driver_biaswell_candidate.spice`, retired in `retired_legacy_vars_20261120.json`)：PMOS单独井接参考偏置，以改变模拟传输门的体偏置；保留实际NMOS/PMOS和关断下拉。独立SS冷角约50ns、完整TX约71ns后进入所测1%误差带，仍不算快速接管完成。需要单独井布局、偏置供电时序及全角开关瞬态验证。
+- 源端footer (`../../analog/tx/output_driver/spice/cml_line_driver_footer_candidate.spice`, retired in `retired_legacy_vars_20261120.json`)：尾管门极保持参考偏置，增加受CMOS轨到轨控制的源端开关；当前只在SS冷角测了一点，独立远端裕量约175mV。新增源端电压和体效应、关断残流及面积/电流代价尚未做全角比较。
 
 两个候选都只是局部启发，不把它们的结果混入原设计的45工况矩阵。
 

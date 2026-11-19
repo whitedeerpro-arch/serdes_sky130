@@ -25,7 +25,7 @@ flowchart LR
 
 双端端接时每端交流负载约 25 Ω，Vdiff,pp ≈ 2 × I_tail × 25 Ω，400 mVpp 约需 8 mA。`tx_en` 低时关闭线尾电流（预驱动不掉电），给 AC 耦合链路提供对称的直流起始状态。
 
-**为什么改使能门。** v0.1 的传输门在 SS/1.65 V/−40 °C 下给尾管栅极充电过慢：30 ns 约 0.817 V、90 ns 约 0.922 V（目标约 1.060 V），96 ns 内未进入 1% 误差带，远端最小裕量只有 31.78 mV。理想钳位定位后恢复到 151 mV。r2 改用低阈值 N/P 传输门（比较 Wp = 16/32/64 µm，选 32 µm），不强制钳位。另有两个未采用的候选：[独立井偏置开关](../../analog/tx/output_driver/spice/cml_line_driver_biaswell_candidate.spice)、[源端 footer](../../analog/tx/output_driver/spice/cml_line_driver_footer_candidate.spice)。来源：[TX PVT](../history/tx_pvt.md)。
+**为什么改使能门。** v0.1 的传输门在 SS/1.65 V/−40 °C 下给尾管栅极充电过慢：30 ns 约 0.817 V、90 ns 约 0.922 V（目标约 1.060 V），96 ns 内未进入 1% 误差带，远端最小裕量只有 31.78 mV。理想钳位定位后恢复到 151 mV。r2 改用低阈值 N/P 传输门（比较 Wp = 16/32/64 µm，选 32 µm），不强制钳位。另有两个未采用的候选：独立井偏置开关 (`../../analog/tx/output_driver/spice/cml_line_driver_biaswell_candidate.spice`, retired in `retired_legacy_vars_20261120.json`)、源端 footer (`../../analog/tx/output_driver/spice/cml_line_driver_footer_candidate.spice`, retired in `retired_legacy_vars_20261120.json`)。来源：[TX PVT](../history/tx_pvt.md)。
 
 ## 已验证结果
 

@@ -68,11 +68,11 @@ bench：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 pre
 | 只加宽负载，或只降低预驱动翻转点 | SS 冷角仍失败 |
 | 负载 W16 + 尾管 W12 + 预驱动 NMOS 3.6 µm | 修好 SS 冷角，但 **SS 热角失败**（上沿不够） |
 | **"big"：输入对 W10、负载 W16、尾管 W16、预驱动 NMOS 3.6 µm** | **45/45**，占空比 0.477–0.511，转换器功耗 2.6–6.2 mW（TT 约 4.8 mW，比原候选多约 1 mW） |
-| 交流耦合 + 自偏置反相器（[cml_to_cmos_acsb](../../analog/common/cml_to_cmos/spice/cml_to_cmos_acsb.spice)） | TT/FF 正常、功耗约 1 mW；SS 冷热都失败：1.65 V 慢工艺下反相器在翻转点几乎没有增益。未采用 |
+| 交流耦合 + 自偏置反相器（cml_to_cmos_acsb (`../../analog/common/cml_to_cmos/spice/cml_to_cmos_acsb.spice`, retired in `retired_legacy_vars_20261120.json`)） | TT/FF 正常、功耗约 1 mW；SS 冷热都失败：1.65 V 慢工艺下反相器在翻转点几乎没有增益。未采用 |
 
 幅度余量：源降到 200 mVpp 时，"big" 在 SS 冷、FS 热、SF 冷角仍通过，SS 热角（输入 277 mVpp）失败；SS 热角正常输入约 390 mVpp。
 
-"big" 定为 r4（`serdes_cml_to_cmos_r4`），接进 [r4 前端](../../analog/pll/top/spice/clock_frontend_r4.spice)，按 r3 原生回接的固定 Vctrl 工作点复验（[bench](../../analog/pll/top/tb/pvt_r4/run.py)）：
+"big" 定为 r4（`serdes_cml_to_cmos_r4`），接进 r4 前端 (`../../analog/pll/top/spice/clock_frontend_r4.spice`, retired in `retired_legacy_vars_20261120.json`)，按 r3 原生回接的固定 Vctrl 工作点复验（bench (`../../analog/pll/top/tb/pvt_r4/run.py`, retired in `retired_legacy_vars_20261120.json`)）：
 
 | 工作点 | VCO | 分频 / 反馈 / 全速 | 全速占空比 | 前端功耗 r3 → r4 |
 |---|---:|---|---:|---:|

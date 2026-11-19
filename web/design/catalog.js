@@ -242,12 +242,12 @@ window.DESIGN_CATALOG = {
           "path": "docs/status/current.md"
         },
         {
-          "title": "完整 PLL 核心",
-          "path": "analog/pll/top/spice/pll_balanced_core.spice"
+          "title": "完整 PLL 核心（r6 quiet）",
+          "path": "analog/pll/top/spice/pll_core_r6k4q.spice"
         },
         {
-          "title": "带预充的完整核心",
-          "path": "analog/pll/top/spice/pll_balanced_startup_core.spice"
+          "title": "历史 r5 k4 核心",
+          "path": "analog/pll/top/spice/pll_core_r5k4q.spice"
         },
         {
           "title": "环路设计与验证",
@@ -2015,8 +2015,8 @@ window.DESIGN_CATALOG = {
           "path": "digital/pll/README.md"
         },
         {
-          "title": "启动电路顶层",
-          "path": "analog/pll/top/spice/pll_balanced_startup_core.spice"
+          "title": "当前 PLL 顶层核心（r6 quiet）",
+          "path": "analog/pll/top/spice/pll_core_r6k4q.spice"
         }
       ],
       "iterations": []

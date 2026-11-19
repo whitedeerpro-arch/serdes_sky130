@@ -1,0 +1,25 @@
+# 模块设计文档索引（`docs/design/`）
+
+项目级采用状态与验证数字唯一汇总见 [current.md](../status/current.md)，执行队列见 [prelayout_plan.md](../status/prelayout_plan.md)，修订线与源文件见 [revisions.md](../overview/revisions.md)。本目录保存各模块原理、尺寸推导、边界与局部验证记录。
+
+## PLL 与时钟
+- **核心与环路**：[pll_loop.md](pll_loop.md) · [r6_lock_confirmation.md](r6_lock_confirmation.md) · [r6_mainline_review.md](r6_mainline_review.md) · [pll_cp_window.md](pll_cp_window.md) · [pll_coarse_windows.md](pll_coarse_windows.md)
+- **VCO 与电容阵列**：[pll_vco.md](pll_vco.md) · [r6_map_audit.md](r6_map_audit.md) · [vco_bank_optimization.md](vco_bank_optimization.md)
+- **分频器与时钟接收**：[pll_divider.md](pll_divider.md)（主线 r3 CML ÷8）· [pll_sync_prescaler8.md](pll_sync_prescaler8.md)（2-Stack 同步 CML 候选）· [clock_receiver.md](clock_receiver.md)（CML→CMOS）· [ref_amp.md](ref_amp.md)
+- **供电与纹波预算**：[pll_ripple_budget.md](pll_ripple_budget.md) · [pll_supply_options.md](pll_supply_options.md) · [pll_supply_variants.md](pll_supply_variants.md) · [pll_timing_supply_review.md](pll_timing_supply_review.md)
+
+## Bias、LDO 与监控
+- **带隙与偏置**：[bias.md](bias.md) · [bias_cap_review.md](bias_cap_review.md) · [physical_reference_card.md](physical_reference_card.md) · [monitor.md](monitor.md)
+- **LDO（HV18 r4 与减容候选）**：[ldo_r4.md](ldo_r4.md) · [ldo_smallcap.md](ldo_smallcap.md) · [ldo_cap_area.md](ldo_cap_area.md) · [ldo.md](ldo.md)
+
+## TX（字入口、时钟分发、串化与线驱动）
+- **整链与主入口**：[tx_parallel_serializer.md](tx_parallel_serializer.md) · [tx_final_retime.md](tx_final_retime.md) · [tx_clock_distribution.md](tx_clock_distribution.md) · [tx_serializer.md](tx_serializer.md) · [tx_output_driver.md](tx_output_driver.md)
+- **字入口与保持时序**：[tx_ingress.md](tx_ingress.md) · [tx_word_capture.md](tx_word_capture.md) · [tx_launch_hold.md](tx_launch_hold.md)
+- **缓冲与负载专题**：[tx_buffer_sizing.md](tx_buffer_sizing.md) · [tx_buffer_local.md](tx_buffer_local.md) · [tx_buffer_cascade.md](tx_buffer_cascade.md) · [tx_buffer_heavy.md](tx_buffer_heavy.md) · [tx_cml_amplitude.md](tx_cml_amplitude.md) · [tx_coupling_state.md](tx_coupling_state.md) · [tx_loaded_clock.md](tx_loaded_clock.md) · [tx_physical_load_card.md](tx_physical_load_card.md) · [tx_relative_timing_screen.md](tx_relative_timing_screen.md) · [tx_retime_demand.md](tx_retime_demand.md)
+
+## RX 与信道
+- **前端、PI、采样与数字**：[rx_frontend.md](rx_frontend.md) · [rx_pi_sampler.md](rx_pi_sampler.md) · [rx_cdr_digital.md](rx_cdr_digital.md) · [rx_cold_convergence.md](rx_cold_convergence.md) · [rx_word_host_timing.md](rx_word_host_timing.md) · [rx_host_cdc.md](rx_host_cdc.md)
+- **信道**：[channel_model.md](channel_model.md)
+
+## 公共器件与跨模块专题
+- [cml_swing_target.md](cml_swing_target.md) · [fixed_load_resistors.md](fixed_load_resistors.md) · [fixed_poly_ac_overlay.md](fixed_poly_ac_overlay.md) · [wide_load_planning.md](wide_load_planning.md) · [power_audit.md](power_audit.md)

@@ -1,5 +1,9 @@
 # HV18 PLL 供电候选
 
+第二轮[周边电容与面积迭代](../../../docs/design/ldo_cap_area.md)已比较8/12/16pF、参考缩容及同值叠层。独立叠层核心/无源/宏源见`spice/*stacked*.spice`；当前PLL采用组合仍查[状态入口](../../../docs/status/current.md)，未静默替换。
+
+2026-11-14新增[70pF减容候选](../../../docs/design/ldo_smallcap.md)：独立电路与物理交付见[smallcap_pdk](layout/variants/smallcap_pdk/README.md)，复跑见[cap_sizing](tb/cap_sizing/README.md)。后续版图优先以该候选规划；已有PLL集成证据仍属于r4，不转移给新尺寸。下文保留原r4的电路与复跑入口。
+
 当前为 **r4：静态供电引脚、参考RC、电压修调、PDK无源**。quiet PLL候选`r5k4q`已接入并完成TT两配置原生预充闭环，压力角进行中；原基线保留。详见[设计与边界](../../../docs/design/ldo_r4.md)、[工作修订](../../../config/ldo_working_revision.toml)、[交接包](../../../docs/work_packages/WP-LDO-002-r4-handoff.md)。
 
 高压配置：Vin3.0–3.6 V，quiet为输出，enable高。外供配置：板上将Vin和quiet同接一条合格1.65–1.95 V电源，enable=0。只在初始化确定配置；不支持Vin=0而quiet单独供电。quiet高压模式的额外电容必须计入稳定性，目前没有任意外接去耦保证。

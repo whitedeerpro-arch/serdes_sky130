@@ -1,0 +1,53 @@
+* NGSPICE file created from serdes_pll_bias_lowpass_slow_r4_pdk.ext - technology: sky130A
+
+.subckt serdes_pll_bias_lowpass_slow_r4_pdk original filtered vss
+X0 filtered a_4192_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X1 a_3896_9723# a_3600_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X2 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X3 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X4 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X5 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X6 a_n4392_9723# a_n4688_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X7 a_n4392_9723# a_n4096_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X8 a_2120_9723# a_1824_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X9 a_3304_9723# a_3600_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X10 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X11 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X12 original a_n4688_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X13 a_936_9723# a_1232_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X14 a_2712_9723# a_2416_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X15 a_3304_9723# a_3008_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X16 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X17 a_2712_9723# a_3008_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X18 a_n3800_9723# a_n4096_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X19 a_344_9723# a_640_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X20 a_1528_9723# a_1824_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X21 a_2120_9723# a_2416_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X22 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X23 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X24 a_344_9723# a_48_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X25 a_1528_9723# a_1232_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X26 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X27 a_n3800_9723# a_n3504_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X28 a_n2024_9723# a_n2320_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X29 a_936_9723# a_640_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X30 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X31 a_n3208_9723# a_n2912_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X32 a_n1432_9723# a_n1728_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X33 a_n840_9723# a_n544_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X34 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X35 a_n3208_9723# a_n3504_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X36 a_n2616_9723# a_n2912_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X37 a_n1432_9723# a_n1136_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X38 a_n248_9723# a_n544_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X39 a_n2616_9723# a_n2320_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X40 a_n2024_9723# a_n1728_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X41 a_n840_9723# a_n1136_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X42 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X43 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X44 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X45 a_3896_9723# a_4192_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X46 a_n248_9723# a_48_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X47 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+.ends
+

@@ -1,5 +1,7 @@
 # PLL 安静供电：HV18 r4
 
+> 2026-11-14：新增[70pF减容局部候选](ldo_smallcap.md)，已独立补原理图网格、启动/噪声和核心PEX压力点。下文保留r4原参数及其证据，原生PLL记录不自动转为减容版本通过。
+
 **r4 是当前 LDO 候选：3.3→1.8 V 双原生 NMOS核心、静态供电接口、参考RC、6bit电压修调和PDK无源。** DC1215条件输出1.776–1.815V；AC255条件20MHz抑制最差38.44dB、PM71.28–81.43°。已接quiet PLL `r5k4q`，完成TT及三个压力条件×hv/ext共8条原生预充闭环锁定；这批结果继续保留。下一步承接r6实际负载、ready/从零启动和相应噪声预算，不重复未改动的r4局部网格。
 
 入口：[工作修订](../../config/ldo_working_revision.toml)、[电路与复跑](../../analog/common/ldo/README.md)、[数据](../data/ldo_r4.json)、[结果索引](../../results/catalog/ldo_r4.json)、[交接包](../work_packages/WP-LDO-002-r4-handoff.md)。[r1–r3 记录](ldo.md)保留历史供电开关与模式实验，不能继续当作 r4 接口。

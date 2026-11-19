@@ -1,0 +1,16 @@
+{
+  "report": "docs/design/ldo_smallcap.md",
+  "runner": "analog/common/ldo/tb/cap_sizing/mismatch.py",
+  "runner_sha256": "ae0eac2367f0c458d11855fc750c3d5f277fd119c02045e2f023defc9ffcdace",
+  "revision": "smallcap_b32_h2_candidate",
+  "date": "2026-11-14",
+  "campaign": "results/analog/common/ldo/smallcap_mismatch/20261113T172749.615910Z",
+  "plan_sha256": "9f7543f28ee9233edb3797744885ba76d2da32e4bbbc563b500a02d2e42460ca",
+  "summary": "results/analog/common/ldo/smallcap_mismatch/20261113T172749.615910Z/analysis/20261113T173305.240662Z/summary.json",
+  "summary_sha256": "b23cca3f90d51c34ead2543b874570212cdb7dbc4a999b758753a3dbf4d563d6",
+  "samples_per_profile": 16,
+  "profiles": ["fs_ll_mm", "tt_mm"],
+  "seed": 70,
+  "chunk": 4,
+  "scope": "conditional schematic local mismatch pilot; per-chip trim, held over declared supply/temperature/load changes; AC at10mA; no PNP mismatch, direct g5 Vth mismatch, statistical global process, full PVT/PEX/startup/PLL qualification"
+}

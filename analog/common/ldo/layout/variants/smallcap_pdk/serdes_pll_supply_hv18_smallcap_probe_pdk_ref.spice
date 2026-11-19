@@ -1,0 +1,149 @@
+* Geometry views for HV18 r4. Values approximate TT/27C; verify by passive card.
+* high_po mapping follows the project's calibrated 378+317*L, divided by W.
+* ngspice47 ignores model isnoisy=0; a dedicated resistor-noise check confirms
+* high_po Johnson noise. Full physical noise/PEX coverage remains separate.
+.subckt serdes_ldo_res a b sub params: r=1k
+Xr a b sub sky130_fd_pr__res_high_po
++ w={max(1,ceil(1012/r))} l={(r*max(1,ceil(1012/r))-378)/317}
+.ends serdes_ldo_res
+
+* 1 Mohm reference resistor, 32 physical high_po units of31.25kohm.
+* xhigh's behavioral body omits Johnson noise in installed ngspice; avoid it.
+.subckt serdes_ldo_ref31 a b sub
+Xr a b sub sky130_fd_pr__res_high_po w=1 l=97.3880126
+.ends serdes_ldo_ref31
+.subckt serdes_ldo_ref62 a b sub
+X0 a m sub serdes_ldo_ref31
+X1 m b sub serdes_ldo_ref31
+.ends serdes_ldo_ref62
+.subckt serdes_ldo_ref125 a b sub
+X0 a m sub serdes_ldo_ref62
+X1 m b sub serdes_ldo_ref62
+.ends serdes_ldo_ref125
+.subckt serdes_ldo_ref250 a b sub
+X0 a m sub serdes_ldo_ref125
+X1 m b sub serdes_ldo_ref125
+.ends serdes_ldo_ref250
+.subckt serdes_ldo_ref500 a b sub
+X0 a m sub serdes_ldo_ref250
+X1 m b sub serdes_ldo_ref250
+.ends serdes_ldo_ref500
+.subckt serdes_ldo_ref_res a b sub
+X0 a m sub serdes_ldo_ref500
+X1 m b sub serdes_ldo_ref500
+.ends serdes_ldo_ref_res
+
+* One physical MIM per leaf. mf does NOT multiply nominal PDK capacitance.
+.subckt serdes_ldo_mim1 a b
+Xc a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+.ends serdes_ldo_mim1
+.subckt serdes_ldo_mim2 a b
+X0 a b serdes_ldo_mim1
+X1 a b serdes_ldo_mim1
+.ends serdes_ldo_mim2
+.subckt serdes_ldo_mim4 a b
+X0 a b serdes_ldo_mim2
+X1 a b serdes_ldo_mim2
+.ends serdes_ldo_mim4
+.subckt serdes_ldo_mim8 a b
+X0 a b serdes_ldo_mim4
+X1 a b serdes_ldo_mim4
+.ends serdes_ldo_mim8
+.subckt serdes_ldo_mim16 a b
+X0 a b serdes_ldo_mim8
+X1 a b serdes_ldo_mim8
+.ends serdes_ldo_mim16
+.subckt serdes_ldo_mim32 a b
+X0 a b serdes_ldo_mim16
+X1 a b serdes_ldo_mim16
+.ends serdes_ldo_mim32
+.subckt serdes_ldo_mim50 a b
+X0 a b serdes_ldo_mim32
+X1 a b serdes_ldo_mim16
+X2 a b serdes_ldo_mim2
+.ends serdes_ldo_mim50
+.subckt serdes_ldo_mim100 a b
+X0 a b serdes_ldo_mim50
+X1 a b serdes_ldo_mim50
+.ends serdes_ldo_mim100
+
+* Small-cap b32_h2 candidate,2026-11-14: Rhv2k/Chv32pF,Rcas31.25k/Ccas16pF.
+* MOS and Miller2pF/2k unchanged; original r4 remains the historical comparison.
+* HV18 r4: cascoded native 5 V NMOS pass with a separately filtered cascode gate.
+* All dimensions are total width; nf selects characterized per-finger bins.
+* External: 1.23 V reference, 10 uA into ibias from host 1.8 V,
+* feedback divider, output capacitor and load. off=0 enables regulation.
+* Static bypass ties vin/out externally. Off clamps gate AND mirror bias.
+* PDK passives require ldo_passives.spice. UVLO is outside this core.
+* No 1.8 V transistor has a terminal connected to the HV supply.
+.subckt serdes_ldo_hv18_core_smallcap vin out ref ibias fb off vss
+Xrhv vin va vss sky130_fd_pr__res_high_po w=2 l=11.425
+Xchv va vss serdes_ldo_mim32
+* Gate-only filter has no amplifier DC current/drop, preserving low-Vin headroom.
+Xrcas vin casg vss sky130_fd_pr__res_high_po w=1 l=97.39
+Xccas casg vss serdes_ldo_mim16
+Xnb ibias ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xnr bp ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xpd bp bp va va sky130_fd_pr__pfet_g5v0d10v5 w=60 l=4 nf=40 ad=17.4 as=17.4 pd=143.2 ps=143.2
+Xpt tail bp va va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=4 nf=80 ad=34.8 as=34.8 pd=286.4 ps=286.4
+Xpl d fb tail va sky130_fd_pr__pfet_g5v0d10v5 w=15 l=1 nf=1 ad=4.35 as=4.35 pd=30.58 ps=30.58
+Xpr x ref tail va sky130_fd_pr__pfet_g5v0d10v5 w=15 l=1 nf=1 ad=4.35 as=4.35 pd=30.58 ps=30.58
+Xnl d d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xnm x d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=4 nf=60 ad=17.4 as=17.4 pd=154.8 ps=154.8
+Xn2 gate x vss vss sky130_fd_pr__nfet_g5v0d10v5 w=60 l=0.5 nf=6 ad=17.4 as=17.4 pd=123.48 ps=123.48
+Xp2 gate bp va va sky130_fd_pr__pfet_g5v0d10v5 w=360 l=4 nf=240 ad=104.4 as=104.4 pd=859.2 ps=859.2
+Xrzero x cz vss sky130_fd_pr__res_high_po w=1 l=5.12
+Xccomp cz gate serdes_ldo_mim2
+* Cascode source follower isolates pass drain and Cgd from the noisy input.
+* Its gate uses a separate HV RC; headroom and startup still need checking.
+Xcas vin casg mid vss sky130_fd_pr__nfet_05v0_nvt w=2000 l=0.9 nf=200 ad=580 as=580 pd=4116 ps=4116
+Xpass mid gate out vss sky130_fd_pr__nfet_05v0_nvt w=1000 l=0.9 nf=100 ad=290 as=290 pd=2058 ps=2058
+Xoff gate off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.9 as=2.9 pd=20.58 ps=20.58
+* Disable the mirror while off; the host copy still supplies ~10uA into clamp.
+Xboff ibias off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.9 as=2.9 pd=20.58 ps=20.58
+.ends serdes_ldo_hv18_core_smallcap
+
+* Small-cap b32_h2 candidate: Cout4pF,reference16pF; total70pF including core50pF.
+* Dependencies: original physical ldo_passives,smallcap core,original BG/copy/CMOS primitives.
+* Static configuration only, 2026-11-10 interface agreement.
+* HV configuration: vin=3.0..3.6V, quiet is an OUTPUT, enable=host logic high.
+* External1.8V configuration: board ties vin AND quiet to ONE qualified1.8V
+* supply, enable=0. No hot change, no isolated-vin=0/quiet=1.8V contract.
+* Global bg/vgi belong to host. Set six trim bits before enable; factory voltage
+* measurement is external. Bits high short binary bottom-divider segments.
+* Dependencies: bias_dist, CMOS/primitives, ldo_passives, ldo_hv18_core_r4.
+.subckt serdes_pll_supply_hv18_smallcap vin host quiet bg vgi enable t0 t1 t2 t3 t4 t5 vss
+Xloop vin host quiet bg vgi enable t0 t1 t2 t3 t4 t5 fb fb vss serdes_pll_supply_hv18_smallcap_probe_pdk
+.ends serdes_pll_supply_hv18_smallcap
+
+* Same circuit with externally accessible feedback break, for dual injection.
+* Production wrapper above shorts both feedback pins, with no probe source.
+.subckt serdes_pll_supply_hv18_smallcap_probe_pdk vin host quiet bg vgi enable t0 t1 t2 t3 t4 t5 fb_return fb_input vss
+Xcopy ibias vgi host host sky130_fd_pr__pfet_01v8_lvt w=24 l=4
+Xinv_n off enable vss vss sky130_fd_pr__nfet_01v8 w=1 l=0.15
+Xinv_p off enable host host sky130_fd_pr__pfet_01v8 w=2 l=0.15
+* Disconnect the shared bandgap when off, rather than loading it through1Mohm.
+Xtg_n bg enable ref_start vss sky130_fd_pr__nfet_01v8 w=2 l=0.15
+Xtg_p bg off ref_start host sky130_fd_pr__pfet_01v8 w=4 l=0.15
+Xrefres ref_start ref_local vss serdes_ldo_ref_res
+Xrefcap ref_local vss serdes_ldo_mim16
+Xrefreset ref_local off vss vss sky130_fd_pr__nfet_01v8 w=2 l=0.15
+Xcore vin quiet ref_local ibias fb_input off vss serdes_ldo_hv18_core_smallcap
+Xrtop quiet fb_return vss sky130_fd_pr__res_high_po w=1 l=118.68
+Xrfixed fb_return n5 vss sky130_fd_pr__res_high_po w=1 l=194.40
+Xr5 n5 n4 vss sky130_fd_pr__res_high_po w=1 l=99.76
+Xr4 n4 n3 vss sky130_fd_pr__res_high_po w=1 l=49.28
+Xr3 n3 n2 vss sky130_fd_pr__res_high_po w=1 l=24.04
+Xr2 n2 n1 vss sky130_fd_pr__res_high_po w=1 l=11.43
+Xr1 n1 n0 vss sky130_fd_pr__res_high_po w=1 l=5.12
+Xr0 n0 vss vss sky130_fd_pr__res_high_po w=2 l=5.12
+Xs5 n5 t5 n4 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs4 n4 t4 n3 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs3 n3 t3 n2 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs2 n2 t2 n1 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs1 n1 t1 n0 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs0 n0 t0 vss vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xbleed quiet vss vss sky130_fd_pr__res_high_po w=1 l=314.28
+Xcout quiet vss serdes_ldo_mim4
+.ends serdes_pll_supply_hv18_smallcap_probe_pdk
+

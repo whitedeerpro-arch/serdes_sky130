@@ -1,0 +1,12 @@
+* NGSPICE file created from serdes_ldo_mim4_pdk.ext - technology: sky130A
+
+.subckt serdes_ldo_mim4_pdk a b
+X0 a b sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X1 a b sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X2 a b sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X3 a b sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+C0 b a 0.17551p
+C1 a VSUBS 6.71213f
+C2 b VSUBS 39.8007f
+.ends
+

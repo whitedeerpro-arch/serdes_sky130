@@ -1,3 +1,4 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
 module = "pll_supply_hv18"
 working_revision = "hv18_r4_static_pins_ref_rc_voltage_trim"
 status = "r4_local_screen_and_four_conditions_x_hv_ext_native_r5_precharged_capture_complete; r6_load_and_startup_handoff_open"
@@ -90,3 +91,46 @@ calibration_campaign = "results/analog/common/ldo/r4/20261110T111227.910607Z_2c6
 startup_campaign = "results/analog/common/ldo/r4_startup/20261110T113541.207446Z_8767c44a"
 noise_campaign = "results/analog/common/ldo/r4_dc_noise/20261110T120141.651192Z_9a75685f"
 cap_load_campaign = "results/analog/common/ldo/r4_cap_load/20261110T120319.075181Z_64e49ca1"
+
+[smallcap_candidate]
+revision = "b32_h2_20261114"
+report = "docs/design/ldo_smallcap.md"
+core = "analog/common/ldo/spice/ldo_hv18_core_smallcap.spice"
+macro = "analog/common/ldo/spice/pll_supply_hv18_smallcap.spice"
+core_subcircuit = "serdes_ldo_hv18_core_smallcap"
+supply_subcircuit = "serdes_pll_supply_hv18_smallcap"
+physical = "analog/common/ldo/layout/variants/smallcap_pdk"
+evidence = "config/ldo_smallcap_evidence.json"
+preferred_for_next_layout = true
+integrated_into_PLL = false
+rhv_ohm = 2000
+chv_pf = 32
+rcas_ohm = 31250
+ccas_pf = 16
+cout_pf = 4
+reference_capacitance_pf = 16
+compensation_pf = 2
+ldo_mim_total_pf = 70
+tail_filter_capacitance_pf = 16 # Separate unchanged branch.
+
+[stacked_mim_candidate]
+revision = "stack_core70_20261114"
+selection_scope = "preferred next physical core candidate; r4/PLL adoption unchanged"
+report = "docs/design/ldo_cap_area.md"
+core = "analog/common/ldo/spice/ldo_hv18_core_stacked.spice"
+macro = "analog/common/ldo/spice/pll_supply_hv18_stacked.spice"
+passives = "analog/common/ldo/spice/ldo_stacked_passives.spice"
+physical_run = "results/layout/ldo_stacked/20261114_core70"
+peripheral_physical_run = "results/layout/ldo_stacked/20261114_filter16_v2"
+evidence = "config/ldo_cap_area_evidence.json"
+preferred_for_next_core_layout = true
+integrated_into_PLL = false
+complete_stacked_macro_drawn = false
+peripheral_replacement_installed = false
+ldo_mim_total_pf = 70
+chv_pf = 32
+ccas_pf = 16
+core_first_layer_units = 26 #24 filter units plus unchanged2pF Miller.
+core_second_layer_units = 24
+physical_core_area_um2 = 39774.73
+nominal_compact_first_layer_core_area_um2 = 52395.57

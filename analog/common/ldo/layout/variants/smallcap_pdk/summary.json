@@ -1,0 +1,394 @@
+{
+  "cell": "serdes_ldo_hv18_smallcap_pdk",
+  "width_um": 248.385,
+  "height_um": 210.945,
+  "area_um2": 52395.57,
+  "drc_total": 0,
+  "lvs_match": true,
+  "lvs_property_errors": false,
+  "exported_ports": [
+    "vss",
+    "out",
+    "vin",
+    "off",
+    "ibias",
+    "fb",
+    "ref"
+  ],
+  "check_stdout": "DRC_TOTAL 0\nWarning: netgen command 'global' use fully-qualified name '::netgen::global'\nReading netlist file /home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_lvs.spice\nReading netlist file /home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_ref.spice\nComparison output logged to file /home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_lvs.log\nLogging to file \"/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_lvs.log\" enabled\nCircuit 1 contains 20 devices, Circuit 2 contains 20 devices.\nCircuit 1 contains 16 nets,    Circuit 2 contains 16 nets.\nNetlists match uniquely.\nResult: Circuits match uniquely.\nLogging to file \"/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_lvs.log\" disabled\nLVS_MATCH True  LVS_PROPERTY_ERRORS False  (see serdes_ldo_hv18_smallcap_pdk_lvs.log)\nLVS_DISCONNECTED none\nLVS_EXPORTED_PORTS vss out vin off ibias fb ref",
+  "chv_pf": 32,
+  "ccas_pf": 16,
+  "cout_pf": 4,
+  "rhv_ohm": 2000,
+  "rcas_ohm": 31250,
+  "cap_arrays": [
+    {
+      "cell": "serdes_ldo_mim16_pdk",
+      "units": 16,
+      "grid": [
+        2,
+        8
+      ],
+      "full_rule_drc": 0,
+      "lvs": "unique_match_no_property_errors_or_disconnected_ports",
+      "ports": [
+        "a",
+        "b"
+      ],
+      "reference_leaf_um": [
+        22.1965,
+        22.1965
+      ],
+      "extracted_leaf_um": [
+        [
+          22.2,
+          22.2
+        ]
+      ],
+      "bbox_um": [
+        -24.66,
+        -97.7,
+        25.0,
+        97.7
+      ],
+      "reference": "analog/common/ldo/spice/ldo_passives.spice"
+    },
+    {
+      "cell": "serdes_ldo_mim32_pdk",
+      "units": 32,
+      "grid": [
+        4,
+        8
+      ],
+      "full_rule_drc": 0,
+      "lvs": "unique_match_no_property_errors_or_disconnected_ports",
+      "ports": [
+        "a",
+        "b"
+      ],
+      "reference_leaf_um": [
+        22.1965,
+        22.1965
+      ],
+      "extracted_leaf_um": [
+        [
+          22.2,
+          22.2
+        ]
+      ],
+      "bbox_um": [
+        -49.92,
+        -97.7,
+        50.26,
+        97.7
+      ],
+      "reference": "analog/common/ldo/spice/ldo_passives.spice"
+    },
+    {
+      "cell": "serdes_ldo_mim4_pdk",
+      "units": 4,
+      "grid": [
+        2,
+        2
+      ],
+      "full_rule_drc": 0,
+      "lvs": "unique_match_no_property_errors_or_disconnected_ports",
+      "ports": [
+        "a",
+        "b"
+      ],
+      "reference_leaf_um": [
+        22.1965,
+        22.1965
+      ],
+      "extracted_leaf_um": [
+        [
+          22.2,
+          22.2
+        ]
+      ],
+      "bbox_um": [
+        -24.66,
+        -26.3,
+        25.0,
+        26.3
+      ],
+      "reference": "analog/common/ldo/spice/ldo_passives.spice"
+    }
+  ],
+  "macros": [
+    {
+      "cell": "serdes_ldo_hv18_smallcap_pdk",
+      "width_um": 248.385,
+      "height_um": 210.945,
+      "area_um2": 52395.57,
+      "drc_total": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "exported_ports": [
+        "vss",
+        "out",
+        "vin",
+        "off",
+        "ibias",
+        "fb",
+        "ref"
+      ]
+    },
+    {
+      "cell": "serdes_pll_bias_lowpass_slow_r4_pdk",
+      "width_um": 100.18,
+      "height_um": 103.21,
+      "area_um2": 10339.58,
+      "drc_total": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "exported_ports": [
+        "original",
+        "filtered",
+        "vss"
+      ]
+    },
+    {
+      "cell": "serdes_pll_supply_hv18_smallcap_probe_pdk",
+      "width_um": 416.52,
+      "height_um": 216.235,
+      "area_um2": 90066.2,
+      "drc_total": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "exported_ports": [
+        "vin",
+        "host",
+        "quiet",
+        "bg",
+        "vgi",
+        "enable",
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "fb_return",
+        "fb_input",
+        "vss"
+      ]
+    },
+    {
+      "cell": "serdes_pll_supply_hv18_smallcap_pdk",
+      "width_um": 416.52,
+      "height_um": 216.235,
+      "area_um2": 90066.2,
+      "drc_total": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "exported_ports": [
+        "vin",
+        "host",
+        "quiet",
+        "bg",
+        "vgi",
+        "enable",
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "vss"
+      ]
+    }
+  ],
+  "parent_builder_sha256": "8a8acd73735f7b7953af66c4bf63100f3fb160cfebc62bd280a1d0d318e695ea",
+  "original_core_area_um2": 87021.25,
+  "original_supply_area_um2": 181560.03,
+  "scope": "Compacted small-cap core + complete 70 pF probe/prod PLL supply macros; full-rule DRC/LVS/ports",
+  "source_run": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2",
+  "artifacts": {
+    "serdes_ldo_mim16_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/serdes_ldo_mim16_pdk.mag",
+      "sha256": "bf337ae9e2829f5131d0e58e7c0e86ce31d53c9c1dc3d235eccf1c1197a73656"
+    },
+    "serdes_ldo_mim16_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/serdes_ldo_mim16_pdk.png",
+      "sha256": "edb2e0787518ca1e17c111bb524f2fd3cf819e3c8dacb8b3bc0662ec4688446e"
+    },
+    "serdes_ldo_mim16_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/serdes_ldo_mim16_pdk_lvs.spice",
+      "sha256": "b100de5212cd424f2557149ad75d05a73eed0fe22365a96fb471ba9a7f3b1cee"
+    },
+    "serdes_ldo_mim16_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/serdes_ldo_mim16_pdk_lvs.log",
+      "sha256": "8eba2e0e4d4a16b7d1b6d8a171745d36d1bcf7ceca2c976e50c4ccfda56b6db3"
+    },
+    "serdes_ldo_mim16_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/serdes_ldo_mim16_pdk_pex.spice",
+      "sha256": "c600224d1d1ed31ade60e2748a7089cb8f9f9247734f68f0c8cc3fcc51edda3d"
+    },
+    "serdes_ldo_mim16_pdk.ext": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/serdes_ldo_mim16_pdk.ext",
+      "sha256": "9fa75b5f499bc46c2d0b3bbce3f203533d0bf418fccc33f4b8761ec21b8e3380"
+    },
+    "serdes_ldo_mim16_pdk_reference.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim16_pdk/reference.spice",
+      "sha256": "06a2b9d250c2a06651dd9f2ff7d3c5d2f9c02b973ea74253216312a6f9a3025c"
+    },
+    "serdes_ldo_mim32_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/serdes_ldo_mim32_pdk.mag",
+      "sha256": "06a58720c09a7169d2cb7fcec1339ce2c2ae14727100cb1882cb60a507aa7189"
+    },
+    "serdes_ldo_mim32_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/serdes_ldo_mim32_pdk.png",
+      "sha256": "4e2ca3786dd64dd134a640b9dada96cf45e127eb464dd14ed733833cf3639b4b"
+    },
+    "serdes_ldo_mim32_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/serdes_ldo_mim32_pdk_lvs.spice",
+      "sha256": "60dfc28da8f8bff8188e26892247dcdd77d0e18ecc3b8885d8fded3beb047b54"
+    },
+    "serdes_ldo_mim32_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/serdes_ldo_mim32_pdk_lvs.log",
+      "sha256": "77f461e745748bedacfe21e1ba2f43c81fddaef1933f8e266fab8b854d0ceea5"
+    },
+    "serdes_ldo_mim32_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/serdes_ldo_mim32_pdk_pex.spice",
+      "sha256": "dbf8c31bd62cc4b2f2fa285407ecb7b398d65a6b8406731a784ee0f44a725b3d"
+    },
+    "serdes_ldo_mim32_pdk.ext": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/serdes_ldo_mim32_pdk.ext",
+      "sha256": "e2951e4e48007158be19bd8832fe304efff2b8419b6249f09d521971aafd5ab8"
+    },
+    "serdes_ldo_mim32_pdk_reference.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim32_pdk/reference.spice",
+      "sha256": "5773c61c0563856791bdb1043fec8e411dd974059879d9eb5cac3aa84e0eee2d"
+    },
+    "serdes_ldo_mim4_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/serdes_ldo_mim4_pdk.mag",
+      "sha256": "ee82216c92d8ea455403127c4de18d040b5db7a7bf6ba0156fab2f705ca10b50"
+    },
+    "serdes_ldo_mim4_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/serdes_ldo_mim4_pdk.png",
+      "sha256": "10f07827de10a437f21baf88ddd1e7c8f0dd0ee2e070eea77c94e713c564ebe6"
+    },
+    "serdes_ldo_mim4_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/serdes_ldo_mim4_pdk_lvs.spice",
+      "sha256": "8fab869d1400ed9a8e5922b03fb0d9d4b028f556d92860a71cc2f9b60a1ef461"
+    },
+    "serdes_ldo_mim4_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/serdes_ldo_mim4_pdk_lvs.log",
+      "sha256": "606bc9d5aee30ab52edc35b3ecb9aaba638dda89241cb1e63018c1939d4ce756"
+    },
+    "serdes_ldo_mim4_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/serdes_ldo_mim4_pdk_pex.spice",
+      "sha256": "4d03a1ac7335c53c9f99d05a9ceab4c24e31113531e82db24dde688470a3e59b"
+    },
+    "serdes_ldo_mim4_pdk.ext": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/serdes_ldo_mim4_pdk.ext",
+      "sha256": "8b495d27ee1c1b64dd0c1822f96ee594cf0e36e0f5a6c7e5b23f680ef324c5bc"
+    },
+    "serdes_ldo_mim4_pdk_reference.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_mim4_pdk/reference.spice",
+      "sha256": "ab6eb43b55fda06a9962db5b58acc9b72c88749217e174cf6544edac14e60640"
+    },
+    "serdes_ldo_hv18_smallcap_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk.mag",
+      "sha256": "17980367fe0b4c32830186c1485de040f9b18cd784cc3f2ca144435889adb110"
+    },
+    "serdes_ldo_hv18_smallcap_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk.png",
+      "sha256": "a402d6bc995c47d6c9415c8f6b8725defaf199279b6f5f13cfb0f5d308b96ef0"
+    },
+    "serdes_ldo_hv18_smallcap_pdk_ref.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_ref.spice",
+      "sha256": "f292363bc65669308c8e0ddcb977715cc3eb5f4b0e4dc066a4274f816d5fb4bf"
+    },
+    "serdes_ldo_hv18_smallcap_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_lvs.spice",
+      "sha256": "00125864ea03fb49caa7e7151d754d9b1a77ecd5b2260c9495c50b2186dfb033"
+    },
+    "serdes_ldo_hv18_smallcap_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_lvs.log",
+      "sha256": "e73ed2d0a197d97fae042589066ce88d5bf4b137c51298ab5398236e36a43135"
+    },
+    "serdes_ldo_hv18_smallcap_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_pex.spice",
+      "sha256": "b37cf2ffbaf2a376e2472a3d91291f2a92e2b1b5b597c736d104f1afb12ac5de"
+    },
+    "serdes_pll_bias_lowpass_slow_r4_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk.mag",
+      "sha256": "c7df660d6cf2651627309f82ba53a6cf8094be89ad355924e257ca55e2178748"
+    },
+    "serdes_pll_bias_lowpass_slow_r4_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk.png",
+      "sha256": "c1f69ffb4d427f02e5baded9b1eafbd5187dc68c2f5476bb6b9d3e028977130a"
+    },
+    "serdes_pll_bias_lowpass_slow_r4_pdk_ref.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk_ref.spice",
+      "sha256": "10908ae535802bacb016630984bdcaeab5738559375f8d9284427d67005ce9a5"
+    },
+    "serdes_pll_bias_lowpass_slow_r4_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk_lvs.spice",
+      "sha256": "7e174bce879d95f8e171990dcbb15006576738c67dcd8dae18e1f617af93d62e"
+    },
+    "serdes_pll_bias_lowpass_slow_r4_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk_lvs.log",
+      "sha256": "0c09276888d9f2860ccd529d27a097147095f5018a49547c62632e3208421441"
+    },
+    "serdes_pll_bias_lowpass_slow_r4_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk_pex.spice",
+      "sha256": "63c038e5f3f135ca8464b7dfb40c97f59094aa61899d5a8da59dabb199797f07"
+    },
+    "serdes_pll_supply_hv18_smallcap_probe_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_probe_pdk/serdes_pll_supply_hv18_smallcap_probe_pdk.mag",
+      "sha256": "74dc187b1dcd7a03dd33109ba82b39fff47ba0ffe2a50814d4f6f6d218afb920"
+    },
+    "serdes_pll_supply_hv18_smallcap_probe_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_probe_pdk/serdes_pll_supply_hv18_smallcap_probe_pdk.png",
+      "sha256": "28ef7a23ac7277d56b163d0160863783ca976781e25ad3020546b1040175b1e0"
+    },
+    "serdes_pll_supply_hv18_smallcap_probe_pdk_ref.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_probe_pdk/serdes_pll_supply_hv18_smallcap_probe_pdk_ref.spice",
+      "sha256": "67cc8a5f22d04710f543b9313b6b1d25b7d36751ca5d6f1335a66b70e5da447b"
+    },
+    "serdes_pll_supply_hv18_smallcap_probe_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_probe_pdk/serdes_pll_supply_hv18_smallcap_probe_pdk_lvs.spice",
+      "sha256": "c84a42e06a25aa7edf673aea6090a7a0aa5767af7e78520faf595ee4f161f426"
+    },
+    "serdes_pll_supply_hv18_smallcap_probe_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_probe_pdk/serdes_pll_supply_hv18_smallcap_probe_pdk_lvs.log",
+      "sha256": "3fb76a3b2694d4cb1ca9a83440cd362f8090dda34f1c1fa2d68260f96f713814"
+    },
+    "serdes_pll_supply_hv18_smallcap_probe_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_probe_pdk/serdes_pll_supply_hv18_smallcap_probe_pdk_pex.spice",
+      "sha256": "d50c0b9f5e8bc29a60367cb9e1f2b47ce9a699fef4a4e322f42716b30a85322d"
+    },
+    "serdes_pll_supply_hv18_smallcap_pdk.mag": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_pdk/serdes_pll_supply_hv18_smallcap_pdk.mag",
+      "sha256": "0b9ec323da31e687d85517dd21c4982bb2422ede07becc55c4b7e350e9ce8192"
+    },
+    "serdes_pll_supply_hv18_smallcap_pdk.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_pdk/serdes_pll_supply_hv18_smallcap_pdk.png",
+      "sha256": "1f009b7d8b44d380edc92857fdc01e285ec75ae88dcdf0de3ede09af47a8dbdf"
+    },
+    "serdes_pll_supply_hv18_smallcap_pdk_ref.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_pdk/serdes_pll_supply_hv18_smallcap_pdk_ref.spice",
+      "sha256": "1f0b465a7833f9eac7ca2690f9ac9b1d9f0a8473db2c82255109df8f651856bd"
+    },
+    "serdes_pll_supply_hv18_smallcap_pdk_lvs.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_pdk/serdes_pll_supply_hv18_smallcap_pdk_lvs.spice",
+      "sha256": "c8f991b7e04fd3a03eecfa049b778bd9aeb403f01f0006020ba84a1f433b1442"
+    },
+    "serdes_pll_supply_hv18_smallcap_pdk_lvs.log": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_pdk/serdes_pll_supply_hv18_smallcap_pdk_lvs.log",
+      "sha256": "b4a8453584ffee34493e8abdbc38b40b3c7a4e84beacd649991f47ecf69ac421"
+    },
+    "serdes_pll_supply_hv18_smallcap_pdk_pex.spice": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/serdes_pll_supply_hv18_smallcap_pdk/serdes_pll_supply_hv18_smallcap_pdk_pex.spice",
+      "sha256": "17eff62c8a913cdec5d44225300a1fc9b84dac7f95057223cf4915d974fe7909"
+    },
+    "ldo_smallcap_pdk_overview.png": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/ldo_smallcap_pdk_overview.png",
+      "sha256": "d7f310933980b09b7b06402aad9e02185583585504c9e32677e2c715f7866819"
+    }
+  }
+}

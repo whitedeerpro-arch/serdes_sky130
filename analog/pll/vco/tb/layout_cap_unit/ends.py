@@ -29,6 +29,9 @@ def main() -> None:
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--keep-full-wire", action="store_true", help="Retain all 12fF as additional wiring stress for a full bank")
     ap.add_argument("--all-supplies", action="store_true", help="Check FS/hh hot and SF/ll cold at all three supplies")
+    ap.add_argument("--delay-pex",type=Path,help="Physically checked seven-port delay PEX from patched Magic")
+    ap.add_argument("--buffer-pex",type=Path,help="Physically checked seven-port buffer PEX from patched Magic")
+    ap.add_argument("--residual-wire-fF",type=float,help="Explicit residual for wires absent from the supplied layouts; 0 is a best-case lower bound")
     args = ap.parse_args()
     spec = importlib.util.spec_from_file_location("r6_layout_ends", ROOT / "analog/pll/vco/tb/tuning/r6.py")
     r6 = importlib.util.module_from_spec(spec)
@@ -83,11 +86,35 @@ def main() -> None:
                                    lambda _: wrapper, original, flags=re.S | re.I)
         if count != 1:
             raise ValueError("Cannot replace half-unit")
+    if args.residual_wire_fF is not None:
+        if args.residual_wire_fF < 0:
+            raise ValueError("Negative residual wiring capacitance")
+        budget.update(retained_fF=args.residual_wire_fF,
+                      policy="explicit residual for unextracted ring/varactor/block connections; supplied leaf routing replaces its part of original allowance")
     bank = out / "physical_bank.spice"
     if bank.exists() and bank.read_text() != bank_text:
         raise ValueError("Bank changed; use a new campaign")
     bank.write_text(bank_text)
     identity = dict(source_netlist=pex, wiring_budget=budget)
+    cml_sources={}
+    for kind,path,original_name in [("delay",args.delay_pex,"pll_vco_delay_r6"),("buffer",args.buffer_pex,"serdes_cml_buffer")]:
+        if path is None:
+            continue
+        text=path.read_text()
+        top_cml=re.search(r"^\.subckt (\S+) inp inn outp outn vbias vdd vss$",text,re.M)
+        if top_cml is None:
+            raise ValueError(f"Expected seven-port {kind} PEX")
+        wrapper=(f".subckt {original_name} inp inn outp outn vbias vdd vss\n"
+                 + ("+ params: wn=40 lin=.15 nfin=8 wt=25.2 lt=.5 nftail=4 lload=4.77\n" if kind=="delay" else "+ params: wn=12 nfin=4 wt=12 rload=600\n")
+                 + f"Xphysical inp inn outp outn vbias vdd vss {top_cml[1]}\n.ends {original_name}\n")
+        text += "\n" + wrapper
+        dest=out/f"physical_{kind}.spice"
+        if dest.exists() and dest.read_text()!=text:
+            raise ValueError(f"{kind} input changed; use a new campaign")
+        dest.write_text(text)
+        cml_sources[kind]=dict(netlist=text,destination=str(dest))
+    if cml_sources:
+        identity["cml_netlists"]=cml_sources
     identity_path = out / "input_identity.json"
     if identity_path.exists() and json.loads(identity_path.read_text()) != identity:
         raise ValueError("Input/budget changed; use a new campaign")
@@ -99,6 +126,12 @@ def main() -> None:
                           lambda _: f'.include "{bank}"', deck, flags=re.M)
         if n != 1:
             raise ValueError("Expected exactly one bank include")
+        for kind,source in cml_sources.items():
+            basename="vco_delay_r6.spice" if kind=="delay" else "cml_buffer.spice"
+            deck,n=re.subn(r'^\.include "[^"\n]*/'+re.escape(basename)+r'"$',
+                           lambda _:f'.include "{source["destination"]}"',deck,flags=re.M)
+            if n!=1:
+                raise ValueError(f"Expected exactly one {kind} include")
         deck = deck.replace(".control\n", f'.include "{physical}"\n.control\n', 1)
         opts["meta"].update(layout_scope="bank PEX" if is_bank else "half-unit PEX", wiring_budget=budget)
         patched.append((deck, dest, opts))
@@ -120,6 +153,10 @@ def main() -> None:
                   wiring_budget=budget, retained="original ring devices/varactors/buffers/real bias",
                   replaced="bank physical devices, AD/AS/PD/PS and extracted capacitances; remove estimated Cfr/Cbp",
                   drift_warnings=r6.UNSETTLED, full_ring_or_PLL_qualified=False)
+    if cml_sources:
+        report.update(physical_cml=list(cml_sources),
+                      retained="real bias / varactor models; unextracted ring/block/varactor routes bounded only by explicit residual",
+                      replaced="bank and supplied CML devices, AD/AS/PD/PS and explicit capacitance matrices; fixed nominal dimensions")
     (out / "summary.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
 

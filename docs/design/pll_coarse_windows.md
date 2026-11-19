@@ -1,6 +1,8 @@
 # 粗码上门限与 VCO 实测控制范围
 
-把粗码上门限从码3（VDD−0.41 V）降到码4（VDD−0.44 V），按现有测点线性内插仍有 **135/135工况各自存在2 GHz预测候选码**。H=4其中95工况至少有一个完整实测2GHz夹区位于窗口内，另外40工况还需边界频率确认。码4改善了[CP静态失配实验](pll_cp_window.md#同样本门限码对照32样本pilot)的上沿余量；它尚未采纳到电路或RTL默认配置。
+> 本页下文是r5/4bit实测窗口及H3/H4规划的历史边界，保留既有记录和未提交局部分析；其中“后续只推进4bit”不再适用于当前主线。当前r6/5bit采用与验证见[current.md](../status/current.md)，新窗口/实际码驱动须按r6曲线和接口承接，不能从本页直接派发旧4bit任务。
+
+上门限H=4（VDD−0.44V）、下门限0.90V的名义静态窗口，已有 **135/135工况各自的2GHz实测夹区**：95个既有完整夹区，加40个新边界频率点。它解决了此前粗网格内插跨过门限的不确定性。码4改善了[CP静态失配实验](pll_cp_window.md#同样本门限码对照32样本pilot)的上沿余量；实际门限、失配与动态切码仍待确认，未改电路或RTL默认H值。
 
 这里有两套独立的4 bit码：VCO电容阵列粗码记为K=0…15（0最快、15最慢）；上门限电压梯档位记为H=0…15。H=3/4是同一门限梯的两个数值，不是3 bit/4 bit阵列。后续设计只推进4 bit VCO；旧3 bit电路和相噪数据保留为历史参考，不再作为并行候选，也不转移其噪声资格。
 
@@ -16,9 +18,9 @@
 | 4，对照 | VDD−0.44 V | 135/135 | 23/45 |
 | 5，对照 | VDD−0.47 V | 135/135 | 19/45 |
 
-完整夹区都在窗口内的工况数，H=3/4/5分别为95/95/56；其余40/40/79包含跨过门限的粗夹区，不能用内插位置代替边界验证。优先补H=4的40个边界频率点，用同一码已有窗口内端点组成实际夹区。
+上表保留补边界前的内插统计，不代表共同码均已精确验证。补点前完整夹区位于窗口内的工况数，H=3/4/5为95/95/56；H=4现已补齐另外40点。H=3窗口更宽，相同夹区也适用；H=5全覆盖和三温共同码没有在本轮独立确认。
 
-码3→4时失去已证实三温共同码的四组为TT/1.65V/ll、SS/1.65V/hh、FF/1.65V/tt、FS/1.65V/ll。各温度仍有候选；这些计数不能证明相邻切码可行或全温无解。控制器本来允许运行中切码，三温固定码只是可用余量的观察量。
+码3→4时失去预测三温共同码的四组为TT/1.65V/ll、SS/1.65V/hh、FF/1.65V/tt、FS/1.65V/ll。各温度仍有候选；这些计数不能证明相邻切码可行或全温无解。控制器本来允许运行中切码，三温固定码只是可用余量的观察量。
 
 ![三个上门限的实测候选码数量](../figures/clocking/vco/vco_coarse_control_windows.png)
 
@@ -61,7 +63,13 @@
 
 ![38°C相邻码的独立静态校准](../figures/clocking/vco/vco_hysteresis_static_anchor.png)
 
-[校准数据](../data/vco_hysteresis_anchor.json)保留6点频率、摆幅、测点夹区和原始输出身份。H=4边界确认已按[独立计划](../../results/catalog/vco_window_boundary_campaign.json)启动：31个下沿、9个上沿点，13个MOS×RC合并deck；正式波形须到24ns，单独的1ns冒烟不计资格。
+[校准数据](../data/vco_hysteresis_anchor.json)保留6点频率、摆幅、测点夹区和原始输出身份。H=4边界确认已完成：31个下沿、9个上沿点，13个MOS×RC合并deck均正常退出，正式波形到24ns；独立1ns冒烟不计资格。下沿测频不高于2GHz，并与同码已有窗口内高频端点配对；上沿反之。40/40均形成实际夹区。
+
+新增边界点距离2GHz最小的频率差16.8066MHz，位于SF/1.65V/−40°C/ll、K15、Vctrl=0.90V，实测1.9831934GHz。这个数是频率差，不能直接称为电压或统计余量。95旧夹区绑定历史source/fill汇总及恢复审计；135不代表本轮重跑135点，也不代表自动粗搜一定选中这些码。
+
+![H4新增边界频率确认](../figures/clocking/vco/vco_h4_boundary_confirmation.png)
+
+[边界数据](../data/vco_window_boundaries.json)、[逐点索引](../../results/catalog/vco_window_boundaries.json)和[独立采集器](../../verification/plotting/vco_window_boundaries.py)保存新40点的raw/deck/execution身份、实际测量及旧端点。后续采用H4还需实际门限与MC、ctrl−z动态预算、二进制码译码/切换和噪声验证。
 
 电路为r5四位阵列、真实偏置、PDK R tt/hh/ll、四缓冲且每端30 fF。135条件覆盖MOS45×上述RC三段，不含hl/lh；不是实际B2/CP/LF动态加载。当前分析不含门限梯实际误差、比较器失调、CP失配、ctrl−z纹波、决策延迟、噪声或上电，全部为ungraded静态模型证据。
 
@@ -79,3 +87,10 @@ uv run python verification/analysis/vco_control_windows.py \
 uv run python verification/plotting/vco_control_windows.py \
   --analysis results/analog/pll/vco/workmap_fill/20261109T044852Z/analysis/control_windows_recheck.json
 ```
+
+
+## 证据版本与安静供电边界
+
+本页工作图和40个H4补点使用旧r5同轨静态供电：VCO、偏置和理想上门限都随原VDD条件变化。当前`r5k4q`已将VCO、CP/LF与码驱动接入quiet域，并增加尾偏置滤波；host与quiet可不同。不能把旧VDD直接换成quiet电压并沿用原门限，也不能把这些135夹区计为当前quiet版本的135点资格。下一步须明确门限梯/比较器的实际参考与供电域，按实际vq、host、B2/CP/LF负载和选码重验；本轮不改H默认值。
+
+新增40点现已在禁止写文件/启动子进程的只读上下文中重新测频。冻结与当前`spice.py`仅执行函数`run`及提取的`log_failures`不同；精确旧/新SHA与排除这两个定义后的完整模块AST均核对相等。其余源码、PDK清单、输入、计划、全部快照/deck及完整24ns终点仍严格检查；原执行器的续跑校验未放松。[只读迁移器](../../verification/analysis/vco_boundary_readonly.py)与数据中的迁移记录保留证明。95条历史夹区的当时PDK文件和原始source-summary哈希缺口仍保留。

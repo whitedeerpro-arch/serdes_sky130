@@ -1,0 +1,22 @@
+* Physical LVS reference for pll_cp_steer @ pll_core_r6k4q.spice sizing (k=4, Icp=200 uA)
+.subckt pll_cp_steer_pdk up dn out vbn vbp ibias vdd vss
+Xupn up_b up vss vss sky130_fd_pr__nfet_01v8 w=2 l=0.88
+Xupp up_b up vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
+Xdn1_n dn_b dn vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15
+Xdn1_p dn_b dn vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
+Xdn2_n dn_on dn_b vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15
+Xdn2_p dn_on dn_b vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
+Xp ps vbp vdd vdd sky130_fd_pr__pfet_01v8 w=80 l=1
+Xps out up_b ps vdd sky130_fd_pr__pfet_01v8 w=16 l=0.15
+Xpd dum up ps vdd sky130_fd_pr__pfet_01v8 w=16 l=0.15
+Xns out dn_on ns vss sky130_fd_pr__nfet_01v8 w=8 l=0.15
+Xnd dum dn_b ns vss sky130_fd_pr__nfet_01v8 w=8 l=0.15
+Xn ns vbn vss vss sky130_fd_pr__nfet_01v8 w=20 l=1
+Xbd ibias ibias vss vss sky130_fd_pr__nfet_01v8 w=1 l=1
+Xt tail ibias vss vss sky130_fd_pr__nfet_01v8 w=10 l=1
+Xa da out tail vss sky130_fd_pr__nfet_01v8_lvt w=24 l=1
+Xb dum dum tail vss sky130_fd_pr__nfet_01v8_lvt w=24 l=1
+Xla da da vdd vdd sky130_fd_pr__pfet_01v8_lvt w=96 l=1
+Xlb dum da vdd vdd sky130_fd_pr__pfet_01v8_lvt w=96 l=1
+Xcdum dum vss sky130_fd_pr__cap_mim_m3_1 w=12.08 l=12.08
+.ends pll_cp_steer_pdk

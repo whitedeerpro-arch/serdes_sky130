@@ -4,14 +4,13 @@
 Implements `analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice`:
   - Domain A + B Analog strip identical to verified r4_v4 (Xfp/Xfn=32 LVT, Xip/Xin=16 LVT, Xlp/Xln=32, Xtail=32).
   - AC/Rfb Coupling Bay (between Analog and Digital):
-      * XCac_p/n: single-layer MIM cap (sky130_fd_pr__cap_mim_m3_1 w=9.0 l=5.5 -> ~100 fF, stack=0) on M3/M4.
+      * XCac_p/n: single-layer MIM cap (sky130_fd_pr__cap_mim_m3_1 w=5.0 l=9.9 -> ~100 fF, stack=0) on M3/M4.
       * XRfb_p/n: compact 3-leg folded poly resistor (sky130_fd_pr__res_high_po_0p35 l=6.0 nx=3 -> ~20 kOhm)
                   underneath XCac in pwell, blocking Diff-to-SE DC offset; mismatch sensitivity remains.
   - Digital Strip (y_vss=0 mirror-symmetric):
-      * Xbp/Xbn (6.0/7.2) + weak cross-coupled Xk_bp/Xk_bn (0.6/1.2)
-      * Xop/Xon (3.6/6.4) + weak cross-coupled Xk_rp/Xk_rn (0.6/1.2)
-      * Skew-locked restorer_r5: dp1..3 (1.2/3.2), set/rst (4.5/4.5), qp/qn (6.0/9.0),
-        rp1 (2.4/7.2), rp2 (1.5/4.5), bpr/bnr (2.4/3.6), opr/onr (4.0/8.0).
+      * Xbp/Xbn (4.5 LVT-N / 10.0 P) + weak cross-coupled Xk_bp/Xk_bn (0.6/1.2)
+      * Xop/Xon (3.6/6.4) -> centered balanced buffer Xm1p/Xm1n (1.8/6.0)
+      * + weak cross-coupled Xkc_p/Xkc_n (0.42/1.0) -> Xo1p/Xo1n (3.2/8.0).
 """
 from __future__ import annotations
 
@@ -88,55 +87,29 @@ def build_digital_half_r5(w: Path, x_dig_l_wall: float) -> tuple[Cell, dict]:
     y_pdiff_bot = D_P_OFF
     y_vdd = Y_VDD_DIG
 
-    specs_c1 = [
-        ("bp",  2.00, 3, 1.80, 4, 0.800),  # 6.0/7.2 AC-self-biased pre-driver
-        ("kbp", 0.60, 1, 1.20, 1, 0.420),  # 0.6/1.2 weak cross-coupled inverter (bn->bp)
-        ("op",  1.80, 2, 1.60, 4, 0.420),  # 3.6/6.4
-        ("krp", 0.60, 1, 1.20, 1, 0.420),  # 0.6/1.2 weak cross-coupled inverter (rawn->rawp)
-        ("dp1", 1.20, 1, 1.60, 2, 0.420),  # 1.2/3.2
-        ("dp2", 1.20, 1, 1.60, 2, 0.340),
-        ("dp3", 1.20, 1, 1.60, 2, 0.340),
-    ]
-    specs_c2 = [
-        ("setb", 1.50, 3, 1.50, 3, 0.800),  # 4.5/4.5
-        ("seta", 1.50, 3, 1.50, 3, 0.340),
-        ("qpb",  2.00, 3, 2.25, 4, 0.340),  # 6.0/9.0
-        ("qpa",  2.00, 3, 2.25, 4, 0.500),
-    ]
-    specs_c3 = [
-        ("rp1",  1.20, 2, 2.40, 3, 0.800),  # 2.4/7.2
-        ("rp2",  1.50, 1, 2.25, 2, 0.340),  # 1.5/4.5
-        ("bprb", 1.20, 2, 1.80, 2, 0.340),  # 2.4/3.6
-        ("bpra", 1.20, 2, 1.80, 2, 0.340),
-        ("opr",  2.00, 2, 2.00, 4, 0.340),  # 4.0/8.0
+    specs = [
+        ("bp",  "sky130_fd_pr__nfet_01v8_lvt", 1.50, 3, 2.50, 4, 0.800),  # 4.5 LVT / 10.0 pre-driver
+        ("kbp", "sky130_fd_pr__nfet_01v8",     0.60, 1, 1.20, 1, 0.500),  # 0.6/1.2 cross-coupler (bn->bp)
+        ("op",  "sky130_fd_pr__nfet_01v8",     1.80, 2, 1.60, 4, 0.420),  # 3.6/6.4
+        ("m1p", "sky130_fd_pr__nfet_01v8",     1.80, 1, 1.50, 4, 0.420),  # 1.8/6.0 balanced stage 1
+        ("kcp", "sky130_fd_pr__nfet_01v8",     0.42, 1, 1.00, 1, 0.420),  # 0.42/1.0 cross-coupler (midn->midp)
+        ("o1p", "sky130_fd_pr__nfet_01v8",     1.60, 2, 2.00, 4, 0.420),  # 3.2/8.0 output buffer
     ]
 
     dcols: dict[str, dict] = {}
-
-    def place_group(x_start_wall: float, specs: list[tuple]) -> float:
-        x_edge = x_start_wall
-        for nm, n_wf, n_nf, p_wf, p_nf, gap_b in specs:
-            dy_nc = grid(y_ndiff_top - n_wf / 2.0)
-            dy_pc = grid(y_pdiff_bot + p_wf / 2.0)
-            cn, inf_n = r4.build_mos(w, f"d5_{nm}_n", "sky130_fd_pr__nfet_01v8", n_wf, 0.15, n_nf, dy_nc, False)
-            cp, inf_p = r4.build_mos(w, f"d5_{nm}_p", "sky130_fd_pr__pfet_01v8", p_wf, 0.15, p_nf, dy_pc, True)
-            hw_col = max(inf_n["hw_diff"], inf_p["hw_diff"])
-            cx = grid(x_edge + gap_b + hw_col)
-            h.include(cn, dx=cx)
-            h.include(cp, dx=cx)
-            dcols[nm] = {"cx": cx, "hw": hw_col, "inf_n": inf_n, "inf_p": inf_p, "n_wf": n_wf, "p_wf": p_wf}
-            x_edge = grid(cx + hw_col)
-        return x_edge
-
-    x_c1_end = place_group(x_dig_l_wall, specs_c1)
-    x_c12_wall = grid(x_c1_end + 0.860)
-    x_c2_end = place_group(x_c12_wall, specs_c2)
-    x_c2_r_wall = grid(x_c2_end + 0.860)
-    x_cr2_n = grid(x_c2_r_wall + V_TAP_WALL + 0.340)
-    x_cr2_p = grid(x_cr2_n + 0.740)
-    x_c3_l_wall = grid(x_cr2_p + 0.340 + V_TAP_WALL)
-    x_c3_end = place_group(x_c3_l_wall, specs_c3)
-    x_right_tap = grid(x_c3_end + 0.860)
+    x_edge = x_dig_l_wall
+    for nm, n_model, n_wf, n_nf, p_wf, p_nf, gap_b in specs:
+        dy_nc = grid(y_ndiff_top - n_wf / 2.0)
+        dy_pc = grid(y_pdiff_bot + p_wf / 2.0)
+        cn, inf_n = r4.build_mos(w, f"d5_{nm}_n", n_model, n_wf, 0.15, n_nf, dy_nc, False)
+        cp, inf_p = r4.build_mos(w, f"d5_{nm}_p", "sky130_fd_pr__pfet_01v8", p_wf, 0.15, p_nf, dy_pc, True)
+        hw_col = max(inf_n["hw_diff"], inf_p["hw_diff"])
+        cx = grid(x_edge + gap_b + hw_col)
+        h.include(cn, dx=cx)
+        h.include(cp, dx=cx)
+        dcols[nm] = {"cx": cx, "hw": hw_col, "inf_n": inf_n, "inf_p": inf_p, "n_wf": n_wf, "p_wf": p_wf}
+        x_edge = grid(cx + hw_col)
+    x_right_tap = grid(x_edge + 0.860)
 
     def flank(nm: str, side: int, offset: float = 0.220, x_wall: float | None = None) -> None:
         col = dcols[nm]
@@ -145,12 +118,8 @@ def build_digital_half_r5(w: Path, x_dig_l_wall: float) -> tuple[Cell, dict]:
         r4.add_field_poly_dummy(h, x_dn, 0.15, grid(y_ndiff_top - col["n_wf"]), y_ndiff_top, D_NDUM_OFF, False, y_vss, x_wall=x_wall)
         r4.add_field_poly_dummy(h, x_dp, 0.15, y_pdiff_bot, grid(y_pdiff_bot + col["p_wf"]), D_PDUM_OFF, True, y_vdd, x_wall=x_wall)
 
-    flank("bp",   -1, x_wall=x_dig_l_wall)
-    flank("dp3",  +1, x_wall=x_c12_wall)
-    flank("setb", -1, x_wall=x_c12_wall)
-    flank("qpa",  +1, x_wall=x_c2_r_wall)
-    flank("rp1",  -1, x_wall=x_c3_l_wall)
-    flank("opr",  +1, x_wall=x_right_tap)
+    flank("bp",  -1, x_wall=x_dig_l_wall)
+    flank("o1p", +1, x_wall=x_right_tap)
 
     def conn_col(cx: float, inf_n: dict, inf_p: dict, *, n_s: bool = True, p_s: bool = True,
                  n_d: bool = True, p_d: bool = True, d_trunk_dx: float | None = None,
@@ -214,23 +183,6 @@ def build_digital_half_r5(w: Path, x_dig_l_wall: float) -> tuple[Cell, dict]:
                 "n_d": [grid(cx + x) for x in inf_n["d_xs"]],
                 "p_d": [grid(cx + x) for x in inf_p["d_xs"]]}
 
-    def wire_nand2(b_nm: str, a_nm: str, xg_b_dx: float, xg_a_dx: float, d_b_dx: float, d_a_dx: float) -> tuple[dict, dict]:
-        cb, ca = dcols[b_nm], dcols[a_nm]
-        wb = conn_col(cb["cx"], cb["inf_n"], cb["inf_p"], n_s=True, p_s=True, n_d=False, p_d=True,
-                      d_trunk_dx=d_b_dx, xg_dx=xg_b_dx, skip_ns_m1_ge_d=True)
-        wa = conn_col(ca["cx"], ca["inf_n"], ca["inf_p"], n_s=False, p_s=True, n_d=True, p_d=True,
-                      d_trunk_dx=d_a_dx, xg_dx=xg_a_dx)
-        ym_c = grid((max(cb["inf_n"]["c_y1"], ca["inf_n"]["c_y1"]) + min(cb["inf_n"]["c_y2"], ca["inf_n"]["c_y2"])) / 2.0)
-        mid_xs = wb["n_d"] + wa["n_s"]
-        if len(wb["n_s"]) == 1 and len(wa["n_s"]) == 1:
-            h.rect("locali", grid(wb["n_d"][-1] - 0.085), grid(ym_c - 0.12), grid(wa["n_s"][0] + 0.085), grid(ym_c + 0.12))
-        else:
-            for xc in mid_xs:
-                h.pad("viali", xc, ym_c, 0.17)
-                h.pad("metal1", xc, ym_c, 0.29)
-            h.wire("metal1", [(min(mid_xs), ym_c), (max(mid_xs), ym_c)], W_M1)
-        return wb, wa
-
     dc_wire = {}
     all_n_s: list[float] = []
     all_p_s: list[float] = []
@@ -240,40 +192,14 @@ def build_digital_half_r5(w: Path, x_dig_l_wall: float) -> tuple[Cell, dict]:
         all_p_s.extend(res["p_s"])
         return res
 
-    # C1 columns (kbp/krp gates sit at y_gt_k=2.880: clear of both n_s locali @ 2.45 and M1 y_t1 @ 3.40!)
+    # Cross-coupler gates (kbp/kcp) sit at y_gt_k=2.880: clear of both n_s locali @ 2.45 and M1 y_t1 @ 3.40!
     y_gt_k = 2.880
-    dc_wire["bp"]  = track_col(conn_col(dcols["bp"]["cx"],  dcols["bp"]["inf_n"],  dcols["bp"]["inf_p"],
-                                        xg_dx=dcols["bp"]["inf_p"]["g_xs"][0], d_trunk_dx=dcols["bp"]["inf_p"]["d_xs"][-1]))
-    dc_wire["kbp"] = track_col(conn_col(dcols["kbp"]["cx"], dcols["kbp"]["inf_n"], dcols["kbp"]["inf_p"],
-                                        xg_dx=-0.220, d_trunk_dx=dcols["kbp"]["inf_n"]["d_xs"][0], g_trk=y_gt_k))
-    dc_wire["op"]  = track_col(conn_col(dcols["op"]["cx"],  dcols["op"]["inf_n"],  dcols["op"]["inf_p"],
-                                        xg_dx=dcols["op"]["inf_p"]["g_xs"][0], d_trunk_dx=dcols["op"]["inf_p"]["d_xs"][-1]))
-    dc_wire["krp"] = track_col(conn_col(dcols["krp"]["cx"], dcols["krp"]["inf_n"], dcols["krp"]["inf_p"],
-                                        xg_dx=-0.220, d_trunk_dx=dcols["krp"]["inf_n"]["d_xs"][0], g_trk=y_gt_k))
-    for dnm in ("dp1", "dp2", "dp3"):
-        # nf=1 N, nf=2 P -> gate offset -0.44 clear of P d_xs[0]=0.00 and N d_xs[0]=+0.26; drain trunk = +0.26!
-        dc_wire[dnm] = track_col(conn_col(dcols[dnm]["cx"], dcols[dnm]["inf_n"], dcols[dnm]["inf_p"],
-                                            xg_dx=-0.440, d_trunk_dx=dcols[dnm]["inf_n"]["d_xs"][0]))
-
-    # C2 NAND2s
-    wb_set, wa_set = wire_nand2("setb", "seta", -0.48, -0.48, +0.72, +0.72)
-    wb_qp,  wa_qp  = wire_nand2("qpb",  "qpa",  -0.72, -0.72, +0.48, +0.48)
-    all_n_s.extend(wb_set["n_s"] + wb_qp["n_s"])
-    all_p_s.extend(wb_set["p_s"] + wa_set["p_s"] + wb_qp["p_s"] + wa_qp["p_s"])
-    dc_wire["setb"], dc_wire["seta"] = wb_set, wa_set
-    dc_wire["qpb"],  dc_wire["qpa"]  = wb_qp,  wa_qp
-
-    # C3 restorer tail (bpr/bnr p_nf=2 -> P drain is at 0.00!)
-    dc_wire["rp1"] = track_col(conn_col(dcols["rp1"]["cx"], dcols["rp1"]["inf_n"], dcols["rp1"]["inf_p"],
-                                        xg_dx=-0.48, d_trunk_dx=dcols["rp1"]["inf_p"]["d_xs"][-1]))
-    dc_wire["rp2"] = track_col(conn_col(dcols["rp2"]["cx"], dcols["rp2"]["inf_n"], dcols["rp2"]["inf_p"],
-                                        xg_dx=-0.44, d_trunk_dx=dcols["rp2"]["inf_n"]["d_xs"][0]))
-    wb_bpr, wa_bpr = wire_nand2("bprb", "bpra", -0.44, -0.44, 0.00, 0.00)
-    all_n_s.extend(wb_bpr["n_s"])
-    all_p_s.extend(wb_bpr["p_s"] + wa_bpr["p_s"])
-    dc_wire["bprb"], dc_wire["bpra"] = wb_bpr, wa_bpr
-    dc_wire["opr"] = track_col(conn_col(dcols["opr"]["cx"], dcols["opr"]["inf_n"], dcols["opr"]["inf_p"],
-                                        xg_dx=-0.72, d_trunk_dx=dcols["opr"]["inf_p"]["d_xs"][-1]))
+    for nm in ("bp", "op", "m1p", "o1p"):
+        dc_wire[nm] = track_col(conn_col(dcols[nm]["cx"], dcols[nm]["inf_n"], dcols[nm]["inf_p"],
+                                         xg_dx=dcols[nm]["inf_p"]["g_xs"][0], d_trunk_dx=dcols[nm]["inf_p"]["d_xs"][-1]))
+    for knm in ("kbp", "kcp"):
+        dc_wire[knm] = track_col(conn_col(dcols[knm]["cx"], dcols[knm]["inf_n"], dcols[knm]["inf_p"],
+                                          xg_dx=-0.220, d_trunk_dx=dcols[knm]["inf_n"]["d_xs"][0], g_trk=y_gt_k))
 
     tapped_pts: set[tuple[float, float]] = set()
 
@@ -291,96 +217,38 @@ def build_digital_half_r5(w: Path, x_dig_l_wall: float) -> tuple[Cell, dict]:
         m1_tap(x2, y, y)
         h.wire("metal1", [(x1, y), (x2, y)], W_M1)
 
-    # Dual gate straps on bp & op (g_xs[0] and g_xs[1], clear of xd!)
-    xg_bp2 = grid(dcols["bp"]["cx"] + dcols["bp"]["inf_p"]["g_xs"][1])
-    r4.poly_cont_pad(h, xg_bp2, y_t1)
-    h.rect("poly", grid(dc_wire["bp"]["xg"] - 0.135), grid(y_t1 - 0.170), grid(xg_bp2 + 0.135), grid(y_t1 + 0.170))
-    m1_hop(dc_wire["bp"]["xg"], xg_bp2)
+    # Dual gate straps on 4-finger P stages (g_xs[0] and g_xs[1], clear of xd!)
+    for nm in ("bp", "op", "m1p", "o1p"):
+        xg2 = grid(dcols[nm]["cx"] + dcols[nm]["inf_p"]["g_xs"][1])
+        r4.poly_cont_pad(h, xg2, y_t1)
+        h.rect("poly", grid(dc_wire[nm]["xg"] - 0.135), grid(y_t1 - 0.170), grid(xg2 + 0.135), grid(y_t1 + 0.170))
+        m1_hop(dc_wire[nm]["xg"], xg2)
 
-    xg_op2 = grid(dcols["op"]["cx"] + dcols["op"]["inf_p"]["g_xs"][1])
-    r4.poly_cont_pad(h, xg_op2, y_t1)
-    h.rect("poly", grid(dc_wire["op"]["xg"] - 0.135), grid(y_t1 - 0.170), grid(xg_op2 + 0.135), grid(y_t1 + 0.170))
-    m1_hop(dc_wire["op"]["xg"], xg_op2)
-
-    # bp -> kbp.D -> op.G (straight M1 on y_t1!)
+    # bp -> kbp.D -> op.G -> op.D -> m1p.G -> m1p.D -> kcp.D -> o1p.G (straight M1 on y_t1!)
     m1_hop(dc_wire["bp"]["xd"], dc_wire["kbp"]["xd"])
     m1_hop(dc_wire["kbp"]["xd"], dc_wire["op"]["xg"])
+    m1_hop(dc_wire["op"]["xd"], dc_wire["m1p"]["xg"])
+    m1_hop(dc_wire["m1p"]["xd"], dc_wire["kcp"]["xd"])
+    m1_hop(dc_wire["kcp"]["xd"], dc_wire["o1p"]["xg"])
 
-    # rawp: op.D -> krp.D -> dp1.G (straight M1 on y_t1!)
-    m1_hop(dc_wire["op"]["xd"], dc_wire["krp"]["xd"])
-    m1_hop(dc_wire["krp"]["xd"], dc_wire["dp1"]["xg"])
-
-    # Tap kbp.G and krp.G on y_gt_k for top-level M3 cross-coupling
+    # Tap kbp.G and kcp.G on y_gt_k for top-level M3 cross-coupling
     m1_tap(dc_wire["kbp"]["xg"], y_gt_k, y_gt_k)
-    m1_tap(dc_wire["krp"]["xg"], y_gt_k, y_gt_k)
-
-    # M2 bypass rawp -> seta.G
-    m1_tap(dc_wire["seta"]["xg"], y_t1, y_t1)
-    h.via1(dc_wire["dp1"]["xg"], y_t1)
-    h.via1(dc_wire["seta"]["xg"], y_t1)
-    h.wire("metal2", [(dc_wire["dp1"]["xg"], y_t1), (dc_wire["seta"]["xg"], y_t1)], W_M2)
-
-    m1_hop(dc_wire["dp1"]["xd"], dc_wire["dp2"]["xg"])
-    m1_hop(dc_wire["dp2"]["xd"], dc_wire["dp3"]["xg"])
-    m1_hop(dc_wire["dp3"]["xd"], dc_wire["setb"]["xg"])
-
-    # set_b -> y_t2 -> drop on M1 in qpb-qpa column gap -> y_t1 -> qpa.G (keeps qpa.xg locali clear of qpa P-diff!)
-    m1_tap(wb_set["xd"], 4.620, y_t2)
-    m1_tap(wa_set["xd"], y_t2, y_t2)
-    x_set_drop = grid((dcols["qpb"]["cx"] + dcols["qpb"]["hw"] + dcols["qpa"]["cx"] - dcols["qpa"]["hw"]) / 2.0)
-    m1_tap(dc_wire["qpa"]["xg"], y_t1, y_t1)
-    h.wire("metal1", [(wb_set["xd"], y_t2), (x_set_drop, y_t2), (x_set_drop, y_t1), (dc_wire["qpa"]["xg"], y_t1)], W_M1)
-
-    # qp -> y_t0 -> cr2_n & rp1.G & bpra.G
-    x_qpb_pd, x_qpa_pd = wb_qp["xd"], wa_qp["xd"]
-    for xc in (x_qpb_pd, x_qpa_pd):
-        h.pad("viali", xc, 4.620, 0.17)
-        h.pad("metal1", xc, 4.620, 0.24, 0.29)
-    h.wire("metal1", [(x_qpb_pd, 4.620), (x_qpa_pd, 4.620)], W_M1)
-    h.pad("viali", x_qpa_pd, y_t0, 0.17)
-    h.pad("metal1", x_qpa_pd, y_t0, 0.24, 0.29)
-    m1_tap(dc_wire["rp1"]["xg"], y_t1, y_t0)
-    h.rect("locali", grid(dc_wire["bpra"]["xg"] - 0.085), grid(y_t0 - 0.085), grid(dc_wire["bpra"]["xg"] + 0.085), grid(y_t1 + 0.085))
-    m1_tap(dc_wire["bpra"]["xg"], y_t0, y_t0)
-    h.wire("metal1", [(x_qpa_pd, y_t0), (dc_wire["bpra"]["xg"], y_t0)], W_M1)
-
-    # qpb.G on y_t1 -> hop over qpa on M2 up to x_c2_r_wall
-    m1_tap(dc_wire["qpb"]["xg"], y_t1, y_t1)
-    h.via1(dc_wire["qpb"]["xg"], y_t1)
-    h.via1(x_c2_r_wall, y_t1)
-    h.wire("metal2", [(dc_wire["qpb"]["xg"], y_t1), (x_c2_r_wall, y_t1)], W_M2)
-
-    m1_hop(dc_wire["rp1"]["xd"], dc_wire["rp2"]["xg"])
-    m1_tap(dc_wire["rp2"]["xd"], y_t2, y_t2)
-    h.rect("locali", grid(dc_wire["bprb"]["xg"] - 0.085), grid(y_t1 - 0.085), grid(dc_wire["bprb"]["xg"] + 0.085), grid(y_t2 + 0.085))
-    m1_tap(dc_wire["bprb"]["xg"], y_t2, y_t2)
-    h.wire("metal1", [(dc_wire["rp2"]["xd"], y_t2), (dc_wire["bprb"]["xg"], y_t2)], W_M1)
-
-    for xc in (wb_bpr["xd"], wa_bpr["xd"]):
-        h.pad("viali", xc, 4.620, 0.17)
-        h.pad("metal1", xc, 4.620, 0.24, 0.29)
-    h.wire("metal1", [(wb_bpr["xd"], 4.620), (wa_bpr["xd"], 4.620)], W_M1)
-    m1_hop(wa_bpr["xd"], dc_wire["opr"]["xg"])
+    m1_tap(dc_wire["kcp"]["xg"], y_gt_k, y_gt_k)
 
     x_out_port = grid(x_right_tap + 0.940)
-    m1_tap(dc_wire["opr"]["xd"], y_t1, y_t1)
-    h.wire("metal1", [(dc_wire["opr"]["xd"], y_t1), (x_out_port, y_t1)], W_M1)
+    m1_tap(dc_wire["o1p"]["xd"], y_t1, y_t1)
+    h.wire("metal1", [(dc_wire["o1p"]["xd"], y_t1), (x_out_port, y_t1)], W_M1)
 
     return h, {
         "x_bp_g": dc_wire["bp"]["xg"],
         "x_bp_d": dc_wire["bp"]["xd"],
         "x_kbp_g": dc_wire["kbp"]["xg"],
-        "x_krp_g": dc_wire["krp"]["xg"],
-        "x_rawp": dc_wire["op"]["xd"],
+        "x_midp": dc_wire["m1p"]["xd"],
+        "x_kcp_g": dc_wire["kcp"]["xg"],
         "y_gt_k": y_gt_k,
         "y_t0": y_t0,
         "y_t1": y_t1,
         "y_t2": y_t2,
-        "x_c12_wall": x_c12_wall,
-        "x_c2_r_wall": x_c2_r_wall,
-        "x_cr2_n": x_cr2_n,
-        "x_cr2_p": x_cr2_p,
-        "x_c3_l_wall": x_c3_l_wall,
         "x_right_tap": x_right_tap,
         "x_out_port": x_out_port,
         "n_s_xs": sorted(set(all_n_s)),
@@ -394,10 +262,10 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
     w.mkdir(parents=True, exist_ok=True)
 
     ana_half, am = r4.build_analog_half(w)
-    # AC/Rfb Coupling Bay sits between x_ana_r_wall and x_dig_l_wall (>= 1.5um M3/capm.11 clearance)!
+    # Compact AC/Rfb Coupling Bay using vertical single-layer MIM caps (w=5.0, l=9.9 -> ~100 fF, >= 1.5um M3/capm.11 clearance)!
     x_bay_l = am["x_ana_r_wall"]
-    x_bay_cx = grid(x_bay_l + 8.000)
-    x_dig_l_wall = grid(x_bay_l + 17.100)
+    x_bay_cx = grid(x_bay_l + 5.400)
+    x_dig_l_wall = grid(x_bay_l + 12.100)
     dig_half, dm = build_digital_half_r5(w, x_dig_l_wall)
 
     c = Cell()
@@ -406,10 +274,10 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
     c.include(dig_half, mirror_y=False)
     c.include(dig_half, mirror_y=True)
 
-    # Single-layer MIM caps (w=9.0, l=5.5) + three physical resistor segments per side.
-    mim_c = build_mim_cell(w, "mim90_55", 9.0, 5.5)
+    # Single-layer vertical MIM caps (w=5.0, l=9.9) + three physical resistor segments per side.
+    mim_c = build_mim_cell(w, "mim50_99", 5.0, 9.9)
     rpo_c, rpo_pts = build_rpo_3leg(w, "rpo6_3", 6.0)
-    y_mim_c = 3.600
+    y_mim_c = 6.200
     y_rpo_c = 6.500
     x_rpo_c = x_bay_cx
 
@@ -459,13 +327,13 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
             r4.draw_np_wall_band(c, am["x_ana_r_wall"], Y_ANA_VSS, -Y_A_T1, -Y_VDD1, half_w=V_TAP_WALL)
 
     # Digital Vertical NP walls
-    for xw, hw_w in ((x_dig_l_wall, V_TAP_EDGE), (dm["x_c12_wall"], V_TAP_WALL), (dm["x_c2_r_wall"], V_TAP_WALL), (dm["x_c3_l_wall"], V_TAP_WALL), (dm["x_right_tap"], V_TAP_EDGE)):
+    for xw, hw_w in ((x_dig_l_wall, V_TAP_EDGE), (dm["x_right_tap"], V_TAP_EDGE)):
         r4.draw_np_wall_band(c, xw, Y_ANA_VSS, +dm["y_t1"], +Y_VDD_DIG, half_w=hw_w)
         r4.draw_np_wall_band(c, xw, Y_ANA_VSS, -dm["y_t1"], -Y_VDD_DIG, half_w=hw_w)
 
-    # Center Shared VSS Rail (0.000): psubdiff + M1 + continuous wide M2 + M4 (clear of M3 crossover at kbp/krp/cr1/cr2!)
+    # Center Shared VSS Rail (0.000): psubdiff + M1 + continuous wide M2 + M4 (clear of M3 crossover at kbp/kcp/cr1!)
     ana_walls = [xl, am["x_sf_gr"], am["x_ana_l_wall"], am["x_ana_r_wall"], am["x_fp_vdd_drop"]]
-    dig_walls = [x_dig_l_wall, dm["x_c12_wall"], dm["x_c2_r_wall"], dm["x_c3_l_wall"], dm["x_right_tap"]]
+    dig_walls = [x_dig_l_wall, dm["x_right_tap"]]
     all_walls = ana_walls + dig_walls
 
     r4.draw_tap_h(c, "psubdiff", x_rail_l, x_dig_rail_r, Y_ANA_VSS, half_w=H_TAP_VSS)
@@ -473,8 +341,8 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
     c.wire("metal2", [(x_rail_l, Y_ANA_VSS), (x_dig_rail_r, Y_ANA_VSS)], 0.56)
     x_vss_ana_m3_l = grid(am["x_ana_l_wall"] + 0.780)
     x_vss_ana_m3_r = grid(am["x_ana_r_wall"] - 1.000)
-    x_vss_dig_m3_l = grid(dm["x_c12_wall"] + 0.400)
-    x_vss_dig_m3_r = grid(dm["x_c2_r_wall"] - 0.400)
+    x_vss_dig_m3_l = grid(dm["x_kbp_g"] + 1.600)
+    x_vss_dig_m3_r = grid(dm["x_kcp_g"] - 0.900)
     c.wire("metal3", [(x_vss_ana_m3_l, Y_ANA_VSS), (x_vss_ana_m3_r, Y_ANA_VSS)], 0.56)
     c.wire("metal3", [(x_vss_dig_m3_l, Y_ANA_VSS), (x_vss_dig_m3_r, Y_ANA_VSS)], 0.56)
     c.pad("metal3", x_dig_l_wall, Y_ANA_VSS, 0.56, 0.64)
@@ -552,13 +420,13 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
     c.wire("metal3", [(xr_t, -Y_VDD_DIG), (xr_t, +Y_VDD_DIG)], 0.60)
     c.wire("metal4", [(xr_t, -Y_VDD_DIG), (xr_t, +Y_VDD_DIG)], 0.80)
 
-    # Digital M4 VSS spine @ y=0 from x_dig_l_wall to x_vss_dig_m3_r
+    # Digital M4 VSS spine @ y=0 from x_dig_l_wall to x_vss_m4_r
     c.via1(x_dig_l_wall, Y_ANA_VSS); c.via2(x_dig_l_wall, Y_ANA_VSS); via3_pad_r5(c, x_dig_l_wall, Y_ANA_VSS)
-    x_vss_m4_r = grid(min(x_vss_dig_m3_r, xr_t - 1.500))
+    x_vss_m4_r = grid(x_vss_dig_m3_r - 0.300)
     c.wire("metal4", [(x_dig_l_wall, Y_ANA_VSS), (x_vss_m4_r, Y_ANA_VSS)], 0.80)
-    for xv in (dm["x_c12_wall"] + 1.0, dm["x_c12_wall"] + 4.5, x_vss_m4_r - 0.4):
+    for xv in (x_vss_dig_m3_l + 0.60, (x_vss_dig_m3_l + x_vss_m4_r) / 2.0, x_vss_m4_r - 0.30):
         xg = grid(xv)
-        if x_dig_l_wall + 0.5 <= xg <= x_vss_m4_r:
+        if x_vss_dig_m3_l + 0.30 <= xg <= x_vss_m4_r:
             via3_pad_r5(c, xg, Y_ANA_VSS)
 
     for sgn in (+1, -1):
@@ -569,7 +437,8 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
             xg = grid(xv)
             via3_pad_r5(c, xg, grid(ya - 0.24))
             via3_pad_r5(c, xg, grid(ya + 0.24))
-        for xv in (x_dig_l_wall, grid(x_dig_l_wall + 5.0), grid(dm["x_c12_wall"] + 2.0), grid(dm["x_c2_r_wall"] - 1.5), xr_t):
+        for k in range(4):
+            xv = grid(x_dig_l_wall + k * (xr_t - x_dig_l_wall) / 3.0)
             via3_pad_r5(c, xv, grid(yd - 0.24))
             via3_pad_r5(c, xv, grid(yd + 0.24))
 
@@ -577,16 +446,16 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
     # Wire AC/Rfb Coupling Bay (ap/an -> XCac -> ap_ac/an_ac -> Xbp.G + XRfb -> bp/bn)
     # -------------------------------------------------------------------------
     for sgn in (+1, -1):
-        # 1. ap/an from Domain B (am["x_ap_v"], +-Y_A_T2) -> M3 bottom plate C2 of XCac (x_bay_cx - 5.17, +-y_mim_c)
-        x_c2 = grid(x_bay_cx - 5.170)  # mirrored X!
+        # 1. ap/an from Domain B (am["x_ap_v"], +-Y_A_T2) -> M3 bottom plate C2 of XCac (x_bay_cx - 3.17, +-y_mim_c)
+        x_c2 = grid(x_bay_cx - 3.170)  # mirrored X!
         y_c_mim = grid(sgn * y_mim_c)
         c.wire("metal1", [(am["x_ap_v"], sgn * Y_A_T2), (x_c2, sgn * Y_A_T2)], W_M1)
         c.via1(x_c2, sgn * Y_A_T2); c.via2(x_c2, sgn * Y_A_T2)
         c.wire("metal3", [(x_c2, sgn * Y_A_T2), (x_c2, y_c_mim)], W_M3)
 
-        # 2. ap_ac from M4 top plate C1 of XCac (x_bay_cx + 0.73, +-y_mim_c) -> exit RIGHT >= 1.61um outside mimcap!
+        # 2. ap_ac from M4 top plate C1 of XCac (x_bay_cx + 0.73, +-y_mim_c) -> exit RIGHT >= 1.57um outside mimcap!
         x_c1 = grid(x_bay_cx + 0.730)
-        x_apac_drop = grid(x_bay_cx + 7.100)
+        x_apac_drop = grid(x_bay_cx + 5.000)
         c.wire("metal4", [(x_c1, y_c_mim), (x_apac_drop, y_c_mim)], 0.52)
         via3_pad_r5(c, x_apac_drop, y_c_mim)
         c.via2(x_apac_drop, y_c_mim)
@@ -611,9 +480,9 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
         c.pad("viali", dm["x_bp_d"], sgn * dm["y_t0"], 0.17)
         c.pad("metal1", dm["x_bp_d"], sgn * dm["y_t0"], 0.24, 0.29)
 
-    # Weak cross-coupled inverters kbp (bp<->bn) & krp (rawp<->rawn) M3 crossovers across y=0!
+    # Weak cross-coupled inverters kbp (bp<->bn) & kcp (midp<->midn) M3 crossovers across y=0!
     yk = dm["y_gt_k"]
-    for x_src, x_dst in ((dm["x_bp_d"], dm["x_kbp_g"]), (dm["x_rawp"], dm["x_krp_g"])):
+    for x_src, x_dst in ((dm["x_bp_d"], dm["x_kbp_g"]), (dm["x_midp"], dm["x_kcp_g"])):
         x_dn_m3 = grid(x_dst + 0.750)  # Top sig -> Bot gate (-yk), >= 0.35um clear of x_up_m3
         x_up_m3 = grid(x_dst)          # Bot sig -> Top gate (+yk)
         c.via1(x_src, +dm["y_t1"]); c.via1(x_dn_m3, +dm["y_t2"])
@@ -627,7 +496,7 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
         c.via2(x_up_m3, -dm["y_t2"]); c.via2(x_up_m3, +yk); c.via1(x_up_m3, +yk)
         c.wire("metal3", [(x_up_m3, -dm["y_t2"]), (x_up_m3, +yk)], W_M3)
 
-    # vbias, cr1, cr2, and I/O ports (identical to r4)
+    # vbias, cr1, and I/O ports
     x_vb = am["x_vbias"]
     for yb in (-Y_A_T1, +Y_A_T1):
         c.via1(x_vb, yb); c.via2(x_vb, yb)
@@ -645,13 +514,6 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
         c.via1(x_cr, y_s); c.via2(x_cr, y_s); c.via1(x_cr, y_d); c.via2(x_cr, y_d)
         c.wire("metal3", [(x_cr, y_s), (x_cr, y_d)], W_M3)
 
-    x2n, x2p = dm["x_cr2_n"], dm["x_cr2_p"]
-    c.wire("metal1", [(dm["x_c2_r_wall"], +dm["y_t1"]), (x2p, +dm["y_t1"])], W_M1)
-    c.wire("metal1", [(dm["x_c2_r_wall"], -dm["y_t1"]), (x2n, -dm["y_t1"])], W_M1)
-    for x_cr, y_s, y_d in ((x2n, +dm["y_t0"], -dm["y_t1"]), (x2p, -dm["y_t0"], +dm["y_t1"])):
-        c.via1(x_cr, y_s); c.via2(x_cr, y_s); c.via1(x_cr, y_d); c.via2(x_cr, y_d)
-        c.wire("metal3", [(x_cr, y_s), (x_cr, y_d)], W_M3)
-
     x_inp, x_out = am["x_inp"], dm["x_out_port"]
     for xp, yp in ((x_inp, +Y_A_T2), (x_inp, -Y_A_T2), (x_out, +dm["y_t1"]), (x_out, -dm["y_t1"])):
         c.via1(xp, yp); c.via2(xp, yp); c.pad("metal3", xp, yp, 0.40, 0.60)
@@ -665,18 +527,11 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
     c.port("vss", "metal4", x_dig_l_wall, Y_ANA_VSS)
     c.write(w / f"{cell}.mag")
 
-    def inv_lines(inst: str, inp: str, outp: str, wn: float, wp: float) -> list[str]:
+    def inv_lines(inst: str, inp: str, outp: str, wn: float, wp: float,
+                  n_model: str = "sky130_fd_pr__nfet_01v8") -> list[str]:
         return [
-            f"X{inst}_n {outp} {inp} vss vss sky130_fd_pr__nfet_01v8 w={wn} l=0.15",
+            f"X{inst}_n {outp} {inp} vss vss {n_model} w={wn} l=0.15",
             f"X{inst}_p {outp} {inp} vdd vdd sky130_fd_pr__pfet_01v8 w={wp} l=0.15",
-        ]
-
-    def nand_lines(inst: str, a: str, b: str, outp: str, wn: float, wp: float) -> list[str]:
-        return [
-            f"X{inst}_nt {outp} {a} {inst}_mid vss sky130_fd_pr__nfet_01v8 w={wn} l=0.15",
-            f"X{inst}_nb {inst}_mid {b} vss vss sky130_fd_pr__nfet_01v8 w={wn} l=0.15",
-            f"X{inst}_pa {outp} {a} vdd vdd sky130_fd_pr__pfet_01v8 w={wp} l=0.15",
-            f"X{inst}_pb {outp} {b} vdd vdd sky130_fd_pr__pfet_01v8 w={wp} l=0.15",
         ]
 
     ref_lines = [
@@ -696,40 +551,26 @@ def build_cml_to_cmos_r5(out: Path) -> dict:
         "Xan_lp an_mir an_mir vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.15",
         "Xan_ln an an_mir vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.15",
         "Xan_t an_tail vbias vss vss sky130_fd_pr__nfet_01v8 w=32 l=0.5",
-        "XCac_p ap_ac ap sky130_fd_pr__cap_mim_m3_1 w=9 l=5.5",
-        "XCac_n an_ac an sky130_fd_pr__cap_mim_m3_1 w=9 l=5.5",
+        "XCac_p ap_ac ap sky130_fd_pr__cap_mim_m3_1 w=5 l=9.9",
+        "XCac_n an_ac an sky130_fd_pr__cap_mim_m3_1 w=5 l=9.9",
         "XRfb_p0 ap_ac rfp1 vss sky130_fd_pr__res_high_po_0p35 l=6",
         "XRfb_p1 rfp1  rfp2 vss sky130_fd_pr__res_high_po_0p35 l=6",
         "XRfb_p2 rfp2  bp   vss sky130_fd_pr__res_high_po_0p35 l=6",
         "XRfb_n0 an_ac rfn1 vss sky130_fd_pr__res_high_po_0p35 l=6",
         "XRfb_n1 rfn1  rfn2 vss sky130_fd_pr__res_high_po_0p35 l=6",
         "XRfb_n2 rfn2  bn   vss sky130_fd_pr__res_high_po_0p35 l=6",
-        *inv_lines("bp", "ap_ac", "bp", 6.0, 7.2),
-        *inv_lines("bn", "an_ac", "bn", 6.0, 7.2),
-        *inv_lines("kbp", "bn", "bp", 0.6, 1.2),
-        *inv_lines("kbn", "bp", "bn", 0.6, 1.2),
-        *inv_lines("op", "bp", "rawp", 3.6, 6.4),
-        *inv_lines("on", "bn", "rawn", 3.6, 6.4),
-        *inv_lines("krp", "rawn", "rawp", 0.6, 1.2),
-        *inv_lines("krn", "rawp", "rawn", 0.6, 1.2),
-        *inv_lines("dp1", "rawp", "dp1", 1.2, 3.2),
-        *inv_lines("dp2", "dp1", "dp2", 1.2, 3.2),
-        *inv_lines("dp3", "dp2", "dp3", 1.2, 3.2),
-        *inv_lines("dn1", "rawn", "dn1", 1.2, 3.2),
-        *inv_lines("dn2", "dn1", "dn2", 1.2, 3.2),
-        *inv_lines("dn3", "dn2", "dn3", 1.2, 3.2),
-        *nand_lines("set", "rawp", "dp3", "set_b", 4.5, 4.5),
-        *nand_lines("rst", "rawn", "dn3", "reset_b", 4.5, 4.5),
-        *nand_lines("qp", "set_b", "qn", "qp", 6.0, 9.0),
-        *nand_lines("qn", "reset_b", "qp", "qn", 6.0, 9.0),
-        *inv_lines("rp1", "qp", "rp1", 2.4, 7.2),
-        *inv_lines("rp2", "rp1", "rp2", 1.5, 4.5),
-        *inv_lines("rn1", "qn", "rn1", 2.4, 7.2),
-        *inv_lines("rn2", "rn1", "rn2", 1.5, 4.5),
-        *nand_lines("bpr", "qp", "rp2", "bp_r", 2.4, 3.6),
-        *nand_lines("bnr", "qn", "rn2", "bn_r", 2.4, 3.6),
-        *inv_lines("opr", "bp_r", "outp", 4.0, 8.0),
-        *inv_lines("onr", "bn_r", "outn", 4.0, 8.0),
+        *inv_lines("bp",  "ap_ac", "bp",   4.5,  10.0, n_model="sky130_fd_pr__nfet_01v8_lvt"),
+        *inv_lines("bn",  "an_ac", "bn",   4.5,  10.0, n_model="sky130_fd_pr__nfet_01v8_lvt"),
+        *inv_lines("kbp", "bn",    "bp",   0.6,   1.2),
+        *inv_lines("kbn", "bp",    "bn",   0.6,   1.2),
+        *inv_lines("op",  "bp",    "rawp", 3.6,   6.4),
+        *inv_lines("on",  "bn",    "rawn", 3.6,   6.4),
+        *inv_lines("m1p", "rawp",  "midp", 1.8,   6.0),
+        *inv_lines("m1n", "rawn",  "midn", 1.8,   6.0),
+        *inv_lines("kcp", "midn",  "midp", 0.42,  1.0),
+        *inv_lines("kcn", "midp",  "midn", 0.42,  1.0),
+        *inv_lines("o1p", "midp",  "outp", 3.2,   8.0),
+        *inv_lines("o1n", "midn",  "outn", 3.2,   8.0),
         f".ends {cell}",
         "",
     ]

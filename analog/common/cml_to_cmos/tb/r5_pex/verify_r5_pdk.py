@@ -30,7 +30,7 @@ from review_sim import freeze_includes, save_analysis
 MODEL_LIB = spice.corner_values(corners.Condition.parse("tt_v1800_t27"))["MODEL_LIBRARY"]
 
 PEX_DIR = ROOT / "analog/common/cml_to_cmos/layout/variants/r5_pdk"
-REV_DIR = ROOT / "results/layout_review/cml_to_cmos_r5_20261117T1448Z"
+REV_DIR = ROOT / "results/layout_review/cml_to_cmos_r5_20261118T1445Z_v6"
 PEX_SPICE = PEX_DIR / "serdes_cml_to_cmos_r5_pdk_pex.spice"
 RCX_SPICE = REV_DIR / "serdes_cml_to_cmos_r5_pdk_rcx.spice"
 DIV_PEX_SPICE = ROOT / "analog/pll/divider/layout/variants/cmos_2g_pdk/pll_cmos_prescaler8_2g_pdk_pex.spice"
@@ -213,14 +213,15 @@ def run_6corners(camp: Path, workers: int) -> None:
     sub = camp / "6corners"
     sub.mkdir(parents=True, exist_ok=True)
     jobs, meta = [], []
-    for kind, dut in (("cpex", PEX_SPICE), ("rcx", RCX_SPICE)):
+    rcx_spice = REV_DIR / "serdes_cml_to_cmos_r5_pdk_rcx.spice"
+    for kind, dut in (("cpex", PEX_SPICE), ("rcx", rcx_spice)):
         for c in EXTREME6:
             name = f"{kind}_{c.tag}"
             deck = _rx_deck(c, dut, input_pp=0.3, stop="22n", skip_before="11n")
             deck = frozen_deck(deck, sub, name)
             prev = spice.case_output(sub, name, "waveforms", t_end=22e-9)
             if prev is None:
-                jobs.append((deck, spice.next_run_dir(sub, name), dict(meta=dict(kind=kind, condition=c.tag))))
+                jobs.append((deck, spice.next_run_dir(sub, name), dict(timeout_s=300, meta=dict(kind=kind, condition=c.tag))))
             meta.append((kind, c, name))
     if jobs:
         for ex in spice.run_many(jobs, workers=workers):
@@ -276,7 +277,7 @@ def run_45corners(camp: Path, workers: int) -> None:
         deck = frozen_deck(deck, sub, c.tag)
         prev = spice.case_output(sub, c.tag, "waveforms", t_end=18e-9)
         if prev is None:
-            jobs.append((deck, spice.next_run_dir(sub, c.tag), dict(meta=dict(condition=c.tag))))
+            jobs.append((deck, spice.next_run_dir(sub, c.tag), dict(timeout_s=240, meta=dict(condition=c.tag))))
         keys.append(c)
     if jobs:
         for ex in spice.run_many(jobs, workers=workers):
@@ -419,10 +420,10 @@ def run_chain_div8(camp: Path, workers: int) -> None:
             f"r5_pdk + cmos_2g_pdk {tag}:{rc}",
             *_header(cv["CORNER"], PEX_SPICE, DIV_PEX_SPICE),
             f".param supply={cv['SUPPLY']} input_pp=0.3",
-            "Vdd vdd 0 {supply}",
-            "Vrx vrx 0 {supply}",
-            "Vdiv vdiv 0 {supply}",
-            "Vreference vref 0 {supply}",
+            "Vdd vdd 0 PWL(0 0 0.5n {supply})",
+            "Vrx vrx 0 PWL(0 0 0.5n {supply})",
+            "Vdiv vdiv 0 PWL(0 0 0.5n {supply})",
+            "Vreference vref 0 PWL(0 0 0.5n {supply})",
             "Iref vref vbias .85m",
             "Xref vbias vbias 0 0 serdes_nfet w=20 l=.5 nf=4",
             "Vp sp 0 SIN({supply-.15} {input_pp/4} 2e9)",
@@ -440,7 +441,7 @@ def run_chain_div8(camp: Path, workers: int) -> None:
             "set num_threads=1",
             "set wr_singlescale",
             "set wr_vecnames",
-            "tran 2p 30n 0 2p",
+            "tran 2p 30n 0 2p uic",
             "let prx=-v(vrx)*i(Vrx)",
             "let pdiv=-v(vdiv)*i(Vdiv)",
             "wrdata waveforms.tsv v(clkp) v(clkn) v(q2p) v(q2n) v(q4p) v(q4n) v(q8p) v(q8n) prx pdiv",
@@ -455,7 +456,7 @@ def run_chain_div8(camp: Path, workers: int) -> None:
         deck = frozen_deck(deck, sub, name)
         prev = spice.case_output(sub, name, "waveforms", t_end=30e-9)
         if prev is None:
-            jobs.append((deck, spice.next_run_dir(sub, name), dict(meta=dict(condition=tag, rc=rc))))
+            jobs.append((deck, spice.next_run_dir(sub, name), dict(timeout_s=450, meta=dict(condition=tag, rc=rc))))
         meta.append((c, rc, name))
     if jobs:
         for ex in spice.run_many(jobs, workers=workers):
@@ -508,8 +509,13 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--stage", choices=["6corners", "45corners", "mc", "chain_div8", "all"], required=True)
     ap.add_argument("--campaign", type=Path, default=None)
+    ap.add_argument("--rev-dir", type=Path, default=None)
     ap.add_argument("--workers", type=int, choices=(1, 2, 3, 4), default=2)
     args = ap.parse_args()
+    if args.rev_dir is not None:
+        global REV_DIR, RCX_SPICE
+        REV_DIR = args.rev_dir.resolve()
+        RCX_SPICE = REV_DIR / "serdes_cml_to_cmos_r5_pdk_rcx.spice"
     camp = (args.campaign or (ROOT / "results/analog/common/cml_to_cmos/r5_pdk" / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()))).resolve()
     camp.mkdir(parents=True, exist_ok=True)
     if len(watch.ngspice_cwds()) + args.workers > 4:

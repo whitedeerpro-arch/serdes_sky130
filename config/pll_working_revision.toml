@@ -1,3 +1,4 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
 revision = "r6_candidate_20261112"
 status = "r6 5-bit layout-aware VCO and k4 quiet core; 135-condition map table generated; frontend partial measurements and existing r5 native integration retained; current loop/interface qualification open"
 r5_change = "VCO only: legacy 3-bit switch W 1 -> 5; current 4-bit half-unit switch W 2.5 and MIM 2.35x2.5; varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
@@ -128,11 +129,25 @@ resumed_points = 20
 ideal_low_v = 0.90
 upper_codes_compared = "3: VDD-0.41V; 4: VDD-0.44V; 5: VDD-0.47V"
 code_names = "K=VCO bank value 0..15; H=upper threshold tap value 0..15; H=3/4 are values, not bit widths"
-conditions_with_measured_choice = "135/135 for each upper code"
-same_code_at_three_temperatures = "27/45; 23/45; 19/45 respectively; narrower window than r5_fixed_code_temperature"
+conditions_with_interpolated_choice = "135/135 for each upper code in original static interpolation analysis"
+same_code_at_three_temperatures = "27/45; 23/45; 19/45 interpolation predictions only; narrower than r5_fixed_code_temperature"
 default_changed = false
 qualified = false
 remaining = "adjacent-code landing; actual threshold and dynamic/MC budgets; startup and noise"
+
+[r5_coarse_control_windows.h4_boundary_confirmation]
+supply_scope = "legacy r5 single-supply static; not current r5k4q host/quiet qualification"
+evidence = "docs/data/vco_window_boundaries.json"
+conditions_with_in_window_measured_bracket = 135
+prior_conditions = 95
+new_boundary_points = 40
+new_low_points = 31
+new_high_points = 9
+minimum_new_boundary_frequency_gap_mhz = 16.806578
+minimum_new_boundary_condition = "sf_v1650_t-40:ll K15 at Vctrl0.90V"
+three_temperature_common_codes_qualified = false
+actual_threshold_mismatch_dynamic_noise_qualified = false
+default_H_changed = false
 
 [r6_vco]
 report = "docs/design/pll_vco.md"
@@ -169,7 +184,20 @@ cfg_level_assumption = "native static bench drives cfg at quiet-rail levels; act
 rtl_control_code_bits_override = 5
 rtl_control_default_bits = 4
 physical_automatic_coarse_search_integrated = false
-native_precharged_lock_qualified = false
+native_precharged_lock_qualified = false  # full required r6 pressure set remains open; TT point below is qualified
 native_full_PVT_completed = false
 from_zero_startup_qualified = false
 old_r5_lock_noise_results_transferable = false
+
+[r6_tt_precharged_lock_20261114]
+report = "docs/design/r6_lock_confirmation.md"
+evidence = "docs/data/r6_lock_confirmation.json"
+campaign = "results/analog/pll/top/native_r6/20261114T123336.086796Z"
+point = "tt_v1800_t27:tt"
+supply_variant = "ext"
+code = 9
+actual_stop_s = 8e-7
+engineering_lock_qualified = true
+hold_s = 4.8e-7
+output_frequency_last200ns_hz = 1999999142.6018455
+scope = "r6 schematic; fixed PDK R, real shared BG/slow tail; ideal250MHz PFD reference and host/quiet rails; map precharge+40mV and explicit kicks; not from-zero startup, loaded lock, PVT, PEX, dynamic TX or stochastic-noise qualification"

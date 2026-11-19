@@ -4,6 +4,8 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 ## 先看当前主线
 
+- [VCO bank局部Pareto研究](layout/vco_bank_optimization.png)：实测叶目录、旧码包络与研究筛选条件，来源及适用边界见[优化研究](../design/vco_bank_optimization.md)。不表示完整环振或良率前沿。
+
 - **[交互设计工作台](../../web/design/index.html)**：SerDes→TX/Bias/RX/PLL/Channel→子模块，边界、模型规划、迭代与证据挂在模块下；[本地运行与保存](../../web/design/README.md)。[静态图与预览](system/README.md)保留参考。
 - **[TX入口与完整链路](tx/ingress/README.md)**：单元/分组保持/关闭竞争、完整TX的TT与FS对照眼图、guard映射时序可行性；FS失败与SS时序不足均保留。
 - **[11-06 时钟链路图集](clocking/README.md)**：7 组新图，覆盖 VCO 135 条件选码/Kvco、3/4 bit 控制范围、CP 窗口、÷2 可行区、r5＋TX v3 原生联合仿真与计数波形；[来源与复现](../history/clocking_progress_20261106.md)。

@@ -1,75 +1,64 @@
-# 待解决问题
+# 问题登记与关闭条件
 
-> 编号稳定，关闭时保留条目并写明结论与日期。阶段：P2 正确性修复，P3 PVT 补全，P4 相位噪声与抖动，P5 RX PVT 与数字实现。优先级按对"45 条件满足规格"的影响排序。
+编号稳定，关闭时保留结论、日期和证据。**本表记录设计风险，不是执行队列**；优先级和领取顺序只看[执行计划](prelayout_plan.md)，采用与验证数字只看[current.md](current.md)。旧P2/P3/P4/P5是历史阶段分类，不再与本轮M里程碑混用。
 
-按模块选择与依赖阅读：[设计框图与开发状态](../overview/development_map.md)。其中区分旧基线、当前候选、未实现接口，以及当前变体自己的PVT/失配/噪声证据。
+本次整理前的详细复述、旧阶段与冲突表保留在[历史快照](../history/open_issues_snapshot_20261113.md)。局部通过、功能失败、数值未完成、未测按原边界保留；此处没有把已验证单元整体重新打开。
 
-TX输出边界补证（2026-11-12）：[AC耦合状态与端接电流](../design/tx_coupling_state.md)发现现有完整TX 45点是4ns使能、10nF/腿、8–120ns的有限电荷历史；新两角干净输入对照中，已使能DC初态端接导电峰达6.62mA，局部眼图仍满足。实际串化器源的耦合建立状态、物理R电流/跟踪/寄生及启动继续纳入I-17/I-29相关边界，不能由旧短窗电流或新局部通过替代。
+## 原生PLL与TX主线
 
-2026-11-06 的跨模块评估建议先做 I-33 共用分频单元、I-07 TX v3 与 I-09/I-32 PLL 工作区，见[分批结论](../history/design_coupling_review_20261106.md)。评估里的 P0/P1 表示执行优先级，与本表的项目阶段编号不同。
+| 编号 | 未关闭的问题 / 关闭条件 | 证据与模块入口 |
+|---|---|---|
+| I-01 | 当前v3的字/时钟共同纪元、guard/blank及复位启动协议。旧r2启动置换解法按历史保留，不列为当前路径必经项 | [时钟分发](../design/tx_clock_distribution.md)、[字捕获](../design/tx_word_capture.md) |
+| I-07 | 当前锁定PLL驱动完整TX动态数据与源/负载差异。按同deck动态、眼图、位映射和实际加载证明；已有r5开环静态及回放不重新记为未做 | [时钟分发](../design/tx_clock_distribution.md)、[源边界](current.md#3-tx-被什么时钟驱动过) |
+| I-08 | r6 plant/PFD下的原生闭环、实际启动与控制接入。继承已有顶层/旧预充闭环，按新接口验证 | [环路](../design/pll_loop.md) |
+| I-09 | r6工作图低频估计/内插的独立校准、当前噪声/失配和背景调码。逐温可达与跨三温共同码分开判定 | [VCO](../design/pll_vco.md)、[读取审计](../design/r6_map_audit.md) |
+| I-12 | CP/门限联合失配尾部、实际ctrl−z纹波、比较/决策与VCO窗口联合余量。静态pilot不等于生产统计资格 | [CP窗口](../design/pll_cp_window.md)、[环路](../design/pll_loop.md) |
+| I-13 | 实体LF与r6控制端导纳、电源分接、B2实际加载/捕获。保留已实现LF及旧闭环证据 | [环路](../design/pll_loop.md) |
+| I-17 | 内部摆幅目标/上界适用性、换向/共模/器件余量、应力和时序。先模型和消费方需求；不只凭偏离400mV淘汰，也不以眼图通过关闭器件风险 | [幅度依据](../design/cml_swing_target.md)、[需求卡](../design/tx_retime_demand.md)、[尺寸约束](../design/tx_buffer_sizing.md) |
+| I-19 | 已实现字入口的物理guard/标签/blank、建立保持与噪声失配。RTL波形回放不替代物理控制时序 | [完整入口](../design/tx_parallel_serializer.md)、[字捕获](../design/tx_word_capture.md) |
+| I-32 | r6源/反馈/负载、物理寄生、码表/窗口、噪声与启动的一致性。新候选被采用前列明证据继承和失效边界；矩形bank融合/缩开关的局部Q与Con反例见[复核](../layout/capacitor_fusion.md) | [VCO](../design/pll_vco.md)、[环路](../design/pll_loop.md)、[PLL版图](../layout/pll_r6.md) |
 
-I-07 原生静态边界：r5 / 4 bit 已接入真实偏置/PDK 电阻的 TX v3 原生联合静态 bench，10 个压力点中 8 个完整且连续计数，2 个 FF 冷角数值未完成。新增[7 组图和恢复记录](../history/clocking_progress_20261106.md)，该静态边界的动态眼图/位映射仍未验证。另有理想2GHz下实际入口完整TX 45点、r5/k4原生闭环三点，二者不把原静态缺点补成通过。
+## 共用边界、规格与物理风险
 
-FF 冷角的[本地前端分层诊断](../history/pll_cold_convergence.md)已完成首轮：ll/hh 的四支路前端在已登记的偏置就绪初值下均有24 ns完整瞬态，分频及全速/反馈功能检查满足；自动DC仍开。这个边界不含TX，不把原联合测试的2个缺点改成通过，也不证明上电。
+| 编号 | 未关闭的问题 / 关闭条件 | 证据与模块入口 |
+|---|---|---|
+| I-02 | 实体定宽R/MIM与通用PDK卡的角偏差/寄生/参考跟踪；按真实器件承接各模块，不能把已接真实无源重记为首次接入 | [固定负载](../design/fixed_load_resistors.md)、[宽电阻](../design/wide_load_planning.md)、[AC模型修正](../design/fixed_poly_ac_overlay.md) |
+| I-03 | 实际vcm加载、参考ready、同时加载和共享扰动/去耦。带隙/分配已有，不能列为重新设计参考 | [Bias](../design/bias.md) |
+| I-05 | 当前r6器件噪声/失配、实际参考/反馈/分发/供电路径与系统抖动预算。控制导纳已作TT局部校准；变容rg缺少热噪声标志已用局部副本修正，DC噪声/AC及短环振对照通过，仍需周期噪声折算与完整预算。旧r5模型不直接转移，MC不替代噪声 | [规格预算](../overview/spec.md#抖动与相位噪声预算)、[当前审计](../design/r6_lock_confirmation.md)、[VCO](../design/pll_vco.md) |
+| I-06 | 当前采用链的长码型散布与剩余余量；旧r2长窗揭示的码型敏感度作为压力选择依据 | [串化器](../design/tx_serializer.md)、[末级重定时](../design/tx_final_retime.md) |
+| I-10 | FS低压冷分频尾管饱和余量及可能的低堆叠结构对照；功能正常不能代替余量依据 | [分频器](../design/pll_divider.md) |
+| I-11 | 高压CMOS过冲的逐器件端电压/应力；按实际接收器版本核对 | [接收器](../design/clock_receiver.md) |
+| I-18 | 当前5bit VCO码与4bit门限梯的实际驱动、译码动态、停止/切码与跨供电域时序；RTL回归不替代物理接口 | [粗码窗口](../design/pll_coarse_windows.md)、[数字PLL](../../digital/pll/README.md) |
+| I-20 | 远端或CTLE后的链路门槛与目标信道定义。现有串化器/焊盘门槛保持；远端比较量不自动通过或推翻它们 | [信道](../design/channel_model.md)、[规格](../overview/spec.md) |
+| I-21 | ready→预充/粗搜→捕获→训练的实际从零启动，含停钟/越界/超时恢复 | [环路](../design/pll_loop.md)、[监测](../design/monitor.md) |
+| I-27 | 当前内部ISI/带宽与末级下垂，优化须同时保持时序和器件余量，避免独立缩R | [串化器](../design/tx_serializer.md)、[需求卡](../design/tx_retime_demand.md) |
+| I-29 | 真实焊盘/ESD/封装、电源/回流、供电抑制及使能/AC耦合状态；FFE为未采用扩展 | [输出级](../design/tx_output_driver.md)、[耦合状态](../design/tx_coupling_state.md)、[物理负载](../design/tx_physical_load_card.md) |
+| I-31 | 既有边界登记/负载签名/默认冒烟已建立；剩余旧脚本的显式身份和变体接入。不得用“最新一次”寻找生产边界 | [边界管理](../verification/methods.md#边界条件管理) |
+| I-35 | 单PLL/相对双PLL、峰值/峰峰值、CDR前后供电抖动口径，以及实际参考/偏置/环外路径的相关性与动态校准；LDO减容候选承接实际PLL负载/快卸载与相关噪声预算 | [定时与供电复核](../design/pll_timing_supply_review.md)、[预算口径](../design/pll_ripple_budget.md)、[TX时序筛选](../design/tx_relative_timing_screen.md)、[LDO减容](../design/ldo_smallcap.md) |
 
-I-02的固定宽电阻转换还需设计迭代：[并联卡](../design/fixed_load_resistors.md)补出120/50Ω的合法实现及短240Ω的跟踪风险。固定卡原AC差异已通过[立方导数最小复现与模型副本](../design/fixed_poly_ac_overlay.md)定位并验证；1080点数值一致不代替新电路/偏置/无源角或噪声资格，原PDK及生产默认模型未改。
+## RX与宿主接口（后续释放）
 
-## 高优先级
+本轮维持已有RX边界，后续按计划M5逐项释放；这是执行排序，不减少最终交付义务。
 
-| 编号 | 问题 | 证据 | 阶段 |
-|---|---|---|---|
-| I-01 | **旧r2的八状态解法已验证，当前v3按单计数器纪元处理。** 旧独立prescaler的8种位对置换与检测/逆置换已在压力工况验证；当前v3计数器、实际字入口和自然位序有独立证据，不把旧remap当作新路径必经项。继续完成当前时钟/字纪元、guard/blank和复位启动协议。 | [TX 时钟分发](../design/tx_clock_distribution.md#启动状态与调序) | P2 |
-| I-02 | **当前TX动态45点已用真实偏置与通用PDK R tt。** RX窗口135、r6工作图135、分频hh/ll和CP DC等局部结果保留。版图定宽卡与通用卡的角偏差/寄生不同，按模块实际器件实现承接，不将已做工作重记为未接无源；TX定宽负载局部对照另在进行。 | [逐框状态](../overview/development_map.md)、[PVT覆盖](../verification/pvt_coverage.md) | P3 |
-| I-03 | **基准/分配/vcm/B2已有，真实参考已进入RX、完整TX及原生PLL/TX测试。** 带隙/分配有135点DC/上电和局部MC。剩余是消费方实际vcm加载、ready/启动衔接、共享参考的相关扰动及同时加载边界，不是重新设计或首次接入参考。 | [偏置](../design/bias.md)、[工作修订](../../config/bias_working_revision.toml) | P3 |
-| I-04 | ~~全速 CML→CMOS SS 冷角失败。~~ **已解决 2026-10-31（PLL r4）**：根因是差分转单端级 PMOS 镜像负载上拉不足；r4 接收器标准边界 45/45，原生 VCO 5 个工作点四路全部正常（含 SS/1.65 V/−40 °C）。遗留：SS 热角幅度余量约 110 mV。 | [时钟接收器](../design/clock_receiver.md#r4全速-ss-冷角修复2026-10-31) | — |
-| I-05 | **已有噪声预算与局部MC，按改动承接到r6。** r5/k4模型的CDR后14.07σ最差0.363UI及VCO五点MC为历史规划证据；CP三点MC与分频局部统计仍按原激励边界保留。r6改VCO尺寸/寄生/负载，须重校其噪声与plant，再补实际参考/反馈、分发与供电路径；MC不替代噪声。 | [规格](../overview/spec.md#抖动与相位噪声预算) | P4 |
-| I-35 | **供电相对抖动预算仍待闭合。** 单PLL0.05UI峰值与总眼宽/双PLL相对峰峰值口径未统一。7点原始宿主Kd已独立复算，低压冷反馈约2.1ps/mV；参考副本7点×4负载也已复算，170fF残差与模型相符。新模型实测点直供7.9–19.5mV峰值、HV31.7–60.9mV峰值，未测点包络HV19.1mV；不是锁定态容限签核。实际参考引脚、偏置传递/独立RC、PFD缺点、环外TX/RX路径及相关性/CDR仍缺。旧45点TX相对时序筛选另计，不冒充独立宿主AC响应。保留现行150MHz/V历史门槛；不能以单项K或模型容限直接宣布功能通过/失败。 | [供电延迟与参考副本复核](../design/pll_timing_supply_review.md)、[TX相对时序](../design/tx_relative_timing_screen.md)、[预算口径](../design/pll_ripple_budget.md) | P4 |
-| I-06 | **TX r2 长码型散布接近门槛。** FS/1.65 V/85 °C 的 1024 bit 记录：串化器 0.1149 UI、焊盘 0.1425 UI、远端 0.1469 UI；同工况 128 bit 为 0.0953 UI。128 bit 网格低估码型相关散布，需要长码型复验和改进余量。调序方案下 8 个启动状态在 FS 热角 1024 bit 的最差散布为 0.127 UI（500 MHz 滞后奇数个 VCO 周期的状态）。 | [TX 串化器](../design/tx_serializer.md) | P3 |
-| I-07 | **原生 PLL 时钟接 TX：r2 在源端漂移和弱抽头下不成立；v1 分发在 4 个原生点上修好。** PLL r4 原生前端 + TX r2 联合仿真：TT 正常（眼图 152.8 mV，检测码直接对应实测置换表），SS 冷（7.1 mV）和 SS 热（0.188 UI）失败。把理想边沿放到原生位置即可复现失败，所以相对位置错位是主因；但输入本身也变差了：SS 热角串化器处 1 GHz 时钟 301 mVpp（理想源 441）、过零斜率 1.06 mV/ps（理想源 2.64），500 MHz 379 mVpp；SS 冷角 1 GHz 斜率为理想源的 55%。r2 的 45 条件扫描用的是同一份理想 TT 时钟源（400 mVpp、20 ps 边沿）和理想 CMOS 数据源。原生时钟相对 r2 标定位置偏 0.17–0.79 UI，且随工况漂移（2 GHz 相对 250 MHz 在 TT 和热角间差约 0.4 UI）；热角单轴窗口为 500 MHz −0.5~+0.1、1 GHz ±0.25、2 GHz −0.1~+0.3 UI。统一对中后 FS 热角仍不达标（0.209 UI）。r2 的 45/45 只在固定 TT 时钟下成立。录制回放拆分后：SS 冷角只是位置；热角是时钟质量（位置对准时 FS 热仍 75 mV / 0.258 UI）。分发 v1（500M/1G 加一级高增益 buffer、去 RC trim，+1.3 mA）+ 每路一个固定延迟（2G 再晚 0.2 UI），4 个原生点最差 125.4 mV / 0.072 UI。位置漂移正比于各路分频级数之差（每级 25–40 ps，全 PVT 约 85 ps）。加入 FF 1.95 V −40 °C 原生点后固定设置失效：2G 晚 0.88 UI、位序改变；5 点剩余误差跨度 500M/1G/2G 0.22/0.55/0.92 UI。需要重新打拍，使各路 VCO 之后的分频级数相同。打拍版 v2b：同一工艺内摇摆带 ≤ 0.10 UI，15 个 V/T 点 10 点满足，85 °C 的 TT/FF/SF 仍失败（2G 不经 clk→q，与打拍后的三路 PVT 走向不同）。结构比较（`serdes_flow.balance`）指向同步二进制计数器 + 2G 复制单元；按此做的分发 v3 在 15 个原生 V/T 点上按原始位序全部满足（最差 121.6 mV / 0.140 UI），待功耗优化、45 条件补点与联合仿真。 | [TX 时钟分发](../design/tx_clock_distribution.md#时钟构造结构比较) | P2 |
-| I-31 | **边界条件（上游录制/理想化波形作为下游激励）没有管理。** 回放脚本按"最新一次录制""最新一次 target"隐式查找，新录制会悄悄改变后续结果；录制时的上游修订、工作点、下游负载（例如 TX 分发输入级）没有作为条件记录，下游改了输入级（v1 把 500M/1G 第一级 400 → 600 Ω，v2 加打拍）也不会让旧录制失效；理想 TT 时钟记录在 45 个条件下复用而结论没有标注。另外 bench 模板直接引用 DUT 内部节点名（`xclocks.a250p` 等）和显式 `.save` 列表，换 DUT 变体时整批仿真在最后写文件时失败（本轮浪费 6–14 分钟各一次），缺少开跑前的短冒烟检查。**已建（2026-10-31）**：登记表 + `serdes_flow.boundary`（按 id 引用、负载签名检查）+ `run_many` 默认冒烟；PLL r4 抽头的 r2 负载录制和理想 TT 记录已登记，`clock_replay`/`retime` 已接入。剩余：v1/v2 输入级下重新录制；旧脚本（clock_states、swing_trial、waveform_view）接入。 | [验证方法](../verification/methods.md#边界条件管理) | P2 |
-| I-08 | **PLL集成和原生锁定已有；r6按新plant承接。** r5/k4有行为VCO分层135点，以及四条件×hv/ext共8条原生预充闭环锁定。当前r6完整core与bench已有，工作图135表已生成；新PFD/plant下的闭环与实际启动链待验证，不能混作首次集成，也不能把预充锁定称为从零上电。 | [PLL 环路](../design/pll_loop.md) | P3 |
-| I-14 | **RX分层结果已有，当前读出/动态范围分别记录。** ac_trim/c2/PI120f无读出负载窗口135条件；历史读出45点存在mutable include身份局限，当前W40有真实偏置/RC的FS/FF冷等压力点。TT背靠背16字、PI步进/物理CDR短窗保留；当前W40网格、实际失配两边沿校准、生产CDR动态与原生锚点按边界承接。 | [RX 前端](../design/rx_frontend.md)、[RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
+| 编号 | 未关闭的问题 / 关闭条件 | 证据与模块入口 |
+|---|---|---|
+| I-14 | 当前W40真实偏置/RC读出网格、实际失配两边沿校准、生产CDR动态及原生锚点；旧mutable include资格不转移 | [PI/采样](../design/rx_pi_sampler.md)、[冷角](../design/rx_cold_convergence.md) |
+| I-15 | 已实现deser16及map→align→FIFO的物理cosim、频偏容量/溢出/重训恢复、实际时序与CDC | [RX数字](../design/rx_cdr_digital.md)、[宿主CDC](../design/rx_host_cdc.md) |
+| I-16 | 宿主HD映射后SS时序、CDR/校准工艺时序与物理CDC。已有映射/TT时序不重记为完全未做 | [宿主字时序](../design/rx_word_host_timing.md)、[RX数字](../design/rx_cdr_digital.md) |
+| I-23 | 读出后鉴相零点、孔径偏移与控制路径延迟的校准 | [PI/采样](../design/rx_pi_sampler.md) |
+| I-28 | CTLE实际vcm/端接加载与启动、真实偏置/RC下增益/零极点、目标信道与档位策略；是否CMFB由余量决定 | [前端](../design/rx_frontend.md)、[Bias](../design/bias.md) |
+| I-30 | 原生PLL多相锚点、PI输入间距/斜率/负载与共享扇出；理想相关源不代表原生源 | [PI/采样](../design/rx_pi_sampler.md) |
+| I-33 | 当前W40全网格、原生锚点/动态和真实启动；保留冷角软DC短窗恢复与原W80失败的各自边界 | [冷角](../design/rx_cold_convergence.md)、[PI/采样](../design/rx_pi_sampler.md) |
 
-## 中优先级
+## 历史修复与维护项
 
-| 编号 | 问题 | 证据 | 阶段 |
-|---|---|---|---|
-| I-09 | **当前VCO为r6/5bit带寄生与成对长负载。** 135条件表已生成，每条件均有窗口内可达2GHz的模型码；慢/快端最差8.23/8.63%，最小窗口/LSB2.25。低频读取和锁点模型校验另验；45组三温有9组无共同码，属于背景调码规划。旧r5五压力点各200样本MC保留为尺寸规划参考，当前VCO统计/噪声需承接。 | [VCO](../design/pll_vco.md#工作区r5-候选45-条件--tt--hh--ll2026-11-06) | P3 |
-| I-10 | FS/1.65 V/−40 °C 分频首级/第二级 master 尾管平均 VDS − VDSAT 约 −5/−4 mV（r3）；r2 时约 63% 采样点低于饱和判据。功能正常但无裕量；修补困难时考虑减少堆叠的结构。 | [分频器](../design/pll_divider.md) | P3 |
-| I-11 | 1.95 V 条件 CMOS 上冲（FF/FS 冷角峰值约 2.022–2.026 V），15 个 1.95 V 条件都有；器件端电压未核对。r4 接收器最高约 2.049 V（SS/1.95 V/−40 °C）。 | [时钟接收器](../design/clock_receiver.md) | P3 |
-| I-12 | 当前k4转向CP的真实偏置DC135点已完整，5%窗口上沿与实测粗码vhi最小距离24.37mV（SF1.65V85°C ll）；旧CP窗口不再沿用。最差点32对联合CP/门限pilot已做：vhi+20mV假设下码3有5/32超过5%，码4为0/32但未采用；须复核VCO控制范围、统计尾部及实际ctrl−z/比较/决策预算；三点CP MC电荷σ1.7–1.9fC和静态相差上界148ps保留。 | [窗口交接](../design/pll_cp_window.md)、[PLL环路](../design/pll_loop.md) | P3 |
-| I-13 | **物理LF已有：4.13kΩ、18个1pF MIM及双预充门。** r5分层135点、四条件×hv/ext共8条原生预充锁定保留。r6按新控制端导纳、实际固定卡和PFD重新校准环路/供电分接，继续B2加载与启动；不再列为LF未实现。 | [PLL 环路](../design/pll_loop.md) | P3 |
-| I-15 | **物理deser16和数字map→align→FIFO均已实现。** 当前W40压力点、TT物理PI步进/回卷及宿主字路径16窗口399前缀字分别有证据。待接宿主物理cosim、容量/频偏政策与错误恢复；工艺CDC/复位及SS时序闭合仍开。 | [RX 数字](../design/rx_cdr_digital.md)、[字收集方案](../history/rx_cml_word_capture_plan.md) | P5 |
-| I-16 | **宿主字路径已做两种SKY130 HD映射/STA，不能再写数字完全未映射。** 扁平化并加入时序目标后TT本域4ns满足，两个SS库角仍负裕量；库点不同于项目45网格。CDR/校准逻辑、物理CDC和提取后时序另验；TX guard的SS局部问题保留。 | [RX 数字](../design/rx_cdr_digital.md) | P5 |
-| I-17 | **内部400mV上界复核中（2026-11-11）**：保留400mVpp驱动目标、150硬下限/200设计目标及历史评分，尚未采用新的内部上界，不单凭>400mV淘汰。逐节点补换向、共模/器件余量、应力和噪声依据。统一WT12.8/R320的FS69.75mV/0.212UI失败；分级尾宽完整FS焊盘0.179857UI失败，仍不采用。SS冷extra435.89mV及需求卡424.45mV均有眼图/位序满足证据，尚无幅度本身致败证据。先补重负载/共模/供电相对延迟与跨PVT联合模型，后选尺寸。 | [幅度依据](../design/cml_swing_target.md)、[需求卡](../design/tx_retime_demand.md)、[联合尺寸约束](../design/tx_buffer_sizing.md) | P3 |
-| I-19 | TX已实现16位捕获/两组保持：首级6压力48字、关闭切片12组；实际v3＋完整TX原FS眼图失败定位末级建立不足；extra5＋输出级候选后完整TX的45个MOS条件串化器与焊盘门槛全部满足（2026-11-08，理想2 GHz源、PDK R tt）。物理控制路径/blank、建立保持与失配/噪声仍缺，不能用RTL波形回放替代。 | [新字入口整链](../design/tx_parallel_serializer.md) | P2 |
-| I-20 | 串化器与焊盘现均用75mV/0.15UI门槛；远端或CTLE后的链路门槛仍未定义。当前完整TX MOS45点FS低压热远端0.1601UI只作比较，不能改变串化器/焊盘的通过结论，也不能称远端已满足规格。 | [信道模型](../design/channel_model.md) | P5 |
-| I-21 | PLL启动组件、B2参考、监督/窗口与5bit粗码RTL已有。当前r6仍需bias/quiet-ready、锁定质量前端及真实驱动时序接入；已有r5预充闭环锁定继续保留，不能代替从零启动。 | [PLL 环路](../design/pll_loop.md) | P3 |
-| I-23 | RX 鉴相零点：CMOS 读出后零点在码 4–8 之间，与 CML 符号判读的码 4 不同；孔径偏移未校准（压力测试中峰值相位误差约 0.138 UI）。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
-| I-27 | TX 串化器内部节点码型相关 ISI 明显（孤立位峰值远低于长连码），远端经输出级限幅后才干净；内部带宽仍是限制。2026-10-31 补测：孤立位/长连码中心电平比 r2 0.82、v0.1 0.80，ISI 没有变差；r2 末级比特中心前下垂约 18 mV，与下一比特和摆幅无关。降低末级负载（400→330→270 Ω）裕量近比例下降、尾管余量不变，末级摆幅不宜降低。 | [TX 串化器](../design/tx_serializer.md) | P3 |
-| I-28 | CTLE：原0.8–0.9 V在SS/FS慢角尾sink掉入线性区；vcm改1.05 V后，独立AC/DC MOS45×4档满足，尾余量≥103 mV；C2名义/弱TX回放45点，EQ3为C2默认。vcm缓冲已独立设计，但实际端接加载启动、真实偏置/RC的独立增益/零极点、目标信道/自适应仍缺；是否CMFB由接口余量决定。 | [RX前端](../design/rx_frontend.md)、[偏置](../design/bias.md) | P5 |
-
-| I-34 | **已修复2026-11-09**：公共冒烟按各段自己的tstart截短所有tran，保留tmax/uic；逐个检查字面量write/wrdata输出存在且非空，防止首段输出掩盖后段缺失；动态输出名明确拒绝。单/多tran及后段缺vector、缺/空输出回归通过，DC bench继续显式使用独立DC冒烟。 | [公共实现](../../src/serdes_flow/spice.py)、[回归](../../tests/test_spice_smoke.py) | — |
-
-## 低优先级
-
-| 编号 | 问题 | 证据 | 阶段 |
-|---|---|---|---|
-| I-18 | 参数化粗码RTL已支持4/5bit，r6集成须CODE_BITS=5，电压门限梯仍4bit；32码搜索/端点/越界与超时回归已做。窗口检测局部PVT与旧r5迟滞模型保留；按r6当前工作图承接实际门限、动态译码/切码和启动，不把H3/H4值误作位宽。 | [VCO](../design/pll_vco.md) | P3 |
-| I-22 | Xschem 原理图是历史导出，未同步 r2/r3/TX r2；当前以 SPICE 为准。 | [原理图记录](../history/schematics.md) | — |
-| I-24 | 三个 PLL 前端 SPICE 文件的注释仍引用旧路径 `docs/pll_first_debug.md`（现为 `docs/history/pll_first_debug.md`），v0.1 发布快照中也有同样引用；按约定未改源码。 | `analog/pll/top/spice/clock_frontend_*.spice` | — |
-| I-29 | TX 输出级焊盘/ESD/封装为代理参数；电源、回流、PSRR 未建模；FFE 未实现。 | [TX 输出级](../design/tx_output_driver.md) | P5 |
-| I-30 | RX PI 锚点是理想源，没有接原生 PLL 八相；共享 PLL 能支持多少路 PI 扇出未验证。 | [RX PI 与采样](../design/rx_pi_sampler.md) | P5 |
-| I-33 | **W40读出热角修复及FS/FF冷角恢复，全网格仍开。** FS热hh输出76→297mVpp，单元hh/ll各45点。当前FS1.65V与FF1.95V两个−40°C/hh条件均以同条件软DC、禁回退完成44.75ns，分别96/112数据位与49/55确定边沿零错，合同位序正确；FF16路单独映射均唯一，FS两路短窗拟合仍有歧义。保留原W80失败；继续当前W40全网格、原生锚点/动态与真实启动，不扩为全角资格。 | [冷角记录](../design/rx_cold_convergence.md)、[RX设计](../design/rx_pi_sampler.md) | P5 |
-| I-32 | **当前主线r6，现有集成与局部验证继续复用。** r6/5bit带寄生VCO及quiet k4 core、标准单元PFD已有，135条件表已生成；CP/分频未改单元的局部MC按原边界保留。优先新plant/反馈负载与CP窗口、启动和噪声；原生r5＋TX已有8个完整静态压力点，另两个FF冷数值缺点保留。 | [VCO](../design/pll_vco.md)、[PLL 环路](../design/pll_loop.md)、[恢复记录](../history/clocking_progress_20261106.md) | P3 |
+| 编号 | 状态与处置 | 证据 |
+|---|---|---|
+| I-04 | 已解决，2026-10-31：r4修复全速接收SS冷角上拉/翻转；热角余量与高压应力分别留在I-11及接收器文档 | [接收器](../design/clock_receiver.md#r4全速-ss-冷角修复2026-10-31) |
+| I-34 | 已解决，2026-11-09：公共冒烟逐段截短tran并检查每个声明输出存在/非空，保留单/多段与缺失输出回归 | [spice.py](../../src/serdes_flow/spice.py)、[回归](../../tests/test_spice_smoke.py) |
+| I-22 | 维护项：Xschem为历史导出；交付原理图须同步采用网表，不能以旧截图定尺寸 | [原理图记录](../history/schematics.md) |
+| I-24 | 维护项：旧前端注释含迁移前文档路径；历史发布快照保持原样，新改代码时修正适用注释 | [旧记录](../history/open_issues_snapshot_20261113.md) |
 
 ## 文档整理时发现的冲突（已按最新记录处理）
 
-| 旧说法 | 来源 | 现行结论 |
-|---|---|---|
-| 当前工作版本是低过驱动 r2 | `pvt_noise_plan.md` 开头 | r3（级间 buffer）是当前版本，见 `pll_buffered_pvt.md`（2026-10-30） |
-| 反馈改为 CML ÷8 后接 CMOS M = 1–16 | `cml_divider_results.md` 开头 | 自由 CMOS 分频接多相 CML 转换后的最高 2 GHz 时钟，不在 ÷8 之后（`clock_domain_clarification.md`、`architecture.md`） |
-| TX 串化器只有 36/45 满足草案 | 旧 README、`tx_pvt.md` | TX r2 为 45/45（`tx_optimization.md`，2026-10-30） |
-| FS 低压热角 2 GHz 原生回接未资格验证 | `pll_lowov_pvt.md`（r2） | r3 码 5、1.100 V 时 1.9906 GHz 回接正常（`pll_buffered_pvt.md`） |
-| SS 低压热角反馈读出失效 | `pll_pvt_first_results.md` | r2/r3 中 SS 热角反馈正常；当前缺口在 SS 冷角全速转换 |
-| TT 局部 Kvco 423 / 464.55 / 495 MHz/V | 首轮 / v0.1 带载拟合 / r3 修整 | 分别对应不同几何、负载、粗码和电压区间，不是矛盾；使用时注明口径 |
+原冲突表保留在[整理前快照](../history/open_issues_snapshot_20261113.md)。本次重点纠正4bit目标与r6/5bit主线、旧分频短窗疑点与带辅助启动结果、固定2+2名额与全机统一调度、数字未映射与已有宿主映射证据的混用。历史中的“当前”只指写作时，不覆盖current.md；本次核对范围见[整理记录](../history/workflow_reorganization_20261113.md)。

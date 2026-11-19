@@ -167,6 +167,8 @@ extra5随后分别完成TT/FS的48ns时钟探针：23次计数采样连续、末
 
 ![45条件完整TX](../figures/tx/ingress/tx_full_pvt45.png)
 
+当前配置的TT与最差FS低压热角三节点[眼图](../figures/tx/ingress/tx_current_eyes.png)，从上述45点索引的明确动态记录重新核对并绘制全部256bit轨迹；[来源与小数据](../data/tx_current_eyes.json)。理想2GHz源边界不变，非r6锁定PLL驱动动态资格。
+
 编排：[pvt45.py](../../analog/tx/input_register/tb/full_serializer/pvt45.py)，活动`results/analog/tx/full_pvt45/20261107T200334Z`（每条件的探针/动态目录在其`state/`），[数据](../data/tx_full_pvt45.json)。4路并行共约4.6 h；单点动态12–18 min（中位16 min），探针约6 min。
 
 ## 范围与下一步

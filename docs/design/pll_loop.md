@@ -1,5 +1,9 @@
 # PLL 环路：PFD、CP、LF、预充与启动监督
 
+> **持续锁定续做**：TT/ext码9的800 ns原生预充记录已通过本点工程锁定（持续480 ns）；600 ns保持288 ns不足的历史保留，压力角与实际启动仍待验证。局部控制导纳、已完成的静态TX加载卡及变容rg噪声局部修正见[续做记录](r6_lock_confirmation.md)，不扩报动态TX/相噪资格。
+
+> **2026-11-14主线复核**：r6原生runner路径错误已修复；TT码9/ext的1 ns冒烟与100 ns预充释放短窗完成，仍不足320 ns持续锁定评分。当前完整TX的单2 GHz接口及r6控制导纳/噪声/失配输入缺口见[闭环与动态链复核](r6_mainline_review.md)，旧r5集成结论按原边界保留。
+
 > **模块集成**：PLL 已有包含VCO、粗调码接口、分频反馈、PFD/CP/LF的[完整电路顶层](../../analog/pll/top/spice/pll_balanced_core.spice)及[双节点预充启动顶层](../../analog/pll/top/spice/pll_balanced_startup_core.spice)。下面记录已实现参数、分层/原生验证与近期局部迭代；模型用于选参和降低验证成本。层次、边界与迭代可从[设计工作台](../../web/design/index.html#pll)进入。
 
 > **当前主线**：r6／5bit带寄生VCO、标准单元延迟复位PFD、k4转向CP及LF4.13kΩ/18pF。quiet core为[pll_core_r6k4q](../../analog/pll/top/spice/pll_core_r6k4q.spice)，cfg0…4及四对CML/分频抽头已有；135条件表已生成。承接当前plant、前端负载和控制接口，再做闭环/粗搜、启动和相应噪声。

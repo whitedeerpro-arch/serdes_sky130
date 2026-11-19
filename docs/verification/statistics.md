@@ -74,6 +74,8 @@ uv run python verification/mc_profile.py --samples 3
 
 `mc.deck(..., profile=True)` 输出 `rusage all`。分块大小应由当前 DUT/时间窗的内存增量决定；并发最多 4 个，多个 campaign 合计也不得超过 4。默认是保守起点，不是任意机器上不会 OOM 的保证。实测增量：PLL ÷8分频器（真实偏置、PDK R、48 ns瞬态）约165–200 MB/样本；`spice.run`的3 GB上限下一块最多约15个样本。2026-11-08按25样本/块×4并发运行时，每块都在第18个样本被上限杀掉（run_many反复重跑、无一完成），4个进程合计8.4 GB，同日的虚拟机停机也发生在这一运行中。被截断的块可回收：样本k由种子固定、截断只由内存决定（`divider/tb/mc/run.py --analyse`）。详见 [2026-11-05 成本与架构评估](../history/workflow_review_20261105.md)。
 
+当前r6 VCO局部TT失配pilot（完整PDK、真实BG/定宽R、四个30fF buffer、24ns；`results/analog/pll/vco/mismatch_r6/20261114T133455.717022Z`）的两块实测一致：第1–4样本程序大小约532/778/1024/1270 MB，追加样本约246 MB，而非旧45 MB估计。本轮固定chunk4、单worker；该测量不能替代分频或更大闭环DUT的成本。输入与初筛范围见[VCO失配卡](../../analog/pll/vco/tb/mc/README.md)。
+
 ## 模型局限
 
 - SKY130 的 PNP 模型没有失配项；带隙中 VBE 失配只能按文献估计。

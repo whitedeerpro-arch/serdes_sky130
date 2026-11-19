@@ -2,6 +2,8 @@
 
 > 先分块验证，再用实际负载、电平、边沿和延迟把相邻模块衔接起来；不以"跑一次全晶体管长仿真"作为有效性的唯一判据。执行成功与设计通过分开记录。
 
+项目任务的选择、验收、发布和交接见[工作流](../status/workflow.md)；当前结果与队列分别在[current.md](../status/current.md)和[执行计划](../status/prelayout_plan.md)。本页只维护验证方法。
+
 长扫描出现异常耗时时，先运行 `uv run python -m serdes_flow.audit <campaign>`：区分未启动、运行中断、超时、输出截断和完整求解，并统计各类进程耗时。它不判定电路通过；原始波形按 `tran` 终点核查，旧 MC 没有终点字段时只能检查行数。轻量进度监控仍用 `serdes_flow.watch`。MC 分块恢复与样本身份见 [统计方法](statistics.md#执行续跑与成本)，成本/架构评估见 [2026-11-05 记录](../history/workflow_review_20261105.md)。
 
 ## 测试层次

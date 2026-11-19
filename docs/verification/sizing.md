@@ -4,6 +4,8 @@
 
 **现状。** 流程各步都有可用的脚本，但靠手工串联；共享库有时序部分（[`serdes_flow.balance`](../../src/serdes_flow/balance.py)）和 TT 器件卡查表（[`serdes_flow.devices`](../../src/serdes_flow/devices.py)）；统一的约束/求解/校准接口尚未建立（见文末缺口）。
 
+多目标/离散叶目录的一个局部实例见[VCO bank鲁棒优化](../design/vco_bank_optimization.md)：明确工艺角与概率的区别、校准策略、ε约束和有限不劣集；公共[`robust_sizing`](../../src/serdes_flow/robust_sizing.py)提供Pareto筛选及带最低宽度的S/α分配，不取代电路评估器或完整良率优化。
+
 ## 流程
 
 ```

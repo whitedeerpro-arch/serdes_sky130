@@ -22,7 +22,8 @@ uv run python -m serdes_flow.design_viewer --open
 
 | 内容 | 位置 | 维护方式 |
 |---|---|---|
-| 模块层次、当前摘要、模型规划与既有证据 | [design_catalog.json](../../config/design_catalog.json) | 手工维护稳定的 `id`、`parent`、边界和资料路径 |
+| 模块层次、结构摘要、模型规划与资料引用 | [design_catalog.json](../../config/design_catalog.json) | 手工维护稳定的 `id`、`parent`、边界和资料路径；每个模块首入口指向 current.md |
+| 采用状态、验证数字与实际驱动边界 | [current.md](../../docs/status/current.md) | 项目级唯一汇总；不在目录数据另抄一份数字 |
 | 新增迭代 | `docs/design/iterations/<模块id>/<UTC>_<随机id>.json` | 页面「添加迭代」追加独立记录；保留已有记录 |
 | 静态浏览数据 | [catalog.js](catalog.js) | 派生数据，运行下面的导出命令更新 |
 | 前端 | [index.html](index.html)、[style.css](style.css)、[app.js](app.js) | 原生 HTML/CSS/JS，无 CDN、框架或包管理依赖 |
@@ -34,7 +35,7 @@ uv run python -m serdes_flow.design_viewer --export
 
 每次迭代可填写问题、模型规划、参数/电路修改、验证边界与结论，并附加已有仓库资料路径。阶段为规划、模型、电路、验证或结论。静态浏览模式可导出同格式 JSON；将其以唯一文件名放入对应模块目录后，重新导出即可纳入目录。
 
-新增记录不会自动改变工作修订或宣布某项验证通过。采纳一次改进时，继续更新该模块设计文档与 `*_working_revision.toml`；结果波形仍按项目约定留在 `results/`。工作台目录保留摘要和证据入口，不按“最新运行”隐式切换依据。
+新增记录不会自动改变工作修订或宣布某项验证通过。采纳一次改进时，继续更新该模块设计文档、current.md与 `*_working_revision.toml` 的采用参数；结果波形仍按项目约定留在 `results/`。工作台目录保留结构摘要和证据入口，不按“最新运行”隐式切换依据；验证数字直接查 current.md。
 
 ## 接手
 

@@ -2,7 +2,7 @@
 
 > 一个共享 2 GHz 多相 PLL 驱动本地 TX 串化器和每路 RX 的相位插值器；TX 是 16:1 的 2:1 CML 选择树，RX 是半速四相采样加数字 PI-CDR。所有电路先按模块独立验证，再用实际负载/电平/边界条件逐层衔接。
 
-逐块工作变体、选用状态、PVT/失配/噪声及开发依赖见 **[设计框图与开发状态](development_map.md)**。本页是连接关系，不代表所有箭头已在同一套实际电路中验证。
+当前修订、采用与验证汇总见 **[current.md](../status/current.md)**，模块资料见[模块地图](development_map.md)，开发依赖见[执行计划](../status/prelayout_plan.md)。本页维护连接关系和接口，不代表所有箭头已在同一套实际电路中验证。
 
 ## 系统框图
 
@@ -12,15 +12,15 @@
 
 ## 时钟域
 
-| 时钟域 | 来源 | 用途 | 状态 |
+| 时钟域 | 来源 | 用途 | 边界责任 |
 |---|---|---|---|
-| VCO 多相 CML | 2 GHz 环振，四路差分抽出，八个极性 | TX选择时钟、RX PI锚点、PLL反馈 | r5/4 bit候选；RX仍用理想相关锚点 |
-| PLL 反馈 | VCO 支路0→三级CML ÷2→CML→CMOS→250 MHz | PFD | 标准输入真实偏置hh/ll各45点；原生r5闭环未资格验证 |
-| TX 选择时钟 | r2：独立prescaler抽头＋微调；v3：同一2G源同步计数器＋复制单元 | 串化器四级选择 | r2基线；v3回放15点、原生静态8点；实际字捕获/保持及完整TX已接，extra3在TT/FS热/SS冷三点眼图满足，内部摆幅仍开 |
-| 自由 CMOS 分频 | 多相 CML 转成的 CMOS 时钟（最高 2 GHz）再按需分频 | 其他时钟域 | 仅定义；旧 4 位 CMOS 分频只在 250 MHz 输入下验证过 |
-| RX 恢复时钟 | PI 输出四相 2 GHz | 数据/边沿采样 | 实现 |
-| RX 恢复字时钟 | PI后时钟取点→CML ÷2→CMOS Johnson ÷4，w每16 UI | CDR控制、字输出 | 物理deser16已实现；旧理想边界45点，当前W40真实偏置/RC全网格未闭合 |
-| 系统时钟 | 外部 | 并行接口 | [独立FIFO积木](../design/rx_host_cdc.md)已过RTL/通用综合检查；实际接线、宿主吞吐/容量、频偏补偿与工艺CDC仍待完成 |
+| VCO 多相 CML | 2 GHz环振，四路差分抽出、八个极性 | TX选择时钟、RX PI锚点、PLL反馈 | 相位节点与buffer输出分别约束加载；实际接入范围查current.md |
+| PLL 反馈 | 支路0→三级CML ÷2→CML→CMOS→250 MHz | PFD | 与TX派生时钟分开；真实源、负载和启动由PLL接口验收 |
+| TX 选择时钟 | v3：同一2G源同步计数器＋复制单元；r2独立抽头保留历史 | 串化器四级选择 | 与字捕获/保持的共同纪元、相对时序及物理guard/blank对应 |
+| 自由 CMOS 分频 | 可选的多相CML→CMOS后按需分频 | 其他时钟域 | 规划/历史接口，不是当前精简PLL前端的必经路径 |
+| RX 恢复时钟 | PI输出四相2 GHz | 数据/边沿采样 | 以连续调相跟踪每路远端频偏，不调共享VCO |
+| RX 恢复字时钟 | PI后取点→CML ÷2→CMOS Johnson ÷4，w每16 UI | CDR控制、字输出 | 物理读出映射与动态PI控制时序由RX接口共同验收 |
+| 系统时钟 | 外部 | 并行接口 | [map→align→FIFO](../design/rx_host_cdc.md)连接恢复字域；容量、频偏、溢出恢复和物理CDC分别约束 |
 
 PLL 反馈与时钟分发是两项独立功能：调整后级派生时钟不改变 VCO；默认反馈总分频为 8。500 MHz 参考在 VCO ≤ 2 GHz 时不能走 ÷8，要用 ÷4 抽头（选择与未用级关断尚未集成）。低参考（如 50 MHz → 400 MHz VCO）只用于低线速，现有电容阵列未证明覆盖 400 MHz。
 
@@ -82,7 +82,7 @@ PLL 反馈与时钟分发是两项独立功能：调整后级派生时钟不改�
 | cmos_to_cml | clk_in/数据、outp、outn、偏置、vdd、vss |
 | pfd | ref、fb、rst_b、up、dn、vdd、vss；rst_b 低有效，UP/DN 高有效 |
 | cp | up、dn、out、vbn、vbp、vdd、vss；UP 注入电荷 |
-| vco | 八个输出、vctrl、粗码b0–b2（3 bit）／cfg0–cfg3（4 bit候选）、vbias、vdd、vss |
+| vco | r6叶单元：q0p/q0n…q3p/q3n、vctrl、b0…b4（5 bit）、vbias、vdd、vss；PLL核外部对应cfg0…cfg4，参考[实际VCO网表](../../analog/pll/vco/spice/vco_ring4_r6.spice)与[quiet core](../../analog/pll/top/spice/pll_core_r6k4q.spice) |
 | divider（prescaler8） | clkp、clkn、q2/q4/q8 差分抽头、vbias、vdd、vss |
 | loop_filter | cp_in、ctrl、z、pre_ref、pre_en、vdd、vss（预充版） |
 | rx_input_termination | inp、inn、vcm；两只 50 Ω |

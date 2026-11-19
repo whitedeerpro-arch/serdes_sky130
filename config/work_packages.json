@@ -92,6 +92,20 @@
       "executor": "external_unassigned; Terra_preparation_reviewed",
       "review_result": "Partial evidence preparation only; 135 conditions and 45 fixed-code temperature groups; behavior model not implemented",
       "release_gate": "superseded architecture: fixed-Vctrl frequency-counting proposal retained as historical; current window-based slow-end search RTL exists; rewrite task before redispatch"
+    },
+    {
+      "id": "WP-007",
+      "module": "pll.vco",
+      "difficulty": "bounded_circuit_calibration",
+      "state": "running",
+      "task": "docs/work_packages/WP-007-vco-4bit-isf-pilot.md",
+      "script": "analog/pll/vco/tb/phase_noise/isf_4b_pilot.py",
+      "delivery": "docs/work_packages/deliveries/WP-007",
+      "review": "docs/work_packages/reviews/WP-007.md",
+      "dependencies": [],
+      "simulation_budget": 1,
+      "executor": "Terra_preparation_and_integrator_execution",
+      "release_gate": "single-worker TT 4-bit ISF pilot; fixed campaign and identities; no DUT/shared edits or noise signoff"
     }
   ],
   "dispatch_policy": "external-ready packets; internal parallel execution only when explicitly requested; choose Terra for the authorized bounded trial; per-package simulator quotas coordinated by integrator"

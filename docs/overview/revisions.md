@@ -1,25 +1,24 @@
 # 版本与基线
 
-> 当前工作组合（2026-11-13）：PLL r6/5bit带寄生VCO＋quiet k4 core及标准单元PFD；TX r2树＋v3/extra5/WT16R240＋预驱120Ω/尾W60/输出W192；RX ac_trim/c2/120f＋deser16/W40及宿主字路径；偏置带隙/恒I·R/分配/B2，供电HV18 r4。已有r5原生TX接口与PLL预充闭环继续作为明确边界的证据，改动后按受影响接口承接。配置首部指向当前组合，旧基线有独立字段，不再把候选更新藏在旧版本号下。
+> 当前组合、采用状态与验证边界见[current.md](../status/current.md)，本页只维护修订关系和源文件导航。执行顺序见[计划](../status/prelayout_plan.md)。
 
 ## 基线政策
 
 - 源码、文档、配置和小数据由git管理，`results/`只留磁盘（索引入库）。当前推进基准为`baseline-prelayout-20261113`；上次交接标签`baseline-handover-20261030`保留作历史，不再作为当前组合入口。
-- 每个模块的当前修订记录在 `config/*_working_revision.toml`，内容包括源文件、关键参数和状态。改电路时更新对应文件，不覆盖旧单元：新单元用新文件/子电路名，旧单元保留给依赖它的模块和历史证据。
+- 每个模块的当前修订记录在 `config/*_working_revision.toml`，内容包括源文件、关键参数和历史身份；项目级验证汇总链接current.md。改电路时更新对应文件，不覆盖旧单元：新单元用新文件/子电路名，旧单元保留给依赖它的模块和历史证据。
 - 改动后在关键工况上重跑该模块的回归，再扩展到 45 条件。建议的关键工况取自历史上暴露问题的点：TT/1.8 V/27 °C、SS/1.65 V/−40 °C、SS/1.65 V/85 °C、FS/1.65 V/85 °C、FS/1.65 V/−40 °C（分频尾管余量），以及 FF/FS/1.95 V/−40 °C（CMOS 过冲）。
 - v0.1 曾以"冻结"形式发布，但之后分频器、VCO、转换器等都继续修改，冻结并未真正约束开发。保留其目录与哈希清单作为历史证据，不再新建冻结版本。
 
 ## 修订线
 
-| 模块组 | 当前修订 | 配置 | 上一版 |
-|---|---|---|---|
-| PLL 时钟前端（VCO、抽出、分频、反馈转换） | r6/5bit；31半单元、显式寄生、长负载对；135条件工作图已生成；轻dummy前端按新边界验证 | [pll_working_revision.toml](../../config/pll_working_revision.toml) | r5/4bit前端；与TX同deck的8个完整静态压力点；r4接收器/原有分频局部结果 |
-| PFD/CP/LF/启动 | r6 quiet core：标准单元延迟复位PFD、k4转向CP、LF4.13kΩ/18pF、5bit搜索RTL | [pll_working_revision.toml](../../config/pll_working_revision.toml)、[环路](../design/pll_loop.md) | r5分层闭环135点与4条件×hv/ext共8条原生预充锁定；CP/分频局部统计保留 |
-| TX 时钟分发、串化器、输出级 | v3/extra5/WT16R240＋r2树＋预驱120Ω/尾W60/输出W192；完整动态MOS45点；原生接口证据另列 | [tx_working_revision.toml](../../config/tx_working_revision.toml) | `baseline_revision`保留r2旧基线；原生r5与TX已联合，r6按接口差异承接 |
-| PLL 安静供电 | HV18 r4；静态引脚、6bit修调、参考/尾偏置RC；本地网格及8条r5原生预充闭环 | [ldo_working_revision.toml](../../config/ldo_working_revision.toml) | r1–r3动态供电开关 |
-| RX 前端、PI、采样、读出、CDR | ac_trim/c2、PI120f、deser16/W40；行为与物理闭环范围不同 | [rx_working_revision.toml](../../config/rx_working_revision.toml)；旧夹具/参数见rx_frontend、rx_cdr配置 | stock、ac、旧pair读出 |
-| 偏置/带隙/参考缓冲 | 恒I·R＋5bit r_ref修调、模块电流拷贝、去耦、B2 | [bias_working_revision.toml](../../config/bias_working_revision.toml) | 理想电流参考 |
-| 信道模型 | RLC16 + 合成 PCB 族 | [channel_family.toml](../../config/channel_family.toml) | — |
+| 模块组 | 工作修订 / 设计入口 | 历史修订如何使用 |
+|---|---|---|
+| PLL前端与环路 | [pll_working_revision.toml](../../config/pll_working_revision.toml)、[环路](../design/pll_loop.md) | r5/4bit与更早版本按实际输入/负载保留；不得转为r6码表、噪声或原生闭环资格 |
+| TX分发/入口/树/驱动 | [tx_working_revision.toml](../../config/tx_working_revision.toml)、[完整TX](../design/tx_parallel_serializer.md) | baseline_revision保留r2；各源边界分别继承；候选局部完成不自动改采用组合 |
+| PLL供电 | [ldo_working_revision.toml](../../config/ldo_working_revision.toml)、[LDO r4](../design/ldo_r4.md) | r1–r3动态供电开关是历史方案 |
+| RX前端/PI/采样/读出/数字 | [rx_working_revision.toml](../../config/rx_working_revision.toml) | stock/ac/旧pair与mutable include记录按原边界，不追认为当前W40读出资格 |
+| Bias/带隙/参考缓冲 | [bias_working_revision.toml](../../config/bias_working_revision.toml)、[Bias](../design/bias.md) | 理想参考、候选定宽参考串及生产参考分别标识 |
+| Channel | [channel_family.toml](../../config/channel_family.toml)、[信道](../design/channel_model.md) | 合成模型与真实板线/封装提取分别标识 |
 
 ### PLL 源文件与修订关系
 
@@ -57,9 +56,9 @@
 
 ## 修订之间的依赖
 
-- PLL→TX已经有r5原生同deck联合调试；另有回放动态及当前完整TX理想2GHz的MOS45点。r6改变VCO、负载/相位和前端dummy，需针对这些接口差异回归，不将联合工作重记为从未做过，见[TX时钟分发](../design/tx_clock_distribution.md)。
-- RX 的 PI 锚点是理想相关的 2 GHz 多相源，没有接原生 PLL。
-- PLL已有r5/k4行为VCO分层135点及4条件×hv/ext共8条原生预充锁定；r6沿用未改动单元的局部证据，承接当前环路和启动。预充锁定与从零启动分别记录。
+PLL→TX已有开环原生静态、回放动态与理想源动态三种边界，具体驱动及覆盖统一见[current.md](../status/current.md#3-tx-被什么时钟驱动过)。改变VCO、dummy、负载或供电域后，按源/负载差异检查受影响接口。RX理想锚点不自动变成原生锚点；PLL预充锁定不自动变成从零启动。
+
+采用新修订时列继承、需重校与作废的边界；未改CP/分频等单元的局部结果继续保留。具体流程见[工作流](../status/workflow.md)和[PVT继承规则](../verification/pvt_coverage.md)。本页整理前的修订/数字表留在[历史快照](../history/revisions_snapshot_20261113.md)。
 
 ## v0.1 历史基线
 

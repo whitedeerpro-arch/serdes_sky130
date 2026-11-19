@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
-"""Build 3D Under-MIM Stacked Fused SKY130 PDK Loop Filter (pll_loop_filter_k4_fused_pdk).
+"""Build 3D Under-MIM Stacked Fused SKY130 PDK Loop Filter (pll_loop_filter_k4_fused_pdk v2).
 
 Implements ``pll_loop_filter_k4_fused`` from ``analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice``:
 - PCell-compliant stacked MIM fusion (w = l = 27.22 um <= 30.0 um guard -> 1.500 pF/layer,
   3.000 pF/site across M3-M4 + M4-M5) arranged as a 3x2 1D common-centroid [VDD, VSS, VDD]
   array (6 sites = 6 MIM1 + 6 MIM2 = 18.00 pF total: 6 pF z-vss + 12 pF z-vdd).
-- Shared middle M4 integrator plate ``z`` extracted on the top bus; Column 0 & 2 M3/M5
-  bottom/top plates strapped to ``vdd`` at the bottom; Column 1 (center) M3/M5 plates
-  strapped to ``vss`` at the top.
-- ``Xrz`` (res_high_po_0p69, l=7.594 um) and ``Xfast`` LVT transmission gate placed
-  strictly beneath Column 1's VSS-grounded M3 bottom plate so ``ctrl`` picks up zero
-  parasitic coupling to VDD.
-- ``Xinv`` and ``Xint`` LVT transmission gate stacked beneath Column 2 using strict
-  HV M1/M2 routing (zero via2/M3/M4/M5 inside the MIM footprint).
+- v2 Compact Bus & Under-MIM Overhaul (98.34 x 64.90 um = 6,382.3 um2, -7.4% vs v1 6,893.6 um2):
+  * Top M4 ``z`` bus tightened to mbbox[3]+0.80 (+30.02) and Col 1 VSS M5/M3 strap tightened
+    to mbbox[3]+2.43 (+31.65, met5.2 = 1.63 um >= 1.60 um), cutting 3.17 um from top overhead.
+  * Bottom Col 0/2 VDD M5 bus tightened to mbbox[1]-2.43 (-31.65, met5.2 = 1.63 um) without a
+    redundant M3 cross-bar across Col 1, allowing the ``ctrl`` M3 port (-32.00) to sit flush
+    inside the bottom macro boundary (-32.45), cutting 2.03 um from bottom overhead.
+  * Under-MIM active island [Xinv, Xint, Xfast] (15.4 x 9.1 um, -18.4% CMOS island area) and
+    Xrz (+ 2 grounded 0.69 um poly dummies) packed tightly into Col 1 Row 0 (y ~ -20.0 um)
+    strictly beneath the VSS-grounded M3 bottom plate: zero M2 bridges over Xrz, zero VDD
+    hop over Xrz, and ~2.5x shorter ``ctrl`` route (~14 um vs ~35 um) slashing ``ctrl`` CPEX cap.
+  * Preserves all 2026-11-17 review fixes: 12 biased gate-length-matched field-poly MOS dummies
+    (6 NMOS -> VSS, 6 PMOS -> VDD), 2 grounded Xrz poly dummies, 0 floating non-device poly,
+    shared P+/N+ dual guard frame, and continuous NWELL.
 """
 from __future__ import annotations
 
@@ -96,26 +101,22 @@ def place_w2_mos(
     dy: float,
     is_pmos: bool,
 ) -> dict:
-    """Place compact guard=0 w=2.0 um MOSFET (PMOS mirrored so G faces inward), strap S/D onto M2."""
+    """Place compact guard=0 w=2.0 um MOSFET (PMOS mirrored so G faces inward), strap S/D directly over diff on M2."""
     c.include(prim, dx=dx, dy=dy, mirror_y=is_pmos)
     sds = sorted({grid((r[0] + r[2]) / 2.0 + dx) for r in prim.rects[cut_layer]})
     s_xs = sds[::2]
     d_xs = sds[1::2]
     if is_pmos:
-        s_y_pin, d_y_pin = grid(dy + 0.46), grid(dy - 0.46)
-        s_bus_y, d_bus_y = grid(dy + 1.45), grid(dy - 1.45)
+        s_bus_y, d_bus_y = grid(dy + 0.48), grid(dy - 0.48)
         gy = grid(dy - prim.pins("G")[0][1])
     else:
-        s_y_pin, d_y_pin = grid(dy - 0.46), grid(dy + 0.46)
-        s_bus_y, d_bus_y = grid(dy - 1.45), grid(dy + 1.45)
+        s_bus_y, d_bus_y = grid(dy - 0.48), grid(dy + 0.48)
         gy = grid(dy + prim.pins("G")[0][1])
 
     for sx in s_xs:
-        c.via1(sx, s_y_pin)
-        c.wire("metal2", [(sx, s_y_pin), (sx, s_bus_y)], 0.24)
+        c.via1(sx, s_bus_y)
     for sx in d_xs:
-        c.via1(sx, d_y_pin)
-        c.wire("metal2", [(sx, d_y_pin), (sx, d_bus_y)], 0.24)
+        c.via1(sx, d_bus_y)
     if len(s_xs) > 1:
         c.wire("metal2", [(s_xs[0], s_bus_y), (s_xs[-1], s_bus_y)], 0.28)
     if len(d_xs) > 1:
@@ -131,7 +132,8 @@ def place_w2_mos(
     py_hi = max(r[3] for r in prim.rects["poly"])
     poly_y1 = grid(dy - py_hi) if is_pmos else grid(dy + py_lo)
     poly_y2 = grid(dy - py_lo) if is_pmos else grid(dy + py_hi)
-    gx_esc = grid(x_df_min - 0.85) if dx < -2.0 else grid(x_df_min - 0.50)
+    # Escape gate left past dummy poly with clean M1 clearance
+    gx_esc = grid(x_df_min - l_f - 0.48)
     c.wire("metal1", [(gx_esc, gy), (gx0, gy)], 0.20)
     c.via1(gx_esc, gy)
 
@@ -161,12 +163,11 @@ def add_mos_poly_dummy(
 ) -> None:
     """Place biased field-poly dummy gate (matching transistor L and inner poly span) tied to VDD/VSS."""
     hw = grid(l_f / 2.0)
-    y_cont = grid(dy + 1.45) if is_pmos else grid(dy - 1.45)
+    y_cont = grid(dy + 1.32) if is_pmos else grid(dy - 1.32)
     if is_pmos:
         c.rect("poly", grid(x_dum - hw), grid(y_poly_inner), grid(x_dum + hw), grid(y_cont + 0.17))
     else:
         c.rect("poly", grid(x_dum - hw), grid(y_cont - 0.17), grid(x_dum + hw), grid(y_poly_inner))
-    # For narrow gates (L < 0.28), flare contact pad outward so inner edge clears poly.2 (0.21) & li.3 (0.17)
     x_cont = grid(x_dum + side_sign * 0.060) if l_f < 0.28 else x_dum
     c.pad("poly", x_cont, y_cont, 0.28, 0.34)
     c.pad("polycont", x_cont, y_cont, 0.17, 0.17)
@@ -180,9 +181,10 @@ def draw_compact_np_frame(
     x2: float,
     y_vss: float,
     y_vdd: float,
+    y_mid: float,
     step: float = 1.40,
 ) -> None:
-    """Draw merged N/P dual guard frame (closed FEOL rails + side walls leaving |y|<1.3 open for M1)."""
+    """Draw merged N/P dual guard frame around CMOS island centered at y_mid."""
     x1g, x2g = grid(x1), grid(x2)
     yvss, yvdd = grid(y_vss), grid(y_vdd)
     for yy, is_nw in ((yvss, False), (yvdd, True)):
@@ -197,15 +199,14 @@ def draw_compact_np_frame(
                 c.pad("viali", xc, yy, 0.17)
                 c.pad("metal1", xc, yy, 0.34)
             xc = grid(xc + 0.50)
-    # Vertical side N/P guard walls (keep N-tap >= 0.20 um inside nwell y>=1.45)
     for xx in (x1g, x2g):
         for dl, cl, ylo, yhi in (
-            ("psubdiff", "psubdiffcont", yvss, -1.65),
-            ("nsubdiff", "nsubdiffcont", 1.65, yvdd),
+            ("psubdiff", "psubdiffcont", yvss, grid(y_mid - 1.50)),
+            ("nsubdiff", "nsubdiffcont", grid(y_mid + 1.50), yvdd),
         ):
             c.rect(dl, grid(xx - 0.18), ylo, grid(xx + 0.18), yhi)
             c.rect("locali", grid(xx - 0.14), ylo, grid(xx + 0.14), yhi)
-            yc = grid(ylo + 0.50)
+            yc = grid(ylo + 0.45)
             while yc <= yhi - 0.35 + 1e-6:
                 c.pad(cl, xx, yc, 0.17)
                 yc = grid(yc + 0.50)
@@ -227,19 +228,20 @@ def build_lf_k4_fused(out: Path) -> dict:
     c = Cell()
     c.include(mim_c)
 
-    # 1. Stacked MIM power/node buses cleanly outside array recognition box:
-    #    - Shared M4 top/mid plate `z` collects all 3 columns at y = upper_z (mbbox[3] + 2.00)
-    #    - Center Col 1 (VSS) M3 & M5 run up past upper_z to top_vss (mbbox[3] + 5.60) and join
-    #    - Outer Col 0 & Col 2 (VDD) M3 & M5 run down to lower_vdd (mbbox[1] - 3.20) and join
-    upper_z = grid(mbbox[3] + 2.00)     # +31.22
-    top_vss = grid(mbbox[3] + 5.60)     # +34.82 (M5 met5.2 gap to MIM2 top edge >= 5.0 um)
-    lower_vdd = grid(mbbox[1] - 3.20)   # -32.42 (M5 met5.2 gap to Col 1 M5 bottom >= 3.0 um)
+    # 1. Tightened Stacked MIM Buses (met4.2 >= 0.35 um, met5.2 = 1.63 um >= 1.60 um):
+    #    - Shared M4 plate `z` at upper_z = mbbox[3] + 0.80 (+30.02, M4 y = 29.57..30.47)
+    #    - Center Col 1 (VSS) M3 & M5 strap at top_vss = mbbox[3] + 2.43 (+31.65, top = +32.45)
+    #    - Outer Col 0 & Col 2 (VDD) joined on M5 at lower_vdd = mbbox[1] - 2.43 (-31.65, bot = -32.45)
+    #      leaving M3 completely open across Col 1 so `ctrl` port sits flush inside -32.45!
+    upper_z = grid(mbbox[3] + 0.80)     # +30.02
+    top_vss = grid(mbbox[3] + 2.43)     # +31.65 (M5 bot = +30.85 -> 1.63 um to +29.22; via4 M4 bot = +30.85 -> 0.38 um to upper_z)
+    lower_vdd = grid(mbbox[1] - 2.43)   # -31.65 (M5 top = -30.85 -> 1.63 um to -29.22)
 
     x_z_top_riser = 11.40
     for x, y in top_m4:
-        c.rect("metal4", grid(x - 0.50), y, grid(x + 0.50), grid(upper_z + 0.50))
-    c.rect("metal4", grid(top_m4[0][0] - 0.60), grid(upper_z - 0.50),
-           grid(max(top_m4[-1][0], x_z_top_riser) + 0.60), grid(upper_z + 0.50))
+        c.rect("metal4", grid(x - 0.50), y, grid(x + 0.50), grid(upper_z + 0.45))
+    c.rect("metal4", grid(top_m4[0][0] - 0.60), grid(upper_z - 0.45),
+           grid(max(top_m4[-1][0], x_z_top_riser) + 0.60), grid(upper_z + 0.45))
 
     # Col 1 (idx=1) -> VSS at top_vss
     x_c1_m3, y_c1_m3 = bot_m3[1]
@@ -250,7 +252,7 @@ def build_lf_k4_fused(out: Path) -> dict:
     via3(c, x_c1_m3, top_vss)
     via4(c, x_c1_m3, top_vss)
 
-    # Col 0 & Col 2 (idx=0, 2) -> VDD at lower_vdd
+    # Col 0 & Col 2 (idx=0, 2) -> VDD at lower_vdd (M5 cross-bar only; local M3 drops at Col 0 & Col 2)
     for idx in (0, 2):
         xm3, ym3 = bot_m3[idx]
         xm5, ym5 = top_m5[idx]
@@ -258,23 +260,57 @@ def build_lf_k4_fused(out: Path) -> dict:
         c.rect("metal5", grid(xm5 - 0.80), grid(lower_vdd - 0.80), grid(xm5 + 0.80), ym5)
         via3(c, xm3, lower_vdd)
         via4(c, xm3, lower_vdd)
-    c.rect("metal3", grid(bot_m3[0][0] - 0.40), grid(lower_vdd - 0.40),
-           grid(bot_m3[2][0] + 0.40), grid(lower_vdd + 0.40))
     c.rect("metal5", grid(top_m5[0][0] - 0.80), grid(lower_vdd - 0.80),
            grid(bot_m3[2][0] + 0.80), grid(lower_vdd + 0.80))
 
-    # 2. Side-mounted Xrz (+ 2 pure-poly dummies) & ultra-compact CMOS island inside Col 1 VSS shield
-    y_rz_vss_m1 = -6.80
-    y_nmos_vss_m1 = -5.20
-    y_preen_m1 = -0.96
-    y_preb_m1 = -0.48
-    y_preref_m1 = 0.00
-    y_ctrl_m1 = 0.48
-    y_z_m1 = 0.96
-    y_pmos_vdd_m1 = 5.20
+    # 2. Compact Under-MIM Island in Col 1 Row 0 VSS Shield (y0 = -20.00, strictly under Col 1 M3!)
+    #    Order: [Xinv, Xint, Xfast] on left, Xrz (+ 2 grounded poly dummies) on right ->
+    #      * ZERO bridges over Xrz for pre_ref / pre_en / vdd
+    #      * Shortest possible ctrl route (Xfast -> Xrz bot -> flush ctrl port at -32.00)
+    y0 = -20.00
+    y_rz_vss_m1 = grid(y0 - 6.80)       # -26.80
+    y_nmos_vss_m1 = grid(y0 - 4.70)     # -24.70
+    y_preen_m1 = grid(y0 - 0.90)        # -20.90
+    y_preb_m1 = grid(y0 - 0.45)         # -20.45
+    y_preref_m1 = grid(y0 + 0.00)       # -20.00
+    y_ctrl_m1 = grid(y0 + 0.45)         # -19.55
+    y_z_m1 = grid(y0 + 0.90)            # -19.10
+    y_pmos_vdd_m1 = grid(y0 + 4.70)     # -15.30
 
-    # Xrz placed on left side of Col 1 alongside CMOS strip, plus 2 symmetric flanking pure-poly dummies
-    dx_rz, dy_rz = -10.80, 0.00
+    dy_n, dy_p = grid(y0 - 2.75), grid(y0 + 2.75)  # -22.75, -17.25
+    dx_inv, dx_int, dx_fast = -9.50, -4.10, 2.20
+
+    in_n = place_w2_mos(c, n2, "ndiffc", dx_inv, dy_n, False)
+    in_p = place_w2_mos(c, p4, "pdiffc", dx_inv, dy_p, True)
+    it_n = place_w2_mos(c, n4, "ndiffc", dx_int, dy_n, False)
+    it_p = place_w2_mos(c, pl8, "pdiffc", dx_int, dy_p, True)
+    fn = place_w2_mos(c, n2, "ndiffc", dx_fast, dy_n, False)
+    fp = place_w2_mos(c, pl4, "pdiffc", dx_fast, dy_p, True)
+
+    # Biased gate-length-matched field-poly dummy gates flanking EVERY NMOS (-> VSS) & PMOS (-> VDD)
+    dum_gap = 0.075
+    for dev, dy_m, is_p, y_rail in (
+        (in_n, dy_n, False, y_nmos_vss_m1),
+        (it_n, dy_n, False, y_nmos_vss_m1),
+        (fn, dy_n, False, y_nmos_vss_m1),
+        (in_p, dy_p, True, y_pmos_vdd_m1),
+        (it_p, dy_p, True, y_pmos_vdd_m1),
+        (fp, dy_p, True, y_pmos_vdd_m1),
+    ):
+        lf = dev["l_f"]
+        y_inner = dev["poly_y1"] if is_p else dev["poly_y2"]
+        for side_sign, x_d in (
+            (-1, grid(dev["x_min"] - dum_gap - lf / 2.0)),
+            (+1, grid(dev["x_max"] + dum_gap + lf / 2.0)),
+        ):
+            add_mos_poly_dummy(c, x_d, lf, dy_m, is_p, y_rail, y_inner, side_sign=side_sign)
+
+    gr_x1, gr_x2 = -11.90, 4.75
+    c.rect("nwell", grid(gr_x1 - 0.45), grid(dy_p - 1.55), grid(gr_x2 + 0.45), grid(y_pmos_vdd_m1 + 0.45))
+    draw_compact_np_frame(c, gr_x1, gr_x2, y_nmos_vss_m1, y_pmos_vdd_m1, y0)
+
+    # Xrz on right side of Col 1 (dx_rz = +8.30, dy_rz = -20.00) + 2 grounded flanking 0.69 um poly dummies
+    dx_rz, dy_rz = 8.30, y0
     c.include(rz, dx=dx_rz, dy=dy_rz)
     rz_by = grid(dy_rz + rz.pins("B")[0][1])
     rz_gl, rz_gr = grid(dx_rz - 0.91), grid(dx_rz + 0.91)
@@ -291,72 +327,33 @@ def build_lf_k4_fused(out: Path) -> dict:
     c.wire("metal1", [(rz_gl, rz_gb), (rz_gl, rz_gt), (rz_gr, rz_gt), (rz_gr, rz_gb), (rz_gl, rz_gb)], 0.30)
     c.wire("metal1", [(dx_rz, rz_by), (dx_rz, y_rz_vss_m1)], 0.32)
 
-    # Flanking pure-poly dummy bars for Xrz (0.69 um wide, no xpolycontact -> zero LVS change)
     for x_rdum in (grid(dx_rz - 1.65), grid(dx_rz + 1.65)):
-        c.rect("poly", grid(x_rdum - 0.345), -6.40, grid(x_rdum + 0.345), 5.875)
-        c.pad("polycont", x_rdum, -6.20, 0.17, 0.17)
-        c.pad("locali", x_rdum, -6.20, 0.34, 0.34)
-        c.pad("viali", x_rdum, -6.20, 0.17)
-        c.pad("metal1", x_rdum, -6.20, 0.32)
-        c.wire("metal1", [(x_rdum, -6.20), (x_rdum, y_rz_vss_m1)], 0.30)
+        c.rect("poly", grid(x_rdum - 0.345), grid(y0 - 6.40), grid(x_rdum + 0.345), grid(y0 + 5.875))
+        c.pad("polycont", x_rdum, grid(y0 - 6.20), 0.17, 0.17)
+        c.pad("locali", x_rdum, grid(y0 - 6.20), 0.34, 0.34)
+        c.pad("viali", x_rdum, grid(y0 - 6.20), 0.17)
+        c.pad("metal1", x_rdum, grid(y0 - 6.20), 0.32)
+        c.wire("metal1", [(x_rdum, grid(y0 - 6.20)), (x_rdum, y_rz_vss_m1)], 0.30)
 
-    y_rz_r2 = grid(dy_rz - 4.80)   # ctrl end (-4.80)
-    y_rz_r1 = grid(dy_rz + 4.80)   # z end (+4.80)
+    y_rz_r2 = grid(dy_rz - 4.80)   # ctrl end (-24.80)
+    y_rz_r1 = grid(dy_rz + 4.80)   # z end (-15.20)
     c.via1(dx_rz, y_rz_r2)
     c.via1(dx_rz, y_rz_r1)
 
-    # Ultra-compact CMOS strip: Xfast (-3.80) | Xinv (+0.50) | Xint (+6.00), height = 10.4 um
-    dy_n, dy_p = -3.10, 3.10
-    dx_fast, dx_inv, dx_int = -3.80, 0.50, 6.00
-
-    fn = place_w2_mos(c, n2, "ndiffc", dx_fast, dy_n, False)
-    fp = place_w2_mos(c, pl4, "pdiffc", dx_fast, dy_p, True)
-    in_n = place_w2_mos(c, n2, "ndiffc", dx_inv, dy_n, False)
-    in_p = place_w2_mos(c, p4, "pdiffc", dx_inv, dy_p, True)
-    it_n = place_w2_mos(c, n4, "ndiffc", dx_int, dy_n, False)
-    it_p = place_w2_mos(c, pl8, "pdiffc", dx_int, dy_p, True)
-
-    # Biased field-poly dummy gates flanking EVERY NMOS (-> VSS) and EVERY PMOS (-> VDD)
-    dum_gap = 0.075  # minimum SKY130 poly.5 spacing from field-poly edge to active diff edge
-    for dev, dy_m, is_p, y_rail in (
-        (fn, dy_n, False, y_nmos_vss_m1),
-        (in_n, dy_n, False, y_nmos_vss_m1),
-        (it_n, dy_n, False, y_nmos_vss_m1),
-        (fp, dy_p, True, y_pmos_vdd_m1),
-        (in_p, dy_p, True, y_pmos_vdd_m1),
-        (it_p, dy_p, True, y_pmos_vdd_m1),
-    ):
-        lf = dev["l_f"]
-        y_inner = dev["poly_y1"] if is_p else dev["poly_y2"]
-        for side_sign, x_d in (
-            (-1, grid(dev["x_min"] - dum_gap - lf / 2.0)),
-            (+1, grid(dev["x_max"] + dum_gap + lf / 2.0)),
-        ):
-            add_mos_poly_dummy(c, x_d, lf, dy_m, is_p, y_rail, y_inner, side_sign=side_sign)
-
-    gr_x1, gr_x2 = -6.65, 9.85
-    c.rect("nwell", grid(gr_x1 - 0.45), 1.45, grid(gr_x2 + 0.45), 5.65)
-    draw_compact_np_frame(c, gr_x1, gr_x2, y_nmos_vss_m1, y_pmos_vdd_m1)
-
-    # VSS M1 rails -> M2 trunk at x_c1_m3 (+14.43, right outside Col 1) -> top_vss (via2 outside MIM)
+    # VSS M1 rails -> M2 trunk at x_c1_m3 (+14.43) -> top_vss (+31.65)
+    # CMOS VSS rail connects down at gr_x2 (+4.15) to y_rz_vss_m1 (-26.80) to clear Xrz M1 guard cleanly!
     x_vss_m2 = x_c1_m3
-    c.wire("metal1", [(-12.50, y_rz_vss_m1), (x_vss_m2, y_rz_vss_m1)], 0.44)
+    c.wire("metal1", [(gr_x1, y_nmos_vss_m1), (gr_x2, y_nmos_vss_m1), (gr_x2, y_rz_vss_m1),
+                      (x_vss_m2, y_rz_vss_m1)], 0.44)
     c.via1(x_vss_m2, y_rz_vss_m1)
-    c.wire("metal1", [(gr_x1, y_nmos_vss_m1), (x_vss_m2, y_nmos_vss_m1)], 0.44)
-    c.via1(x_vss_m2, y_nmos_vss_m1)
     c.wire("metal2", [(x_vss_m2, y_rz_vss_m1), (x_vss_m2, top_vss)], 0.56)
     c.via2(x_vss_m2, top_vss)
 
-    # VDD M1 rail -> hop over Xrz (y=+7.20 M1) -> Col 0/1 gap x_vdd_m2 = bot_m3[0][0] (-18.28) -> lower_vdd
+    # VDD M1 rail exits straight LEFT from CMOS island (ZERO hop over Xrz!) -> x_vdd_m2 (-18.28) -> lower_vdd
     x_vdd_m2 = bot_m3[0][0]
-    y_vdd_bridge = 7.20
-    c.wire("metal1", [(gr_x1, y_pmos_vdd_m1), (gr_x2, y_pmos_vdd_m1)], 0.44)
-    c.via1(gr_x1, y_pmos_vdd_m1)
-    c.wire("metal2", [(gr_x1, y_pmos_vdd_m1), (gr_x1, y_vdd_bridge)], 0.44)
-    c.via1(gr_x1, y_vdd_bridge)
-    c.wire("metal1", [(x_vdd_m2, y_vdd_bridge), (gr_x1, y_vdd_bridge)], 0.44)
-    c.via1(x_vdd_m2, y_vdd_bridge)
-    c.wire("metal2", [(x_vdd_m2, lower_vdd), (x_vdd_m2, y_vdd_bridge)], 0.56)
+    c.wire("metal1", [(x_vdd_m2, y_pmos_vdd_m1), (gr_x2, y_pmos_vdd_m1)], 0.44)
+    c.via1(x_vdd_m2, y_pmos_vdd_m1)
+    c.wire("metal2", [(x_vdd_m2, lower_vdd), (x_vdd_m2, y_pmos_vdd_m1)], 0.56)
     c.via2(x_vdd_m2, lower_vdd)
 
     # Xinv wiring
@@ -367,70 +364,62 @@ def build_lf_k4_fused(out: Path) -> dict:
     c.wire("metal2", [(dx_inv, in_n["d_bus_y"]), (dx_inv, in_p["d_bus_y"])], 0.30)
     c.via1(dx_inv, y_preb_m1)
 
-    # Gate ties to pre_en (-0.84) and pre_b (-0.42)
-    for gpt in (fn["g_pt"], in_n["g_pt"], in_p["g_pt"], it_n["g_pt"]):
+    # Gate ties to pre_en & pre_b (direct horizontal M1 from left port, ZERO bridges over Xrz!)
+    for gpt in (in_n["g_pt"], in_p["g_pt"], it_n["g_pt"], fn["g_pt"]):
         c.wire("metal2", [gpt, (gpt[0], y_preen_m1)], 0.24)
         c.via1(gpt[0], y_preen_m1)
-    for gpt in (fp["g_pt"], it_p["g_pt"]):
+    for gpt in (it_p["g_pt"], fp["g_pt"]):
         c.wire("metal2", [gpt, (gpt[0], y_preb_m1)], 0.24)
         c.via1(gpt[0], y_preb_m1)
 
-    x_sig_port = grid(mbbox[0] + 0.80)  # -49.60, under M5 overhang and clear of Col 0 M3 (-47.00)
-    x_ov_l, x_ov_r = -13.50, -8.40      # M2 bridge across Xrz (avoids Xrz M1 shield & passes under ctrl M2)
-    c.wire("metal1", [(x_sig_port, y_preen_m1), (x_ov_l, y_preen_m1)], 0.22)
+    x_sig_port = grid(mbbox[0] + 0.80)  # -49.60, under Col 0 M5 overhang & clear of Col 0 M3 (-47.40)
+    c.wire("metal1", [(x_sig_port, y_preen_m1), (fn["g_pt"][0], y_preen_m1)], 0.22)
     c.via1(x_sig_port, y_preen_m1)
-    c.via1(x_ov_l, y_preen_m1)
-    c.wire("metal2", [(x_ov_l, y_preen_m1), (x_ov_r, y_preen_m1)], 0.22)
-    c.via1(x_ov_r, y_preen_m1)
-    c.wire("metal1", [(x_ov_r, y_preen_m1), (it_n["g_pt"][0], y_preen_m1)], 0.22)
     c.via2(x_sig_port, y_preen_m1)
     c.pad("metal3", x_sig_port, y_preen_m1, 0.52)
 
-    c.wire("metal1", [(fp["g_pt"][0], y_preb_m1), (it_p["g_pt"][0], y_preb_m1)], 0.22)
+    c.wire("metal1", [(dx_inv, y_preb_m1), (fp["g_pt"][0], y_preb_m1)], 0.22)
 
-    # Xfast t-gate: node b = ctrl (dx_fast) -> x_ctrl_riser (-7.65) -> Xrz bottom (-4.80) -> ctrl port
-    c.wire("metal2", [(dx_fast, fn["d_bus_y"]), (dx_fast, fp["d_bus_y"])], 0.30)
-    c.via1(dx_fast, y_ctrl_m1)
-    x_ctrl_riser = -7.65
-    c.wire("metal1", [(x_ctrl_riser, y_ctrl_m1), (dx_fast, y_ctrl_m1)], 0.22)
-    c.via1(x_ctrl_riser, y_ctrl_m1)
-    y_ctrl_port = grid(lower_vdd - 1.80)  # -34.22
-    c.wire("metal2", [(x_ctrl_riser, y_ctrl_m1), (x_ctrl_riser, -8.20),
-                      (dx_rz, -8.20), (dx_rz, y_rz_r2)], 0.38)
-    c.wire("metal2", [(dx_rz, -8.20), (dx_rz, y_ctrl_port)], 0.40)
-    c.via2(dx_rz, y_ctrl_port)
-    c.pad("metal3", dx_rz, y_ctrl_port, 0.52)
+    # pre_ref direct horizontal M1 from x_sig_port to Xint.S and Xfast.S (ZERO bridges over Xrz!)
+    x_int_ref = grid(it_p["s_xs"][-1] + 0.55)
+    c.wire("metal2", [(it_n["s_xs"][-1], it_n["s_bus_y"]), (x_int_ref, it_n["s_bus_y"]),
+                      (x_int_ref, it_p["s_bus_y"]), (it_p["s_xs"][-1], it_p["s_bus_y"])], 0.24)
+    c.via1(x_int_ref, y_preref_m1)
 
-    # Xfast node a = pre_ref -> y_preref_m1 (0.00)
     x_fast_ref = grid(fp["s_xs"][-1] + 0.55)
     c.wire("metal2", [(fn["s_xs"][-1], fn["s_bus_y"]), (x_fast_ref, fn["s_bus_y"]),
                       (x_fast_ref, fp["s_bus_y"]), (fp["s_xs"][-1], fp["s_bus_y"])], 0.24)
     c.via1(x_fast_ref, y_preref_m1)
 
-    # Xint t-gate: node b = z (dx_int) -> upper_z via x_z_top_riser (+11.40), bridged over island to Xrz top (+4.80)
-    c.wire("metal2", [(dx_int, it_n["d_bus_y"]), (dx_int, it_p["d_bus_y"])], 0.32)
-    c.via1(dx_int, y_z_m1)
-    c.wire("metal1", [(dx_int, y_z_m1), (x_z_top_riser, y_z_m1)], 0.22)
-    c.via1(x_z_top_riser, y_z_m1)
-    c.wire("metal2", [(dx_rz, y_rz_r1), (dx_rz, 8.40), (x_z_top_riser, 8.40),
-                      (x_z_top_riser, y_z_m1)], 0.40)
-    c.wire("metal2", [(x_z_top_riser, 8.40), (x_z_top_riser, upper_z)], 0.48)
-    c.via2(x_z_top_riser, upper_z)
-    via3(c, x_z_top_riser, upper_z)
-
-    # Xint node a = pre_ref -> y_preref_m1 -> M2 bridge across Xrz -> left port x_sig_port
-    x_int_ref = grid(it_p["s_xs"][-1] + 0.55)
-    c.wire("metal2", [(it_n["s_xs"][-1], it_n["s_bus_y"]), (x_int_ref, it_n["s_bus_y"]),
-                      (x_int_ref, it_p["s_bus_y"]), (it_p["s_xs"][-1], it_p["s_bus_y"])], 0.24)
-    c.via1(x_int_ref, y_preref_m1)
-    c.wire("metal1", [(x_ov_r, y_preref_m1), (x_int_ref, y_preref_m1)], 0.22)
-    c.via1(x_ov_r, y_preref_m1)
-    c.wire("metal2", [(x_ov_l, y_preref_m1), (x_ov_r, y_preref_m1)], 0.22)
-    c.via1(x_ov_l, y_preref_m1)
-    c.wire("metal1", [(x_sig_port, y_preref_m1), (x_ov_l, y_preref_m1)], 0.22)
+    c.wire("metal1", [(x_sig_port, y_preref_m1), (x_fast_ref, y_preref_m1)], 0.22)
     c.via1(x_sig_port, y_preref_m1)
     c.via2(x_sig_port, y_preref_m1)
     c.pad("metal3", x_sig_port, y_preref_m1, 0.52)
+
+    # Xfast node b = ctrl -> ultra-short M2 route directly into Xrz bottom (-24.80) & flush bottom port (-32.00)!
+    c.wire("metal2", [(dx_fast, fn["d_bus_y"]), (dx_fast, fp["d_bus_y"])], 0.30)
+    c.via1(dx_fast, y_ctrl_m1)
+    x_ctrl_drop = 5.95
+    c.wire("metal1", [(dx_fast, y_ctrl_m1), (x_ctrl_drop, y_ctrl_m1)], 0.24)
+    c.via1(x_ctrl_drop, y_ctrl_m1)
+    y_ctrl_port = -32.00  # flush inside lower_vdd M5 (-32.45), clear of Col 1 M3 (-28.42), M3 open across Col 1!
+    c.wire("metal2", [(x_ctrl_drop, y_ctrl_m1), (x_ctrl_drop, y_rz_r2),
+                      (dx_rz, y_rz_r2), (dx_rz, y_ctrl_port)], 0.38)
+    c.via2(dx_rz, y_ctrl_port)
+    c.pad("metal3", dx_rz, y_ctrl_port, 0.52)
+
+    # Xint node b = z -> M1 across channel to x_z_up=+5.35 (clears it_p source bus & Xrz!) -> M2 up to y_z_hop -> Xrz top -> upper_z
+    c.wire("metal2", [(dx_int, it_n["d_bus_y"]), (dx_int, it_p["d_bus_y"])], 0.32)
+    c.via1(dx_int, y_z_m1)
+    x_z_up = 5.35
+    c.wire("metal1", [(dx_int, y_z_m1), (x_z_up, y_z_m1)], 0.24)
+    c.via1(x_z_up, y_z_m1)
+    y_z_hop = grid(y_pmos_vdd_m1 + 2.30)  # -13.00 (clears CMOS nwell & Xrz guard top)
+    c.wire("metal2", [(x_z_up, y_z_m1), (x_z_up, y_z_hop),
+                      (x_z_top_riser, y_z_hop), (x_z_top_riser, upper_z)], 0.44)
+    c.wire("metal2", [(dx_rz, y_rz_r1), (dx_rz, y_z_hop)], 0.40)
+    c.via2(x_z_top_riser, upper_z)
+    via3(c, x_z_top_riser, upper_z)
 
     # Export exact port order: ctrl z pre_ref pre_en vdd vss
     c.port("ctrl", "metal3", dx_rz, y_ctrl_port)
@@ -533,7 +522,8 @@ def main() -> None:
     r = build_lf_k4_fused(out)
     print(
         f"{r['cell']:32s} | DRC={r['drc_boxes']} | LVS={r['lvs_match']} | "
-        f"PROP_ERR={r['lvs_property_errors']} | ports={len(r['exported_ports'])} | size={r['size_um']} um",
+        f"PROP_ERR={r['lvs_property_errors']} | ports={len(r['exported_ports'])} | "
+        f"size={r['size_um']} um | area={r['area_um2']} um2",
         flush=True,
     )
     (out / "summary.json").write_text(json.dumps([r], indent=2) + "\n")

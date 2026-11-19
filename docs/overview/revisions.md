@@ -22,25 +22,26 @@
 
 ### PLL 源文件与修订关系
 
-当前是[clock_frontend_r6q.spice](../../analog/pll/top/spice/clock_frontend_r6q.spice)＋[vco_ring4_r6.spice](../../analog/pll/vco/spice/vco_ring4_r6.spice)，完整环路为[pll_core_r6k4q.spice](../../analog/pll/top/spice/pll_core_r6k4q.spice)。r5/4bit与下面r3文件保留历史边界；未改动单元的局部结果继续按原输入/负载使用，受影响的源、加载、码表和噪声另验。
+当前是 [clock_frontend_r6q.spice](../../analog/pll/top/spice/clock_frontend_r6q.spice) ＋ [vco_ring4_r6.spice](../../analog/pll/vco/spice/vco_ring4_r6.spice)，完整环路为 [pll_core_r6k4q.spice](../../analog/pll/top/spice/pll_core_r6k4q.spice)。r5/4bit 与早期 r3 保留最近 2–3 个 Var；更早 v0.1–r4 历史文件已归档退休（见 [retired_legacy_vars_20261120.json](../../results/catalog/retired_legacy_vars_20261120.json)）。
 
-| 单元 | 文件 |
-|---|---|
-| 原生时钟前端（四路抽出、三路供电 dummy） | clock_frontend_lowov.spice (`../../analog/pll/top/spice/clock_frontend_lowov.spice`, retired in `retired_legacy_vars_20261120.json`) |
-| VCO | vco_ring4_pvt_candidate.spice (`../../analog/pll/vco/spice/vco_ring4_pvt_candidate.spice`, retired in `retired_legacy_vars_20261120.json`) |
-| 时钟接收器（全速与反馈） | [cml_to_cmos_pvt_candidate.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice) |
-| ÷8 prescaler（含级间 buffer、本地偏置） | [cml_prescaler8.spice](../../analog/pll/divider/spice/cml_prescaler8.spice)、[cml_div2.spice](../../analog/pll/divider/spice/cml_div2.spice)、[cml_latch.spice](../../analog/pll/divider/spice/cml_latch.spice) |
-| PFD / CP / LF | [pfd_cmos.spice](../../analog/pll/pfd/spice/pfd_cmos.spice)、[charge_pump.spice](../../analog/pll/cp/spice/charge_pump.spice)、[passive_rc_precharge.spice](../../analog/pll/loop_filter/spice/passive_rc_precharge.spice) |
-| 物理 LF 候选（未采用） | passive_rc_pdk_candidate.spice (`../../analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice`, retired in `retired_legacy_vars_20261120.json`) |
-| 启动监督 RTL | [pll_startup_supervisor.sv](../../digital/pll/rtl/pll_startup_supervisor.sv) |
+| 单元 | 当前采用（r6） | 最近对照 / 候选 |
+|---|---|---|
+| 原生时钟前端 | [clock_frontend_r6q.spice](../../analog/pll/top/spice/clock_frontend_r6q.spice) | [clock_frontend_r5q.spice](../../analog/pll/top/spice/clock_frontend_r5q.spice)、[clock_frontend_r5.spice](../../analog/pll/top/spice/clock_frontend_r5.spice) |
+| 完整 PLL 核心 | [pll_core_r6k4q.spice](../../analog/pll/top/spice/pll_core_r6k4q.spice) | [pll_core_r5k4q.spice](../../analog/pll/top/spice/pll_core_r5k4q.spice)、[pll_core_r5k4.spice](../../analog/pll/top/spice/pll_core_r5k4.spice) |
+| VCO 与电容阵列 | [vco_ring4_r6.spice](../../analog/pll/vco/spice/vco_ring4_r6.spice)、[vco_delay_r6.spice](../../analog/pll/vco/spice/vco_delay_r6.spice)、[cap_bank_5b.spice](../../analog/pll/vco/spice/cap_bank_5b.spice) | [vco_ring4_4b.spice](../../analog/pll/vco/spice/vco_ring4_4b.spice)、[cap_bank_4b.spice](../../analog/pll/vco/spice/cap_bank_4b.spice) |
+| 时钟接收器（反馈 / 全速） | [cml_to_cmos_pvt_candidate.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)（250 MHz 反馈） | [cml_to_cmos_r4.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice)、[cml_to_cmos_r5.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice)（v6） |
+| ÷8 prescaler | [cml_prescaler8.spice](../../analog/pll/divider/spice/cml_prescaler8.spice)、[cml_div2.spice](../../analog/pll/divider/spice/cml_div2.spice)、[cml_latch.spice](../../analog/pll/divider/spice/cml_latch.spice) | 纯 CMOS / TSPC 重定时候选（独立分支，未切换主线） |
+| PFD / 锁定检测 | [pfd_sc.spice](../../analog/pll/pfd/spice/pfd_sc.spice)、[phase_window.spice](../../analog/pll/pfd/spice/phase_window.spice) | [pfd_cmos.spice](../../analog/pll/pfd/spice/pfd_cmos.spice) |
+| CP / LF | [charge_pump_steer.spice](../../analog/pll/cp/spice/charge_pump_steer.spice)、[passive_rc_pdk_k4.spice](../../analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice) | [charge_pump.spice](../../analog/pll/cp/spice/charge_pump.spice)、[passive_rc_precharge.spice](../../analog/pll/loop_filter/spice/passive_rc_precharge.spice) |
+| 启动监督 RTL | [pll_startup_supervisor.sv](../../digital/pll/rtl/pll_startup_supervisor.sv) | [pll_control_top.sv](../../digital/pll/rtl/pll_control_top.sv) |
 
-### TX r2 源文件
+### TX 工作结构源文件
 
 | 单元 | 文件 |
 |---|---|
 | 串化器 | [serializer16_retimed_lowov.spice](../../analog/tx/serializer/spice/serializer16_retimed_lowov.spice) |
 | 低过驱动逻辑单元与偏置 | [cml_lowov_cells.spice](../../analog/common/cml_mux/spice/cml_lowov_cells.spice) |
-| 时钟分发 | [cml_clock_distribution_tx_lowov.spice](../../analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice) |
+| 时钟分发 | [tx_clock_dist_v3.py](../../analog/tx/clock_distribution/spice/tx_clock_dist_v3.py)（v3 规范入口；r2 基线 [cml_clock_distribution_tx_lowov.spice](../../analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice)） |
 | 输出级 | [cml_line_driver_lowvt_enable.spice](../../analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice) |
 | P-LVT 适配器 | [sky130_pfet_lvt.spice](../../analog/common/devices/spice/sky130_pfet_lvt.spice) |
 

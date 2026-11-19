@@ -1,0 +1,9 @@
+* NGSPICE file created from serdes_bias_ctle_pdk.ext - technology: sky130A
+
+.subckt serdes_bias_ctle_pdk iin vss
+X0 iin iin vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.58 ps=4.58 w=2 l=0.5
+X1 vss iin iin vss sky130_fd_pr__nfet_01v8_lvt ad=0.58 pd=4.58 as=0.29 ps=2.29 w=2 l=0.5
+X2 iin iin vss vss sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.5
+X3 vss iin iin vss sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.5
+.ends
+

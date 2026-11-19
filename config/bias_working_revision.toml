@@ -1,3 +1,4 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
 revision = "bandgap_constant_IR_dist_decoupled_B2_working"
 status = "module_topologies_characterized; real_bias_in_RX_TX_and_native_PLL_benches; simultaneous_loading_ready_and_startup_handoff_open"
 report = "docs/design/bias.md"
@@ -32,3 +33,16 @@ report = "docs/design/physical_reference_card.md"
 data = "docs/data/physical_reference_card.json"
 scope = "TT1.8V x three temperatures x five sampled trim codes x generic/fixed_s1/fixed_s8 = 45 OP; not MOS45, all32codes or startup"
 production_adopted = false
+
+[capacitor_review_candidate]
+report = "docs/design/bias_cap_review.md"
+evidence_manifest = "config/bias_cap_review_evidence.json"
+current_shared_total_pf = 13
+candidate_shared_total_pf = 11
+candidate_cc_pf = 4
+candidate_cvbg_pf = 5
+candidate_cvgi_pf = 2
+candidate_rz_ohm = 30000
+candidate_rz_physical_segments = 4
+production_adopted = false
+scope = "five boundary profiles x two loads; three-profile startup/DC-noise comparison; no new full-PVT, MC, layout area or PEX qualification"

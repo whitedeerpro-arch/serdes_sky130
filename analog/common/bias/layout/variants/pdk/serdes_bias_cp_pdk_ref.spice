@@ -1,0 +1,6 @@
+* Design-side bias_dist.spice serdes_bias_cp
+.subckt serdes_bias_cp_pdk vbn vbp vcp vss
+Xdn vbn vbn vss vss sky130_fd_pr__nfet_01v8 w=5 l=1
+Xmn vbp vbn vss vss sky130_fd_pr__nfet_01v8 w=5 l=1
+Xdp vbp vbp vcp vcp sky130_fd_pr__pfet_01v8 w=20 l=1
+.ends serdes_bias_cp_pdk

@@ -1,0 +1,10 @@
+* Compact 2D Common-Centroid serdes_ref_vbuf_pdk
+.subckt serdes_ref_vbuf_pdk iin ibias out vdd vss
+Xr iin vss vss sky130_fd_pr__res_high_po w=1 l=331.86
+Xbd ibias ibias vss vss sky130_fd_pr__nfet_01v8 w=4 l=4
+Xt tail ibias vss vss sky130_fd_pr__nfet_01v8 w=4 l=4
+Xa da iin tail vss sky130_fd_pr__nfet_01v8 w=24 l=5
+Xb out out tail vss sky130_fd_pr__nfet_01v8 w=24 l=5
+Xla da da vdd vdd sky130_fd_pr__pfet_01v8_lvt w=48 l=12
+Xlb out da vdd vdd sky130_fd_pr__pfet_01v8_lvt w=48 l=12
+.ends serdes_ref_vbuf_pdk

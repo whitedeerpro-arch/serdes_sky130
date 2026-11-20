@@ -13,7 +13,7 @@
 - **LDO（HV18 r4、减容与 v2 重构候选）**：[ldo_r4.md](ldo_r4.md) · [ldo_smallcap.md](ldo_smallcap.md) · [ldo_cap_area.md](ldo_cap_area.md) · [ldo_v2.md](ldo_v2.md) · [ldo.md](ldo.md)
 
 ## TX（字入口、时钟分发、串化与线驱动）
-- **整链与主入口**：[tx_parallel_serializer.md](tx_parallel_serializer.md) · [tx_final_retime.md](tx_final_retime.md) · [tx_clock_distribution.md](tx_clock_distribution.md) · [tx_serializer.md](tx_serializer.md) · [tx_output_driver.md](tx_output_driver.md)
+- **整链与主入口**：[tx_parallel_serializer.md](tx_parallel_serializer.md) · [tx_final_retime.md](tx_final_retime.md) · [tx_sst_v4.md](tx_sst_v4.md)（去 CML 四相 N-over-N SST 独立候选）· [tx_clock_distribution.md](tx_clock_distribution.md) · [tx_serializer.md](tx_serializer.md) · [tx_output_driver.md](tx_output_driver.md)
 - **字入口与保持时序**：[tx_ingress.md](tx_ingress.md) · [tx_word_capture.md](tx_word_capture.md) · [tx_launch_hold.md](tx_launch_hold.md)
 - **缓冲与负载专题**：[tx_buffer_sizing.md](tx_buffer_sizing.md) · [tx_buffer_local.md](tx_buffer_local.md) · [tx_buffer_cascade.md](tx_buffer_cascade.md) · [tx_buffer_heavy.md](tx_buffer_heavy.md) · [tx_cml_amplitude.md](tx_cml_amplitude.md) · [tx_coupling_state.md](tx_coupling_state.md) · [tx_loaded_clock.md](tx_loaded_clock.md) · [tx_physical_load_card.md](tx_physical_load_card.md) · [tx_relative_timing_screen.md](tx_relative_timing_screen.md) · [tx_retime_demand.md](tx_retime_demand.md)
 

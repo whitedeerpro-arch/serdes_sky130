@@ -14,6 +14,8 @@
 
 ![四架构多角度对比](../figures/clocking/dividers/tspc_reclock_multiangle.png)
 
+![v2 双端原生 RCX 工作波形与边沿对齐放大](../figures/clocking/dividers/saff_reclock_v2_waveforms.png)
+
 ---
 
 ## 1. 前代 `cmos_sync_prescaler8_2g` 失败根因与新架构突破

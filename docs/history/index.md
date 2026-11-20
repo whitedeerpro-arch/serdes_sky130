@@ -1,5 +1,7 @@
 # 实验记录（历史）
 
+- [分频器旧版与失败候选归档记录（2026-11-20）](divider_retirement_20261120.md)：按 CML 族（2 Var）与 CMOS/TSPC 族（2 Var）分族保留策略清退旧分频源码、测试台、`variants/pdk/` 与失败候选 `cmos_sync_2g`，归档登记见 `results/catalog/retired_divider_vars_20261120.json`。
+
 - [历史版本退休清理记录（2026-11-20）](legacy_vars_retirement_20261120.md)：按每模块仅保留现行及最近 2–3 个 Var 原则清退 73 个早期历史网表、旧版图原型与旧测试台，归档登记见 `results/catalog/retired_legacy_vars_20261120.json`。
 
 - [旧版图总览与生成链清退（2026-11-17）](legacy_layout_retirement_20261117.md)：失效图表、生成脚本和 LDO/Bias 原交付声明的证据、依赖边界与追溯方式。

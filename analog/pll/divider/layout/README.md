@@ -1,16 +1,14 @@
-# PLL ÷8 与轻 dummy 版图入口
+# PLL ÷8 版图入口
 
-当前原型为 [双翼 prescaler](variants/pdk/README.md)，独立清理候选在 [variants/review_clean/](variants/review_clean/)。布局与寄生后结论见 [review.md](review.md)，不以生成时的 DRC/LVS 摘要替代电气验收。
+本目录按接口族分别保留最近 2 个可用版图变体（旧版 `variants/pdk/`、中间未布线 `variants/sync2_pdk/` 及失败候选 `variants/cmos_sync_2g_pdk/` 已于 2026-11-20 归档退役，见 [divider_retirement_20261120.md](../../../../docs/history/divider_retirement_20261120.md)）。主线 CML 布局与寄生后审阅见 [review.md](review.md)，不以生成时 DRC/LVS 摘要替代电气验收。
 
-全速电平转换后接 [CMOS ÷8 候选](variants/cmos_2g_pdk/README.md)是一条独立替代研究，10 端口接口不能直接替换当前 11 端口 CML 分频器。它的重建/双极性波形复核及尚未验收的 sync2 身份差异见[本批复核](../../../../docs/layout/pll_pending_review_20261117.md)；未切换工作修订，原全量 RC 疑点继续暂停。
+## 当前保留变体
 
-| 位置 | 职责 |
-|---|---|
-| [build_prescaler8_pdk.py](build_prescaler8_pdk.py) | r6q 的 h40/h80 latch、三级 ÷2、级间 buffer、本地偏置及轻 dummy |
-| [build_divider_pdk.py](build_divider_pdk.py) | 旧叶单元原型，不作为当前完整 ÷8 的入口 |
-| [plan/](plan/) | 早期摆位/通道规划，尺寸以选定 `.mag` 为准 |
-| [variants/pdk/](variants/pdk/) | 原几何及各叶单元快照 |
-| [variants/review_clean/](variants/review_clean/) | 撤除浮空 field-poly 的完整 ÷8 和轻 dummy 候选 |
-| [layout_pex/run.py](../tb/layout_pex/run.py) | 2 GHz 实际 buffer 输入＋提取接收器的联合台 |
+| 家族 | 目录 / 变体 | 生成器 | 状态与定位 |
+|---|---|---|---|
+| **CML（11 端口）Var 1** | [variants/review_clean/](variants/review_clean/README.md) | [build_prescaler8_pdk.py](build_prescaler8_pdk.py) + `clean_field_poly.py` | 撤除浮空 field-poly 的 r3 双翼 CML ÷8 与轻 dummy 候选；`LAYOUT-PLL-DIV-RC-01` 原全量 RC 疑点继续暂停 |
+| **CML（11 端口）Var 2** | [variants/sync2_routed/](variants/sync2_routed/README.md) | [build_sync_prescaler8_pdk.py](build_sync_prescaler8_pdk.py)、[route_sync2_blocks.py](route_sync2_blocks.py)、[route_sync2_top.py](route_sync2_top.py) | 2-Stack 同步 CML ÷8 布线候选（[pll_pending_review_20261117.md](../../../../docs/layout/pll_pending_review_20261117.md) 标注尚未完成电气身份验收） |
+| **CMOS/TSPC（10 端口）Var 1** | [variants/cmos_2g_pdk/](variants/cmos_2g_pdk/README.md) | [build_cmos_prescaler8_2g_pdk.py](build_cmos_prescaler8_2g_pdk.py) | 级联 C²MOS 纹波 ÷8 基线版图，供 `r5_pdk` 联合验收与对照 |
+| **CMOS/TSPC（10 端口）Var 2** | [variants/saff_reclock_2g_pdk/](variants/saff_reclock_2g_pdk/README.md) | [build_saff_reclock_prescaler8_2g_pdk.py](build_saff_reclock_prescaler8_2g_pdk.py) | **v2 交错紧邻 SAFF-TSPC 重定时 ÷8**（`1,705.31 µm²`，DRC=0 / LVS=MATCH，45 角 CPEX 45/45 功能通过、44/45 `< 30 ps`，`RCX_BOTH` 5/5，`fs_v1650_t85_mm` 200/200 MC 通过；`ss_v1650_t-40_mm` `Xtg2` 边界见 [设计报告](../../../../docs/design/pll_tspc_reclock_divider.md)） |
 
-清理工具 [clean_field_poly.py](../../../../verification/layout/clean_field_poly.py)从独立 EXT 确认浮空岛后创建新几何，重跑 full-rule DRC/LVS，保留原输入和失败尝试；不手工修改提取网表。原生成/检查输出留在新的 `results/` 目录。[固定证据](../../../../results/catalog/pll_layout_review_divider_20261115.json)绑定本轮所有候选和实际运行。
+其余文件：`plan/` 保存早期摆位/通道规划（尺寸以选定 `.mag` 为准）；[build_divider_pdk.py](build_divider_pdk.py) 为旧叶单元原型脚本；[layout_pex/run.py](../tb/layout_pex/run.py) 为 2 GHz 实际 buffer + CML ÷8 + 提取接收器联合台；固定证据索引见 [pll_layout_review_divider_20261115.json](../../../../results/catalog/pll_layout_review_divider_20261115.json)。

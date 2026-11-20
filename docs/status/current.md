@@ -86,3 +86,8 @@
 [LF、divider、VCO 与 CML→CMOS 的阶段验收](../layout/pll_acceptance_20261115.md)接受六份局部几何交付；电气资格保持报告所列边界。错误大环及其依赖顶层规划已撤销，未切换电路工作修订。
 
 2026-11-17 [待提交工作复核](../layout/pll_pending_review_20261117.md)：新版 LF 已重建并通过局部预充筛查；r4/r5 全速转换及 CMOS ÷8 为独立候选，未切换 PLL 采用参数。r5 冷角原生 RC 功能失败保持 changes requested，旧无源角标签与运行时 include 身份缺口已明确，旧三叠层 divider 全量 RC 继续暂停。
+
+2026-11-20 候选迭代与仓库整理（均未切换现行采用工作修订）：
+- **纯 CMOS / TSPC 2 GHz ÷8 预分频器候选（`pll_saff_reclock_prescaler8_2g` v7 + `v2` 交错版图）**：`1,705.31 µm²`，full-rule DRC=0 / Netgen LVS=MATCH / 0 浮空 poly；原理图 45/45 通过（max skew `12.14 ps`），宿主 `Kd` 较纹波 CMOS 降 `2.3–2.85×`；后仿 45 角 CPEX **45/45 功能通过、44/45 `< 30 ps`**（中位 `4.28 ps`，仅 `ss_v1650_t-40` 为 `45.61 ps`），双向原生 `RCX_BOTH` 5/5 通过；200 样本 CPEX MC 在 `fs_v1650_t85_mm` **200/200 通过**，在 `ss_v1650_t-40_mm` 为 `168/200` 正常分频（瓶颈定位到 `Xtg2` 极寒低压传输门死区）。见 [pll_tspc_reclock_divider.md](../design/pll_tspc_reclock_divider.md)。
+- **PLL CP v3 与 LF v2 物理重构**：CP v3（`2,175.50 µm²`，−58.0%，ABBA 共质心、biased dummies、`out` CPEX −31.6%）与 LF v2（`6,382.27 µm²`，−7.4% vs v1 / −48.6% vs 18-MIM，开关与 `Rz` 复用 Col-1 VSS MIM 下方、`ctrl` CPEX −41.4%）均通过 full-rule DRC=0 / LVS=MATCH / RCX 器件保留检查；按 r6 `Kvco = 242–1025 MHz/V` 的解析环路相位裕度复核 TT 为 `58.1°–63.8°`（`UGB < fref/10`）。
+- **历史版本清退**：按每设计家族仅保留现行及最近 2–3 个 Var 原则完成两批归档（v0.1–r4 73 个文件见 [legacy_vars_retirement_20261120.md](../history/legacy_vars_retirement_20261120.md)；分频器旧版与失败候选见 [divider_retirement_20261120.md](../history/divider_retirement_20261120.md)）。

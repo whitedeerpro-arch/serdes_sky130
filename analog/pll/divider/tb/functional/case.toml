@@ -2,20 +2,18 @@ id = "functional"
 dut = "analog/pll/divider"
 level = "block"
 status = "prototype"
-purpose = "当前路径为固定 CML ÷8 后的 CMOS M=1–16；验证 tick、注册时钟、复位与旁路时的计数器时钟关闭。"
+purpose = "保留固定 CML ÷2 单元基础功能台（早期全 CML 可编程链与 250 MHz CMOS M=1–16 后级台已于 2026-11-20 归档退役）。"
 analyses = ["tran"]
-measurements = ["division_ratio","output_frequency","duty_cycle","reset_recovery","power"]
-shared_stimuli = ["verification/stimuli/spice/clock_cmos.spice","verification/stimuli/spice/cml_diff_clock.spice"]
+measurements = ["division_ratio","output_frequency","duty_cycle","power"]
+shared_stimuli = ["verification/stimuli/spice/cml_diff_clock.spice"]
 
 [implementation]
 view = "schematic"
 simulator = "ngspice47"
-testbench = "tb_cmos_divider_ngspice.cir.in"
-additional_testbenches = ["tb_cml_div2_ngspice.cir.in"]
-historical_testbenches = ["tb_cml_programmable_ngspice.cir.in", "tb_cml_chain_ngspice.cir.in"]
+testbench = "tb_cml_div2_ngspice.cir.in"
 
 [sweep]
-parameters = ["M=1..16 (static CMOS M-1 configuration)", "corner", "temperature", "maximum_step"]
+parameters = ["corner", "temperature", "maximum_step"]
 
 [requirements]
 status = "unspecified"

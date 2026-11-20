@@ -1,0 +1,363 @@
+{
+  "date": "2026-11-20",
+  "status": "retired_divider_legacy_and_superseded_vars",
+  "source_commit": "6d11fe6c5cedf445769b6cbec62e820b86843c28",
+  "scope": "Legacy full-CML/programmable CMOS divider sources, superseded layout/variants/pdk (replaced by variants/review_clean), and legacy functional/logic_truth/topology_exploration testbenches; keeps 2 CML Vars (review_clean, sync2_routed) + 2 CMOS/TSPC Vars (cmos_2g_pdk, saff_reclock_2g_pdk).",
+  "reason": "Keep CML (11-port) and CMOS/TSPC (10-port) divider families cleanly capped at 2 active variants each; full source bytes archived locally with SHA-256 receipts and recoverable via git source_commit.",
+  "files": [
+    {
+      "former_path": "analog/pll/divider/spice/exploratory/latch_candidates.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/spice/exploratory/latch_candidates.spice",
+      "sha256": "959886dc83614ff2972a86b90e007353f23584f2fca8d0a04dbd4bcf71efb24b",
+      "bytes": 4968
+    },
+    {
+      "former_path": "analog/pll/divider/spice/cml_dff.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/spice/cml_dff.spice",
+      "sha256": "e2111ab30f96f6afd55a0a1f82bc0754ffe12e231ca0251bdf4b133ea2665fe7",
+      "bytes": 747
+    },
+    {
+      "former_path": "analog/pll/divider/spice/cml_binary_chain.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/spice/cml_binary_chain.spice",
+      "sha256": "7d824b738e476fe2d8218d99fe81a2d36f3cef27dae66aaccd34484fc19d1142",
+      "bytes": 1230
+    },
+    {
+      "former_path": "analog/pll/divider/spice/cml_divider_programmable.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/spice/cml_divider_programmable.spice",
+      "sha256": "5bb07c577393c1f6a7e3714499a8da75237d56af037ae09d8b42df10db637f4e",
+      "bytes": 2724
+    },
+    {
+      "former_path": "analog/pll/divider/spice/cml_logic.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/spice/cml_logic.spice",
+      "sha256": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa",
+      "bytes": 1684
+    },
+    {
+      "former_path": "analog/pll/divider/spice/cmos_divider_programmable.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/spice/cmos_divider_programmable.spice",
+      "sha256": "a60b227d59f663048b43662218b0723410f1de57335eb8d0dbea705656809ea4",
+      "bytes": 3276
+    },
+    {
+      "former_path": "analog/pll/divider/tb/topology_exploration/case.toml",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/topology_exploration/case.toml",
+      "sha256": "c6ffc2620fcc4fa186a297f88cf403e26e7538202d152268b4f25b0905713439",
+      "bytes": 788
+    },
+    {
+      "former_path": "analog/pll/divider/tb/topology_exploration/tb_explore_ngspice.cir.in",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/topology_exploration/tb_explore_ngspice.cir.in",
+      "sha256": "57209c41860594891e801d52acab1fa35abed983f1d33b525a9f52f4c906e72e",
+      "bytes": 1840
+    },
+    {
+      "former_path": "analog/pll/divider/tb/logic_truth/case.toml",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/logic_truth/case.toml",
+      "sha256": "7062f668e8dbdcd6c60cfbcc9d50bb9986e20a49814fe98a02185127a8913f78",
+      "bytes": 705
+    },
+    {
+      "former_path": "analog/pll/divider/tb/logic_truth/stimuli/cmos_truth_vectors.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/logic_truth/stimuli/cmos_truth_vectors.spice",
+      "sha256": "03d69f0174451ad4e74e25c4e6ebd226b451c7d95eac351b7c9e1f2092d0483a",
+      "bytes": 15029
+    },
+    {
+      "former_path": "analog/pll/divider/tb/logic_truth/tb_cmos_next_state_dc_ngspice.cir.in",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/logic_truth/tb_cmos_next_state_dc_ngspice.cir.in",
+      "sha256": "40e745a6b55ead9e35458ce01d12b4cb490722cf5b623ae996e07f60e925544d",
+      "bytes": 1289
+    },
+    {
+      "former_path": "analog/pll/divider/tb/logic_truth/tb_cmos_next_state_settled_ngspice.cir.in",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/logic_truth/tb_cmos_next_state_settled_ngspice.cir.in",
+      "sha256": "10ff527149393c42a63b35dbc4219fccf29db0f8097cd570144b33e1a9ae801e",
+      "bytes": 882
+    },
+    {
+      "former_path": "analog/pll/divider/tb/functional/tb_cml_chain_ngspice.cir.in",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/functional/tb_cml_chain_ngspice.cir.in",
+      "sha256": "7c7017adb126c78d8e6c1ca072d89b254e7bcafebb95c4fcfb9f6e590a72ddc7",
+      "bytes": 1611
+    },
+    {
+      "former_path": "analog/pll/divider/tb/functional/tb_cml_programmable_ngspice.cir.in",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/functional/tb_cml_programmable_ngspice.cir.in",
+      "sha256": "228c07f23d2ce4f658f218b5db98a20fcd89456467b0d89509bf0f4775157934",
+      "bytes": 1835
+    },
+    {
+      "former_path": "analog/pll/divider/tb/functional/tb_cmos_divider_ngspice.cir.in",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/tb/functional/tb_cmos_divider_ngspice.cir.in",
+      "sha256": "2376057a5f285ae658be0ca8743c13ad4dee44d6e306a526794d667eef56e87f",
+      "bytes": 1173
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/README.md",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/README.md",
+      "sha256": "c8ae1e99abedabdbe53f18fd39dbd0dbd588ad29cfe3b8c71d1c5a6b41a87361",
+      "bytes": 5713
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk.mag",
+      "sha256": "cda62158af205e61e5292fd9d1e2ec5ffa4f44c082ec8aee057e1464c9ffb224",
+      "bytes": 147919
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk.png",
+      "sha256": "003f409327ed298885bc8bcf0ad2b9d3109d2626897aeb5646605b8e4a8320d7",
+      "bytes": 124124
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk_lvs.spice",
+      "sha256": "f6ea1726f60d7f77a136bacf986f88ea42d0e2510bcfea794265348f4a2429a0",
+      "bytes": 21320
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk_pex.spice",
+      "sha256": "b83c4d45593dccd44ff101d091576707c6dd010b28196a1cf224c29a6edbd34c",
+      "bytes": 35992
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h40_pdk_ref.spice",
+      "sha256": "b10e57d5febc67f71e40cb8efeee010b239b6314b74dae0cb6f8cfc14235ec18",
+      "bytes": 1135
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk.mag",
+      "sha256": "b77b67822fb98adde56a8a7756ff0ccb67f3fec11ac8e6203d25770d23a7d3d5",
+      "bytes": 165871
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk.png",
+      "sha256": "33d90a059cf7a899eae75a8723dcbe4f1c2f487990fd4fee0be762d97c8af21b",
+      "bytes": 127281
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk_lvs.spice",
+      "sha256": "0c07dd5f61ebe7b7e2fddb585bea8bc91c971497c1524876733dc541ee80d864",
+      "bytes": 24584
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk_pex.spice",
+      "sha256": "d84df68453cbaff3c847c18f3765d9451ccd5b91d35f72c747d8a7f30cf6fe24",
+      "bytes": 38963
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_div2_biased_h80_pdk_ref.spice",
+      "sha256": "45d2d1e48f7142708809eb8fff5fda2175b4424ab5beee1bcd88a98ab1a1b34c",
+      "bytes": 1135
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk.mag",
+      "sha256": "faec10779f582eeda1ff659fb086c9c7923b710166c2c7aa00c79f2d4dbfbb87",
+      "bytes": 58323
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk.png",
+      "sha256": "1ab1a9a9a50647ef0f528410330e9cb49cc9fbde790ddd2206f30a8920fc38f6",
+      "bytes": 90137
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk_lvs.spice",
+      "sha256": "bbc8032f145bdac5e06a648e0ee53d56b7ed706f2199017de66a3d54a76bbbbd",
+      "bytes": 8781
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk_pex.spice",
+      "sha256": "483975d0b85c3b03e20c770d083079816cdbfad1326cf45a2db7e446a5c52cec",
+      "bytes": 13478
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h40_pdk_ref.spice",
+      "sha256": "f2d4f794cf6d8c4b8635bc3604c4e33ab122d8795e026939b784869d2e760798",
+      "bytes": 643
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk.mag",
+      "sha256": "0d7e99e04238b9c222dc095b947ffcc3bcfb682a77420889749e5f0737d4ab80",
+      "bytes": 67051
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk.png",
+      "sha256": "44850952f339828418d97db456c8f28294689f5fd961b6784fdb9702ccfb53f1",
+      "bytes": 92478
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk_lvs.spice",
+      "sha256": "c35d88ba9bcfa95640a09f6ae0ed5cf35facd8dbb79c3da79fe5b2f3290dbd4c",
+      "bytes": 10397
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk_pex.spice",
+      "sha256": "e5cde41f3e621699d0550b909610e04e8c1c095425f0a9e151904188d3fe7f73",
+      "bytes": 14814
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_h80_pdk_ref.spice",
+      "sha256": "c2712d464b90f17a4f14d93d7874f90cdce69a788ef7399de1ee77c048aee9ba",
+      "bytes": 643
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_pdk.mag",
+      "sha256": "8afccc7eeb033829bf0c24819e64adcf3893068933b16c17ee69f2ad79d58c7c",
+      "bytes": 38154
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_latch_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_latch_pdk_ref.spice",
+      "sha256": "6e06221e6ea6d43a18a01d3a5b1c610a3141b0fd1748874d6b247d1cfe962833",
+      "bytes": 702
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk.mag",
+      "sha256": "ca4651fcf168edebffe110741bfb48f916e2acfd362a5867df608f7d4d973f33",
+      "bytes": 565006
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk.png",
+      "sha256": "311731d4732bf6eca35b04bbe5cd0a7071391af73d90e5db415cb5dfe787b58a",
+      "bytes": 315550
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk_lvs.spice",
+      "sha256": "17f0d1533094de98aa8897fd5ae8eba9616acf5bccb549082ec87149d03dbb99",
+      "bytes": 81328
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk_pex.spice",
+      "sha256": "23841de3b60beea9feabfde0e79f8213e01cde0d6216fdada921cc7adbb9c1f2",
+      "bytes": 144596
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_prescaler8_pdk_ref.spice",
+      "sha256": "1be52177339f457455a1df119b174028b82df942451f456959ac26293e9b7b66",
+      "bytes": 3530
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk.mag",
+      "sha256": "ff5ac4d141520cd2edcd03f65c7fcfa6346aa69f1a64153c1bcfed27432dff29",
+      "bytes": 23819
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk.png",
+      "sha256": "efce74c1efe438f55821ab75c290ac022146829a6fd9e5517fd98ba4427a3e53",
+      "bytes": 82500
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk_lvs.spice",
+      "sha256": "0c3d8e99842a42b54d0d177df9f226aada8ffb1838b7e1c09a47c4692c72f459",
+      "bytes": 2855
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk_pex.spice",
+      "sha256": "75104fb3bb2bc6878812bcef976cd3fc83e9b4b37f474ab8d58201216fba238a",
+      "bytes": 4253
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_cml_tail_bias_pdk_ref.spice",
+      "sha256": "4f269257c2d8f98090db07ab418d36697701151f0438cb458c0f68d4fdd856f5",
+      "bytes": 360
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk.mag",
+      "sha256": "b6ada53cc15c547aca2e41ab650a76a9f1c3259956407c1879c63de6a979a106",
+      "bytes": 25141
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk.png",
+      "sha256": "6ba237202c79315b97970840352fa6909cb87330fae87bc78a1298b58127661e",
+      "bytes": 82207
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk_lvs.spice",
+      "sha256": "893ec7eb03d431849801c87178f97a0171394b7cf21b0d08525c79d98e3e1dd9",
+      "bytes": 2296
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk_pex.spice",
+      "sha256": "83a3c21f789dc299f74df7f3b6492c03b9b2946930869627bc3670a725a2d9d3",
+      "bytes": 3834
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_div_buffer_pdk_ref.spice",
+      "sha256": "d78410a975090b012fac9ca51f3ad7d4bfa6f9427edca20335a7cd8037dab093",
+      "bytes": 373
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.mag",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.mag",
+      "sha256": "edfea480641f81f36e35ca71ad9c129d0eae50644a26fae69f0b46845a03793f",
+      "bytes": 44517
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.png",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk.png",
+      "sha256": "089833883478c8daab23e51faf2e13bba7d02bd0a22584e8c70ef6987705ac0f",
+      "bytes": 74193
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk_lvs.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk_lvs.spice",
+      "sha256": "ae40c2bbbf0f9c5a11a429625b05669e0f18b12f4cf8d4b8bcd40f52cf1023fe",
+      "bytes": 6614
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk_pex.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk_pex.spice",
+      "sha256": "342f573d223a3598272490869eadc32c9760031b9581cb6e97286895c4064ebd",
+      "bytes": 8975
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk_ref.spice",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/pll_frontend_dummy_load_pdk_ref.spice",
+      "sha256": "a96471f252d3a1e71eb5c744d6cce020cecf88100275143970cf4018c1d5947f",
+      "bytes": 448
+    },
+    {
+      "former_path": "analog/pll/divider/layout/variants/pdk/summary.json",
+      "archive": "results/maintenance/divider_retirement/20261120/files/analog/pll/divider/layout/variants/pdk/summary.json",
+      "sha256": "8558930518cf91c2c280670f5efb2bb2f4879bc5ed3c934256d04de0acc43ff4",
+      "bytes": 4675
+    }
+  ]
+}

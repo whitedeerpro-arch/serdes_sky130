@@ -31,7 +31,7 @@ flowchart LR
 | 文件 | 当前职责 |
 |---|---|
 | [cml_prescaler8.spice](../../analog/pll/divider/spice/cml_prescaler8.spice) | 三个现有 CML ÷2 单元，输出 /2、/4、/8 |
-| [cmos_divider_programmable.spice](../../analog/pll/divider/spice/cmos_divider_programmable.spice) | 四位 CMOS 递减/重装计数器、周期脉冲和注册时钟 |
+| `analog/pll/divider/spice/cmos_divider_programmable.spice`（已于 2026-11-20 归档，见 [divider_retirement_20261120.md](divider_retirement_20261120.md)） | 四位 CMOS 递减/重装计数器、周期脉冲和注册时钟 |
 | [cmos_logic.spice](../../analog/common/devices/spice/cmos_logic.spice) | CMOS 门、MUX、XOR、比较器 |
 | [cmos_dff_reset.spice](../../analog/common/devices/spice/cmos_dff_reset.spice) | PFD 和 CMOS 分频器共享的静态复位 DFF/锁存器 |
 | [clock_division.toml](../../config/clock_division.toml) | 当前基准、编码及配置约束 |
@@ -60,7 +60,7 @@ CML 前端尚无确定相位复位，CMOS 复位不能消除其初始相位不�
 
 ### 组合逻辑
 
-[稳态逻辑测试台](../../analog/pll/divider/tb/logic_truth/tb_cmos_next_state_settled_ngspice.cir.in)
+稳态逻辑测试台（原 `analog/pll/divider/tb/logic_truth/tb_cmos_next_state_settled_ngspice.cir.in`，已于 2026-11-20 归档）
 穷举 16 个配置码 ×16 个状态，共 256 个输入向量，均使用实际 MOS 门。
 每个向量保持 4 ns，在切换后 3.5 ns 采样；没有行为逻辑替代被测组合电路。
 检查递减/重装 next-state、零检测和半周期比较，三项错误数均为 **0**，
@@ -73,7 +73,7 @@ DC 探索、超时日志和输入均保留，不能把超时直接解释为电�
 
 ### CMOS 后级动态
 
-[独立测试台](../../analog/pll/divider/tb/functional/tb_cmos_divider_ngspice.cir.in)
+独立测试台（原 `analog/pll/divider/tb/functional/tb_cmos_divider_ngspice.cir.in`，已于 2026-11-20 归档）
 输入 250 MHz、40 ps 边沿，tick 和 clk_out 各 20 fF。
 
 | 配置/条件 | 输出频率，两个端口相同 | tick 占空比 | clk_out 占空比 | CMOS 后级功耗 |

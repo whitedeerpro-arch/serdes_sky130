@@ -10,7 +10,7 @@
 
 ## Bias、LDO 与监控
 - **带隙与偏置**：[bias.md](bias.md) · [bias_cap_review.md](bias_cap_review.md) · [physical_reference_card.md](physical_reference_card.md) · [monitor.md](monitor.md)
-- **LDO（HV18 r4 与减容候选）**：[ldo_r4.md](ldo_r4.md) · [ldo_smallcap.md](ldo_smallcap.md) · [ldo_cap_area.md](ldo_cap_area.md) · [ldo.md](ldo.md)
+- **LDO（HV18 r4、减容与 v2 重构候选）**：[ldo_r4.md](ldo_r4.md) · [ldo_smallcap.md](ldo_smallcap.md) · [ldo_cap_area.md](ldo_cap_area.md) · [ldo_v2.md](ldo_v2.md) · [ldo.md](ldo.md)
 
 ## TX（字入口、时钟分发、串化与线驱动）
 - **整链与主入口**：[tx_parallel_serializer.md](tx_parallel_serializer.md) · [tx_final_retime.md](tx_final_retime.md) · [tx_clock_distribution.md](tx_clock_distribution.md) · [tx_serializer.md](tx_serializer.md) · [tx_output_driver.md](tx_output_driver.md)

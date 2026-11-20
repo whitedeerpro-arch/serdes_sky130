@@ -1,0 +1,94 @@
+* 2-stack synchronous 3-bit CML prescaler (divide-by-2/4/8) with replica clock-bias servo,
+* 2-stage clock pre-shaping/AC-coupled driver, and matched 2-stack CML output buffers.
+* Drop-in pin-compatible with pll_cml_prescaler8:
+*   clkp clkn q2p q2n q4p q4n q8p q8n vbias vdd vss
+* All resistors use calibrated SKY130 PDK fixed-width cards (2p85 for <= 2 kOhm, 1p41 for > 2 kOhm).
+
+.subckt sync2_res_lo a b params: rval=500
+Xr a b 0 sky130_fd_pr__res_high_po_2p85 l={((rval)-137.6)/111.8}
+.ends sync2_res_lo
+
+.subckt sync2_res_hi a b params: rval=4000
+Xr a b 0 sky130_fd_pr__res_high_po_1p41 l={((rval)-256.0)/230.04}
+.ends sync2_res_hi
+
+.subckt sync2_buf inp inn outp outn vbias vdd vss params: wn=24 nfin=4 wt=12 nft=4 rload=550
+XRp vdd outn sync2_res_lo rval={rload}
+XRn vdd outp sync2_res_lo rval={rload}
+Xmp outn inp tail vss serdes_nfet_lvt w={wn} nf={nfin}
+Xmn outp inn tail vss serdes_nfet_lvt w={wn} nf={nfin}
+Xtail tail vbias vss vss serdes_nfet w={wt} l=0.5 nf={nft}
+.ends sync2_buf
+
+.subckt sync2_latch dp dn qp qn ct ch vdd vss params: wdata=16 whold=14 wclock=20 rload=480
+XRp vdd qp sync2_res_lo rval={rload}
+XRn vdd qn sync2_res_lo rval={rload}
+Xdp qn dp track vss serdes_nfet_lvt w={wdata} nf=4
+Xdn qp dn track vss serdes_nfet_lvt w={wdata} nf=4
+Xhp qn qp hold vss serdes_nfet_lvt w={whold} nf=4
+Xhn qp qn hold vss serdes_nfet_lvt w={whold} nf=4
+Xct track ct vss vss serdes_nfet_lvt w={wclock} nf=4
+Xch hold ch vss vss serdes_nfet_lvt w={wclock} nf=4
+.ends sync2_latch
+
+.subckt sync2_dff dp dn qp qn ckp ckn vdd vss params: wdata=16 whold=14 wclock=20 rload=480
+Xm dp dn mp mn ckp ckn vdd vss sync2_latch wdata={wdata} whold={whold} wclock={wclock} rload={rload}
+Xs mp mn qp qn ckn ckp vdd vss sync2_latch wdata={wdata} whold={whold} wclock={wclock} rload={rload}
+* Small deterministic MOS-cap asymmetry breaks noiseless transient DC symmetry without external Ikick
+Xseed vss mp vss vss serdes_nfet w=1.0 l=0.5 nf=1
+.ends sync2_dff
+
+.subckt sync2_mux2 ap an bp bn sp sn qp qn vbias vdd vss params: wdata=12 wselect=24 wtail=6 rload=1100
+XRp vdd qp sync2_res_lo rval={rload}
+XRn vdd qn sync2_res_lo rval={rload}
+Xap qn ap ta vss serdes_nfet_lvt w={wdata} nf=4
+Xan qp an ta vss serdes_nfet_lvt w={wdata} nf=4
+Xbp qn bp tb vss serdes_nfet_lvt w={wdata} nf=4
+Xbn qp bn tb vss serdes_nfet_lvt w={wdata} nf=4
+Xsa ta sn tail vss serdes_nfet_lvt w={wselect} nf=4
+Xsb tb sp tail vss serdes_nfet_lvt w={wselect} nf=4
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=0.5 nf=2
+.ends sync2_mux2
+
+.subckt sync2_ck_replica_bias vbias vbias_ck vdd vss params: wdata=16 wclock=20 rload=480
+* Half-scale latch replica regulated to Vref = VDD - Iref * XRref (~95-110 mV) via resistive level-shift + 8-T OTA
+Xref_sink vref vbias vss vss serdes_nfet w=5 l=0.5 nf=1
+XRref vdd vref sync2_res_lo rval=580
+XRrep vdd rep_out sync2_res_lo rval={2*rload}
+Xrep_d rep_out vdd rep_track vss serdes_nfet_lvt w={wdata/2} nf=2
+Xrep_c rep_track vbias_ck vss vss serdes_nfet_lvt w={wclock/2} nf=2
+Xls_p in_p vbias vss vss serdes_nfet w=5 l=2.0 nf=2
+XRls_p rep_out in_p sync2_res_hi rval=12000
+Xls_n in_n vbias vss vss serdes_nfet w=5 l=2.0 nf=2
+XRls_n vref in_n sync2_res_hi rval=12000
+Xota_t ota_t vbias vss vss serdes_nfet w=5 l=0.5 nf=1
+Xota_dp np in_p ota_t vss serdes_nfet_lvt w=12 l=0.5 nf=4
+Xota_dn nn in_n ota_t vss serdes_nfet_lvt w=12 l=0.5 nf=4
+Xmp1 np np vdd vdd serdes_pfet w=24 l=0.5 nf=4
+Xmp3 vbias_ck np vdd vdd serdes_pfet w=24 l=0.5 nf=4
+Xmp2 nn nn vdd vdd serdes_pfet w=24 l=0.5 nf=4
+Xmp4 nm nn vdd vdd serdes_pfet w=24 l=0.5 nf=4
+Xmn1 nm nm vss vss serdes_nfet w=8 l=0.5 nf=2
+Xmn2 vbias_ck nm vss vss serdes_nfet w=8 l=0.5 nf=2
+Xcomp vbias_ck vss sky130_fd_pr__cap_mim_m3_1 w=20 l=20
+.ends sync2_ck_replica_bias
+
+.subckt pll_sync_prescaler8_2stack clkp clkn q2p q2n q4p q4n q8p q8n vbias vdd vss
+Xrep vbias vbias_ck vdd vss sync2_ck_replica_bias
+Xckpre clkp clkn ck_mid_p ck_mid_n vbias vdd vss sync2_buf wn=20 nfin=4 wt=12 nft=4 rload=850
+Xckdrv ck_mid_p ck_mid_n ck_pre_p ck_pre_n vbias vdd vss sync2_buf wn=32 nfin=4 wt=24 nft=4 rload=550
+Xccp ck_pre_p ckp sky130_fd_pr__cap_mim_m3_1 w=15 l=15
+Xccn ck_pre_n ckn sky130_fd_pr__cap_mim_m3_1 w=15 l=15
+Xrbp ckp vbias_ck sync2_res_hi rval=4000
+Xrbn ckn vbias_ck sync2_res_hi rval=4000
+* 3-bit synchronous binary counter: b0' = ~b0, b1' = b0 ? ~b1 : b1, b2' = b0 ? (b1 ? ~b2 : b2) : b2
+Xff0 b0n b0p b0p b0n ckp ckn vdd vss sync2_dff
+Xx1 b1p b1n b1n b1p b0p b0n d1p d1n vbias vdd vss sync2_mux2
+Xff1 d1p d1n b1p b1n ckp ckn vdd vss sync2_dff
+Xt2 b2p b2n b2n b2p b1p b1n t2p t2n vbias vdd vss sync2_mux2
+Xx2 b2p b2n t2p t2n b0p b0n d2p d2n vbias vdd vss sync2_mux2
+Xff2 d2p d2n b2p b2n ckp ckn vdd vss sync2_dff
+Xq2buf b0p b0n q2p q2n vbias vdd vss sync2_buf wn=24 nfin=4 wt=12 nft=4 rload=550
+Xq4buf b1p b1n q4p q4n vbias vdd vss sync2_buf wn=24 nfin=4 wt=12 nft=4 rload=550
+Xq8buf b2p b2n q8p q8n vbias vdd vss sync2_buf wn=24 nfin=4 wt=12 nft=4 rload=550
+.ends pll_sync_prescaler8_2stack

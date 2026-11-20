@@ -9,7 +9,7 @@
 - **供电与纹波预算**：[pll_ripple_budget.md](pll_ripple_budget.md) · [pll_supply_options.md](pll_supply_options.md) · [pll_supply_variants.md](pll_supply_variants.md) · [pll_timing_supply_review.md](pll_timing_supply_review.md)
 
 ## Bias、LDO 与监控
-- **带隙与偏置**：[bias.md](bias.md) · [bias_cap_review.md](bias_cap_review.md) · [physical_reference_card.md](physical_reference_card.md) · [monitor.md](monitor.md)
+- **带隙与偏置**：[bias.md](bias.md) · [bias_cap_review.md](bias_cap_review.md) · [bias_v2.md](bias_v2.md)（单级 FC-OTA + 真 CMOS `ref_pbuf` + 集成 `bias_top` 候选）· [physical_reference_card.md](physical_reference_card.md) · [monitor.md](monitor.md)
 - **LDO（HV18 r4、减容与 v2 重构候选）**：[ldo_r4.md](ldo_r4.md) · [ldo_smallcap.md](ldo_smallcap.md) · [ldo_cap_area.md](ldo_cap_area.md) · [ldo_v2.md](ldo_v2.md) · [ldo.md](ldo.md)
 
 ## TX（字入口、时钟分发、串化与线驱动）

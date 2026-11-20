@@ -1,0 +1,375 @@
+* BIAS v2: Folded-Cascode Bandgap, Constant-Swing V->I Reference, VCM/PBUF Buffers,
+* Distribution Copies, and Integrated Bias Top Macro (SKY130, 1.8 V, 100% real transistors).
+*
+* Architectural upgrades over v1 (bandgap.spice / bias_dist.spice):
+*   1. Single-stage folded-cascode core OTA (serdes_bg_fcota_v2) replaces 2-stage serdes_bg_amp:
+*      - Eliminates 6 pF Miller cap Cc + 20 kOhm Rz (~3,500 um^2 saved).
+*      - Eliminates 2nd-stage Vgs-vs-da VDD tracking bug -> DC line reg < 10 mV/V (-40 dB) across PVT.
+*      - Uses regular NMOS (A_VT=5.45) for both input pair and active mirror load -> lower offset.
+*   2. Head-R-calibrated multi-segment high_po resistors (R = 378.24 + 317.22*L at w=1 um):
+*      - Every segment explicitly instantiated so schematic = extracted layout to 0.00%.
+*      - R1 and R2 share near-identical ~38-40 um unit bar length so contact-head TC cancels.
+*   3. Stacked MIM1+MIM2 capacitors (cap_mim_m3_1 + cap_mim_m3_2 in parallel, ~4.14 fF/um^2):
+*      - Cvbg = 6 pF (3 stacked sites), Cvgi = 2 pF (1 stacked site), CML Cdec = 5 pF (2 stacked sites).
+*   4. Zero behavioral B-sources:
+*      - r_ref 5-bit trim gates (g4..g0) are physical digital ports; switch L=0.18 um (clear of FS L=0.15 bin).
+*      - serdes_ref_pbuf_v2 uses a real 4-to-16 static CMOS decoder (c3..c0) + 16-tap string + 16 tgates.
+*   5. Integrated serdes_bias_top_v2 keeps high-Z vgi locked internally with unified pcopy bank.
+
+* -----------------------------------------------------------------------------
+* Stacked MIM1+MIM2 building blocks (matching build_stacked_mim.py / layout)
+* -----------------------------------------------------------------------------
+.subckt serdes_mim_stack_2p_v2 a b
+Xm1 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+Xm2 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+.ends serdes_mim_stack_2p_v2
+
+.subckt serdes_mim_stack_6p_v2 a b
+Xs0 a b serdes_mim_stack_2p_v2
+Xs1 a b serdes_mim_stack_2p_v2
+Xs2 a b serdes_mim_stack_2p_v2
+.ends serdes_mim_stack_6p_v2
+
+.subckt serdes_mim_stack_5p_v2 a b
+* 2 stacked sites of 24.8 x 24.8 um = 2 * (1.25 pF + 1.25 pF) = 5.00 pF (<=1,800 um^2 cell)
+Xm1_0 a b sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xm2_0 b a sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xm1_1 a b sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xm2_1 b a sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+.ends serdes_mim_stack_5p_v2
+
+* -----------------------------------------------------------------------------
+* Static CMOS primitives (L=0.18 um to avoid SKY130 FS L=0.15 Pclm<0 bin)
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_inv_v2 a y vdd vss
+Xn y a vss vss serdes_nfet w=1 l=0.18
+Xp y a vdd vdd serdes_pfet w=2 l=0.18
+.ends serdes_bias_inv_v2
+
+.subckt serdes_bias_nand2_v2 a b y vdd vss
+Xna y a mid vss serdes_nfet w=2 l=0.18
+Xnb mid b vss vss serdes_nfet w=2 l=0.18
+Xpa y a vdd vdd serdes_pfet w=2 l=0.18
+Xpb y b vdd vdd serdes_pfet w=2 l=0.18
+.ends serdes_bias_nand2_v2
+
+.subckt serdes_bias_nor2_v2 a b y vdd vss
+Xna y a vss vss serdes_nfet w=1 l=0.18
+Xnb y b vss vss serdes_nfet w=1 l=0.18
+Xpa y a mid vdd serdes_pfet w=4 l=0.18
+Xpb mid b vdd vdd serdes_pfet w=4 l=0.18
+.ends serdes_bias_nor2_v2
+
+.subckt serdes_bias_tgate_v2 a b en en_b vdd vss
+Xn a en b vss serdes_nfet w=1 l=0.18
+Xp a en_b b vdd serdes_pfet w=2 l=0.18
+.ends serdes_bias_tgate_v2
+
+* -----------------------------------------------------------------------------
+* Core Error Amplifier: Single-Stage Wide-Swing Folded-Cascode OTA
+* Polarity: out = +A * (inp - inn)
+*   inp = tb (diode side -> Xb -> fb -> Xpca -> da)
+*   inn = ta (output side -> Xa -> fa -> Xpcb -> out)
+* Dominant pole is the core PMOS gate capacitance C_vg (to VDD) -> no Cc/Rz!
+* -----------------------------------------------------------------------------
+.subckt serdes_bg_fcota_v2 inp inn out vbn vdd vss
++ params: wt=6 lt=4 win=24 lin=4 wf=48 lf=8 wpc=48 lpc=2.5 wnm=16 lnm=8 wnc=16 lnc=4
+* Tail current source (1.0 x I_core, matched to Xbd w=6 l=4)
+Xt tail vbn vss vss serdes_nfet w={wt} l={lt} nf=2
+* Regular NMOS input differential pair (A_VT = 5.45 mV*um)
+Xb fb inp tail vss serdes_nfet w={win} l={lin} nf=4
+Xa fa inn tail vss serdes_nfet w={win} l={lin} nf=4
+* Internal bias legs (3 x 0.5 I_core):
+* 1) vbp_src: biases folding PMOS sources Xfa/Xfb (1.0 x I_core each)
+Xnbp vbp_src vbn vss vss serdes_nfet w={wt/2} l={lt} nf=1
+Xpb vbp_src vbp_src vdd vdd serdes_pfet_lvt w={wf/2} l={lf} nf=2
+* 2) vbp_c: wide-swing PMOS cascode bias (keeps both Xfa/Xfb and Xpca/Xpcb in sat at FS 85C)
+Xnbpc vbp_c vbn vss vss serdes_nfet w={wt/2} l={lt} nf=1
+Xpbc vbp_c vbp_c vdd vdd serdes_pfet_lvt w=3 l=4 nf=1
+* 3) vbn_c: wide-swing NMOS cascode bias (keeps Xna/Xnb Vds ~ 0.25 V across PVT)
+Xpbnc vbn_c vbp_src vdd vdd serdes_pfet_lvt w={wf/2} l={lf} nf=2
+Xnbc vbn_c vbn_c vss vss serdes_nfet w=1.5 l=10 nf=1
+* Folding PMOS current sources (1.0 x I_core each)
+Xfb fb vbp_src vdd vdd serdes_pfet_lvt w={wf} l={lf} nf=4
+Xfa fa vbp_src vdd vdd serdes_pfet_lvt w={wf} l={lf} nf=4
+* PMOS cascodes (0.5 x I_core nominal each)
+Xpca da vbp_c fb vdd serdes_pfet_lvt w={wpc} l={lpc} nf=4
+Xpcb out vbp_c fa vdd serdes_pfet_lvt w={wpc} l={lpc} nf=4
+* Wide-swing NMOS cascode mirror load (0.5 x I_core nominal each, A_VT = 5.45)
+Xnca da vbn_c na vss serdes_nfet w={wnc} l={lnc} nf=4
+Xncb out vbn_c nb_n vss serdes_nfet w={wnc} l={lnc} nf=4
+Xna na da vss vss serdes_nfet w={wnm} l={lnm} nf=4
+Xnb nb_n da vss vss serdes_nfet w={wnm} l={lnm} nf=4
+.ends serdes_bg_fcota_v2
+
+* -----------------------------------------------------------------------------
+* V->I Error Amplifier: Single-Stage OTA
+* Polarity: out = +A * (inp - inn); inp = s (diode side), inn = vbg (output side)
+* Tail ~ 1/6 of I_core (~0.7 uA) so vgi (Cvgi + pcopy gates) is the dominant pole.
+* -----------------------------------------------------------------------------
+.subckt serdes_bg_ota_v2 inp inn out vbn vdd vss
++ params: win=24 lin=4 wl=24 ll=8 wt=1 lt=6
+Xt tail vbn vss vss serdes_nfet w={wt} l={lt} nf=1
+Xa da inp tail vss serdes_nfet w={win} l={lin} nf=4
+Xb out inn tail vss serdes_nfet w={win} l={lin} nf=4
+Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll} nf=4
+Xlb out da vdd vdd serdes_pfet_lvt w={wl} l={ll} nf=4
+.ends serdes_bg_ota_v2
+
+* -----------------------------------------------------------------------------
+* Core Bandgap + Constant-Swing V->I Reference (100% physical, 0 B-sources)
+* Nominal TT 1.8V 27C (trim code 15: g4=0, g3=g2=g1=g0=1):
+*   vbg ~ 1.236 V, Iref = vbg / r_ref ~ 10.05 uA per 4-finger copy.
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_ref_v2 vbg i0 i1 i2 i3 vgi g4 g3 g2 g1 g0 vdd vss
++ params: wp=56 lp=12 n=8 wv=32 lv=4 nfv=4 l_r1=39.790 l_r2=37.650 l_rs=39.200 l_rref=33.900
+* Core PMOS current sources (W=48, L=12, nf=4 -> 12x12 um fingers, WL=576 um^2)
+Xm1 ta vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm2 tb vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm3 vbg vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm4 nb vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm5 nb2 vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+* Level-shift resistors Xrsa, Xrsb (5 x 12.81 kOhm = 64.06 kOhm each, exact height match to R1/R2)
+Xrsa0 ta rsa1 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa1 rsa1 rsa2 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa2 rsa2 rsa3 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa3 rsa3 rsa4 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa4 rsa4 a vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb0 tb rsb1 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb1 rsb1 rsb2 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb2 rsb2 rsb3 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb3 rsb3 rsb4 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb4 rsb4 b vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+* PTAT + VBE PNP core (1 : 8 : 1)
+Xq1 vss vss a sky130_fd_pr__pnp_05v5_W3p40L3p40
+Xr1 b c vss sky130_fd_pr__res_high_po w=1 l={l_r1}
+Xq2 vss vss c sky130_fd_pr__pnp_05v5_W3p40L3p40 m={n}
+* R2: 10 calibrated unit bars matching R1 bar geometry (~122.6 kOhm total)
+Xr2_0 vbg r2_1 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_1 r2_1 r2_2 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_2 r2_2 r2_3 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_3 r2_3 r2_4 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_4 r2_4 r2_5 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_5 r2_5 r2_6 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_6 r2_6 r2_7 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_7 r2_7 r2_8 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_8 r2_8 r2_9 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_9 r2_9 d vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xq3 vss vss d sky130_fd_pr__pnp_05v5_W3p40L3p40
+* Core bias diode + Folded-Cascode OTA
+Xbd nb nb vss vss serdes_nfet w=6 l=4 nf=2
+Xamp tb ta vg nb vdd vss serdes_bg_fcota_v2
+* Startup circuit (pulls vg down while nb is low; fully off in equilibrium)
+Xsp st vss vdd vdd serdes_pfet w=0.42 l=20
+Xsn st nb vss vss serdes_nfet w=2 l=1
+Xsu vg st vss vss serdes_nfet w=1 l=1
+* Vbg output decoupling: 6 pF stacked MIM1+MIM2 (3 sites)
+Xcvbg vbg vss serdes_mim_stack_6p_v2
+* V->I reference loop
+Xbd2 nb2 nb2 vss vss serdes_nfet w=6 l=4 nf=2
+Xamp2 s vbg vgi nb2 vdd vss serdes_bg_ota_v2
+Xcvgi vgi vdd serdes_mim_stack_2p_v2
+* Slew helper for fast zero-start power-up (LVT nfet stays active higher up s; off when s = vbg)
+Xk vgi vbg s vss serdes_nfet_lvt w=2 l=4
+Xmv s vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+* Fixed r_ref (10 x 11.092 kOhm = 110.92 kOhm, calibrated w=1)
+Xrref0 s rr1 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref1 rr1 rr2 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref2 rr2 rr3 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref3 rr3 rr4 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref4 rr4 rr5 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref5 rr5 rr6 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref6 rr6 rr7 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref7 rr7 rr8 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref8 rr8 rr9 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref9 rr9 rt5 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+* 5-bit binary trim ladder (LSB = 780 Ohm, head-R calibrated) + L=0.18 NMOS bypass switches
+Xrt4 rt5 rt4 vss sky130_fd_pr__res_high_po w=1 l=38.150
+Xrt3 rt4 rt3 vss sky130_fd_pr__res_high_po w=1 l=18.480
+Xrt2 rt3 rt2 vss sky130_fd_pr__res_high_po w=1 l=8.645
+Xrt1 rt2 rt1 vss sky130_fd_pr__res_high_po w=1 l=3.725
+Xrt0 rt1 vss vss sky130_fd_pr__res_high_po w=1 l=1.265
+Xs4 rt5 g4 rt4 vss serdes_nfet w=20 l=0.18 nf=4
+Xs3 rt4 g3 rt3 vss serdes_nfet w=20 l=0.18 nf=4
+Xs2 rt3 g2 rt2 vss serdes_nfet w=20 l=0.18 nf=4
+Xs1 rt2 g1 rt1 vss serdes_nfet w=20 l=0.18 nf=4
+Xs0 rt1 g0 vss vss serdes_nfet w=20 l=0.18 nf=4
+* 4 matched 10 uA output copies (unit finger 6/4 x 4)
+Xo0 i0 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+Xo1 i1 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+Xo2 i2 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+Xo3 i3 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+.ends serdes_bias_ref_v2
+
+* -----------------------------------------------------------------------------
+* Distribution PMOS current copy (n fingers of 8/4 pfet_lvt -> 2.5 uA/finger)
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_pcopy_v2 out vgi vdd params: n=4
+Xp out vgi vdd vdd serdes_pfet_lvt w={8*n} l=4 nf={n}
+.ends serdes_bias_pcopy_v2
+
+* -----------------------------------------------------------------------------
+* Local module-side diode cells
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_cml_v2 iin vss
+Xd iin iin vss vss serdes_nfet w=5 l=0.5
+Xcdec iin vss serdes_mim_stack_5p_v2
+.ends serdes_bias_cml_v2
+
+.subckt serdes_bias_ctle_v2 iin vss
+Xd iin iin vss vss serdes_nfet_lvt w=8 l=0.5 nf=4
+.ends serdes_bias_ctle_v2
+
+.subckt serdes_bias_cp_v2 vbn vbp vcp vss
+Xdn vbn vbn vss vss serdes_nfet w=5 l=1 nf=2
+Xmn vbp vbn vss vss serdes_nfet w=5 l=1 nf=2
+Xdp vbp vbp vcp vcp serdes_pfet w=20 l=1 nf=4
+.ends serdes_bias_cp_v2
+
+* -----------------------------------------------------------------------------
+* RX Termination Common-Mode Reference Buffer (vcm ~ 1.05 V)
+* -----------------------------------------------------------------------------
+.subckt serdes_ref_vbuf_v2 iin ibias out vdd vss
++ params: l_rv=40.185 win=24 lin=4 wl=32 ll=8
+* 8 calibrated segments of 13.125 kOhm = 105.0 kOhm -> 1.050 V at 10.0 uA
+Xr0 iin rv1 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr1 rv1 rv2 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr2 rv2 rv3 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr3 rv3 rv4 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr4 rv4 rv5 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr5 rv5 rv6 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr6 rv6 rv7 vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+Xr7 rv7 vss vss sky130_fd_pr__res_high_po w=1 l={l_rv}
+* Unity-gain single-stage OTA follower
+Xbd ibias ibias vss vss serdes_nfet w=4 l=4 nf=2
+Xt tail ibias vss vss serdes_nfet w=4 l=4 nf=2
+Xa da iin tail vss serdes_nfet w={win} l={lin} nf=4
+Xb out out tail vss serdes_nfet w={win} l={lin} nf=4
+Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll} nf=4
+Xlb out da vdd vdd serdes_pfet_lvt w={wl} l={ll} nf=4
+.ends serdes_ref_vbuf_v2
+
+* -----------------------------------------------------------------------------
+* PLL LF Precharge Reference Buffer (100% real transistors, 4-to-16 CMOS decoder)
+* Codes 0..15 (c3 MSB .. c0 LSB) select 0.95 V .. 1.35 V in 26.7 mV steps.
+* Switched 300 uA LVT-input OTA follower (en switches tail only -> zero kick on vgi).
+* -----------------------------------------------------------------------------
+.subckt serdes_ref_pbuf_v2 iin ibias out en c0 c1 c2 c3 vdd vss
++ params: l_r0=36.550 l_step=7.360 win=24 lin=1 wl=96 ll=1 ntail=6
+* Bottom 95.0 kOhm (8 calibrated bars of 11.875 kOhm)
+Xr0_0 t0 p0_1 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_1 p0_1 p0_2 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_2 p0_2 p0_3 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_3 p0_3 p0_4 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_4 p0_4 p0_5 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_5 p0_5 p0_6 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_6 p0_6 p0_7 vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+Xr0_7 p0_7 vss vss sky130_fd_pr__res_high_po w=1 l={l_r0}
+* 15 equal tap segments (2.667 kOhm each -> 26.67 mV/step at 10 uA)
+Xr1 t1 t0 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr2 t2 t1 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr3 t3 t2 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr4 t4 t3 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr5 t5 t4 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr6 t6 t5 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr7 t7 t6 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr8 t8 t7 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr9 t9 t8 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr10 t10 t9 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr11 t11 t10 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr12 t12 t11 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr13 t13 t12 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr14 t14 t13 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+Xr15 iin t14 vss sky130_fd_pr__res_high_po w=1 l={l_step}
+* Real 4-to-16 static CMOS decoder (pre-decode 2x2->4 NAND2 + 16 NOR2 + 16 INV)
+Xic0 c0 c0b vdd vss serdes_bias_inv_v2
+Xic1 c1 c1b vdd vss serdes_bias_inv_v2
+Xic2 c2 c2b vdd vss serdes_bias_inv_v2
+Xic3 c3 c3b vdd vss serdes_bias_inv_v2
+Xna0 c1b c0b a0n vdd vss serdes_bias_nand2_v2
+Xna1 c1b c0  a1n vdd vss serdes_bias_nand2_v2
+Xna2 c1  c0b a2n vdd vss serdes_bias_nand2_v2
+Xna3 c1  c0  a3n vdd vss serdes_bias_nand2_v2
+Xnb0 c3b c2b b0n vdd vss serdes_bias_nand2_v2
+Xnb1 c3b c2  b1n vdd vss serdes_bias_nand2_v2
+Xnb2 c3  c2b b2n vdd vss serdes_bias_nand2_v2
+Xnb3 c3  c2  b3n vdd vss serdes_bias_nand2_v2
+Xno0  b0n a0n s0  vdd vss serdes_bias_nor2_v2
+Xno1  b0n a1n s1  vdd vss serdes_bias_nor2_v2
+Xno2  b0n a2n s2  vdd vss serdes_bias_nor2_v2
+Xno3  b0n a3n s3  vdd vss serdes_bias_nor2_v2
+Xno4  b1n a0n s4  vdd vss serdes_bias_nor2_v2
+Xno5  b1n a1n s5  vdd vss serdes_bias_nor2_v2
+Xno6  b1n a2n s6  vdd vss serdes_bias_nor2_v2
+Xno7  b1n a3n s7  vdd vss serdes_bias_nor2_v2
+Xno8  b2n a0n s8  vdd vss serdes_bias_nor2_v2
+Xno9  b2n a1n s9  vdd vss serdes_bias_nor2_v2
+Xno10 b2n a2n s10 vdd vss serdes_bias_nor2_v2
+Xno11 b2n a3n s11 vdd vss serdes_bias_nor2_v2
+Xno12 b3n a0n s12 vdd vss serdes_bias_nor2_v2
+Xno13 b3n a1n s13 vdd vss serdes_bias_nor2_v2
+Xno14 b3n a2n s14 vdd vss serdes_bias_nor2_v2
+Xno15 b3n a3n s15 vdd vss serdes_bias_nor2_v2
+Xi0  s0  sb0  vdd vss serdes_bias_inv_v2
+Xi1  s1  sb1  vdd vss serdes_bias_inv_v2
+Xi2  s2  sb2  vdd vss serdes_bias_inv_v2
+Xi3  s3  sb3  vdd vss serdes_bias_inv_v2
+Xi4  s4  sb4  vdd vss serdes_bias_inv_v2
+Xi5  s5  sb5  vdd vss serdes_bias_inv_v2
+Xi6  s6  sb6  vdd vss serdes_bias_inv_v2
+Xi7  s7  sb7  vdd vss serdes_bias_inv_v2
+Xi8  s8  sb8  vdd vss serdes_bias_inv_v2
+Xi9  s9  sb9  vdd vss serdes_bias_inv_v2
+Xi10 s10 sb10 vdd vss serdes_bias_inv_v2
+Xi11 s11 sb11 vdd vss serdes_bias_inv_v2
+Xi12 s12 sb12 vdd vss serdes_bias_inv_v2
+Xi13 s13 sb13 vdd vss serdes_bias_inv_v2
+Xi14 s14 sb14 vdd vss serdes_bias_inv_v2
+Xi15 s15 sb15 vdd vss serdes_bias_inv_v2
+* 16:1 CMOS transmission-gate mux (tap 15 connects directly to iin)
+Xg0  t0  tap s0  sb0  vdd vss serdes_bias_tgate_v2
+Xg1  t1  tap s1  sb1  vdd vss serdes_bias_tgate_v2
+Xg2  t2  tap s2  sb2  vdd vss serdes_bias_tgate_v2
+Xg3  t3  tap s3  sb3  vdd vss serdes_bias_tgate_v2
+Xg4  t4  tap s4  sb4  vdd vss serdes_bias_tgate_v2
+Xg5  t5  tap s5  sb5  vdd vss serdes_bias_tgate_v2
+Xg6  t6  tap s6  sb6  vdd vss serdes_bias_tgate_v2
+Xg7  t7  tap s7  sb7  vdd vss serdes_bias_tgate_v2
+Xg8  t8  tap s8  sb8  vdd vss serdes_bias_tgate_v2
+Xg9  t9  tap s9  sb9  vdd vss serdes_bias_tgate_v2
+Xg10 t10 tap s10 sb10 vdd vss serdes_bias_tgate_v2
+Xg11 t11 tap s11 sb11 vdd vss serdes_bias_tgate_v2
+Xg12 t12 tap s12 sb12 vdd vss serdes_bias_tgate_v2
+Xg13 t13 tap s13 sb13 vdd vss serdes_bias_tgate_v2
+Xg14 t14 tap s14 sb14 vdd vss serdes_bias_tgate_v2
+Xg15 iin tap s15 sb15 vdd vss serdes_bias_tgate_v2
+* Switched 300 uA LVT-input OTA follower
+Xbd ibias ibias vss vss serdes_nfet w=1 l=1 nf=1
+Xt tail ibias ts vss serdes_nfet w={5*ntail} l=1 nf={ntail}
+Xst ts en vss vss serdes_nfet w={5*ntail} l=0.18 nf={ntail}
+Xa da tap tail vss serdes_nfet_lvt w={win} l={lin} nf=4
+Xb out out tail vss serdes_nfet_lvt w={win} l={lin} nf=4
+Xla da da vdd vdd serdes_pfet_lvt w={wl} l={ll} nf=16
+Xlb out da vdd vdd serdes_pfet_lvt w={wl} l={ll} nf=16
+.ends serdes_ref_pbuf_v2
+
+* -----------------------------------------------------------------------------
+* Integrated Top-Level Bias Macro (high-Z vgi stays locked internally!)
+* Ports:
+*   vbg, vcm, pref           : voltage references
+*   icml, ictle, icp         : module bias currents (212.5 uA, 50 uA, 50 uA)
+*   i_ldo0, i_ldo1           : auxiliary 10 uA current copies (LDO / test)
+*   g4..g0                   : 5-bit binary r_ref trim (nominal 01111 = 15)
+*   c3..c0, en_pbuf          : 4-bit LF precharge code + enable
+*   vdd, vss                 : 1.8 V supply rails
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_top_v2 vbg vcm pref icml ictle icp i_ldo0 i_ldo1 g4 g3 g2 g1 g0 c3 c2 c1 c0 en_pbuf vdd vss
+Xref vbg iv_in iv_b ip_in ip_b vgi g4 g3 g2 g1 g0 vdd vss serdes_bias_ref_v2
+Xvbuf iv_in iv_b vcm vdd vss serdes_ref_vbuf_v2
+Xpbuf ip_in ip_b pref en_pbuf c0 c1 c2 c3 vdd vss serdes_ref_pbuf_v2
+Xpc_cml  icml   vgi vdd serdes_bias_pcopy_v2 n=85
+Xpc_ctle ictle  vgi vdd serdes_bias_pcopy_v2 n=20
+Xpc_cp   icp    vgi vdd serdes_bias_pcopy_v2 n=20
+Xpc_ldo0 i_ldo0 vgi vdd serdes_bias_pcopy_v2 n=4
+Xpc_ldo1 i_ldo1 vgi vdd serdes_bias_pcopy_v2 n=4
+.ends serdes_bias_top_v2

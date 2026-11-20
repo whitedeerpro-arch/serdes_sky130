@@ -1,0 +1,27 @@
+* NGSPICE file created from serdes_bias_cp_v2_pdk.ext - technology: sky130A
+
+.subckt serdes_bias_cp_v2_pdk vbn vbp vcp vss
+X0 vcp vbp vbp vcp sky130_fd_pr__pfet_01v8 ad=0.725 pd=5.29 as=0.725 ps=5.29 w=5 l=1
+X1 vbn vbn vss.t3 vss.t0 sky130_fd_pr__nfet_01v8 ad=0.3625 pd=2.79 as=0.3625 ps=2.79 w=2.5 l=1
+X2 vcp vcp vcp vcp sky130_fd_pr__pfet_01v8 ad=1.45 pd=10.58 as=7.25 ps=52.9 w=5 l=1
+X3 vbp vbp vcp vcp sky130_fd_pr__pfet_01v8 ad=0.725 pd=5.29 as=0.725 ps=5.29 w=5 l=1
+X4 vbp vbn vss vss.t0 sky130_fd_pr__nfet_01v8 ad=0.3625 pd=2.79 as=0.3625 ps=2.79 w=2.5 l=1
+X5 vss.t3 vbn vbp vss.t0 sky130_fd_pr__nfet_01v8 ad=0.3625 pd=2.79 as=0.3625 ps=2.79 w=2.5 l=1
+X6 vbn vss vss vss.t0 sky130_fd_pr__nfet_01v8 ad=0.3625 pd=2.79 as=0.725 ps=5.58 w=2.5 l=1
+X7 vss vbn vbn vss.t0 sky130_fd_pr__nfet_01v8 ad=0.3625 pd=2.79 as=0.3625 ps=2.79 w=2.5 l=1
+X8 vcp vbp vbp vcp sky130_fd_pr__pfet_01v8 ad=0.725 pd=5.29 as=0.725 ps=5.29 w=5 l=1
+X9 vcp vcp vcp vcp sky130_fd_pr__pfet_01v8 ad=0.725 pd=5.29 as=0 ps=0 w=5 l=1
+X10 vbp vbp vcp vcp sky130_fd_pr__pfet_01v8 ad=0.725 pd=5.29 as=0.725 ps=5.29 w=5 l=1
+X11 vss.t3 vss.t3 vbn vss.t0 sky130_fd_pr__nfet_01v8 ad=0.725 pd=5.58 as=0.3625 ps=2.79 w=2.5 l=1
+R0 vss vss.n0 2.75268
+R1 vss.t0 vss.n0 26.8992
+R2 vss.n0 vss.t3 2.75268
+R3 vss vss.t3 1.65013
+C0 vbn vcp 0.03344f
+C1 vbp vbn 0.78481f
+C2 vbp vcp 3.96956f
+C3 vbn vss 2.83454f
+C4 vbp vss 0.49654f
+C5 vcp vss 6.49726f
+.ends
+

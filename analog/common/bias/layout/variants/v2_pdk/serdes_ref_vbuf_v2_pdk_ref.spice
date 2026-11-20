@@ -1,0 +1,24 @@
+* BIAS v2 serdes_ref_vbuf_v2_pdk (calibrated 8-bar Xr + 2D CC OTA + outer dummies)
+.subckt serdes_ref_vbuf_v2_pdk iin ibias out vdd vss
+Xr0 iin rv1 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr1 rv1 rv2 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr2 rv2 rv3 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr3 rv3 rv4 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr4 rv4 rv5 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr5 rv5 rv6 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr6 rv6 rv7 vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xr7 rv7 vss vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xrdum_l vss vss vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xrdum_r vss vss vss sky130_fd_pr__res_high_po w=1 l=40.185
+Xbd ibias ibias vss vss sky130_fd_pr__nfet_01v8 w=4 l=4
+Xt tail ibias vss vss sky130_fd_pr__nfet_01v8 w=4 l=4
+Xdum_tl ibias vss vss vss sky130_fd_pr__nfet_01v8 w=2 l=4
+Xdum_tr ibias vss vss vss sky130_fd_pr__nfet_01v8 w=2 l=4
+Xa da iin tail vss sky130_fd_pr__nfet_01v8 w=24 l=4
+Xb out out tail vss sky130_fd_pr__nfet_01v8 w=24 l=4
+Xdum_nl tail vss vss vss sky130_fd_pr__nfet_01v8 w=6 l=4
+Xdum_nr tail vss vss vss sky130_fd_pr__nfet_01v8 w=6 l=4
+Xla da da vdd vdd sky130_fd_pr__pfet_01v8_lvt w=32 l=8
+Xlb out da vdd vdd sky130_fd_pr__pfet_01v8_lvt w=32 l=8
+Xdum_p0 vdd vdd vdd vdd sky130_fd_pr__pfet_01v8_lvt w=32 l=8
+.ends serdes_ref_vbuf_v2_pdk

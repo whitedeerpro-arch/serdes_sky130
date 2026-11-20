@@ -1,0 +1,35 @@
+* NGSPICE file created from serdes_bias_ctle_v2_pdk.ext - technology: sky130A
+
+.subckt serdes_bias_ctle_v2_pdk iin vss
+X0 vss iin iin vss.t5 sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.5
+X1 iin iin vss vss.t4 sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.5
+X2 vss iin iin vss.t7 sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.5
+X3 vss vss.t0 vss vss.t1 sky130_fd_pr__nfet_01v8_lvt ad=0.58 pd=4.58 as=2.9 ps=22.9 w=2 l=0.5
+X4 iin iin vss vss.t6 sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.5
+X5 vss vss.t2 vss vss.t3 sky130_fd_pr__nfet_01v8_lvt ad=0.29 pd=2.29 as=0 ps=0 w=2 l=0.5
+R0 vss.n3 vss.n0 5197.32
+R1 vss.n5 vss.n0 5197.32
+R2 vss.n5 vss.n2 5197.32
+R3 vss.n3 vss.n2 5197.32
+R4 vss.n5 vss.t1 1203.89
+R5 vss.t3 vss.n3 1203.89
+R6 vss.t1 vss.t4 917.15
+R7 vss.t4 vss.t5 917.15
+R8 vss.t6 vss.t7 917.15
+R9 vss.t7 vss.t3 917.15
+R10 vss.t5 vss.n4 458.575
+R11 vss.n4 vss.t6 458.575
+R12 vss.n6 vss.t0 335.562
+R13 vss.t0 vss.n1 335.562
+R14 vss.n1 vss.t2 335.562
+R15 vss.n6 vss.t2 335.562
+R16 vss.t0 vss.n5 83.5719
+R17 vss.n3 vss.t2 83.5719
+R18 vss.n4 vss.n0 39.0005
+R19 vss.n6 vss.n0 39.0005
+R20 vss.n4 vss.n2 39.0005
+R21 vss.n2 vss.n1 39.0005
+R22 vss vss.n6 13.8005
+C0 iin vss 2.04326f
+.ends
+

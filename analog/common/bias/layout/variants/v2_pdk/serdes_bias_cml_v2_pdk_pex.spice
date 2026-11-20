@@ -1,0 +1,11 @@
+* NGSPICE file created from serdes_bias_cml_v2_pdk.ext - technology: sky130A
+
+.subckt serdes_bias_cml_v2_pdk iin vss
+X0 iin iin vss vss sky130_fd_pr__nfet_01v8 ad=1.45 pd=10.58 as=1.45 ps=10.58 w=5 l=0.5
+X1 iin vss sky130_fd_pr__cap_mim_m3_1 l=24.8 w=24.8
+X2 vss iin sky130_fd_pr__cap_mim_m3_2 l=24.8 w=24.8
+X3 iin vss sky130_fd_pr__cap_mim_m3_1 l=24.8 w=24.8
+X4 vss iin sky130_fd_pr__cap_mim_m3_2 l=24.8 w=24.8
+C0 iin vss 0.23604p
+.ends
+

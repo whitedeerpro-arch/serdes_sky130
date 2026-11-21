@@ -1,0 +1,62 @@
+* PDK-Mapped Lean Analog CTLE (SKY130A, 1.8 V, 100% real PDK devices).
+* Compatible with BIAS v2 (serdes_bias_ctle_v2: 50 uA into LVT 8/0.5 diode -> 6x mirror = 300 uA/leg)
+* and drop-in port-compatible with serdes_rx_ctle_rc.
+* Dependencies: sky130_primitives.spice (serdes_nfet, serdes_nfet_lvt, serdes_pfet).
+*
+* Key PDK upgrades over rx_ctle_rc.spice:
+*   1. Load resistors (600 Ohm) & Rdeg (600 Ohm) -> sky130_fd_pr__res_high_po_2p85 (l=4.14 um).
+*   2. Degeneration capacitors Ceq0 (200 fF) & Ceq1 (400 fF) -> sky130_fd_pr__cap_mim_m3_1 (1x & 2x 9.81x9.81 um).
+*   3. Static EQ inverters & transmission-gate switches use L=0.18 um (clear of FS L=0.15 Pclm<0 bin).
+*   4. Zero ideal bleed resistors: disabled cap plates are shorted to sp via small L=0.5 um NMOS switches.
+
+.subckt ctle_inv_s a y vdd vss params: wn=1.0 wp=2.0
+Xn y a vss vss serdes_nfet w={wn} l=0.18 nf=1
+Xp y a vdd vdd serdes_pfet w={wp} l=0.18 nf=1
+.ends ctle_inv_s
+
+.subckt ctle_tgate_s a b en en_b vdd vss params: wn=4.0 wp=8.0
+Xn a en   b vss serdes_nfet w={wn} l=0.18 nf=2
+Xp a en_b b vdd serdes_pfet w={wp} l=0.18 nf=4
+.ends ctle_tgate_s
+
+* PDK-mapped 50 Ohm split RX input termination (4 parallel 200 Ohm high_po_5p73 bars per side)
+.subckt serdes_rx_term_pdk inp inn vcm vss params: lbar=2.34
+Xrp0 inp vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrp1 inp vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrp2 inp vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrp3 inp vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrn0 inn vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrn1 inn vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrn2 inn vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+Xrn3 inn vcm vss sky130_fd_pr__res_high_po_5p73 l={lbar}
+.ends serdes_rx_term_pdk
+
+* Single-stage differential PDK-mapped CTLE
+* Positive differential input (inp - inn > 0) -> positive differential output (outp - outn > 0).
+.subckt serdes_rx_ctle_pdk inp inn outp outn eq0 eq1 vbias vdd vss
++ params: win=24 nfin=8 wtail=48 nftail=8 l_rload=4.14 l_rdeg=4.14 c_w=9.81 c_l=9.81 wsw=4
+* Matched 600 Ohm PDK high-poly load resistors
+Xrp vdd outp vss sky130_fd_pr__res_high_po_2p85 l={l_rload}
+Xrn vdd outn vss sky130_fd_pr__res_high_po_2p85 l={l_rload}
+* LVT NMOS differential input pair
+Xip outn inp sp vss serdes_nfet_lvt w={win} l=0.15 nf={nfin}
+Xin outp inn sn vss serdes_nfet_lvt w={win} l=0.15 nf={nfin}
+* Split LVT NMOS tail current sinks (no DC current across Rdeg)
+Xtp sp vbias vss vss serdes_nfet_lvt w={wtail} l=0.5 nf={nftail}
+Xtn sn vbias vss vss serdes_nfet_lvt w={wtail} l=0.5 nf={nftail}
+* Source degeneration resistor (600 Ohm high-poly)
+Xrdeg sp sn vss sky130_fd_pr__res_high_po_2p85 l={l_rdeg}
+* Static EQ control inverters (L=0.18 um)
+Xeq0 eq0 eq0_b vdd vss ctle_inv_s wn=1.0 wp=2.0
+Xeq1 eq1 eq1_b vdd vss ctle_inv_s wn=1.0 wp=2.0
+* Matched unit MIM degeneration capacitors: Ceq0 = 1x 200 fF, Ceq1 = 2x 200 fF = 400 fF
+Xceq0  sp cap0 sky130_fd_pr__cap_mim_m3_1 w={c_w} l={c_l}
+Xceq1a sp cap1 sky130_fd_pr__cap_mim_m3_1 w={c_w} l={c_l}
+Xceq1b sp cap1 sky130_fd_pr__cap_mim_m3_1 w={c_w} l={c_l}
+* L=0.18 um CMOS transmission-gate switches
+Xsw0 cap0 sn eq0 eq0_b vdd vss ctle_tgate_s wn={wsw} wp={2*wsw}
+Xsw1 cap1 sn eq1 eq1_b vdd vss ctle_tgate_s wn={wsw} wp={2*wsw}
+* Physical DC reference switches: short unused cap plates to sp when eq=0 (zero floating nodes, zero ideal R)
+Xtie0 cap0 eq0_b sp vss serdes_nfet w=0.42 l=0.50 nf=1
+Xtie1 cap1 eq1_b sp vss serdes_nfet w=0.42 l=0.50 nf=1
+.ends serdes_rx_ctle_pdk

@@ -1,0 +1,12 @@
+* Exact flattened LVS reference netlist for serdes_rx_term_pdk
+* Source subckt: serdes_rx_term_pdk (frozen analog/rx/cmos_rx/spice/*.spice)
+.subckt serdes_rx_term_pdk inp inn vcm vss
+X1 inp vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X2 inp vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X3 inp vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X4 inp vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X5 inn vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X6 inn vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X7 inn vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+X8 inn vcm vss sky130_fd_pr__res_high_po_5p73 l=2.34
+.ends serdes_rx_term_pdk

@@ -7,8 +7,8 @@ SKY130A PDK physical layout suite for the signed-off RX v2 analog front-end (`se
 | Cell | Size (`W × H µm`) | Area (`µm²`) | AR | Devices (Raw / Merged) | Ports | Magic Full DRC | Netgen LVS | Prop Err | Floating Poly | `review_cell.py` (`phys` / `rc_dev`) |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
 | [`serdes_rx_term_pdk.mag`](serdes_rx_term_pdk.mag) | `33.35 × 16.36` | `545.61` | `2.04` | `8 / 2` | `4 / 4` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_rx_ctle_pdk.mag`](serdes_rx_ctle_pdk.mag) | `39.60 × 29.20` | `1,156.32` | `1.36` | `20 / 19` | `9 / 9` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_rx_dt_slicer_pdk.mag`](serdes_rx_dt_slicer_pdk.mag) | `25.20 × 50.29` | `1,267.31` | `0.50` | `51 / 51` | `13 / 13` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| [`serdes_rx_ctle_pdk.mag`](serdes_rx_ctle_pdk.mag) | `37.40 × 26.20` | `979.88` | `1.43` | `20 / 19` | `9 / 9` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| [`serdes_rx_dt_slicer_pdk.mag`](serdes_rx_dt_slicer_pdk.mag) | `29.60 × 31.54` | `933.58` | `0.94` | `51 / 51` | `13 / 13` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
 
 Note on `serdes_rx_term_pdk` port count: the frozen `rx_ctle_pdk.spice` schematic defines 4 ports (`inp inn vcm vss`), including the shared p-sub guard ring terminal `vss` for the 8 `sky130_fd_pr__res_high_po_5p73` bars.
 
@@ -17,14 +17,14 @@ Note on `serdes_rx_term_pdk` port count: the frozen `rx_ctle_pdk.spice` schemati
 | Cell | M1 / M2 / M3 / M4 / M5 Share | Key Differential CPEX & Balance (`total_node_fF`) |
 |---|---|---|
 | `serdes_rx_term_pdk` | `10.8 / 26.9 / 41.5 / 12.0 / 8.9%` | `inp = 12.300 fF`, `inn = 12.605 fF` (**`|ΔC| = 0.305 fF`**), `vcm = 10.076 fF` |
-| `serdes_rx_ctle_pdk` | `16.0 / 22.9 / 51.6 / 9.5 / 0.0%` *(M3 includes `357.5 µm²` MIM bottom plates)* | `inp = 3.631 fF`, `inn = 3.627 fF` (**`|ΔC| = 0.004 fF`**); `outp = 7.635 fF`, `outn = 8.192 fF` (**`|ΔC| = 0.557 fF` ≤ 1.0 fF**) |
-| `serdes_rx_dt_slicer_pdk` | `39.4 / 29.6 / 23.3 / 7.8 / 0.0%` (`M1+M2 = 69.0%`) | `inp/inn = 3.871 / 3.871 fF` (**`Δ = 0.000 fF`**); `fn/fp = 12.684 / 12.216 fF` (**`Δ = 0.468 fF`**); `outn_b/outp_b = 8.895 / 8.874 fF` (**`Δ = 0.021 fF`**); `qp/qn = 3.494 / 3.480 fF` (**`Δ = 0.014 fF`**); `clk = 10.045 fF` |
+| `serdes_rx_ctle_pdk` | `16.2 / 22.0 / 51.0 / 10.7 / 0.0%` *(M3 includes `357.5 µm²` MIM bottom plates)* | `inp = 4.317 fF`, `inn = 4.301 fF` (**`|ΔC| = 0.016 fF`**); `outp = 7.156 fF`, `outn = 7.061 fF` (**`|ΔC| = 0.095 fF` ≤ 1.0 fF**) |
+| `serdes_rx_dt_slicer_pdk` | `38.0 / 31.5 / 19.3 / 11.2 / 0.0%` (`M1+M2 = 69.5%`) | `inp/inn = 5.397 / 5.357 fF` (**`Δ = 0.040 fF`**); `fn/fp = 9.701 / 9.208 fF` (**`Δ = 0.493 fF`**); `outn_b/outp_b = 8.963 / 8.964 fF` (**`Δ = 0.001 fF`**); `qp/qn = 3.536 / 3.517 fF` (**`Δ = 0.019 fF`**); `clk = 7.683 fF` |
 
 ## Architecture & Craftsmanship Notes
 
 1. **`serdes_rx_term_pdk`**: Two stacked `nx=4` blocks of `sky130_fd_pr__res_high_po_5p73 l=2.34` arranged in 2D common-centroid ABBA/BAAB (`P N N P` / `N P P N`) with a merged central p-sub guard ring (`rpm.2`-clean spacing), central low-R M2+M3 `vcm` spine exiting East, and symmetric low-C M3→M4→M5 `inp/inn` trunks exiting West.
-2. **`serdes_rx_ctle_pdk`**: Compact `1,156.3 µm²` (`AR = 1.36`) analog layout combining a MIM-free North signal band (2D common-centroid LVT NMOS input quad `[[Ip, In], [In, Ip]]` with biased poly dummies and continuous P+ guard ring + matched `nx=2` `res_high_po_2p85 l=4.14` load resistors `Xrp/Xrn`, equal-length M3 West `inp/inn` & East `outp/outn`) with a 3D Under-MIM South band (3× `9.81×9.81 µm` MIM1 caps `Ceq1a/Ceq0/Ceq1b` stacked directly over the 16-finger shared-diffusion ABBA LVT tail sinks `Xtp/Xtn`, `Xrdeg`, and L=0.18 static EQ inverters, T-gates, and bleed FETs).
-3. **`serdes_rx_dt_slicer_pdk`**: Abutment-ready `25.20 µm`-pitch rectangular slice designed to tile seamlessly into an 8× slicer bank with full-width M3 `vdd`, `vss`, `inp`, `inn` abutment buses, continuous NWELL bands, central M4 `clk` spine along `X = 0.000`, and strict bilateral mirror symmetry across all 5 bands (including exact `28.80 µm : 28.80 µm` 3-row MOS-cap trim mirroring with dual-contact `w_f = 0.90 µm` MSB/ref banks so driver RC delay stays `< 1.0 ps` and mirror-matched `r_on/r_off` straps).
+2. **`serdes_rx_ctle_pdk`**: Compact `979.9 µm²` (`AR = 1.43`) analog layout combining a MIM-free North signal band (centered `X = 0` 2D common-centroid LVT NMOS input quad `[[Ip, In], [In, Ip]]` with biased poly dummies and continuous P+ guard ring, symmetrically flanked by split `res_high_po_2p85 l=4.14` load resistors `Xrp` on the Left and `Xrn` on the Right, equal-length M3 West `inp/inn` and offset-balanced M4 East `outp/outn` achieving `|ΔC(outp, outn)| < 0.10 fF`) with a 3D Under-MIM South band (3× `9.81×9.81 µm` MIM1 caps `Ceq1a/Ceq0/Ceq1b` stacked directly over the 16-finger shared-diffusion ABBA LVT tail sinks `Xtp/Xtn`, `Xrdeg`, and L=0.18 static EQ inverters, T-gates, and bleed FETs).
+3. **`serdes_rx_dt_slicer_pdk`**: Abutment-ready `29.60 µm`-pitch (`933.6 µm²`, `AR = 0.94`) winged-trim rectangular slice designed to tile seamlessly into an 8× slicer bank with full-width M3 `vdd`, `vss`, `inp`, `inn` abutment buses, 2 continuous full-width NWELL bands, central M4 `clk` spine along `X = 0.000`, centered `X = 0` Stage-1/Stage-2/SR comparator core, and symmetric Left (`fn`) / Right (`fp`) wings tucking the 2-row shared-gate `28.80 µm : 28.80 µm` `L=0.18` MOS-cap trim/reference banks and static drivers directly beside `fn/fp` (eliminating the vertical trim stack and cutting `fn/fp` CPEX and total area by >23%).
 
 ## Reproduction & Artifacts
 

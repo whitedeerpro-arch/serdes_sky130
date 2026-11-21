@@ -67,4 +67,25 @@
 ## 3. 适用边界与后续优化点
 
 1. **`V_drv` LDO 高频纹波阻尼**：在 `sf_v1950_t85` 热角下 `V_drv` 瞬态纹波峰峰值达 `103.9 mVpp`（`23.6 mVrms`，TT 为 `48.8 mVpp`），虽不影响 DC 均值（`0.432–0.442 V`）与焊盘眼图（`204.3 mV / 0.0131 UI`），后续可在 `vgate` 补偿电容上串联一小颗调零电阻 `R_z` 进一步阻尼。
-2. **当前测试边界**：45 角整链采用理想 1 GHz 四相时钟（`tr=tf=30 ps`）与 PDK `tt` 电阻卡（极端 `hh/ll` 电阻角已在 Stage 1 核心驱动验证）；物理版图 PEX/RCX 与真实 PLL 四相 1 GHz 时钟联调为下一阶段工作。
+2. **当前测试边界**：45 角整链采用理想 1 GHz 四相时钟（`tr=tf=30 ps`）与 PDK `tt` 电阻卡（极端 `hh/ll` 电阻角已在 Stage 1 核心驱动验证）；物理版图提取后仿（CPEX/RCX）与真实 PLL 四相 1 GHz 时钟联调为下一阶段工作。
+
+---
+
+## 4. 物理版图签核（`v4_pdk`，5/5 单元 DRC=0 / LVS=MATCH）
+
+完整层次化 SKY130A PDK 版图已构建并通过 Magic 全规则 `DRC = 0`、Netgen `LVS = MATCH`（零属性误差、零浮空非器件 poly）以及独立 `verification/layout/review_cell.py --rc`（`physical_passed = True`、`devices_preserved = True`），详见 [v4_pdk/README.md](../../analog/tx/sst/layout/variants/v4_pdk/README.md) 与生成器 [build_tx_sst_v4_pdk.py](../../analog/tx/sst/layout/build_tx_sst_v4_pdk.py)。
+
+| 单元 | 尺寸（µm） | 面积（µm²） | 长宽比 | 器件数（原始/合并） | 端口 | Full DRC | Netgen LVS | 属性误差 | 浮空 Poly |
+|---|---:|---:|---:|---:|---:|---:|---|---:|---:|
+| `sst_slice_unit_pdk` | `8.80 × 25.17` | `221.5` | `0.35` | `18 / 18` | `8/8` | **0** | **MATCH** | `False` | `0` |
+| `sst_vdrv_ldo_pdk` | `106.00 × 89.12` | `9,446.7` | `1.19` | `25 / 15` | `4/4` | **0** | **MATCH** | `False` | `0` |
+| `serdes_tx_sst_driver_pdk` | `253.74 × 117.88` | `29,910.9` | `2.15` | `705 / 695` | `27/27` | **0** | **MATCH** | `False` | `0` |
+| `serdes_tx_sst_serializer16_pdk` | `227.98 × 71.02` | `16,191.1` | `3.21` | `1,132 / 1,132` | `33/33` | **0** | **MATCH** | `False` | `0` |
+| **`serdes_tx_sst_top_pdk`** | **`254.14 × 194.76`** | **`49,496.3`** | **`1.30`** | **`1,837 / 1,827`** | **`38/38`** | **0** | **MATCH** | **`False`** | **`0`** |
+
+- **关键提取寄生（CPEX & 原生 RCX）**：
+  - `pad_p / pad_n` 总寄生电容：**`46.55 fF / 42.88 fF`**（28 片双排镜像拼接 + 中缝对称 M4/M5 干线，差值仅 `3.67 fF`）；
+  - `vdrv` 与 `pad_p/pad_n` 在 `1 Ω` 门槛下原生 RCX 提取出 **`0` 段线电阻**（平行 `2.2 µm` M4+M5 干线，解析方阻 `< 0.45 Ω`）；
+  - `sst_vdrv_ldo_pdk` 采用 3D 堆叠将 `6× 24.8×24.8 µm`（`15.3 pF`）MIM1+MIM2 置于 4 条 `high_po_1p41` 电阻上方，ABBA 共质心 5T OTA 无 MIM 覆盖。
+
+![TX v4 SST 16:1 顶层 PDK 版图](../../analog/tx/sst/layout/variants/v4_pdk/serdes_tx_sst_top_pdk.png)

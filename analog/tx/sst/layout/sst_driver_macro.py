@@ -253,21 +253,22 @@ def _build_mux4_row(
 
 
 def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
-    """Build complete `serdes_tx_sst_driver_pdk` macro."""
+    """Build complete `serdes_tx_sst_driver_pdk` macro (~231.5 x 90.1 um)."""
     c = Cell()
     row = scc.ROW_DRV
 
     # ------------------------------------------------------------------
-    # 1. West Block: On-Chip V_drv LDO (`Xldo`)
+    # 1. West Block: Compacted On-Chip V_drv LDO (`Xldo`, x in [0.0..86.5])
     # ------------------------------------------------------------------
     ldo_cell, ldo_meta = sab.build_sst_vdrv_ldo(cache, add_ports=False)
     c.include(ldo_cell, dx=0.0, dy=0.0)
 
     # ------------------------------------------------------------------
     # 2. East-South Block: 2 Compact High-Speed CMOS Rows (Row 0 = Xpg; Row 1 = Xmux_m || Xmux_f)
+    #    Shifted West by 11.00 um to abut tightly against compacted Xldo (xmax = 86.50)!
     # ------------------------------------------------------------------
-    x_cmos0 = 106.000
-    x_pg0 = 106.500
+    x_cmos0 = 95.000
+    x_pg0 = 95.500
     y_r0_vss = 3.000                                # Row 0 (Xpg):             VSS=3.00,  VDD=13.20
     y_r0_vdd = grid(y_r0_vss + row.height)          # 13.20
     # Channel 0-1 (6.0 um) + over-cell diff bands = 12.2 um pin-free M3 corridor [10.0..22.2]!
@@ -286,14 +287,14 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
         en_net="ffe_en", out_p_net="fp", out_n_net="fn",
     )
 
-    # Row 1 horizontal layout under the 124 um slice array [107..231]:
-    #   * Xmux_m (mirrored in X) spans [107.64..160.00] -> mp/mn exit right at West edge (108.3, 115.5)!
-    #   * Xmux_f (normal)        spans [168.00..219.40] -> fp/fn exit right at East edge (212.5, 219.3)!
-    x_mm_r = 160.000
-    x_mf_l = 168.000
-    x_cmos_l = grid(x_cmos0 - 1.000)                # 105.000
-    x_r0_r = grid(x_pg0 + pg_w + 1.500)             # ~199.2
-    x_cmos_r = grid(x_mf_l + mf_w + 1.600)          # ~221.0
+    # Row 1 horizontal layout under the 124 um slice array [96..220]:
+    #   * Xmux_m (mirrored in X) spans [96.64..149.00] -> mp/mn exit right at West edge (97.3, 104.5)!
+    #   * Xmux_f (normal)        spans [157.00..208.40] -> fp/fn exit right at East edge (201.5, 208.3)!
+    x_mm_r = 149.000
+    x_mf_l = 157.000
+    x_cmos_l = grid(x_cmos0 - 1.000)                # 94.000
+    x_r0_r = grid(x_pg0 + pg_w + 1.500)             # ~188.2
+    x_cmos_r = grid(x_mf_l + mf_w + 1.600)          # ~210.0
 
     scc.finish_cmos_row(pg_cell, row, grid(x_cmos_l - x_pg0), grid(x_r0_r - x_pg0), tap_pitch=10.0)
 
@@ -345,8 +346,8 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     hx = smeta["half_x"]         # 4.400
     gap_mf = 0.800               # clean M3 break between Main (mp/mn) and Post-FFE (fp/fn) slices
 
-    x_arr_l = 107.000
-    y_seam = 61.000              # Slid South 27.80 um so East top (89.42) aligns with Xldo top (89.72)!
+    x_arr_l = 96.000
+    y_seam = 61.000              # Slid South 27.80 um so East top (89.42) aligns with Xldo top (89.42)!
     y_row_t = grid(y_seam + 5.600)   # 66.600
     y_row_b = grid(y_seam - 5.600)   # 55.400 (bot en = 35.75, y_en_b_bus = 34.60, 5.20 um above Row 1 VDD 29.40!)
 
@@ -401,7 +402,7 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     x_padp_j = grid(x_e_base + 5.200)
     x_fn_v   = grid(x_e_base + 7.200)
     x_fp_v   = grid(x_e_base + 8.400)
-    x_pad_out = grid(x_e_base + 11.200)
+    x_pad_out = grid(x_e_base + 11.000)           # 231.000 -> flush East edge at 231.500!
 
     # pad_n: M4 bridge at x_padn_j + M4 exit at y=y_seam -> clear of pad_p M5 bridge!
     c.wire("metal4", [(x_arr_r, y_padn_t), (x_padn_j, y_padn_t), (x_padn_j, y_padn_b), (x_arr_r, y_padn_b)], 0.800)
@@ -415,28 +416,33 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     c.wire("metal5", [(x_padp_j, y_padp_b), (x_padp_j, y_padp_t)], 1.800)
     c.wire("metal4", [(x_padp_j, y_padp_t), (x_pad_out, y_padp_t)], 1.000)
 
-    # Heavy VDRV feed from Xldo.vdrv -> vertical M4+M5 spine at x=102.0 -> both slice rows!
-    y_vdrv_t = grid(y_row_t + smeta["y_vdrv"])    # 74.750
+    # Heavy VDRV feed from collinear Xldo.vdrv (74.750) -> vertical M4+M5 spine at x=91.0 -> both slice rows
+    # + 2.0 um M5 over-straps directly over y_vdrv_t and y_vdrv_b across the M5-free 2x14 slice array!
+    y_vdrv_t = grid(y_row_t + smeta["y_vdrv"])    # 74.750 (collinear with Xldo.vdrv!)
     y_vdrv_b = grid(y_row_b - smeta["y_vdrv"])    # 47.250
     y_vdrv_lo = min(y_vdrv_b, ldo_meta["vdrv"][1])
     y_vdrv_hi = max(y_vdrv_t, ldo_meta["vdrv"][1])
-    x_vdrv_sp = 102.000
+    x_vdrv_sp = 91.000
     c.wire("metal4", [ldo_meta["vdrv"], (x_vdrv_sp, ldo_meta["vdrv"][1])], 2.000)
     c.wire("metal4", [(x_vdrv_sp, y_vdrv_lo), (x_vdrv_sp, y_vdrv_hi)], 2.200)
     c.wire("metal4", [(x_vdrv_sp, y_vdrv_t), (x_arr_l, y_vdrv_t)], 1.400)
     c.wire("metal4", [(x_vdrv_sp, y_vdrv_b), (x_arr_l, y_vdrv_b)], 1.400)
-    # Parallel M5 reinforcement on vdrv spine!
+    # Parallel M5 spine + full-width M5 over-straps stitched via4 every 3-4 slices (cuts array R ~5.5x: 8.16 -> ~1.5 ohm!)
     via4_array(c, x_vdrv_sp, y_vdrv_b, nx=1, ny=1)
-    via4_array(c, x_vdrv_sp, ldo_meta["vdrv"][1], nx=1, ny=1)
     via4_array(c, x_vdrv_sp, y_vdrv_t, nx=1, ny=1)
+    if abs(ldo_meta["vdrv"][1] - y_vdrv_t) > 0.5 and abs(ldo_meta["vdrv"][1] - y_vdrv_b) > 0.5:
+        via4_array(c, x_vdrv_sp, ldo_meta["vdrv"][1], nx=1, ny=1)
     c.wire("metal5", [(ldo_meta["vdrv"][0], ldo_meta["vdrv"][1]), (x_vdrv_sp, ldo_meta["vdrv"][1])], 2.200)
     c.wire("metal5", [(x_vdrv_sp, y_vdrv_lo), (x_vdrv_sp, y_vdrv_hi)], 2.200)
+    for y_vs, row_cxs in ((y_vdrv_t, top_cxs), (y_vdrv_b, bot_cxs)):
+        c.wire("metal5", [(x_vdrv_sp, y_vs), (row_cxs[-1], y_vs)], 2.000)
+        for sidx in (0, 4, 8, 11, 13):
+            via4_array(c, row_cxs[sidx], y_vs, nx=1, ny=1)
 
-    # Heavy VDD distribution: join Xldo.vdd, Row T vdd, Row B vdd, and CMOS VDD!
-    y_vdd_t = grid(y_row_t + smeta["y_vdd_drv"])  # 85.400
+    # Heavy VDD distribution: join collinear Xldo.vdd (85.400), Row T vdd, Row B vdd, and CMOS VDD!
+    y_vdd_t = grid(y_row_t + smeta["y_vdd_drv"])  # 85.400 (collinear with Xldo.vdd!)
     y_vdd_b = grid(y_row_b - smeta["y_vdd_drv"])  # 36.600
-    # Top VDD: route on M4 at x_vdd_sp = 99.20 (2.80 um west of x_vdrv_sp=102.0 -> zero crossing with vdrv!)
-    x_vdd_sp = 99.200
+    x_vdd_sp = 88.200
     c.wire("metal4", [ldo_meta["vdd"], (x_vdd_sp, ldo_meta["vdd"][1]), (x_vdd_sp, y_vdd_t)], 1.600)
     via3_array(c, x_vdd_sp, y_vdd_t, nx=2, ny=2)
     c.wire("metal3", [(x_vdd_sp, y_vdd_t), (x_arr_l, y_vdd_t)], 1.200)
@@ -449,12 +455,12 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     c.wire("metal2", [(x_vdd_e, y_r1_vdd), (x_vdd_e, y_vdd_b)], 1.400)
     c.wire("metal2", [(x_pwr_r, y_r1_vdd), (x_vdd_e, y_r1_vdd)], 1.000)
 
-    # Heavy VSS distribution: vertical M3 spine at x_vss_sp = 99.200 (strictly between Xldo 97.6 and vdrv M4 102.0!)
+    # Heavy VSS distribution: vertical M3 spine at x_vss_sp = 88.200 (between Xldo 86.5 and vdrv M4 91.0!)
     y_vss_pt = grid(y_row_t + smeta["y_vss_pwr"])  # 72.000
     y_vss_dt = grid(y_row_t + smeta["y_vss_drv"])  # 78.000
     y_vss_pb = grid(y_row_b - smeta["y_vss_pwr"])  # 50.000
     y_vss_db = grid(y_row_b - smeta["y_vss_drv"])  # 44.000
-    x_vss_sp = 99.200
+    x_vss_sp = 88.200
     c.wire("metal3", [(x_vss_sp, y_r0_vss), (x_vss_sp, y_vss_dt)], 1.200)
     c.wire("metal3", [(x_vss_sp, y_r0_vss), (x_pwr_l, y_r0_vss)], 1.000)
     for yv in (y_vss_db, y_vss_pb, y_vss_pt, y_vss_dt):
@@ -509,7 +515,7 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     y_dinp_t = grid(y_row_t + smeta["y_din_p"])   # 80.600
     y_dinn_t = grid(y_row_t + smeta["y_din_n"])   # 81.600
 
-    x_mp_v, x_mn_v = 104.400, 105.700
+    x_mp_v, x_mn_v = 93.400, 94.700
     for xv, yb, yt, nm in ((x_mp_v, y_dinp_b, y_dinp_t, "mp"), (x_mn_v, y_dinn_b, y_dinn_t, "mn")):
         c.wire("metal3", [(xv, yb), (x_arr_l, yb)], 0.360)
         c.wire("metal3", [(xv, yt), (x_arr_l, yt)], 0.360)
@@ -545,31 +551,31 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     # Pin-free M3 bands (0.90 um pitch):
     #   * Band S   (South + Row 0 NMOS diff):       y in [0.5..5.9]   (7 tracks; Row 0 pins at y in [7.0..9.0])
     #   * Band 0-1 (Row 0 PMOS + Ch0-1 + Row 1 NMOS): y in [10.4..22.1] (14 tracks; Row 1 pins at y in [23.2..25.2])
-    #   * Band 1-A (Row 1 PMOS + Ch1-Arr):          y in [26.6..33.0] (skip y=29.3 near x_vdd_e M2/M3 tap y_r1_vdd=29.40)
+    #   * Band 1-A (Row 1 PMOS + Ch1-Arr):          y in [26.6..33.0] (x_vdd_e is M2-only below 36.6 -> 29.3 is open!)
     m3_tracks = [grid(0.500 + 0.900 * k) for k in range(37)]
     pref_tracks = {
         yt for yt in m3_tracks
-        if (0.5 <= yt <= 5.95) or (10.3 <= yt <= 22.15) or (26.5 <= yt <= 28.5) or (30.1 <= yt <= 33.4)
+        if (0.5 <= yt <= 5.95) or (10.3 <= yt <= 22.15) or (26.5 <= yt <= 33.4)
     }
     router = ManhattanRouter(m3_tracks, m4_min_pitch=0.960, preferred_tracks=pref_tracks)
 
-    # South perimeter ports aligned directly below their receiver spans:
-    #   * phi0..phi270 at 108..120 (4.0 um pitch, directly under Xpg West)
-    #   * d0..d3 at 142..160 and db0..db3 at 166..184 (6.0 um pitch, strictly inside [Xmux_m..Xmux_f] span!)
+    # South perimeter ports aligned directly below their receiver spans (shifted West 11.00 um!):
+    #   * phi0..phi270 at 97..109 (4.0 um pitch, directly under Xpg West)
+    #   * d0..d3 at 131..149 and db0..db3 at 155..173 (6.0 um pitch, strictly inside [Xmux_m..Xmux_f] span!)
     y_south_port = -0.400
     south_port_xs = {
-        "phi0":   108.000,
-        "phi90":  112.000,
-        "phi180": 116.000,
-        "phi270": 120.000,
-        "d0":     142.000,
-        "d1":     148.000,
-        "d2":     154.000,
-        "d3":     160.000,
-        "db0":    166.000,
-        "db1":    172.000,
-        "db2":    178.000,
-        "db3":    184.000,
+        "phi0":    97.000,
+        "phi90":  101.000,
+        "phi180": 105.000,
+        "phi270": 109.000,
+        "d0":     131.000,
+        "d1":     137.000,
+        "d2":     143.000,
+        "d3":     149.000,
+        "db0":    155.000,
+        "db1":    161.000,
+        "db2":    167.000,
+        "db3":    173.000,
     }
     south_ports: dict[str, tuple[float, float]] = {}
     for pnm, px in south_port_xs.items():
@@ -577,25 +583,35 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
         south_ports[pnm] = (px, y_south_port)
         all_nets.setdefault(pnm, []).append((px, y_south_port, "metal4"))
 
-    # East perimeter ports for bottom-row enables (m4, m1, m0, f1, f0) + ffe_en!
-    #   * ffe_en (x >= 208.6, strictly East of all p0..pb3/d0..db3) exits cleanly at y = 22.100!
-    #   * m4, m1, m0, f1, f0 exit in Band 1-Arr (skipping y=29.40 for top-level x_vdd_e tap).
+    # East perimeter ports for bottom-row enables (ffe_en, m4, m1, m0, f1, f0):
+    #   Spread cleanly across y in [22.10, 32.90] (min spacing 1.80 um, zero label crowding!)
+    #   m4 and m1 jog cleanly down on M4 East of x_fp_v (228.4) to 24.30 / 26.50!
     east_en_order = ["ffe_en", "m4", "m1", "m0", "f1", "f0"]
     east_en_ports: dict[str, tuple[float, float]] = {}
-    east_track_ys = [22.100, 28.400, 30.200, 31.100, 32.000, 32.900]
+    x_fan_m4 = grid(x_fp_v + 1.000)   # 229.400
+    x_fan_m1 = grid(x_fp_v + 2.000)   # 230.400
+    east_route_spec = {
+        "ffe_en": (x_pad_out, 22.100, 22.100),
+        "m4":     (x_fan_m4,  28.400, 24.300),
+        "m1":     (x_fan_m1,  30.200, 26.500),
+        "m0":     (x_pad_out, 29.300, 29.300),
+        "f1":     (x_pad_out, 31.100, 31.100),
+        "f0":     (x_pad_out, 32.900, 32.900),
+    }
     pref_y_map: dict[str, float] = {
         "fp": 27.500,
         "fn": 26.600,
         "mp": 32.900,
         "mn": 32.000,
     }
-    for enm, y_ep in zip(east_en_order, east_track_ys):
+    for enm in east_en_order:
+        x_end, y_trk, y_port = east_route_spec[enm]
         if enm != "ffe_en":
             bx, by = bot_en_pins[enm]
             all_nets.setdefault(enm, []).append((bx, by, "metal3"))
-        all_nets.setdefault(enm, []).append((x_pad_out, y_ep, "metal3"))
-        east_en_ports[enm] = (x_pad_out, y_ep)
-        pref_y_map[enm] = y_ep
+        all_nets.setdefault(enm, []).append((x_end, y_trk, "metal3"))
+        east_en_ports[enm] = (x_pad_out, y_port)
+        pref_y_map[enm] = y_trk
     for nm in ("phi0", "phi90", "phi180", "phi270"):
         pref_y_map[nm] = 2.300
     for nm in ("p0", "p1", "p2", "p3", "pb0", "pb1", "pb2", "pb3"):
@@ -603,9 +619,8 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     for nm in ("d0", "d1", "d2", "d3", "db0", "db1", "db2", "db3"):
         pref_y_map[nm] = 13.100
 
-    # Reserve M3 power spines & bridges so router stays clear of VSS/VDD M3!
+    # Reserve M3 power spines & bridges so router stays clear of VSS/VDD M3 + East fanout!
     router.reserve_m3_span(y_en_b_bus, x_arr_l, x_arr_r, "__en_b_bus__")
-    router.reserve_m3_pad(x_vdd_e, y_r1_vdd, "__vdd_r1_top_tap__")
     for yt in m3_tracks:
         if y_r0_vss - 0.8 <= yt <= y_r1_vss + 0.8:
             router.reserve_m3_pad(x_pwr_l, yt, "__vss_l__")
@@ -613,6 +628,10 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
             router.reserve_m3_pad(x_vdd_e, yt, "__vdd_e__")
     router.reserve_m4_seg(x_mp_v, y_dinp_b, y_dinp_t, "mp")
     router.reserve_m4_seg(x_mn_v, y_dinn_b, y_dinn_t, "mn")
+    router.reserve_m4_seg(x_fan_m4, 24.300, 28.400, "m4")
+    router.reserve_m4_seg(x_fan_m1, 26.500, 30.200, "m1")
+    router.reserve_m3_span(24.300, x_fan_m4, x_pad_out, "m4")
+    router.reserve_m3_span(26.500, x_fan_m1, x_pad_out, "m1")
     router.pre_register_nets(all_nets)
 
     # Route Band 1-Arr & East enables first (lock exact clean straight tracks), then M4 South-port nets, then p0..pb3!
@@ -624,8 +643,17 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
             max(p[0] for p in kv[1]) - min(p[0] for p in kv[1]),
         ),
     )
+    routed_ys: dict[str, float] = {}
     for net_name, plist in net_order:
-        router.route_net(c, net_name, plist, pref_y=pref_y_map.get(net_name))
+        routed_ys[net_name] = router.route_net(c, net_name, plist, pref_y=pref_y_map.get(net_name))
+
+    # Draw clean East fanout drops for m4 (28.4 -> 24.3) and m1 (30.2 -> 26.5) East of x_fp_v!
+    for enm in ("m4", "m1"):
+        x_fan, y_trk, y_port = east_route_spec[enm]
+        via3_pad(c, x_fan, y_trk)
+        c.wire("metal4", [(x_fan, y_port), (x_fan, y_trk)], 0.440)
+        via3_pad(c, x_fan, y_port)
+        c.wire("metal3", [(x_fan, y_port), (x_pad_out, y_port)], 0.400)
 
     # ------------------------------------------------------------------
     # 7. Export Exact 27 Perimeter Ports (Exact Schematic Subckt Order!)

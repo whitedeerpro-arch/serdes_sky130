@@ -452,6 +452,60 @@ def _strap_mos_guard1(
     }
 
 
+def _strap_pass_single_row(
+    c: Cell, prim: Cell, dx: float, dy: float, y_vdd_bus: float, y_vdrv_bus: float, x_g_tap: float,
+) -> dict:
+    """Place single-row 32-finger LVT NMOS pass FET (w=7.5, l=0.15, nf=32, m=1) with
+    collinear North D (vdd) and South S (vdrv) M2 buses, West gate tap, and West guard-ring body tie."""
+    dx, dy = grid(dx), grid(dy)
+    y_vdd_bus, y_vdrv_bus, x_g_tap = grid(y_vdd_bus), grid(y_vdrv_bus), grid(x_g_tap)
+    p = slc.clone_cell(prim)
+    sd_xs = sorted({grid((r[0] + r[2]) / 2.0 + dx) for r in prim.rects["ndiffc"]})
+    g_pts = sorted({(grid(x + dx), grid(y + dy)) for _, x, y, lbl in prim.labels if lbl.startswith("G")})
+    # West vertical guard-ring bar center (psubdiff/locali x in [dx-8.335, dx-8.165])
+    west_li_x = grid(min(r[0] for r in prim.rects["psubdiff"]) + 0.085 + dx)
+    p.labels.clear()
+    c.include(p, dx=dx, dy=dy)
+
+    d_xs = sd_xs[::2]   # 17 fingers -> vdd (North)
+    s_xs = sd_xs[1::2]  # 16 fingers -> vdrv (South)
+    g_x0, g_y = g_pts[0][0], g_pts[0][1]
+
+    vo_list = (-2.400, 0.000, +2.400)
+    for x in d_xs:
+        for vo in vo_list:
+            c.via1(x, grid(dy + vo))
+        c.wire("metal2", [(x, grid(dy + vo_list[0])), (x, y_vdd_bus)], 0.240)
+    c.wire("metal2", [(d_xs[0], y_vdd_bus), (d_xs[-1], y_vdd_bus)], 1.000)
+
+    for x in s_xs:
+        for vo in vo_list:
+            c.via1(x, grid(dy + vo))
+        c.wire("metal2", [(x, y_vdrv_bus), (x, grid(dy + vo_list[-1]))], 0.240)
+    c.wire("metal2", [(s_xs[0], y_vdrv_bus), (s_xs[-1], y_vdrv_bus)], 1.000)
+
+    # Gate M1 extension West from gate bar (y = g_y ~ 84.125) to x_g_tap (clear of ndiffc M1 & d_xs[0] M2)
+    c.wire("metal1", [(x_g_tap, g_y), (g_x0, g_y)], 0.180)
+    c.via1(x_g_tap, g_y)
+
+    # Multi-point body tie along West guard ring (strictly clear of gate M1 and South vdrv M2)
+    by1, by2 = grid(dy - 2.000), grid(dy + 0.800)
+    for by in (by1, by2):
+        c.body_contact(west_li_x, by)
+    c.wire("metal2", [(west_li_x, by1), (west_li_x, by2)], 0.340)
+
+    return {
+        "D": (d_xs[0], y_vdd_bus),
+        "D_right": (d_xs[-1], y_vdd_bus),
+        "S": (s_xs[0], y_vdrv_bus),
+        "S_right": (s_xs[-1], y_vdrv_bus),
+        "G": (x_g_tap, g_y),
+        "B": (west_li_x, by1),
+        "d_xs": d_xs,
+        "s_xs": s_xs,
+    }
+
+
 def _place_res_1p41(c: Cell, cache: PdkCache, length: float, dx: float, dy: float) -> dict:
     p = cache.device(R_1P41, dict(l=length, nx=1, m=1, guard=1))
     r1 = p.pins("R1")[0]
@@ -472,65 +526,66 @@ def _place_res_1p41(c: Cell, cache: PdkCache, length: float, dx: float, dy: floa
 def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     """Build Compact 1.8 V -> 0.44 V V_drv LDO (`sst_vdrv_ldo_pdk`).
 
-    Floorplan (~98 x 92 um = ~9,000 um^2):
-      - West Bay (x in [0..61], y in [0..90]):
-          * 6 x 24.8x24.8 um stacked MIM1+MIM2 bypass bank (nx=2, ny=3 -> 15.3 pF on M3-M4-M5)
+    Floorplan (~86.50 x 88.62 um = ~7,666 um^2, flush West edge xmin = 0.000):
+      - West Bay (x in [0.0..60.5], y in [0.8..89.4]):
+          * 6 x 24.8x24.8 um stacked MIM1+MIM2 bypass bank (nx=2, ny=3 -> 15.3 pF on M3-M4-M5,
+            pillar_side="none", joined to mim_cg via one shared central via34_pillar at x=63.0, y=48.0)
           * 3D Under-MIM (strictly poly/li/M1/M2 below M3!): all 4 head-R-consistent
             single-bar `res_high_po_1p41` resistors: Xrbias (l=80), Xrtop (l=63),
             Xrbot (l=37), Xrbleed (l=38) — zero extra area, 0.00% head-R error!
-      - East Column (x in [65..97], y in [0..90]):
-          * South (y in [2..23]):   Xcg1/Xcg2 (17x17 um stacked MIM1+MIM2, 1.2 pF)
-          * Middle (y in [27..63]): MIM-free Analog OTA & Bias:
-              - ABBA common-centroid NMOS mirror Xm1/Xm2 (w=16 l=0.5 nf=4 -> 2x 4.0x2 each)
-              - ABBA common-centroid PMOS diff pair Xref/Xfb (w=48 l=0.35 nf=8 -> 2x 6.0x4 each)
-              - PMOS tail Xtail (40/0.35 nf=8) + diode bias Xbp_ref (20/0.35 nf=4)
-          * North (y in [67..89]):  Wide LVT NMOS pass device Xpass (240/0.15 nf=32 = 7.5x16 m=2)
-              with heavy M4+M5 `vdd` and `vdrv` plates feeding East perimeter `vdrv` port!
+      - Central VSS Corridor (x = 63.0):
+          * Shared M3+M5 VSS trunk + single `via34_pillar(63.0, 48.0)` tying both MIM outer plates,
+            NMOS mirror sources/bodies, and Xpass guard ring cleanly down to `yb3=2.90` & `y_vss_bot=1.20`.
+      - East Column (centered at x_c = 74.0, x in [64.1..86.5]):
+          * South (y in [4.5..22.3]):   Xcg1/Xcg2 (17x17 um stacked MIM1+MIM2, 1.2 pF, pillar_side="none"),
+            routing `vgate` straight North on M4 over the M4-free OTA!
+          * Middle (y in [28.2..61.8]): MIM-free Analog 5T PMOS-Input OTA & Bias at crisp 5.20 um pitch:
+              - ABBA common-centroid NMOS mirror Xm1/Xm2 (4x 4.0x2, unified pwell)
+              - ABBA common-centroid PMOS diff pair Xref/Xfb (4x 6.0x4, unified nwell)
+              - PMOS diode bias Xbp_ref (20/0.35 nf=4) + tail Xtail (40/0.35 nf=8)
+          * North (y in [74.0..86.2]):  Single-row wide LVT NMOS pass FET Xpass (w=7.5, l=0.15, nf=32, m=1)
+            with collinear `D (vdd)` at `y_vdd_t = 85.40` and `S (vdrv)` at `y_vdrv_t = 74.75`!
     """
     c = Cell()
+    x_east_edge = 86.500
+    x_east_port = 86.000
+    x_vss_mid = 63.000
+    x_vdd_e = 85.000
+    x_c = 74.000
+    y_vss_bot = 1.200
+    y_vdrv_t = 74.750
+    y_vdd_t = 85.400
 
     # ------------------------------------------------------------------
-    # Zone 1: West Bay — 6x 24.8x24.8 Stacked MIM1+MIM2 (nx=2, ny=3)
+    # Zone 1: West Bay — 6x 24.8x24.8 Stacked MIM1+MIM2 (xmin = 0.000!)
     # ------------------------------------------------------------------
     mim_cd = place_stacked_mim(
         c, cache, side=24.8, cols=2, rows=3,
-        dx_c=31.0, dy_c=45.0,
+        dx_c=31.625, dy_c=45.000,
         a_off=1.90, b3_off=1.90, b5_off=2.60,
-        pillar_side="west", pillar_dx=4.60,
+        pillar_side="none",
     )
-    # mim_cd bbox is roughly x in [1.7..60.4], y in [4.8..85.2]
-    # mim_cd["a"] (M4 = vdrv) at y = ya (~87.1), mim_cd["b"] (M3+M5 = vss) at west pillar x ~ -1.7
+    # mim_cd: metal5 x in [0.000..58.210], metal4 x in [0.110..60.250], metal3 x in [3.000..60.490]
+    # mim_cd: ya = 87.100, yb3 = 2.900, yb5 = 87.800
 
     # 3D Under-MIM Resistors (strictly <= M2, well inside x in [6..52], y in [2..88]):
-    # Place Xrbias (l=80), Xrtop (l=63), Xrbot (l=37), Xrbleed (l=38) side-by-side vertically!
-    # Each res_high_po_1p41 has pwell half-width 1.535 um -> pitch 6.0 um gives ~3.0 um clear gap!
     r_bias = _place_res_1p41(c, cache, 80.0, dx=10.0, dy=45.0)    # y in [2.1..87.9]
     r_top  = _place_res_1p41(c, cache, 63.0, dx=18.0, dy=45.0)    # y in [10.6..79.4]
     r_bot  = _place_res_1p41(c, cache, 37.0, dx=26.0, dy=38.0)    # y in [16.6..59.4]
     r_bld  = _place_res_1p41(c, cache, 38.0, dx=34.0, dy=45.0)    # y in [23.1..66.9]
 
-    # Connect all resistor bodies + bottom terminals (vss) onto a clean Under-MIM M2 VSS spine at y=1.20
-    y_vss_bot = 1.200
-    x_vss_w, y_vss_w = mim_cd["b"]
-    c.wire("metal2", [(min(-8.0, x_vss_w), y_vss_bot), (96.0, y_vss_bot)], 0.800)
+    # Continuous M2 VSS spine along bottom edge (exact flush [0.000 .. x_east_edge])
+    c.rect("metal2", 0.000, grid(y_vss_bot - 0.400), x_east_edge, grid(y_vss_bot + 0.400))
     for rinfo in (r_bias, r_top, r_bot, r_bld):
         bx, by = rinfo["B"]
-        # Drop resistor body B (shifted left by 1.2 um to avoid R2 pin!) down to y_vss_bot
         xb_drop = grid(bx - 1.200)
         c.wire("metal2", [(bx, by), (xb_drop, by), (xb_drop, y_vss_bot)], 0.360)
     for rinfo in (r_bias, r_bot, r_bld):
-        # R2 (bottom terminal) ties straight to vss!
         x2, y2 = rinfo["R2"]
         c.wire("metal2", [(x2, y2), (x2, y_vss_bot)], 0.360)
 
-    # Tie MIM bypass outer plates (vss) west pillar down to y_vss_bot via M3 -> via2 -> M2
-    c.wire("metal3", [(x_vss_w, y_vss_bot), (x_vss_w, y_vss_w)], 1.200)
-    for vy in (y_vss_bot, 22.0, 68.0):
-        via2_clean(c, x_vss_w, vy)
-    c.wire("metal2", [(x_vss_w, y_vss_bot), (x_vss_w, 68.0)], 0.800)
-
-    # Divider vref node: r_top.R2 (18.0, 11.595) -> r_bot.R1 (26.0, 58.405) -> route cleanly on M2 to OTA!
-    x_vref_bus = 22.000  # open vertical lane between r_top (18.0) and r_bot (26.0)
+    # Divider vref node: r_top.R2 (18.0, 11.595) -> r_bot.R1 (26.0, 58.405) on M2
+    x_vref_bus = 22.000
     c.wire("metal2", [r_top["R2"], (x_vref_bus, r_top["R2"][1]), (x_vref_bus, r_bot["R1"][1]), r_bot["R1"]], 0.360)
 
     # ------------------------------------------------------------------
@@ -538,45 +593,60 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     # ------------------------------------------------------------------
     mim_cg = place_stacked_mim(
         c, cache, side=17.0, cols=1, rows=1,
-        dx_c=77.0, dy_c=13.5,
-        a_off=1.60, b3_off=1.60, b5_off=2.20,
-        pillar_side="east", pillar_dx=3.20,
+        dx_c=74.900, dy_c=13.400,
+        a_off=1.60, b3_off=1.595, b5_off=2.60,
+        pillar_side="none",
     )
-    # Tie mim_cg outer plates (vss) down to y_vss_bot
-    xcg_b, ycg_b = mim_cg["b"]
-    c.wire("metal3", [(xcg_b, y_vss_bot), (xcg_b, ycg_b)], 1.000)
-    via2_clean(c, xcg_b, y_vss_bot)
-    c.wire("metal2", [(xcg_b, y_vss_bot), (96.0, y_vss_bot)], 0.800)
+    # mim_cg: mimcap x in [65.52..82.52] (center 74.02), yb3 = 2.900 (collinear with mim_cd.yb3!),
+    #         ya = 23.905, yb5 = 24.505, a = (74.020, 23.905)
+
+    # Shared continuous M3 VSS rail at yb3 = 2.900 joining mim_cd and mim_cg bottom M3 plates!
+    yb3 = mim_cd["yb3"]  # 2.900
+    c.wire("metal3", [(mim_cd["b3_pts"][0][0], yb3), (mim_cg["b3_pts"][0][0], yb3)], 1.000)
+    for vx in (29.700, 59.990, x_vss_mid, mim_cg["b3_pts"][0][0]):
+        c.wire("metal3", [(vx, y_vss_bot), (vx, yb3)], 0.800)
+        via2_clean(c, vx, y_vss_bot)
+
+    # Shared central M5+M3 VSS pillar at (x_vss_mid=63.0, y_pil=48.0) in the M4/M5-free corridor:
+    #   - Joins mim_cd M5 (yb5=87.80) and mim_cg M5 (yb5=24.505) on one straight M5 spine at x=63.0!
+    #   - Ties M5 <-> M3 via ONE via34_pillar(63.0, 48.0), running straight South on M3 to yb3=2.90!
+    y_pil = 48.000
+    c.wire("metal5", [(mim_cd["b5_pts"][-1][0], mim_cd["yb5"]), (x_vss_mid, mim_cd["yb5"])], 1.600)
+    c.wire("metal5", [(x_vss_mid, mim_cg["yb5"]), (x_vss_mid, mim_cd["yb5"])], 1.600)
+    c.wire("metal5", [(x_vss_mid, mim_cg["yb5"]), (mim_cg["b5_pts"][0][0], mim_cg["yb5"])], 1.600)
+    via34_pillar(c, x_vss_mid, y_pil, big=False)
+    c.wire("metal3", [(x_vss_mid, y_vss_bot), (x_vss_mid, y_pil)], 0.800)
 
     # ------------------------------------------------------------------
     # Zone 3: East-Middle — MIM-Free Analog 5T PMOS-Input OTA + Bias
+    #         1:1 vertically aligned ABBA columns at crisp 5.20 um pitch!
     # ------------------------------------------------------------------
-    # Sub-row 3A (y = 31.0): ABBA Common-Centroid NMOS Current Mirror Xm1/Xm2 (each w=16 l=0.50 nf=4)
-    # Split into 4 segments of w_f=4.0 l=0.50 nf=2 (each w=8.0): A(m1) B(m2) B(m2) A(m1)
+    ota_pitch = 5.200
+    xs_ota = [grid(x_c + (k - 1.5) * ota_pitch) for k in range(4)]  # [66.20, 71.40, 76.60, 81.80]
+
+    # Sub-row 3A (y = 31.20): ABBA Common-Centroid NMOS Current Mirror Xm1/Xm2 (4x 4.0x2)
+    y_nmir = 31.200
     p_nmir = cache.device(N_STD, dict(w=4.0, l=0.50, nf=2, m=1, conn_gates=1, guard=1))
-    # Place at x = 67.5, 74.5, 81.5, 88.5 (spacing ~7.0 um -> generous clearance!)
-    m1_l = _strap_mos_guard1(c, p_nmir, "ndiffc", 67.5, 31.0, tie_sb=True)
-    m2_l = _strap_mos_guard1(c, p_nmir, "ndiffc", 74.5, 31.0, tie_sb=True)
-    m2_r = _strap_mos_guard1(c, p_nmir, "ndiffc", 81.5, 31.0, tie_sb=True)
-    m1_r = _strap_mos_guard1(c, p_nmir, "ndiffc", 88.5, 31.0, tie_sb=True)
+    m1_l = _strap_mos_guard1(c, p_nmir, "ndiffc", xs_ota[0], y_nmir, tie_sb=True)
+    m2_l = _strap_mos_guard1(c, p_nmir, "ndiffc", xs_ota[1], y_nmir, tie_sb=True)
+    m2_r = _strap_mos_guard1(c, p_nmir, "ndiffc", xs_ota[2], y_nmir, tie_sb=True)
+    m1_r = _strap_mos_guard1(c, p_nmir, "ndiffc", xs_ota[3], y_nmir, tie_sb=True)
+    c.rect("pwell", grid(xs_ota[0] - 1.625), grid(y_nmir - 3.050), grid(xs_ota[-1] + 1.625), grid(y_nmir + 3.050))
 
-    # Shared mirror VSS rail along bottom of Xm1/Xm2 -> tie right to East VSS spine
+    # Shared mirror VSS rail along bottom of Xm1/Xm2 -> tie West into central M3 VSS trunk at x=63.0!
     y_mir_s = m1_l["S"][1]
-    c.wire("metal2", [(m1_l["B"][0], y_mir_s), (xcg_b, y_mir_s)], 0.560)
-    via2_clean(c, xcg_b, y_mir_s)
-    c.wire("metal3", [(xcg_b, ycg_b), (xcg_b, y_mir_s)], 0.800)
+    c.wire("metal2", [(x_vss_mid, y_mir_s), (m1_r["S_right"][0], y_mir_s)], 0.560)
+    via2_clean(c, x_vss_mid, y_mir_s)
 
-    # Shared mirror gate (`nd`) across all 4 segments + diode-connect to m1_l.D and m1_r.D!
-    y_nd_g = 36.050
-    y_vg_bus = 37.050
+    # Shared mirror gate (`nd`) across all 4 segments + diode-connect to m1_l.D_right and m1_r.D_right
+    y_nd_g = 36.100
+    y_vg_bus = 37.200
     x_nd_min = min(m1_l["D"][0], m1_l["G"][0])
     for seg in (m1_l, m2_l, m2_r, m1_r):
         c.wire("metal2", [seg["G"], (seg["G"][0], y_nd_g)], 0.320)
     c.wire("metal2", [(x_nd_min, y_nd_g), (m1_r["G"][0], y_nd_g)], 0.400)
-    # Connect m1_l.D_right and m1_r.D_right up to y_nd_g (nd node, >= 0.8 um clear of left-side G straps!)
     for seg in (m1_l, m1_r):
         c.wire("metal2", [seg["D_right"], (seg["D_right"][0], y_nd_g)], 0.340)
-    # Connect m2_l.D and m2_r.D up to y_vg_bus (vgate node, via M3 bridge over y_nd_g!)
     for seg in (m2_l, m2_r):
         dx_m2, dy_m2 = seg["D"]
         via2_clean(c, dx_m2, dy_m2)
@@ -584,36 +654,27 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
         c.wire("metal3", [(dx_m2, dy_m2), (dx_m2, y_vg_bus)], 0.400)
     c.wire("metal2", [(m2_l["D"][0], y_vg_bus), (m2_r["D"][0], y_vg_bus)], 0.360)
 
-    # Connect vgate (m2_l.D at y_vg_bus) down to Xcg1/Xcg2 middle plate (M4 at mim_cg["a"])!
-    x_vg_drop = 64.200
-    c.wire("metal2", [(x_vg_drop, y_vg_bus), (m2_l["D"][0], y_vg_bus)], 0.360)
-    via2_clean(c, x_vg_drop, y_vg_bus)
-    via3_pad(c, x_vg_drop, y_vg_bus)
-    c.wire("metal4", [(x_vg_drop, mim_cg["a"][1]), (x_vg_drop, y_vg_bus)], 0.600)
-    c.wire("metal4", [(x_vg_drop, mim_cg["a"][1]), mim_cg["a"]], 0.600)
-
-    # Sub-row 3B (y = 44.5): ABBA Common-Centroid PMOS Diff Pair Xref/Xfb (each w=48 l=0.35 nf=8)
-    # Split into 4 segments of w_f=6.0 l=0.35 nf=4 (each w=24.0): A(ref) B(fb) B(fb) A(ref)
+    # Sub-row 3B (y = 44.50): ABBA Common-Centroid PMOS Diff Pair Xref/Xfb (4x 6.0x4, unified nwell!)
+    y_pdp = 44.500
     p_pdp = cache.device(P_STD, dict(w=6.0, l=0.35, nf=4, m=1, conn_gates=1, guard=1))
-    ref_l = _strap_mos_guard1(c, p_pdp, "pdiffc", 67.5, 44.5, tie_sb=False)
-    fb_l  = _strap_mos_guard1(c, p_pdp, "pdiffc", 74.5, 44.5, tie_sb=False)
-    fb_r  = _strap_mos_guard1(c, p_pdp, "pdiffc", 81.5, 44.5, tie_sb=False)
-    ref_r = _strap_mos_guard1(c, p_pdp, "pdiffc", 88.5, 44.5, tie_sb=False)
+    ref_l = _strap_mos_guard1(c, p_pdp, "pdiffc", xs_ota[0], y_pdp, tie_sb=False)
+    fb_l  = _strap_mos_guard1(c, p_pdp, "pdiffc", xs_ota[1], y_pdp, tie_sb=False)
+    fb_r  = _strap_mos_guard1(c, p_pdp, "pdiffc", xs_ota[2], y_pdp, tie_sb=False)
+    ref_r = _strap_mos_guard1(c, p_pdp, "pdiffc", xs_ota[3], y_pdp, tie_sb=False)
+    c.rect("nwell", grid(xs_ota[0] - 2.115), grid(y_pdp - 4.095), grid(xs_ota[-1] + 2.115), grid(y_pdp + 4.095))
 
-    # Common `tail` bus across all 4 diff-pair sources (S)
+    # Common `tail` bus across all 4 diff-pair sources + common N-well body tie (`vdd`)
     y_tail_s = ref_l["S"][1]
     c.wire("metal2", [(ref_l["S"][0], y_tail_s), (ref_r["S_right"][0], y_tail_s)], 0.440)
-    # Common N-well body tie (`vdd`) along bottom guard ring of diff pair
     y_dp_b = ref_l["B"][1]
     c.wire("metal2", [(ref_l["B"][0], y_dp_b), (ref_r["B"][0], y_dp_b)], 0.400)
 
-    # Connect diff-pair drains down to `nd` (y_nd_g) and `vgate` (y_vg_bus) via M3 vertical drops!
+    # Connect diff-pair drains down to `nd` (y_nd_g) and `vgate` (y_vg_bus) via M3 vertical drops
     for seg in (ref_l, ref_r):
         dx_p, dy_p = seg["D_right"]
         via2_clean(c, dx_p, dy_p)
         via2_clean(c, dx_p, y_nd_g)
         c.wire("metal3", [(dx_p, y_nd_g), (dx_p, dy_p)], 0.400)
-    # Ensure y_nd_g M2 spans all the way from x_nd_min to ref_r["D_right"][0] (W=0.40 matches via2_clean!)
     c.wire("metal2", [(x_nd_min, y_nd_g), (ref_r["D_right"][0], y_nd_g)], 0.400)
 
     for seg in (fb_l, fb_r):
@@ -621,163 +682,127 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
         via2_clean(c, dx_p, dy_p)
         via2_clean(c, dx_p, y_vg_bus)
         c.wire("metal3", [(dx_p, y_vg_bus), (dx_p, dy_p)], 0.400)
-    # Ensure y_vg_bus M2 spans all the way to fb_r["D_right"][0]!
-    c.wire("metal2", [(x_vg_drop, y_vg_bus), (fb_r["D_right"][0], y_vg_bus)], 0.360)
+    c.wire("metal2", [(m2_l["D"][0], y_vg_bus), (fb_r["D_right"][0], y_vg_bus)], 0.360)
 
-    # Connect ABBA gates:
-    #   vref -> ref_l.G and ref_r.G on M2 at y = 51.000
-    #   vdrv -> fb_l.G and fb_r.G on M2 at y = 51.900
-    y_g_ref = 51.000
-    y_g_fb  = 51.900
+    # Connect ABBA gates: vref -> ref_l/ref_r at y=50.80, vdrv -> fb_l/fb_r at y=51.80
+    y_g_ref = 50.800
+    y_g_fb  = 51.800
     for seg in (ref_l, ref_r):
         c.wire("metal2", [seg["G"], (seg["G"][0], y_g_ref)], 0.320)
-    c.wire("metal2", [(ref_l["G"][0], y_g_ref), (ref_r["G"][0], y_g_ref)], 0.340)
-    # Route vref from under-MIM x_vref_bus (22.0, 58.4) -> (22.0, y_g_ref) -> ref_l.G on M2!
-    c.wire("metal2", [(x_vref_bus, y_g_ref), (ref_l["G"][0], y_g_ref)], 0.340)
+    c.wire("metal2", [(x_vref_bus, y_g_ref), (ref_r["G"][0], y_g_ref)], 0.340)
 
     for seg in (fb_l, fb_r):
         gx, gy = seg["G"]
-        # Hop over y_g_ref on M3!
         via2_clean(c, gx, gy)
         via2_clean(c, gx, y_g_fb)
         c.wire("metal3", [(gx, gy), (gx, y_g_fb)], 0.400)
     c.wire("metal2", [(fb_l["G"][0], y_g_fb), (fb_r["G"][0], y_g_fb)], 0.340)
 
-    # Sub-row 3C (y = 58.0): PMOS Current Source Xtail (40/0.35 nf=8) + Diode Xbp_ref (20/0.35 nf=4)
+    # Sub-row 3C (y = 58.20): PMOS Diode Xbp_ref (20/0.35 nf=4) + Tail Xtail (40/0.35 nf=8)
+    y_bias = 58.200
     p_tail = cache.device(P_STD, dict(w=5.0, l=0.35, nf=8, m=1, conn_gates=1, guard=1))
     p_bref = cache.device(P_STD, dict(w=5.0, l=0.35, nf=4, m=1, conn_gates=1, guard=1))
-    u_bref = _strap_mos_guard1(c, p_bref, "pdiffc", 69.0, 58.0, tie_sb=True)
-    u_tail = _strap_mos_guard1(c, p_tail, "pdiffc", 82.0, 58.0, tie_sb=True)
+    u_bref = _strap_mos_guard1(c, p_bref, "pdiffc", 68.800, y_bias, tie_sb=True)
+    u_tail = _strap_mos_guard1(c, p_tail, "pdiffc", 78.400, y_bias, tie_sb=True)
 
-    # Tie Xtail.D -> diff-pair tail bus (y_tail_s) via M3 at x = 86.0 (or tail D_right)
+    # Tie Xtail.D -> diff-pair tail bus (y_tail_s) via vertical M3 at u_tail.D_right
     xt_d, yt_d = u_tail["D_right"]
     via2_clean(c, xt_d, yt_d)
     via2_clean(c, xt_d, y_tail_s)
     c.wire("metal3", [(xt_d, y_tail_s), (xt_d, yt_d)], 0.440)
 
-    # Tie Xbp_ref.G, Xtail.G, Xbp_ref.D (`vbp`) together on M2 at y = 63.300 -> route west to r_bias.R1!
-    y_vbp = 63.300
+    # Tie Xbp_ref.G, Xtail.G, Xbp_ref.D (`vbp`) on M2 at y = 63.500 -> straight West to r_bias.R1!
+    y_vbp = 63.500
     c.wire("metal2", [u_bref["G"], (u_bref["G"][0], y_vbp), (u_tail["G"][0], y_vbp), u_tail["G"]], 0.340)
     c.wire("metal2", [u_bref["D"], (u_bref["D"][0], y_vbp)], 0.340)
-    # Route vbp west on M2 at y = 89.200 (above r_top/r_bot/r_bld, right next to r_bias.R1 at (10.0, 86.905)!)
-    # Or horizontally at y = 63.300? Wait: r_bias is at x=10, r_top at 18, r_bot at 26, r_bld at 34!
-    # r_top/r_bot/r_bld ONLY use poly/li/M1 (via1 only at their R1/R2 ends)!
-    # Check y of R1/R2 pins:
-    #   r_bias.R1 = (10, 86.905)
-    #   r_top.R1  = (18, 78.405)  (vbg!)
-    #   r_bot.R1  = (26, 58.405)  (vref)
-    #   r_bld.R1  = (34, 65.905)  (vdrv)
-    # So y = 63.300 is COMPLETELY OPEN across x in [10..69] on M2 (zero via1 at y=63.300!)!
-    # Let's check x_vref_bus (x=22.0): x_vref_bus runs y in [11.6..58.4] -> stops at 58.4, 4.9 um below 63.300!
-    # So y = 63.300 runs unobstructed straight from u_bref.G all the way to x = 10.0 -> up to r_bias.R1!
     c.wire("metal2", [(r_bias["R1"][0], y_vbp), (u_bref["G"][0], y_vbp)], 0.360)
     c.wire("metal2", [(r_bias["R1"][0], y_vbp), r_bias["R1"]], 0.360)
 
-    # Connect VDD across Xbp_ref.S/B, Xtail.S/B, and diff-pair B -> East VDD vertical M3 spine at x = 93.200
-    x_vdd_e = 93.200
+    # Connect VDD across Xbp_ref.S/B, Xtail.S/B, and diff-pair B -> single clean East VDD spine (x=85.0)
     c.wire("metal2", [(u_bref["S"][0], u_bref["S"][1]), (x_vdd_e, u_bref["S"][1])], 0.600)
     c.wire("metal2", [(ref_r["B"][0], y_dp_b), (x_vdd_e, y_dp_b)], 0.500)
     via2_clean(c, x_vdd_e, y_dp_b)
     via2_clean(c, x_vdd_e, u_bref["S"][1])
 
     # ------------------------------------------------------------------
-    # Zone 4: East-North — Wide LVT NMOS Pass FET Xpass (240/0.15 nf=32 = 7.5x16 m=2)
+    # Zone 4: East-North — Single-Row Wide LVT Pass FET (w=7.5, l=0.15, nf=32, m=1)
+    #         Collinear D (vdd) at y_vdd_t = 85.40, S (vdrv) at y_vdrv_t = 74.75!
     # ------------------------------------------------------------------
-    p_pass = cache.device(N_LVT, dict(w=7.5, l=0.15, nf=16, m=2, conn_gates=1, guard=1))
-    # Centered at (80.0, 77.5) -> bbox x in [75.3..84.7], y in [68.4..86.6]
-    u_pass = _strap_mos_guard1(c, p_pass, "ndiffc", 80.0, 77.5, tie_sb=False)
-    # Note: in u_pass:
-    #   D (d_xs = even diffusions) = vdd (north bus at d_bus_y ~ 87.3)
-    #   S (s_xs = odd diffusions)  = vdrv (south bus at s_bus_y ~ 67.3)
-    #   G = vgate (west side at x ~ 74.2, y ~ 77.5)
-    #   B = vss (bottom guard ring at y ~ 68.7)
+    p_pass = cache.device(N_LVT, dict(w=7.5, l=0.15, nf=32, m=1, conn_gates=1, guard=1))
+    x_vg_m3 = 65.200
+    u_pass = _strap_pass_single_row(c, p_pass, x_c, 80.100, y_vdd_t, y_vdrv_t, x_g_tap=x_vg_m3)
 
-    # Connect u_pass.B (vss) to East VSS M3 spine at x = xcg_b (~91.7? wait check xcg_b!)
-    # Let's place a clean dedicated East VSS spine at x = 95.800 (clear of x_vdd_e = 93.200!)
-    x_vss_e = 95.800
-    c.wire("metal2", [(xcg_b, y_vss_bot), (x_vss_e, y_vss_bot)], 0.800)
-    via2_clean(c, x_vss_e, y_vss_bot)
-    c.wire("metal3", [(x_vss_e, y_vss_bot), (x_vss_e, u_pass["B"][1])], 0.800)
-    via2_clean(c, x_vss_e, u_pass["B"][1])
-    # Wait: u_pass["B"] is at x ~ 75.5, y ~ 68.7 -> route right on M2 at y = 66.200?
-    # Better: connect u_pass["B"] west to x = 64.2? No, connect u_pass["B"] at y = 68.7?
-    # Wait: u_pass["S"] bus is at y = s_bus_y ~ 67.3, and u_pass["B"] is at y ~ 68.7 (above s_bus_y!).
-    # So u_pass["B"] can go WEST to mim_cd's bottom/west VSS, OR lift to M3 at u_pass["B"] and go east!
-    # Wait: at u_pass["B"] (x~75.5, y~68.7), vertical M2 bars of Xpass S/D sit over x in [75.8..84.2].
-    # So going WEST from u_pass["B"] (75.5 -> 62.5) is 100% clear! Then drop down on M2 at x=62.5 to y_vss_bot!
-    # Route u_pass.B (vss) west on M2 to open vertical M3 corridor x_vss_mid = 62.200 -> M3 south to y_vss_bot!
-    # (Strictly M3 vertically -> ZERO crossing with horizontal M2 vref=51.0, vbp=63.3, r_bld=65.9!)
-    x_vss_mid = 62.200
+    # Tie Xpass West guard ring (vss) straight West on M2 into central M3 VSS trunk at x_vss_mid = 63.0!
     c.wire("metal2", [(x_vss_mid, u_pass["B"][1]), u_pass["B"]], 0.440)
     via2_clean(c, x_vss_mid, u_pass["B"][1])
-    via2_clean(c, x_vss_mid, y_vss_bot)
-    c.wire("metal3", [(x_vss_mid, y_vss_bot), (x_vss_mid, u_pass["B"][1])], 0.600)
+    c.wire("metal3", [(x_vss_mid, y_pil), (x_vss_mid, u_pass["B"][1])], 0.800)
 
-    # Connect u_pass.G (vgate) to x_vg_drop (64.200) on M4 (continuing straight up from mim_cg/y_vg_bus M4!)
-    # Strictly M4 vertically -> ZERO crossing with horizontal M2 vref, vbp, r_bld!
-    c.wire("metal4", [(x_vg_drop, y_vg_bus), (x_vg_drop, u_pass["G"][1])], 0.600)
-    via3_pad(c, x_vg_drop, u_pass["G"][1])
-    via2_clean(c, x_vg_drop, u_pass["G"][1])
-    c.wire("metal2", [(x_vg_drop, u_pass["G"][1]), u_pass["G"]], 0.400)
+    # Route `vgate` straight North on M4 from mim_cg["a"] (74.02, 23.905) through y_vg_bus (37.20)
+    # over the M4-free OTA up to y=71.80, then M3 underpass under y_vdrv_t M4 at x=65.20 into Xpass.G!
+    x_vg_c = mim_cg["a"][0]  # 74.020
+    y_vg_hop = 71.800
+    via2_clean(c, x_vg_c, y_vg_bus)
+    via3_pad(c, x_vg_c, y_vg_bus)
+    c.wire("metal4", [mim_cg["a"], (x_vg_c, y_vg_hop), (x_vg_m3, y_vg_hop)], 0.600)
+    via3_pad(c, x_vg_m3, y_vg_hop)
+    c.wire("metal3", [(x_vg_m3, y_vg_hop), (x_vg_m3, u_pass["G"][1])], 0.400)
+    via2_clean(c, x_vg_m3, u_pass["G"][1])
 
-    # Heavy M3/M4 VDD plate over u_pass.D (top, y = u_pass["D"][1]) -> connect to x_vdd_e & East perimeter!
-    y_vdd_top = grid(u_pass["D"][1])
-    c.wire("metal2", [(u_pass["D"][0], y_vdd_top), (x_vdd_e, y_vdd_top)], 1.200)
-    c.wire("metal3", [(u_pass["D"][0], y_vdd_top), (x_vdd_e, y_vdd_top)], 1.200)
-    for vx in (76.5, 79.0, 81.5, 84.0, x_vdd_e):
-        via2_clean(c, vx, y_vdd_top)
-    c.wire("metal3", [(x_vdd_e, y_dp_b), (x_vdd_e, y_vdd_top)], 1.000)
-    via3_array(c, 81.0, y_vdd_top, nx=4, ny=2)
-    c.wire("metal4", [(76.0, y_vdd_top), (96.5, y_vdd_top)], 1.600)
+    # Heavy M2/M3/M4 VDD rail over Xpass.D (y_vdd_t = 85.400) -> East VDD spine & East perimeter!
+    c.wire("metal2", [(u_pass["D"][0], y_vdd_t), (x_vdd_e, y_vdd_t)], 1.000)
+    c.wire("metal3", [(u_pass["D"][0], y_vdd_t), (x_vdd_e, y_vdd_t)], 1.200)
+    for vx in (67.0, 69.5, 72.0, 74.5, 77.0, 79.5, 81.5, x_vdd_e):
+        via2_clean(c, vx, y_vdd_t)
+    c.wire("metal3", [(x_vdd_e, y_dp_b), (x_vdd_e, y_vdd_t)], 1.000)
+    via3_array(c, 71.0, y_vdd_t, nx=4, ny=2)
+    via3_array(c, 77.5, y_vdd_t, nx=4, ny=2)
+    c.rect("metal4", 66.300, grid(y_vdd_t - 0.800), x_east_edge, grid(y_vdd_t + 0.800))
 
-    # Heavy M3/M4/M5 VDRV trunk:
-    #   Joins: (1) u_pass.S (s_bus_y ~ 67.25), (2) mim_cd["a"] (M4 at ya ~ 87.1),
-    #          (3) fb_l/fb_r gates (y_g_fb = 51.900), (4) r_bld.R1 (34.0, 65.905),
-    #          (5) East perimeter `vdrv` port at (96.5, y_vdrv_s)!
-    y_vdrv_s = grid(u_pass["S"][1])
-    c.wire("metal3", [(66.0, y_vdrv_s), (91.0, y_vdrv_s)], 1.400)
-    for vx in (76.5, 79.0, 81.5, 84.0):
-        via2_clean(c, vx, y_vdrv_s)
-    via3_array(c, 80.0, y_vdrv_s, nx=4, ny=2)
-    c.wire("metal4", [(66.0, y_vdrv_s), (96.5, y_vdrv_s)], 1.600)
+    # Heavy M2/M3/M4/M5 VDRV trunk over Xpass.S (y_vdrv_t = 74.750):
+    #   Joins: Xpass.S, mim_cd["a"] (ya=87.10), OTA fb gates (y_g_fb=51.80), r_bld.R1, East port!
+    #   M3 stops at x=82.20 (>= 2.30 um clear of x_vdd_e=85.00 M3 spine!); M4+M5 cross cleanly East!
+    c.wire("metal3", [(66.500, y_vdrv_t), (82.000, y_vdrv_t)], 1.400)
+    for vx in (67.0, 69.5, 72.0, 74.5, 77.0, 79.5, 81.5):
+        via2_clean(c, vx, y_vdrv_t)
+    via3_array(c, 71.0, y_vdrv_t, nx=4, ny=2)
+    via3_array(c, 77.5, y_vdrv_t, nx=4, ny=2)
+    c.rect("metal4", 61.700, grid(y_vdrv_t - 0.800), x_east_edge, grid(y_vdrv_t + 0.800))
 
-    # Connect vdrv M4 bus (66.0, y_vdrv_s) north on M4 to mim_cd["a"] (y = mim_cd["ya"] ~ 87.1)
-    c.wire("metal4", [(66.0, y_vdrv_s), (66.0, mim_cd["ya"]), mim_cd["a"]], 1.600)
+    # Connect vdrv M4 trunk north at x=62.500 to mim_cd["a"] (y = 87.100)
+    x_vdrv_m4 = 62.500
+    c.wire("metal4", [(x_vdrv_m4, y_vdrv_t), (x_vdrv_m4, mim_cd["ya"]), mim_cd["a"]], 1.600)
 
-    # Connect vdrv Kelvin sense down to OTA fb gates (y_g_fb = 51.900) on M3 at x = 66.0
-    # (Strictly M3 vertically -> ZERO crossing with M2 vbp=63.3 or r_bld=65.9!)
-    via3_pad(c, 66.0, y_vdrv_s)
-    c.wire("metal3", [(66.0, y_g_fb), (66.0, y_vdrv_s)], 0.440)
-    via2_clean(c, 66.0, y_g_fb)
-    c.wire("metal2", [(66.0, y_g_fb), (fb_l["G"][0], y_g_fb)], 0.360)
-
-    # Connect r_bld.R1 (34.0, 65.905) straight east on M2 to (66.0, y_bld) -> up M2 to (66.0, y_vdrv_s) -> via2!
-    # (x_vss_mid=62.2 is on M3, x_vg_drop=64.2 is on M4 -> M2 is 100% unobstructed!)
+    # Connect vdrv Kelvin sense down to OTA fb gates (y_g_fb=51.80) + r_bld.R1 on M3 at x = 66.500
+    x_fb_sense = 66.500
+    c.wire("metal3", [(x_fb_sense, y_g_fb), (x_fb_sense, y_vdrv_t)], 0.440)
+    via2_clean(c, x_fb_sense, y_g_fb)
+    c.wire("metal2", [(x_fb_sense, y_g_fb), (fb_l["G"][0], y_g_fb)], 0.360)
     y_bld = r_bld["R1"][1]
-    c.wire("metal2", [r_bld["R1"], (66.0, y_bld), (66.0, y_vdrv_s)], 0.360)
-    via2_clean(c, 66.0, y_vdrv_s)
+    c.wire("metal2", [r_bld["R1"], (x_fb_sense, y_bld)], 0.360)
+    via2_clean(c, x_fb_sense, y_bld)
 
-    # Export `vbg` from r_top.R1 (18.0, 78.405) cleanly north to y=89.500 (strictly above r_bias.R1 at 86.9!)
-    # and west to (-4.5, 89.500) on M2 -> zero crossing with r_bias!
-    y_vbg = 89.500
-    c.wire("metal2", [(-4.5, y_vbg), (r_top["R1"][0], y_vbg), r_top["R1"]], 0.440)
+    # M5 low-R reinforcement over East vdrv exit (strictly >= 15 um clear of x_vss_mid=63.0 M5!)
+    via4_array(c, 81.500, y_vdrv_t, nx=2, ny=1)
+    c.rect("metal5", 79.000, grid(y_vdrv_t - 1.100), x_east_edge, grid(y_vdrv_t + 1.100))
 
-    # Add M5 strap over East vdrv port + East VDD port for ultra-low resistance
-    via4_array(c, 92.0, y_vdrv_s, nx=2, ny=1)
-    c.wire("metal5", [(89.5, y_vdrv_s), (96.5, y_vdrv_s)], 2.200)
+    # Export `vbg` cleanly West at flush x = 0.000, y = 89.200 (above r_bias top 87.90)
+    y_vbg = 89.200
+    c.rect("metal2", 0.000, grid(y_vbg - 0.220), grid(r_top["R1"][0] + 0.220), grid(y_vbg + 0.220))
+    c.wire("metal2", [(r_top["R1"][0], y_vbg), r_top["R1"]], 0.440)
 
     if add_ports:
         # Exact schematic port order: vbg vdrv vdd vss
-        c.port("vbg",  "metal2", -4.5,  y_vbg)
-        c.port("vdrv", "metal4", 96.5,  y_vdrv_s)
-        c.port("vdd",  "metal4", 96.5,  y_vdd_top)
-        c.port("vss",  "metal2", 96.0,  y_vss_bot)
+        c.port("vbg",  "metal2", 0.000,       y_vbg)
+        c.port("vdrv", "metal4", x_east_port, y_vdrv_t)
+        c.port("vdd",  "metal4", x_east_port, y_vdd_t)
+        c.port("vss",  "metal2", x_east_port, y_vss_bot)
 
     return c, {
-        "vbg":  (-4.5, y_vbg),
-        "vdrv": (96.5, y_vdrv_s),
-        "vdd":  (96.5, y_vdd_top),
-        "vss":  (96.0, y_vss_bot),
+        "vbg":  (0.000,       y_vbg),
+        "vdrv": (x_east_port, y_vdrv_t),
+        "vdd":  (x_east_port, y_vdd_t),
+        "vss":  (x_east_port, y_vss_bot),
+        "x_east_edge": x_east_edge,
     }
 
 

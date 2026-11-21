@@ -39,20 +39,21 @@ from sst_layout_common import (  # noqa: E402
 import sst_cmos_cells as scc  # noqa: E402
 
 
-# Exact Step 1 `serdes_tx_sst_driver_pdk` South perimeter port X coordinates (metal4)
+# Exact `serdes_tx_sst_driver_pdk` South perimeter port X coordinates (metal4),
+# shifted by -4.200 um so `Xser` placed at dx=+4.200 shares a flush West edge (x=0.000) with `Xldo`!
 DEFAULT_NORTH_PIN_XS: dict[str, float] = {
-    "phi0":   108.000,
-    "phi90":  112.000,
-    "phi180": 116.000,
-    "phi270": 120.000,
-    "d0":     142.000,
-    "d1":     148.000,
-    "d2":     154.000,
-    "d3":     160.000,
-    "db0":    166.000,
-    "db1":    172.000,
-    "db2":    178.000,
-    "db3":    184.000,
+    "phi0":    92.800,
+    "phi90":   96.800,
+    "phi180": 100.800,
+    "phi270": 104.800,
+    "d0":     126.800,
+    "d1":     132.800,
+    "d2":     138.800,
+    "d3":     144.800,
+    "db0":    150.800,
+    "db1":    156.800,
+    "db2":    162.800,
+    "db3":    168.800,
 }
 
 # Local intra-row M1/M2 routing tracks inside `ROW_SER` (H=9.500 um):
@@ -252,10 +253,10 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
     add("clk250_out", uo250["y"])
 
     # ------------------------------------------------------------------
-    # 2. Center Group (x ~ 107..130): 4-phase clock buffers Xc0..Xc27b
-    #    Directly beneath Driver South ports phi0..phi270 = 108, 112, 116, 120!
+    # 2. Center Group (x ~ 91.8..114.8): 4-phase clock buffers Xc0..Xc27b
+    #    Directly beneath shifted Driver South ports phi0..phi270 (local 92.8..104.8)!
     # ------------------------------------------------------------------
-    x = 107.000
+    x = 91.800
     clk_specs = [
         ("phi0",   "c0",   2.0, 4.0, 3.5, 7.0),
         ("phi90",  "c90",  1.5, 3.0, 2.5, 5.0),
@@ -270,9 +271,9 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
         add(pin_out, u2["y"])
 
     # ------------------------------------------------------------------
-    # 3. Right-Center Group (x ~ 132..165): Xb500a/b + Xo500 + /2 divider Xdiv500
+    # 3. Right-Center Group (x ~ 117.0..150.0): Xb500a/b + Xo500 + /2 divider Xdiv500
     # ------------------------------------------------------------------
-    x = 132.000
+    x = 117.000
     ua500, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.000, trk_g=2)
     ub500, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=0.900, trk_g=2)
     uo500, x = scc.place_inv(c, cache, row, x, 1.5, 3.0, 1, 2, gap_l=1.000, trk_g=2)

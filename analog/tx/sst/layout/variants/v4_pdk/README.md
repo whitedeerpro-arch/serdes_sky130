@@ -8,9 +8,9 @@ Complete hierarchical SKY130A PDK physical layout suite for the 4 Gb/s Zero-CML 
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
 | [`sst_slice_unit_pdk.mag`](sst_slice_unit_pdk.mag) | `8.80 × 25.17` | `221.5` | `0.35` | `18 / 18` | `8 / 8` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
 | [`sst_vdrv_ldo_pdk.mag`](sst_vdrv_ldo_pdk.mag) | `106.00 × 89.12` | `9,446.7` | `1.19` | `25 / 15` | `4 / 4` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_tx_sst_driver_pdk.mag`](serdes_tx_sst_driver_pdk.mag) | `253.74 × 117.88` | `29,910.9` | `2.15` | `705 / 695` | `27 / 27` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_tx_sst_serializer16_pdk.mag`](serdes_tx_sst_serializer16_pdk.mag) | `227.98 × 71.02` | `16,191.1` | `3.21` | `1,132 / 1,132` | `33 / 33` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_tx_sst_top_pdk.mag`](serdes_tx_sst_top_pdk.mag) | `254.14 × 194.76` | `49,496.3` | `1.30` | `1,837 / 1,827` | `38 / 38` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| [`serdes_tx_sst_driver_pdk.mag`](serdes_tx_sst_driver_pdk.mag) | `251.10 × 90.38` | `22,694.4` | `2.78` | `705 / 695` | `27 / 27` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| [`serdes_tx_sst_serializer16_pdk.mag`](serdes_tx_sst_serializer16_pdk.mag) | `227.98 × 51.62` | `11,768.3` | `4.42` | `1,132 / 1,132` | `33 / 33` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| [`serdes_tx_sst_top_pdk.mag`](serdes_tx_sst_top_pdk.mag) | `251.50 × 147.76` | `37,161.6` | `1.70` | `1,837 / 1,827` | `38 / 38` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
 
 ## Extracted Parasitics (CPEX & Native Magic RCX)
 
@@ -18,21 +18,21 @@ Complete hierarchical SKY130A PDK physical layout suite for the 4 Gb/s Zero-CML 
 |---|---:|---:|---:|---|
 | `sst_slice_unit_pdk` | `1.659 fF` (`1.123 / 0.536`) | `1.892 fF` (`1.390 / 0.502`) | `2.595 fF` | All `< 1 Ω` (0 RCX elements above 1 Ω threshold) |
 | `sst_vdrv_ldo_pdk` | — | — | `717.8 fF` (+ `15.3 pF` MIM1+MIM2) | `vdrv` `< 1 Ω` (heavy M4+M5 pass-FET & MIM trunk) |
-| `serdes_tx_sst_driver_pdk` | **`46.55 fF`** (`28.47 / 18.08`) | **`42.88 fF`** (`26.35 / 16.53`) | `795.9 fF` (+ `15.3 pF` MIM1+MIM2) | `vdrv`, `pad_p`, `pad_n` all `< 1 Ω` (0 RCX elements) |
-| `serdes_tx_sst_top_pdk` | **`46.55 fF`** (`28.47 / 18.08`) | **`42.88 fF`** (`26.35 / 16.53`) | `797.9 fF` (+ `15.3 pF` MIM1+MIM2) | `vdrv`, `pad_p`, `pad_n`, `phi0` all `< 1 Ω` |
+| `serdes_tx_sst_driver_pdk` | **`46.55 fF`** (`28.47 / 18.08`) | **`42.88 fF`** (`26.35 / 16.53`) | `793.9 fF` (+ `15.3 pF` MIM1+MIM2) | `vdrv`, `pad_p`, `pad_n`, `phi0` all `< 1 Ω` (0 RCX elements) |
+| `serdes_tx_sst_top_pdk` | **`46.55 fF`** (`28.47 / 18.08`) | **`42.88 fF`** (`26.35 / 16.53`) | `795.9 fF` (+ `15.3 pF` MIM1+MIM2) | `vdrv`, `pad_p`, `pad_n`, `phi0..phi270`, `clk500_out`, `clk250_out` all `< 1 Ω` |
 
 Key parasitic observations:
 - **Pad output capacitance**: `pad_p = 46.55 fF` / `pad_n = 42.88 fF` across all 28 tiled slices + symmetric center-seam M4/M5 trunks (`ΔC = 3.67 fF`, well below the 100 fF 4 Gb/s pad budget).
 - **`vdrv` bus RC**: Parallel M4 (`2.2 µm`) + M5 (`2.2 µm`) feed from `Xldo.vdrv` into both `1.2 µm` M4 slice array rails keeps every branch below Magic's `1 Ω` `extresist` threshold (`0` extracted wire resistors on `vdrv`, `pad_p`, `pad_n`), with analytical trunk sheet-R `< 0.45 Ω` from pass-FET source to the array midpoint (`R_sq(M4) ≈ 0.079 Ω/sq`, `R_sq(M5) ≈ 0.029 Ω/sq`).
-- **Serializer clock/data interface**: `phi0 = 30.51 fF` at top (combines `18.00 fF` serializer + `2.36 fF` driver + West corridor M3 exit), `d0/db0 = 12.38 / 12.72 fF`, `clk500_out = 9.49 fF`, `clk250_out = 8.29 fF`.
+- **Serializer clock/data interface**: `phi0..phi270 = 16.08 / 15.74 / 16.99 / 17.41 fF` at top (down from `30.51–34.51 fF`, `-47% to -53%`, combining compact serializer `3.70–4.60 fF` + driver `1.91–2.69 fF` + widened `1.30 µm`-pitch M3 West corridor exit, cutting adjacent inter-phase coupling to `4.03–4.61 fF`), `d0..d3 = 12.18 / 12.39 / 12.14 / 8.85 fF` (`ser`) + `11.80 / 13.27 / 11.95 / 13.23 fF` (`drv`), `db0..db3 = 8.86 / 7.28 / 7.52 / 4.93 fF` (`ser`) + `11.52 / 11.82 / 12.22 / 11.46 fF` (`drv`), `clk500_out = 3.43 fF`, `clk250_out = 3.43 fF` (down from `9.49 / 8.29 fF`).
 
 ## Architecture & Floorplan Notes
 
 1. **`sst_slice_unit_pdk`**: `8.80 µm` abutment-tiled unit cell (`2× sst_nand2 + 2× sst_inv` local pre-drivers, symmetric `3.8/0.15 nf=2` LVT NMOS pull-up + `2.6/0.15 nf=1` LVT NMOS pull-down, matched `sky130_fd_pr__res_high_po_2p85 l=3.75` single-bar resistors inside a continuous p-sub guard ring, and exact-width horizontal M3/M4 rails).
 2. **`sst_vdrv_ldo_pdk`**: Compact `1.8 V -> 0.44 V` sub-regulator using 3D stacked placement — `6× 24.8×24.8 µm` stacked MIM1+MIM2 (`15.3 pF` `vdrv` bypass bank on M3–M5) directly over the 4 head-R-consistent single-bar `sky130_fd_pr__res_high_po_1p41` resistors (`l = 63, 37, 38, 80 µm`, 0% head-R error), MIM-free ABBA common-centroid 5T PMOS-input OTA, `17×17 µm` stacked MIM1+MIM2 (`1.2 pF` compensation cap), and `240/0.15 nf=32` LVT NMOS pass FET.
-3. **`serdes_tx_sst_driver_pdk`**: Places `Xldo` West, 3 high-speed CMOS rows (`Xpg`, `Xmux_m scale=1.0`, `Xmux_f scale=0.45`) East-South with pin-free M3 routing channels, and a 2×14 face-to-face mirrored SST slice array (`23` Main + `5` Post-FFE) East-North with symmetric East M4+M5 `pad_p/pad_n` trunks.
-4. **`serdes_tx_sst_serializer16_pdk`**: 5 mirrored standard-height (`9.50 µm`) static CMOS rows (`1 GHz` `/2, /4` dividers + 16:4 mux tree + 4-phase stagger retimers) with continuous VDD/VSS rails, well taps, West VSS / East VDD spines, South `din0..din15, rst_n, clk500_out, clk250_out`, and North `phi0..phi270, d0..db3` aligned 1:1 with the driver's South pins.
-5. **`serdes_tx_sst_top_pdk`**: Stacks `serdes_tx_sst_driver_pdk` directly North of `serdes_tx_sst_serializer16_pdk` across a `5.6 µm` inter-macro corridor (`d0..db3, phi0..phi270` join straight vertically on M4; `phi0..phi270` tap cleanly West on M3; `vss` and `vdd` bridge vertically on M2 with zero crossings). All 38 top ports sit on the outer perimeter matching `serdes_tx_sst_top` 1:1.
+3. **`serdes_tx_sst_driver_pdk`**: Places `Xldo` West, 2 compacted high-speed CMOS rows (`Xpg` on Row 0; `Xmux_m` + `Xmux_f` side-by-side on Row 1 with local M1/M2 intra-row routing and over-cell M3 channels) East-South, and a 2×14 face-to-face mirrored SST slice array (`23` Main + `5` Post-FFE) East-North aligned with `Xldo` height (`90.38 µm`, `-24.1%` area vs baseline) with symmetric East M4+M5 `pad_p/pad_n` trunks.
+4. **`serdes_tx_sst_serializer16_pdk`**: 5 mirrored standard-height (`9.50 µm`) static CMOS rows (`1 GHz` `/2, /4` dividers + 16:4 mux tree + 4-phase stagger retimers) with shared VDD/VSS seams, over-cell M3 routing (`51.62 µm` height, `-27.3%` area vs baseline), continuous well taps, West VSS / East VDD spines, direct M4 South `din0..din15, rst_n, clk500_out, clk250_out`, and North `phi0..phi270, d0..db3` aligned `0.000 µm` 1:1 with the driver's South pins.
+5. **`serdes_tx_sst_top_pdk`**: Stacks `serdes_tx_sst_driver_pdk` directly North of `serdes_tx_sst_serializer16_pdk` across a compact `5.8 µm` inter-macro corridor (`y in [-6.20, -0.40]`; `d0..db3, phi0..phi270` join straight vertically on M4; `phi0..phi270` tap cleanly West on M3 at widened `1.30 µm` pitch / `0.86 µm` gap; `vss` and `vdd` bridge vertically on M2 with zero crossings), reaching `251.50 × 147.76 µm` (`37,161.6 µm²`, `-24.9%` vs baseline `49,496.3 µm²`). All 38 top ports sit on the outer perimeter matching `serdes_tx_sst_top` 1:1.
 
 ## Reproduction & Artifacts
 

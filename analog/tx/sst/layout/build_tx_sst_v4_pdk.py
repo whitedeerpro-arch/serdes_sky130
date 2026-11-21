@@ -44,12 +44,13 @@ RESULTS_DIR = slc.REPO / "results" / "layout" / "tx_sst_v4"
 def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     """Assemble integrated 16:1 Zero-CML TX v4 SST Top (`serdes_tx_sst_top_pdk`).
 
-    Floorplan (~253.7 x 194.2 um = ~49,270 um^2, AR ~ 1.31):
-      - North: `Xdrv` (`serdes_tx_sst_driver_pdk`) at (0.0, 0.0)
-      - South: `Xser` (`serdes_tx_sst_serializer16_pdk`) directly below with 1:1
-               X-aligned M4 vertical joins for `d0..d3, db0..db3, phi0..phi270`
-      - 5.6 um inter-macro corridor (`y in [-6.0, -0.4]`):
-               `phi0..phi270` tap cleanly West on M3 (`y=-5..-2`) to outer West perimeter
+    Floorplan (~251.5 x 147.8 um = ~37,160 um^2, AR ~ 1.70):
+      - North: `Xdrv` (`serdes_tx_sst_driver_pdk`, 251.10 x 90.38 um) at (0.0, 0.0)
+      - South: `Xser` (`serdes_tx_sst_serializer16_pdk`, 227.98 x 51.62 um) directly below
+               with 1:1 exact 0.000 um X-aligned M4 vertical joins for `phi0..phi270, d0..db3`
+      - 5.8 um inter-macro corridor (`y in [-6.20, -0.40]`):
+               `phi0..phi270` tap cleanly West on M3 at widened 1.30 um pitch
+               (`y=-5.25, -3.95, -2.65, -1.35`, 0.86 um gap) to outer West perimeter
                (`x=-8.40`), while `vss` bridges vertically on M2 (`x=-3.60`) and `vdd`
                bridges vertically on M2 (`x=x_vdd_e=233.80`) with zero crossings!
     """
@@ -59,7 +60,7 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     north_pin_xs = {k: x for k, (x, _) in drv_meta["south_ports"].items()}
     ser_cell, ser_meta = ssm.build_sst_serializer16(cache, add_ports=False, north_pin_xs=north_pin_xs)
 
-    y_ser_north = -6.000
+    y_ser_north = -6.200
     dy_ser = grid(y_ser_north - ser_meta["y_north_port"])
 
     c.include(drv_cell, dx=0.0, dy=0.0)
@@ -69,11 +70,12 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     for nm, (px, py_drv) in drv_meta["south_ports"].items():
         c.wire("metal4", [(px, y_ser_north), (px, py_drv)], 0.520)
 
-    # 2. Export `phi0..phi270` West on M3 inside the 5.6 um corridor to outer West perimeter (x=-8.40)
+    # 2. Export `phi0..phi270` West on M3 inside the 5.8 um corridor to outer West perimeter (x=-8.40)
+    #    1.30 um track pitch (0.86 um edge-to-edge gap) minimizes lateral inter-phase coupling!
     x_west_port = -8.400
     phi_ports: dict[str, tuple[float, float]] = {}
     for idx, nm in enumerate(("phi0", "phi90", "phi180", "phi270")):
-        yp = grid(-5.000 + idx * 1.000)
+        yp = grid(-5.250 + idx * 1.300)
         xp = drv_meta["south_ports"][nm][0]
         via3_pad(c, xp, yp)
         c.wire("metal3", [(x_west_port, yp), (xp, yp)], 0.440)
@@ -87,16 +89,16 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     c.wire("metal2", [(x_vss_w, y_ser_vss_hi), (x_vss_w, y_ldo_vss)], 1.400)
     c.wire("metal2", [(x_west_port, y_ldo_vss), (-7.600, y_ldo_vss)], 0.800)
 
-    # 4. Join `vdd` (`Xser` East M3 spine -> M3 east to x_vdd_e -> vertical M2 north to y_r2_vdd -> `Xdrv` East M3 spine!)
-    #    Strictly clear of all CMOS rows (west of x_vdd_e) and all East enable M3 routes (M2 under M3)!
+    # 4. Join `vdd` (`Xser` East M3 spine -> M3 east to x_vdd_e -> vertical M2 north into `Xdrv` East M2 spine at y_r1_vdd)
+    #    Strictly clear of all CMOS rows (west of x_vdd_e) and all East enable M3 routes (M2 under M3, no M3 pad at y_r1_vdd)!
     x_ser_vdd = ser_meta["x_vdd_e"]
     y_ser_vdd_hi = grid(dy_ser + ser_meta["vdd_ys"][-1])
     x_drv_vdd_e = drv_meta["x_vdd_e"]
-    y_drv_r2_vdd = drv_meta["y_r2_vdd"]
+    y_drv_r1_vdd = drv_meta.get("y_r1_vdd", drv_meta["y_r2_vdd"])
     c.wire("metal3", [(x_ser_vdd, y_ser_vdd_hi), (x_drv_vdd_e, y_ser_vdd_hi)], 1.200)
-    via2_clean(c, x_drv_vdd_e, y_ser_vdd_hi)
-    via2_clean(c, x_drv_vdd_e, y_drv_r2_vdd)
-    c.wire("metal2", [(x_drv_vdd_e, y_ser_vdd_hi), (x_drv_vdd_e, y_drv_r2_vdd)], 1.400)
+    for vx_off in (-0.300, +0.300):
+        via2_clean(c, grid(x_drv_vdd_e + vx_off), y_ser_vdd_hi)
+    c.wire("metal2", [(x_drv_vdd_e, y_ser_vdd_hi), (x_drv_vdd_e, y_drv_r1_vdd)], 1.400)
 
     # 5. Extend `vbg` West to outer West perimeter (-8.40, 89.50) and `vdd`/`vdrv` North to y_north_port!
     _, x_vbg, y_vbg = drv_meta["ports"]["vbg"]
@@ -272,7 +274,7 @@ def main() -> None:
         ("serdes_tx_sst_serializer16_pdk", "serdes_tx_sst_serializer16", lambda: ssm.build_sst_serializer16(cache, add_ports=True),
          ["phi0", "d0", "db0", "clk500_out", "clk250_out", "vdd", "vss"], 240),
         ("serdes_tx_sst_top_pdk", "serdes_tx_sst_top", lambda: build_sst_top(cache, add_ports=True),
-         ["pad_p", "pad_n", "vdrv", "vdd", "vss", "phi0", "clk500_out", "clk250_out"], 360),
+         ["pad_p", "pad_n", "vdrv", "vdd", "vss", "phi0", "phi90", "phi180", "phi270", "clk500_out", "clk250_out"], 360),
     ]
 
     if args.only:

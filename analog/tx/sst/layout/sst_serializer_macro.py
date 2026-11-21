@@ -2,15 +2,21 @@
 """Physical PDK layout builder for `serdes_tx_sst_serializer16_pdk` (Pure 1 GHz Static CMOS
 16:4 Quarter-Rate Serializer + /2 & /4 Dividers + 4-Phase Stagger Retimer).
 
-Floorplan (~240 x 51 um = ~12,200 um^2, 5 mirrored standard CMOS rows `ROW_SER` H=9.50 um):
-  - Row 0 (y=0.0..9.5,   normal): Lane 0 (Xr0..Xr3, Xma, Xmb, Xda, Xdb, Xmc, Xd1g, Xst0)
-  - Row 1 (y=9.5..19.0,  mirror): Lane 1 (Xr0..Xr3, Xma, Xmb, Xda, Xdb, Xmc, Xd1g, Xst1)
-  - Row 2 (y=19.0..28.5, normal): Clock buffers (Xc0..Xc27b) + Dividers (Xdiv500, Xdiv250) + Export bufs
-  - Row 3 (y=28.5..38.0, mirror): Lane 2 (Xr0..Xr3, Xma, Xmb, Xda, Xdb, Xmc, Xd1g, Xst2a, Xst2b)
-  - Row 4 (y=38.0..47.5, normal): Lane 3 (Xr0..Xr3, Xma, Xmb, Xda, Xdb, Xmc, Xd1g, Xst3a, Xst3b)
+Floorplan (~227.7 x 53.1 um = ~12,090 um^2, 5 abutted mirrored standard CMOS rows `ROW_SER` H=9.50 um):
+  - Row 0 (y=0.0..9.5,   normal): Lane 0 (Xr0..Xr3, Xma, Xda, Xmb, Xdb, Xmc, Xd1g, Xst0)
+  - Row 1 (y=9.5..19.0,  mirror): Lane 1 (Xr0..Xr3, Xma, Xda, Xmb, Xdb, Xmc, Xd1g, Xst1)
+  - Row 2 (y=19.0..28.5, normal): Dataflow-aligned Clock/Div row:
+      Left [x~48..82]:   Xdiv250 + Xb250a/b + Xo250
+      Center [x~107..130]: Xc0..Xc27b (aligned directly beneath phi0..phi270 North ports)
+      Right [x~132..165]:  Xb500a/b + Xo500 + Xdiv500
+  - Row 3 (y=28.5..38.0, mirror): Lane 2 (Xr0..Xr3, Xma, Xda, Xmb, Xdb, Xmc, Xd1g, Xst2a, Xst2b)
+  - Row 4 (y=38.0..47.5, normal): Lane 3 (Xr0..Xr3, Xma, Xda, Xmb, Xdb, Xmc, Xd1g, Xst3a, Xst3b)
 
-North perimeter pins (`d0..d3, db0..db3, phi0..phi270`) align 1-to-1 with the South perimeter
-of `serdes_tx_sst_driver_pdk` for abutment in `serdes_tx_sst_top_pdk`.
+All 42 intra-lane nets and 6 internal Row-2 divider/buffer nets are routed locally on M1/M2
+inside each row's open NMOS/PMOS diff bands, leaving only 22 global nets on over-cell M3/M4
+(plus 16 straight vertical M4 `din0..din15` drops and collinear `rst_n` M3 buses).
+North perimeter pins (`phi0..phi270, d0..d3, db0..db3`) align 1-to-1 with the South perimeter
+of `serdes_tx_sst_driver_pdk` for zero-jog vertical abutment in `serdes_tx_sst_top_pdk`.
 """
 from __future__ import annotations
 
@@ -31,6 +37,66 @@ from sst_layout_common import (  # noqa: E402
     via3_pad,
 )
 import sst_cmos_cells as scc  # noqa: E402
+
+
+# Exact Step 1 `serdes_tx_sst_driver_pdk` South perimeter port X coordinates (metal4)
+DEFAULT_NORTH_PIN_XS: dict[str, float] = {
+    "phi0":   108.000,
+    "phi90":  112.000,
+    "phi180": 116.000,
+    "phi270": 120.000,
+    "d0":     142.000,
+    "d1":     148.000,
+    "d2":     154.000,
+    "d3":     160.000,
+    "db0":    166.000,
+    "db1":    172.000,
+    "db2":    178.000,
+    "db3":    184.000,
+}
+
+# Local intra-row M1/M2 routing tracks inside `ROW_SER` (H=9.500 um):
+#   - Strictly clear of `dff_r` internal M2 (`0.62..0.94`, `3.05..4.91`, `6.31..6.63`, `8.78..9.10`)
+#   - Strictly clear of `din` via2 M2 pads at `y=6.65` (`6.45..6.85`) -> P1 starts at `7.18` (`0.21 um` gap!)
+#   - Strictly clear of `dff_r` `tg1.a` `viali_pad` at `1.325..1.615` -> N2 at `1.95` (`0.175 um` gap!)
+Y_M1_HOP = 6.650
+Y_M2_N2  = 1.950
+Y_M2_P1  = 7.180
+Y_M2_P2  = 7.680
+Y_M2_P3  = 8.180
+
+
+def _local_m1_abut_to_dff_d(c: Cell, x_src: float, x_dst: float) -> None:
+    """Direct pure-M1 link from an adjacent cell's `y`/`q` column (y<=5.99) to next `dff_r.d` (y=6.65)."""
+    c.wire("metal1", [(x_src, 5.990), (x_src, Y_M1_HOP), (x_dst, Y_M1_HOP)], slc.W_M1)
+
+
+def _local_m2_pmos_strap(
+    c: Cell,
+    x_src: float,
+    x_dst: float,
+    y_trk: float,
+    src_y0: float = 5.990,
+    dst_y0: float | None = None,
+    dst_w: float = slc.W_M1,
+) -> None:
+    """Route an intra-row net on an open PMOS-band horizontal M2 track (`7.18 / 7.68 / 8.18`)."""
+    c.wire("metal1", [(x_src, src_y0), (x_src, y_trk)], slc.W_M1)
+    c.via1(x_src, y_trk)
+    if dst_y0 is not None:
+        c.wire("metal1", [(x_dst, min(dst_y0, y_trk)), (x_dst, max(dst_y0, y_trk))], dst_w)
+    c.via1(x_dst, y_trk)
+    c.wire("metal2", [(min(x_src, x_dst), y_trk), (max(x_src, x_dst), y_trk)], 0.240)
+
+
+def _local_m2_nmos_strap(c: Cell, x_src: float, x_dst: float, y_trk: float, src_y1: float = 2.510, dst_y1: float | None = 2.050) -> None:
+    """Route an intra-row net on an open NMOS-band horizontal M2 track (`1.85`)."""
+    c.wire("metal1", [(x_src, y_trk), (x_src, src_y1)], slc.W_M1)
+    c.via1(x_src, y_trk)
+    if dst_y1 is not None:
+        c.wire("metal1", [(x_dst, min(y_trk, dst_y1)), (x_dst, max(y_trk, dst_y1))], slc.W_M1)
+    c.via1(x_dst, y_trk)
+    c.wire("metal2", [(min(x_src, x_dst), y_trk), (max(x_src, x_dst), y_trk)], 0.240)
 
 
 def _add_row_transformed(
@@ -60,18 +126,20 @@ def _build_lane_row(
 ) -> tuple[Cell, dict[str, list[tuple[float, float, str]]], float]:
     """Build one complete 4:1 lane serializer + its stagger retimer DFF(s) on `ROW_SER`.
 
+    All intra-lane data hops (`r0..r3, ma, mb, da, db, mc, l*, l2h/l3h`) are routed
+    100% locally on M1 abutment and open-band M2 straps (ZERO M3/M4 usage!).
     `stagger_spec`: list of `(clk_net, d_in_net, wn, wp, q_net, qb_net)`.
     """
     row = scc.ROW_SER
     c = Cell()
     nets: dict[str, list[tuple[float, float, str]]] = {}
-    p = f"L{lane_idx}"
 
     def add(net: str, pt: tuple[float, float], lyr: str = "metal1") -> None:
         nets.setdefault(net, []).append((pt[0], pt[1], lyr))
 
-    def wire_dff(u: dict, d_n: str, ck_n: str, q_n: str | None, qb_n: str | None) -> None:
-        add(d_n, u["d"])
+    def wire_dff_ctrl(u: dict, ck_n: str, d_in_global: str | None = None, q_n: str | None = None, qb_n: str | None = None) -> None:
+        if d_in_global is not None:
+            add(d_in_global, u["d"])
         add(ck_n, u["clk"])
         add("rst_n", u["rst_n"], "metal3")
         if q_n is not None:
@@ -81,48 +149,78 @@ def _build_lane_row(
 
     x = 0.0
     # Stage 0: 4x 250 MHz input capture DFFs (wn=0.8, wp=1.6)
+    r_dffs: list[dict] = []
     for k in range(4):
         u, x = scc.place_dff_r(c, cache, row, x, wn=0.8, wp=1.6, gap_l=0.900)
-        wire_dff(u, dins[k], "clk250", f"{p}_r{k}", None)
+        wire_dff_ctrl(u, "clk250", d_in_global=dins[k])
+        r_dffs.append(u)
 
-    # Stage 1: 4:2 MUX (Xma, Xmb, wn=0.9, wp=1.8) + 2x 500 MHz DFFs (Xda, Xdb, wn=1.0, wp=2.0)
-    # Extra gap_l=1.360 before mux2 keeps mux2's left x_l M1 strap >= 0.25 um clear of previous cell's drain!
-    for m_nm, a_n, b_n, y_n in (
-        ("ma", f"{p}_r2", f"{p}_r0", f"{p}_ma"),
-        ("mb", f"{p}_r3", f"{p}_r1", f"{p}_mb"),
-    ):
-        u, x = scc.place_mux2(c, cache, row, x, wn=0.9, wp=1.8, gap_l=1.360)
-        add(a_n, u["a"])
-        add(b_n, u["b"])
-        add("clk250", u["sel"], "metal2")
-        add("clk250b", u["sel_b"], "metal2")
-        add(y_n, u["y"])
+    # Stage 1 interleaved as (Xma, Xda, Xmb, Xdb) for direct M1 abutment on ma & mb!
+    u_ma, x = scc.place_mux2(c, cache, row, x, wn=0.9, wp=1.8, gap_l=1.360)
+    add("clk250", u_ma["sel"], "metal2")
+    add("clk250b", u_ma["sel_b"], "metal2")
 
-    for d_in, q_out in ((f"{p}_ma", f"{p}_da"), (f"{p}_mb", f"{p}_db")):
-        u, x = scc.place_dff_r(c, cache, row, x, wn=1.0, wp=2.0, gap_l=0.900)
-        wire_dff(u, d_in, "clk500b", q_out, None)
+    u_da, x = scc.place_dff_r(c, cache, row, x, wn=1.0, wp=2.0, gap_l=0.900)
+    wire_dff_ctrl(u_da, "clk500b")
+
+    u_mb, x = scc.place_mux2(c, cache, row, x, wn=0.9, wp=1.8, gap_l=1.360)
+    add("clk250", u_mb["sel"], "metal2")
+    add("clk250b", u_mb["sel_b"], "metal2")
+
+    u_db, x = scc.place_dff_r(c, cache, row, x, wn=1.0, wp=2.0, gap_l=0.900)
+    wire_dff_ctrl(u_db, "clk500b")
 
     # Stage 2: 2:1 MUX (Xmc, wn=1.2, wp=2.4) + 1 GHz DFF (Xd1g, wn=1.4, wp=2.8)
-    u, x = scc.place_mux2(c, cache, row, x, wn=1.2, wp=2.4, gap_l=1.360)
-    add(f"{p}_da", u["a"])
-    add(f"{p}_db", u["b"])
-    add("clk500", u["sel"], "metal2")
-    add("clk500b", u["sel_b"], "metal2")
-    add(f"{p}_mc", u["y"])
+    u_mc, x = scc.place_mux2(c, cache, row, x, wn=1.2, wp=2.4, gap_l=1.360)
+    add("clk500", u_mc["sel"], "metal2")
+    add("clk500b", u_mc["sel_b"], "metal2")
 
-    u, x = scc.place_dff_r(c, cache, row, x, wn=1.4, wp=2.8, gap_l=0.900)
-    wire_dff(u, f"{p}_mc", "c0", f"l{lane_idx}", None)
+    u_d1g, x = scc.place_dff_r(c, cache, row, x, wn=1.4, wp=2.8, gap_l=0.900)
+    wire_dff_ctrl(u_d1g, "c0")
 
-    # Stage 3: 4-Phase Stagger Retimer DFF(s)
-    for ck_n, d_in, wn, wp, q_n, qb_n in stagger_spec:
-        u, x = scc.place_dff_r(c, cache, row, x, wn=wn, wp=wp, gap_l=0.900)
-        wire_dff(u, d_in, ck_n, q_n, qb_n)
+    # Stage 3: 4-Phase Stagger Retimer DFF(s) with direct M1 abutment from Xd1g -> Xst*
+    prev_q_x = u_d1g["q"][0]
+    for ck_n, _d_in, wn, wp, q_n, qb_n in stagger_spec:
+        u_st, x = scc.place_dff_r(c, cache, row, x, wn=wn, wp=wp, gap_l=0.900)
+        _local_m1_abut_to_dff_d(c, prev_q_x, u_st["d"][0])
+        # Only export final output ports (d0..d3, db0..db3); internal l2h/l3h connect via M1 abutment!
+        is_final = (qb_n is not None)
+        wire_dff_ctrl(u_st, ck_n, q_n=(q_n if is_final else None), qb_n=(qb_n if is_final else None))
+        prev_q_x = u_st["q"][0]
+
+    # --- Local M1 direct abutment links (ZERO vias, ZERO M2/M3/M4!) ---
+    _local_m1_abut_to_dff_d(c, u_ma["y"][0], u_da["d"][0])    # ma: Xma.y -> Xda.d
+    _local_m1_abut_to_dff_d(c, u_mb["y"][0], u_db["d"][0])    # mb: Xmb.y -> Xdb.d
+    _local_m1_abut_to_dff_d(c, u_mc["y"][0], u_d1g["d"][0])   # mc: Xmc.y -> Xd1g.d
+
+    # --- Local over-cell M2 horizontal straps (ZERO M3/M4!) ---
+    # r2: Xr2.q -> Xma.a on NMOS M2 (stops at Xma.ta.a, 1.025 um left of Xma.sel vertical M2!)
+    _local_m2_nmos_strap(c, r_dffs[2]["q"][0], u_ma["a"][0], Y_M2_N2, src_y1=2.510, dst_y1=2.050)
+    # r0: Xr0.q -> Xma.b on PMOS M2 P1 (Xma.tb.a already spans y=1.98..7.42)
+    _local_m2_pmos_strap(c, r_dffs[0]["q"][0], u_ma["b"][0], Y_M2_P1, src_y0=5.990, dst_y0=None)
+    # r1: Xr1.q -> Xmb.b on PMOS M2 P2 (wide 0.300 M1 stub bridges cleanly to Xmb.tb.a viali_pad at 7.33 -> 0 notch!)
+    _local_m2_pmos_strap(c, r_dffs[1]["q"][0], u_mb["b"][0], Y_M2_P2, src_y0=5.990, dst_y0=7.330, dst_w=0.300)
+    # r3: Xr3.q -> Xmb.a on PMOS M2 P3 (extend Xmb.ta.a M1 from 7.33 to 8.18)
+    _local_m2_pmos_strap(c, r_dffs[3]["q"][0], u_mb["a"][0], Y_M2_P3, src_y0=5.990, dst_y0=7.330)
+    # da: Xda.q -> Xmc.a on PMOS M2 P1 (strictly east of r0 end; Xmc.ta.a spans 1.68..8.02)
+    _local_m2_pmos_strap(c, u_da["q"][0], u_mc["a"][0], Y_M2_P1, src_y0=5.990, dst_y0=None)
+    # db: Xdb.q -> Xmc.b on PMOS M2 P2 (P2=7.68 pad top=7.84 overlaps Xmc.tb.a viali_pad 7.785..8.075 -> 0 notch!)
+    _local_m2_pmos_strap(c, u_db["q"][0], u_mc["b"][0], Y_M2_P2, src_y0=5.990, dst_y0=None)
 
     return c, nets, x
 
 
 def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[float, float, str]]], float]:
-    """Build center clock-buffer + /2 & /4 divider row (`Row 2`) on `ROW_SER`."""
+    """Build dataflow-aligned center clock-buffer + /2 & /4 divider row (`Row 2`) on `ROW_SER`.
+
+    Placement left-to-right matches lane loads & North/South ports:
+      - Left   [x~48..82]:  Xdiv250 + Xb250a/b + Xo250 (center of Xr0..Xr3 & Xma/Xmb)
+      - Center [x~107..130]: Xc0..Xc27b (aligned directly beneath phi0..phi270 North ports!)
+      - Right  [x~132..165]: Xb500a/b + Xo500 + Xdiv500 (aligned with Xda/Xdb/Xmc & c0 loads!)
+
+    All internal Row-2 divider/buffer nets (`clk250b_i, clk250_i, clk500b_i, clk500_i`,
+    plus `Xb250a->Xo250` and `Xb500a->Xo500`) route locally on M1/M2 (ZERO M3/M4!).
+    """
     row = scc.ROW_SER
     c = Cell()
     nets: dict[str, list[tuple[float, float, str]]] = {}
@@ -130,9 +228,34 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
     def add(net: str, pt: tuple[float, float], lyr: str = "metal1") -> None:
         nets.setdefault(net, []).append((pt[0], pt[1], lyr))
 
-    x = 0.0
     y2 = row.y_tracks[2]
-    # 1. Local 4-phase clock buffers Xc0..Xc27b (direct M1 link between stage 1 & stage 2 -> zero M3 tracks!)
+
+    # ------------------------------------------------------------------
+    # 1. Left Group (x ~ 52..86): /4 divider Xdiv250 + Xb250a/b + Xo250
+    # ------------------------------------------------------------------
+    x = 52.000
+    u250, x = scc.place_dff_r(c, cache, row, x, wn=1.5, wp=3.0, gap_l=0.900)
+    add("rst_n", u250["rst_n"], "metal3")
+    # Self-feedback clk250b_i (u250.qb -> u250.d) on NMOS M2 Y_M2_N2 (u250.d already reaches y=1.38!)
+    _local_m2_nmos_strap(c, u250["qb"][0], u250["d"][0], Y_M2_N2, src_y1=2.510, dst_y1=None)
+
+    ua250, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.000, trk_g=2)
+    ub250, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=0.900, trk_g=2)
+    uo250, x = scc.place_inv(c, cache, row, x, 1.5, 3.0, 1, 2, gap_l=1.000, trk_g=2)
+    # clk250_i: u250.q -> ua250.a on direct pure M1 at y=6.65!
+    c.wire("metal1", [(u250["q"][0], 5.990), (u250["q"][0], Y_M1_HOP), (ua250["a"][0], Y_M1_HOP), ua250["a"]], slc.W_M1)
+    # clk250b: ua250.y -> ub250.a (direct M1 at y2) + ua250.y -> uo250.a (local PMOS M2 P2)
+    c.wire("metal1", [(ua250["y_col_x"], y2), ub250["a"]], slc.W_M1)
+    _local_m2_pmos_strap(c, ua250["y_col_x"], uo250["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=y2)
+    add("clk250b",    ua250["y"])
+    add("clk250",     ub250["y"])
+    add("clk250_out", uo250["y"])
+
+    # ------------------------------------------------------------------
+    # 2. Center Group (x ~ 107..130): 4-phase clock buffers Xc0..Xc27b
+    #    Directly beneath Driver South ports phi0..phi270 = 108, 112, 116, 120!
+    # ------------------------------------------------------------------
+    x = 107.000
     clk_specs = [
         ("phi0",   "c0",   2.0, 4.0, 3.5, 7.0),
         ("phi90",  "c90",  1.5, 3.0, 2.5, 5.0),
@@ -143,39 +266,39 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
         u1, x = scc.place_inv(c, cache, row, x, wn1, wp1, 1, 2, gap_l=1.100, trk_g=2)
         u2, x = scc.place_inv(c, cache, row, x, wn2, wp2, 2, 3, gap_l=0.800, trk_g=2)
         c.wire("metal1", [(u1["y_col_x"], y2), u2["a"]], slc.W_M1)
-        add(pin_in, u1["a"])
+        add(pin_in,  u1["a"])
         add(pin_out, u2["y"])
 
-    # 2. Static CMOS /2 and /4 dividers Xdiv500, Xdiv250
+    # ------------------------------------------------------------------
+    # 3. Right-Center Group (x ~ 132..165): Xb500a/b + Xo500 + /2 divider Xdiv500
+    # ------------------------------------------------------------------
+    x = 132.000
+    ua500, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.000, trk_g=2)
+    ub500, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=0.900, trk_g=2)
+    uo500, x = scc.place_inv(c, cache, row, x, 1.5, 3.0, 1, 2, gap_l=1.000, trk_g=2)
+    c.wire("metal1", [(ua500["y_col_x"], y2), ub500["a"]], slc.W_M1)
+    _local_m2_pmos_strap(c, ua500["y_col_x"], uo500["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=y2)
+    add("clk500b",    ua500["y"])
+    add("clk500",     ub500["y"])
+    add("clk500_out", uo500["y"])
+
     u500, x = scc.place_dff_r(c, cache, row, x, wn=1.5, wp=3.0, gap_l=1.100)
-    add("clk500b_i", u500["d"])
-    add("c0",        u500["clk"])
-    add("rst_n",     u500["rst_n"], "metal3")
-    add("clk500_i",  u500["q"])
-    add("clk500b_i", u500["qb"])
+    add("c0",    u500["clk"])
+    add("rst_n", u500["rst_n"], "metal3")
+    # Self-feedback clk500b_i (u500.qb -> u500.d) on NMOS M2 Y_M2_N2 (u500.d already reaches y=1.38!)
+    _local_m2_nmos_strap(c, u500["qb"][0], u500["d"][0], Y_M2_N2, src_y1=2.510, dst_y1=None)
 
-    u250, x = scc.place_dff_r(c, cache, row, x, wn=1.5, wp=3.0, gap_l=1.100)
-    add("clk250b_i", u250["d"])
-    add("clk500_i",  u250["clk"])
-    add("rst_n",     u250["rst_n"], "metal3")
-    add("clk250_i",  u250["q"])
-    add("clk250b_i", u250["qb"])
-
-    # 3. Buffered internal distribution clocks Xb500a/b, Xb250a/b & export buffers Xo500, Xo250
-    #    Direct M1 link ua.y -> ub.a & uo.a (strictly adjacent -> zero M3 pinch!)
-    for src_n, inv_n, buf_n, exp_n in (
-        ("clk500_i", "clk500b", "clk500", "clk500_out"),
-        ("clk250_i", "clk250b", "clk250", "clk250_out"),
-    ):
-        ua, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.200, trk_g=2)
-        ub, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.000, trk_g=2)
-        uo, x = scc.place_inv(c, cache, row, x, 1.5, 3.0, 1, 2, gap_l=1.200, trk_g=2)
-        c.wire("metal1", [(ua["y_col_x"], y2), ub["a"]], slc.W_M1)
-        add(src_n, ua["a"])
-        add(inv_n, ua["y"])
-        add(buf_n, ub["y"])
-        add(inv_n, uo["a"])
-        add(exp_n, uo["y"])
+    # clk500_i: u500.q -> ua500.a -> u250.clk on single continuous local PMOS M2 P1 strap!
+    x_q500 = u500["q"][0]
+    x_a500 = ua500["a"][0]
+    x_c250 = u250["clk"][0]
+    c.wire("metal1", [(x_q500, 5.990), (x_q500, Y_M2_P1)], slc.W_M1)
+    c.via1(x_q500, Y_M2_P1)
+    c.wire("metal1", [(x_a500, y2), (x_a500, Y_M2_P1)], slc.W_M1)
+    c.via1(x_a500, Y_M2_P1)
+    c.wire("metal1", [(x_c250, y2), (x_c250, Y_M2_P1)], slc.W_M1)
+    c.via1(x_c250, Y_M2_P1)
+    c.wire("metal2", [(x_c250, Y_M2_P1), (x_q500, Y_M2_P1)], 0.240)
 
     return c, nets, x
 
@@ -185,10 +308,10 @@ def build_sst_serializer16(
     add_ports: bool = True,
     north_pin_xs: dict[str, float] | None = None,
 ) -> tuple[Cell, dict]:
-    """Build complete `serdes_tx_sst_serializer16_pdk` macro (~242 x 51 um).
+    """Build complete `serdes_tx_sst_serializer16_pdk` macro (~227.7 x 53.1 um).
 
     Optional `north_pin_xs` lets `serdes_tx_sst_top_pdk` specify exact X coordinates for
-    `d0..d3, db0..db3, phi0..phi270` so serializer North pins abut driver South pins 1:1.
+    `phi0..phi270, d0..d3, db0..db3` so serializer North pins abut driver South pins 1:1.
     """
     c = Cell()
     row = scc.ROW_SER
@@ -213,7 +336,7 @@ def build_sst_serializer16(
         [("c180", "l3", 1.2, 2.4, "l3h", None), ("c180", "l3h", 1.5, 3.0, "d3", "db3")],
     )
 
-    # Stagger the 5 rows in X by 1.20 um so identical-column pins across Lanes 0..3 NEVER share an M4 X!
+    # Stagger the 4 lane rows by 1.20 um (> 0.96 um M4 pitch) so identical-column pins never collide on M4!
     row_dxs = [0.000, 1.200, 0.000, 2.400, 3.600]
     x_max_w = grid(max(r0_w, r1_w + 1.2, r2_w, r3_w + 2.4, r4_w + 3.6) + 1.500)
     x_row_l = -1.000
@@ -221,22 +344,19 @@ def build_sst_serializer16(
     for rc, rdx in zip((r0_c, r1_c, r2_c, r3_c, r4_c), row_dxs):
         scc.finish_cmos_row(rc, row, grid(x_row_l - rdx), grid(x_row_r - rdx), tap_pitch=12.0)
 
-    # Row vertical placement with clean 7.2 um pin-free M3 routing channels around center clock/div row!
-    #   Pair 0 (Row 0 + Row 1 mirrored at VDD=9.50):   y in [0.00 .. 19.00]
-    #   Channel A (pin-free M3 routing bay):           y in [19.00 .. 26.20]
-    #   Row 2 (Clock buffers + /2, /4 dividers):       y in [26.20 .. 35.70]
-    #   Channel B (pin-free M3 routing bay):           y in [35.70 .. 42.90]
-    #   Pair 1 (Row 3 + Row 4 mirrored at VDD=52.40):  y in [42.90 .. 61.90]
-    #   Channel C (North interface bay):               y in [61.90 .. 67.50]
+    # Compact 5-row abutted mirrored placement (shared VDD/VSS rails, ChA = ChB = 0.0 um!):
+    #   Row 0 (normal):  VSS=0.00,  VDD=9.50
+    #   Row 1 (mirror):  VDD=9.50,  VSS=19.00
+    #   Row 2 (normal):  VSS=19.00, VDD=28.50
+    #   Row 3 (mirror):  VDD=28.50, VSS=38.00
+    #   Row 4 (normal):  VSS=38.00, VDD=47.50
+    #   Channel C (North interface bay): y in [47.50 .. 51.00] (3.50 um)
     y_r0 = 0.000
     y_r1 = grid(2.0 * H)          # 19.000 (mirror_y -> VDD=9.50, VSS=19.00)
-    y_r2 = 26.200                 # normal   -> VSS=26.20, VDD=35.70
-    y_r3 = grid(42.900 + H)       # 52.400? wait: mirror_y around y_vss!
-    # Wait: if Row 3 is mirror_y with y_vss=52.40 -> VDD is at 52.40-9.50=42.90, VSS is at 52.40!
-    # And Row 4 is normal with y_vss=52.40 -> VSS is at 52.40 (SHARED with Row 3!), VDD is at 61.90!
-    y_r3_vss = grid(42.900 + H)   # 52.400
-    y_r4_vss = y_r3_vss           # 52.400
-    y_top = grid(y_r4_vss + H)    # 61.900
+    y_r2 = y_r1                   # 19.000 (normal   -> VSS=19.00 shared with Row 1, VDD=28.50)
+    y_r3_vss = grid(4.0 * H)      # 38.000 (mirror_y -> VDD=28.50 shared with Row 2, VSS=38.00)
+    y_r4_vss = y_r3_vss           # 38.000 (normal   -> VSS=38.00 shared with Row 3, VDD=47.50)
+    y_top = grid(5.0 * H)         # 47.500
 
     row_cfgs = [
         (r0_c, r0_n, row_dxs[0], y_r0,     False),
@@ -251,12 +371,12 @@ def build_sst_serializer16(
         for net, pts in mapped.items():
             all_nets.setdefault(net, []).extend(pts)
 
-    # Power rail vertical straps: VSS OUTSIDE at x=-3.60 (so rst_n M3 at x=-2.00 NEVER crosses VSS M3!), VDD East!
+    # Power rail vertical straps: VSS West at x=-3.60 (clear of rst_n M4 at x=-1.90), VDD East!
     x_vss_w = grid(x_row_l - 2.600)
     x_rst_w = grid(x_row_l - 0.900)
     x_vdd_e = grid(x_row_r + 1.400)
-    vss_ys = [y_r0, y_r1, y_r2, y_r3_vss]
-    vdd_ys = [grid(y_r0 + H), grid(y_r2 + H), 42.900, y_top]
+    vss_ys = [y_r0, y_r1, y_r3_vss]
+    vdd_ys = [grid(y_r0 + H), grid(y_r2 + H), y_top]
     for yv in vss_ys:
         c.wire("metal1", [(x_vss_w, yv), (x_row_l, yv)], 0.560)
         c.via1(x_vss_w, yv)
@@ -269,13 +389,13 @@ def build_sst_serializer16(
         via2_clean(c, x_vdd_e, yv)
     c.wire("metal3", [(x_vdd_e, vdd_ys[0]), (x_vdd_e, vdd_ys[-1])], 1.200)
 
-    # Collinear horizontal M3 `rst_n` buses across each row, joined on M4 at x_rst_w (strictly EAST of x_vss_w!)
+    # Collinear horizontal M3 `rst_n` buses across each row, joined on M4 at x_rst_w
     rst_pts = all_nets.pop("rst_n", [])
     rst_by_y: dict[float, list[float]] = {}
     for px, py, _ in rst_pts:
         rst_by_y.setdefault(grid(py), []).append(px)
-    y_south_port = -2.200
-    y_north_port = grid(y_top + 6.400)
+    y_south_port = -1.600
+    y_north_port = grid(y_top + 2.000)  # 49.500 (2.0 um North bay; Row 4 VDD sits 2.0 um below y_north_port)
     rst_ys = sorted(rst_by_y.keys())
     for ry in rst_ys:
         xs_r = rst_by_y[ry]
@@ -283,36 +403,75 @@ def build_sst_serializer16(
         via3_pad(c, x_rst_w, ry)
     c.wire("metal4", [(x_rst_w, y_south_port), (x_rst_w, max(rst_ys))], 0.440)
 
-    # Build M3 horizontal tracks strictly clear of the 5 `rst_n` M3 lines, preferring pin-free channels first!
-    raw_tracks = [grid(0.600 + 0.900 * k) for k in range(int((y_north_port - 1.2) / 0.900) + 1)]
+    # Over-cell + Channel C M3 tracks (0.90 um pitch, strictly clear of the 5 `rst_n` M3 lines)
+    raw_tracks = [grid(0.600 + 0.900 * k) for k in range(int((y_north_port - 0.80) / 0.900) + 1)]
     m3_tracks = [yt for yt in raw_tracks if all(abs(yt - ry) >= 0.880 for ry in rst_ys)]
+    # Prefer pin-free diff-band seams (Row0-1 VDD, Row1-2 VSS, Row2-3 VDD, Row4 PMOS + ChC)
     pref_tracks = {
         yt for yt in m3_tracks
-        if (19.4 <= yt <= 25.8) or (36.1 <= yt <= 42.5) or (62.3 <= yt <= 67.5)
+        if (7.5 <= yt <= 11.4) or (19.2 <= yt <= 21.4) or (25.1 <= yt <= 30.8) or (45.5 <= yt <= 48.6)
     }
     router = ManhattanRouter(m3_tracks, m4_min_pitch=0.960, preferred_tracks=pref_tracks)
     for ry in rst_ys:
         router.reserve_m3_span(ry, x_rst_w - 0.5, x_row_r + 0.5, "rst_n")
     router.reserve_m4_seg(x_rst_w, y_south_port, max(rst_ys), "rst_n")
 
-    # South perimeter ports (din0..din15 aligned under Xr0..Xr3 in [2..80], clk500/250_out clear in [104..116])
-    south_order = [f"din{i}" for i in range(16)] + ["clk500_out", "clk250_out"]
+    # Direct zero-M3 vertical M4 drops for all 16 parallel data inputs `din0..din15`!
     south_ports: dict[str, tuple[float, float]] = {"rst_n": (x_rst_w, y_south_port)}
-    for idx, pnm in enumerate(south_order):
-        px = grid(2.000 + idx * 5.200) if idx < 16 else grid(106.0 + (idx - 16) * 8.000)
+    for i in range(16):
+        pnm = f"din{i}"
+        px, py, _lyr = all_nets.pop(pnm)[0]
+        c.via1(px, py)
+        via2_clean(c, px, py)
+        via3_pad(c, px, py)
+        c.wire("metal4", [(px, y_south_port), (px, py)], 0.520)
+        router.reserve_m3_pad(px, py, pnm)
+        router.reserve_m4_seg(px, y_south_port, py, pnm)
         south_ports[pnm] = (px, y_south_port)
-        all_nets.setdefault(pnm, []).append((px, y_south_port, "metal4"))
 
-    # North perimeter ports (phi0..phi270, d0..d3, db0..db3) aligned 1:1 with Driver South ports!
+    # South perimeter ports for `clk250_out` and `clk500_out` directly beneath Xo250 / Xo500!
+    for pnm in ("clk250_out", "clk500_out"):
+        px_src = all_nets[pnm][0][0]
+        px = grid(px_src)
+        south_ports[pnm] = (px, y_south_port)
+        all_nets[pnm].append((px, y_south_port, "metal4"))
+
+    # North perimeter ports aligned 1:1 with Step 1 `serdes_tx_sst_driver_pdk` South ports!
     north_order = [
         "phi0", "phi90", "phi180", "phi270",
-        "d0", "db0", "d1", "db1", "d2", "db2", "d3", "db3",
+        "d0", "d1", "d2", "d3", "db0", "db1", "db2", "db3",
     ]
     north_ports: dict[str, tuple[float, float]] = {}
-    for idx, pnm in enumerate(north_order):
-        px = grid(north_pin_xs[pnm]) if (north_pin_xs and pnm in north_pin_xs) else grid(109.0 + idx * 7.200)
+    for pnm in north_order:
+        px = grid(north_pin_xs[pnm]) if (north_pin_xs and pnm in north_pin_xs) else DEFAULT_NORTH_PIN_XS[pnm]
         north_ports[pnm] = (px, y_north_port)
         all_nets.setdefault(pnm, []).append((px, y_north_port, "metal4"))
+
+    # Preferred trunk Y hints: separate d0..db3 across Row0-1, Row2-3, and Row4-ChC seams to cut lateral coupling!
+    pref_y_map: dict[str, float] = {
+        "clk250":     20.400,
+        "clk250b":    19.500,
+        "clk500":     25.800,
+        "clk500b":    21.300,
+        "c0":         26.700,
+        "c90":        27.600,
+        "c180":       28.500,
+        "c270":       20.400,
+        "phi0":       29.400,
+        "phi90":      30.300,
+        "phi180":     29.400,
+        "phi270":     30.300,
+        "clk250_out": 19.500,
+        "clk500_out": 20.400,
+        "d0":          8.700,
+        "db0":        10.500,
+        "d1":          9.600,
+        "db1":        11.400,
+        "d2":         29.400,
+        "db2":        30.300,
+        "d3":         46.500,
+        "db3":        48.300,
+    }
 
     # Route M4-port nets first (claim clean straight vertical drops), then shortest spans first!
     router.pre_register_nets(all_nets)
@@ -321,7 +480,7 @@ def build_sst_serializer16(
         key=lambda kv: (0 if any(p[2] == "metal4" for p in kv[1]) else 1, max(p[0] for p in kv[1]) - min(p[0] for p in kv[1])),
     )
     for net_name, plist in net_order:
-        router.route_net(c, net_name, plist)
+        router.route_net(c, net_name, plist, pref_y=pref_y_map.get(net_name))
 
     # Export exact 33 schematic ports
     port_locs: dict[str, tuple[str, float, float]] = {}

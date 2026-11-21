@@ -1,0 +1,151 @@
+* PLL VCO r6 PTAT + Constant-Swing Blended Bias Candidate (SKY130A, 1.8 V, 100% real devices).
+*
+* Architecture:
+*   Blends BIAS v2's existing bandgap PTAT gate (`vg`, I_ptat = dVbe / R1, +44.8% from -40 to 85 C)
+*   and constant-swing V->I gate (`vgi`, I_const = Vbg / R_ref, -5.9% from -40 to 85 C) directly
+*   inside the bias macro onto the VCO's dedicated current-distribution output `icml_vco`, feeding
+*   the standard local CML diode `serdes_bias_cml_v2` (nfet 5/0.5 + 5 pF stacked MIM).
+*
+*   - Zero extra bandgap, OTA, or reference circuits required.
+*   - Both high-Z gate nodes (`vg`, `vgi`) remain strictly internal to the bias macro.
+*   - Both branches scale as 1 / R_high_po across passive corners (hh/tt/ll), preserving constant-swing
+*     resistor-corner tracking to within +/-0.5%.
+*   - Standard constant-swing `icml` (for TX/RX CML) remains untouched in `serdes_bias_top_v2_ptat`.
+*   - Dependencies loaded by testbench:
+*       analog/common/devices/spice/sky130_primitives.spice
+*       analog/common/devices/spice/sky130_pfet_lvt.spice
+*       analog/common/bias/spice/bias_v2.spice
+
+* -----------------------------------------------------------------------------
+* Bandgap + Constant-Swing V->I Reference exposing internal PTAT gate `vg`
+* Identical device-for-device to `serdes_bias_ref_v2` in bias_v2.spice.
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_ref_v2_ptat vbg i0 i1 i2 i3 vgi vg g4 g3 g2 g1 g0 vdd vss
++ params: wp=56 lp=12 n=8 wv=32 lv=4 nfv=4 l_r1=39.790 l_r2=37.650 l_rs=39.200 l_rref=33.900
+* Core PMOS current sources (14x12 um x 4 fingers = 56/12)
+Xm1 ta vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm2 tb vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm3 vbg vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm4 nb vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+Xm5 nb2 vg vdd vdd serdes_pfet_lvt w={wp} l={lp} nf=4
+* Level-shift resistors Xrsa, Xrsb (5 x 12.81 kOhm = 64.06 kOhm each)
+Xrsa0 ta rsa1 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa1 rsa1 rsa2 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa2 rsa2 rsa3 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa3 rsa3 rsa4 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsa4 rsa4 a vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb0 tb rsb1 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb1 rsb1 rsb2 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb2 rsb2 rsb3 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb3 rsb3 rsb4 vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+Xrsb4 rsb4 b vss sky130_fd_pr__res_high_po w=1 l={l_rs}
+* PTAT + VBE PNP core (1 : 8 : 1)
+Xq1 vss vss a sky130_fd_pr__pnp_05v5_W3p40L3p40
+Xr1 b c vss sky130_fd_pr__res_high_po w=1 l={l_r1}
+Xq2 vss vss c sky130_fd_pr__pnp_05v5_W3p40L3p40 m={n}
+* R2: 10 calibrated unit bars matching R1 bar geometry
+Xr2_0 vbg r2_1 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_1 r2_1 r2_2 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_2 r2_2 r2_3 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_3 r2_3 r2_4 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_4 r2_4 r2_5 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_5 r2_5 r2_6 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_6 r2_6 r2_7 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_7 r2_7 r2_8 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_8 r2_8 r2_9 vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xr2_9 r2_9 d vss sky130_fd_pr__res_high_po w=1 l={l_r2}
+Xq3 vss vss d sky130_fd_pr__pnp_05v5_W3p40L3p40
+* Core bias diode + Folded-Cascode OTA
+Xbd nb nb vss vss serdes_nfet w=6 l=4 nf=2
+Xamp tb ta vg nb vdd vss serdes_bg_fcota_v2
+* Startup circuit
+Xsp st vss vdd vdd serdes_pfet w=0.42 l=20
+Xsn st nb vss vss serdes_nfet w=2 l=1
+Xsu vg st vss vss serdes_nfet w=1 l=1
+* Vbg output decoupling: 6 pF stacked MIM1+MIM2
+Xcvbg vbg vss serdes_mim_stack_6p_v2
+* V->I reference loop
+Xbd2 nb2 nb2 vss vss serdes_nfet w=6 l=4 nf=2
+Xamp2 s vbg vgi nb2 vdd vss serdes_bg_ota_v2
+Xcvgi vgi vdd serdes_mim_stack_2p_v2
+Xk vgi vbg s vss serdes_nfet_lvt w=2 l=4
+Xmv s vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+* Fixed r_ref (10 calibrated bars) + 5-bit binary trim ladder
+Xrref0 s rr1 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref1 rr1 rr2 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref2 rr2 rr3 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref3 rr3 rr4 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref4 rr4 rr5 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref5 rr5 rr6 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref6 rr6 rr7 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref7 rr7 rr8 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref8 rr8 rr9 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrref9 rr9 rt5 vss sky130_fd_pr__res_high_po w=1 l={l_rref}
+Xrt4 rt5 rt4 vss sky130_fd_pr__res_high_po w=1 l=38.150
+Xrt3 rt4 rt3 vss sky130_fd_pr__res_high_po w=1 l=18.480
+Xrt2 rt3 rt2 vss sky130_fd_pr__res_high_po w=1 l=8.645
+Xrt1 rt2 rt1 vss sky130_fd_pr__res_high_po w=1 l=3.725
+Xrt0 rt1 vss vss sky130_fd_pr__res_high_po w=1 l=1.265
+Xs4 rt5 g4 rt4 vss serdes_nfet w=20 l=0.18 nf=4
+Xs3 rt4 g3 rt3 vss serdes_nfet w=20 l=0.18 nf=4
+Xs2 rt3 g2 rt2 vss serdes_nfet w=20 l=0.18 nf=4
+Xs1 rt2 g1 rt1 vss serdes_nfet w=20 l=0.18 nf=4
+Xs0 rt1 g0 vss vss serdes_nfet w=20 l=0.18 nf=4
+* 4 matched 10 uA output copies
+Xo0 i0 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+Xo1 i1 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+Xo2 i2 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+Xo3 i3 vgi vdd vdd serdes_pfet_lvt w={wv} l={lv} nf={nfv}
+.ends serdes_bias_ref_v2_ptat
+
+* -----------------------------------------------------------------------------
+* PTAT PMOS mirror branch off bandgap core gate `vg`
+* Unit finger 14/6 pfet_lvt: ~2.184 uA/finger at TT 27 C, +43.4% from -40 to 85 C,
+* +/-0.5% tracking vs constant-swing branch across MOS x RC corners.
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_pcopy_ptat_v2 out vg vdd params: n=66 wp_unit=14 lp=6
+Xp out vg vdd vdd serdes_pfet_lvt w={wp_unit*n} l={lp} nf={n}
+.ends serdes_bias_pcopy_ptat_v2
+
+* -----------------------------------------------------------------------------
+* Blended VCO CML bias current source (constant-swing vgi + PTAT vg)
+* Nominal 27 C TT target: ~214 uA into serdes_bias_cml_v2 (1.08 mA/stage in VCO r6).
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_cml_blend_v2 out vgi vg vdd params: nf_const=28 nf_ptat=66 wp_ptat=14 lp_ptat=6
+Xconst out vgi vdd serdes_bias_pcopy_v2 n={nf_const}
+Xptat  out vg  vdd serdes_bias_pcopy_ptat_v2 n={nf_ptat} wp_unit={wp_ptat} lp={lp_ptat}
+.ends serdes_bias_cml_blend_v2
+
+* -----------------------------------------------------------------------------
+* Compact VCO-only real bias core (Bandgap + V->I + blended mirror + local CML diode)
+* Electrically identical at `icml_vco` to `serdes_bias_top_v2_ptat` without unused
+* RX vbuf / PLL pbuf CMOS decoder gates during fast VCO transient maps.
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_vco_ptat_core vbias vbg g4 g3 g2 g1 g0 vdd vss
++ params: nf_const=28 nf_ptat=66 wp_ptat=14 lp_ptat=6
+Xref vbg i0 i1 i2 i3 vgi vg g4 g3 g2 g1 g0 vdd vss serdes_bias_ref_v2_ptat
+* Tie unused 10 uA reference copies to mid-rail diode sink (matches vbuf/pbuf load)
+Xd0 i0 i0 vss vss serdes_nfet w=4 l=4 nf=2
+Xd1 i1 i1 vss vss serdes_nfet w=4 l=4 nf=2
+Xd2 i2 i2 vss vss serdes_nfet w=4 l=4 nf=2
+Xd3 i3 i3 vss vss serdes_nfet w=4 l=4 nf=2
+Xblend vbias vgi vg vdd serdes_bias_cml_blend_v2 nf_const={nf_const} nf_ptat={nf_ptat} wp_ptat={wp_ptat} lp_ptat={lp_ptat}
+Xdcml  vbias vss serdes_bias_cml_v2
+.ends serdes_bias_vco_ptat_core
+
+* -----------------------------------------------------------------------------
+* Integrated Top-Level Bias Macro with dedicated PTAT-blended VCO bias (`icml_vco`)
+* Keeps both high-Z `vgi` and `vg` locked internally; TX/RX `icml` stays pure constant-swing.
+* -----------------------------------------------------------------------------
+.subckt serdes_bias_top_v2_ptat vbg vcm pref icml icml_vco ictle icp i_ldo0 i_ldo1 g4 g3 g2 g1 g0 c3 c2 c1 c0 en_pbuf vdd vss
++ params: nf_const=28 nf_ptat=66 wp_ptat=14 lp_ptat=6
+Xref vbg iv_in iv_b ip_in ip_b vgi vg g4 g3 g2 g1 g0 vdd vss serdes_bias_ref_v2_ptat
+Xvbuf iv_in iv_b vcm vdd vss serdes_ref_vbuf_v2
+Xpbuf ip_in ip_b pref en_pbuf c0 c1 c2 c3 vdd vss serdes_ref_pbuf_v2
+Xpc_cml     icml     vgi    vdd serdes_bias_pcopy_v2 n=85
+Xpc_cml_vco icml_vco vgi vg vdd serdes_bias_cml_blend_v2 nf_const={nf_const} nf_ptat={nf_ptat} wp_ptat={wp_ptat} lp_ptat={lp_ptat}
+Xpc_ctle    ictle    vgi    vdd serdes_bias_pcopy_v2 n=20
+Xpc_cp      icp      vgi    vdd serdes_bias_pcopy_v2 n=20
+Xpc_ldo0    i_ldo0   vgi    vdd serdes_bias_pcopy_v2 n=4
+Xpc_ldo1    i_ldo1   vgi    vdd serdes_bias_pcopy_v2 n=4
+.ends serdes_bias_top_v2_ptat

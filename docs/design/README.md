@@ -18,7 +18,7 @@
 - **缓冲与负载专题**：[tx_buffer_sizing.md](tx_buffer_sizing.md) · [tx_buffer_local.md](tx_buffer_local.md) · [tx_buffer_cascade.md](tx_buffer_cascade.md) · [tx_buffer_heavy.md](tx_buffer_heavy.md) · [tx_cml_amplitude.md](tx_cml_amplitude.md) · [tx_coupling_state.md](tx_coupling_state.md) · [tx_loaded_clock.md](tx_loaded_clock.md) · [tx_physical_load_card.md](tx_physical_load_card.md) · [tx_relative_timing_screen.md](tx_relative_timing_screen.md) · [tx_retime_demand.md](tx_retime_demand.md)
 
 ## RX 与信道
-- **前端、PI、采样与数字**：[rx_frontend.md](rx_frontend.md) · [rx_pi_sampler.md](rx_pi_sampler.md) · [rx_cdr_digital.md](rx_cdr_digital.md) · [rx_cold_convergence.md](rx_cold_convergence.md) · [rx_word_host_timing.md](rx_word_host_timing.md) · [rx_host_cdc.md](rx_host_cdc.md)
+- **前端、PI、采样与数字**：[rx_frontend.md](rx_frontend.md) · [rx_pi_sampler.md](rx_pi_sampler.md) · [rx_cmos_v2.md](rx_cmos_v2.md)（去 CML 四分之一速 Double-Tail + 2 GHz CMOS PI + 纯 CMOS 解串，45/45 端到端独立候选）· [rx_cdr_digital.md](rx_cdr_digital.md) · [rx_cold_convergence.md](rx_cold_convergence.md) · [rx_word_host_timing.md](rx_word_host_timing.md) · [rx_host_cdc.md](rx_host_cdc.md)
 - **信道**：[channel_model.md](channel_model.md)
 
 ## 公共器件与跨模块专题

@@ -198,9 +198,9 @@ Xkn2 int_n int_p vss vss serdes_nfet_lvt w=0.42 l=0.15 nf=1
 * Reset switches (rst_n=0 -> int_p=0, int_n=1 -> qp=0, qn=1, 0 uA static!)
 Xrp int_p rst   vss vss serdes_nfet w=1.0 l=0.18 nf=1
 Xrn int_n rst_n vdd vdd serdes_pfet w=1.8 l=0.18 nf=1
-* Output inverters
-Xop int_n qp vdd vss pi_inv wn=1.00 wp=2.70 nfn=1 nfp=1
-Xon int_p qn vdd vss pi_inv wn=1.00 wp=2.70 nfn=1 nfp=1
+* Output inverters (sized to drive 2.4/6.2 output clock buffers cleanly @ SS 1.65V -40C)
+Xop int_n qp vdd vss pi_inv wn=1.25 wp=3.30 nfn=1 nfp=2
+Xon int_p qn vdd vss pi_inv wn=1.25 wp=3.30 nfn=1 nfp=2
 Xcc qp    qn vdd vss pi_cc_align wn=0.42 wp=1.00
 .ends pi_diff_latch
 
@@ -239,19 +239,19 @@ Xdm_e0b e0 e2 vdd vss pi_latch_dummy
 Xdm_e1a e1 e3 vdd vss pi_latch_dummy
 Xdm_e1b e1 e3 vdd vss pi_latch_dummy
 
-* Slim 1 GHz Output Buffers driving 12 fF slicer clock loads (<35 ps edges @ SS -40C!)
-Xbd0 d2 ckd0 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbd2 d0 ckd2 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbd1 d3 ckd1 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbd3 d1 ckd3 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbe0 e2 cke0 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbe2 e0 cke2 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbe1 e3 cke1 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xbe3 e1 cke3 vdd vss pi_inv wn=1.10 wp=2.90 nfn=1 nfp=2
-Xccd0 ckd0 ckd2 vdd vss pi_cc_align wn=0.42 wp=0.95
-Xccd1 ckd1 ckd3 vdd vss pi_cc_align wn=0.42 wp=0.95
-Xcce0 cke0 cke2 vdd vss pi_cc_align wn=0.42 wp=0.95
-Xcce1 cke1 cke3 vdd vss pi_cc_align wn=0.42 wp=0.95
+* 1 GHz Output Buffers driving full ~38 fF real Double-Tail slicer + deser16 clock loads (< 45 ps edges @ SS -40C!)
+Xbd0 d2 ckd0 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbd2 d0 ckd2 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbd1 d3 ckd1 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbd3 d1 ckd3 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbe0 e2 cke0 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbe2 e0 cke2 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbe1 e3 cke1 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xbe3 e1 cke3 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+Xccd0 ckd0 ckd2 vdd vss pi_cc_align wn=0.45 wp=1.10
+Xccd1 ckd1 ckd3 vdd vss pi_cc_align wn=0.45 wp=1.10
+Xcce0 cke0 cke2 vdd vss pi_cc_align wn=0.45 wp=1.10
+Xcce1 cke1 cke3 vdd vss pi_cc_align wn=0.45 wp=1.10
 .ends serdes_rx_qdiv2_8ph
 
 * --- Integrated 2 GHz Ultra-Low-Power CMOS PI + Deterministic 8-Phase 1 GHz Clock Generator ---

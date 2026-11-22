@@ -135,37 +135,39 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
     pi_ports = {nm: (x, y) for _l, x, y, nm in Cell.read(VARIANT_DIR / "serdes_rx_cmos_pi_8ph_pdk.mag").labels}
     deser_ports = {nm: (x, y) for _l, x, y, nm in Cell.read(VARIANT_DIR / "serdes_rx_cmos_deser16_pdk.mag").labels}
 
-    # --- 1. Place South Band: PI_8ph (West) + Isolated Analog FE Bay (East) ---
-    dx_pi, dy_pi = 2.300, 0.500
-    c.include(pi_cell, dx=dx_pi, dy=dy_pi)  # world bbox [0.00, 0.00, 163.32, 68.72]
+    # --- 1. Place South Band: PI_8ph v2.2 (124.88 um wide, West!) + Isolated Analog FE Bay (East) ---
+    dx_pi, dy_pi = 1.900, 0.500
+    c.include(pi_cell, dx=dx_pi, dy=dy_pi)  # world bbox [0.00, 0.00, 124.88, 68.72]
 
     # Term (mirrored in X -> rxp/rxn on East edge x=236.5, vcm/vss on West x=203.6)
     x_mir_term, dy_term = 218.000, 16.000
     _include_flip_x(c, term_cell, x_mirror_axis=x_mir_term, dy=dy_term)  # [203.15, 7.82, 236.50, 24.18]
 
-    # CTLE (mirrored in X -> inp/inn on East x=230.7 directly above term, outp/outn on West x=193.3!)
-    x_mir_ctle, dy_ctle = 212.000, 46.000
-    _include_flip_x(c, ctle_cell, x_mirror_axis=x_mir_ctle, dy=dy_ctle)  # [193.30, 31.40, 230.70, 57.60]
+    # Option 1 Floorplan: Move CTLE closer to 8x slicer midpoint (x=118.4) while keeping 20.7 um grounded shield bay from PI!
+    # Mirrored in X -> inp/inn on East x=183.00, outp/outn on West x=145.60 (ctle_p/n trunk shrinks 69 -> 20.4 um!)
+    x_mir_ctle, dy_ctle = 164.300, 46.000
+    _include_flip_x(c, ctle_cell, x_mirror_axis=x_mir_ctle, dy=dy_ctle)  # [145.60, 31.40, 183.00, 57.60]
 
-    # Exact 1:1 `serdes_bias_ctle_v2` LVT diode mirror in spacious bay West of term (184.0, 16.0)
-    bias_pts = _draw_bias_ctle_diode(c, cache, 184.000, 16.000)
+    # Exact 1:1 `serdes_bias_ctle_v2` LVT diode mirror directly below CTLE East vbias (188.0, 16.0)
+    bias_pts = _draw_bias_ctle_diode(c, cache, 188.000, 16.000)
 
     # --- 2. Place Middle Band: 8x Abutted `serdes_rx_dt_slicer_pdk` (`236.80 um` wide!) ---
+    # Option 1 Floorplan: Collapse empty y=68.7..83.2 clock corridor to 4.36 um by routing cke0..3 over slicer's M3-free South zone!
     col_pitch = 29.600
-    dy_slicer = 84.320  # world y in [83.200, 114.740]
+    dy_slicer = 74.200  # world y in [73.080, 104.620] (-10.12 um vs v2.1 84.320!)
     slicer_ctrs = [grid(14.800 + col * col_pitch) for col in range(8)]
     for x_ctr in slicer_ctrs:
         c.include(slicer_cell, dx=x_ctr, dy=dy_slicer)
 
     # --- 3. Place North Band: Pitch-Matched `serdes_rx_cmos_deser16_pdk` (`236.80 um` wide!) ---
-    dx_deser, dy_deser = 0.000, 126.400  # south pins at y=117.400, north pins at y=203.400!
+    dx_deser, dy_deser = 0.000, 116.280  # south pins at y=107.280, north pins at y=193.280 (-10.12 um height -> ~195.4 um!)
     c.include(deser_cell, dx=dx_deser, dy=dy_deser)
 
     # Perimeter coordinates
     x_west = -4.200
     x_east = 239.000
     y_south = -1.600
-    y_north = grid(dy_deser + 77.000)  # 203.400
+    y_north = grid(dy_deser + 77.000)  # 193.280
 
     # --- 4. Analog Front-End Routing (`rxp/rxn`, `vcm_ref`, `ibias_ctle`, `eq0/eq1`, `ctle_p/ctle_n`) ---
     # 4a. East `rxp/rxn` M5 input pads extending to x_east = 239.000
@@ -174,20 +176,20 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
     c.wire("metal5", [(235.000, y_rxp_term), (x_east, y_rxp_term)], 1.800)
     c.wire("metal5", [(235.000, y_rxn_term), (x_east, y_rxn_term)], 1.800)
 
-    # Symmetric M4 risers from term's existing M4 bars (x_rxp=231.90, x_rxn=234.10) straight up to CTLE inp/inn!
+    # Symmetric M4 risers from term's existing M4 bars (x_rxp=231.90, x_rxn=234.10) + matched M3 pair -> CTLE inp/inn (x=183.00)!
     x_rxp_m4 = grid(x_mir_term - (-13.900))  # 231.900
     x_rxn_m4 = grid(x_mir_term - (-16.100))  # 234.100
     y_ctle_inp = grid(dy_ctle + 5.950)       # 51.950
     y_ctle_inn = grid(dy_ctle + 5.050)       # 51.050
-    x_ctle_e = grid(x_mir_ctle - (-18.700))  # 230.700
+    x_ctle_e = grid(x_mir_ctle - (-18.700))  # 183.000
 
     c.wire("metal4", [(x_rxp_m4, grid(dy_term + 7.550)), (x_rxp_m4, y_ctle_inp)], 0.640)
     via3_pad(c, x_rxp_m4, y_ctle_inp)
-    c.wire("metal3", [(x_ctle_e, y_ctle_inp), (x_rxp_m4, y_ctle_inp)], 0.440)
+    c.wire("metal3", [(x_ctle_e, y_ctle_inp), (x_rxp_m4, y_ctle_inp)], 0.480)
 
     c.wire("metal4", [(x_rxn_m4, grid(dy_term + 6.350)), (x_rxn_m4, y_ctle_inn)], 0.640)
     via3_pad(c, x_rxn_m4, y_ctle_inn)
-    c.wire("metal3", [(x_ctle_e, y_ctle_inn), (x_rxn_m4, y_ctle_inn)], 0.440)
+    c.wire("metal3", [(x_ctle_e, y_ctle_inn), (x_rxn_m4, y_ctle_inn)], 0.480)
 
     # 4b. `vcm_ref`: term vcm (203.60, 16.00, M3) -> South port at (200.00, y_south, M4)
     x_vcm_s = 200.000
@@ -195,25 +197,25 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
     via3_pad(c, x_vcm_s, dy_term)
     c.wire("metal4", [(x_vcm_s, y_south), (x_vcm_s, dy_term)], 0.560)
 
-    # 4c. `ibias_ctle`: bias_ctle iin (184.0, 17.60, M2) <-> CTLE vbias (230.70, 33.90, M1) -> South port (196.00, y_south, M4)
-    x_bias_in, y_bias_in = bias_pts["iin"]   # (184.000, 17.600)
+    # 4c. `ibias_ctle`: bias_ctle iin (188.0, 17.60, M2) <-> CTLE vbias (183.00, 33.90, M1) -> South port (188.00, y_south, M4)
+    x_bias_in, y_bias_in = bias_pts["iin"]   # (188.000, 17.600)
     y_ctle_vb = grid(dy_ctle - 12.100)       # 33.900
     y_ibias_bus = 27.400                     # clean horizontal M2 bus (clear of term top 24.18 & y_m5_vss_lo=30.00!)
-    x_ibias_s = 196.000
-    # CTLE vbias (M1 at 230.70, 33.90) -> M2 down to y=27.40 -> West to x=196.00 -> South to bias_ctle & port!
-    c.wire("metal1", [(x_ctle_e, y_ctle_vb), (231.300, y_ctle_vb)], 0.300)
-    via1_clean(c, 231.300, y_ctle_vb)
-    c.wire("metal2", [(231.300, y_ctle_vb), (231.300, y_ibias_bus), (x_ibias_s, y_ibias_bus)], 0.400)
-    c.wire("metal2", [(x_bias_in, y_bias_in), (x_ibias_s, y_bias_in), (x_ibias_s, y_ibias_bus)], 0.400)
+    x_ibias_s = 188.000
+    x_vb_via = grid(x_ctle_e + 0.600)        # 183.600
+    c.wire("metal1", [(x_ctle_e, y_ctle_vb), (x_vb_via, y_ctle_vb)], 0.300)
+    via1_clean(c, x_vb_via, y_ctle_vb)
+    c.wire("metal2", [(x_vb_via, y_ctle_vb), (x_vb_via, y_ibias_bus), (x_ibias_s, y_ibias_bus)], 0.400)
+    c.wire("metal2", [(x_bias_in, y_bias_in), (x_ibias_s, y_ibias_bus)], 0.400)
     via2_clean(c, x_ibias_s, y_ibias_bus)
     via3_pad(c, x_ibias_s, y_ibias_bus)
     c.wire("metal4", [(x_ibias_s, y_south), (x_ibias_s, y_ibias_bus)], 0.480)
 
-    # 4d. `eq0` & `eq1`: CTLE West pins (x=193.30, y=45.85 / 34.25, M1) -> South ports (190.40 / 192.20, y_south, M4)
-    x_ctle_w = grid(x_mir_ctle - 18.700)     # 193.300
+    # 4d. `eq0` & `eq1`: CTLE West pins (x=145.60, y=45.85 / 34.25, M1) -> South ports (142.80 / 144.40, y_south, M4)
+    x_ctle_w = grid(x_mir_ctle - 18.700)     # 145.600
     y_eq0 = grid(dy_ctle - 0.150)            # 45.850
     y_eq1 = grid(dy_ctle - 11.750)           # 34.250
-    x_eq0_s, x_eq1_s = 190.400, 192.200
+    x_eq0_s, x_eq1_s = 142.800, 144.400
     for x_s, y_e in ((x_eq0_s, y_eq0), (x_eq1_s, y_eq1)):
         c.wire("metal1", [(x_s, y_e), (x_ctle_w, y_e)], 0.280)
         via1_clean(c, x_s, y_e)
@@ -221,27 +223,27 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
         via3_pad(c, x_s, y_e)
         c.wire("metal4", [(x_s, y_south), (x_s, y_e)], 0.440)
 
-    # 4e. Center-Fed Symmetric Differential `ctle_p / ctle_n` Trunk -> Exact Center (`x=118.40`) of 8x Slicers!
+    # 4e. Short Center-Fed Symmetric Differential `ctle_p / ctle_n` Trunk (20.4 um M3!) -> Exact Center (`x=118.40`) of 8x Slicers!
     y_ctle_op = grid(dy_ctle + 6.800)        # 52.800 (M4)
     y_ctle_on = grid(dy_ctle + 4.200)        # 50.200 (M4)
-    x_cp_m4, x_cn_m4 = 188.000, 186.400      # symmetric pair rising West of CTLE (clear of eq0=190.4 and PI=163.3!)
-    y_cp_m3, y_cn_m3 = 80.500, 81.800        # dedicated M3 channel right above 8 clock tracks (70.0..79.1)!
+    x_cp_m4, x_cn_m4 = 139.600, 138.000      # symmetric pair in col 4 x_rel=+6.40/+4.80 (1.60 um clear of M5 drop at 141.20!)
+    y_cp_m3, y_cn_m3 = 78.750, 79.600        # short 20.4 um M3 bridge right below slicer inp/inn (80.45/81.25) & above cke3 (77.85)!
     x_cp_ctr, x_cn_ctr = 119.200, 117.600    # straddling exact midpoint x=118.40 of 8x slicer bank!
-    y_sl_inp = grid(dy_slicer + 6.250)       # 90.570
-    y_sl_inn = grid(dy_slicer + 7.050)       # 91.370
+    y_sl_inp = grid(dy_slicer + 6.250)       # 80.450
+    y_sl_inn = grid(dy_slicer + 7.050)       # 81.250
 
     # ctle_p
     c.wire("metal4", [(x_ctle_w, y_ctle_op), (x_cp_m4, y_ctle_op), (x_cp_m4, y_cp_m3)], 0.520)
     _dual_via3_h(c, x_cp_m4, y_cp_m3, dx=-0.62)
-    c.wire("metal3", [(x_cp_ctr, y_cp_m3), (x_cp_m4, y_cp_m3)], 0.520)
-    _dual_via3_h(c, x_cp_ctr, y_cp_m3, dx=0.62)
+    c.wire("metal3", [(x_cp_ctr, y_cp_m3), (x_cp_m4, y_cp_m3)], 0.440)
+    _dual_via3_h(c, x_cp_ctr, y_cp_m3, dx=-0.62)
     c.wire("metal4", [(x_cp_ctr, y_cp_m3), (x_cp_ctr, y_sl_inp)], 0.520)
     via3_pad(c, x_cp_ctr, y_sl_inp)
 
     # ctle_n
     c.wire("metal4", [(x_ctle_w, y_ctle_on), (x_cn_m4, y_ctle_on), (x_cn_m4, y_cn_m3)], 0.520)
     _dual_via3_h(c, x_cn_m4, y_cn_m3, dx=-0.62)
-    c.wire("metal3", [(x_cn_ctr, y_cn_m3), (x_cn_m4, y_cn_m3)], 0.520)
+    c.wire("metal3", [(x_cn_ctr, y_cn_m3), (x_cn_m4, y_cn_m3)], 0.440)
     _dual_via3_h(c, x_cn_ctr, y_cn_m3, dx=-0.62)
     c.wire("metal4", [(x_cn_ctr, y_cn_m3), (x_cn_ctr, y_sl_inn)], 0.520)
     via3_pad(c, x_cn_ctr, y_sl_inn)
@@ -250,35 +252,37 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
     c.wire("metal3", [(236.800, y_sl_inp), (x_east, y_sl_inp)], 0.400)
     c.wire("metal3", [(236.800, y_sl_inn), (x_east, y_sl_inn)], 0.400)
 
-    # --- 5. Equalized-Span 8-Phase 1 GHz Clock Distribution (PI -> 8x Slicers -> Deser16) ---
+    # --- 5. Equalized-Span 8-Phase 1 GHz Clock Distribution (Option 1 Over-Slicer Collapsed Channel!) ---
+    # ckd0..3 in compact 4.36 um gap [69.50..72.20]; cke0..3 over 8x slicer's M3-free South zone [75.15..77.85]!
     clk_names = ["ckd0", "ckd1", "ckd2", "ckd3", "cke0", "cke1", "cke2", "cke3"]
-    y_sl_clk_bot = grid(dy_slicer - 0.900)   # 83.420
-    y_sl_clk_top = grid(dy_slicer + 17.200)  # 101.520 (existing slicer M4 clk spine top)
-    y_dsr_s = grid(dy_deser - 9.000)         # 117.400
+    clk_y_trks = [69.500, 70.400, 71.300, 72.200, 75.150, 76.050, 76.950, 77.850]
+    y_sl_clk_bot = grid(dy_slicer - 0.900)   # 73.300 (overlaps existing slicer M4 clk spine [-1.12..+17.42] = [73.08..91.62]!)
+    y_sl_clk_top = grid(dy_slicer + 17.200)  # 91.400 (existing slicer M4 clk spine top)
+    y_dsr_s = grid(dy_deser - 9.000)         # 107.280
 
     for k, cname in enumerate(clk_names):
         x_pi_ck = grid(dx_pi + pi_ports[cname][0])
         y_pi_ck = grid(dy_pi + pi_ports[cname][1])  # 68.500
         x_sl_ck = slicer_ctrs[k]
-        y_trk = grid(70.000 + k * 1.300)            # 70.0, 71.3, ..., 79.1
+        y_trk = clk_y_trks[k]
 
-        # Equalized 82.00 um horizontal M3 span -> matched load capacitance across all 8 phases!
-        # Match M4 vertical riser width (0.440) to PI North & Slicer South M4 clk stubs (zero met4.2 step notch!)
+        # Equalized 110.00 um horizontal M3 span -> matched load capacitance across all 8 phases!
         x_lo = min(x_pi_ck, x_sl_ck)
-        x_hi = max(x_pi_ck, x_sl_ck, grid(x_lo + 82.000))
+        x_hi = max(x_pi_ck, x_sl_ck, grid(x_lo + 110.000))
         c.wire("metal4", [(x_pi_ck, y_pi_ck), (x_pi_ck, y_trk)], 0.440)
         _dual_via3_h(c, x_pi_ck, y_trk, dx=0.62)
-        c.wire("metal3", [(x_lo, y_trk), (x_hi, y_trk)], 0.560)
+        c.wire("metal3", [(x_lo, y_trk), (x_hi, y_trk)], 0.460)
         _dual_via3_h(c, x_sl_ck, y_trk, dx=-0.62)
-        c.wire("metal4", [(x_sl_ck, y_trk), (x_sl_ck, y_sl_clk_bot)], 0.440)
+        if y_trk < y_sl_clk_bot:
+            c.wire("metal4", [(x_sl_ck, y_trk), (x_sl_ck, y_sl_clk_bot)], 0.440)
 
         # Straight M4 pass-through along slicer's central x_rel=0 spine -> Deser16 South clock pin!
         c.wire("metal4", [(x_sl_ck, y_sl_clk_top), (x_sl_ck, y_dsr_s)], 0.440)
 
     # --- 6. Slicer Hardwired Trim Ties (`t5=vdd`, `t4..t0=vss`) & Straight `qp -> Deser16` Stitches ---
-    y_sl_vss = grid(dy_slicer + 0.000)       # 84.320 (full-width M3 vss)
-    y_sl_vdd = grid(dy_slicer + 11.300)      # 95.620 (full-width M3 vdd)
-    y_sl_qp = grid(dy_slicer + 30.250)       # 114.570 (M2)
+    y_sl_vss = grid(dy_slicer + 0.000)       # 74.200 (full-width M3 vss)
+    y_sl_vdd = grid(dy_slicer + 11.300)      # 85.500 (full-width M3 vdd)
+    y_sl_qp = grid(dy_slicer + 30.250)       # 104.450 (M2)
     t_vss_offs = (-12.750, -11.850, -10.050, -8.150, -7.300)
     t5_off = -10.950
 
@@ -304,10 +308,10 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
         c.wire("metal3", [(x_west, y_p), (x_p, y_p)], 0.440)
         west_c_ports[nm] = (x_west, y_p)
 
-    # West rst_n: stitch PI rst_n (0.30, 54.35, M3) -> West M4 trunk at x=-0.800 -> Deser16 rst_n (-0.800, 127.70, M4)!
+    # West rst_n: stitch PI rst_n (0.30, 54.35, M3) -> West M4 trunk at x=-0.800 -> Deser16 rst_n (-0.800, 117.58, M4)!
     y_pi_rstn = grid(dy_pi + pi_ports["rst_n"][1])      # 54.350
     x_dsr_rstn = grid(dx_deser + deser_ports["rst_n"][0])  # -0.800
-    y_dsr_rstn = grid(dy_deser + deser_ports["rst_n"][1])  # 127.700
+    y_dsr_rstn = grid(dy_deser + deser_ports["rst_n"][1])  # 117.580
     c.wire("metal3", [(x_west, y_pi_rstn), (grid(dx_pi + pi_ports["rst_n"][0]), y_pi_rstn)], 0.440)
     via3_pad(c, x_dsr_rstn, y_pi_rstn)
     c.wire("metal4", [(x_dsr_rstn, y_pi_rstn), (x_dsr_rstn, y_dsr_rstn)], 0.520)
@@ -323,17 +327,23 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
             south_ctrl_ports[nm] = (x_p, y_south)
 
     # --- 8. Low-R Interdigitated M5 Power Comb (`vdd` West-Rooted, `vss` East-Rooted -> ZERO M5 Crossings!) ---
-    # VDD M5 comb: West vertical trunk at x = -4.200 (y in [57.20 .. 194.80]) + 5 horizontal fingers [-4.20 .. 222.00]
-    # VSS M5 comb: East vertical trunk at x = 227.600 (y in [31.80 .. 202.40], 3.6 um clear of term M5!) + 6 horizontal fingers
-    #              (y=31.80 runs full width to x_west=-4.200 below VDD trunk; upper fingers stop at x=1.80, 3.6 um clear of West VDD trunk!)
     x_vdd_m5_w = -4.200
     x_vss_m5_e = 227.600
     x_vdd_m5_end = 222.000
     x_vss_m5_beg = 1.800
 
-    y_m5_vdd_lo, y_m5_vdd_sl1, y_m5_vdd_sl2, y_m5_vdd_ds0, y_m5_vdd_hi = 57.200, 95.620, 113.670, 118.000, 194.800
-    # Put y_m5_vss_lo at 30.000 (>= 2.40 um below CTLE internal cap1 M4 bar at y=32.40!)
-    y_m5_vss_lo, y_m5_vss_pi, y_m5_vss_sl1, y_m5_vss_sl2, y_m5_vss_ds0, y_m5_vss_hi = 30.000, 63.000, 84.320, 105.070, 126.400, 202.400
+    y_m5_vdd_lo  = 57.200
+    y_m5_vdd_sl1 = grid(dy_slicer + 11.300)   # 85.500
+    y_m5_vdd_sl2 = grid(dy_slicer + 29.350)   # 103.550
+    y_m5_vdd_ds0 = grid(dy_deser - 8.400)     # 107.880
+    y_m5_vdd_hi  = grid(dy_deser + 68.400)    # 184.680
+
+    y_m5_vss_lo  = 30.000
+    y_m5_vss_pi  = 63.000
+    y_m5_vss_sl1 = grid(dy_slicer + 0.000)    # 74.200
+    y_m5_vss_sl2 = grid(dy_slicer + 20.750)   # 94.950
+    y_m5_vss_ds0 = grid(dy_deser + 0.000)     # 116.280
+    y_m5_vss_hi  = grid(dy_deser + 76.000)    # 192.280
 
     # Draw VDD M5 Comb
     c.wire("metal5", [(x_vdd_m5_w, y_m5_vdd_lo), (x_vdd_m5_w, y_m5_vdd_hi)], 2.400)
@@ -343,51 +353,54 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
     # Draw VSS M5 Comb
     c.wire("metal5", [(x_vss_m5_e, y_m5_vss_lo), (x_vss_m5_e, y_m5_vss_hi)], 2.400)
     c.wire("metal5", [(x_vdd_m5_w, y_m5_vss_lo), (x_vss_m5_e, y_m5_vss_lo)], 2.200)  # full-width South VSS bus -> West port!
-    c.wire("metal5", [(154.000, y_m5_vss_pi), (x_vss_m5_e, y_m5_vss_pi)], 2.200)     # PI East VSS + quiet shield finger
+    c.wire("metal5", [(120.000, y_m5_vss_pi), (x_vss_m5_e, y_m5_vss_pi)], 2.200)     # PI v2.2 East VSS + quiet shield finger
     for yv in (y_m5_vss_sl1, y_m5_vss_sl2, y_m5_vss_ds0, y_m5_vss_hi):
         c.wire("metal5", [(x_vss_m5_beg, yv), (x_vss_m5_e, yv)], 2.200)
 
-    # --- 8a. Stitch PI_8ph vdd & vss into M5 comb ---
-    via4_pad(c, 1.200, y_m5_vdd_lo)
-    via4_pad(c, 161.700, y_m5_vdd_lo)
-    via4_pad(c, 155.800, y_m5_vss_pi)
-    # West PI vss stitch (0.30, 50.10, M3) -> West M4 at x=-3.60 down to y=30.00 -> via4 onto M5 vss bus!
+    # --- 8a. Stitch PI_8ph v2.2 vdd & vss into M5 comb ---
+    c.wire("metal4", [(0.600, y_m5_vdd_lo), (1.000, y_m5_vdd_lo)], 0.800)
+    via4_pad(c, 0.600, y_m5_vdd_lo)
+    c.wire("metal4", [(123.700, y_m5_vdd_lo), (124.500, y_m5_vdd_lo)], 0.800)
+    via4_pad(c, 124.500, y_m5_vdd_lo)
+    c.wire("metal4", [(122.600, y_m5_vss_pi), (123.300, y_m5_vss_pi)], 0.800)
+    via4_pad(c, 123.300, y_m5_vss_pi)
     y_pi_vss = grid(dy_pi + pi_ports["vss"][1])  # 50.100
     c.wire("metal3", [(-3.600, y_pi_vss), (grid(dx_pi + pi_ports["vss"][0]), y_pi_vss)], 0.600)
     via3_pad(c, -3.600, y_pi_vss)
     c.wire("metal4", [(-3.600, y_m5_vss_lo), (-3.600, y_pi_vss)], 0.800)
     via4_pad(c, -3.600, y_m5_vss_lo)
 
-    # --- 8b. Stitch CTLE, Term, and BIAS_CTLE vdd & vss into M5 comb ---
-    for xv_c in (206.000, 220.000):
+    # --- 8b. Stitch CTLE, Term, BIAS_CTLE vdd & vss + Grounded Shield Wall between PI (124.9) & CTLE (145.6) ---
+    for xv_c in (158.000, 172.000):
         via2_clean(c, xv_c, y_m5_vdd_lo)
         via3_pad(c, xv_c, y_m5_vdd_lo)
         via4_pad(c, xv_c, y_m5_vdd_lo)
 
     # Bring CTLE South vss M2 rail (y=31.80) down to y_m5_vss_lo (30.00) on wide M2 stubs -> clean via2+via3+via4!
     y_ctle_vss = grid(dy_ctle - 14.200)  # 31.800
-    for xv_c in (206.000, 214.000, 224.000):
+    for xv_c in (158.000, 166.000, 176.000):
         c.wire("metal2", [(xv_c, y_m5_vss_lo), (xv_c, y_ctle_vss)], 0.800)
         via2_clean(c, xv_c, y_m5_vss_lo)
         via3_pad(c, xv_c, y_m5_vss_lo)
         via4_pad(c, xv_c, y_m5_vss_lo)
 
+    # Stitch Term vss (203.60, 11.90, M2) & BIAS_CTLE vss (188.0, 14.15, M2) -> x=196.00 M3/M4 riser into y_m5_vss_lo (30.00)!
     x_term_vss = grid(x_mir_term - 14.400)  # 203.600
     y_term_vss = grid(dy_term - 4.100)      # 11.900
-    c.wire("metal2", [(198.000, y_term_vss), (x_term_vss, y_term_vss)], 0.440)
-    via2_clean(c, 198.000, y_term_vss)
-    c.wire("metal3", [(198.000, y_term_vss), (198.000, y_ctle_vss)], 0.520)
-    via2_clean(c, 198.000, y_ctle_vss)
+    x_bias_vss, y_bias_vss = bias_pts["vss"]  # (188.000, 14.150)
+    x_fe_vss = 196.000
+    c.wire("metal2", [(x_fe_vss, y_term_vss), (x_term_vss, y_term_vss)], 0.440)
+    c.wire("metal2", [(x_bias_vss, y_bias_vss), (x_fe_vss, y_bias_vss)], 0.520)
+    c.wire("metal2", [(x_fe_vss, y_term_vss), (x_fe_vss, y_bias_vss)], 0.520)
+    via2_clean(c, x_fe_vss, y_bias_vss)
+    c.wire("metal3", [(x_fe_vss, y_bias_vss), (x_fe_vss, y_m5_vss_lo)], 0.600)
+    via3_pad(c, x_fe_vss, y_m5_vss_lo)
+    via4_pad(c, x_fe_vss, y_m5_vss_lo)
 
-    # Stitch bias_ctle vss (184.0, 14.15, M2) -> x=174.00 grounded shield spine (M2->M3->M4)!
-    x_bias_vss, y_bias_vss = bias_pts["vss"]  # (184.000, 14.150)
-    c.wire("metal2", [(174.000, y_bias_vss), (x_bias_vss, y_bias_vss)], 0.520)
-    via2_clean(c, 174.000, y_bias_vss)
-    via3_pad(c, 174.000, y_bias_vss)
-    # Grounded M4 quiet shield spine between PI (x=163.3) and CTLE (x=193.3) at x = 174.00!
-    c.wire("metal4", [(174.000, y_bias_vss), (174.000, y_m5_vss_pi)], 0.800)
-    via4_pad(c, 174.000, y_m5_vss_lo)
-    via4_pad(c, 174.000, y_m5_vss_pi)
+    # Grounded M4 quiet shield wall between PI (x=124.88) and CTLE (x=145.60) at x = 134.000!
+    c.wire("metal4", [(134.000, y_m5_vss_lo), (134.000, y_m5_vss_pi)], 0.800)
+    via4_pad(c, 134.000, y_m5_vss_lo)
+    via4_pad(c, 134.000, y_m5_vss_pi)
 
     # --- 8c. Stitch 8x Slicer Bank vdd & vss into M5 comb (7 distributed drops per rail!) ---
     for col, x_ctr in enumerate(slicer_ctrs[:7]):  # cols 0..6 -> x_drop in [22.8 .. 200.4], 100% M4-free!

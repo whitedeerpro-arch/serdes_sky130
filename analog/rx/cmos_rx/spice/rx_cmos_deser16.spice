@@ -64,10 +64,10 @@ Xp a enb b vdd serdes_pfet w={wp} l=0.18 nf=1
 * --- Lean 1 GHz Rising-Edge Static CMOS DFF with Async Active-Low Reset (zero stacked PMOS!) ---
 * Uses zero-skew complementary clocks (ck, ckb) -> zero master-slave shoot-through even at SS 1.65V -40C!
 * Resets to q=0, qb=1 when rst_n=0.
-.subckt dsr_dff_1g d ck ckb rst_n q qb vdd vss params: wn=0.65 wp=1.80
+.subckt dsr_dff_1g d ck ckb rst_n q qb vdd vss params: wn=0.65 wp=2.20
 * Master latch (transparent when ck=0, holds when ck=1)
 Xtg1 d  m1 ckb ck vdd vss dsr_tgate wn={wn} wp={wp}
-Xm2  m1 rst_n m2 vdd vss dsr_nand2 wn=0.90 wp=1.60
+Xm2  m1 rst_n m2 vdd vss dsr_nand2 wn=1.00 wp=2.00
 Xm3  m2 m3 vdd vss dsr_inv wn=0.45 wp=1.15
 Xtg2 m3 m1 ck ckb vdd vss dsr_tgate wn=0.45 wp=1.05
 * Slave latch (transparent when ck=1, holds when ck=0)
@@ -75,8 +75,8 @@ Xtg3 m2 s1 ck ckb vdd vss dsr_tgate wn={wn} wp={wp}
 Xsq  s1 qi vdd vss dsr_inv wn=0.65 wp=1.65
 Xsfb qi rst_n s2 vdd vss dsr_nand2 wn=0.80 wp=1.40
 Xtg4 s2 s1 ckb ck vdd vss dsr_tgate wn=0.45 wp=1.05
-* Clean output buffers
-Xbq1 s1 q  vdd vss dsr_inv wn=0.70 wp=1.80
+* Clean output buffers (balanced wp/wn=3.0 -> fast 0->1 half-cycle timing @ SS 1.65V -40C!)
+Xbq1 s1 q  vdd vss dsr_inv wn=0.80 wp=2.40
 Xbq2 q  qb vdd vss dsr_inv wn=0.55 wp=1.40
 .ends dsr_dff_1g
 
@@ -101,10 +101,10 @@ Xf2 s1  ck ckb rst_n s2 s2b vdd vss dsr_dff_1g
 Xf3 s2  ck ckb rst_n s3 s3b vdd vss dsr_dff_1g
 .ends dsr_shift4
 
-* --- Dummy Clock Receiver Load (matches 0.8/2.0 input inverter on ckd0/ckd2 -> 0.00 ps 8-phase skew!) ---
+* --- Dummy Clock Receiver Load (matches 1.20/4.80 input inverter on ckd0/ckd2 -> 0.00 ps 8-phase skew!) ---
 .subckt dsr_clk_dummy ck vdd vss
-Xn vss ck vss vss serdes_nfet_lvt w=0.80 l=0.15 nf=1
-Xp vdd ck vdd vdd serdes_pfet     w=2.00 l=0.15 nf=1
+Xn vss ck vss vss serdes_nfet_lvt w=1.20 l=0.15 nf=1
+Xp vdd ck vdd vdd serdes_pfet     w=4.80 l=0.15 nf=2
 .ends dsr_clk_dummy
 
 * --- Complete Quarter-Rate Pure CMOS 8->32 Deserializer ---
@@ -115,20 +115,24 @@ Xp vdd ck vdd vdd serdes_pfet     w=2.00 l=0.15 nf=1
 + we0 we1 we2 we3 we4 we5 we6 we7 we8 we9 we10 we11 we12 we13 we14 we15
 + wclk vdd vss
 
-* 1. Zero-Skew Differential 2-Bank 1 GHz Clock Distribution (ck0a/ck0ba, ck0b/ck0bb)
-*    ckd0 (0ps) and ckd2 (500ps = ~ckd0) pass through IDENTICAL 2-stage aligned buffers -> < 5 ps skew!
-*    Bank A drives 22 DFFs (data alignment + data shift); Bank B drives 22 DFFs (edge alignment + edge shift + /4).
-Xck0_i1 ckd0 ck0_1b vdd vss dsr_inv wn=0.80 wp=2.00 nfn=1 nfp=1
-Xck2_i1 ckd2 ck2_1b vdd vss dsr_inv wn=0.80 wp=2.00 nfn=1 nfp=1
-Xcc_c1  ck0_1b ck2_1b vdd vss dsr_cc_align wn=0.42 wp=1.00
+* 1. Zero-Skew Differential 3-Stage 2-Bank 1 GHz Clock Distribution (wp/wn=4.0 -> 50% duty & <15ps crossover @ SS -40C!)
+*    Swapped complementary inputs (ckd2 -> ck0_1, ckd0 -> ck2_1) keep exact polarity through 3 inversions!
+*    Bank A drives 23 DFFs (21 data + 2 Johnson /4); Bank B drives 23 DFFs (23 edge) -> exact 23/23 load balance!
+Xck0_i1 ckd2 ck0_1  vdd vss dsr_inv wn=1.20 wp=4.80 nfn=1 nfp=2
+Xck2_i1 ckd0 ck2_1  vdd vss dsr_inv wn=1.20 wp=4.80 nfn=1 nfp=2
+Xcc_c1  ck0_1 ck2_1 vdd vss dsr_cc_align wn=0.42 wp=1.40
 
-Xck0_a  ck0_1b ck0a  vdd vss dsr_inv wn=2.60 wp=6.60 nfn=2 nfp=4
-Xck2_a  ck2_1b ck0ba vdd vss dsr_inv wn=2.60 wp=6.60 nfn=2 nfp=4
-Xcc_a   ck0a   ck0ba vdd vss dsr_cc_align wn=0.45 wp=1.10
+Xck0_pa ck0_1  ck0_2a vdd vss dsr_inv wn=2.40 wp=9.60 nfn=2 nfp=4
+Xck2_pa ck2_1  ck2_2a vdd vss dsr_inv wn=2.40 wp=9.60 nfn=2 nfp=4
+Xck0_a  ck0_2a ck0a   vdd vss dsr_inv wn=9.60 wp=38.40 nfn=8 nfp=16
+Xck2_a  ck2_2a ck0ba  vdd vss dsr_inv wn=9.60 wp=38.40 nfn=8 nfp=16
+Xcc_a   ck0a   ck0ba  vdd vss dsr_cc_align wn=0.45 wp=1.60
 
-Xck0_b  ck0_1b ck0b  vdd vss dsr_inv wn=2.60 wp=6.60 nfn=2 nfp=4
-Xck2_b  ck2_1b ck0bb vdd vss dsr_inv wn=2.60 wp=6.60 nfn=2 nfp=4
-Xcc_b   ck0b   ck0bb vdd vss dsr_cc_align wn=0.45 wp=1.10
+Xck0_pb ck0_1  ck0_2b vdd vss dsr_inv wn=2.40 wp=9.60 nfn=2 nfp=4
+Xck2_pb ck2_1  ck2_2b vdd vss dsr_inv wn=2.40 wp=9.60 nfn=2 nfp=4
+Xck0_b  ck0_2b ck0b   vdd vss dsr_inv wn=9.60 wp=38.40 nfn=8 nfp=16
+Xck2_b  ck2_2b ck0bb  vdd vss dsr_inv wn=9.60 wp=38.40 nfn=8 nfp=16
+Xcc_b   ck0b   ck0bb  vdd vss dsr_cc_align wn=0.45 wp=1.60
 
 * Matched dummy loads on the other 6 phases
 Xdm_d1 ckd1 vdd vss dsr_clk_dummy
@@ -139,17 +143,19 @@ Xdm_e2 cke2 vdd vss dsr_clk_dummy
 Xdm_e3 cke3 vdd vss dsr_clk_dummy
 
 * 2. Half-Cycle Phase Alignment into Single 1 GHz ck0 Domain (note: ck2 == ck0b, ck2b == ck0!)
-*    Early group (cycle n+1 at ck0): d0 via ck2 -> ck0 -> p0; e0, d1, e1, d2 direct -> ck0 -> p0
+*    Early group (cycle n+1 at ck0): d0, e0 via ck2 -> ck0 -> p0 (eliminates FF hold race on e0!); d1, e1, d2 direct -> ck0 -> p0
 Xd0_a  d0   ck0ba ck0a  rst_n d0_a  d0_ab vdd vss dsr_dff_1g
 Xd0_p  d0_a ck0a  ck0ba rst_n d0_p  d0_pb vdd vss dsr_dff_1g
 Xd1_p  d1   ck0a  ck0ba rst_n d1_p  d1_pb vdd vss dsr_dff_1g
 Xd2_p  d2   ck0a  ck0ba rst_n d2_p  d2_pb vdd vss dsr_dff_1g
-Xe0_p  e0   ck0b  ck0bb rst_n e0_p  e0_pb vdd vss dsr_dff_1g
+Xe0_a  e0   ck0bb ck0b  rst_n e0_a  e0_ab vdd vss dsr_dff_1g
+Xe0_p  e0_a ck0b  ck0bb rst_n e0_p  e0_pb vdd vss dsr_dff_1g
 Xe1_p  e1   ck0b  ck0bb rst_n e1_p  e1_pb vdd vss dsr_dff_1g
 
-*    Late group (cycle n at ck0): e2, d3, e3 via ck2 -> directly into 4-tap ck0 shift register!
+*    Late group (cycle n at ck0): e2 via ck0 -> ck2 (eliminates FF hold race on e2!); d3, e3 via ck2 -> 4-tap ck0 shift register!
 Xd3_a  d3   ck0ba ck0a  rst_n d3_a  d3_ab vdd vss dsr_dff_1g
-Xe2_a  e2   ck0bb ck0b  rst_n e2_a  e2_ab vdd vss dsr_dff_1g
+Xe2_p  e2   ck0b  ck0bb rst_n e2_p  e2_pb vdd vss dsr_dff_1g
+Xe2_a  e2_p ck0bb ck0b  rst_n e2_a  e2_ab vdd vss dsr_dff_1g
 Xe3_a  e3   ck0bb ck0b  rst_n e3_a  e3_ab vdd vss dsr_dff_1g
 
 * 3. 8-Lane 4-Tap 1 GHz Shift Registers (all 8 lanes aligned to exact cycle n!)
@@ -165,9 +171,9 @@ Xsh_e2 e2_a ck0b ck0bb rst_n e2_0 e2_1 e2_2 e2_3 vdd vss dsr_shift4
 Xsh_e3 e3_a ck0b ck0bb rst_n e3_0 e3_1 e3_2 e3_3 vdd vss dsr_shift4
 Xe3_4  e3_3 ck0b ck0bb rst_n e3_4 e3_4b vdd vss dsr_dff_1g
 
-* 4. Deterministic 250 MHz Johnson /4 Word Strobe (clocked on ck2 = ck0bb, 500 ps midpoint between ck0 edges!)
-Xj0 j1b ck0bb ck0b rst_n j0 j0b vdd vss dsr_dff_1g
-Xj1 j0  ck0bb ck0b rst_n j1 j1b vdd vss dsr_dff_1g
+* 4. Deterministic 250 MHz Johnson /4 Word Strobe (clocked on ck2 = ck0ba, 500 ps midpoint between ck0 edges!)
+Xj0 j1b ck0ba ck0a rst_n j0 j0b vdd vss dsr_dff_1g
+Xj1 j0  ck0ba ck0a rst_n j1 j1b vdd vss dsr_dff_1g
 * Zero-skew 250 MHz word-capture clock distribution (wcap = j0, wcapb = j0b)
 Xwcb1 j0      wcapb_i vdd vss dsr_inv wn=1.40 wp=3.40 nfn=1 nfp=2
 Xwcb2 wcapb_i wcap    vdd vss dsr_inv wn=2.40 wp=5.80 nfn=2 nfp=4

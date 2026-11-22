@@ -20,9 +20,9 @@ X16 t_Xcomp_r_off vss vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.18
 X17 t_Xcomp_tail clk vss vss sky130_fd_pr__nfet_01v8_lvt w=7 l=0.15
 X18 t_Xcomp_fn inp t_Xcomp_tail vss sky130_fd_pr__nfet_01v8_lvt w=14 l=0.18
 X19 t_Xcomp_fp inn t_Xcomp_tail vss sky130_fd_pr__nfet_01v8_lvt w=14 l=0.18
-X20 t_Xcomp_fn clk vdd vdd sky130_fd_pr__pfet_01v8 w=3.6 l=0.15
-X21 t_Xcomp_fp clk vdd vdd sky130_fd_pr__pfet_01v8 w=3.6 l=0.15
-X22 t_Xcomp_fn clk t_Xcomp_fp vdd sky130_fd_pr__pfet_01v8 w=1 l=0.18
+X20 t_Xcomp_fn clk vdd vdd sky130_fd_pr__pfet_01v8 w=5.1 l=0.15
+X21 t_Xcomp_fp clk vdd vdd sky130_fd_pr__pfet_01v8 w=5.1 l=0.15
+X22 t_Xcomp_fn clk t_Xcomp_fp vdd sky130_fd_pr__pfet_01v8 w=2.1 l=0.18
 X23 t_Xcomp_tb0 t_Xcomp_fn t_Xcomp_tb0 vss sky130_fd_pr__nfet_01v8 w=0.45 l=0.18
 X24 t_Xcomp_tb1 t_Xcomp_fn t_Xcomp_tb1 vss sky130_fd_pr__nfet_01v8 w=0.9 l=0.18
 X25 t_Xcomp_tb2 t_Xcomp_fn t_Xcomp_tb2 vss sky130_fd_pr__nfet_01v8 w=1.8 l=0.18
@@ -39,9 +39,9 @@ X35 t_outp_b t_outn_b t_Xcomp_vbot2 vss sky130_fd_pr__nfet_01v8_lvt w=8 l=0.18
 X36 t_outn_b t_outp_b t_Xcomp_vbot2 vss sky130_fd_pr__nfet_01v8_lvt w=8 l=0.18
 X37 t_outp_b t_outn_b vdd vdd sky130_fd_pr__pfet_01v8 w=9 l=0.18
 X38 t_outn_b t_outp_b vdd vdd sky130_fd_pr__pfet_01v8 w=9 l=0.18
-X39 t_outp_b clk vdd vdd sky130_fd_pr__pfet_01v8 w=3.6 l=0.15
-X40 t_outn_b clk vdd vdd sky130_fd_pr__pfet_01v8 w=3.6 l=0.15
-X41 t_outp_b clk t_outn_b vdd sky130_fd_pr__pfet_01v8 w=1 l=0.18
+X39 t_outp_b clk vdd vdd sky130_fd_pr__pfet_01v8 w=5.1 l=0.15
+X40 t_outn_b clk vdd vdd sky130_fd_pr__pfet_01v8 w=5.1 l=0.15
+X41 t_outp_b clk t_outn_b vdd sky130_fd_pr__pfet_01v8 w=2.1 l=0.18
 X42 t_Xsr_sp t_outp_b vss vss sky130_fd_pr__nfet_01v8_lvt w=1.5 l=0.15
 X43 t_Xsr_sp t_outp_b vdd vdd sky130_fd_pr__pfet_01v8_lvt w=3.2 l=0.35
 X44 t_Xsr_sn t_outn_b vss vss sky130_fd_pr__nfet_01v8_lvt w=1.5 l=0.15

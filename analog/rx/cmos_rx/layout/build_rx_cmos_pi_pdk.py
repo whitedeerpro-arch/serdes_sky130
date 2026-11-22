@@ -75,6 +75,17 @@ def rot90_cell(src: Cell) -> Cell:
     return out
 
 
+def flip_x_cell(src: Cell) -> Cell:
+    """Mirror a flat Cell horizontally: (x, y) -> (-x, y)."""
+    out = Cell()
+    for lyr, rects in src.rects.items():
+        for x1, y1, x2, y2 in rects:
+            out.rect(lyr, grid(-x2), grid(y1), grid(-x1), grid(y2))
+    for lyr, x, y, nm in src.labels:
+        out.labels.append((lyr, grid(-x), grid(y), nm))
+    return out
+
+
 def place_mos_col(
     c: Cell,
     cache: PdkCache,
@@ -154,6 +165,7 @@ def draw_cmos_inv(
     y_vdd: float,
     y_vss: float,
     y_out_m1: float | None = None,
+    x_out_off: float = 0.500,
 ) -> dict:
     """Draw a compact vertical CMOS inverter at `cx` with shared gate at `y_g` and M1 drain stitch."""
     cx = grid(cx)
@@ -183,7 +195,7 @@ def draw_cmos_inv(
     # Connect drains together on M1 along the right side of the gate pad (x_out).
     # Require x_drn - cx >= 0.500 so via1 on gate (cx+0.16) and via1 on drain (x_drn-0.16) keep >= 0.18 um (> 0.14 um met1.2)!
     # Use 0.290 horizontal stubs at dp_y/dn_y matching viali_pad height (0.29) to avoid 0.045 um met1.2 corner notches!
-    x_drn = grid(cx + max(0.500, max(abs(pm["d"][0] - cx), abs(nm["d"][0] - cx))))
+    x_drn = grid(cx + max(x_out_off, max(abs(pm["d"][0] - cx), abs(nm["d"][0] - cx))))
     c.rect("metal1", grid(min(pm["d"][0], x_drn) - 0.09), grid(dp_y - 0.145),
            grid(max(pm["d"][0], x_drn) + 0.09), grid(dp_y + 0.145))
     c.rect("metal1", grid(min(nm["d"][0], x_drn) - 0.09), grid(dn_y - 0.145),
@@ -251,31 +263,31 @@ def _draw_qdiv2_clkgate(
 ) -> dict:
     """Draw 1 reset-gated 2 GHz clock slice: pi_nand2(ck_in, rst_n -> ckb) + pi_inv(ckb -> ck).
 
-    3 columns at pitch 1.95 um (total width ~5.85 um):
+    3 columns compact (total width ~5.05 um):
       Col 0 (x0 + 0.00): Xpa / Xna (g = ck_in)
-      Col 1 (x0 + 1.95): Xpb / Xnb (g = rst_n)
-      Col 2 (x0 + 4.10): Xg_inv    (g = ckb -> y = ck)
+      Col 1 (x0 + 1.85): Xpb / Xnb (g = rst_n)
+      Col 2 (x0 + 3.85): Xg_inv    (g = ckb -> y = ck)
     """
     x0 = grid(x0)
     x_a = grid(x0)
     x_b = grid(x0 + 1.950)
-    x_i = grid(x0 + 4.050)
+    x_i = grid(x0 + 4.100)
     y_gc = grid((y_gp + y_gn) / 2.0)
 
-    # Col 0: Xpa (pfet w=2.00 l=0.15), Xna (nfet_lvt w=1.10 l=0.15) — gate = ck_in
-    # Note: Xna source goes to `mid` (Xnb drain), Xna drain goes to `ckb`!
-    pa = place_mos_col(c, cache, x_a, P_STD, 2.00, 0.15, 1, y_p, True, y_gc, grid(y_p + 0.45), grid(y_p - 0.45))
-    na = place_mos_col(c, cache, x_a, N_LVT, 1.10, 0.15, 1, y_n, False, y_gc, grid(y_n - 0.25), grid(y_n + 0.25))
-    c.wire("metal1", [(pa["s"][0], pa["s"][1]), (pa["s"][0], y_vdd)], 0.220)
+    # Col 0: Xpa (pfet w=4.60 nf=2 l=0.15), Xna (nfet_lvt w=1.40 l=0.15) — gate = ck_in
+    pa = place_mos_col(c, cache, x_a, P_STD, 4.60, 0.15, 2, y_p, True, y_gc, grid(y_p + 0.45), grid(y_p - 0.45))
+    na = place_mos_col(c, cache, x_a, N_LVT, 1.40, 0.15, 1, y_n, False, y_gc, grid(y_n - 0.25), grid(y_n + 0.25))
+    for sx in pa["s_xs"]:
+        c.wire("metal1", [(sx, pa["s"][1]), (sx, y_vdd)], 0.220)
 
-    # Col 1: Xpb (pfet w=2.00 l=0.15), Xnb (nfet_lvt w=1.10 l=0.15) — gate = rst_n
-    pb = place_mos_col(c, cache, x_b, P_STD, 2.00, 0.15, 1, y_p, True, y_gc, grid(y_p + 0.45), grid(y_p - 0.45))
-    nb = place_mos_col(c, cache, x_b, N_LVT, 1.10, 0.15, 1, y_n, False, y_gc, grid(y_n - 0.25), grid(y_n - 0.35))
-    c.wire("metal1", [(pb["s"][0], pb["s"][1]), (pb["s"][0], y_vdd)], 0.220)
+    # Col 1: Xpb (pfet w=4.60 nf=2 l=0.15), Xnb (nfet_lvt w=1.40 l=0.15) — gate = rst_n
+    pb = place_mos_col(c, cache, x_b, P_STD, 4.60, 0.15, 2, y_p, True, y_gc, grid(y_p + 0.45), grid(y_p - 0.45))
+    nb = place_mos_col(c, cache, x_b, N_LVT, 1.40, 0.15, 1, y_n, False, y_gc, grid(y_n - 0.25), grid(y_n - 0.35))
+    for sx in pb["s_xs"]:
+        c.wire("metal1", [(sx, pb["s"][1]), (sx, y_vdd)], 0.220)
     c.wire("metal1", [(nb["s"][0], nb["s"][1]), (nb["s"][0], y_vss)], 0.220)
 
-    # Connect `mid` = Xna.s (x_a-0.22, -6.30) to Xnb.d (x_b+0.22, -6.40) on M2 at y = -6.70.
-    # Jog nb.d M1 right by +0.18 um before via1 so via1 M1 pad keeps >= 0.25 um from nb.s viali pad!
+    # Connect `mid` = Xna.s (x_a-0.22, -6.30) to Xnb.d (x_b+0.22, -6.40) on M2 at y = -6.75.
     x_nbd_v = grid(nb["d"][0] + 0.180)
     c.rect("metal1", grid(nb["d"][0] - 0.09), grid(nb["d"][1] - 0.145), grid(x_nbd_v + 0.16), grid(nb["d"][1] + 0.145))
     via1_clean(c, na["s"][0], na["s"][1])
@@ -283,29 +295,33 @@ def _draw_qdiv2_clkgate(
     c.wire("metal2", [(na["s"][0], na["s"][1]), (na["s"][0], grid(y_n - 0.70)),
                       (x_nbd_v, grid(y_n - 0.70)), (x_nbd_v, nb["d"][1])], 0.320)
 
-    # Col 2: Xg_inv (nfet_lvt w=1.00 l=0.15, pfet w=2.70 l=0.15) — gate = ckb, out = ck
+    # Col 2: Xg_inv (nfet_lvt w=2.00 nf=2 l=0.15, pfet w=6.90 nf=3 l=0.15) — gate = ckb, out = ck
     inv = draw_cmos_inv(
-        c, cache, x_i, 1.00, 2.70, N_LVT, P_STD, 0.15, 0.15, 1, 1,
-        y_p, y_n, y_gc, y_vdd, y_vss, y_out_m1=y_gc,
+        c, cache, x_i, 2.00, 6.90, N_LVT, P_STD, 0.15, 0.15, 2, 3,
+        y_p, y_n, y_gc, y_vdd, y_vss, y_out_m1=y_gc, x_out_off=0.940,
     )
 
     # Connect `ckb`: pa.d, pb.d, na.d, and inv.in on M1 cleanly at y_ckb_m1 = y_gp (-3.900)
-    # Wait: inv.in is at (x_i, y_gc=-4.400) -> pad top is -4.255; y_ckb_m1=-3.900 has 0.265 um gap to pad!
-    y_ckb_m1 = grid(y_gp)  # -3.900 = exact ym_ckb track!
+    y_ckb_m1 = grid(y_gp)  # -3.900
     x_ckb_drop = grid(x_a + 0.720)
     c.wire("metal1", [(pa["d"][0], pa["d"][1]), (pa["d"][0], y_ckb_m1), (x_i, y_ckb_m1), (x_i, y_gc)], W_M1)
     c.wire("metal1", [(pb["d"][0], pb["d"][1]), (pb["d"][0], y_ckb_m1)], W_M1)
     c.wire("metal1", [(na["d"][0], na["d"][1]), (x_ckb_drop, na["d"][1]), (x_ckb_drop, y_ckb_m1)], W_M1)
 
-    # Extend inv.out (ck) on M1 down to y_gn (-4.900 = exact ym_ck track!)
-    c.wire("metal1", [(inv["out"][0], inv["dn"][1]), (inv["out"][0], y_gn)], W_M1)
+    # Clean M3-free escape pads at y_esc = y_vss + 1.000 (-6.450) for ckb (x_b+0.98) and ck (inv.out)!
+    y_esc = grid(y_vss + 1.000)
+    x_ckb_esc = grid(x_b + 0.980)
+    c.wire("metal1", [(x_ckb_esc, y_ckb_m1), (x_ckb_esc, y_esc)], W_M1)
+    c.wire("metal1", [(inv["out"][0], inv["dn"][1]), (inv["out"][0], y_esc)], W_M1)
 
     return {
         "ck_in": (x_a, y_gc),
         "rst_n": (x_b, y_gc),
         "ckb": (x_i, y_ckb_m1),
+        "ckb_esc": (x_ckb_esc, y_esc),
         "ck": (inv["out"][0], grid(y_gn)),
-        "x_end": grid(x_i + 1.250),
+        "ck_esc": (inv["out"][0], y_esc),
+        "x_end": grid(x_i + 1.450),
     }
 
 
@@ -336,33 +352,31 @@ def _draw_pi_diff_latch(
     x0 = grid(x0)
     xs = [
         grid(x0 + 0.000),   # 0: Xtgp
-        grid(x0 + 1.950),   # 1: Xk1 (int_n -> int_p)
-        grid(x0 + 3.850),   # 2: Xrp/Xrn (rst / rst_n)
-        grid(x0 + 5.750),   # 3: Xk2 (int_p -> int_n)
-        grid(x0 + 7.700),   # 4: Xtgn
-        grid(x0 + 9.950),   # 5: Xon (int_p -> qn, nf=2 PMOS w_diff=1.25)
-        grid(x0 + 12.150),  # 6: Xcc1 (qp -> qn)
-        grid(x0 + 14.000),  # 7: Xcc2 (qn -> qp)
-        grid(x0 + 16.200),  # 8: Xop (int_n -> qp, nf=2 PMOS w_diff=1.25)
+        grid(x0 + 2.050),   # 1: Xk1 (int_n -> int_p)
+        grid(x0 + 3.750),   # 2: Xrp/Xrn (rst / rst_n)
+        grid(x0 + 5.450),   # 3: Xk2 (int_p -> int_n)
+        grid(x0 + 7.500),   # 4: Xtgn (nfp=2)
+        grid(x0 + 10.100),  # 5: Xon (int_p -> qn, nfn=2 nfp=3)
+        grid(x0 + 12.400),  # 6: Xcc1 (qp -> qn)
+        grid(x0 + 14.100),  # 7: Xcc2 (qn -> qp)
+        grid(x0 + 16.400),  # 8: Xop (int_n -> qp, nfn=2 nfp=3)
     ]
     y_gc = grid((y_gp + y_gn) / 2.0)
 
-    # 0: Xtgp (pfet w=2.40 l=0.15 g=ckb, nfet_lvt w=1.00 l=0.15 g=ck)
-    # s = dp_in (left), d = int_p (right)
-    tgp_p = place_mos_col(c, cache, xs[0], P_STD, 2.40, 0.15, 1, y_p, True, y_gp, grid(y_p + 0.45), grid(y_p - 0.45))
-    tgp_n = place_mos_col(c, cache, xs[0], N_LVT, 1.00, 0.15, 1, y_n, False, y_gn, grid(y_n - 0.25), grid(y_n + 0.25))
-    # Connect `dp_in` (tgp_p.s to tgp_n.s) and `int_p` (tgp_p.d to tgp_n.d) with 0.290 horizontal M1 stubs (zero met1.2 notch!)
-    x_dpin = grid(xs[0] - 0.500)
+    # 0: Xtgp (pfet w=4.80 nf=2 l=0.15 g=ckb, nfet_lvt w=2.40 nf=2 l=0.15 g=ck)
+    tgp_p = place_mos_col(c, cache, xs[0], P_STD, 4.80, 0.15, 2, y_p, True, y_gp, grid(y_p + 0.45), grid(y_p - 0.45))
+    tgp_n = place_mos_col(c, cache, xs[0], N_LVT, 2.40, 0.15, 2, y_n, False, y_gn, grid(y_n - 0.25), grid(y_n + 0.25))
+    x_dpin = grid(xs[0] - 0.620)
     c.rect("metal1", grid(x_dpin - 0.09), grid(tgp_p["s"][1] - 0.145), grid(tgp_p["s"][0] + 0.145), grid(tgp_p["s"][1] + 0.145))
     c.rect("metal1", grid(x_dpin - 0.09), grid(tgp_n["s"][1] - 0.145), grid(tgp_n["s"][0] + 0.145), grid(tgp_n["s"][1] + 0.145))
     c.wire("metal1", [(x_dpin, tgp_p["s"][1]), (x_dpin, tgp_n["s"][1])], W_M1)
-    x_tgp_d = grid(xs[0] + 0.500)
+    x_tgp_d = grid(xs[0] + 0.620)
     c.rect("metal1", grid(tgp_p["d"][0] - 0.145), grid(tgp_p["d"][1] - 0.145), grid(x_tgp_d + 0.09), grid(tgp_p["d"][1] + 0.145))
     c.rect("metal1", grid(tgp_n["d"][0] - 0.145), grid(tgp_n["d"][1] - 0.145), grid(x_tgp_d + 0.09), grid(tgp_n["d"][1] + 0.145))
     c.wire("metal1", [(x_tgp_d, tgp_p["d"][1]), (x_tgp_d, tgp_n["d"][1])], W_M1)
 
-    # 1: Xk1 (int_n -> int_p)
-    k1 = draw_cmos_inv(c, cache, xs[1], 0.42, 0.50, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p, y_n, y_gc, y_vdd, y_vss)
+    # 1: Xk1 (int_n -> int_p, weak l=0.25 keeper for fast TG overwrite @ SS -40C!)
+    k1 = draw_cmos_inv(c, cache, xs[1], 0.42, 0.45, N_LVT, P_STD, 0.25, 0.25, 1, 1, y_p, y_n, y_gc, y_vdd, y_vss)
 
     # 2: Xrn (pfet w=1.80 l=0.18 g=rst_n -> d=int_n), Xrp (nfet w=1.00 l=0.18 g=rst -> d=int_p)
     rn = place_mos_col(c, cache, xs[2], P_STD, 1.80, 0.18, 1, y_p, True, y_gp, grid(y_p + 0.45), grid(y_p - 0.45))
@@ -370,29 +384,29 @@ def _draw_pi_diff_latch(
     c.wire("metal1", [(rn["s"][0], rn["s"][1]), (rn["s"][0], y_vdd)], 0.220)
     c.wire("metal1", [(rp["s"][0], rp["s"][1]), (rp["s"][0], y_vss)], 0.220)
 
-    # 3: Xk2 (int_p -> int_n)
-    k2 = draw_cmos_inv(c, cache, xs[3], 0.42, 0.50, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p, y_n, y_gc, y_vdd, y_vss)
+    # 3: Xk2 (int_p -> int_n, weak l=0.25 keeper)
+    k2 = draw_cmos_inv(c, cache, xs[3], 0.42, 0.45, N_LVT, P_STD, 0.25, 0.25, 1, 1, y_p, y_n, y_gc, y_vdd, y_vss)
 
     # 4: Xtgn (dn_in <-> int_n, gP=ckb, gN=ck)
-    tgn_p = place_mos_col(c, cache, xs[4], P_STD, 2.40, 0.15, 1, y_p, True, y_gp, grid(y_p + 0.45), grid(y_p - 0.45))
-    tgn_n = place_mos_col(c, cache, xs[4], N_LVT, 1.00, 0.15, 1, y_n, False, y_gn, grid(y_n - 0.25), grid(y_n + 0.25))
-    x_tgn_int = grid(xs[4] - 0.500)
+    tgn_p = place_mos_col(c, cache, xs[4], P_STD, 4.80, 0.15, 2, y_p, True, y_gp, grid(y_p + 0.45), grid(y_p - 0.45))
+    tgn_n = place_mos_col(c, cache, xs[4], N_LVT, 2.40, 0.15, 2, y_n, False, y_gn, grid(y_n - 0.25), grid(y_n + 0.25))
+    x_tgn_int = grid(xs[4] - 0.620)
     c.rect("metal1", grid(x_tgn_int - 0.09), grid(tgn_p["s"][1] - 0.145), grid(tgn_p["s"][0] + 0.145), grid(tgn_p["s"][1] + 0.145))
     c.rect("metal1", grid(x_tgn_int - 0.09), grid(tgn_n["s"][1] - 0.145), grid(tgn_n["s"][0] + 0.145), grid(tgn_n["s"][1] + 0.145))
     c.wire("metal1", [(x_tgn_int, tgn_p["s"][1]), (x_tgn_int, tgn_n["s"][1])], W_M1)
-    x_dnin = grid(xs[4] + 0.500)
+    x_dnin = grid(xs[4] + 0.940)
     c.rect("metal1", grid(tgn_p["d"][0] - 0.145), grid(tgn_p["d"][1] - 0.145), grid(x_dnin + 0.09), grid(tgn_p["d"][1] + 0.145))
     c.rect("metal1", grid(tgn_n["d"][0] - 0.145), grid(tgn_n["d"][1] - 0.145), grid(x_dnin + 0.09), grid(tgn_n["d"][1] + 0.145))
     c.wire("metal1", [(x_dnin, tgn_p["d"][1]), (x_dnin, tgn_n["d"][1])], W_M1)
 
-    # 5: Xon (int_p -> qn)
-    xon = draw_cmos_inv(c, cache, xs[5], 1.25, 3.30, N_LVT, P_STD, 0.15, 0.15, 1, 2, y_p, y_n, y_gc, y_vdd, y_vss)
+    # 5: Xon (int_p -> qn, co-sized 3.00/9.00 nfn=2 nfp=3 for rock-solid SS -40C 1 GHz lock!)
+    xon = draw_cmos_inv(c, cache, xs[5], 3.00, 9.00, N_LVT, P_STD, 0.15, 0.15, 2, 3, y_p, y_n, y_gc, y_vdd, y_vss, x_out_off=0.940)
     # 6: Xcc1 (qp -> qn)
     cc1 = draw_cmos_inv(c, cache, xs[6], 0.42, 1.00, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p, y_n, y_gc, y_vdd, y_vss)
     # 7: Xcc2 (qn -> qp)
     cc2 = draw_cmos_inv(c, cache, xs[7], 0.42, 1.00, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p, y_n, y_gc, y_vdd, y_vss)
     # 8: Xop (int_n -> qp)
-    xop = draw_cmos_inv(c, cache, xs[8], 1.25, 3.30, N_LVT, P_STD, 0.15, 0.15, 1, 2, y_p, y_n, y_gc, y_vdd, y_vss)
+    xop = draw_cmos_inv(c, cache, xs[8], 3.00, 9.00, N_LVT, P_STD, 0.15, 0.15, 2, 3, y_p, y_n, y_gc, y_vdd, y_vss, x_out_off=0.940)
 
     # --- STRICTLY HORIZONTAL M2 + VERTICAL M1 internal latch routing (ZERO M2 crossings!) ---
     # 4 clean horizontal M2 tracks (pitch >= 0.70 um, ZERO vertical M2 segments inside latch!):
@@ -424,7 +438,7 @@ def _draw_pi_diff_latch(
     # k2.in (xs[3], -4.40) -> straight up on M1 to ym_intp (-2.500) (k2 PMOS diff bottom is -2.30, well above!)
     c.wire("metal1", [(k2["in"][0], k2["in"][1]), (k2["in"][0], ym_intp)], W_M1)
     # xon.in (xs[5], -4.40) -> jog left to xs[5]-0.95 (wide gap between xs[4] and xs[5]!), up to ym_intp!
-    x_xon_in = grid(xs[5] - 0.950)
+    x_xon_in = grid(xs[5] - 1.150)
     c.wire("metal1", [(xon["in"][0], xon["in"][1]), (x_xon_in, xon["in"][1]), (x_xon_in, ym_intp)], W_M1)
     for px in (x_tgp_d, k1["out"][0], x_rpd_m1, k2["in"][0], x_xon_in):
         via1_clean(c, px, ym_intp)
@@ -477,16 +491,62 @@ def _draw_pi_diff_latch(
     y_rst_tap = grid((ym_ckb + ym_ck) / 2.0)  # -4.400!
     c.wire("metal1", [(rp["g"][0], rp["g"][1]), (rp["g"][0], y_rst_tap)], W_M1)
 
+    # Escape `ckb` M2 bar down to M3-free y_esc (-6.450) on M1 at x = xs[0] + 1.150 (passing cleanly UNDER ym_ck M2!)
+    x_ckb_tap = grid(xs[0] + 1.150)
+    via1_clean(c, x_ckb_tap, ym_ckb)
+    c.wire("metal1", [(x_ckb_tap, ym_ckb), (x_ckb_tap, y_esc)], W_M1)
+
     return {
         "dp_in": (x_dpin, y_esc),
         "dn_in": (x_dnin, y_esc),
         "ckb": (tgp_p["g"][0], ym_ckb),
+        "ckb_esc": (x_ckb_tap, y_esc),
         "ck": (tgp_n["g"][0], ym_ck),
         "rst_n": (x_rstn_esc, grid(y_vss + 1.900)),
         "rst": (rp["g"][0], y_rst_tap),
         "qn": (xon["out"][0], y_esc),
         "qp": (xop["out"][0], y_esc),
-        "x_end": grid(xs[8] + 1.400),
+        "x_end": grid(xs[8] + 1.500),
+    }
+
+
+def _draw_qdiv2_cc_align(
+    c: Cell,
+    cache: PdkCache,
+    x_c1: float,
+    y_p: float,
+    y_n: float,
+    y_g: float,
+    y_vdd: float,
+    y_vss: float,
+    wn: float = 0.50,
+    wp: float = 1.50,
+) -> dict:
+    """Draw 1 compact 2-column `pi_cc_align` in North row of `qdiv2` (width ~3.0 um)."""
+    x_c1 = grid(x_c1)
+    x_c2 = grid(x_c1 + 2.000)
+    c1 = draw_cmos_inv(c, cache, x_c1, wn, wp, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p, y_n, y_g, y_vdd, y_vss)
+    c2 = draw_cmos_inv(c, cache, x_c2, wn, wp, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p, y_n, y_g, y_vdd, y_vss)
+
+    y_a = grid(y_p + 0.55)
+    y_b = grid(y_n - 0.42)
+    c.wire("metal1", [(c2["out"][0], y_a), (c2["out"][0], c2["dp"][1])], W_M1)
+    c.wire("metal1", [(c1["out"][0], c1["dn"][1]), (c1["out"][0], y_b)], W_M1)
+    c.rect("metal1", grid(c1["dn"][0] - 0.10), grid(y_b - 0.16), grid(c1["out"][0] + 0.16), grid(c1["dn"][1] + 0.145))
+    c.rect("metal1", grid(c2["dp"][0] - 0.10), grid(c2["dp"][1] - 0.145), grid(c2["out"][0] + 0.16), grid(y_a + 0.16))
+
+    # Net a: c1.in <-> c2.out on M2 at y_a
+    via1_clean(c, c1["in"][0], c1["in"][1])
+    via1_clean(c, c2["out"][0], y_a)
+    c.wire("metal2", [(c1["in"][0], c1["in"][1]), (c1["in"][0], y_a), (c2["out"][0], y_a)], W_M2)
+    # Net b: c1.out <-> c2.in on M2 at y_b
+    via1_clean(c, c1["out"][0], y_b)
+    via1_clean(c, c2["in"][0], c2["in"][1])
+    c.wire("metal2", [(c1["out"][0], y_b), (c2["in"][0], y_b), (c2["in"][0], c2["in"][1])], W_M2)
+
+    return {
+        "a": (c1["in"][0], y_a),
+        "b": (c2["in"][0], y_b),
     }
 
 
@@ -505,32 +565,28 @@ def _draw_pi_latch_dummy(
     """
     x0 = grid(x0)
     x_p = grid(x0)
-    x_n = grid(x0 + 1.800)
-    y_gp = grid(y_vdd - 0.55)   # wait: gate of PMOS tied to vdd! Put poly cont near vdd or bottom of PMOS!
-    # Wait: top of w=2.40 PMOS is y_p + 1.20 = -0.850; bottom of nsubdiff is -0.175 -> gap is 0.675 um, tight for polycont!
-    # Put gate contact cleanly at y_gp = -3.850 (below PMOS) and tie on M1 up to vdd along left side? Even cleaner:
-    # tie s (left) to vdd, g (center) on M1 straight to s -> vdd! And d (right) stitches PMOS.d to NMOS.d!
-    y_gp_c = grid(y_p - 1.750)
+    x_n = grid(x0 + 2.050)
+    y_gp_c = grid(y_p - 1.850)
     y_gn_c = grid(y_n + 1.150)
 
     pts = {}
     for nm_key, xx in (("dp_in", x_p), ("dn_in", x_n)):
-        pm = place_mos_col(c, cache, xx, P_STD, 2.40, 0.15, 1, y_p, True, y_gp_c, grid(y_p + 0.45), grid(y_p - 0.45))
-        nm = place_mos_col(c, cache, xx, N_LVT, 1.00, 0.15, 1, y_n, False, y_gn_c, grid(y_n - 0.25), grid(y_n + 0.25))
-        # Tie sources + gates to vdd / vss cleanly on M1 straight onto source wire (zero met1.2 notch!)
-        x_tie = pm["s"][0]
-        c.wire("metal1", [(pm["s"][0], pm["s"][1]), (pm["s"][0], y_vdd)], 0.290)
+        pm = place_mos_col(c, cache, xx, P_STD, 4.00, 0.15, 2, y_p, True, y_gp_c, grid(y_p + 0.45), grid(y_p - 0.45))
+        nm = place_mos_col(c, cache, xx, N_LVT, 1.80, 0.15, 2, y_n, False, y_gn_c, grid(y_n - 0.25), grid(y_n + 0.25))
+        x_tie = pm["s_xs"][0]
+        for sx in pm["s_xs"]:
+            c.wire("metal1", [(sx, pm["s"][1]), (sx, y_vdd)], 0.240)
         c.wire("metal1", [(pm["g"][0], pm["g"][1]), (x_tie, pm["g"][1]), (x_tie, y_vdd)], W_M1)
-        c.wire("metal1", [(nm["s"][0], nm["s"][1]), (nm["s"][0], y_vss)], 0.290)
-        c.wire("metal1", [(nm["g"][0], nm["g"][1]), (x_tie, nm["g"][1]), (x_tie, y_vss)], W_M1)
-        # Stitch drains together along right side (xx + 0.50) with 0.290 M1 stubs (zero met1.2 notch!)
-        x_drn = grid(xx + 0.500)
+        for sx in nm["s_xs"]:
+            c.wire("metal1", [(sx, nm["s"][1]), (sx, y_vss)], 0.240)
+        c.wire("metal1", [(nm["g"][0], nm["g"][1]), (nm["s_xs"][0], nm["g"][1]), (nm["s_xs"][0], y_vss)], W_M1)
+        x_drn = grid(xx + 0.940)
         y_esc = grid(y_vss + 1.000)
         c.rect("metal1", grid(pm["d"][0] - 0.145), grid(pm["d"][1] - 0.145), grid(x_drn + 0.09), grid(pm["d"][1] + 0.145))
         c.rect("metal1", grid(nm["d"][0] - 0.145), grid(nm["d"][1] - 0.145), grid(x_drn + 0.09), grid(nm["d"][1] + 0.145))
         c.wire("metal1", [(x_drn, pm["d"][1]), (x_drn, y_esc)], W_M1)
         pts[nm_key] = (x_drn, y_esc)
-    pts["x_end"] = grid(x_n + 1.200)
+    pts["x_end"] = grid(x_n + 1.350)
     return pts
 
 
@@ -635,14 +691,14 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
     y_n_s = -6.050
     y_vss_s = -7.450
 
-    # North row (8x Output Buffers + 4x CC Aligners)
+    # North row (8x Output Buffers + 4x 1GHz CC Aligners + 4x 2GHz Clock CC Aligners)
     y_p_n = +1.600
     y_gc_n = +3.200
     y_n_n = +4.650
-    y_vss_n = +6.050
+    y_vss_n = +6.640
 
     x_left = 0.000
-    x_right = 154.000
+    x_right = 121.200
 
     # Continuous full-width NWELL spanning both rows' PMOS + central VDD tap
     c.rect("nwell", grid(x_left - 0.60), -3.800, grid(x_right + 0.60), +2.850)
@@ -652,11 +708,13 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
     draw_tap_h(c, "psubdiff", x_left, x_right, y_vss_s, half_w=0.175, with_m1=True, m1_w=0.560, viali_pitch=1.200)
     draw_tap_h(c, "psubdiff", x_left, x_right, y_vss_n, half_w=0.175, with_m1=True, m1_w=0.560, viali_pitch=1.200)
 
-    # Power M3 reinforcement rails directly over y_vdd, y_vss_s, y_vss_n
-    # Keep y_vss_n via1/via2 strictly clear of the 8 North output M2 risers!
-    north_m2_xs = [25.28, 33.88, 47.28, 55.88, 97.28, 105.88, 119.28, 127.88]
-    for y_rail in (y_vdd, y_vss_s, y_vss_n):
-        c.wire("metal3", [(x_left, y_rail), (x_right, y_rail)], 0.600)
+    # Power M3 reinforcement rails directly over y_vdd, y_vss_s, y_vss_n (0.50 um on y_vdd/y_vss_n for 7 clean North M3 tracks!)
+    pair_x_ctrs = {"d02": 18.000, "d13": 42.000, "e02": 72.000, "e13": 96.000}
+    north_m2_xs = []
+    for xc in pair_x_ctrs.values():
+        north_m2_xs.extend([grid(xc - 4.300 + 0.580), grid(xc + 4.450 + 0.580)])
+    for y_rail, m3_pw in ((y_vdd, 0.500), (y_vss_s, 0.600), (y_vss_n, 0.500)):
+        c.wire("metal3", [(x_left, y_rail), (x_right, y_rail)], m3_pw)
         xv = grid(x_left + 1.5)
         while xv <= x_right - 1.5 + 1e-6:
             if y_rail == y_vss_n and any(abs(xv - nx) < 1.20 for nx in north_m2_xs):
@@ -674,63 +732,62 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
 
     # --- 1. Xrst (West end of South row) ---
     xrst = draw_cmos_inv(
-        c, cache, 3.000, 0.60, 1.20, N_STD, P_STD, 0.18, 0.18, 1, 1,
+        c, cache, 2.400, 0.60, 1.20, N_STD, P_STD, 0.18, 0.18, 1, 1,
         y_p_s, y_n_s, y_gc_s, y_vdd, y_vss_s,
     )
 
-    # --- 2. 4 Matched Latch Columns in South row (uniform pitch = 35.5 um!) ---
-    col_x0 = [7.000, 42.500, 78.000, 113.500]
+    # --- 2. 4 Uniformly-Spaced Compact Latch Columns in South row (25.00 um pitch, zero E-dummies!) ---
+    col_x0 = [4.500, 29.500, 54.500, 79.500]
     clk_names = ["dp", "dn", "ep", "en"]
     gates = {}
     latches = {}
-    dummies = {}
     for idx, (cname, x0) in enumerate(zip(clk_names, col_x0)):
         cg = _draw_qdiv2_clkgate(c, cache, x0, y_p_s, y_n_s, y_gp_s, y_gn_s, y_vdd, y_vss_s)
-        lt = _draw_pi_diff_latch(c, cache, grid(x0 + 6.400), y_p_s, y_n_s, y_gp_s, y_gn_s, y_vdd, y_vss_s)
+        lt = _draw_pi_diff_latch(c, cache, grid(x0 + 6.700), y_p_s, y_n_s, y_gp_s, y_gn_s, y_vdd, y_vss_s)
         gates[cname] = cg
         latches[cname] = lt
 
-        # Local M2 stitch: cg.ckb -> lt.ckb, cg.ck -> lt.ck!
-        via1_clean(c, cg["ckb"][0], cg["ckb"][1])
-        c.wire("metal2", [(cg["ckb"][0], cg["ckb"][1]), (cg["ckb"][0], lt["ckb"][1]), lt["ckb"]], W_M2)
+        # Local M2 stitch: cg.ck -> own lt.ck (lt.ckb gets OPPOSITE Stage-2 ck via zero-skew North bus!)
         via1_clean(c, cg["ck"][0], cg["ck"][1])
         c.wire("metal2", [(cg["ck"][0], cg["ck"][1]), (cg["ck"][0], lt["ck"][1]), lt["ck"]], W_M2)
 
-        # Place 2 fanout-matching dummies right beside Xle0 (idx=2) and Xle1 (idx=3)
-        if idx >= 2:
-            dm_a = _draw_pi_latch_dummy(c, cache, grid(lt["x_end"] + 1.000), y_p_s, y_n_s, y_vdd, y_vss_s)
-            dm_b = _draw_pi_latch_dummy(c, cache, grid(dm_a["x_end"] + 1.000), y_p_s, y_n_s, y_vdd, y_vss_s)
-            dummies[cname] = (dm_a, dm_b)
-
-    # --- 3. 4 Matched Differential Output Buffer Pairs in North row ---
-    pair_x_ctrs = {"d02": 29.000, "d13": 51.000, "e02": 101.000, "e13": 123.000}
+    # --- 3. 4 Matched Differential Output Buffer Pairs + 4x 2 GHz Clock CC Aligners in North row ---
     outpairs = {}
     for pname, xctr in pair_x_ctrs.items():
         outpairs[pname] = _draw_qdiv2_outpair(c, cache, xctr, y_p_n, y_n_n, y_gc_n, y_vdd, y_vss_n)
 
+    cc_dckb = _draw_qdiv2_cc_align(c, cache, 25.600, y_p_n, y_n_n, y_gc_n, y_vdd, y_vss_n)
+    cc_dck  = _draw_qdiv2_cc_align(c, cache, 30.800, y_p_n, y_n_n, y_gc_n, y_vdd, y_vss_n)
+    cc_eckb = _draw_qdiv2_cc_align(c, cache, 79.600, y_p_n, y_n_n, y_gc_n, y_vdd, y_vss_n)
+    cc_eck  = _draw_qdiv2_cc_align(c, cache, 84.800, y_p_n, y_n_n, y_gc_n, y_vdd, y_vss_n)
+
     # --- 4. Clean M3-Horizontal / M4-Vertical Inter-Stage Routing (ZERO M5!) ---
-    # South band M3 tracks (pitch >= 0.85 um, leaving y = -6.450 100% M3-FREE and rst at -4.400 clear of M2!):
+    # South band M3 tracks: QUADRATURE-INTERLEAVED [dp, ep, dn, en] -> eliminates 180-deg Miller coupling!
     y_trk_rstn = -5.550
     y_trk_rst  = -4.400
     y_trk_dp   = -3.550
-    y_trk_dn   = -2.700
-    y_trk_ep   = -1.850
+    y_trk_ep   = -2.700
+    y_trk_dn   = -1.850
     y_trk_en   = -1.000
 
-    # North band M3 tracks (pitch = 0.92 um, clear of y_vdd=0.000 and y_vss_n=+6.050!):
-    y_trk_d0   = +1.000
-    y_trk_d2   = +1.920
-    y_trk_d1   = +2.840
-    y_trk_d3   = +3.760
-    y_trk_e23  = +4.680
+    # North band 7 M3 tracks (0.83 um pitch, ANTI-MILLER INTERLEAVED so NO 180-deg pair is adjacent!):
+    #   d0 (0.83) | dp_ck/ep_ck (1.66) | d2 (2.49) | d1 (3.32) | dn_ck/en_ck (4.15) | d3 (4.98) | ckb (5.81)
+    y_trk_d0   = +0.830
+    y_trk_ckp  = +1.660   # dp_ck (West) & ep_ck (East) — 2.49 um clear of dn_ck/en_ck!
+    y_trk_d2   = +2.490
+    y_trk_d1   = +3.320
+    y_trk_ckn  = +4.150   # dn_ck (West) & en_ck (East) — zero 2x Miller coupling to ckp!
+    y_trk_d3   = +4.980
+    y_trk_ckb  = +5.810   # dp_ckb, dn_ckb, ep_ckb, en_ckb — all 4 disjoint in X!
 
-    # North sorting M3 tracks (ABOVE y_vss_n=+6.050!)
-    y_trk_ck02 = +7.050
-    y_trk_ck13 = +7.950
+    # North sorting M3 tracks (ABOVE y_vss_n=+6.640, exact same y_north_pin=+8.600 -> zero height change!)
+    y_trk_ck02 = +7.460
+    y_trk_ck13 = +8.280
     y_north_pin = +8.600
 
     # 4a. Direct M2->M3 drops for South-band horizontal buses (rst_n, rst, dp, dn, ep, en)!
-    c.wire("metal3", [(x_left, y_trk_rstn), (125.000, y_trk_rstn)], 0.360)
+    x_rstn_hi = grid(latches["en"]["rst_n"][0] + 1.000)
+    c.wire("metal3", [(x_left, y_trk_rstn), (x_rstn_hi, y_trk_rstn)], 0.340)
     via1_clean(c, xrst["in"][0], xrst["in"][1])
     c.wire("metal2", [(xrst["in"][0], xrst["in"][1]), (xrst["in"][0], y_trk_rstn)], W_M2)
     via2_clean(c, xrst["in"][0], y_trk_rstn)
@@ -744,7 +801,7 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
         via2_clean(c, lx, ly)
 
     x_rst_hi = latches["en"]["rst"][0]
-    c.wire("metal3", [(xrst["out"][0], y_trk_rst), (x_rst_hi, y_trk_rst)], 0.360)
+    c.wire("metal3", [(xrst["out"][0], y_trk_rst), (x_rst_hi, y_trk_rst)], 0.340)
     via1_clean(c, xrst["out"][0], xrst["out"][1])
     c.wire("metal2", [(xrst["out"][0], xrst["out"][1]), (xrst["out"][0], y_trk_rst)], W_M2)
     via2_clean(c, xrst["out"][0], y_trk_rst)
@@ -754,9 +811,9 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
         c.wire("metal2", [(rx, ry), (rx, y_trk_rst)], W_M2)
         via2_clean(c, rx, y_trk_rst)
 
-    # `dp, dn, ep, en` EQUAL FULL-SPAN horizontal M3 trunks [7.0 .. x_right]
+    # `dp, dn, ep, en` EQUAL-SPAN low-C horizontal M3 trunks [4.5 .. x_right] (0.30 um M3 -> ~35% lower wire CPEX!)
     for cn, yt in (("dp", y_trk_dp), ("dn", y_trk_dn), ("ep", y_trk_ep), ("en", y_trk_en)):
-        c.wire("metal3", [(7.000, yt), (x_right, yt)], 0.360)
+        c.wire("metal3", [(4.500, yt), (x_right, yt)], 0.300)
         gx, gy = gates[cn]["ck_in"]
         via1_clean(c, gx, gy)
         c.wire("metal2", [(gx, gy), (gx, yt)], W_M2)
@@ -772,12 +829,12 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
         y_vdd: [(x_left, x_right, "vdd")],
         y_vss_s: [(x_left, x_right, "vss")],
         y_vss_n: [(x_left, x_right, "vss")],
-        y_trk_rstn: [(x_left, 125.000, "rst_n")],
+        y_trk_rstn: [(x_left, x_rstn_hi, "rst_n")],
         y_trk_rst: [(xrst["out"][0], x_rst_hi, "rst")],
-        y_trk_dp: [(7.000, x_right, "dp")],
-        y_trk_dn: [(7.000, x_right, "dn")],
-        y_trk_ep: [(7.000, x_right, "ep")],
-        y_trk_en: [(7.000, x_right, "en")],
+        y_trk_dp: [(4.500, x_right, "dp")],
+        y_trk_dn: [(4.500, x_right, "dn")],
+        y_trk_ep: [(4.500, x_right, "ep")],
+        y_trk_en: [(4.500, x_right, "en")],
     }
 
     def m4_free(x: float, y1: float, y2: float, net: str) -> bool:
@@ -789,12 +846,12 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
 
     def m3_pt_ok(x_c: float, y_c: float, net: str) -> bool:
         for ty, occs in m3_tracks_occ.items():
-            if abs(ty - y_c) < 0.84:
+            if abs(ty - y_c) < 0.78:
                 for ox1, ox2, onet in occs:
-                    if onet != net and (ox1 - 0.84) <= x_c <= (ox2 + 0.84):
+                    if onet != net and (ox1 - 0.80) <= x_c <= (ox2 + 0.80):
                         return False
         for mx, my, mnet in m3_pads:
-            if mnet != net and abs(mx - x_c) < 0.84 and abs(my - y_c) < 0.84:
+            if mnet != net and abs(mx - x_c) < 0.80 and abs(my - y_c) < 0.78:
                 return False
         return True
 
@@ -802,7 +859,7 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
         net: str,
         y_trk: float,
         pins: list[tuple[float, float, str]],
-        m3_w: float = 0.520,
+        m3_w: float = 0.300,
         m4_w: float = 0.400,
     ) -> None:
         """Connect pins to horizontal M3 trunk `y_trk` via conflict-free vertical M4 drops."""
@@ -870,46 +927,76 @@ def build_rx_qdiv2_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
     ])
     route_bus_m3_m4("e0", y_trk_d0, [
         (latches["ep"]["qp"][0], latches["ep"]["qp"][1], "metal1"),
-        (dummies["ep"][0]["dp_in"][0], dummies["ep"][0]["dp_in"][1], "metal1"),
-        (dummies["ep"][1]["dp_in"][0], dummies["ep"][1]["dp_in"][1], "metal1"),
         (outpairs["e02"]["in_b"][0], outpairs["e02"]["in_b"][1], "metal1"),
     ])
-    route_bus_m3_m4("e2", y_trk_e23, [
+    route_bus_m3_m4("e2", y_trk_d0, [
         (latches["ep"]["qn"][0], latches["ep"]["qn"][1], "metal1"),
-        (dummies["ep"][0]["dn_in"][0], dummies["ep"][0]["dn_in"][1], "metal1"),
-        (dummies["ep"][1]["dn_in"][0], dummies["ep"][1]["dn_in"][1], "metal1"),
         (outpairs["e02"]["in_a"][0], outpairs["e02"]["in_a"][1], "metal1"),
     ])
     route_bus_m3_m4("e1", y_trk_d0, [
         (latches["en"]["qp"][0], latches["en"]["qp"][1], "metal1"),
-        (dummies["en"][0]["dp_in"][0], dummies["en"][0]["dp_in"][1], "metal1"),
-        (dummies["en"][1]["dp_in"][0], dummies["en"][1]["dp_in"][1], "metal1"),
         (outpairs["e13"]["in_b"][0], outpairs["e13"]["in_b"][1], "metal1"),
     ])
-    route_bus_m3_m4("e3", y_trk_e23, [
+    route_bus_m3_m4("e3", y_trk_d0, [
         (latches["en"]["qn"][0], latches["en"]["qn"][1], "metal1"),
-        (dummies["en"][0]["dn_in"][0], dummies["en"][0]["dn_in"][1], "metal1"),
-        (dummies["en"][1]["dn_in"][0], dummies["en"][1]["dn_in"][1], "metal1"),
         (outpairs["e13"]["in_a"][0], outpairs["e13"]["in_a"][1], "metal1"),
     ])
 
+    # 4c2. Zero-skew Stage-2 complementary latch clocks + 4x 2 GHz clock CC aligners!
+    route_bus_m3_m4("dp_ck", y_trk_ckp, [
+        (gates["dp"]["ck_esc"][0], gates["dp"]["ck_esc"][1], "metal1"),
+        (latches["dn"]["ckb_esc"][0], latches["dn"]["ckb_esc"][1], "metal1"),
+        (cc_dck["a"][0], cc_dck["a"][1], "metal2"),
+    ])
+    route_bus_m3_m4("dn_ck", y_trk_ckn, [
+        (gates["dn"]["ck_esc"][0], gates["dn"]["ck_esc"][1], "metal1"),
+        (latches["dp"]["ckb_esc"][0], latches["dp"]["ckb_esc"][1], "metal1"),
+        (cc_dck["b"][0], cc_dck["b"][1], "metal2"),
+    ])
+    route_bus_m3_m4("ep_ck", y_trk_ckp, [
+        (gates["ep"]["ck_esc"][0], gates["ep"]["ck_esc"][1], "metal1"),
+        (latches["en"]["ckb_esc"][0], latches["en"]["ckb_esc"][1], "metal1"),
+        (cc_eck["a"][0], cc_eck["a"][1], "metal2"),
+    ])
+    route_bus_m3_m4("en_ck", y_trk_ckn, [
+        (gates["en"]["ck_esc"][0], gates["en"]["ck_esc"][1], "metal1"),
+        (latches["ep"]["ckb_esc"][0], latches["ep"]["ckb_esc"][1], "metal1"),
+        (cc_eck["b"][0], cc_eck["b"][1], "metal2"),
+    ])
+    route_bus_m3_m4("dp_ckb", y_trk_ckb, [
+        (gates["dp"]["ckb_esc"][0], gates["dp"]["ckb_esc"][1], "metal1"),
+        (cc_dckb["a"][0], cc_dckb["a"][1], "metal2"),
+    ])
+    route_bus_m3_m4("dn_ckb", y_trk_ckb, [
+        (gates["dn"]["ckb_esc"][0], gates["dn"]["ckb_esc"][1], "metal1"),
+        (cc_dckb["b"][0], cc_dckb["b"][1], "metal2"),
+    ])
+    route_bus_m3_m4("ep_ckb", y_trk_ckb, [
+        (gates["ep"]["ckb_esc"][0], gates["ep"]["ckb_esc"][1], "metal1"),
+        (cc_eckb["a"][0], cc_eckb["a"][1], "metal2"),
+    ])
+    route_bus_m3_m4("en_ckb", y_trk_ckb, [
+        (gates["en"]["ckb_esc"][0], gates["en"]["ckb_esc"][1], "metal1"),
+        (cc_eckb["b"][0], cc_eckb["b"][1], "metal2"),
+    ])
+
     # 4d. Route 8 North output clocks in exact uniform-pitch order:
-    #     ckd0, ckd1, ckd2, ckd3, cke0, cke1, cke2, cke3  (x = 14, 32, 50, 68, 86, 104, 122, 140)
+    #     ckd0, ckd1, ckd2, ckd3, cke0, cke1, cke2, cke3 (uniform 14.5 um pitch across 120.4 um!)
     north_specs = [
-        ("ckd0", outpairs["d02"]["out_a_m2"], 14.000, y_trk_ck02),
-        ("ckd2", outpairs["d02"]["out_b_m2"], 50.000, y_trk_ck02),
-        ("ckd1", outpairs["d13"]["out_a_m2"], 32.000, y_trk_ck13),
-        ("ckd3", outpairs["d13"]["out_b_m2"], 68.000, y_trk_ck13),
-        ("cke0", outpairs["e02"]["out_a_m2"], 86.000, y_trk_ck02),
-        ("cke2", outpairs["e02"]["out_b_m2"], 122.000, y_trk_ck02),
-        ("cke1", outpairs["e13"]["out_a_m2"], 104.000, y_trk_ck13),
-        ("cke3", outpairs["e13"]["out_b_m2"], 140.000, y_trk_ck13),
+        ("ckd0", outpairs["d02"]["out_a_m2"], 10.000, y_trk_ck02),
+        ("ckd2", outpairs["d02"]["out_b_m2"], 39.000, y_trk_ck02),
+        ("ckd1", outpairs["d13"]["out_a_m2"], 24.500, y_trk_ck13),
+        ("ckd3", outpairs["d13"]["out_b_m2"], 53.500, y_trk_ck13),
+        ("cke0", outpairs["e02"]["out_a_m2"], 68.000, y_trk_ck02),
+        ("cke2", outpairs["e02"]["out_b_m2"], 97.000, y_trk_ck02),
+        ("cke1", outpairs["e13"]["out_a_m2"], 82.500, y_trk_ck13),
+        ("cke3", outpairs["e13"]["out_b_m2"], 111.500, y_trk_ck13),
     ]
     north_pins: dict[str, tuple[float, float]] = {}
     for nm, (ox, oy), x_pin, y_sort in north_specs:
         c.wire("metal2", [(ox, oy), (ox, y_sort)], 0.360)
         via2_clean(c, ox, y_sort)
-        c.wire("metal3", [(min(ox, x_pin), y_sort), (max(ox, x_pin), y_sort)], 0.400)
+        c.wire("metal3", [(min(ox, x_pin), y_sort), (max(ox, x_pin), y_sort)], 0.360)
         via3_pad(c, x_pin, y_sort)
         c.wire("metal4", [(x_pin, y_sort), (x_pin, y_north_pin)], 0.440)
         north_pins[nm] = (x_pin, y_north_pin)
@@ -959,33 +1046,39 @@ def _draw_tgate_col(
     y_gp: float,
     y_gn: float,
     s_on_left: bool = True,
+    nfp: int = 1,
 ) -> dict:
-    """Draw 1 vertical LVT transmission gate (nfet_lvt l=0.15 + pfet_lvt l=0.35) with M1 s/d stitches."""
+    """Draw 1 vertical LVT transmission gate (nfet_lvt l=0.15 + pfet_lvt l=0.35, nfp=1 or 2) with M1 s/d stitches."""
     cx = grid(cx)
-    hp = grid(wp / 2.0)
+    hp = grid((wp / nfp) / 2.0)
     hn = grid(wn / 2.0)
     # Place source/drain viali cleanly inside diffusion height
-    sp_y = grid(y_p + min(0.28, max(0.0, hp - 0.16)))
-    dp_y = grid(y_p - min(0.28, max(0.0, hp - 0.16)))
-    sn_y = grid(y_n - min(0.20, max(0.0, hn - 0.14)))
-    dn_y = grid(y_n + min(0.20, max(0.0, hn - 0.14)))
+    sp_y = grid(y_p + min(0.45 if nfp > 1 else 0.28, max(0.0, hp - 0.16)))
+    dp_y = grid(y_p - min(0.45 if nfp > 1 else 0.28, max(0.0, hp - 0.16)))
+    sn_y = grid(y_n - min(0.28 if wn >= 1.0 else 0.20, max(0.0, hn - 0.14)))
+    dn_y = grid(y_n + min(0.28 if wn >= 1.0 else 0.20, max(0.0, hn - 0.14)))
 
-    pm = place_mos_col(c, cache, cx, P_LVT, wp, 0.35, 1, y_p, True, y_gp, sp_y, dp_y)
+    pm = place_mos_col(c, cache, cx, P_LVT, wp, 0.35, nfp, y_p, True, y_gp, sp_y, dp_y)
     nm = place_mos_col(c, cache, cx, N_LVT, wn, 0.15, 1, y_n, False, y_gn, sn_y, dn_y)
 
-    # Left terminal (s_xs[0] = -0.32 P, -0.22 N) stitched along x_left = cx - 0.56
-    # Right terminal (d_xs[0] = +0.32 P, +0.22 N) stitched along x_right = cx + 0.56
-    # Use 0.290 horizontal M1 stubs at exact pad Y to guarantee zero met1.2 notches!
-    x_l = grid(cx - 0.560)
-    x_r = grid(cx + 0.560)
-
-    c.rect("metal1", grid(x_l - 0.09), grid(sp_y - 0.145), grid(pm["s"][0] + 0.145), grid(sp_y + 0.145))
-    c.rect("metal1", grid(x_l - 0.09), grid(sn_y - 0.145), grid(nm["s"][0] + 0.145), grid(sn_y + 0.145))
-    c.wire("metal1", [(x_l, sn_y), (x_l, sp_y)], W_M1)
-
-    c.rect("metal1", grid(pm["d"][0] - 0.145), grid(dp_y - 0.145), grid(x_r + 0.09), grid(dp_y + 0.145))
-    c.rect("metal1", grid(nm["d"][0] - 0.145), grid(dn_y - 0.145), grid(x_r + 0.09), grid(dn_y + 0.145))
-    c.wire("metal1", [(x_r, dn_y), (x_r, dp_y)], W_M1)
+    if nfp == 1:
+        x_l = grid(cx - 0.560)
+        x_r = grid(cx + 0.560)
+        c.rect("metal1", grid(x_l - 0.09), grid(sp_y - 0.145), grid(pm["s"][0] + 0.145), grid(sp_y + 0.145))
+        c.rect("metal1", grid(x_l - 0.09), grid(sn_y - 0.145), grid(nm["s"][0] + 0.145), grid(sn_y + 0.145))
+        c.wire("metal1", [(x_l, sn_y), (x_l, sp_y)], W_M1)
+        c.rect("metal1", grid(pm["d"][0] - 0.145), grid(dp_y - 0.145), grid(x_r + 0.09), grid(dp_y + 0.145))
+        c.rect("metal1", grid(nm["d"][0] - 0.145), grid(dn_y - 0.145), grid(x_r + 0.09), grid(dn_y + 0.145))
+        c.wire("metal1", [(x_r, dn_y), (x_r, dp_y)], W_M1)
+    else:
+        # nfp=2: pm.s_xs = [cx-0.64, cx+0.64] (tied on M1 at sp_y), pm.d = [cx] at dp_y!
+        x_l = grid(pm["s_xs"][0])  # cx - 0.640
+        x_r = grid(cx + 0.500)
+        c.rect("metal1", grid(x_l - 0.09), grid(sn_y - 0.145), grid(nm["s"][0] + 0.145), grid(sn_y + 0.145))
+        c.wire("metal1", [(x_l, sn_y), (x_l, sp_y)], W_M1)
+        c.rect("metal1", grid(pm["d"][0] - 0.145), grid(dp_y - 0.145), grid(x_r + 0.09), grid(dp_y + 0.145))
+        c.rect("metal1", grid(nm["d"][0] - 0.145), grid(dn_y - 0.145), grid(x_r + 0.09), grid(dn_y + 0.145))
+        c.wire("metal1", [(x_r, dn_y), (x_r, dp_y)], W_M1)
 
     return {
         "a": (x_l, grid((sn_y + sp_y) / 2.0)) if s_on_left else (x_r, grid((dn_y + dp_y) / 2.0)),
@@ -1002,38 +1095,35 @@ def _draw_tgate_col(
 
 
 def _draw_pi_mux4_half(c: Cell, cache: PdkCache, x0: float) -> dict:
-    """Draw 1 `pi_mux4_tg` in the top half of a channel (y in [+2.30, +9.30]):
-      y_vss = +2.50, y_n = +3.75, y_gn = +4.80, y_gc = +5.25, y_gp = +5.75, y_p = +7.15, y_vdd = +8.80.
-      4x pi_tgate_lvt(wn=1.00, wp=1.80) at x0 + [0.0, 2.30, 4.60, 6.90]
-      1x pi_inv(wn=1.40, wp=3.30 nfp=2) at x0 + 9.45
+    """Draw 1 v2.2 co-sized `pi_mux4_tg` in top half of a channel (y in [+2.30, +9.30]):
+      4x pi_tgate_lvt(wn=1.40, wp=3.60, nfp=2) at x0 + [0.0, 2.20, 4.40, 6.60]
+      1x pi_inv(wn=1.80 nfn=2, wp=8.40 nfp=4) at x0 + 9.10
     """
     x0 = grid(x0)
-    y_vss = +2.500
-    y_n   = +3.750
-    y_gn  = +4.800
-    y_gc  = +5.250
-    y_gp  = +5.750
-    y_p   = +7.150
+    y_vss = +2.400
+    y_n   = +3.580
+    y_gn  = +4.760
+    y_gc  = +5.200
+    y_gp  = +5.680
+    y_p   = +7.120
     y_vdd = +8.800
 
     tgs = []
     for k in range(4):
-        cx = grid(x0 + k * 2.300)
-        tg = _draw_tgate_col(c, cache, cx, 1.00, 1.80, y_p, y_n, y_gp, y_gn, s_on_left=True)
-        # Keep tg.x_l M1 strictly ABOVE y_vss=+2.50 (stops at sn_y=+3.55 -> fly over y_vss on M2!)
+        cx = grid(x0 + k * 2.200)
+        tg = _draw_tgate_col(c, cache, cx, 1.40, 3.60, y_p, y_n, y_gp, y_gn, s_on_left=True, nfp=2)
         tgs.append(tg)
 
-    # Output inverter Xout (wn=1.40 l=0.15 nf=1, wp=3.30 l=0.15 nf=2 -> w_f=1.65)
-    x_out = grid(x0 + 9.450)
+    # Output inverter Xout (wn=1.80 nfn=2, wp=8.40 nfp=4 -> w_f_p=2.10, w_diff_p=2.21)
+    x_out = grid(x0 + 9.100)
     inv = draw_cmos_inv(
-        c, cache, x_out, 1.40, 3.30, N_LVT, P_STD, 0.15, 0.15, 1, 2,
+        c, cache, x_out, 1.80, 8.40, N_LVT, P_STD, 0.15, 0.15, 2, 4,
         y_p, y_n, y_gc, y_vdd, y_vss,
     )
 
-    # Common mux node `m`: horizontal M2 bar at y_m = +6.65 connecting all 4 tg.x_r and inv.in!
-    y_m = grid(y_p - 0.450)  # +6.650 (well clear above y_gp=+5.650, below y_vdd=+8.800!)
-    # Extend inv.in (x_out, y_gc=+5.15) on M1 left to x_out-0.85 and up to y_m=+6.65 (clear of nf=2 PMOS s_xs=[-0.48,+0.48]!)
-    x_in_m = grid(x_out - 0.900)
+    # Common mux node `m`: horizontal M2 bar at y_m = +6.650 connecting all 4 tg.x_r and inv.in!
+    y_m = grid(y_p - 0.450)  # +6.650 (exact dp_y of TGs and Xout!)
+    x_in_m = grid(x_out - 1.150)  # clear of Xout.pm.d_xs[0] (x_out-0.48) and TG3.x_r (x0+7.10)!
     c.wire("metal1", [(inv["in"][0], inv["in"][1]), (x_in_m, inv["in"][1]), (x_in_m, y_m)], W_M1)
     via1_clean(c, x_in_m, y_m)
     for tg in tgs:
@@ -1043,7 +1133,7 @@ def _draw_pi_mux4_half(c: Cell, cache: PdkCache, x0: float) -> dict:
     return {
         "tgs": tgs,
         "out": (inv["out"][0], y_gc),
-        "x_end": grid(x_out + 1.250),
+        "x_end": grid(x_out + 1.350),
     }
 
 
@@ -1067,53 +1157,53 @@ def _draw_pi_slice_r_fets_clean(
     x0 = grid(x0)
     sgn = +1.0 if y_vdd > y_vss else -1.0
     y_n  = grid(y_vss + sgn * 0.850)
-    y_gn = grid(y_vss + sgn * 1.600)
-    y_gc = grid(y_vss + sgn * 2.050)
-    y_gp = grid(y_vss + sgn * 2.500)
+    y_gn = grid(y_vss + sgn * 1.560)
+    y_gc = grid(y_vss + sgn * 2.000)
+    y_gp = grid(y_vss + sgn * 2.440)
     y_p  = grid(y_vss + sgn * 3.550)
 
-    xs = [grid(x0 + dx) for dx in (0.000, 2.200, 4.300, 6.450, 8.650, 10.500)]
+    xs = [grid(x0 + dx) for dx in (0.000, 2.080, 4.000, 5.980, 8.060, 9.780)]
 
     xsa = _draw_tgate_col(c, cache, xs[0], 0.42, 0.75, y_p, y_n, y_gp, y_gn, s_on_left=True)
     xdb = _draw_tgate_col(c, cache, xs[1], 0.42, 0.75, y_p, y_n, y_gp, y_gn, s_on_left=True)
     xsb = _draw_tgate_col(c, cache, xs[3], 0.42, 0.75, y_p, y_n, y_gp, y_gn, s_on_left=True)
     xda = _draw_tgate_col(c, cache, xs[4], 0.42, 0.75, y_p, y_n, y_gp, y_gn, s_on_left=True)
 
-    # Col 2: Xdum (gate = dum, d = s = vdd / vss)
-    dp_m = place_mos_col(c, cache, xs[2], P_STD, 1.35, 0.15, 1, y_p, True, y_gc,
+    # Col 2: Xdum (gate = dum, d = s = vdd / vss, balanced 0.42/1.70)
+    dp_m = place_mos_col(c, cache, xs[2], P_STD, 1.70, 0.15, 1, y_p, True, y_gc,
                          grid(y_p + sgn * 0.35), grid(y_p - sgn * 0.35))
-    dn_m = place_mos_col(c, cache, xs[2], N_LVT, 0.45, 0.15, 1, y_n, False, y_gc,
+    dn_m = place_mos_col(c, cache, xs[2], N_LVT, 0.42, 0.15, 1, y_n, False, y_gc,
                          grid(y_n - sgn * 0.05), grid(y_n + sgn * 0.05))
     for pt in (dp_m["s"], dp_m["d"]):
         c.wire("metal1", [(pt[0], pt[1]), (pt[0], y_vdd)], 0.220)
     for pt in (dn_m["s"], dn_m["d"]):
         c.wire("metal1", [(pt[0], pt[1]), (pt[0], y_vss)], 0.220)
 
-    # Col 5: Xinv (sel -> drv)
+    # Col 5: Xinv (sel -> drv, balanced 0.42/1.70)
     xinv = draw_cmos_inv(
-        c, cache, xs[5], 0.45, 1.35, N_LVT, P_STD, 0.15, 0.15, 1, 1,
+        c, cache, xs[5], 0.42, 1.70, N_LVT, P_STD, 0.15, 0.15, 1, 1,
         y_p, y_n, y_gc, y_vdd, y_vss,
     )
 
-    # 5 strictly horizontal M2 tracks (pitch >= 0.60 um, ZERO vertical M2 wires!)
-    ym_dum = grid(y_vss + sgn * 1.050)   # +1.05 / +8.65 (>= 0.19 um M2 gap to via1 at +0.55 / +9.15!)
-    ym_gn  = y_gn                        # +1.60 / +8.10
-    ym_gp  = y_gp                        # +2.50 / +7.20
-    ym_fbb = grid(y_vss + sgn * 3.150)   # +3.15 / +6.55
-    ym_sel = grid(y_vss + sgn * 3.750)   # +3.75 / +5.95
+    # 5 strictly horizontal M2 tracks (pitch >= 0.58 um, ZERO vertical M2 wires!)
+    ym_dum = grid(y_vss + sgn * 1.050)   # +1.05 / +8.65
+    ym_gn  = y_gn                        # +1.56 / +8.14
+    ym_gp  = y_gp                        # +2.44 / +7.26
+    ym_fbb = grid(y_vss + sgn * 3.000)   # +3.00 / +6.70
+    ym_sel = grid(y_vss + sgn * 3.580)   # +3.58 / +6.12 (0.18 um M2 clear below y_ca=+4.10 via2!)
 
     # 1. `sel` on M2 at ym_sel: xsa.x_r, xsb.x_r, xinv.in (escaped left to xs[5]-0.72 -> >= 0.195 um clear of Xinv.pm.s!)
     #    Use 0.320 vertical M1 on xsa.x_r / xsb.x_r between dp_y and ym_sel (zero met1.2 corner notch!).
-    x_sel_in = grid(xs[5] - 0.720)
+    x_sel_in = grid(xs[5] - 0.680)
     c.wire("metal1", [(xinv["in"][0], xinv["in"][1]), (x_sel_in, xinv["in"][1]), (x_sel_in, ym_sel)], W_M1)
     c.wire("metal1", [(xsa["x_r"], xsa["dp_y"]), (xsa["x_r"], ym_sel)], 0.320)
     c.wire("metal1", [(xsb["x_r"], xsb["dp_y"]), (xsb["x_r"], ym_sel)], 0.320)
     for px in (xsa["x_r"], xsb["x_r"], x_sel_in):
         via1_clean(c, px, ym_sel)
-    c.wire("metal2", [(xsa["x_r"], ym_sel), (x_sel_in, ym_sel)], 0.300)
+    c.wire("metal2", [(xsa["x_r"], ym_sel), (x_sel_in, ym_sel)], W_M2)
 
-    # 2. `dum` on M2 at ym_dum: xdb.x_r, xdum.g (escaped left to xs[2]-0.72 -> >= 0.195 um clear of Xdum.s!), xda.x_r
-    x_dum_in = grid(xs[2] - 0.720)
+    # 2. `dum` on M2 at ym_dum: xdb.x_r, xdum.g (escaped left to xs[2]-0.68), xda.x_r
+    x_dum_in = grid(xs[2] - 0.680)
     c.wire("metal1", [(xs[2], y_gc), (x_dum_in, y_gc), (x_dum_in, ym_dum)], W_M1)
     c.wire("metal1", [(xdb["x_r"], xdb["dn_y"]), (xdb["x_r"], ym_dum)], 0.320)
     c.wire("metal1", [(xda["x_r"], xda["dn_y"]), (xda["x_r"], ym_dum)], 0.320)
@@ -1122,7 +1212,7 @@ def _draw_pi_slice_r_fets_clean(
     c.wire("metal2", [(xdb["x_r"], ym_dum), (xda["x_r"], ym_dum)], 0.300)
 
     # 3. `f`: left M2 at ym_gp [xs[0] .. x_f_x], M1 step at x_f_x [ym_gp .. y_tap], right M2 at ym_gn [x_f_x .. xs[4]]
-    x_f_x = grid(xs[2] + 1.050)   # +5.35 (0.55 um from xdum.d=4.52 and 0.54 um from xsb.x_l=5.89!)
+    x_f_x = grid(xs[2] + 0.860)
     y_tap_m1 = grid(y_vss + sgn * 0.550)  # +0.55 (Row+0) / +9.15 (Row+1) -> >= 0.21 um clear of vss M1!
     via1_clean(c, xsa["gp"][0], ym_gp)
     via1_clean(c, xdb["gp"][0], ym_gp)
@@ -1137,8 +1227,8 @@ def _draw_pi_slice_r_fets_clean(
 
     # 4. `fb`: left M2 at ym_gn [xs[0] .. xs[1]], M1 step at x_fb_l [y_tap .. ym_fbb],
     #          bridge M2 at ym_fbb [x_fb_l .. x_fb_r], M1 step at x_fb_r [ym_fbb .. ym_gp], right M2 at ym_gp [xs[3] .. xs[4]]
-    x_fb_l = grid(xs[0] + 1.100)  # +1.10
-    x_fb_r = grid(xs[3] + 1.100)  # +7.55
+    x_fb_l = grid(xs[0] + 1.040)
+    x_fb_r = grid(xs[3] + 1.040)
     via1_clean(c, xsa["gn"][0], ym_gn)
     via1_clean(c, x_fb_l, ym_gn)
     via1_clean(c, xdb["gn"][0], ym_gn)
@@ -1154,10 +1244,11 @@ def _draw_pi_slice_r_fets_clean(
     via1_clean(c, xda["gp"][0], ym_gp)
     c.wire("metal2", [(xsb["gp"][0], ym_gp), (xda["gp"][0], ym_gp)], W_M2)
 
-    # Extend ca/cb M1 pins toward y_vdd (+4.35 / +5.35) for clean M2 stitch across y_vdd!
-    y_bridge = grid(y_vdd - sgn * 0.500)  # +4.350 (Row+0) or +5.350 (Row+1)
+    # Extend ca/cb M1 pins toward y_vdd (+4.10 / +5.60) with solid M1 bar covering xl..pm.s (zero met1.2 notch!)
+    y_bridge = grid(y_vdd - sgn * 0.750)  # +4.100 (Row+0) or +5.600 (Row+1)
     for xl in (xsa["x_l"], xdb["x_l"], xsb["x_l"], xda["x_l"]):
-        c.wire("metal1", [(xl, xsa["sp_y"]), (xl, y_bridge)], W_M1)
+        ya, yb = sorted((grid(xsa["sp_y"]), y_bridge))
+        c.rect("metal1", grid(xl - 0.160), grid(ya - 0.145), grid(xl + 0.385), grid(yb + 0.145))
 
     return {
         "ca_xs": [xsa["x_l"], xda["x_l"]],
@@ -1174,59 +1265,64 @@ def _draw_pi_slice_r_fets_clean(
 def _build_pi_diff_chan_cell(cache: PdkCache) -> tuple[Cell, dict]:
     """Build ONE complete, mathematically Y-mirror symmetric `pi_diff_chan` centered at y = 0.0 (y in [-9.95, +9.95]).
 
-    Top half (+y) = P-leg (Xmap, Xmbp, Xmixp, Xcmix_p, Xcp, Xrp, Xip, Xr2n -> on)
-    Bot half (-y) = N-leg (Xman, Xmbn, Xmixn, Xcmix_n, Xcn, Xrn, Xin, Xr2p -> op) -- LITERAL mirror_y=True!
+    v2.2 Compact Architecture (~121 um total rotator width, 0% M5):
+      - Stage 1: co-sized `pi_mux4_tg` (TG 1.40/3.60 nfp=2, Xout 1.80/8.40 nfn=2 nfp=4) + tight 0.88 um jumper corridor
+      - Stage 2: 8x `pi_slice_r` tightened to 11.15 um pitch with low-C 0.30 um M3 `cap/cbp` trunks
+      - Stage 3+4 MERGED: 3D-stack `Xcmix` (M3=vss Faraday shield, M4=mix) & `Xcac` (M3=mix, M4=ac Faraday-shielded!)
+        directly over `r16` (eliminating the entire 17.5 um Stage 4 MIM column!)
+      - Stage 5: vertical (unrotated) `r2` (`2.84 um` wide!) + `Xip` (1.10/3.50) + `Xr2` (2.00/6.40 nfn=2 nfp=4)
     """
     ch = Cell()
     half = Cell()
 
     # --- Shared symmetric resistor banks (centered at y = 0.0!) ---
     r16 = rot90_cell(cache.device(R_0P69, dict(l=10.8, nx=16, m=1, guard=1)))
-    x_r16_c = 107.600
-    r16_r1_x = grid(x_r16_c - 7.305)   # 100.295 (West heads)
-    r16_r2_x = grid(x_r16_c + 7.305)   # 114.905 (East heads)
+    x_r16_c = 100.200
+    r16_r1_x = grid(x_r16_c - 7.305)   # 92.895 (West heads)
+    r16_r2_x = grid(x_r16_c + 7.305)   # 107.505 (East heads)
     r16_top_ys = [grid(0.585 + k * 1.170) for k in range(8)]  # +0.585 .. +8.775
     r16.labels.clear()
     ch.include(r16, dx=x_r16_c, dy=0.0)
 
-    r2 = rot90_cell(cache.device(R_0P35, dict(l=10.5, nx=2, m=1, guard=1)))
-    x_r2_c = 142.400
-    r2_r1_x = grid(x_r2_c - 7.155)     # 135.245 (West heads)
-    r2_r2_x = grid(x_r2_c + 7.155)     # 149.555 (East heads)
-    r2_y_p = +0.415
+    # Vertical (unrotated) r2: only 2.84 um wide x 16.32 um tall!
+    r2 = cache.device(R_0P35, dict(l=10.5, nx=2, m=1, guard=1))
+    x_r2_c = 110.300
+    x_r2_w = grid(x_r2_c - 0.415)      # 109.885 (Bar 0 = Xrp: top=+7.155 acp, bot=-7.155 r1p)
+    x_r2_e = grid(x_r2_c + 0.415)      # 110.715 (Bar 1 = Xrn: bot=-7.155 acn, top=+7.155 r1n)
+    y_r2_hi = +7.155
+    y_r2_lo = -7.155
     r2.labels.clear()
     ch.include(r2, dx=x_r2_c, dy=0.0)
 
     # Tie r16 & r2 p-sub guard rings cleanly to vss rails at y = +-9.70
-    # Tie r2 guard ring on its WEST side (x_r2_c - 7.895 = 134.505, completely clear of Stage 5 vdd at x >= 135.90!)
     for xg_tie in (grid(x_r16_c - 8.045), grid(x_r16_c + 8.045)):
         for yt in (-9.700, 0.000, +9.700):
             viali_pad(ch, xg_tie, yt)
         ch.wire("metal1", [(xg_tie, -9.700), (xg_tie, +9.700)], 0.340)
-    x_r2_g = grid(x_r2_c - 7.895)
-    viali_pad(ch, x_r2_g, 0.000)
-    ch.wire("metal1", [(x_r2_g, -9.700), (x_r2_g, +9.700)], 0.340)
+    for yt_r2 in (-7.895, +7.895):
+        viali_pad(ch, x_r2_c, yt_r2)
+    ch.wire("metal1", [(x_r2_c, +7.895), (x_r2_c, +9.700)], 0.340)
+    ch.wire("metal1", [(x_r2_c, -7.895), (x_r2_c, -9.700)], 0.340)
 
     # =========================================================================
     # BUILD TOP HALF (+y) inside `half`, then include BOTH normal and mirror_y!
     # =========================================================================
 
-    # 1. Stage 1 TOP: Xmap (x=17.50) and Xmbp (x=33.20 -> clean 3.8 um M4 jumper corridor between Xmap & Xmbp!)
-    #    NWELL trimmed to x_max=43.55, y_max=+9.30 so gap to Stage 2 NWELL (x_min=45.05) = 1.50 > 1.27 um (nwell.2a)
-    #    and gap to y_vss=+9.70 (psubdiff bot +9.525) = 0.225 > 0.13 um (diff/tap.11)!
-    x_mux_a = 17.500
-    x_mux_b = 33.200
-    half.rect("nwell", grid(x_mux_a - 1.20), +5.950, 43.550, +9.300)
-    draw_tap_h(half, "nsubdiff", grid(x_mux_a - 0.80), 43.350, +8.800, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
-    draw_tap_h(half, "psubdiff", grid(x_mux_a - 0.80), grid(x_mux_b + 10.60), +2.500, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
+    # 1. Stage 1 TOP: Xmap (x=15.60) and Xmbp (x=31.40 -> compact 0.88 um jumper corridor!)
+    x_mux_a = 15.600
+    x_mux_b = 31.400
+    x_s1_nw_r = 41.900
+    half.rect("nwell", grid(x_mux_a - 1.20), +5.750, x_s1_nw_r, +9.300)
+    draw_tap_h(half, "nsubdiff", grid(x_mux_a - 0.80), 41.700, +8.800, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
+    draw_tap_h(half, "psubdiff", grid(x_mux_a - 0.80), 41.800, +2.400, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
     mux_a = _draw_pi_mux4_half(half, cache, x_mux_a)
     mux_b = _draw_pi_mux4_half(half, cache, x_mux_b)
 
-    # 2. Stage 2 TOP: 8x pi_slice_r in 2 mirrored rows x 4 columns (x = 46.20 + col * 12.20)
-    slice_xs = [grid(46.200 + c_idx * 12.200) for c_idx in range(4)]
-    x_mix_l = grid(slice_xs[0] - 0.850)
-    x_mix_r = grid(slice_xs[-1] + 11.600)
-    half.rect("nwell", 45.050, +2.650, grid(x_mix_r + 0.50), +7.050)
+    # 2. Stage 2 TOP: 8x pi_slice_r in 2 mirrored rows x 4 columns (x = 44.60 + col * 11.40)
+    slice_xs = [grid(44.600 + c_idx * 11.400) for c_idx in range(4)]
+    x_mix_l = grid(slice_xs[0] - 0.850)   # 43.750
+    x_mix_r = grid(slice_xs[-1] + 10.900) # 89.700
+    half.rect("nwell", 43.400, +2.450, grid(x_mix_r + 0.50), +7.250)
     draw_tap_h(half, "nsubdiff", x_mix_l, x_mix_r, +4.850, half_w=0.175, with_m1=True, m1_w=0.300, viali_pitch=1.20)
     draw_tap_h(half, "psubdiff", x_mix_l, x_mix_r, +9.700, half_w=0.175, with_m1=True, m1_w=0.360, viali_pitch=1.20)
     draw_tap_h(ch, "psubdiff", x_mix_l, x_mix_r, 0.000, half_w=0.175, with_m1=True, m1_w=0.360, viali_pitch=1.20)
@@ -1236,9 +1332,10 @@ def _build_pi_diff_chan_cell(cache: PdkCache) -> tuple[Cell, dict]:
         slices_top[2 * col_i]     = _draw_pi_slice_r_fets_clean(half, cache, sx, y_vss=0.000, y_vdd=+4.850)
         slices_top[2 * col_i + 1] = _draw_pi_slice_r_fets_clean(half, cache, sx, y_vss=+9.700, y_vdd=+4.850)
 
-    # Connect `cap` (y_ca = +4.350) and `cbp` (y_cb = +5.350) from mux_a/mux_b across all 8 slices!
-    y_ca = +4.350
-    y_cb = +5.350
+    # Connect `cap` (y_ca = +4.100) and `cbp` (y_cb = +5.600) on lean 0.30 um M3,
+    # FARADAY-SHIELDED from each other by an intervening M3 `vdd` shield rail at y = +4.850!
+    y_ca = +4.100
+    y_cb = +5.600
     for mx_pt, yt_clk in ((mux_a["out"], y_ca), (mux_b["out"], y_cb)):
         via1_clean(half, mx_pt[0], mx_pt[1])
         half.wire("metal2", [mx_pt, (mx_pt[0], yt_clk)], 0.320)
@@ -1260,21 +1357,24 @@ def _build_pi_diff_chan_cell(cache: PdkCache) -> tuple[Cell, dict]:
             half.wire("metal2", [(xcb, y_ca), (xcb, y_cb)], 0.300)
             via2_clean(half, xcb, y_cb)
             cb_max_x = max(cb_max_x, xcb)
-    half.wire("metal3", [(mux_a["out"][0], y_ca), (ca_max_x, y_ca)], 0.400)
-    half.wire("metal3", [(mux_b["out"][0], y_cb), (cb_max_x, y_cb)], 0.400)
+    half.wire("metal3", [(mux_a["out"][0], y_ca), (ca_max_x, y_ca)], 0.300)
+    half.wire("metal3", [(mux_b["out"][0], y_cb), (cb_max_x, y_cb)], 0.300)
+    # Continuous M3 VDD Faraday shield between `cap` (+4.05) and `cbp` (+5.65) -> kills cap<->cbp coupling (< 0.15 fF)!
+    x_vdd_w_ch = 42.650
+    via1_clean(half, x_vdd_w_ch, +4.850)
+    via2_clean(half, x_vdd_w_ch, +4.850)
+    half.wire("metal3", [(x_vdd_w_ch, +4.850), (x_mix_r, +4.850)], 0.300)
 
-    # Route `drv_p[0..7]` straight horizontally on 8 dedicated M3 tracks into r16 West heads!
-    # Row +0 (yt < yb, step UP):   jog_xs DECREASE with yt (97.75, 97.10, 96.45, 95.80) -> ZERO M2 crossings!
-    # Row +1 (yt > yb, step DOWN): jog_xs INCREASE with yt (95.80, 96.45, 97.10, 97.75) -> ZERO M2 crossings!
+    # Route `drv_p[0..7]` straight horizontally on 8 dedicated M3 tracks (0.86 um pitch -> >= 0.49 um clear of cap/cbp!)
     drv_plan = [
-        (6, +0.550, 0, 97.750),  # Col 3 Row+0 -> bar 0 (+0.585)
-        (4, +1.500, 1, 97.100),  # Col 2 Row+0 -> bar 1 (+1.755)
-        (2, +2.450, 2, 96.450),  # Col 1 Row+0 -> bar 2 (+2.925)
-        (0, +3.400, 3, 95.800),  # Col 0 Row+0 -> bar 3 (+4.095)
-        (1, +6.300, 4, 95.800),  # Col 0 Row+1 -> bar 4 (+5.265)
-        (3, +7.250, 5, 96.450),  # Col 1 Row+1 -> bar 5 (+6.435)
-        (5, +8.200, 6, 97.100),  # Col 2 Row+1 -> bar 6 (+7.605)
-        (7, +9.150, 7, 97.750),  # Col 3 Row+1 -> bar 7 (+8.775)
+        (6, +0.550, 0, 91.950),  # Col 3 Row+0 -> bar 0 (+0.585)
+        (4, +1.410, 1, 91.300),  # Col 2 Row+0 -> bar 1 (+1.755)
+        (2, +2.270, 2, 90.650),  # Col 1 Row+0 -> bar 2 (+2.925)
+        (0, +3.130, 3, 90.000),  # Col 0 Row+0 -> bar 3 (+4.095)
+        (1, +6.570, 4, 90.000),  # Col 0 Row+1 -> bar 4 (+5.265)
+        (3, +7.430, 5, 90.650),  # Col 1 Row+1 -> bar 5 (+6.435)
+        (5, +8.290, 6, 91.300),  # Col 2 Row+1 -> bar 6 (+7.605)
+        (7, +9.150, 7, 91.950),  # Col 3 Row+1 -> bar 7 (+8.775)
     ]
     for s_idx, yt, bar_i, xj in drv_plan:
         sl = slices_top[s_idx]
@@ -1284,13 +1384,13 @@ def _build_pi_diff_chan_cell(cache: PdkCache) -> tuple[Cell, dict]:
         half.wire("metal1", [(dx, y_lo), (dx, y_hi)], 0.320)
         via1_clean(half, dx, yt)
         via2_clean(half, dx, yt)
-        half.wire("metal3", [(dx, yt), (xj, yt)], 0.360)
+        half.wire("metal3", [(dx, yt), (xj, yt)], 0.340)
         via2_clean(half, xj, yt)
         yb = r16_top_ys[bar_i]
         half.wire("metal2", [(xj, yt), (xj, yb), (r16_r1_x, yb)], 0.400)
         via1_clean(half, r16_r1_x, yb)
 
-    # Connect `f_k, fb_k` taps in Row+0 (y=+0.45) and Row+1 (y=+9.25) to 4 dedicated M4 X columns per slice col!
+    # Connect `f_k, fb_k` taps in Row+0 (y=+0.55) and Row+1 (y=+9.15) to 4 dedicated M4 X columns per slice col!
     f_m4_xs: dict[int, float] = {}
     fb_m4_xs: dict[int, float] = {}
     for col_i, sx in enumerate(slice_xs):
@@ -1303,8 +1403,8 @@ def _build_pi_diff_chan_cell(cache: PdkCache) -> tuple[Cell, dict]:
 
         xm_f_ev  = xf_ev
         xm_fb_ev = xfb_ev
-        xm_f_od  = grid(xf_od + 1.200)
-        xm_fb_od = grid(xfb_od + 1.200)
+        xm_f_od  = grid(xf_od + 1.050)
+        xm_fb_od = grid(xfb_od + 1.050)
         f_m4_xs[ev], fb_m4_xs[ev] = xm_f_ev, xm_fb_ev
         f_m4_xs[od], fb_m4_xs[od] = xm_f_od, xm_fb_od
 
@@ -1321,181 +1421,211 @@ def _build_pi_diff_chan_cell(cache: PdkCache) -> tuple[Cell, dict]:
         half.wire("metal3", [(xfb_od, yfb_od), (xm_fb_od, yfb_od)], 0.520)
         via3_pad(half, xm_fb_od, yfb_od)
 
-    # 3. Stage 3 East summing bar (`mixp`) on r16 East heads (x = r16_r2_x = 114.905)
+    # 3. Stage 3 East summing bar (`mixp`) on r16 East heads (x = r16_r2_x = 108.105)
     half.wire("metal1", [(r16_r2_x, r16_top_ys[0]), (r16_r2_x, r16_top_ys[-1])], 0.440)
     half.wire("metal2", [(r16_r2_x, r16_top_ys[0]), (r16_r2_x, r16_top_ys[-1])], 0.440)
     for yb in r16_top_ys:
         via1_clean(half, r16_r2_x, yb)
 
-    # 4. Stage 4 TOP: 2x MIM1 (4.1 x 4.1 um) side-by-side at y = +5.000
+    # 4. Stage 3+4 MERGED: 3D-Stack BOTH MIM1 caps (`Xcmix`, `Xcac`, 4.1 x 4.1 um) directly over `r16`!
+    #    - West `Xcmix` (unflipped): M3 bottom plate (C2) = `vss` (Faraday shield, via3 bar on EAST at +2.72),
+    #                                M4 top plate (C1) = `mixp` (WEST [-2.58..+1.32])
+    #    - East `Xcac`  (X-flipped): M3 bottom plate (C2) = `mixp` (via3 bar on WEST at -2.72 -> 1.44 um M3 gap & 3.10 um capm.11!),
+    #                                M4 top plate (C1) = `acp` (EAST, 100% Faraday-shielded from r16!)
     mim = cache.device(MIM1, dict(w=4.1, l=4.1, nx=1, ny=1, stack=0, doports=1))
-    c1_rel = mim.pins("C1")[0]
     c2_rel = mim.pins("C2")[0]
     mim.labels.clear()
+    mim_fx = flip_x_cell(mim)
 
-    x_cmix = 120.100
-    x_cac  = 127.300
+    x_cmix = grid(x_r16_c - 3.700)  # 97.100 (M3 [94.12..100.08], mimcap [94.32..98.42], C2 at 99.82)
+    x_cac  = grid(x_r16_c + 3.700)  # 104.500 (M3 [101.52..107.48], mimcap [103.18..107.28], C2 at 101.78)
     y_mim  = +5.000
-    half.include(mim, dx=x_cmix, dy=y_mim)
-    half.include(mim, dx=x_cac, dy=y_mim)
+    half.include(mim,    dx=x_cmix, dy=y_mim)
+    half.include(mim_fx, dx=x_cac,  dy=y_mim)
 
-    p_cmix_c1 = (grid(x_cmix + c1_rel[0]), y_mim)
-    p_cmix_c2 = (grid(x_cmix + c2_rel[0]), y_mim)
-    p_cac_c1  = (grid(x_cac  + c1_rel[0]), y_mim)
-    p_cac_c2  = (grid(x_cac  + c2_rel[0]), y_mim)
+    # Tie Xcmix.C2 (`vss` M3 bottom plate, at x = 99.820) straight up on M3 to y=+9.70 vss M1!
+    x_cmix_vss = grid(x_cmix + c2_rel[0])  # 99.820 (1.70 um clear of Xcac M3, 3.36 um clear of Xcac mimcap!)
+    half.wire("metal3", [(x_cmix_vss, +7.000), (x_cmix_vss, +9.700)], 0.520)
+    via2_clean(half, x_cmix_vss, +9.700)
+    via1_clean(half, x_cmix_vss, +9.700)
 
+    # Stitch `mixp`: r16_r2_x (107.505) -> Xcac.C2 M3 right edge -> Xcac built-in via3 bar -> M4 bridge -> Xcmix.C1!
+    x_cac_c2 = grid(x_cac - c2_rel[0])
     via2_clean(half, r16_r2_x, y_mim)
-    via3_pad(half, r16_r2_x, y_mim)
-    half.wire("metal4", [(r16_r2_x, y_mim), p_cmix_c1], 0.560)
-    half.wire("metal4", [p_cmix_c1, (p_cmix_c1[0], +8.150), (p_cac_c1[0], +8.150), p_cac_c1], 0.560)
+    half.wire("metal3", [(grid(x_cac + 2.800), y_mim), (r16_r2_x, y_mim)], 0.520)
+    half.wire("metal4", [(grid(x_cmix - 0.100), +7.000), (grid(x_cmix - 0.100), +7.900), (x_cac_c2, +7.900), (x_cac_c2, +7.000)], 0.440)
 
-    half.wire("metal3", [(p_cmix_c2[0], +7.000), (p_cmix_c2[0], +9.700)], 0.520)
-    via2_clean(half, p_cmix_c2[0], +9.700)
-    via1_clean(half, p_cmix_c2[0], +9.700)
+    # Escape `acp` directly EAST from Xcac.C1 M4 top plate at y=+7.900 to Stage 5 (x=109.200)!
+    y_ac_bus = +7.900
+    x_ac_drop = 109.200
+    half.wire("metal4", [(grid(x_cac + 1.500), +7.000), (grid(x_cac + 1.500), y_ac_bus), (x_ac_drop, y_ac_bus)], 0.440)
+    via3_pad(half, x_ac_drop, y_ac_bus)
+    via2_clean(half, x_ac_drop, y_ac_bus)
 
-    # 5. Stage 5 TOP: Xip (acp -> r1p) and Xr2n (r1p -> on) above r2 (y in [+2.50, +9.70])!
-    x_rec_l = 134.500
-    x_rec_r = 150.200
-    y_vdd_r = +3.000
-    y_p_r   = +4.650
-    y_gc_r  = +6.350
-    y_n_r   = +7.850
+    # 5. Stage 5 TOP: Xip (1.65/6.60 nfn=1 nfp=4) and Xr2 (2.66/10.64 nfn=2 nfp=4) beside vertical r2!
+    y_vdd_r = +2.600
+    y_p_r   = +4.400
+    y_gc_r  = +6.100
+    y_n_r   = +7.600
     y_vss_r = +9.700
 
-    half.rect("nwell", grid(x_rec_l + 1.00), +2.500, grid(x_rec_r - 1.20), +5.800)
-    draw_tap_h(half, "nsubdiff", grid(x_rec_l + 1.40), grid(x_rec_r - 1.60), y_vdd_r, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
-    draw_tap_h(half, "psubdiff", grid(x_rec_l - 12.50), grid(x_rec_r + 1.20), y_vss_r, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
+    x_xip   = 113.800
+    x_xr2   = 117.600
+    x_vdd_e = 119.600
+    half.rect("nwell", 112.100, +2.050, 119.500, +5.950)
+    draw_tap_h(half, "nsubdiff", 112.400, 119.200, y_vdd_r, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
+    # Keep psubdiff strictly CLEAR of r16 poly resistors (poly.9 >= 0.48 um!); bridge M1 across r16 at y=+9.70!
+    half.wire("metal1", [(x_mix_r, y_vss_r), (112.100, y_vss_r)], 0.460)
+    draw_tap_h(half, "psubdiff", 112.100, 120.400, y_vss_r, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
 
-    x_xip  = 139.000
-    x_xr2  = 145.000
     xip = draw_cmos_inv(
-        half, cache, x_xip, 0.80, 2.60, N_LVT, P_LVT, 0.15, 0.35, 1, 2,
+        half, cache, x_xip, 1.65, 6.60, N_LVT, P_LVT, 0.15, 0.35, 1, 4,
         y_p_r, y_n_r, y_gc_r, y_vdd_r, y_vss_r,
     )
     xr2 = draw_cmos_inv(
-        half, cache, x_xr2, 0.95, 3.10, N_LVT, P_LVT, 0.15, 0.35, 1, 2,
+        half, cache, x_xr2, 2.66, 10.64, N_LVT, P_LVT, 0.15, 0.35, 2, 4,
         y_p_r, y_n_r, y_gc_r, y_vdd_r, y_vss_r,
     )
 
-    half.wire("metal3", [p_cac_c2, (133.400, y_mim)], 0.440)
-    via2_clean(half, 133.400, y_mim)
-    half.wire("metal2", [(133.400, y_mim), (133.400, r2_y_p), (r2_r1_x, r2_y_p)], 0.320)
-    via1_clean(half, r2_r1_x, r2_y_p)
-    half.wire("metal2", [(133.400, y_mim), (133.400, y_gc_r), (xip["in"][0], y_gc_r)], 0.320)
-    via1_clean(half, xip["in"][0], xip["in"][1])
-
+    # Local `r1` stitch: xip.out -> xr2.in on M2 at y_gc_r!
     via1_clean(half, xip["out"][0], y_gc_r)
     via1_clean(half, xr2["in"][0], y_gc_r)
     half.wire("metal2", [(xip["out"][0], y_gc_r), (xr2["in"][0], y_gc_r)], 0.320)
-    half.wire("metal2", [(142.100, y_gc_r), (142.100, r2_y_p), (r2_r2_x, r2_y_p)], 0.320)
-    via1_clean(half, r2_r2_x, r2_y_p)
 
+    # Stage 5 output M3 stub from xr2.out to x = 121.000
     via1_clean(half, xr2["out"][0], y_gc_r)
     via2_clean(half, xr2["out"][0], y_gc_r)
-    half.wire("metal3", [(xr2["out"][0], y_gc_r), (152.000, y_gc_r)], 0.440)
+    half.wire("metal3", [(xr2["out"][0], y_gc_r), (121.000, y_gc_r)], 0.400)
 
     # Power ties inside `half`
-    draw_tap_h(half, "psubdiff", 16.500, x_mix_l, +9.700, half_w=0.175, with_m1=True, m1_w=0.360, viali_pitch=1.20)
-    half.wire("metal1", [(grid(x_mux_b + 10.60), +2.500), (44.750, +2.500), (44.750, 0.000), (x_mix_l, 0.000)], 0.440)
-    half.wire("metal1", [(43.350, +8.800), (44.150, +8.800), (44.150, +4.850), (x_mix_l, +4.850)], 0.360)
+    draw_tap_h(half, "psubdiff", 14.500, x_mix_l, +9.700, half_w=0.175, with_m1=True, m1_w=0.360, viali_pitch=1.20)
+    half.wire("metal1", [(41.800, +2.400), (43.250, +2.400), (43.250, 0.000), (x_mix_l, 0.000)], 0.440)
+    half.wire("metal1", [(41.700, +8.800), (x_vdd_w_ch, +8.800), (x_vdd_w_ch, +4.850), (x_mix_l, +4.850)], 0.360)
 
     # Include `half` BOTH normal (+y = P-leg) AND mirror_y (-y = N-leg)!!
     ch.include(half, dx=0.0, dy=0.0, mirror_y=False)
     ch.include(half, dx=0.0, dy=0.0, mirror_y=True)
 
-    # Connect Stage 5 vdd (+3.00 & -3.00) via vertical M4 strap at x = 151.200
-    for yv in (-y_vdd_r, +y_vdd_r):
-        ch.wire("metal1", [(grid(x_rec_r - 1.60), yv), (151.200, yv)], 0.440)
-        via1_clean(ch, 151.200, yv)
-        via2_clean(ch, 151.200, yv)
-        via3_pad(ch, 151.200, yv)
-    ch.wire("metal4", [(151.200, -y_vdd_r), (151.200, +y_vdd_r)], 0.560)
+    # 180-deg point-symmetric vertical r2 connections (`acp/acn` & `r1p/r1n`) — ZERO M2 crossings!
+    #   acp (+y): (109.20, +7.90) -> Xrp top (109.885, +7.155) -> Xip.in (113.800, +6.10)
+    ch.wire("metal2", [(x_ac_drop, +y_ac_bus), (112.000, +y_ac_bus), (112.000, +y_gc_r), (x_xip, +y_gc_r)], 0.300)
+    ch.wire("metal2", [(x_r2_w, +y_ac_bus), (x_r2_w, y_r2_hi)], 0.300)
+    via1_clean(ch, x_r2_w, y_r2_hi)
+    via1_clean(ch, x_xip, +y_gc_r)
+    #   acn (-y): (109.20, -7.90) -> Xrn bot (110.715, -7.155) -> Xin.in (113.800, -6.10)
+    ch.wire("metal2", [(x_ac_drop, -y_ac_bus), (112.000, -y_ac_bus), (112.000, -y_gc_r), (x_xip, -y_gc_r)], 0.300)
+    ch.wire("metal2", [(x_r2_e, -y_ac_bus), (x_r2_e, y_r2_lo)], 0.300)
+    via1_clean(ch, x_r2_e, y_r2_lo)
+    via1_clean(ch, x_xip, -y_gc_r)
+    #   r1p (+y Xip.out -> Xrp bot 109.885, -7.155) via short M3 bridge at y = +1.200
+    x_r1_tap = grid(xip["out"][0] + 0.800)  # 115.240 (clear between Xip and Xr2!)
+    ch.wire("metal2", [(x_r1_tap, +y_gc_r), (x_r1_tap, +1.200)], 0.300)
+    via2_clean(ch, x_r1_tap, +1.200)
+    ch.wire("metal3", [(x_r2_w, +1.200), (x_r1_tap, +1.200)], 0.360)
+    via2_clean(ch, x_r2_w, +1.200)
+    ch.wire("metal2", [(x_r2_w, +1.200), (x_r2_w, y_r2_lo)], 0.300)
+    via1_clean(ch, x_r2_w, y_r2_lo)
+    #   r1n (-y Xin.out -> Xrn top 111.515, +7.155) via short M3 bridge at y = -1.200
+    ch.wire("metal2", [(x_r1_tap, -y_gc_r), (x_r1_tap, -1.200)], 0.300)
+    via2_clean(ch, x_r1_tap, -1.200)
+    ch.wire("metal3", [(x_r2_e, -1.200), (x_r1_tap, -1.200)], 0.360)
+    via2_clean(ch, x_r2_e, -1.200)
+    ch.wire("metal2", [(x_r2_e, -1.200), (x_r2_e, y_r2_hi)], 0.300)
+    via1_clean(ch, x_r2_e, y_r2_hi)
 
-    # Connect Stage 1/2 vdd (+8.80 & -8.80, completely M3-free!) at x = 44.150 on M4!
+    # Connect Stage 5 vdd (+2.60 & -2.60) via vertical M4 strap at x = x_vdd_e = 119.600
+    for yv in (-y_vdd_r, +y_vdd_r):
+        ch.wire("metal1", [(119.200, yv), (x_vdd_e, yv)], 0.440)
+        via1_clean(ch, x_vdd_e, yv)
+        via2_clean(ch, x_vdd_e, yv)
+        via3_pad(ch, x_vdd_e, yv)
+    ch.wire("metal4", [(x_vdd_e, -y_vdd_r), (x_vdd_e, +y_vdd_r)], 0.560)
+
+    # Connect Stage 1/2 vdd (+8.80 & -8.80) at x = x_vdd_w_ch = 42.650 on M4!
     for yv in (-8.800, +8.800):
-        via1_clean(ch, 44.150, yv)
-        via2_clean(ch, 44.150, yv)
-        via3_pad(ch, 44.150, yv)
-    ch.wire("metal4", [(44.150, -8.800), (44.150, +8.800)], 0.560)
+        via1_clean(ch, x_vdd_w_ch, yv)
+        via2_clean(ch, x_vdd_w_ch, yv)
+        via3_pad(ch, x_vdd_w_ch, yv)
+    ch.wire("metal4", [(x_vdd_w_ch, -8.800), (x_vdd_w_ch, +8.800)], 0.560)
 
     # --- Central 2 GHz Clock Channels for Xmap/Xman (`e0..e3`) and Xmbp/Xmbn (`o0..o3`) ---
-    # Fly CLEANLY OVER y_vss = +-2.500 on M2 (starting from tg.x_l at y = +-3.55, strictly clear of vss M1!)
+    # Equalize even/odd load C: wider 0.54 um M3 on shorter `e0..e3` vs lean 0.30 um M3 on longer `o0..o3`!
     clk_ys = [+1.410, +0.470, -0.470, -1.410]
-    for mx_base, x_l_bus, x_r_bus in (
-        (mux_a, 15.800, 27.600),
-        (mux_b, 31.800, 42.800),
+    for mx_base, x_l_bus, x_r_bus, w_clk_m3 in (
+        (mux_a, 14.000, 25.400, 0.540),
+        (mux_b, 29.800, 41.200, 0.300),
     ):
         for yt in clk_ys:
-            ch.wire("metal3", [(x_l_bus, yt), (x_r_bus, yt)], 0.360)
+            ch.wire("metal3", [(x_l_bus, yt), (x_r_bus, yt)], w_clk_m3)
         for k in range(4):
             xl = mx_base["tgs"][k]["x_l"]
             yt_top = clk_ys[k]
-            via1_clean(ch, xl, +3.550)
-            ch.wire("metal2", [(xl, +3.550), (xl, yt_top)], 0.300)
+            via1_clean(ch, xl, +3.450)
+            ch.wire("metal2", [(xl, +3.450), (xl, yt_top)], 0.300)
             via2_clean(ch, xl, yt_top)
             yt_bot = clk_ys[(k + 2) % 4]
-            xl_b = grid(xl - 0.600)
-            ch.wire("metal1", [(xl, -3.550), (xl_b, -3.550)], 0.290)
-            via1_clean(ch, xl_b, -3.550)
-            ch.wire("metal2", [(xl_b, -3.550), (xl_b, yt_bot)], 0.300)
+            xl_b = grid(xl - 0.520)
+            ch.wire("metal1", [(xl, -3.450), (xl_b, -3.450)], 0.290)
+            via1_clean(ch, xl_b, -3.450)
+            ch.wire("metal2", [(xl_b, -3.450), (xl_b, yt_bot)], 0.300)
             via2_clean(ch, xl_b, yt_bot)
 
-    # Fly `o0..o3` across Xmap/Xman from x = 15.80 on 4 symmetric M3 tracks at y = +7.55, +6.60, -6.60, -7.55
+    # Fly `o0..o3` across Xmap/Xman from x = 14.00 on 4 lean 0.30 um symmetric M3 tracks at y = +7.55, +6.60, -6.60, -7.55
     o_fly_ys = [+7.550, +6.600, -6.600, -7.550]
-    o_jmp_xs = [28.600, 29.560, 30.520, 31.480]
+    o_jmp_xs = [26.800, 27.680, 28.560, 29.440]
     for k in range(4):
         yf = o_fly_ys[k]
         xj = o_jmp_xs[k]
         yc = clk_ys[k]
-        ch.wire("metal3", [(15.800, yf), (xj, yf)], 0.360)
+        ch.wire("metal3", [(14.000, yf), (xj, yf)], 0.300)
         via3_pad(ch, xj, yf)
-        ch.wire("metal4", [(xj, yf), (xj, yc)], 0.400)
+        ch.wire("metal4", [(xj, yf), (xj, yc)], 0.340)
         via3_pad(ch, xj, yc)
-        ch.wire("metal3", [(xj, yc), (31.800, yc)], 0.360)
+        ch.wire("metal3", [(xj, yc), (29.800, yc)], 0.300)
 
-    # Connect MUX select gate taps to 16 vertical M4 columns (xm_s = cx + 0.00, xm_sb = cx + 1.05 ->
-    # >= 0.21 um M2 clearance from tg clock riser at xl = cx - 0.56 and >= 1.05 um M4 pitch!)
+    # Connect MUX select gate taps to 16 vertical M4 columns (xm_s = cx, xm_sb = cx + 0.96 -> pitch >= 0.96 um!)
     sel_a_m4: list[tuple[float, float]] = []
     sel_b_m4: list[tuple[float, float]] = []
     for mx_base, out_list in ((mux_a, sel_a_m4), (mux_b, sel_b_m4)):
         for k in range(4):
             cx = mx_base["tgs"][k]["gp"][0]
             xm_s  = grid(cx)
-            xm_sb = grid(cx + 1.050)
+            xm_sb = grid(cx + 0.960)
             out_list.append((xm_s, xm_sb))
             for sgn_y in (+1.0, -1.0):
-                y_gn_c = grid(sgn_y * 4.800)
-                y_s_v  = grid(sgn_y * 3.350)
+                y_gn_c = grid(sgn_y * 4.760)
+                y_s_v  = grid(sgn_y * 3.300)
                 via1_clean(ch, cx, y_gn_c)
                 ch.wire("metal2", [(cx, y_gn_c), (xm_s, y_s_v)], W_M2)
                 via2_clean(ch, xm_s, y_s_v)
                 via3_pad(ch, xm_s, y_s_v)
-                y_gp_c = grid(sgn_y * 5.750)
+                y_gp_c = grid(sgn_y * 5.680)
                 via1_clean(ch, cx, y_gp_c)
                 ch.wire("metal2", [(cx, y_gp_c), (xm_sb, y_gp_c)], W_M2)
                 via2_clean(ch, xm_sb, y_gp_c)
                 via3_pad(ch, xm_sb, y_gp_c)
-            ch.wire("metal4", [(xm_s, -3.350), (xm_s, +3.350)], 0.400)
-            ch.wire("metal4", [(xm_sb, -5.750), (xm_sb, +5.750)], 0.400)
+            ch.wire("metal4", [(xm_s, -3.300), (xm_s, +3.300)], 0.360)
+            ch.wire("metal4", [(xm_sb, -5.680), (xm_sb, +5.680)], 0.360)
 
     # Connect top & bottom `f_k, fb_k` inside channel on M4
     for k in range(8):
         yk = 0.550 if (k % 2 == 0) else 9.150
-        ch.wire("metal4", [(f_m4_xs[k], -yk), (f_m4_xs[k], +yk)], 0.400)
-        ch.wire("metal4", [(fb_m4_xs[k], -yk), (fb_m4_xs[k], +yk)], 0.400)
+        ch.wire("metal4", [(f_m4_xs[k], -yk), (f_m4_xs[k], +yk)], 0.360)
+        ch.wire("metal4", [(fb_m4_xs[k], -yk), (fb_m4_xs[k], +yk)], 0.360)
 
     meta = {
         "e_ys": clk_ys,
         "o_ys": o_fly_ys,
-        "clk_in_x": 15.800,
+        "clk_in_x": 14.000,
         "sel_a_m4": sel_a_m4,
         "sel_b_m4": sel_b_m4,
         "f_m4_xs": f_m4_xs,
         "fb_m4_xs": fb_m4_xs,
-        "on_pt": (152.000, +y_gc_r),
-        "op_pt": (152.000, -y_gc_r),
-        "vdd_m4_w": 44.150,
-        "vdd_m4_e": 151.200,
+        "on_pt": (121.000, +y_gc_r),
+        "op_pt": (121.000, -y_gc_r),
+        "xr2_out_x": xr2["out"][0],
+        "vdd_m4_w": x_vdd_w_ch,
+        "vdd_m4_e": x_vdd_e,
         "vss_ys": [-9.700, 0.000, +9.700],
     }
     return ch, meta
@@ -1512,18 +1642,18 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
     c.include(ch_cell, dx=0.0, dy=y_ch_e)
     c.include(ch_cell, dx=0.0, dy=y_ch_d)
 
-    # 2. West 8x 2 GHz Input Clock Buffers (`Xin0..Xin7`, c0..c7 -> cb0..cb7)
+    # 2. West 8x 2 GHz Input Clock Buffers (`Xin0..Xin7`, pi_inv_lvt 1.60/6.40 nfn=1 nfp=4!)
     x_buf_l = 0.400
-    x_buf_c = 3.200
-    x_buf_r = 5.400
-    y_buf_base = 8.400
-    h_buf = 4.900
+    x_buf_c = 2.600
+    x_buf_r = 4.800
+    y_buf_base = 8.000
+    h_buf = 5.000
 
-    spine_xs = [grid(6.800 + k * 1.000) for k in range(8)]
+    spine_xs = [grid(6.000 + k * 0.880) for k in range(8)]  # 6.00 .. 12.16 (0.88 um pitch!)
     y_spine_lo = grid(y_ch_e - 8.200)
     y_spine_hi = grid(y_ch_d + 8.200)
     for k in range(8):
-        c.wire("metal4", [(spine_xs[k], y_spine_lo), (spine_xs[k], y_spine_hi)], 0.400)
+        c.wire("metal4", [(spine_xs[k], y_spine_lo), (spine_xs[k], y_spine_hi)], 0.360)
 
     c_in_pts: dict[str, tuple[float, float]] = {}
     buf_out_ys = [9.000, 14.800, 20.350, 26.400, 30.150, 35.650, 41.600, 47.500]
@@ -1537,9 +1667,9 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
             y_vdd_b, y_vss_b = y_bot, y_top
             sgn = -1.0
 
-        y_n_b  = grid(y_vss_b + sgn * 1.050)
-        y_gc_b = grid(y_vss_b + sgn * 2.150)
-        y_p_b  = grid(y_vss_b + sgn * 3.550)
+        y_n_b  = grid(y_vss_b + sgn * 1.250)
+        y_gc_b = grid(y_vss_b + sgn * 2.500)
+        y_p_b  = grid(y_vss_b + sgn * 3.750)
 
         nw_y1, nw_y2 = sorted((grid(y_p_b - sgn * 1.05), grid(y_vdd_b + sgn * 0.55)))
         c.rect("nwell", grid(x_buf_l - 0.40), nw_y1, grid(x_buf_r + 0.40), nw_y2)
@@ -1551,15 +1681,15 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
             draw_tap_h(c, "psubdiff", x_buf_l, x_buf_r, y_vss_b, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.00)
 
         inv = draw_cmos_inv(
-            c, cache, x_buf_c, 1.00, 2.80, N_LVT, P_STD, 0.15, 0.15, 1, 2,
+            c, cache, x_buf_c, 1.60, 6.40, N_LVT, P_LVT, 0.15, 0.35, 1, 4,
             y_p_b, y_n_b, y_gc_b, y_vdd_b, y_vss_b,
         )
-        # Escape gate input LEFT to x=2.65 on M1 (0.290 wide bridge -> zero met1.2 notch!)
-        x_in_b = grid(inv["in"][0] - 0.550)
+        # Escape gate input LEFT to x=1.55 on M1 (0.42 um M2 clear of West vss M2 spine at x=0.70!)
+        x_in_b = grid(x_buf_c - 1.050)  # 1.550
         c.rect("metal1", grid(x_in_b - 0.145), grid(y_gc_b - 0.145), grid(inv["in"][0] + 0.145), grid(y_gc_b + 0.145))
         via1_clean(c, x_in_b, y_gc_b)
         via2_clean(c, x_in_b, y_gc_b)
-        c.wire("metal3", [(0.000, y_gc_b), (x_in_b, y_gc_b)], 0.400)
+        c.wire("metal3", [(0.000, y_gc_b), (x_in_b, y_gc_b)], 0.360)
         c_in_pts[f"c{k}"] = (0.000, y_gc_b)
 
         yo = buf_out_ys[k]
@@ -1567,22 +1697,22 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
         if abs(yo - y_gc_b) > 0.01:
             c.wire("metal2", [(inv["out"][0], y_gc_b), (inv["out"][0], yo)], 0.320)
         via2_clean(c, inv["out"][0], yo)
-        c.wire("metal3", [(inv["out"][0], yo), (spine_xs[k], yo)], 0.400)
+        c.wire("metal3", [(inv["out"][0], yo), (spine_xs[k], yo)], 0.340)
         via3_pad(c, spine_xs[k], yo)
         if yo < y_spine_lo:
-            c.wire("metal4", [(spine_xs[k], yo), (spine_xs[k], y_spine_lo)], 0.400)
+            c.wire("metal4", [(spine_xs[k], yo), (spine_xs[k], y_spine_lo)], 0.360)
         if yo > y_spine_hi:
-            c.wire("metal4", [(spine_xs[k], y_spine_hi), (spine_xs[k], yo)], 0.400)
+            c.wire("metal4", [(spine_xs[k], y_spine_hi), (spine_xs[k], yo)], 0.360)
 
     # Connect West buffer vdd & vss rails together on M2
     for k in range(9):
         y_r = grid(y_buf_base + k * h_buf)
         if k % 2 == 0:
-            via1_clean(c, 0.800, y_r)
+            via1_clean(c, 0.700, y_r)
         else:
-            via1_clean(c, 5.200, y_r)
-    c.wire("metal2", [(0.800, y_buf_base), (0.800, grid(y_buf_base + 8 * h_buf))], 0.460)
-    c.wire("metal2", [(5.200, grid(y_buf_base + h_buf)), (5.200, grid(y_buf_base + 7 * h_buf))], 0.460)
+            via1_clean(c, 4.500, y_r)
+    c.wire("metal2", [(0.700, y_buf_base), (0.700, grid(y_buf_base + 8 * h_buf))], 0.460)
+    c.wire("metal2", [(4.500, grid(y_buf_base + h_buf)), (4.500, grid(y_buf_base + 7 * h_buf))], 0.460)
 
     # 3. Tap West Clock Spine (`cb0..cb7`) into `Xch_d` and `Xch_e`!
     for y_ch, e_cbs, o_cbs in (
@@ -1593,12 +1723,12 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
             yt = grid(y_ch + ch_m["e_ys"][idx])
             xs_tap = spine_xs[cb_k]
             via3_pad(c, xs_tap, yt)
-            c.wire("metal3", [(xs_tap, yt), (ch_m["clk_in_x"], yt)], 0.360)
+            c.wire("metal3", [(xs_tap, yt), (ch_m["clk_in_x"], yt)], 0.340)
         for idx, cb_k in enumerate(o_cbs):
             yt = grid(y_ch + ch_m["o_ys"][idx])
             xs_tap = spine_xs[cb_k]
             via3_pad(c, xs_tap, yt)
-            c.wire("metal3", [(xs_tap, yt), (ch_m["clk_in_x"], yt)], 0.360)
+            c.wire("metal3", [(xs_tap, yt), (ch_m["clk_in_x"], yt)], 0.340)
 
     # 4. South Band (y in [0.00, 5.40]): 24x `pi_inv_static` (a0..7, b0..7, f0..7)
     y_st_vss = 0.400
@@ -1607,12 +1737,12 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
     y_st_p   = 3.150
     y_st_vdd = 4.250
 
-    a_xs = [grid(16.000 + k * 1.700) for k in range(8)]  # 16.00 .. 27.90 (>= 1.15 um clear of x_vss_cw=14.85!)
-    b_xs = [grid(30.400 + k * 1.650) for k in range(8)]  # 30.40 .. 41.95 (well clear of vdd spine at 44.15!)
-    f_xs = [49.000, 54.000, 61.200, 66.200, 73.400, 78.400, 85.600, 90.600]
+    a_xs = [grid(14.600 + k * 1.650) for k in range(8)]  # 14.60 .. 26.15
+    b_xs = [grid(28.600 + k * 1.650) for k in range(8)]  # 28.60 .. 40.15
+    f_xs = [46.000, 50.800, 57.150, 61.950, 68.300, 73.100, 79.450, 84.250]
 
-    x_st_l = 14.500
-    x_st_r = 93.000
+    x_st_l = 13.000
+    x_st_r = 86.800
     c.rect("nwell", grid(x_st_l - 0.50), +2.350, grid(x_st_r + 0.50), +4.850)
     draw_tap_h(c, "psubdiff", x_st_l, x_st_r, y_st_vss, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
     draw_tap_h(c, "nsubdiff", x_st_l, x_st_r, y_st_vdd, half_w=0.175, with_m1=True, m1_w=0.460, viali_pitch=1.20)
@@ -1633,7 +1763,6 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
             south_pins[nm] = (inv["in"][0], y_south_pin)
 
     # 5. Connect vertical M4 control lines between South bank, Xch_e, and Xch_d!
-    #    8 tracks at 0.90 um pitch [0.60 .. 6.90] (0.90 um clear below y_ch_e - 9.70 = 7.80!)
     jog_ys_8 = [0.600, 1.500, 2.400, 3.300, 4.200, 5.100, 6.000, 6.900]
 
     def stitch_ctrl_m4(pin_m1: tuple[float, float], is_m2: bool, x_m4: float, y_jog: float, y_m4_top: float) -> None:
@@ -1646,19 +1775,19 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
         if abs(x_m4 - px) > 0.01:
             c.wire("metal3", [(min(px, x_m4), y_jog), (max(px, x_m4), y_jog)], 0.520)
         via3_pad(c, x_m4, y_jog)
-        c.wire("metal4", [(x_m4, y_jog), (x_m4, y_m4_top)], 0.400)
+        c.wire("metal4", [(x_m4, y_jog), (x_m4, y_m4_top)], 0.360)
 
     for idx, k in enumerate((0, 2, 4, 6)):
         xm_s, xm_sb = ch_m["sel_a_m4"][idx]
         inv = stat_invs[f"a{k}"]
-        stitch_ctrl_m4(inv["in"],  True,  xm_s,  jog_ys_8[2 * idx],     grid(y_ch_d + 3.350))
-        stitch_ctrl_m4(inv["out"], False, xm_sb, jog_ys_8[2 * idx + 1], grid(y_ch_d + 5.750))
+        stitch_ctrl_m4(inv["in"],  True,  xm_s,  jog_ys_8[2 * idx],     grid(y_ch_d + 3.300))
+        stitch_ctrl_m4(inv["out"], False, xm_sb, jog_ys_8[2 * idx + 1], grid(y_ch_d + 5.680))
 
     for idx, k in enumerate((1, 3, 5, 7)):
         xm_s, xm_sb = ch_m["sel_b_m4"][idx]
         inv = stat_invs[f"b{k}"]
-        stitch_ctrl_m4(inv["in"],  True,  xm_s,  jog_ys_8[2 * idx],     grid(y_ch_d + 3.350))
-        stitch_ctrl_m4(inv["out"], False, xm_sb, jog_ys_8[2 * idx + 1], grid(y_ch_d + 5.750))
+        stitch_ctrl_m4(inv["in"],  True,  xm_s,  jog_ys_8[2 * idx],     grid(y_ch_d + 3.300))
+        stitch_ctrl_m4(inv["out"], False, xm_sb, jog_ys_8[2 * idx + 1], grid(y_ch_d + 5.680))
 
     for col_i in range(4):
         for sub_i in range(2):
@@ -1669,64 +1798,59 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
             stitch_ctrl_m4(inv["out"], False, ch_m["fb_m4_xs"][k], jog_ys_8[2 * sub_i + 1], y_top_k)
 
     # 6. Global Power Distribution Grid inside `serdes_rx_pi_rotator_2g_pdk` (0% M5!)
-    #    Place top M3 vss bus at y_top_vss_bus = 49.60 (1.00 um above y_ch_d+9.70=48.60 -> ZERO met3.2!)
-    #    and top M3 vdd bus at y_top_vdd_bus = 50.60!
     y_top_vss_m1  = grid(y_ch_d + 9.700)  # 48.600
     y_top_vss_bus = 49.600
     y_top_vdd_bus = 50.600
 
-    # Dedicated M4 vss spines:
-    #   - West buffer vss spine at x = 0.800 (y_st_vss=0.40 .. y_top_vss_bus=49.60, NEVER runs M1 through West bufs!)
-    #   - Channel-West vss spine at x = 15.200 (between clock spine 13.80 and Stage 1 16.50!)
-    #   - Channel-East vss spine at x = 152.800
-    x_vss_cw = 14.850
+    x_vss_cw = 13.300
+    x_vdd_w_ch = ch_m["vdd_m4_w"]  # 42.650
+    x_vdd_e = ch_m["vdd_m4_e"]     # 119.600
+    x_vss_e = 120.600
     for yv in (grid(y_ch_e - 9.700), grid(y_ch_e + 9.700), grid(y_ch_d - 9.700), y_top_vss_m1):
-        c.wire("metal1", [(x_vss_cw, yv), (16.500, yv)], 0.460)
-        c.wire("metal1", [(151.400, yv), (152.800, yv)], 0.460)
-        for xv in (x_vss_cw, 152.800):
+        c.wire("metal1", [(x_vss_cw, yv), (14.500, yv)], 0.460)
+        c.wire("metal1", [(120.000, yv), (x_vss_e, yv)], 0.460)
+        for xv in (x_vss_cw, x_vss_e):
             via1_clean(c, xv, yv)
             via2_clean(c, xv, yv)
             via3_pad(c, xv, yv)
-    # Connect West buffer vss (x=0.800, y_buf_base=8.40 and y_buf_top=47.60) to West M4 vss spine (0.800)
     for yv in (y_st_vss, y_buf_base, grid(y_buf_base + 8 * h_buf)):
-        via1_clean(c, 0.800, yv)
-        via2_clean(c, 0.800, yv)
-        via3_pad(c, 0.800, yv)
-    # Connect South static vss (y_st_vss=0.40) to x=0.800 and x=15.200 cleanly on M1!
-    c.wire("metal1", [(0.800, y_st_vss), (x_st_l, y_st_vss)], 0.460)
+        via1_clean(c, 0.700, yv)
+        via2_clean(c, 0.700, yv)
+        via3_pad(c, 0.700, yv)
+    c.wire("metal1", [(0.700, y_st_vss), (x_st_l, y_st_vss)], 0.460)
     via1_clean(c, x_vss_cw, y_st_vss)
     via2_clean(c, x_vss_cw, y_st_vss)
     via3_pad(c, x_vss_cw, y_st_vss)
-    # Vertical M4 vss spines up to y_top_vss_bus = 49.600
-    for xv, y0_s in ((0.800, y_st_vss), (x_vss_cw, y_st_vss), (152.800, grid(y_ch_e - 9.700))):
+    for xv, y0_s in ((0.700, y_st_vss), (x_vss_cw, y_st_vss), (x_vss_e, grid(y_ch_e - 9.700))):
         via3_pad(c, xv, y_top_vss_bus)
         c.wire("metal4", [(xv, y0_s), (xv, y_top_vss_bus)], 0.600)
-    c.wire("metal3", [(0.800, y_top_vss_bus), (152.800, y_top_vss_bus)], 0.560)
+    c.wire("metal3", [(0.700, y_top_vss_bus), (x_vss_e, y_top_vss_bus)], 0.560)
 
-    # VDD vertical M4 spines: x = 5.200 (West bufs), x = 44.150 (South static + Stage 1/2), x = 151.200 (Stage 5)
-    c.wire("metal3", [(5.200, y_top_vdd_bus), (151.200, y_top_vdd_bus)], 0.600)
-    via2_clean(c, 5.200, grid(y_buf_base + 7 * h_buf))
-    via3_pad(c, 5.200, grid(y_buf_base + 7 * h_buf))
-    via3_pad(c, 5.200, y_top_vdd_bus)
-    c.wire("metal4", [(5.200, grid(y_buf_base + 7 * h_buf)), (5.200, y_top_vdd_bus)], 0.560)
-    via1_clean(c, 44.150, y_st_vdd)
-    via2_clean(c, 44.150, y_st_vdd)
-    via3_pad(c, 44.150, y_st_vdd)
-    via3_pad(c, 44.150, y_top_vdd_bus)
-    c.wire("metal4", [(44.150, y_st_vdd), (44.150, y_top_vdd_bus)], 0.560)
-    via3_pad(c, 151.200, y_top_vdd_bus)
-    c.wire("metal4", [(151.200, grid(y_ch_e - 3.000)), (151.200, y_top_vdd_bus)], 0.560)
+    # VDD vertical M4 spines: x = 4.500 (West bufs), x = 42.650 (Stage 1/2), x = 119.600 (Stage 5)
+    c.wire("metal3", [(4.500, y_top_vdd_bus), (x_vdd_e, y_top_vdd_bus)], 0.600)
+    via2_clean(c, 4.500, grid(y_buf_base + 7 * h_buf))
+    via3_pad(c, 4.500, grid(y_buf_base + 7 * h_buf))
+    via3_pad(c, 4.500, y_top_vdd_bus)
+    c.wire("metal4", [(4.500, grid(y_buf_base + 7 * h_buf)), (4.500, y_top_vdd_bus)], 0.560)
+    via1_clean(c, x_vdd_w_ch, y_st_vdd)
+    via2_clean(c, x_vdd_w_ch, y_st_vdd)
+    via3_pad(c, x_vdd_w_ch, y_st_vdd)
+    via3_pad(c, x_vdd_w_ch, y_top_vdd_bus)
+    c.wire("metal4", [(x_vdd_w_ch, y_st_vdd), (x_vdd_w_ch, y_top_vdd_bus)], 0.560)
+    via3_pad(c, x_vdd_e, y_top_vdd_bus)
+    c.wire("metal4", [(x_vdd_e, grid(y_ch_e - 2.600)), (x_vdd_e, y_top_vdd_bus)], 0.560)
 
-    # 7. East outputs: dp, dn, ep, en (extend to x = 154.000 on M3!)
-    dp_pt = (154.000, grid(y_ch_d + ch_m["op_pt"][1]))
-    dn_pt = (154.000, grid(y_ch_d + ch_m["on_pt"][1]))
-    ep_pt = (154.000, grid(y_ch_e + ch_m["op_pt"][1]))
-    en_pt = (154.000, grid(y_ch_e + ch_m["on_pt"][1]))
+    # 7. East outputs: dp, dn, ep, en (extend to x = 121.400 on M3!)
+    x_rot_east = 121.400
+    dp_pt = (x_rot_east, grid(y_ch_d + ch_m["op_pt"][1]))
+    dn_pt = (x_rot_east, grid(y_ch_d + ch_m["on_pt"][1]))
+    ep_pt = (x_rot_east, grid(y_ch_e + ch_m["op_pt"][1]))
+    en_pt = (x_rot_east, grid(y_ch_e + ch_m["on_pt"][1]))
     for pt in (dp_pt, dn_pt, ep_pt, en_pt):
-        c.wire("metal3", [(152.000, pt[1]), pt], 0.440)
+        c.wire("metal3", [(121.000, pt[1]), pt], 0.400)
 
-    c.wire("metal3", [(0.000, y_top_vdd_bus), (5.200, y_top_vdd_bus)], 0.600)
-    c.wire("metal3", [(0.000, y_top_vss_bus), (0.800, y_top_vss_bus)], 0.560)
+    c.wire("metal3", [(0.000, y_top_vdd_bus), (4.500, y_top_vdd_bus)], 0.600)
+    c.wire("metal3", [(0.000, y_top_vss_bus), (0.700, y_top_vss_bus)], 0.560)
 
     meta = {
         **c_in_pts,
@@ -1741,6 +1865,10 @@ def build_rx_pi_rotator_2g_pdk(cache: PdkCache, add_ports: bool = True) -> tuple
         "vss_top_y": y_top_vss_bus,
         "y_ch_e": y_ch_e,
         "y_ch_d": y_ch_d,
+        "x_vdd_e": x_vdd_e,
+        "x_vss_e": x_vss_e,
+        "xr2_out_x": ch_m["xr2_out_x"],
+        "x_rot_east": x_rot_east,
     }
 
     if add_ports:
@@ -1778,23 +1906,24 @@ def build_rx_cmos_pi_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[C
     y_div_vss = grid(dy_div + div_m["vss"][1])
     y_div_vdd = grid(dy_div + div_m["vdd"][1])
 
-    # Stitch vss between rotator (0.80, 152.80) and qdiv2 (0.50, 153.50) with solid M4 bridges (zero met4.2 notch!)
+    # Stitch vss between rotator (0.70, 120.60) and qdiv2 (0.50, 120.70 -> 1.10 um clear of rotator x_vdd_e=119.60!)
     via3_pad(c, 0.500, rot_m["vss_top_y"])
-    c.wire("metal4", [(0.500, rot_m["vss_top_y"]), (0.800, rot_m["vss_top_y"])], 0.600)
+    c.wire("metal4", [(0.500, rot_m["vss_top_y"]), (0.700, rot_m["vss_top_y"])], 0.600)
     c.wire("metal4", [(0.500, rot_m["vss_top_y"]), (0.500, y_div_vss)], 0.600)
-    c.wire("metal3", [(152.800, rot_m["vss_top_y"]), (153.500, rot_m["vss_top_y"])], 0.560)
-    via3_pad(c, 153.500, rot_m["vss_top_y"])
-    c.wire("metal4", [(152.800, rot_m["vss_top_y"]), (153.500, rot_m["vss_top_y"])], 0.600)
-    c.wire("metal4", [(153.500, rot_m["vss_top_y"]), (153.500, y_div_vss)], 0.600)
+    x_div_vss_e = grid(div_m["vss_e"][0] - 0.500)  # 120.700
+    c.wire("metal3", [(rot_m["x_vss_e"], rot_m["vss_top_y"]), (x_div_vss_e, rot_m["vss_top_y"])], 0.560)
+    via3_pad(c, x_div_vss_e, rot_m["vss_top_y"])
+    c.wire("metal4", [(rot_m["x_vss_e"], rot_m["vss_top_y"]), (x_div_vss_e, rot_m["vss_top_y"])], 0.600)
+    c.wire("metal4", [(x_div_vss_e, rot_m["vss_top_y"]), (x_div_vss_e, y_div_vss)], 0.600)
 
-    x_vdd_w = -1.100
+    x_vdd_w = -0.900
     c.wire("metal3", [(x_vdd_w, rot_m["vdd_top_y"]), (0.000, rot_m["vdd_top_y"])], 0.600)
     c.wire("metal3", [(x_vdd_w, y_div_vdd), (0.000, y_div_vdd)], 0.600)
     via3_pad(c, x_vdd_w, rot_m["vdd_top_y"])
     via3_pad(c, x_vdd_w, y_div_vdd)
     c.wire("metal4", [(x_vdd_w, rot_m["vdd_top_y"]), (x_vdd_w, y_div_vdd)], 0.600)
 
-    x_west = -2.000
+    x_west = -1.600
     y_rstn = grid(dy_div + div_m["rst_n"][1])
     c.wire("metal3", [(x_west, y_rstn), (0.000, y_rstn)], 0.400)
     c.wire("metal3", [(x_west, rot_m["vss_top_y"]), (0.000, rot_m["vss_top_y"])], 0.560)
@@ -1803,10 +1932,11 @@ def build_rx_cmos_pi_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[C
         yk = rot_m[f"c{k}"][1]
         c.wire("metal3", [(x_west, yk), (0.000, yk)], 0.400)
 
-    # Matched-span East M4 vertical stitch for dp, dn, ep, en + East perimeter ports at x_east = 160.800!
-    x_vdd_e = 159.400
-    x_east = 160.800
-    stitch_xs = {"dp": 155.000, "dn": 156.000, "ep": 157.000, "en": 158.000}
+    # DIRECT UPWARD Stage-5 M4 stitch: QUADRATURE-INTERLEAVED [dp, ep, dn, en] (zero 180-deg Miller coupling!)
+    # Placed inside M4-free corridor [115.4 .. 118.4] (1.00 um pitch, 0.32 um low-C M4!)
+    x_vdd_e = 121.800
+    x_east  = 122.800
+    stitch_xs = {"dp": 111.950, "ep": 114.150, "dn": 116.300, "en": 118.450}
     y_st_lo = min(rot_m[nm][1] for nm in ("dp", "dn", "ep", "en"))
     y_st_hi = max(grid(dy_div + div_m[nm][1]) for nm in ("dp", "dn", "ep", "en"))
     east_ports: dict[str, tuple[float, float]] = {}
@@ -1814,16 +1944,18 @@ def build_rx_cmos_pi_8ph_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[C
         xr = stitch_xs[nm]
         y_from = rot_m[nm][1]
         y_to   = grid(dy_div + div_m[nm][1])
-        c.wire("metal3", [(154.000, y_from), (xr, y_from)], 0.440)
+        # Extend rotator M3 output WEST from xr2_out (118.24) to xr if needed
+        if xr < rot_m["xr2_out_x"]:
+            c.wire("metal3", [(xr, y_from), (rot_m["xr2_out_x"], y_from)], 0.400)
         via3_pad(c, xr, y_from)
         # Equalized full vertical M4 span [y_st_lo .. y_st_hi] for matched dp/dn/ep/en capacitance!
-        c.wire("metal4", [(xr, y_st_lo), (xr, y_st_hi)], 0.440)
+        c.wire("metal4", [(xr, y_st_lo), (xr, y_st_hi)], 0.320)
         via3_pad(c, xr, y_to)
-        c.wire("metal3", [(154.000, y_to), (x_east, y_to)], 0.440)
+        c.wire("metal3", [(div_m["dp"][0], y_to), (x_east, y_to)], 0.360)
         east_ports[nm] = (x_east, y_to)
 
-    c.wire("metal3", [(151.200, rot_m["vdd_top_y"]), (x_vdd_e, rot_m["vdd_top_y"])], 0.600)
-    c.wire("metal3", [(154.000, y_div_vdd), (x_vdd_e, y_div_vdd)], 0.600)
+    c.wire("metal3", [(rot_m["x_vdd_e"], rot_m["vdd_top_y"]), (x_vdd_e, rot_m["vdd_top_y"])], 0.600)
+    c.wire("metal3", [(div_m["vdd_e"][0], y_div_vdd), (x_vdd_e, y_div_vdd)], 0.600)
     via3_pad(c, x_vdd_e, rot_m["vdd_top_y"])
     via3_pad(c, x_vdd_e, y_div_vdd)
     c.wire("metal4", [(x_vdd_e, rot_m["vdd_top_y"]), (x_vdd_e, y_div_vdd)], 0.600)

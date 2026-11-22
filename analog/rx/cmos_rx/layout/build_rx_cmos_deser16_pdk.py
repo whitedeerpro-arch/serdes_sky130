@@ -216,15 +216,15 @@ def _build_dsr_dff_cell(
         n_cols = 11
     else:
         n_mdl, p_mdl, l_dev = N_LVT, P_STD, 0.15
-        w_tg1 = (0.65, 1.80)
-        w_m2 = (0.90, 1.60)
+        w_tg1 = (0.65, 2.20)
+        w_m2 = (1.00, 2.00)
         w_m3 = (0.45, 1.15)
         w_tg2 = (0.45, 1.05)
-        w_tg3 = (0.65, 1.80)
+        w_tg3 = (0.65, 2.20)
         w_sq = (0.65, 1.65)
         w_sfb = (0.80, 1.40)
         w_tg4 = (0.45, 1.05)
-        w_bq1 = (0.70, 1.80)
+        w_bq1 = (0.80, 2.40)
         w_bq2 = (0.55, 1.40)
         n_cols = 12
 
@@ -467,30 +467,30 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
 
     def draw_clk_dummy(cx: float) -> tuple[float, float]:
         cx = grid(cx)
-        pm = pi_b.place_mos_col(c, cache, cx, P_STD, 2.00, 0.15, 1, y_p0, True, y_gc0, grid(y_p0 - 0.45), grid(y_p0 + 0.45))
-        nm = pi_b.place_mos_col(c, cache, cx, N_LVT, 0.80, 0.15, 1, y_n0, False, y_gc0, grid(y_n0 + 0.25), grid(y_n0 - 0.25))
-        for x_sd in (pm["s"][0], pm["d"][0]):
+        pm = pi_b.place_mos_col(c, cache, cx, P_STD, 4.80, 0.15, 2, y_p0, True, y_gc0, grid(y_p0 - 0.45), grid(y_p0 + 0.45))
+        nm = pi_b.place_mos_col(c, cache, cx, N_LVT, 1.20, 0.15, 1, y_n0, False, y_gc0, grid(y_n0 + 0.25), grid(y_n0 - 0.25))
+        for x_sd in pm["s_xs"] + pm["d_xs"]:
             c.wire("metal1", [(x_sd, pm["s"][1]), (x_sd, y_vdd0)], 0.220)
             c.wire("metal1", [(x_sd, pm["d"][1]), (x_sd, y_vdd0)], 0.220)
-        for x_sd in (nm["s"][0], nm["d"][0]):
+        for x_sd in nm["s_xs"] + nm["d_xs"]:
             c.wire("metal1", [(x_sd, nm["s"][1]), (x_sd, y_vss0)], 0.220)
             c.wire("metal1", [(x_sd, nm["d"][1]), (x_sd, y_vss0)], 0.220)
         return (cx, y_gc0)
 
-    # Place dummies cleanly clear of the centered [99..138] clock receiver + Bank A/B driver bay!
+    # Place dummies cleanly clear of the centered [79..158] 3-stage clock receiver + Bank A/B driver bay!
     dummy_cols = [1, 3, 4, 5, 6, 7]
     for col in dummy_cols:
         x_ck = slicer_clk_xs[col]
         if col == 3:
-            x_dm = 96.000
+            x_dm = 76.500
         elif col == 4:
-            x_dm = 141.000
+            x_dm = 160.200
         else:
             x_dm = x_ck
         dm_g = draw_clk_dummy(x_dm)
         via1_clean(c, dm_g[0], dm_g[1])
         if abs(x_dm - x_ck) > 0.01:
-            # Route shifted dummy clock cleanly at y=-7.350 (clear of y_r0_ckd2=-6.35 and drv_a/b outputs!)
+            # Route shifted dummy clock cleanly at y=-7.350 (clear of y_r0_ckd2=-6.40 and drv_a/b outputs!)
             y_dm_m3 = -7.350
             c.wire("metal2", [(dm_g[0], dm_g[1]), (dm_g[0], y_dm_m3)], W_M2)
             via2_clean(c, dm_g[0], y_dm_m3)
@@ -502,35 +502,33 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
             via3_pad(c, x_ck, dm_g[1])
             c.wire("metal4", [(x_ck, dm_g[1]), (x_ck, grid(y_bot - 0.600))], 0.480)
 
-    # 2b. Co-Located Center Clock Receiver + Bank A & Bank B Drivers ([99..138]) -> 3.5x shorter ck0_1b/ck2_1b!
-    #   Bank A Driver [99.0..110.0]: ctr = 104.50 -> spines x_cka_0=105.60, x_cka_b=107.00
-    #   Receiver      [114.0..121.0]: Xck0_i1=114.65, Xcc_c1a=116.55, Xcc_c1b=118.45, Xck2_i1=120.35
-    #   Bank B Driver [126.0..137.0]: ctr = 131.50 -> spines x_ckb_0=127.00, x_ckb_b=128.40
-    rx_i0 = pi_b.draw_cmos_inv(c, cache, 114.650, 0.80, 2.00, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
-    rx_c1 = pi_b.draw_cmos_inv(c, cache, 116.550, 0.42, 1.00, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
-    rx_c2 = pi_b.draw_cmos_inv(c, cache, 118.450, 0.42, 1.00, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
-    rx_i2 = pi_b.draw_cmos_inv(c, cache, 120.350, 0.80, 2.00, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
+    # 2b. Co-Located 3-Stage wp/wn=4.0 Center Clock Receiver + Bank A & Bank B Drivers ([79..158])
+    #     Swapped Stage-1 inputs (rx_i0 takes ckd2 -> ck0_1; rx_i2 takes ckd0 -> ck2_1) keep exact polarity!
+    rx_i0 = pi_b.draw_cmos_inv(c, cache, 115.650, 1.20, 4.80, N_LVT, P_STD, 0.15, 0.15, 1, 2, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
+    rx_c1 = pi_b.draw_cmos_inv(c, cache, 117.550, 0.42, 1.40, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
+    rx_c2 = pi_b.draw_cmos_inv(c, cache, 119.450, 0.42, 1.40, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
+    rx_i2 = pi_b.draw_cmos_inv(c, cache, 121.350, 1.20, 4.80, N_LVT, P_STD, 0.15, 0.15, 1, 2, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
 
-    # Equal-span M3 inputs for ckd0 (x=14.80) and ckd2 (x=74.00) -> exact matched wire C (99.85 um each)!
+    # Equal-span M3 inputs for ckd0 (-> rx_i2) and ckd2 (-> rx_i0) -> exact matched wire C!
     y_r0_ckd0 = -5.350
     y_r0_ckd2 = -6.400
     c.wire("metal4", [(slicer_clk_xs[0], grid(y_bot - 0.600)), (slicer_clk_xs[0], y_r0_ckd0)], 0.480)
     via3_pad(c, slicer_clk_xs[0], y_r0_ckd0)
-    c.wire("metal3", [(slicer_clk_xs[0], y_r0_ckd0), (rx_i0["in"][0], y_r0_ckd0)], 0.340)
-    via2_clean(c, rx_i0["in"][0], y_r0_ckd0)
-    via1_clean(c, rx_i0["in"][0], y_gc0)
-    c.wire("metal2", [(rx_i0["in"][0], y_gc0), (rx_i0["in"][0], y_r0_ckd0)], W_M2)
+    c.wire("metal3", [(slicer_clk_xs[0], y_r0_ckd0), (rx_i2["in"][0], y_r0_ckd0)], 0.340)
+    via2_clean(c, rx_i2["in"][0], y_r0_ckd0)
+    via1_clean(c, rx_i2["in"][0], y_gc0)
+    c.wire("metal2", [(rx_i2["in"][0], y_gc0), (rx_i2["in"][0], y_r0_ckd0)], W_M2)
 
     c.wire("metal4", [(slicer_clk_xs[2], grid(y_bot - 0.600)), (slicer_clk_xs[2], y_r0_ckd2)], 0.480)
     via3_pad(c, slicer_clk_xs[2], y_r0_ckd2)
-    c.wire("metal3", [(20.500, y_r0_ckd2), (rx_i2["in"][0], y_r0_ckd2)], 0.340)
-    via2_clean(c, rx_i2["in"][0], y_r0_ckd2)
-    via1_clean(c, rx_i2["in"][0], y_gc0)
-    c.wire("metal2", [(rx_i2["in"][0], y_gc0), (rx_i2["in"][0], y_r0_ckd2)], W_M2)
+    c.wire("metal3", [(20.500, y_r0_ckd2), (rx_i0["in"][0], y_r0_ckd2)], 0.340)
+    via2_clean(c, rx_i0["in"][0], y_r0_ckd2)
+    via1_clean(c, rx_i0["in"][0], y_gc0)
+    c.wire("metal2", [(rx_i0["in"][0], y_gc0), (rx_i0["in"][0], y_r0_ckd2)], W_M2)
 
-    # Ultra-short M3 trunks carrying ck0_1b and ck2_1b (~38 um total vs 135 um -> >4x lower CPEX!)
-    y_1b_0 = -2.350  # M3 horizontal trunk for ck0_1b (>= 0.38 um M3 clear of y_ob=-3.25!)
-    y_1b_2 = -1.200  # M3 horizontal trunk for ck2_1b (1.15 um pitch -> low Miller coupling!)
+    # M3 trunks carrying ck0_1 (from rx_i0) and ck2_1 (from rx_i2) to Bank A/B Stage-2 pre-drivers!
+    y_1b_0 = -2.350  # M3 horizontal trunk for ck0_1
+    y_1b_2 = -1.200  # M3 horizontal trunk for ck2_1
     for pt_x, pt_y in (rx_i0["out"], rx_c1["in"], rx_c2["out"]):
         via1_clean(c, pt_x, pt_y)
         c.wire("metal2", [(pt_x, pt_y), (pt_x, y_1b_0)], W_M2)
@@ -541,23 +539,33 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
         via2_clean(c, pt_x, y_1b_2)
 
     def draw_clk_bank_drv(x_ctr: float, y_spine_lo: float, x_sp0: float, x_spb: float) -> dict:
-        x0 = grid(x_ctr - 4.450)
-        xc1 = grid(x_ctr - 0.950)
-        xc2 = grid(x_ctr + 0.950)
-        x2 = grid(x_ctr + 4.450)
-        b0 = _draw_big_inv(c, cache, x0, 2.60, 6.60, 2, 4, y_p0, y_n0, y_gc0, y_vdd0, y_vss0, x_in_side=-1)
-        c1 = pi_b.draw_cmos_inv(c, cache, xc1, 0.45, 1.10, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
-        c2 = pi_b.draw_cmos_inv(c, cache, xc2, 0.45, 1.10, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
-        b2 = _draw_big_inv(c, cache, x2, 2.60, 6.60, 2, 4, y_p0, y_n0, y_gc0, y_vdd0, y_vss0, x_in_side=+1)
+        xp0 = grid(x_ctr - 15.500)
+        x0  = grid(x_ctr - 7.800)
+        xc1 = grid(x_ctr - 1.000)
+        xc2 = grid(x_ctr + 1.000)
+        x2  = grid(x_ctr + 7.800)
+        xp2 = grid(x_ctr + 15.500)
+        p0 = _draw_big_inv(c, cache, xp0, 2.40, 9.60, 2, 4, y_p0, y_n0, y_gc0, y_vdd0, y_vss0, x_in_side=-1)
+        b0 = _draw_big_inv(c, cache, x0, 9.60, 38.40, 8, 16, y_p0, y_n0, y_gc0, y_vdd0, y_vss0, x_in_side=-1)
+        c1 = pi_b.draw_cmos_inv(c, cache, xc1, 0.45, 1.60, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
+        c2 = pi_b.draw_cmos_inv(c, cache, xc2, 0.45, 1.60, N_LVT, P_STD, 0.15, 0.15, 1, 1, y_p0, y_n0, y_gc0, y_vdd0, y_vss0)
+        b2 = _draw_big_inv(c, cache, x2, 9.60, 38.40, 8, 16, y_p0, y_n0, y_gc0, y_vdd0, y_vss0, x_in_side=+1)
+        p2 = _draw_big_inv(c, cache, xp2, 2.40, 9.60, 2, 4, y_p0, y_n0, y_gc0, y_vdd0, y_vss0, x_in_side=+1)
 
-        # Inputs from M3 trunks y_1b_0 and y_1b_2
+        # Stage-2 inputs from M3 trunks y_1b_0 and y_1b_2
+        via1_clean(c, p0["in"][0], p0["in"][1])
+        c.wire("metal2", [(p0["in"][0], p0["in"][1]), (p0["in"][0], y_1b_0)], W_M2)
+        via2_clean(c, p0["in"][0], y_1b_0)
+
+        via1_clean(c, p2["in"][0], p2["in"][1])
+        c.wire("metal2", [(p2["in"][0], p2["in"][1]), (p2["in"][0], y_1b_2)], W_M2)
+        via2_clean(c, p2["in"][0], y_1b_2)
+
+        # Local Stage-2 -> Stage-3 horizontal M2 stitch at y_gc0 (-3.850)
         via1_clean(c, b0["in"][0], b0["in"][1])
-        c.wire("metal2", [(b0["in"][0], b0["in"][1]), (b0["in"][0], y_1b_0)], W_M2)
-        via2_clean(c, b0["in"][0], y_1b_0)
-
+        c.wire("metal2", [(p0["x_out"], y_gc0), (b0["in"][0], y_gc0)], 0.360)
         via1_clean(c, b2["in"][0], b2["in"][1])
-        c.wire("metal2", [(b2["in"][0], b2["in"][1]), (b2["in"][0], y_1b_2)], W_M2)
-        via2_clean(c, b2["in"][0], y_1b_2)
+        c.wire("metal2", [(b2["in"][0], y_gc0), (p2["x_out"], y_gc0)], 0.360)
 
         # Stitch outputs to CC aligner on M2: out0 at y=-4.550, outb at y=-3.250 (clear of y_gc0=-3.85!)
         y_o0 = -4.550
@@ -584,14 +592,14 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
         c.wire("metal2", [(b2["x_out"], y_ob), (grid(b2["x_out"] - 0.56), y_ob)], 0.400)
         c.wire("metal3", [(min(grid(b2["x_out"] - 0.56), x_spb), y_ob), (max(b2["x_out"], x_spb), y_ob)], 0.520)
         _dual_via3(c, x_spb, y_ob)
-        return {"in0_x": b0["in"][0], "in2_x": b2["in"][0], "y_o0": y_o0, "y_ob": y_ob}
+        return {"in0_x": p0["in"][0], "in2_x": p2["in"][0], "y_o0": y_o0, "y_ob": y_ob}
 
     x_cka_0, x_cka_b = 104.000, 105.400
     x_ckb_0, x_ckb_b = 125.000, 126.400
-    drv_a = draw_clk_bank_drv(104.500, y_bot, x_cka_0, x_cka_b)
-    drv_b = draw_clk_bank_drv(131.500, y_bot, x_ckb_0, x_ckb_b)
+    drv_a = draw_clk_bank_drv(96.000, y_bot, x_cka_0, x_cka_b)
+    drv_b = draw_clk_bank_drv(141.000, y_bot, x_ckb_0, x_ckb_b)
 
-    # Short horizontal M3 trunks carrying ck0_1b and ck2_1b between Bank A (98.8) and Bank B (137.2)!
+    # Horizontal M3 trunks carrying ck0_1 and ck2_1 between Bank A (79.4) and Bank B (157.6)!
     c.wire("metal3", [(drv_a["in0_x"], y_1b_0), (drv_b["in0_x"], y_1b_0)], 0.340)
     c.wire("metal3", [(drv_a["in2_x"], y_1b_2), (drv_b["in2_x"], y_1b_2)], 0.340)
 
@@ -709,11 +717,11 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
             ["d2_0", "d2_1", "d2_2", "d2_3"], ["wd14", "wd10", "wd6", "wd2"]),
         (3, [("d3_a", True), ("d3_0", False), ("d3_1", False), ("d3_2", False), ("d3_3", False)],
             ["d3_0", "d3_1", "d3_2", "d3_3"], ["wd15", "wd11", "wd7", "wd3"]),
-        (4, [("e0_p", False), ("e0_0", False), ("e0_1", False), ("e0_2", False), ("e0_3", False)],
+        (4, [("e0_a", True), ("e0_p", False), ("e0_0", False), ("e0_1", False), ("e0_2", False), ("e0_3", False)],
             ["e0_0", "e0_1", "e0_2", "e0_3"], ["we13", "we9", "we5", "we1"]),
         (5, [("e1_p", False), ("e1_0", False), ("e1_1", False), ("e1_2", False), ("e1_3", False)],
             ["e1_0", "e1_1", "e1_2", "e1_3"], ["we14", "we10", "we6", "we2"]),
-        (6, [("e2_a", True), ("e2_0", False), ("e2_1", False), ("e2_2", False), ("e2_3", False)],
+        (6, [("e2_p", False), ("e2_a", True), ("e2_0", False), ("e2_1", False), ("e2_2", False), ("e2_3", False)],
             ["e2_0", "e2_1", "e2_2", "e2_3"], ["we15", "we11", "we7", "we3"]),
         (7, [("e3_a", True), ("e3_0", False), ("e3_1", False), ("e3_2", False), ("e3_3", False), ("e3_4", False)],
             ["e3_1", "e3_2", "e3_3", "e3_4"], ["we12", "we8", "we4", "we0"]),
@@ -763,10 +771,11 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
             c.wire("metal4", [(x_out_trk, y_m3_q), (x_out_trk, y_north_pin)], 0.400)
             north_out_ports[out_nm] = (x_out_trk, y_north_pin)
 
-    # --- 4. Row 6: Johnson /4 (`Xj0` in Col 4, `Xj1` in Col 5) + 250 MHz Word-Clock Drivers (Cols 2 & 3) ---
+    # --- 4. Row 6: Johnson /4 (`Xj0` in Col 1, `Xj1` in Col 2 on Bank A!) + 250 MHz Word-Clock Drivers (Col 3) ---
+    # Bank A drives exact 23 DFFs (21 data + 2 Johnson /4); Bank B drives exact 23 DFFs (23 edge)!
     # Row 6 is even: vdd at 38.000, vss at 45.600, y_p6 = 39.850, y_gc6 = 42.500, y_n6 = 44.200
-    xj0 = place_dff(4, 6, is_250m=False, swap_clk=True)  # ck=ck0bb, ckb=ck0b -> q=j0, qb=j0b
-    xj1 = place_dff(5, 6, is_250m=False, swap_clk=True)  # d=j0 -> q=j1, qb=j1b
+    xj0 = place_dff(1, 6, is_250m=False, swap_clk=True)  # ck=ck0ba, ckb=ck0a -> q=j0, qb=j0b
+    xj1 = place_dff(2, 6, is_250m=False, swap_clk=True)  # d=j0 -> q=j1, qb=j1b
 
     # Stitch Johnson /4: j0 (xj0.q -> xj1.d) on M3 at y_rel=6.650; j1b (xj1.qb -> xj0.d) on M3 at y_rel=5.250!
     y_r6_m3_hi = _row_y_transform(6, 6.650)  # 38.950
@@ -811,29 +820,17 @@ def build_rx_cmos_deser16_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[
     wc2   = _draw_big_inv(c, cache, 113.000, 2.40, 5.80, 2, 4, y_p6, y_n6, y_gc6, y_vdd6, y_vss6, x_in_side=+1)
     wc1   = _draw_big_inv(c, cache, 116.500, 1.40, 3.40, 1, 2, y_p6, y_n6, y_gc6, y_vdd6, y_vss6, x_in_side=+1)
 
-    # Connect `j0` (from xj0.q at y_r6_m3_hi=39.200) -> wcb1.in!
-    c.wire("metal3", [(wcb1["in"][0], y_r6_m3_hi), (xj0["q"][0], y_r6_m3_hi)], W_M3)
+    # Connect `j0` (from xj0.q at 51.5 -> xj1.d at 62.1 -> wcb1.in at 99.4 on y_r6_m3_hi=38.950)!
+    c.wire("metal3", [(xj0["q"][0], y_r6_m3_hi), (wcb1["in"][0], y_r6_m3_hi)], W_M3)
     via2_clean(c, wcb1["in"][0], y_r6_m3_hi)
     via1_clean(c, wcb1["in"][0], y_gc6)
     c.wire("metal2", [(wcb1["in"][0], y_gc6), (wcb1["in"][0], y_r6_m3_hi)], W_M2)
 
-    # Connect `j0b` (from xj0.qb) -> wc1.in AND wclk1.in!
-    # Route j0b from xj0.qb (x~143.6) on M3 at y_j0b = 40.350? Wait: j1b uses 40.350 from xj0.d (121.3) to xj1.qb (173.2)!
-    # So hop j0b up on M4 at x=143.6 to y = 46.80 (inside Row 7? No, Row 7 has M3 rst at 46.90)!
-    # Even simpler: Row 6 has FREE M3 at y = 40.90? Wait: 40.35 to 41.65 (ckb) is 1.30 um (0.65 pitch, tight).
-    # What about y = 39.200? j0 uses 39.200 from wcb1.in (99.4) to xj1.d (150.9)!
-    # What about Row 5 top M3 (row 5 is odd -> y_rel=6.40 is 36.800, y_rel=5.25 is 35.650!)?
-    # Even cleaner: use M4 from xj0.qb (143.6) up to y = 47.0? NO — Row 6 Col 4 is ONLY xj0, so at y = 44.85? No, rst is at 44.30!
-    # Check Row 6 M3 tracks again:
-    #   38.00 vdd, 39.20 j0, 40.35 j1b, 41.65 ckb, 43.45 ck, 44.30 rst, 45.60 vss!
-    # Look at the gap between 41.65 (ckb, top 41.88) and 43.45 (ck, bot 43.22): `1.34 um`!
-    # Put `j0b` horizontal M3 at **`y_j0b = 42.550`** (w=0.34 -> `[42.38, 42.72]`, gap to ckb = `0.50 um` >> 0.30, gap to ck = `0.50 um` >> 0.30)!!
-    # Check if ANY cell in Row 6 uses M3 at `y = 42.550` (`y_rel = 3.050`): ZERO!!
+    # Connect `j0b` (from xj0.qb at 53.3 -> wclk1.in at 96.8 -> wc1.in at 117.4 on y_j0b=42.550)!
     y_j0b = 42.550
-    # xj0.qb M1 spans from dn_y (43.92) to 39.20 -> so (xj0.qb, 42.550) IS ON xj0.qb M1!
     via1_clean(c, xj0["qb"][0], y_j0b)
     via2_clean(c, xj0["qb"][0], y_j0b)
-    c.wire("metal3", [(wclk1["in"][0], y_j0b), (xj0["qb"][0], y_j0b)], W_M3)
+    c.wire("metal3", [(xj0["qb"][0], y_j0b), (wc1["in"][0], y_j0b)], W_M3)
     for x_tgt in (wc1["in"][0], wclk1["in"][0]):
         via2_clean(c, x_tgt, y_j0b)
         via1_clean(c, x_tgt, y_j0b)

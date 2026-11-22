@@ -245,9 +245,9 @@
       "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_dt_slicer_pdk.mag",
       "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_dt_slicer_pdk_ref.spice",
       "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_dt_slicer_pdk.png",
-      "review_dir": "results/layout/rx_cmos_v2/opt_v2_1/review/serdes_rx_dt_slicer_pdk",
-      "pex_spice": "results/layout/rx_cmos_v2/opt_v2_1/review/serdes_rx_dt_slicer_pdk/serdes_rx_dt_slicer_pdk_pex.spice",
-      "rcx_spice": "results/layout/rx_cmos_v2/opt_v2_1/review/serdes_rx_dt_slicer_pdk/serdes_rx_dt_slicer_pdk_rcx.spice",
+      "review_dir": "results/layout/rx_cmos_v2/review/serdes_rx_dt_slicer_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/review/serdes_rx_dt_slicer_pdk/serdes_rx_dt_slicer_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/review/serdes_rx_dt_slicer_pdk/serdes_rx_dt_slicer_pdk_rcx.spice",
       "bbox_um": [
         -14.8,
         -1.12,
@@ -282,47 +282,43 @@
       "lvs_match": true,
       "lvs_property_errors": false,
       "rc_devices_preserved": true,
-      "rc_resistor_count": 541,
-      "rc_resistor_nets": [
-        "a_n1139_5254#",
-        "vdd",
-        "vss"
-      ],
+      "rc_resistor_count": 0,
+      "rc_resistor_nets": [],
       "raw_device_count": 51,
       "merged_device_count": 51,
       "net_count": 29,
       "metal_shares": {
         "area_um2": {
-          "M1": 201.883,
-          "M2": 167.441,
-          "M3": 102.27,
+          "M1": 202.442,
+          "M2": 167.588,
+          "M3": 102.09,
           "M4": 59.587,
           "M5": 0.0
         },
-        "total_metal_um2": 531.181,
+        "total_metal_um2": 531.707,
         "share_pct": {
-          "M1": 38.0,
+          "M1": 38.1,
           "M2": 31.5,
-          "M3": 19.3,
+          "M3": 19.2,
           "M4": 11.2,
           "M5": 0.0
         }
       },
       "key_port_caps_fF": {
         "inp": {
-          "to_substrate_fF": 1.715,
-          "coupling_sum_fF": 3.682,
-          "total_node_fF": 5.397
+          "to_substrate_fF": 1.714,
+          "coupling_sum_fF": 3.684,
+          "total_node_fF": 5.398
         },
         "inn": {
           "to_substrate_fF": 1.25,
-          "coupling_sum_fF": 4.107,
-          "total_node_fF": 5.357
+          "coupling_sum_fF": 4.114,
+          "total_node_fF": 5.364
         },
         "clk": {
-          "to_substrate_fF": 2.768,
-          "coupling_sum_fF": 4.914,
-          "total_node_fF": 7.683
+          "to_substrate_fF": 2.819,
+          "coupling_sum_fF": 5.344,
+          "total_node_fF": 8.163
         },
         "qp": {
           "to_substrate_fF": 1.602,
@@ -334,36 +330,66 @@
           "coupling_sum_fF": 1.974,
           "total_node_fF": 3.517
         },
+        "t5": {
+          "to_substrate_fF": 1.621,
+          "coupling_sum_fF": 5.546,
+          "total_node_fF": 7.168
+        },
+        "t4": {
+          "to_substrate_fF": 1.389,
+          "coupling_sum_fF": 4.148,
+          "total_node_fF": 5.537
+        },
+        "t3": {
+          "to_substrate_fF": 0.819,
+          "coupling_sum_fF": 3.404,
+          "total_node_fF": 4.223
+        },
+        "t2": {
+          "to_substrate_fF": 0.632,
+          "coupling_sum_fF": 2.435,
+          "total_node_fF": 3.067
+        },
+        "t1": {
+          "to_substrate_fF": 1.169,
+          "coupling_sum_fF": 2.559,
+          "total_node_fF": 3.729
+        },
+        "t0": {
+          "to_substrate_fF": 1.772,
+          "coupling_sum_fF": 2.233,
+          "total_node_fF": 4.006
+        },
         "vdd": {
-          "to_substrate_fF": 48.852,
-          "coupling_sum_fF": 36.733,
-          "total_node_fF": 85.584
+          "to_substrate_fF": 48.694,
+          "coupling_sum_fF": 37.864,
+          "total_node_fF": 86.558
         }
       },
       "internal_cpex_fF": {
         "fn": {
           "extracted_net": "a_n2647_626#",
-          "to_substrate_fF": 3.381,
-          "coupling_sum_fF": 6.319,
-          "total_node_fF": 9.701
+          "to_substrate_fF": 3.383,
+          "coupling_sum_fF": 6.609,
+          "total_node_fF": 9.993
         },
         "fp": {
-          "extracted_net": "a_18_1790#",
+          "extracted_net": "a_18_1680#",
           "to_substrate_fF": 3.327,
-          "coupling_sum_fF": 5.881,
-          "total_node_fF": 9.208
+          "coupling_sum_fF": 6.18,
+          "total_node_fF": 9.507
         },
         "outn_b": {
           "extracted_net": "a_n1139_5254#",
           "to_substrate_fF": 2.134,
-          "coupling_sum_fF": 6.83,
-          "total_node_fF": 8.963
+          "coupling_sum_fF": 7.156,
+          "total_node_fF": 9.29
         },
         "outp_b": {
           "extracted_net": "a_n682_2407#",
-          "to_substrate_fF": 2.423,
-          "coupling_sum_fF": 6.541,
-          "total_node_fF": 8.964
+          "to_substrate_fF": 2.427,
+          "coupling_sum_fF": 6.986,
+          "total_node_fF": 9.413
         }
       },
       "key_net_rcx_ohm": {
@@ -392,9 +418,39 @@
           "r_sum_ohm": 0.0,
           "note": "< 1 ohm Magic extresist threshold"
         },
+        "t5": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t4": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
         "vdd": {
-          "r_elem_count": 358,
-          "r_sum_ohm": 21325.279,
+          "r_elem_count": 363,
+          "r_sum_ohm": 21370.843,
           "r_max_elem_ohm": 987.014
         },
         "vss": {
@@ -416,13 +472,13 @@
       "bbox_um": [
         -0.6,
         -7.75,
-        154.6,
+        121.8,
         8.82
       ],
-      "width_um": 155.2,
+      "width_um": 122.4,
       "height_um": 16.57,
-      "area_um2": 2571.66,
-      "aspect_ratio": 9.37,
+      "area_um2": 2028.17,
+      "aspect_ratio": 7.39,
       "expected_port_count": 15,
       "exported_port_count": 15,
       "exported_ports": [
@@ -453,105 +509,110 @@
       "rc_connectivity_and_wl_preserved": true,
       "rc_shorted_supply_moscap_as_ps_diffs": 0,
       "rc_note": "Passed unmodified verification/layout/review_cell.py --rc with strict device/attribute identity.",
-      "rc_resistor_count": 510,
+      "rc_resistor_count": 635,
       "rc_resistor_nets": [
-        "a_18837_n575#",
-        "a_19283_n914#",
-        "a_23581_122#",
-        "a_25331_122#",
-        "a_2607_n1310#",
-        "a_4235_n1310#",
-        "a_4637_n575#",
-        "a_5083_n914#",
-        "a_618_n1270#",
+        "a_10867_n640#",
+        "a_11639_n640#",
+        "a_12177_n814#",
+        "a_12623_n914#",
+        "a_1639_n640#",
+        "a_17623_n914#",
+        "a_2115_n1330#",
+        "a_2177_n814#",
+        "a_2581_122#",
+        "a_2623_n914#",
+        "a_3707_n1330#",
+        "a_4331_122#",
+        "a_498_n1270#",
+        "a_7623_n914#",
         "vdd",
         "vss"
       ],
       "raw_device_count": 146,
-      "merged_device_count": 138,
+      "merged_device_count": 146,
       "net_count": 44,
       "metal_shares": {
         "area_um2": {
-          "M1": 411.025,
-          "M2": 120.564,
-          "M3": 844.021,
-          "M4": 117.778,
+          "M1": 377.837,
+          "M2": 128.888,
+          "M3": 569.359,
+          "M4": 137.642,
           "M5": 0.0
         },
-        "total_metal_um2": 1493.388,
+        "total_metal_um2": 1213.726,
         "share_pct": {
-          "M1": 27.5,
-          "M2": 8.1,
-          "M3": 56.5,
-          "M4": 7.9,
+          "M1": 31.1,
+          "M2": 10.6,
+          "M3": 46.9,
+          "M4": 11.3,
           "M5": 0.0
         }
       },
       "key_port_caps_fF": {
         "dp": {
-          "to_substrate_fF": 1.403,
-          "coupling_sum_fF": 20.367,
-          "total_node_fF": 21.77
+          "to_substrate_fF": 1.377,
+          "coupling_sum_fF": 16.422,
+          "total_node_fF": 17.799
         },
         "dn": {
-          "to_substrate_fF": 0.513,
-          "coupling_sum_fF": 19.95,
-          "total_node_fF": 20.462
+          "to_substrate_fF": 0.493,
+          "coupling_sum_fF": 15.067,
+          "total_node_fF": 15.56
         },
         "ep": {
-          "to_substrate_fF": 0.523,
-          "coupling_sum_fF": 18.565,
-          "total_node_fF": 19.087
+          "to_substrate_fF": 0.475,
+          "coupling_sum_fF": 16.233,
+          "total_node_fF": 16.708
         },
         "en": {
-          "to_substrate_fF": 0.516,
-          "coupling_sum_fF": 18.449,
-          "total_node_fF": 18.965
+          "to_substrate_fF": 0.489,
+          "coupling_sum_fF": 14.956,
+          "total_node_fF": 15.445
         },
         "ckd0": {
-          "to_substrate_fF": 2.721,
-          "coupling_sum_fF": 2.558,
-          "total_node_fF": 5.279
+          "to_substrate_fF": 2.052,
+          "coupling_sum_fF": 2.588,
+          "total_node_fF": 4.641
         },
         "ckd1": {
-          "to_substrate_fF": 2.46,
-          "coupling_sum_fF": 3.243,
-          "total_node_fF": 5.703
+          "to_substrate_fF": 2.276,
+          "coupling_sum_fF": 3.177,
+          "total_node_fF": 5.453
         },
         "ckd2": {
-          "to_substrate_fF": 2.906,
-          "coupling_sum_fF": 2.925,
-          "total_node_fF": 5.831
+          "to_substrate_fF": 2.811,
+          "coupling_sum_fF": 3.12,
+          "total_node_fF": 5.931
         },
         "ckd3": {
-          "to_substrate_fF": 2.815,
-          "coupling_sum_fF": 2.275,
-          "total_node_fF": 5.09
+          "to_substrate_fF": 2.341,
+          "coupling_sum_fF": 2.184,
+          "total_node_fF": 4.526
         },
         "cke0": {
-          "to_substrate_fF": 2.69,
-          "coupling_sum_fF": 2.497,
-          "total_node_fF": 5.187
+          "to_substrate_fF": 1.634,
+          "coupling_sum_fF": 2.572,
+          "total_node_fF": 4.206
         },
         "cke1": {
-          "to_substrate_fF": 2.417,
-          "coupling_sum_fF": 2.914,
-          "total_node_fF": 5.331
+          "to_substrate_fF": 2.092,
+          "coupling_sum_fF": 2.508,
+          "total_node_fF": 4.6
         },
         "cke2": {
-          "to_substrate_fF": 2.877,
-          "coupling_sum_fF": 3.224,
-          "total_node_fF": 6.101
+          "to_substrate_fF": 3.357,
+          "coupling_sum_fF": 2.845,
+          "total_node_fF": 6.202
         },
         "cke3": {
-          "to_substrate_fF": 2.787,
-          "coupling_sum_fF": 2.382,
-          "total_node_fF": 5.169
+          "to_substrate_fF": 2.694,
+          "coupling_sum_fF": 1.622,
+          "total_node_fF": 4.316
         },
         "vdd": {
-          "to_substrate_fF": 128.33,
-          "coupling_sum_fF": 68.246,
-          "total_node_fF": 196.576
+          "to_substrate_fF": 98.086,
+          "coupling_sum_fF": 69.19,
+          "total_node_fF": 167.277
         }
       },
       "internal_cpex_fF": {},
@@ -617,14 +678,14 @@
           "note": "< 1 ohm Magic extresist threshold"
         },
         "vdd": {
-          "r_elem_count": 150,
-          "r_sum_ohm": 20817.25,
-          "r_max_elem_ohm": 1665.71
+          "r_elem_count": 223,
+          "r_sum_ohm": 16404.005,
+          "r_max_elem_ohm": 268.572
         },
         "vss": {
-          "r_elem_count": 131,
-          "r_sum_ohm": 2819.078,
-          "r_max_elem_ohm": 108.419
+          "r_elem_count": 68,
+          "r_sum_ohm": 866.837,
+          "r_max_elem_ohm": 109.96
         }
       }
     },
@@ -640,13 +701,13 @@
       "bbox_um": [
         -0.3,
         -0.5,
-        154.22,
+        121.6,
         50.9
       ],
-      "width_um": 154.52,
+      "width_um": 121.9,
       "height_um": 51.4,
-      "area_um2": 7942.33,
-      "aspect_ratio": 3.01,
+      "area_um2": 6265.66,
+      "aspect_ratio": 2.37,
       "expected_port_count": 38,
       "exported_port_count": 38,
       "exported_ports": [
@@ -700,67 +761,67 @@
       "rc_connectivity_and_wl_preserved": true,
       "rc_shorted_supply_moscap_as_ps_diffs": 2,
       "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
-      "rc_resistor_count": 2950,
+      "rc_resistor_count": 3223,
       "rc_resistor_nets": [
-        "a_11355_1685#",
-        "a_11355_2655#",
-        "a_11355_3625#",
-        "a_11355_4595#",
-        "a_11355_5965#",
-        "a_11355_6935#",
-        "a_11355_7905#",
-        "a_11355_8875#",
-        "a_11653_1846#",
-        "a_11653_3146#",
-        "a_11695_3628#",
-        "a_11695_5228#",
-        "a_11695_5968#",
-        "a_13795_1685#",
-        "a_13795_2655#",
-        "a_13795_3625#",
-        "a_13795_4595#",
-        "a_13795_5965#",
-        "a_13795_6935#",
-        "a_14093_1846#",
-        "a_14093_3146#",
-        "a_14135_1688#",
-        "a_14135_3628#",
-        "a_14135_5228#",
-        "a_14135_5968#",
-        "a_14135_7908#",
-        "a_16533_1846#",
-        "a_16533_3146#",
-        "a_16575_3628#",
-        "a_16575_9508#",
-        "a_3218_205#",
-        "a_3898_205#",
-        "a_4385_1864#",
-        "a_4845_1864#",
-        "a_5357_1905#",
-        "a_5357_4765#",
-        "a_5357_6185#",
-        "a_5357_9045#",
-        "a_607_2250#",
-        "a_607_2790#",
-        "a_607_4210#",
-        "a_607_4750#",
-        "a_607_6170#",
-        "a_607_6710#",
-        "a_607_8130#",
-        "a_607_8670#",
-        "a_6428_205#",
-        "a_7065_1864#",
-        "a_7525_1864#",
-        "a_7985_1864#",
-        "a_8497_1905#",
-        "a_8497_4765#",
-        "a_8497_6185#",
-        "a_8497_9045#",
-        "a_9213_1846#",
-        "a_9213_3146#",
-        "a_9255_3628#",
-        "a_9255_5228#",
-        "a_9255_7568#",
+        "a_10891_1688#",
+        "a_10891_2620#",
+        "a_10891_3628#",
+        "a_10891_4560#",
+        "a_10891_5968#",
+        "a_10891_6900#",
+        "a_10891_7908#",
+        "a_10891_8840#",
+        "a_11173_1838#",
+        "a_11173_3154#",
+        "a_11215_1688#",
+        "a_11215_3288#",
+        "a_11215_7568#",
+        "a_11215_7908#",
+        "a_11215_9508#",
+        "a_13453_1838#",
+        "a_13453_3154#",
+        "a_13495_3288#",
+        "a_13495_3628#",
+        "a_13495_5228#",
+        "a_13495_5968#",
+        "a_13495_7908#",
+        "a_13495_9508#",
+        "a_15733_1838#",
+        "a_15733_3154#",
+        "a_15775_1688#",
+        "a_15775_3288#",
+        "a_15775_5228#",
+        "a_15775_9508#",
+        "a_2938_205#",
+        "a_3091_9024#",
+        "a_3461_1870#",
+        "a_363_2190#",
+        "a_363_2690#",
+        "a_363_4190#",
+        "a_363_4690#",
+        "a_363_6190#",
+        "a_363_6690#",
+        "a_363_8190#",
+        "a_363_8690#",
+        "a_3901_1870#",
+        "a_4341_1870#",
+        "a_4811_1866#",
+        "a_4811_4714#",
+        "a_4811_6146#",
+        "a_4811_8994#",
+        "a_6068_205#",
+        "a_6621_1870#",
+        "a_7061_1870#",
+        "a_7501_1870#",
+        "a_7971_1866#",
+        "a_7971_4714#",
+        "a_7971_6146#",
+        "a_7971_8994#",
+        "a_8893_1838#",
+        "a_8893_3154#",
+        "a_8935_1688#",
+        "a_8935_3288#",
+        "a_8935_7908#",
         "vdd",
         "vss"
       ],
@@ -769,112 +830,112 @@
       "net_count": 194,
       "metal_shares": {
         "area_um2": {
-          "M1": 1121.735,
-          "M2": 683.501,
-          "M3": 1137.379,
-          "M4": 869.408,
+          "M1": 1129.236,
+          "M2": 633.53,
+          "M3": 1048.296,
+          "M4": 784.478,
           "M5": 0.0
         },
-        "total_metal_um2": 3812.023,
+        "total_metal_um2": 3595.54,
         "share_pct": {
-          "M1": 29.4,
-          "M2": 17.9,
-          "M3": 29.8,
-          "M4": 22.8,
+          "M1": 31.4,
+          "M2": 17.6,
+          "M3": 29.2,
+          "M4": 21.8,
           "M5": 0.0
         }
       },
       "key_port_caps_fF": {
         "c0": {
-          "to_substrate_fF": 0.724,
-          "coupling_sum_fF": 0.41,
-          "total_node_fF": 1.134
+          "to_substrate_fF": 0.803,
+          "coupling_sum_fF": 0.922,
+          "total_node_fF": 1.725
         },
         "c1": {
-          "to_substrate_fF": 0.644,
-          "coupling_sum_fF": 0.456,
-          "total_node_fF": 1.099
+          "to_substrate_fF": 0.754,
+          "coupling_sum_fF": 0.975,
+          "total_node_fF": 1.728
         },
         "c2": {
-          "to_substrate_fF": 0.637,
-          "coupling_sum_fF": 0.472,
-          "total_node_fF": 1.109
+          "to_substrate_fF": 0.745,
+          "coupling_sum_fF": 0.982,
+          "total_node_fF": 1.727
         },
         "c3": {
-          "to_substrate_fF": 0.655,
-          "coupling_sum_fF": 0.449,
-          "total_node_fF": 1.104
+          "to_substrate_fF": 0.754,
+          "coupling_sum_fF": 0.97,
+          "total_node_fF": 1.725
         },
         "c4": {
-          "to_substrate_fF": 0.637,
-          "coupling_sum_fF": 0.472,
-          "total_node_fF": 1.109
+          "to_substrate_fF": 0.751,
+          "coupling_sum_fF": 0.973,
+          "total_node_fF": 1.724
         },
         "c5": {
-          "to_substrate_fF": 0.637,
-          "coupling_sum_fF": 0.472,
-          "total_node_fF": 1.109
+          "to_substrate_fF": 0.745,
+          "coupling_sum_fF": 0.982,
+          "total_node_fF": 1.728
         },
         "c6": {
-          "to_substrate_fF": 0.651,
-          "coupling_sum_fF": 0.451,
-          "total_node_fF": 1.102
+          "to_substrate_fF": 0.747,
+          "coupling_sum_fF": 0.984,
+          "total_node_fF": 1.731
         },
         "c7": {
-          "to_substrate_fF": 0.688,
-          "coupling_sum_fF": 0.416,
-          "total_node_fF": 1.105
+          "to_substrate_fF": 0.786,
+          "coupling_sum_fF": 0.933,
+          "total_node_fF": 1.719
         },
         "dp": {
-          "to_substrate_fF": 1.121,
-          "coupling_sum_fF": 0.659,
-          "total_node_fF": 1.78
+          "to_substrate_fF": 0.741,
+          "coupling_sum_fF": 1.201,
+          "total_node_fF": 1.942
         },
         "dn": {
-          "to_substrate_fF": 1.036,
-          "coupling_sum_fF": 0.658,
-          "total_node_fF": 1.694
+          "to_substrate_fF": 0.718,
+          "coupling_sum_fF": 1.2,
+          "total_node_fF": 1.919
         },
         "ep": {
-          "to_substrate_fF": 1.134,
-          "coupling_sum_fF": 0.542,
-          "total_node_fF": 1.676
+          "to_substrate_fF": 0.766,
+          "coupling_sum_fF": 1.089,
+          "total_node_fF": 1.855
         },
         "en": {
-          "to_substrate_fF": 1.121,
-          "coupling_sum_fF": 0.659,
-          "total_node_fF": 1.78
+          "to_substrate_fF": 0.741,
+          "coupling_sum_fF": 1.201,
+          "total_node_fF": 1.942
         },
         "vdd": {
-          "to_substrate_fF": 254.25,
-          "coupling_sum_fF": 143.591,
-          "total_node_fF": 397.841
+          "to_substrate_fF": 238.67,
+          "coupling_sum_fF": 180.864,
+          "total_node_fF": 419.534
         }
       },
       "internal_cpex_fF": {
         "edge_mixn": {
-          "extracted_net": "a_22584_1676#",
-          "to_substrate_fF": 6.196,
-          "coupling_sum_fF": 2.074,
-          "total_node_fF": 8.27
+          "extracted_net": "a_21104_1676#",
+          "to_substrate_fF": 6.069,
+          "coupling_sum_fF": 2.475,
+          "total_node_fF": 8.543
         },
         "edge_mixp": {
-          "extracted_net": "a_22584_3548#",
-          "to_substrate_fF": 5.942,
-          "coupling_sum_fF": 2.183,
-          "total_node_fF": 8.125
+          "extracted_net": "a_21104_3548#",
+          "to_substrate_fF": 5.849,
+          "coupling_sum_fF": 2.566,
+          "total_node_fF": 8.415
         },
         "data_mixn": {
-          "extracted_net": "a_22584_5956#",
-          "to_substrate_fF": 5.942,
-          "coupling_sum_fF": 2.183,
-          "total_node_fF": 8.125
+          "extracted_net": "a_21104_5956#",
+          "to_substrate_fF": 5.83,
+          "coupling_sum_fF": 2.578,
+          "total_node_fF": 8.409
         },
         "data_mixp": {
-          "extracted_net": "a_22584_7828#",
-          "to_substrate_fF": 6.226,
-          "coupling_sum_fF": 2.093,
-          "total_node_fF": 8.318
+          "extracted_net": "a_21104_7828#",
+          "to_substrate_fF": 6.019,
+          "coupling_sum_fF": 2.471,
+          "total_node_fF": 8.49
         }
       },
       "key_net_rcx_ohm": {
@@ -939,14 +1000,14 @@
           "note": "< 1 ohm Magic extresist threshold"
         },
         "vdd": {
-          "r_elem_count": 863,
-          "r_sum_ohm": 151749.914,
-          "r_max_elem_ohm": 2736.0
+          "r_elem_count": 835,
+          "r_sum_ohm": 135021.577,
+          "r_max_elem_ohm": 2413.0
         },
         "vss": {
-          "r_elem_count": 967,
-          "r_sum_ohm": 1236367.139,
-          "r_max_elem_ohm": 72491.8
+          "r_elem_count": 1032,
+          "r_sum_ohm": 1228385.274,
+          "r_max_elem_ohm": 69786.7
         }
       }
     },
@@ -960,15 +1021,15 @@
       "pex_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_cmos_pi_8ph_pdk/serdes_rx_cmos_pi_8ph_pdk_pex.spice",
       "rcx_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_cmos_pi_8ph_pdk/serdes_rx_cmos_pi_8ph_pdk_rcx.spice",
       "bbox_um": [
-        -2.3,
+        -1.9,
         -0.5,
-        161.02,
+        122.98,
         68.22
       ],
-      "width_um": 163.32,
+      "width_um": 124.88,
       "height_um": 68.72,
-      "area_um2": 11223.35,
-      "aspect_ratio": 2.38,
+      "area_um2": 8581.75,
+      "aspect_ratio": 1.82,
       "expected_port_count": 47,
       "exported_port_count": 47,
       "exported_ports": [
@@ -1031,231 +1092,232 @@
       "rc_connectivity_and_wl_preserved": true,
       "rc_shorted_supply_moscap_as_ps_diffs": 2,
       "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
-      "rc_resistor_count": 3924,
+      "rc_resistor_count": 4380,
       "rc_resistor_nets": [
-        "a_11355_1685#",
-        "a_11355_2655#",
-        "a_11355_3625#",
-        "a_11355_4595#",
-        "a_11355_5965#",
-        "a_11355_6935#",
-        "a_11355_7905#",
-        "a_11355_8875#",
-        "a_11653_1846#",
-        "a_11653_3146#",
-        "a_11695_3628#",
-        "a_11695_9508#",
-        "a_13795_1685#",
-        "a_13795_2655#",
-        "a_13795_3625#",
-        "a_13795_4595#",
-        "a_13795_5965#",
-        "a_13795_6935#",
-        "a_14093_1846#",
-        "a_14093_3146#",
-        "a_14135_1688#",
-        "a_14135_3288#",
-        "a_14135_5228#",
-        "a_14135_7568#",
-        "a_14135_7908#",
-        "a_16533_1846#",
-        "a_16533_3146#",
-        "a_16575_5228#",
-        "a_16575_7568#",
-        "a_16575_9508#",
-        "a_18837_11305#",
-        "a_19283_10966#",
-        "a_23581_12002#",
-        "a_25331_12002#",
-        "a_2607_10570#",
-        "a_3218_205#",
-        "a_3898_205#",
-        "a_4235_10570#",
-        "a_4385_1864#",
-        "a_4637_11305#",
-        "a_4845_1864#",
-        "a_5083_10966#",
-        "a_5357_1905#",
-        "a_5357_4765#",
-        "a_5357_6185#",
-        "a_5357_9045#",
-        "a_607_2250#",
-        "a_607_2790#",
-        "a_607_4210#",
-        "a_607_4750#",
-        "a_607_6170#",
-        "a_607_6710#",
-        "a_607_8130#",
-        "a_607_8670#",
-        "a_618_10610#",
-        "a_6428_205#",
-        "a_7065_1864#",
-        "a_7525_1864#",
-        "a_7985_1864#",
-        "a_8497_1905#",
-        "a_8497_4765#",
-        "a_8497_6185#",
-        "a_8497_9045#",
-        "a_9213_1846#",
-        "a_9213_3146#",
-        "a_9255_1688#",
-        "a_9255_3288#",
-        "a_9255_5228#",
-        "a_9255_7908#",
+        "a_10867_11240#",
+        "a_10891_1688#",
+        "a_10891_2620#",
+        "a_10891_3628#",
+        "a_10891_4560#",
+        "a_10891_5968#",
+        "a_10891_6900#",
+        "a_10891_7908#",
+        "a_10891_8840#",
+        "a_11173_1838#",
+        "a_11173_3154#",
+        "a_11215_5968#",
+        "a_11215_7908#",
+        "a_11639_11240#",
+        "a_12177_11066#",
+        "a_12623_10966#",
+        "a_13453_1838#",
+        "a_13453_3154#",
+        "a_13495_1688#",
+        "a_13495_3288#",
+        "a_13495_5228#",
+        "a_13495_7568#",
+        "a_13495_7908#",
+        "a_15733_1838#",
+        "a_15733_3154#",
+        "a_15775_5228#",
+        "a_15775_5968#",
+        "a_15775_7568#",
+        "a_1639_11240#",
+        "a_17623_10966#",
+        "a_2115_10550#",
+        "a_2177_11066#",
+        "a_2581_12002#",
+        "a_2623_10966#",
+        "a_2938_205#",
+        "a_3091_9024#",
+        "a_3461_1870#",
+        "a_363_2190#",
+        "a_363_2690#",
+        "a_363_4190#",
+        "a_363_4690#",
+        "a_363_6190#",
+        "a_363_6690#",
+        "a_363_8190#",
+        "a_363_8690#",
+        "a_3707_10550#",
+        "a_3901_1870#",
+        "a_4331_12002#",
+        "a_4341_1870#",
+        "a_4811_1866#",
+        "a_4811_4714#",
+        "a_4811_6146#",
+        "a_4811_8994#",
+        "a_498_10610#",
+        "a_6068_205#",
+        "a_6621_1870#",
+        "a_7061_1870#",
+        "a_7501_1870#",
+        "a_7623_10966#",
+        "a_7971_1866#",
+        "a_7971_4714#",
+        "a_7971_6146#",
+        "a_7971_8994#",
+        "a_8893_1838#",
+        "a_8893_3154#",
+        "a_8935_1688#",
+        "a_8935_3628#",
+        "a_8935_5228#",
+        "a_8935_7908#",
+        "a_8935_9508#",
         "vdd",
         "vss"
       ],
       "raw_device_count": 734,
-      "merged_device_count": 726,
+      "merged_device_count": 734,
       "net_count": 232,
       "metal_shares": {
         "area_um2": {
-          "M1": 1532.76,
-          "M2": 804.065,
-          "M3": 2017.125,
-          "M4": 1085.468,
+          "M1": 1507.072,
+          "M2": 762.417,
+          "M3": 1635.961,
+          "M4": 997.146,
           "M5": 0.0
         },
-        "total_metal_um2": 5439.418,
+        "total_metal_um2": 4902.596,
         "share_pct": {
-          "M1": 28.2,
-          "M2": 14.8,
-          "M3": 37.1,
-          "M4": 20.0,
+          "M1": 30.7,
+          "M2": 15.6,
+          "M3": 33.4,
+          "M4": 20.3,
           "M5": 0.0
         }
       },
       "key_port_caps_fF": {
         "c0": {
-          "to_substrate_fF": 0.876,
-          "coupling_sum_fF": 0.424,
-          "total_node_fF": 1.3
+          "to_substrate_fF": 0.932,
+          "coupling_sum_fF": 0.934,
+          "total_node_fF": 1.866
         },
         "c1": {
-          "to_substrate_fF": 0.755,
-          "coupling_sum_fF": 0.486,
-          "total_node_fF": 1.241
+          "to_substrate_fF": 0.852,
+          "coupling_sum_fF": 0.999,
+          "total_node_fF": 1.851
         },
         "c2": {
-          "to_substrate_fF": 0.747,
-          "coupling_sum_fF": 0.503,
-          "total_node_fF": 1.25
+          "to_substrate_fF": 0.843,
+          "coupling_sum_fF": 1.006,
+          "total_node_fF": 1.849
         },
         "c3": {
-          "to_substrate_fF": 0.765,
-          "coupling_sum_fF": 0.48,
-          "total_node_fF": 1.245
+          "to_substrate_fF": 0.853,
+          "coupling_sum_fF": 0.995,
+          "total_node_fF": 1.847
         },
         "c4": {
-          "to_substrate_fF": 0.747,
-          "coupling_sum_fF": 0.503,
-          "total_node_fF": 1.251
+          "to_substrate_fF": 0.849,
+          "coupling_sum_fF": 0.998,
+          "total_node_fF": 1.846
         },
         "c5": {
-          "to_substrate_fF": 0.747,
-          "coupling_sum_fF": 0.503,
-          "total_node_fF": 1.25
+          "to_substrate_fF": 0.843,
+          "coupling_sum_fF": 1.007,
+          "total_node_fF": 1.85
         },
         "c6": {
-          "to_substrate_fF": 0.762,
-          "coupling_sum_fF": 0.482,
-          "total_node_fF": 1.244
+          "to_substrate_fF": 0.846,
+          "coupling_sum_fF": 1.008,
+          "total_node_fF": 1.854
         },
         "c7": {
-          "to_substrate_fF": 0.816,
-          "coupling_sum_fF": 0.43,
-          "total_node_fF": 1.246
+          "to_substrate_fF": 0.892,
+          "coupling_sum_fF": 0.945,
+          "total_node_fF": 1.837
         },
         "dp": {
-          "to_substrate_fF": 4.546,
-          "coupling_sum_fF": 24.267,
-          "total_node_fF": 28.813
+          "to_substrate_fF": 4.22,
+          "coupling_sum_fF": 20.982,
+          "total_node_fF": 25.202
         },
         "dn": {
-          "to_substrate_fF": 2.18,
-          "coupling_sum_fF": 26.059,
-          "total_node_fF": 28.239
+          "to_substrate_fF": 2.03,
+          "coupling_sum_fF": 19.809,
+          "total_node_fF": 21.838
         },
         "ep": {
-          "to_substrate_fF": 2.435,
-          "coupling_sum_fF": 24.521,
-          "total_node_fF": 26.956
+          "to_substrate_fF": 2.173,
+          "coupling_sum_fF": 21.316,
+          "total_node_fF": 23.489
         },
         "en": {
-          "to_substrate_fF": 3.921,
-          "coupling_sum_fF": 22.758,
-          "total_node_fF": 26.679
+          "to_substrate_fF": 2.137,
+          "coupling_sum_fF": 19.695,
+          "total_node_fF": 21.832
         },
         "ckd0": {
-          "to_substrate_fF": 2.721,
-          "coupling_sum_fF": 2.558,
-          "total_node_fF": 5.279
+          "to_substrate_fF": 2.052,
+          "coupling_sum_fF": 2.588,
+          "total_node_fF": 4.641
         },
         "ckd1": {
-          "to_substrate_fF": 2.46,
-          "coupling_sum_fF": 3.243,
-          "total_node_fF": 5.703
+          "to_substrate_fF": 2.276,
+          "coupling_sum_fF": 3.177,
+          "total_node_fF": 5.453
         },
         "ckd2": {
-          "to_substrate_fF": 2.906,
-          "coupling_sum_fF": 2.925,
-          "total_node_fF": 5.831
+          "to_substrate_fF": 2.811,
+          "coupling_sum_fF": 3.12,
+          "total_node_fF": 5.931
         },
         "ckd3": {
-          "to_substrate_fF": 2.815,
-          "coupling_sum_fF": 2.275,
-          "total_node_fF": 5.09
+          "to_substrate_fF": 2.341,
+          "coupling_sum_fF": 2.184,
+          "total_node_fF": 4.526
         },
         "cke0": {
-          "to_substrate_fF": 2.69,
-          "coupling_sum_fF": 2.497,
-          "total_node_fF": 5.187
+          "to_substrate_fF": 1.634,
+          "coupling_sum_fF": 2.572,
+          "total_node_fF": 4.206
         },
         "cke1": {
-          "to_substrate_fF": 2.417,
-          "coupling_sum_fF": 2.914,
-          "total_node_fF": 5.331
+          "to_substrate_fF": 2.092,
+          "coupling_sum_fF": 2.508,
+          "total_node_fF": 4.6
         },
         "cke2": {
-          "to_substrate_fF": 2.877,
-          "coupling_sum_fF": 3.224,
-          "total_node_fF": 6.101
+          "to_substrate_fF": 3.357,
+          "coupling_sum_fF": 2.845,
+          "total_node_fF": 6.202
         },
         "cke3": {
-          "to_substrate_fF": 2.787,
-          "coupling_sum_fF": 2.382,
-          "total_node_fF": 5.169
+          "to_substrate_fF": 2.694,
+          "coupling_sum_fF": 1.622,
+          "total_node_fF": 4.316
         },
         "vdd": {
-          "to_substrate_fF": 385.53,
-          "coupling_sum_fF": 213.566,
-          "total_node_fF": 599.096
+          "to_substrate_fF": 338.52,
+          "coupling_sum_fF": 253.566,
+          "total_node_fF": 592.086
         }
       },
       "internal_cpex_fF": {
         "edge_mixn": {
-          "extracted_net": "a_22584_1676#",
-          "to_substrate_fF": 6.196,
-          "coupling_sum_fF": 2.074,
-          "total_node_fF": 8.27
+          "extracted_net": "a_21104_1676#",
+          "to_substrate_fF": 6.062,
+          "coupling_sum_fF": 2.496,
+          "total_node_fF": 8.559
         },
         "edge_mixp": {
-          "extracted_net": "a_22584_3548#",
-          "to_substrate_fF": 5.942,
-          "coupling_sum_fF": 2.183,
-          "total_node_fF": 8.125
+          "extracted_net": "a_21104_3548#",
+          "to_substrate_fF": 5.849,
+          "coupling_sum_fF": 2.594,
+          "total_node_fF": 8.443
         },
         "data_mixn": {
-          "extracted_net": "a_22584_5956#",
-          "to_substrate_fF": 5.942,
-          "coupling_sum_fF": 2.183,
-          "total_node_fF": 8.125
+          "extracted_net": "a_21104_5956#",
+          "to_substrate_fF": 5.823,
+          "coupling_sum_fF": 2.609,
+          "total_node_fF": 8.433
         },
         "data_mixp": {
-          "extracted_net": "a_22584_7828#",
-          "to_substrate_fF": 6.164,
-          "coupling_sum_fF": 2.118,
-          "total_node_fF": 8.282
+          "extracted_net": "a_21104_7828#",
+          "to_substrate_fF": 5.989,
+          "coupling_sum_fF": 2.512,
+          "total_node_fF": 8.501
         }
       },
       "key_net_rcx_ohm": {
@@ -1360,14 +1422,14 @@
           "note": "< 1 ohm Magic extresist threshold"
         },
         "vdd": {
-          "r_elem_count": 1283,
-          "r_sum_ohm": 193861.721,
-          "r_max_elem_ohm": 2736.0
+          "r_elem_count": 1486,
+          "r_sum_ohm": 172393.475,
+          "r_max_elem_ohm": 2413.0
         },
         "vss": {
-          "r_elem_count": 1284,
-          "r_sum_ohm": 1061560.502,
-          "r_max_elem_ohm": 36840.2
+          "r_elem_count": 1224,
+          "r_sum_ohm": 1070364.963,
+          "r_max_elem_ohm": 41260.6
         }
       }
     },
@@ -1457,51 +1519,56 @@
       "rc_connectivity_and_wl_preserved": true,
       "rc_shorted_supply_moscap_as_ps_diffs": 2,
       "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
-      "rc_resistor_count": 6201,
+      "rc_resistor_count": 9584,
       "rc_resistor_nets": [
+        "a_10215_7730#",
+        "a_10575_7830#",
         "a_12444_10910#",
         "a_12444_12390#",
         "a_12444_13950#",
         "a_12444_9350#",
         "a_14338_12390#",
         "a_14338_9350#",
+        "a_15941_n1488#",
+        "a_15971_n1460#",
         "a_18364_10910#",
         "a_18364_12390#",
         "a_18364_13950#",
         "a_18364_9350#",
-        "a_19333_8466#",
-        "a_19851_n1413#",
-        "a_19977_7772#",
+        "a_20025_n1488#",
         "a_20258_10910#",
+        "a_20258_9350#",
         "a_24284_10910#",
         "a_24284_12390#",
         "a_24284_13950#",
         "a_24284_9350#",
-        "a_24287_7790#",
         "a_24333_476#",
         "a_24333_696#",
+        "a_24971_n1460#",
+        "a_2498_10910#",
+        "a_2498_12390#",
         "a_2498_13950#",
+        "a_2498_9350#",
+        "a_26178_10910#",
         "a_26178_13950#",
+        "a_26178_9350#",
+        "a_29025_n1488#",
         "a_30204_10910#",
         "a_30204_12390#",
         "a_30204_13950#",
         "a_30204_9350#",
-        "a_32098_10910#",
-        "a_32098_13950#",
+        "a_32098_12390#",
         "a_32098_9350#",
         "a_36124_10910#",
         "a_36124_12390#",
         "a_36124_13950#",
         "a_36124_9350#",
-        "a_38018_13950#",
-        "a_38018_9350#",
         "a_42044_10910#",
         "a_42044_12390#",
         "a_42044_13950#",
         "a_42044_9350#",
-        "a_42047_3255#",
-        "a_43938_12390#",
-        "a_43938_13950#",
+        "a_43938_10910#",
+        "a_43938_9350#",
         "a_604_10910#",
         "a_604_12390#",
         "a_604_13950#",
@@ -1510,130 +1577,132 @@
         "a_6524_12390#",
         "a_6524_13950#",
         "a_6524_9350#",
+        "a_6527_7750#",
         "a_653_476#",
         "a_653_696#",
         "a_653_9596#",
         "a_653_9816#",
-        "a_8418_10910#",
+        "a_8418_13950#",
+        "a_8418_9350#",
         "rst_n",
         "vdd",
         "vss"
       ],
-      "raw_device_count": 1812,
-      "merged_device_count": 1812,
-      "net_count": 759,
+      "raw_device_count": 1868,
+      "merged_device_count": 1868,
+      "net_count": 783,
       "metal_shares": {
         "area_um2": {
-          "M1": 3496.711,
-          "M2": 1216.234,
-          "M3": 4969.363,
-          "M4": 1932.578,
+          "M1": 3591.757,
+          "M2": 1270.82,
+          "M3": 5032.943,
+          "M4": 1913.773,
           "M5": 0.0
         },
-        "total_metal_um2": 11614.886,
+        "total_metal_um2": 11809.293,
         "share_pct": {
-          "M1": 30.1,
-          "M2": 10.5,
-          "M3": 42.8,
-          "M4": 16.6,
+          "M1": 30.4,
+          "M2": 10.8,
+          "M3": 42.6,
+          "M4": 16.2,
           "M5": 0.0
         }
       },
       "key_port_caps_fF": {
         "ckd0": {
-          "to_substrate_fF": 3.141,
-          "coupling_sum_fF": 6.936,
-          "total_node_fF": 10.077
+          "to_substrate_fF": 2.898,
+          "coupling_sum_fF": 9.147,
+          "total_node_fF": 12.046
         },
         "ckd1": {
-          "to_substrate_fF": 0.706,
-          "coupling_sum_fF": 0.715,
-          "total_node_fF": 1.421
+          "to_substrate_fF": 0.767,
+          "coupling_sum_fF": 0.836,
+          "total_node_fF": 1.603
         },
         "ckd2": {
-          "to_substrate_fF": 0.978,
-          "coupling_sum_fF": 9.332,
-          "total_node_fF": 10.31
+          "to_substrate_fF": 0.902,
+          "coupling_sum_fF": 9.908,
+          "total_node_fF": 10.809
         },
         "ckd3": {
-          "to_substrate_fF": 0.613,
-          "coupling_sum_fF": 1.878,
-          "total_node_fF": 2.491
+          "to_substrate_fF": 0.761,
+          "coupling_sum_fF": 4.179,
+          "total_node_fF": 4.94
         },
         "cke0": {
-          "to_substrate_fF": 0.713,
-          "coupling_sum_fF": 1.505,
-          "total_node_fF": 2.218
+          "to_substrate_fF": 0.899,
+          "coupling_sum_fF": 3.71,
+          "total_node_fF": 4.609
         },
         "cke1": {
-          "to_substrate_fF": 0.707,
-          "coupling_sum_fF": 0.569,
-          "total_node_fF": 1.276
+          "to_substrate_fF": 0.727,
+          "coupling_sum_fF": 0.718,
+          "total_node_fF": 1.446
         },
         "cke2": {
-          "to_substrate_fF": 0.707,
-          "coupling_sum_fF": 0.569,
-          "total_node_fF": 1.276
+          "to_substrate_fF": 0.769,
+          "coupling_sum_fF": 0.686,
+          "total_node_fF": 1.454
         },
         "cke3": {
-          "to_substrate_fF": 0.707,
-          "coupling_sum_fF": 0.569,
-          "total_node_fF": 1.276
+          "to_substrate_fF": 0.769,
+          "coupling_sum_fF": 0.686,
+          "total_node_fF": 1.454
         },
         "d0": {
-          "to_substrate_fF": 1.208,
-          "coupling_sum_fF": 2.757,
-          "total_node_fF": 3.964
+          "to_substrate_fF": 1.21,
+          "coupling_sum_fF": 2.8,
+          "total_node_fF": 4.01
         },
         "d1": {
-          "to_substrate_fF": 1.129,
-          "coupling_sum_fF": 2.983,
-          "total_node_fF": 4.112
+          "to_substrate_fF": 1.13,
+          "coupling_sum_fF": 3.03,
+          "total_node_fF": 4.16
         },
         "d2": {
-          "to_substrate_fF": 1.179,
-          "coupling_sum_fF": 2.947,
-          "total_node_fF": 4.126
+          "to_substrate_fF": 1.177,
+          "coupling_sum_fF": 3.001,
+          "total_node_fF": 4.178
         },
         "d3": {
-          "to_substrate_fF": 0.912,
-          "coupling_sum_fF": 3.321,
-          "total_node_fF": 4.233
+          "to_substrate_fF": 0.879,
+          "coupling_sum_fF": 3.486,
+          "total_node_fF": 4.365
         },
         "e0": {
-          "to_substrate_fF": 0.908,
-          "coupling_sum_fF": 3.333,
-          "total_node_fF": 4.24
+          "to_substrate_fF": 0.899,
+          "coupling_sum_fF": 3.455,
+          "total_node_fF": 4.354
         },
         "e1": {
-          "to_substrate_fF": 1.13,
-          "coupling_sum_fF": 2.854,
-          "total_node_fF": 3.985
+          "to_substrate_fF": 1.115,
+          "coupling_sum_fF": 2.993,
+          "total_node_fF": 4.108
         },
         "e2": {
-          "to_substrate_fF": 1.134,
-          "coupling_sum_fF": 2.829,
-          "total_node_fF": 3.963
+          "to_substrate_fF": 1.13,
+          "coupling_sum_fF": 2.902,
+          "total_node_fF": 4.033
         },
         "e3": {
-          "to_substrate_fF": 1.134,
-          "coupling_sum_fF": 2.829,
-          "total_node_fF": 3.963
+          "to_substrate_fF": 1.135,
+          "coupling_sum_fF": 2.876,
+          "total_node_fF": 4.011
         },
         "wclk": {
-          "to_substrate_fF": 1.213,
-          "coupling_sum_fF": 4.711,
-          "total_node_fF": 5.924
+          "to_substrate_fF": 1.206,
+          "coupling_sum_fF": 4.819,
+          "total_node_fF": 6.025
         },
         "rst_n": {
-          "to_substrate_fF": 210.85,
-          "coupling_sum_fF": 206.283,
-          "total_node_fF": 417.133
+          "to_substrate_fF": 212.52,
+          "coupling_sum_fF": 208.213,
+          "total_node_fF": 420.733
         },
         "vdd": {
-          "to_substrate_fF": 1263.11,
-          "coupling_sum_fF": 660.199,
-          "total_node_fF": 1923.309
+          "to_substrate_fF": 1255.06,
+          "coupling_sum_fF": 696.44,
+          "total_node_fF": 1951.5
         }
       },
       "internal_cpex_fF": {},
@@ -1724,18 +1793,18 @@
           "note": "< 1 ohm Magic extresist threshold"
         },
         "rst_n": {
-          "r_elem_count": 194,
-          "r_sum_ohm": 53907.612,
+          "r_elem_count": 206,
+          "r_sum_ohm": 57810.561,
           "r_max_elem_ohm": 827.255
         },
         "vdd": {
-          "r_elem_count": 2850,
-          "r_sum_ohm": 374801.998,
-          "r_max_elem_ohm": 11015.7
+          "r_elem_count": 3715,
+          "r_sum_ohm": 395482.386,
+          "r_max_elem_ohm": 6750.34
         },
         "vss": {
-          "r_elem_count": 1480,
-          "r_sum_ohm": 804705.182,
+          "r_elem_count": 3541,
+          "r_sum_ohm": 868830.273,
           "r_max_elem_ohm": 73412.2
         }
       }
@@ -1753,12 +1822,12 @@
         -5.4,
         -1.88,
         239.9,
-        203.64
+        193.52
       ],
       "width_um": 245.3,
-      "height_um": 205.52,
-      "area_um2": 50414.06,
-      "aspect_ratio": 1.19,
+      "height_um": 195.4,
+      "area_um2": 47931.62,
+      "aspect_ratio": 1.26,
       "expected_port_count": 76,
       "exported_port_count": 76,
       "exported_ports": [
@@ -1850,275 +1919,271 @@
       "rc_connectivity_and_wl_preserved": true,
       "rc_shorted_supply_moscap_as_ps_diffs": 2,
       "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
-      "rc_resistor_count": 21163,
+      "rc_resistor_count": 23888,
       "rc_resistor_nets": [
-        "a_10445_12190#",
-        "a_1067_2350#",
-        "a_1067_2890#",
-        "a_1067_4310#",
-        "a_1067_4850#",
-        "a_1067_6270#",
-        "a_1067_6810#",
-        "a_1067_8230#",
-        "a_1067_8770#",
-        "a_1078_10710#",
-        "a_11815_1785#",
-        "a_11815_2755#",
-        "a_11815_3725#",
-        "a_11815_4695#",
-        "a_11815_6065#",
-        "a_11815_7035#",
-        "a_11815_8005#",
-        "a_11815_8975#",
-        "a_12113_1946#",
-        "a_12113_3246#",
-        "a_12155_1788#",
-        "a_12155_3728#",
-        "a_12155_7668#",
-        "a_12155_8008#",
-        "a_12155_9608#",
-        "a_12444_34630#",
-        "a_12444_36190#",
-        "a_12444_37670#",
-        "a_12444_39230#",
-        "a_13661_22118#",
-        "a_14255_1785#",
-        "a_14255_2755#",
-        "a_14255_3725#",
-        "a_14255_4695#",
-        "a_14255_6065#",
-        "a_14255_7035#",
-        "a_14338_34630#",
-        "a_14338_37670#",
-        "a_14338_39230#",
-        "a_14553_1946#",
-        "a_14553_3246#",
-        "a_14595_1788#",
-        "a_14595_3728#",
-        "a_14595_5328#",
-        "a_14595_7668#",
-        "a_14595_9608#",
-        "a_16033_11066#",
-        "a_16993_1946#",
-        "a_16993_3246#",
-        "a_17035_3388#",
-        "a_17035_8008#",
-        "a_17035_9608#",
-        "a_1821_22118#",
-        "a_1833_11066#",
-        "a_18364_34630#",
-        "a_18364_36190#",
-        "a_18364_37670#",
-        "a_18364_39230#",
-        "a_1857_19316#",
-        "a_19297_11405#",
-        "a_19333_33746#",
-        "a_19581_22118#",
-        "a_19671_12130#",
-        "a_19743_11066#",
-        "a_19851_23867#",
-        "a_19977_33052#",
-        "a_20258_34630#",
-        "a_20258_36190#",
-        "a_20258_39230#",
-        "a_20445_12190#",
-        "a_23133_11066#",
-        "a_24041_12102#",
-        "a_24071_12130#",
-        "a_24284_34630#",
-        "a_24284_36190#",
-        "a_24284_37670#",
-        "a_24284_39230#",
-        "a_24287_33070#",
-        "a_24333_25756#",
-        "a_24333_25976#",
-        "a_24845_12190#",
-        "a_2498_34630#",
-        "a_2498_37670#",
-        "a_2498_39230#",
-        "a_25501_22118#",
-        "a_25791_12102#",
-        "a_26178_34630#",
-        "a_26178_39230#",
-        "a_30204_34630#",
-        "a_30204_36190#",
-        "a_30204_37670#",
-        "a_30204_39230#",
-        "a_3067_10670#",
-        "a_31421_22118#",
-        "a_32098_36190#",
-        "a_32098_39230#",
-        "a_36124_34630#",
-        "a_36124_36190#",
-        "a_36124_37670#",
-        "a_36124_39230#",
-        "a_3678_305#",
-        "a_37341_22118#",
-        "a_38018_34630#",
-        "a_38018_39230#",
-        "a_39199_8430#",
-        "a_39294_8430#",
-        "a_39470_7278#",
-        "a_39894_8430#",
-        "a_42044_34630#",
-        "a_42044_36190#",
-        "a_42044_37670#",
-        "a_42044_39230#",
-        "a_42047_28535#",
-        "a_43261_22118#",
-        "a_4358_305#",
-        "a_43938_39230#",
-        "a_4695_10670#",
-        "a_4845_1964#",
-        "a_5097_11405#",
-        "a_5305_1964#",
-        "a_5543_11066#",
-        "a_5817_2005#",
-        "a_5817_4865#",
-        "a_5817_6285#",
-        "a_5817_9145#",
-        "a_6045_12190#",
-        "a_604_34630#",
-        "a_604_36190#",
-        "a_604_37670#",
-        "a_604_39230#",
-        "a_607_28535#",
-        "a_6524_34630#",
-        "a_6524_36190#",
-        "a_6524_37670#",
-        "a_6524_39230#",
-        "a_653_25756#",
-        "a_653_25976#",
-        "a_653_34876#",
-        "a_653_35096#",
-        "a_6888_305#",
-        "a_7525_1964#",
-        "a_7741_22118#",
-        "a_7777_19316#",
-        "a_7985_1964#",
-        "a_8418_37670#",
-        "a_8418_39230#",
-        "a_8445_1964#",
-        "a_8933_11066#",
-        "a_8957_2005#",
-        "a_8957_4865#",
-        "a_8957_6285#",
-        "a_8957_9145#",
-        "a_9673_1946#",
-        "a_9673_3246#",
-        "a_9715_1788#",
-        "a_9715_3728#",
-        "a_9715_7668#",
-        "a_9715_9608#",
+        "a_10215_30986#",
+        "a_10575_31086#",
+        "a_11217_11066#",
+        "a_11247_11340#",
+        "a_11271_1788#",
+        "a_11271_2720#",
+        "a_11271_3728#",
+        "a_11271_4660#",
+        "a_11271_6068#",
+        "a_11271_7000#",
+        "a_11271_8008#",
+        "a_11271_8940#",
+        "a_11553_1938#",
+        "a_11553_3254#",
+        "a_11595_1788#",
+        "a_11595_5328#",
+        "a_11595_9608#",
+        "a_12019_11340#",
+        "a_1217_11066#",
+        "a_12444_32606#",
+        "a_12444_34166#",
+        "a_12444_35646#",
+        "a_12444_37206#",
+        "a_1247_11340#",
+        "a_12557_11166#",
+        "a_13003_11066#",
+        "a_13661_20094#",
+        "a_13791_12130#",
+        "a_13833_1938#",
+        "a_13833_3254#",
+        "a_13875_3388#",
+        "a_13875_8008#",
+        "a_13875_9608#",
+        "a_14338_32606#",
+        "a_14565_12190#",
+        "a_15941_21768#",
+        "a_15971_21796#",
+        "a_16113_1938#",
+        "a_16113_3254#",
+        "a_16155_3728#",
+        "a_16155_5328#",
+        "a_16155_7668#",
+        "a_16217_11066#",
+        "a_18003_11066#",
+        "a_1821_20094#",
+        "a_18364_32606#",
+        "a_18364_34166#",
+        "a_18364_35646#",
+        "a_18364_37206#",
+        "a_18591_12130#",
+        "a_1859_17302#",
+        "a_19365_12190#",
+        "a_19581_20094#",
+        "a_20025_21768#",
+        "a_2019_11340#",
+        "a_20258_37206#",
+        "a_24284_32606#",
+        "a_24284_34166#",
+        "a_24284_35646#",
+        "a_24284_37206#",
+        "a_24333_23732#",
+        "a_24333_23952#",
+        "a_2495_10650#",
+        "a_24971_21796#",
+        "a_2498_32606#",
+        "a_25501_20094#",
+        "a_2557_11166#",
+        "a_26178_37206#",
+        "a_29025_21768#",
+        "a_2961_12102#",
+        "a_29659_8430#",
+        "a_29754_8430#",
+        "a_29930_7278#",
+        "a_3003_11066#",
+        "a_30204_32606#",
+        "a_30204_34166#",
+        "a_30204_35646#",
+        "a_30204_37206#",
+        "a_30354_8430#",
+        "a_31421_20094#",
+        "a_32098_32606#",
+        "a_32098_34166#",
+        "a_32098_35646#",
+        "a_32098_37206#",
+        "a_3318_305#",
+        "a_3471_9124#",
+        "a_36124_32606#",
+        "a_36124_34166#",
+        "a_36124_35646#",
+        "a_36124_37206#",
+        "a_37341_20094#",
+        "a_3765_12190#",
+        "a_38018_34166#",
+        "a_38018_35646#",
+        "a_3841_1970#",
+        "a_4087_10650#",
+        "a_42044_32606#",
+        "a_42044_34166#",
+        "a_42044_35646#",
+        "a_42044_37206#",
+        "a_4281_1970#",
+        "a_43261_20094#",
+        "a_43938_34166#",
+        "a_4711_12102#",
+        "a_4721_1970#",
+        "a_5191_1966#",
+        "a_5191_4814#",
+        "a_5191_6246#",
+        "a_5191_9094#",
+        "a_604_32606#",
+        "a_604_34166#",
+        "a_604_35646#",
+        "a_604_37206#",
+        "a_6217_11066#",
+        "a_6448_305#",
+        "a_6524_32606#",
+        "a_6524_34166#",
+        "a_6524_35646#",
+        "a_6524_37206#",
+        "a_6527_31006#",
+        "a_653_23732#",
+        "a_653_23952#",
+        "a_653_32852#",
+        "a_653_33072#",
+        "a_7001_1970#",
+        "a_743_2290#",
+        "a_743_2790#",
+        "a_743_4290#",
+        "a_743_4790#",
+        "a_743_6290#",
+        "a_743_6790#",
+        "a_743_8290#",
+        "a_743_8790#",
+        "a_7441_1970#",
+        "a_7741_20094#",
+        "a_7779_17302#",
+        "a_7881_1970#",
+        "a_8003_11066#",
+        "a_8351_1966#",
+        "a_8351_4814#",
+        "a_8351_6246#",
+        "a_8351_9094#",
+        "a_8565_12190#",
+        "a_878_10710#",
+        "a_9273_1938#",
+        "a_9273_3254#",
+        "a_9315_1788#",
+        "a_9315_3388#",
+        "a_9315_3728#",
+        "a_9315_5328#",
+        "a_9315_7668#",
+        "a_9315_9608#",
+        "ctle_n",
+        "ctle_p",
         "rst_n",
         "vdd",
         "vss"
       ],
-      "raw_device_count": 2983,
-      "merged_device_count": 2968,
-      "net_count": 1130,
+      "raw_device_count": 3039,
+      "merged_device_count": 3032,
+      "net_count": 1154,
       "metal_shares": {
         "area_um2": {
-          "M1": 6788.954,
-          "M2": 3620.266,
-          "M3": 8736.815,
-          "M4": 4110.318,
-          "M5": 5928.3
+          "M1": 6862.779,
+          "M2": 3618.02,
+          "M3": 8447.17,
+          "M4": 3949.148,
+          "M5": 5954.524
         },
-        "total_metal_um2": 29184.653,
+        "total_metal_um2": 28831.641,
         "share_pct": {
-          "M1": 23.3,
-          "M2": 12.4,
-          "M3": 29.9,
-          "M4": 14.1,
-          "M5": 20.3
+          "M1": 23.8,
+          "M2": 12.5,
+          "M3": 29.3,
+          "M4": 13.7,
+          "M5": 20.7
         }
       },
       "key_port_caps_fF": {
         "rxp": {
-          "to_substrate_fF": 10.033,
-          "coupling_sum_fF": 9.517,
-          "total_node_fF": 19.55
+          "to_substrate_fF": 13.004,
+          "coupling_sum_fF": 11.351,
+          "total_node_fF": 24.355
         },
         "rxn": {
-          "to_substrate_fF": 10.705,
-          "coupling_sum_fF": 9.184,
-          "total_node_fF": 19.889
+          "to_substrate_fF": 13.178,
+          "coupling_sum_fF": 11.333,
+          "total_node_fF": 24.511
         },
         "ctle_p": {
-          "to_substrate_fF": 24.09,
-          "coupling_sum_fF": 38.353,
-          "total_node_fF": 62.443
+          "to_substrate_fF": 20.1,
+          "coupling_sum_fF": 39.208,
+          "total_node_fF": 59.308
         },
         "ctle_n": {
-          "to_substrate_fF": 22.407,
-          "coupling_sum_fF": 40.522,
-          "total_node_fF": 62.929
+          "to_substrate_fF": 18.453,
+          "coupling_sum_fF": 41.093,
+          "total_node_fF": 59.547
         },
         "vcm_ref": {
-          "to_substrate_fF": 9.788,
-          "coupling_sum_fF": 1.841,
-          "total_node_fF": 11.629
+          "to_substrate_fF": 10.21,
+          "coupling_sum_fF": 1.631,
+          "total_node_fF": 11.841
         },
         "ibias_ctle": {
-          "to_substrate_fF": 17.437,
-          "coupling_sum_fF": 6.701,
-          "total_node_fF": 24.138
+          "to_substrate_fF": 15.306,
+          "coupling_sum_fF": 5.766,
+          "total_node_fF": 21.072
         },
         "c0": {
-          "to_substrate_fF": 1.198,
-          "coupling_sum_fF": 0.455,
-          "total_node_fF": 1.653
+          "to_substrate_fF": 1.248,
+          "coupling_sum_fF": 0.968,
+          "total_node_fF": 2.216
         },
         "c1": {
-          "to_substrate_fF": 0.981,
-          "coupling_sum_fF": 0.556,
-          "total_node_fF": 1.538
+          "to_substrate_fF": 1.083,
+          "coupling_sum_fF": 1.067,
+          "total_node_fF": 2.15
         },
         "c2": {
-          "to_substrate_fF": 0.977,
-          "coupling_sum_fF": 0.573,
-          "total_node_fF": 1.55
+          "to_substrate_fF": 1.082,
+          "coupling_sum_fF": 1.074,
+          "total_node_fF": 2.156
         },
         "c3": {
-          "to_substrate_fF": 1.061,
-          "coupling_sum_fF": 0.55,
-          "total_node_fF": 1.612
+          "to_substrate_fF": 1.147,
+          "coupling_sum_fF": 1.062,
+          "total_node_fF": 2.209
         },
         "c4": {
-          "to_substrate_fF": 1.315,
-          "coupling_sum_fF": 0.573,
-          "total_node_fF": 1.888
+          "to_substrate_fF": 1.409,
+          "coupling_sum_fF": 1.065,
+          "total_node_fF": 2.474
         },
         "c5": {
-          "to_substrate_fF": 1.122,
-          "coupling_sum_fF": 0.573,
-          "total_node_fF": 1.695
+          "to_substrate_fF": 1.224,
+          "coupling_sum_fF": 1.074,
+          "total_node_fF": 2.299
         },
         "c6": {
-          "to_substrate_fF": 1.121,
-          "coupling_sum_fF": 0.552,
-          "total_node_fF": 1.673
+          "to_substrate_fF": 1.21,
+          "coupling_sum_fF": 1.076,
+          "total_node_fF": 2.285
         },
         "c7": {
-          "to_substrate_fF": 1.213,
-          "coupling_sum_fF": 0.464,
-          "total_node_fF": 1.676
+          "to_substrate_fF": 1.283,
+          "coupling_sum_fF": 0.982,
+          "total_node_fF": 2.265
         },
         "wclk": {
-          "to_substrate_fF": 1.483,
-          "coupling_sum_fF": 5.002,
-          "total_node_fF": 6.485
+          "to_substrate_fF": 1.475,
+          "coupling_sum_fF": 5.111,
+          "total_node_fF": 6.586
         },
         "rst_n": {
-          "to_substrate_fF": 229.59,
-          "coupling_sum_fF": 223.592,
-          "total_node_fF": 453.182
+          "to_substrate_fF": 228.84,
+          "coupling_sum_fF": 225.711,
+          "total_node_fF": 454.551
         },
         "vdd": {
-          "to_substrate_fF": 2149.32,
-          "coupling_sum_fF": 1215.497,
-          "total_node_fF": 3364.817
+          "to_substrate_fF": 2091.48,
+          "coupling_sum_fF": 1301.923,
+          "total_node_fF": 3393.403
         }
       },
       "internal_cpex_fF": {},
@@ -2134,14 +2199,14 @@
           "note": "< 1 ohm Magic extresist threshold"
         },
         "ctle_p": {
-          "r_elem_count": 0,
-          "r_sum_ohm": 0.0,
-          "note": "< 1 ohm Magic extresist threshold"
+          "r_elem_count": 17,
+          "r_sum_ohm": 3252.771,
+          "r_max_elem_ohm": 666.768
         },
         "ctle_n": {
-          "r_elem_count": 0,
-          "r_sum_ohm": 0.0,
-          "note": "< 1 ohm Magic extresist threshold"
+          "r_elem_count": 23,
+          "r_sum_ohm": 5672.645,
+          "r_max_elem_ohm": 666.768
         },
         "vcm_ref": {
           "r_elem_count": 0,
@@ -2199,18 +2264,18 @@
           "note": "< 1 ohm Magic extresist threshold"
         },
         "rst_n": {
-          "r_elem_count": 603,
-          "r_sum_ohm": 217565.481,
+          "r_elem_count": 619,
+          "r_sum_ohm": 223641.611,
           "r_max_elem_ohm": 827.255
         },
         "vdd": {
-          "r_elem_count": 8959,
-          "r_sum_ohm": 775611.842,
-          "r_max_elem_ohm": 11015.7
+          "r_elem_count": 9923,
+          "r_sum_ohm": 759557.368,
+          "r_max_elem_ohm": 6750.34
         },
         "vss": {
-          "r_elem_count": 7794,
-          "r_sum_ohm": 2964370.425,
+          "r_elem_count": 8683,
+          "r_sum_ohm": 3033843.37,
           "r_max_elem_ohm": 335061.0
         }
       }

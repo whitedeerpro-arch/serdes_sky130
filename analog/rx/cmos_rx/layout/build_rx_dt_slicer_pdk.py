@@ -387,8 +387,8 @@ def build_rx_dt_slicer_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
     c.wire("metal2", [(0.000, y_tail_gc), (0.000, y_st1_pg)], 0.320)
 
     # --- Stage-1 PMOS (`Xpfeq`, `Xpf1`, `Xpf2`) ---
-    m_pfeq, inf_pfeq = cache.build_mos(P_STD, 1.00, 0.18, 1, y_st1_p, True)
-    m_pf,   inf_pf   = cache.build_mos(P_STD, 1.80, 0.15, 2, y_st1_p, True)
+    m_pfeq, inf_pfeq = cache.build_mos(P_STD, 2.10, 0.18, 1, y_st1_p, True)
+    m_pf,   inf_pf   = cache.build_mos(P_STD, 1.70, 0.15, 3, y_st1_p, True)
     c.include(m_pfeq, dx=0.000)
     c.include(m_pf,   dx=-cx_in)
     c.include(m_pf,   dx=+cx_in)
@@ -398,17 +398,17 @@ def build_rx_dt_slicer_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
         for sx in [grid(cx + x) for x in inf_pf["s_xs"]]:
             locali_v(c, sx, y_st1_p, y_vdd_mid)
             _strap_diff_vertical(c, [sx], grid(y_st1_p - 0.50), y_vdd_mid,
-                                 [grid(y_st1_p - 0.45), grid(y_st1_p + 0.45)])
-        dx_p = grid(cx + inf_pf["d_xs"][0])
-        _strap_diff_vertical(c, [dx_p], grid(y_st1_p - 0.50), grid(y_st1_p + 0.50),
-                             [grid(y_st1_p - 0.45), grid(y_st1_p + 0.45)], y_bus=y_st1_p)
+                                 [grid(y_st1_p - 0.45), grid(y_st1_p + 0.45)], m1_w=0.280)
+        pf_ds = [grid(cx + x) for x in inf_pf["d_xs"]]
+        _strap_diff_vertical(c, pf_ds, grid(y_st1_p - 0.50), grid(y_st1_p + 0.50),
+                             [grid(y_st1_p - 0.45), grid(y_st1_p + 0.45)], y_bus=y_st1_p, m1_w=0.280)
         x_eq_d = grid(inf_pfeq["s_xs"][0] if sgn < 0 else inf_pfeq["d_xs"][0])
         viali_pad(c, x_eq_d, y_st1_p)
         via1_clean(c, x_eq_d, y_st1_p)
-        xa, xb = sorted((grid(sgn * x_fn_sp), x_eq_d))
-        c.wire("metal2", [(xa, y_st1_p), (xb, y_st1_p)], 0.320)
+        all_p1d = [grid(sgn * x_fn_sp), x_eq_d] + pf_ds
+        c.wire("metal2", [(min(all_p1d), y_st1_p), (max(all_p1d), y_st1_p)], 0.320)
 
-    tie_mos_gates(c, 0.000,  inf_pfeq, y_bar=grid(y_st1_p - 0.850), y_cont=y_st1_pg, tap_xs=[0.000])
+    tie_mos_gates(c, 0.000,  inf_pfeq, y_bar=grid(y_st1_p - 1.250), y_cont=y_st1_pg, tap_xs=[0.000])
     tie_mos_gates(c, -cx_in, inf_pf,   y_bar=grid(y_st1_p - 1.150), y_cont=y_st1_pg, tap_xs=[-cx_in])
     tie_mos_gates(c, +cx_in, inf_pf,   y_bar=grid(y_st1_p - 1.150), y_cont=y_st1_pg, tap_xs=[+cx_in])
     c.wire("metal1", [(-cx_in, y_st1_pg), (+cx_in, y_st1_pg)], 0.290)
@@ -419,43 +419,44 @@ def build_rx_dt_slicer_pdk(cache: PdkCache, add_ports: bool = True) -> tuple[Cel
     # --- Stage-2 Dynamic Regenerative Latch (`Xpoeq`, `Xlp`, `Xpo`, `Xtail2`, `Xln`, `Xmn`) ---
     cx_lp = 2.600
     cx_po = 5.200
-    m_poeq, inf_poeq = cache.build_mos(P_STD, 1.00, 0.18, 1, y_st2_p, True)
+    cx_po_p = 4.950
+    m_poeq, inf_poeq = cache.build_mos(P_STD, 2.10, 0.18, 1, y_st2_p, True)
     m_lp,   inf_lp   = cache.build_mos(P_STD, 2.25, 0.18, 4, y_st2_p, True)
-    m_po,   inf_po   = cache.build_mos(P_STD, 1.80, 0.15, 2, y_st2_p, True)
+    m_po,   inf_po   = cache.build_mos(P_STD, 1.70, 0.15, 3, y_st2_p, True)
     c.include(m_poeq, dx=0.000)
     for sgn in (-1, +1):
         c.include(m_lp, dx=grid(sgn * cx_lp))
-        c.include(m_po, dx=grid(sgn * cx_po))
+        c.include(m_po, dx=grid(sgn * cx_po_p))
 
     for sgn in (-1, +1):
         for sx in [grid(sgn * cx_lp + x) for x in inf_lp["s_xs"]]:
             locali_v(c, sx, y_vdd_mid, y_st2_p)
             _strap_diff_vertical(c, [sx], y_vdd_mid, grid(y_st2_p + 0.70),
                                  [grid(y_st2_p - 0.65), grid(y_st2_p + 0.65)])
-        for sx in [grid(sgn * cx_po + x) for x in inf_po["s_xs"]]:
+        for sx in [grid(sgn * cx_po_p + x) for x in inf_po["s_xs"]]:
             locali_v(c, sx, y_vdd_mid, y_st2_p)
             _strap_diff_vertical(c, [sx], y_vdd_mid, grid(y_st2_p + 0.50),
-                                 [grid(y_st2_p - 0.45), grid(y_st2_p + 0.45)])
+                                 [grid(y_st2_p - 0.45), grid(y_st2_p + 0.45)], m1_w=0.280)
         x_eq_d = grid(inf_poeq["s_xs"][0] if sgn < 0 else inf_poeq["d_xs"][0])
         viali_pad(c, x_eq_d, y_st2_p)
         via1_clean(c, x_eq_d, y_st2_p)
         lp_ds = [grid(sgn * cx_lp + x) for x in inf_lp["d_xs"]]
-        po_ds = [grid(sgn * cx_po + x) for x in inf_po["d_xs"]]
+        po_ds = [grid(sgn * cx_po_p + x) for x in inf_po["d_xs"]]
         _strap_diff_vertical(c, lp_ds, grid(y_st2_p - 0.70), grid(y_st2_p + 0.70),
                              [grid(y_st2_p - 0.65), grid(y_st2_p + 0.65)], y_bus=y_st2_p)
         _strap_diff_vertical(c, po_ds, grid(y_st2_p - 0.50), grid(y_st2_p + 0.50),
-                             [grid(y_st2_p - 0.45), grid(y_st2_p + 0.45)], y_bus=y_st2_p)
+                             [grid(y_st2_p - 0.45), grid(y_st2_p + 0.45)], y_bus=y_st2_p, m1_w=0.280)
         all_ds = [x_eq_d] + lp_ds + po_ds
         c.wire("metal2", [(min(all_ds), y_st2_p), (max(all_ds), y_st2_p)], 0.320)
 
-    tie_mos_gates(c, 0.000,  inf_poeq, y_bar=grid(y_st2_p + 0.750), y_cont=y_s2_clk_p, tap_xs=[0.000])
-    tie_mos_gates(c, -cx_po, inf_po,   y_bar=grid(y_st2_p + 1.150), y_cont=y_s2_clk_p, tap_xs=[-cx_po])
-    tie_mos_gates(c, +cx_po, inf_po,   y_bar=grid(y_st2_p + 1.150), y_cont=y_s2_clk_p, tap_xs=[+cx_po])
-    for xck in (-cx_po, 0.000, +cx_po):
+    tie_mos_gates(c, 0.000,    inf_poeq, y_bar=grid(y_st2_p + 1.250), y_cont=y_s2_clk_p, tap_xs=[0.000])
+    tie_mos_gates(c, -cx_po_p, inf_po,   y_bar=grid(y_st2_p + 1.150), y_cont=y_s2_clk_p, tap_xs=[-cx_po_p])
+    tie_mos_gates(c, +cx_po_p, inf_po,   y_bar=grid(y_st2_p + 1.150), y_cont=y_s2_clk_p, tap_xs=[+cx_po_p])
+    for xck in (-cx_po_p, 0.000, +cx_po_p):
         via1_clean(c, xck, y_s2_clk_p)
         via2_clean(c, xck, y_s2_clk_p)
     via3_pad(c, 0.000, y_s2_clk_p)
-    c.wire("metal3", [(-cx_po, y_s2_clk_p), (+cx_po, y_s2_clk_p)], 0.360)
+    c.wire("metal3", [(-cx_po_p, y_s2_clk_p), (+cx_po_p, y_s2_clk_p)], 0.360)
 
     m_tail2, inf_tail2 = cache.build_mos(N_STD, 1.50, 0.18, 4, y_st2_n, False)
     m_ln,    inf_ln    = cache.build_mos(N_LVT, 2.00, 0.18, 4, y_st2_n, False)

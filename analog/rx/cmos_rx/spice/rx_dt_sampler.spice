@@ -29,7 +29,7 @@ Xp y a vdd vdd serdes_pfet w={wp} l=0.18 nf={nfp}
 
 * --- Dynamic Double-Tail Comparator with 6-Bit Pure Capacitive Offset Trim ---
 .subckt serdes_rx_dt_comp inp inn clk outp_b outn_b t5 t4 t3 t2 t1 t0 vdd vss
-+ params: win=14.0 lin=0.18 nfin=4 wtail=7.0 wpre=3.6 wcap_u=0.45 lcap_u=0.18 wtail2=6.0 wmn=4.8 wln=8.0 wlp=9.0
++ params: win=14.0 lin=0.18 nfin=4 wtail=7.0 wpre=5.1 wcap_u=0.45 lcap_u=0.18 wtail2=6.0 wmn=4.8 wln=8.0 wlp=9.0
 * Weight-scaled low-Z static trim drivers (L=0.18 um) so S/D plates stay rock-solid during 50 ps ramp
 Xt0   t0  tb0  vdd vss dt_inv_static wn=1.0  wp=2.0  nfn=1 nfp=1
 Xt1   t1  tb1  vdd vss dt_inv_static wn=1.0  wp=2.0  nfn=1 nfp=1
@@ -45,10 +45,10 @@ Xref_off vss r_off vdd vss dt_inv_static wn=16.0 wp=32.0 nfn=8 nfp=16
 Xtail tail clk vss vss serdes_nfet_lvt w={wtail} l=0.15 nf=2
 Xinp  fn inp tail vss serdes_nfet_lvt w={win} l={lin} nf={nfin}
 Xinn  fp inn tail vss serdes_nfet_lvt w={win} l={lin} nf={nfin}
-* Precharge to VDD + equalize fn/fp when clk=0 (eliminates memory/hysteresis)
-Xpf1  fn clk vdd vdd serdes_pfet w={wpre} l=0.15 nf=2
-Xpf2  fp clk vdd vdd serdes_pfet w={wpre} l=0.15 nf=2
-Xpfeq fn clk fp  vdd serdes_pfet w=1.0    l=0.18 nf=1
+* Precharge to VDD + equalize fn/fp when clk=0 (eliminates memory/hysteresis even @ SS 1.65V -40C!)
+Xpf1  fn clk vdd vdd serdes_pfet w={wpre} l=0.15 nf=3
+Xpf2  fp clk vdd vdd serdes_pfet w={wpre} l=0.15 nf=3
+Xpfeq fn clk fp  vdd serdes_pfet w=2.1    l=0.18 nf=1
 
 * --- 6-Bit Binary-Weighted MOS-Cap Offset Trim on fn (balanced by fixed 32:32 reference bank on fp) ---
 * When t_k=1 -> tb_k=0 -> fn unit in strong inversion (high C) -> fn slows down -> positive Vos!
@@ -72,10 +72,10 @@ Xln1 outp_b outn_b vbot2 vss serdes_nfet_lvt w={wln} l=0.18 nf=4
 Xln2 outn_b outp_b vbot2 vss serdes_nfet_lvt w={wln} l=0.18 nf=4
 Xlp1 outp_b outn_b vdd   vdd serdes_pfet     w={wlp} l=0.18 nf=4
 Xlp2 outn_b outp_b vdd   vdd serdes_pfet     w={wlp} l=0.18 nf=4
-* Precharge outp_b, outn_b to VDD + equalize when clk=0 (zero hysteresis)
-Xpo1  outp_b clk vdd    vdd serdes_pfet w={wpre} l=0.15 nf=2
-Xpo2  outn_b clk vdd    vdd serdes_pfet w={wpre} l=0.15 nf=2
-Xpoeq outp_b clk outn_b vdd serdes_pfet w=1.0    l=0.18 nf=1
+* Precharge outp_b, outn_b to VDD + equalize when clk=0 (zero hysteresis @ SS 1.65V -40C CPEX!)
+Xpo1  outp_b clk vdd    vdd serdes_pfet w={wpre} l=0.15 nf=3
+Xpo2  outn_b clk vdd    vdd serdes_pfet w={wpre} l=0.15 nf=3
+Xpoeq outp_b clk outn_b vdd serdes_pfet w=2.1    l=0.18 nf=1
 .ends serdes_rx_dt_comp
 
 * --- Symmetric Isolated Zero-Stacked-PMOS Static SR Latch ---
@@ -96,7 +96,7 @@ Xkn2 qn qp vss vss serdes_nfet_lvt w=1.0 l=0.15 nf=1
 
 * --- Complete 1 GHz Quarter-Rate Double-Tail Slicer (Comparator + SR Latch + 6-Bit Trim) ---
 .subckt serdes_rx_dt_slicer inp inn clk qp qn t5 t4 t3 t2 t1 t0 vdd vss
-+ params: win=14.0 lin=0.18 nfin=4 wtail=7.0 wpre=3.6 wcap_u=0.45 lcap_u=0.18 wtail2=6.0 wmn=4.8 wln=8.0 wlp=9.0
++ params: win=14.0 lin=0.18 nfin=4 wtail=7.0 wpre=5.1 wcap_u=0.45 lcap_u=0.18 wtail2=6.0 wmn=4.8 wln=8.0 wlp=9.0
 Xcomp inp inn clk outp_b outn_b t5 t4 t3 t2 t1 t0 vdd vss serdes_rx_dt_comp
 + win={win} lin={lin} nfin={nfin} wtail={wtail} wpre={wpre} wcap_u={wcap_u} lcap_u={lcap_u}
 + wtail2={wtail2} wmn={wmn} wln={wln} wlp={wlp}

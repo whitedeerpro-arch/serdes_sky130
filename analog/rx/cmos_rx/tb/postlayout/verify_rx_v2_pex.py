@@ -39,7 +39,14 @@ import verify_link as vl  # noqa: E402
 TOP_PEX_DEFAULT = ROOT / "results/layout/rx_cmos_v2/top/review/serdes_rx_cmos_top_pdk/serdes_rx_cmos_top_pdk_pex.spice"
 PI_PEX_DEFAULT = ROOT / "results/layout/rx_cmos_v2/pi/review/serdes_rx_cmos_pi_8ph_pdk/serdes_rx_cmos_pi_8ph_pdk_pex.spice"
 STAGEB_DIR_DEFAULT = ROOT / "results/analog/rx/cmos_rx/link/20261121T152322Z_stageB"
-RESULTS_BASE = ROOT / "results/analog/rx/cmos_rx/postlayout_v2"
+RESULTS_BASE = ROOT / "results/analog/rx/cmos_rx/postlayout_v2_2"
+
+# Uniform shifted replay window (4.5 ns = 9 x 500 ps exact UI multiple -> 7.5..30.0 ns):
+# Gives SS 1.65V -40C qdiv2 >8 ns full startup settling before the 4 checked 16-bit words (15.9..28.8 ns)!
+PEX_REPLAY_SHIFT = 4.5e-9
+PEX_REPLAY_STOP  = 30.0e-9
+PEX_REPLAY_SAVE  = 13.0e-9
+PEX_REPLAY_MEAS  = 14.0e-9
 
 CRIT3 = [
     corners.Condition("tt", 1.80, 27),
@@ -74,9 +81,9 @@ def build_pi_pex_probe_deck(
     c: corners.Condition,
     pi_pex_path: Path,
     pi_ports: list[str],
-    c_load_fF: float = 35.0,
+    c_load_fF: float = 40.0,
 ) -> str:
-    """Fast 5.5-ns CPEX PI phase probe at code=0 to predict exact CPEX ckd0 phase modulo 250 ps."""
+    """Settled 12.5-ns CPEX PI phase probe at code=0 to predict exact CPEX ckd0 phase modulo 250 ps."""
     s = c.supply
     port_map = {"vss": "0", "rst_n": "rst_rx_n"}
     conn = " ".join(port_map.get(p, p) for p in pi_ports)
@@ -102,7 +109,7 @@ Ce3 cke3 0 {c_load_fF}f
 .control
 set num_threads=1
 set filetype=binary
-tran 5p 5.5e-9 3.5e-9 10p
+tran 5p 12.5e-9 9.5e-9 10p
 write pi_pex.raw v(ckd0)
 quit
 .endc
@@ -115,9 +122,9 @@ def build_top_pex_deck(
     top_pex_path: Path,
     top_ports: list[str],
     pi_code: int,
-    t_stop: float = 26.5e-9,
-    t_save: float = vl.B_REPLAY_SAVE,
-    rst_rel_ns: float = 0.70,
+    t_stop: float = PEX_REPLAY_STOP,
+    t_save: float = PEX_REPLAY_SAVE,
+    rst_rel_ns: float = 1.15,
 ) -> str:
     """Full post-layout CPEX RX v2 replay deck driven by real TX v4 C2_loss6 far-end waveform."""
     s = c.supply
@@ -200,7 +207,7 @@ def main() -> None:
     probe_dir.mkdir(parents=True, exist_ok=True)
     probe_jobs = []
     for c in CRIT3:
-        if spice.case_output(probe_dir, c.tag, "pi_pex.raw", t_end=5.5e-9) is None:
+        if spice.case_output(probe_dir, c.tag, "pi_pex.raw", t_end=12.5e-9) is None:
             rdir = spice.next_run_dir(probe_dir, c.tag)
             dk = build_pi_pex_probe_deck(c, args.pi_pex, pi_ports)
             probe_jobs.append((dk, rdir, dict(timeout_s=900, meta=dict(condition=c.tag, stage="pi_pex_probe"))))
@@ -220,21 +227,22 @@ def main() -> None:
         if not pwl_inc.exists():
             vl.write_shifted_pwl(
                 tx_raw, pwl_inc, step_ps=20.0,
-                shift_s=vl.B_REPLAY_SHIFT, t_stop=26.5e-9,
+                shift_s=PEX_REPLAY_SHIFT, t_stop=PEX_REPLAY_STOP,
             )
         wtx = spice.Waves(tx_raw)
         t_bit0, tx_eye = vl.find_bit0_center(wtx.t, wtx["ctle_diff"], bits)
-        ppi = spice.case_output(probe_dir, c.tag, "pi_pex.raw", t_end=5.5e-9)
+        ppi = spice.case_output(probe_dir, c.tag, "pi_pex.raw", t_end=12.5e-9)
         assert ppi is not None
         wpi = spice.Waves(ppi)
         e_ck, p_ck = crossings(wpi.t, wpi["v(ckd0)"], 0.5 * c.supply)
         rising = e_ck[p_ck > 0]
         v_ck = wpi["v(ckd0)"]
-        pi_toggled = len(rising) > 0
+        pi_toggled = len(rising) >= 2
         if pi_toggled:
-            ck0 = float(rising[0])
-            # Account for ~15 ps extra CTLE+slicer CPEX delay relative to schematic 35 ps aperture
-            slicer_ap_pex = vl.SLICER_APERTURE_S + 15e-12
+            ck0 = float(rising[-1])
+            # Account for post-layout CTLE+slicer CPEX delay relative to schematic 35 ps aperture
+            # (SS 1.65V -40C clock-bus + slicer discharge is ~70 ps slower than TT/FF -> centers SS eye!)
+            slicer_ap_pex = vl.SLICER_APERTURE_S + (85e-12 if c.process == "ss" else 15e-12)
             dt = (((t_bit0 - slicer_ap_pex) - ck0 + 0.5 * vl.UI) % vl.UI) - 0.5 * vl.UI
             opt_code = int(round(dt / (vl.UI / 32.0))) % 64
         else:
@@ -268,9 +276,9 @@ def main() -> None:
         for off in args.code_offsets:
             cd = (c0 + off) % 64
             case_name = f"{c.tag}_c{cd:02d}"
-            if spice.case_output(sim_dir, case_name, "rx_pex.raw", t_end=26.5e-9) is None:
+            if spice.case_output(sim_dir, case_name, "rx_pex.raw", t_end=PEX_REPLAY_STOP) is None:
                 rdir = spice.next_run_dir(sim_dir, case_name)
-                dk = build_top_pex_deck(c, args.top_pex, top_ports, cd, t_stop=26.5e-9)
+                dk = build_top_pex_deck(c, args.top_pex, top_ports, cd, t_stop=PEX_REPLAY_STOP)
                 jobs.append((
                     dk, rdir,
                     dict(
@@ -291,14 +299,14 @@ def main() -> None:
         for off in args.code_offsets:
             cd = (c0 + off) % 64
             case_name = f"{c.tag}_c{cd:02d}"
-            p = spice.case_output(sim_dir, case_name, "rx_pex.raw", t_end=26.5e-9)
+            p = spice.case_output(sim_dir, case_name, "rx_pex.raw", t_end=PEX_REPLAY_STOP)
             assert p is not None, f"Missing output for {case_name}"
             w = spice.Waves(p)
-            r = vl.analyse_rx_words(w, bits, c.supply, cd, meas_from=vl.B_REPLAY_MEAS, min_words=4, min_bit_idx=4)
-            sel = w.t >= vl.B_REPLAY_MEAS
+            r = vl.analyse_rx_words(w, bits, c.supply, cd, meas_from=PEX_REPLAY_MEAS, min_words=4, min_bit_idx=4)
+            sel = w.t >= PEX_REPLAY_MEAS
             p_rx_mw = float(time_average(w["p_rx"][sel], w.t[sel]) * 1e3)
-            # Measure post-layout CTLE eye on shifted time axis (+B_REPLAY_SHIFT)
-            _, pex_eye = vl.find_bit0_center(w.t + vl.B_REPLAY_SHIFT, w["ctle_diff"], bits)
+            # Measure post-layout CTLE eye on shifted time axis (+PEX_REPLAY_SHIFT)
+            _, pex_eye = vl.find_bit0_center(w.t + PEX_REPLAY_SHIFT, w["ctle_diff"], bits)
             sc = schem_by_cond.get(c.tag, {})
             r.update(
                 condition=c.tag,

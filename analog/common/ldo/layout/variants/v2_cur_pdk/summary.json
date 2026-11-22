@@ -1,0 +1,357 @@
+{
+  "architecture": "LDO v2 Current-Mode Bias Input (i_ldo -> local 1:1 Xnb/Xnr 30/2 NMOS mirror, BIAS v2 i_ldo0 compatible)",
+  "bias_interface": "Direct 10 uA current-mode input i_ldo from serdes_bias_top_v2_pdk.i_ldo0 (vgi removed, redundant v1 Xcopy removed)",
+  "total_mim_pf": 60.0,
+  "macros": [
+    {
+      "cell": "serdes_pll_supply_hv18_v2_cur_probe_pdk",
+      "bbox_um": [
+        -6.6,
+        -64.72,
+        305.92,
+        56.72
+      ],
+      "width_um": 312.52,
+      "height_um": 121.44,
+      "area_um2": 37952.43,
+      "drc_total": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "exported_ports": [
+        "vin",
+        "host",
+        "quiet",
+        "bg",
+        "i_ldo",
+        "enable",
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "fb_return",
+        "fb_input",
+        "vss"
+      ],
+      "parasitics": {
+        "extracted_mos_segments": 682,
+        "ad_um2": 773.77,
+        "as_um2": 810.31,
+        "pd_um": 5492.68,
+        "ps_um": 5759.76,
+        "pex_cap_elements": 812,
+        "total_substrate_cap_fF": 3566.326,
+        "total_coupling_cap_fF": 1753.263,
+        "port_caps_fF": {
+          "vin": {
+            "to_substrate_fF": 132.04,
+            "coupling_sum_fF": 503.545,
+            "total_node_fF": 635.585
+          },
+          "host": {
+            "to_substrate_fF": 5.478,
+            "coupling_sum_fF": 4.132,
+            "total_node_fF": 9.61
+          },
+          "quiet": {
+            "to_substrate_fF": 448.45,
+            "coupling_sum_fF": 405.603,
+            "total_node_fF": 854.053
+          },
+          "bg": {
+            "to_substrate_fF": 1.425,
+            "coupling_sum_fF": 3.188,
+            "total_node_fF": 4.614
+          },
+          "i_ldo": {
+            "to_substrate_fF": 35.745,
+            "coupling_sum_fF": 28.714,
+            "total_node_fF": 64.458
+          },
+          "enable": {
+            "to_substrate_fF": 4.603,
+            "coupling_sum_fF": 3.16,
+            "total_node_fF": 7.763
+          },
+          "t0": {
+            "to_substrate_fF": 2.781,
+            "coupling_sum_fF": 1.25,
+            "total_node_fF": 4.032
+          },
+          "t1": {
+            "to_substrate_fF": 2.018,
+            "coupling_sum_fF": 1.875,
+            "total_node_fF": 3.893
+          },
+          "t2": {
+            "to_substrate_fF": 2.006,
+            "coupling_sum_fF": 1.889,
+            "total_node_fF": 3.895
+          },
+          "t3": {
+            "to_substrate_fF": 2.004,
+            "coupling_sum_fF": 1.89,
+            "total_node_fF": 3.894
+          },
+          "t4": {
+            "to_substrate_fF": 2.0,
+            "coupling_sum_fF": 1.894,
+            "total_node_fF": 3.894
+          },
+          "t5": {
+            "to_substrate_fF": 1.96,
+            "coupling_sum_fF": 1.945,
+            "total_node_fF": 3.905
+          },
+          "fb_return": {
+            "to_substrate_fF": 16.298,
+            "coupling_sum_fF": 39.312,
+            "total_node_fF": 55.61
+          },
+          "fb_input": {
+            "to_substrate_fF": 0.965,
+            "coupling_sum_fF": 36.452,
+            "total_node_fF": 37.417
+          }
+        },
+        "top_coupling_fF": [
+          {
+            "node_a": "a_1464_8048#",
+            "node_b": "vin",
+            "cap_fF": 171.81
+          },
+          {
+            "node_a": "a_51034_n9809#",
+            "node_b": "vin",
+            "cap_fF": 165.69
+          },
+          {
+            "node_a": "a_1464_8048#",
+            "node_b": "a_51034_n9809#",
+            "cap_fF": 163.45
+          },
+          {
+            "node_a": "a_22436_8048#",
+            "node_b": "vin",
+            "cap_fF": 123.43
+          },
+          {
+            "node_a": "a_42634_n375#",
+            "node_b": "w_42120_n8480#",
+            "cap_fF": 116.93
+          },
+          {
+            "node_a": "a_23713_n11140#",
+            "node_b": "quiet",
+            "cap_fF": 104.41
+          },
+          {
+            "node_a": "a_51034_n9809#",
+            "node_b": "quiet",
+            "cap_fF": 102.04
+          },
+          {
+            "node_a": "a_23713_n11140#",
+            "node_b": "a_51034_n9809#",
+            "cap_fF": 97.869
+          }
+        ]
+      },
+      "rcx": {
+        "threshold_mohm": 100,
+        "minres_mohm": 100,
+        "resistor_count": 6014,
+        "path": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_v2_cur/build_v1/serdes_pll_supply_hv18_v2_cur_probe_pdk/serdes_pll_supply_hv18_v2_cur_probe_pdk_rcx.spice"
+      },
+      "floating_poly": 0,
+      "is_probe": true,
+      "expected_ports": [
+        "vin",
+        "host",
+        "quiet",
+        "bg",
+        "i_ldo",
+        "enable",
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "fb_return",
+        "fb_input",
+        "vss"
+      ],
+      "ports_exact_match": true
+    },
+    {
+      "cell": "serdes_pll_supply_hv18_v2_cur_pdk",
+      "bbox_um": [
+        -6.6,
+        -64.74,
+        305.92,
+        56.72
+      ],
+      "width_um": 312.52,
+      "height_um": 121.46,
+      "area_um2": 37958.68,
+      "drc_total": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "exported_ports": [
+        "vin",
+        "host",
+        "quiet",
+        "bg",
+        "i_ldo",
+        "enable",
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "vss"
+      ],
+      "parasitics": {
+        "extracted_mos_segments": 682,
+        "ad_um2": 773.77,
+        "as_um2": 810.31,
+        "pd_um": 5492.68,
+        "ps_um": 5759.76,
+        "pex_cap_elements": 804,
+        "total_substrate_cap_fF": 3569.955,
+        "total_coupling_cap_fF": 1753.942,
+        "port_caps_fF": {
+          "vin": {
+            "to_substrate_fF": 132.04,
+            "coupling_sum_fF": 503.545,
+            "total_node_fF": 635.585
+          },
+          "host": {
+            "to_substrate_fF": 5.478,
+            "coupling_sum_fF": 4.132,
+            "total_node_fF": 9.61
+          },
+          "quiet": {
+            "to_substrate_fF": 448.41,
+            "coupling_sum_fF": 405.812,
+            "total_node_fF": 854.222
+          },
+          "bg": {
+            "to_substrate_fF": 1.425,
+            "coupling_sum_fF": 3.188,
+            "total_node_fF": 4.614
+          },
+          "i_ldo": {
+            "to_substrate_fF": 35.745,
+            "coupling_sum_fF": 28.754,
+            "total_node_fF": 64.498
+          },
+          "enable": {
+            "to_substrate_fF": 4.603,
+            "coupling_sum_fF": 3.16,
+            "total_node_fF": 7.763
+          },
+          "t0": {
+            "to_substrate_fF": 2.781,
+            "coupling_sum_fF": 1.25,
+            "total_node_fF": 4.032
+          },
+          "t1": {
+            "to_substrate_fF": 2.018,
+            "coupling_sum_fF": 1.875,
+            "total_node_fF": 3.893
+          },
+          "t2": {
+            "to_substrate_fF": 2.006,
+            "coupling_sum_fF": 1.889,
+            "total_node_fF": 3.895
+          },
+          "t3": {
+            "to_substrate_fF": 2.004,
+            "coupling_sum_fF": 1.89,
+            "total_node_fF": 3.894
+          },
+          "t4": {
+            "to_substrate_fF": 2.0,
+            "coupling_sum_fF": 1.894,
+            "total_node_fF": 3.894
+          },
+          "t5": {
+            "to_substrate_fF": 1.96,
+            "coupling_sum_fF": 1.945,
+            "total_node_fF": 3.905
+          }
+        },
+        "top_coupling_fF": [
+          {
+            "node_a": "a_1464_8048#",
+            "node_b": "vin",
+            "cap_fF": 171.81
+          },
+          {
+            "node_a": "a_51034_n9809#",
+            "node_b": "vin",
+            "cap_fF": 165.69
+          },
+          {
+            "node_a": "a_1464_8048#",
+            "node_b": "a_51034_n9809#",
+            "cap_fF": 163.45
+          },
+          {
+            "node_a": "a_22436_8048#",
+            "node_b": "vin",
+            "cap_fF": 123.43
+          },
+          {
+            "node_a": "a_42634_n375#",
+            "node_b": "w_42120_n8480#",
+            "cap_fF": 116.93
+          },
+          {
+            "node_a": "a_23713_n11140#",
+            "node_b": "quiet",
+            "cap_fF": 104.41
+          },
+          {
+            "node_a": "a_51034_n9809#",
+            "node_b": "quiet",
+            "cap_fF": 102.04
+          },
+          {
+            "node_a": "a_23713_n11140#",
+            "node_b": "a_51034_n9809#",
+            "cap_fF": 97.869
+          }
+        ]
+      },
+      "rcx": {
+        "threshold_mohm": 100,
+        "minres_mohm": 100,
+        "resistor_count": 6026,
+        "path": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_v2_cur/build_v1/serdes_pll_supply_hv18_v2_cur_pdk/serdes_pll_supply_hv18_v2_cur_pdk_rcx.spice"
+      },
+      "floating_poly": 0,
+      "is_probe": false,
+      "expected_ports": [
+        "vin",
+        "host",
+        "quiet",
+        "bg",
+        "i_ldo",
+        "enable",
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "vss"
+      ],
+      "ports_exact_match": true
+    }
+  ]
+}

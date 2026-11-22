@@ -1,0 +1,75 @@
+* LDO v2 Current-Mode Bias Input HV18 PLL Supply Macro (`v2_cur`)
+*
+* Fixes the BIAS v2 (`serdes_bias_top_v2`) vs LDO v2 (`serdes_pll_supply_hv18_v2`)
+* interface mismatch:
+*   - `serdes_bias_top_v2` keeps high-Z `vgi` strictly internal and exports 10 uA
+*     current-mode outputs `i_ldo0` / `i_ldo1` (`Xpc_ldo0/1`, 4x 8/4 `pfet_01v8_lvt`).
+*   - Legacy `serdes_pll_supply_hv18_v2` expected voltage input `vgi` and instantiated
+*     a redundant BIAS v1 `serdes_bias_pcopy n=4` (w=24/4, -25% ratio error vs v2 w=32/4).
+*   - `serdes_pll_supply_hv18_v2_cur` removes `Xcopy` and accepts `i_ldo` (10 uA)
+*     directly from `serdes_bias_top_v2.i_ldo0` into `serdes_ldo_hv18_core_v2`'s local
+*     1:1 unit-finger-matched 5 V NMOS diode mirror (`Xnb` 30/2 nf=6 -> `Xnr` 30/2 nf=6
+*     + `Xpre_sink` 9/2 nf=3 + `Xboff` 10/0.5 shutdown clamp).
+*
+* Subcircuits:
+*   serdes_pll_supply_hv18_v2_cur        : 13-port production macro
+*   serdes_pll_supply_hv18_v2_cur_probe  : 15-port stability/loop-break wrapper
+*
+* Dependencies:
+*   analog/common/devices/spice/sky130_primitives.spice
+*   analog/common/ldo/spice/ldo_v2_passives.spice
+*   analog/common/ldo/spice/ldo_hv18_core_v2.spice
+
+.subckt serdes_pll_supply_hv18_v2_cur vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 vss
+Xloop vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 fb fb vss serdes_pll_supply_hv18_v2_cur_probe
+.ends serdes_pll_supply_hv18_v2_cur
+
+.subckt serdes_pll_supply_hv18_v2_cur_probe vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 fb_return fb_input vss
+* Enable inverter and soft-start reference filter (i_ldo feeds Xcore local diode Xnb directly)
+Xinv enable off host vss serdes_cmos_inv
+Xrefgate bg ref_start enable off host vss serdes_cmos_tgate wn=2 wp=4
+Xrefres ref_start ref_local vss serdes_ldo_v2_rf1p6m
+Xrefcap ref_local vss serdes_ldo_v2_mim10p5
+Xrefreset ref_local off vss vss serdes_nfet w=2 l=0.15
+
+* HV18 LDO core (local NMOS diode Xnb 30/2 nf=6 + matched Xnr 30/2 nf=6 + Xpre_sink 9/2 nf=3 + Xboff)
+Xcore vin quiet ref_local i_ldo fb_input off vss serdes_ldo_hv18_core_v2
+
+* Head-R-calibrated 6-bit unit-matched feedback divider + lead zero Cff
+Xrtop quiet fb_return vss serdes_ldo_v2_rdiv40k
+Xcff fb_return quiet serdes_ldo_v2_mim0p75
+Xrfixed fb_return n5 vss serdes_ldo_v2_rdiv64k
+Xr5 n5 n4 vss serdes_ldo_v2_rdiv32k
+Xr4 n4 n3 vss serdes_ldo_v2_rdiv16k
+Xr3 n3 n2 vss serdes_ldo_v2_rdiv8k
+Xr2 n2 n1 vss serdes_ldo_v2_rdiv4k
+Xr1 n1 n0 vss serdes_ldo_v2_rdiv2k
+Xr0 n0 vss vss serdes_ldo_v2_rdiv1k
+Xrdum_t0 vss vss vss serdes_ldo_v2_rdiv4k
+Xrdum_t1 vss vss vss serdes_ldo_v2_rdiv4k
+Xrdum_b0 vss vss vss serdes_ldo_v2_rdiv4k
+Xrdum_b1 vss vss vss serdes_ldo_v2_rdiv4k
+Xs5 n5 t5 n4 vss serdes_nfet w=20 l=0.15
+Xs4 n4 t4 n3 vss serdes_nfet w=20 l=0.15
+Xs3 n3 t3 n2 vss serdes_nfet w=20 l=0.15
+Xs2 n2 t2 n1 vss serdes_nfet w=20 l=0.15
+Xs1 n1 t1 n0 vss serdes_nfet w=20 l=0.15
+Xs0 n0 t0 vss vss serdes_nfet w=20 l=0.15
+
+* Fast 0.15 um proportional AC-coupled active transient overshoot clamp
+Xcl_en cl_top off quiet quiet sky130_fd_pr__pfet_01v8 w=4 l=0.15 nf=2 ad=1.16 as=1.16 pd=9.16 ps=9.16
+Xcl_rref cl_top cl_nb vss serdes_ldo_v2_rf200k
+Xcl_nref cl_nb cl_nb vss vss sky130_fd_pr__nfet_01v8 w=24 l=0.15 nf=6 ad=6.96 as=6.96 pd=51.48 ps=51.48
+Xcl_rhp cl_nb v_det vss serdes_ldo_v2_rf50k
+Xcl_chp v_det quiet serdes_ldo_v2_mim2p0
+Xcl_off v_det off vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15 nf=2 ad=1.16 as=1.16 pd=9.16 ps=9.16
+Xcl_n1 v_b v_det vss vss sky130_fd_pr__nfet_01v8 w=56 l=0.15 nf=14 ad=16.24 as=16.24 pd=120.12 ps=120.12
+Xcl_r1 quiet v_b vss serdes_ldo_v2_r12k
+Xcl_p2 vg_clamp v_b quiet quiet sky130_fd_pr__pfet_01v8 w=96 l=0.15 nf=16 ad=27.84 as=27.84 pd=201.28 ps=201.28
+Xcl_r2 vg_clamp vss vss serdes_ldo_v2_r5k
+Xcl_off2 vg_clamp off vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15 nf=2 ad=1.16 as=1.16 pd=9.16 ps=9.16
+Xclamp quiet vg_clamp vss vss sky130_fd_pr__nfet_01v8 w=144 l=0.15 nf=36 ad=41.76 as=41.76 pd=308.88 ps=308.88
+
+* Local stacked output decoupling
+Xcout quiet vss serdes_ldo_v2_mim7p0
+.ends serdes_pll_supply_hv18_v2_cur_probe

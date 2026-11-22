@@ -129,6 +129,12 @@ def _place_col(
 
 def _tie_poly(c: Cell, row: RowSpec, cx: float, g_xs: list[float], is_p: bool, tap_x: float | None = None) -> None:
     ya, yb = row.y_ppoly if is_p else row.y_npoly
+    # Widen horizontal poly tie strap into channel (0.32 um on ROW_DRV, 0.24 um on ROW_SER) to slash gate series R
+    w_bar = 0.320 if row.height >= 10.0 else 0.240
+    if is_p:
+        ya = grid(yb - w_bar)
+    else:
+        yb = grid(ya + w_bar)
     y_edge = row.y_p_bot if is_p else row.y_n_top
     for gx in g_xs:
         x = grid(cx + gx)
@@ -142,38 +148,118 @@ def _tie_poly(c: Cell, row: RowSpec, cx: float, g_xs: list[float], is_p: bool, t
 
 
 def _tap_shared_gate(c: Cell, row: RowSpec, col: dict, y_trk: float, tap_dx: float) -> float:
-    """Tie N & P poly gates together and place polycont+viali at (cx + tap_dx, y_trk)."""
+    """Tie N & P poly gates via dual near-edge polyconts bridged by low-R vertical M1.
+
+    Eliminates the 2.7 um vertical poly run across the 3 um channel (~480 ohm -> ~1.5 ohm!).
+    On high-speed ROW_DRV multi-finger devices (nf >= 3), adds a second mid-column polycont + M1
+    strap strictly left of the drain vertical M1 bar to slash horizontal poly bar resistance!
+    """
     cx = col["cx"]
     xg = grid(cx + tap_dx)
     _tie_poly(c, row, cx, col["inf_n"]["g_xs"], False, tap_x=xg)
     _tie_poly(c, row, cx, col["inf_p"]["g_xs"], True, tap_x=xg)
-    c.rect("poly", grid(xg - 0.135), row.y_npoly[0], grid(xg + 0.135), row.y_ppoly[1])
-    poly_cont_pad(c, xg, y_trk)
-    viali_pad(c, xg, y_trk)
+    y_ntap = row.y_tracks[0]
+    y_ptap = row.y_tracks[4]
+    # Short vertical poly stubs from n/p tie bars to near-edge polyconts only
+    c.rect("poly", grid(xg - 0.135), row.y_npoly[0], grid(xg + 0.135), grid(y_ntap + 0.170))
+    c.rect("poly", grid(xg - 0.135), grid(y_ptap - 0.170), grid(xg + 0.135), row.y_ppoly[1])
+    poly_cont_pad(c, xg, y_ntap)
+    viali_pad(c, xg, y_ntap)
+    poly_cont_pad(c, xg, y_ptap)
+    viali_pad(c, xg, y_ptap)
+    # Low-R M1 vertical gate bridge spanning all 5 tracks (0.125 ohm/sq vs 48.2 ohm/sq poly!)
+    c.wire("metal1", [(xg, y_ntap), (xg, y_ptap)], 0.220)
+    # Multi-finger M1 gate shunting on ROW_DRV: tap middle finger strictly clear (>=0.56 um) of BOTH N and P right drain bars!
+    if row.height >= 10.0:
+        x_join_approx = grid(cx + min(max(col["inf_n"]["d_xs"]), max(col["inf_p"]["d_xs"])))
+        for is_p, y_t, g_xs in ((False, y_ntap, col["inf_n"]["g_xs"]), (True, y_ptap, col["inf_p"]["g_xs"])):
+            if len(g_xs) >= 3:
+                # Choose finger closest to center that stays >= 0.56 um left of x_join_approx and >= 0.44 um right of xg
+                cands = [grid(cx + g) for g in g_xs if grid(cx + g) <= x_join_approx - 0.560 and grid(cx + g) >= xg + 0.440]
+                if cands:
+                    xm = cands[-1]
+                    if is_p:
+                        c.rect("poly", grid(xm - 0.135), grid(y_t - 0.170), grid(xm + 0.135), row.y_ppoly[1])
+                    else:
+                        c.rect("poly", grid(xm - 0.135), row.y_npoly[0], grid(xm + 0.135), grid(y_t + 0.170))
+                    poly_cont_pad(c, xm, y_t)
+                    viali_pad(c, xm, y_t)
+                    c.wire("metal1", [(xg, y_t), (xm, y_t)], 0.220)
     return xg
 
 
 def _tap_single_gate(c: Cell, row: RowSpec, col: dict, is_p: bool, y_trk: float, tap_dx: float) -> float:
-    """Tie only N or only P poly gates and place polycont+viali at (cx + tap_dx, y_trk)."""
+    """Tie only N or only P poly gates and place polycont+viali at (cx + tap_dx, y_trk).
+
+    For high-speed driver rows (ROW_DRV), uses dual parallel polyconts + dual viali to halve contact R!
+    """
     cx = col["cx"]
     xg = grid(cx + tap_dx)
     inf = col["inf_p"] if is_p else col["inf_n"]
     _tie_poly(c, row, cx, inf["g_xs"], is_p, tap_x=xg)
     ya, yb = row.y_ppoly if is_p else row.y_npoly
-    ys = sorted((grid(y_trk), ya, yb))
-    c.rect("poly", grid(xg - 0.135), ys[0], grid(xg + 0.135), ys[-1])
-    poly_cont_pad(c, xg, y_trk)
-    viali_pad(c, xg, y_trk)
+    if row.height >= 10.0:
+        # Dual parallel polyconts spaced 0.360 um apart vertically (clear of y2 = y_trk +- 1.00 um!)
+        # Single continuous 0.18 um locali rect eliminates any li.3 notch between the two pads.
+        y_2 = grid(y_trk - 0.360 if is_p else y_trk + 0.360)
+        ys = sorted((grid(y_trk), y_2, ya, yb))
+        c.rect("poly", grid(xg - 0.135), grid(ys[0] - 0.170 if ys[0] in (grid(y_trk), y_2) else ys[0]),
+               grid(xg + 0.135), grid(ys[-1] + 0.170 if ys[-1] in (grid(y_trk), y_2) else ys[-1]))
+        poly_cont_pad(c, xg, y_trk)
+        poly_cont_pad(c, xg, y_2)
+        c.rect("locali", grid(xg - 0.090), grid(min(y_trk, y_2) - 0.170),
+               grid(xg + 0.090), grid(max(y_trk, y_2) + 0.170))
+        viali_pad(c, xg, y_trk)
+        viali_pad(c, xg, y_2)
+        c.wire("metal1", [(xg, min(y_trk, y_2)), (xg, max(y_trk, y_2))], 0.290)
+    else:
+        ys = sorted((grid(y_trk), ya, yb))
+        c.rect("poly", grid(xg - 0.135), ys[0], grid(xg + 0.135), ys[-1])
+        poly_cont_pad(c, xg, y_trk)
+        viali_pad(c, xg, y_trk)
     return xg
 
 
-def _tie_sd_to_rail(c: Cell, row: RowSpec, col: dict, is_p: bool, xs_local: list[float]) -> None:
+def _shunt_sd_bar_m1(
+    c: Cell, cx: float, xs_local: list[float], y_anchor: float, y_limit: float, toward_pos: bool,
+) -> None:
+    """Add 0.48 um-pitched viali + 0.24 um vertical M1 along wide ROW_DRV diffusion bars to slash locali/pdc R (6x)."""
+    step = 0.480 if toward_pos else -0.480
+    ys: list[float] = []
+    yy = grid(y_anchor + step)
+    while (yy <= y_limit) if toward_pos else (yy >= y_limit):
+        ys.append(grid(yy))
+        yy = grid(yy + step)
+    if not ys:
+        return
+    y_lo = grid(min(y_anchor, ys[-1]) - 0.145)
+    y_hi = grid(max(y_anchor, ys[-1]) + 0.145)
+    for lx in xs_local:
+        x = grid(cx + lx)
+        for yv in ys:
+            c.pad("viali", x, yv, 0.17)
+        c.rect("metal1", grid(x - 0.120), y_lo, grid(x + 0.120), y_hi)
+
+
+def _tie_sd_to_rail(
+    c: Cell, row: RowSpec, col: dict, is_p: bool, xs_local: list[float], shunt_m1: bool = False
+) -> None:
     cx = col["cx"]
     inf = col["inf_p"] if is_p else col["inf_n"]
     y_rail = row.y_vdd if is_p else row.y_vss
     y_end = inf["c_y2"] - 0.060 if is_p else inf["c_y1"] + 0.060
+    use_m1 = shunt_m1 and row.height >= 10.0 and inf["w_f"] >= 1.80
+    y_shunt = grid(inf["c_y2"] - 0.160) if is_p else grid(inf["c_y1"] + 0.160)
     for sx in xs_local:
-        locali_v(c, grid(cx + sx), y_rail, y_end)
+        x = grid(cx + sx)
+        locali_v(c, x, y_rail, y_end)
+        if use_m1:
+            viali_pad(c, x, y_shunt)
+            c.wire("metal1", [(x, min(y_rail, y_shunt)), (x, max(y_rail, y_shunt))], 0.220)
+    if use_m1:
+        y_opp = grid(max(inf["c_y1"] + 0.160, row.y_p_bot + 0.240)) if is_p else grid(min(inf["c_y2"] - 0.160, row.y_n_top - 0.240))
+        y_lim = grid(y_opp + 0.580) if is_p else grid(y_opp - 0.580)
+        _shunt_sd_bar_m1(c, cx, xs_local, y_shunt, y_lim, toward_pos=(not is_p))
 
 
 def _strap_sd_m1(c: Cell, cx: float, xs_local: list[float], y_bar: float, inf: dict, is_p: bool) -> float:
@@ -214,12 +300,20 @@ def _connect_col_drains_m1(c: Cell, row: RowSpec, col: dict, y_out: float, n_xs:
     for x in xn_pts:
         viali_pad(c, x, y_nb)
     if len(xn_pts) > 1 or xn_pts[0] != x_join:
-        c.wire("metal1", [(min(xn_pts + [x_join]), y_nb), (max(xn_pts + [x_join]), y_nb)], W_M1)
+        c.wire("metal1", [(min(xn_pts + [x_join]), y_nb), (max(xn_pts + [x_join]), y_nb)], 0.290)
 
     for x in xp_pts:
         viali_pad(c, x, y_pb)
     if len(xp_pts) > 1 or xp_pts[0] != x_join:
-        c.wire("metal1", [(min(xp_pts + [x_join]), y_pb), (max(xp_pts + [x_join]), y_pb)], W_M1)
+        c.wire("metal1", [(min(xp_pts + [x_join]), y_pb), (max(xp_pts + [x_join]), y_pb)], 0.290)
+
+    if row.height >= 10.0:
+        if in_n["w_f"] >= 1.80:
+            y_n_opp = grid(max(in_n["c_y1"] + 0.160, 0.720))
+            _shunt_sd_bar_m1(c, cx, n_list, y_nb, grid(y_n_opp + 0.580), toward_pos=False)
+        if in_p["w_f"] >= 1.80:
+            y_p_opp = grid(min(in_p["c_y2"] - 0.160, row.y_vdd - 0.850))
+            _shunt_sd_bar_m1(c, cx, p_list, y_pb, grid(y_p_opp - 0.580), toward_pos=True)
 
     c.wire("metal1", [(x_join, y_nb), (x_join, y_pb)], W_M1)
     return x_join
@@ -239,8 +333,8 @@ def place_inv(
     wfp, nfp = choose_fingers(wp, row.y_vdd - row.y_p_bot - 0.65, min_nf=nfp)
     col, x_next = _place_col(c, cache, row, x_edge, wfn * nfn, wfp * nfp, nfn, nfp, gap_l=gap_l)
 
-    _tie_sd_to_rail(c, row, col, False, col["inf_n"]["s_xs"])
-    _tie_sd_to_rail(c, row, col, True,  col["inf_p"]["s_xs"])
+    _tie_sd_to_rail(c, row, col, False, col["inf_n"]["s_xs"], shunt_m1=True)
+    _tie_sd_to_rail(c, row, col, True,  col["inf_p"]["s_xs"], shunt_m1=True)
 
     yg = row.y_tracks[trk_g]
     xg = _tap_shared_gate(c, row, col, yg, tap_dx=_default_gate_dx(col))
@@ -261,10 +355,10 @@ def place_nand2(
     ca, x1 = _place_col(c, cache, row, x_edge, wfn * nfn, wfp * nfp, nfn, nfp, gap_l=gap_l)
     cb, x2 = _place_col(c, cache, row, x1,     wfn * nfn, wfp * nfp, nfn, nfp, gap_l=0.680)
 
-    # Power ties: Xnb.s -> VSS, Xpa.s & Xpb.s -> VDD
-    _tie_sd_to_rail(c, row, cb, False, cb["inf_n"]["s_xs"])
-    _tie_sd_to_rail(c, row, ca, True,  ca["inf_p"]["s_xs"])
-    _tie_sd_to_rail(c, row, cb, True,  cb["inf_p"]["s_xs"])
+    # Power ties: Xnb.s -> VSS, Xpa.s & Xpb.s -> VDD (M1 shunt on parallel PMOS!)
+    _tie_sd_to_rail(c, row, cb, False, cb["inf_n"]["s_xs"], shunt_m1=False)
+    _tie_sd_to_rail(c, row, ca, True,  ca["inf_p"]["s_xs"], shunt_m1=True)
+    _tie_sd_to_rail(c, row, cb, True,  cb["inf_p"]["s_xs"], shunt_m1=True)
 
     # Series NMOS `mid`: ca.n.s_xs -> cb.n.d_xs on horizontal M1 near bottom of NMOS band
     y_mid = grid(max(ca["inf_n"]["c_y1"] + 0.140, 0.720))
@@ -302,18 +396,19 @@ def place_nor2(
     ca, x1 = _place_col(c, cache, row, x_edge, wfn * nfn, wfp * nfp, nfn, nfp, gap_l=gap_l)
     cb, x2 = _place_col(c, cache, row, x1,     wfn * nfn, wfp * nfp, nfn, nfp, gap_l=0.680)
 
-    # Power ties: Xna.s & Xnb.s -> VSS, Xpb.s -> VDD
-    _tie_sd_to_rail(c, row, ca, False, ca["inf_n"]["s_xs"])
-    _tie_sd_to_rail(c, row, cb, False, cb["inf_n"]["s_xs"])
-    _tie_sd_to_rail(c, row, cb, True,  cb["inf_p"]["s_xs"])
+    # Power ties: Xna.s & Xnb.s -> VSS (M1 shunt on wide ROW_DRV!), Xpb.s -> VDD
+    # (Xpb already has 4 parallel locali legs of 0.7 um to VDD = ~13 ohm; keep y_mid at top clear of Xpg c0..c270!)
+    _tie_sd_to_rail(c, row, ca, False, ca["inf_n"]["s_xs"], shunt_m1=True)
+    _tie_sd_to_rail(c, row, cb, False, cb["inf_n"]["s_xs"], shunt_m1=True)
+    _tie_sd_to_rail(c, row, cb, True,  cb["inf_p"]["s_xs"], shunt_m1=False)
 
-    # Series PMOS `mid`: ca.p.s_xs -> cb.p.d_xs near top of PMOS band
+    # Series PMOS `mid`: ca.p.s_xs -> cb.p.d_xs on horizontal M1 near top of PMOS band (clear of M2 c0..c270!)
     y_mid = grid(min(ca["inf_p"]["c_y2"] - 0.140, row.y_vdd - 0.850))
     _strap_sd_m1(c, ca["cx"], ca["inf_p"]["s_xs"], y_mid, ca["inf_p"], True)
     _strap_sd_m1(c, cb["cx"], cb["inf_p"]["d_xs"], y_mid, cb["inf_p"], True)
     xa_mid = grid(ca["cx"] + ca["inf_p"]["s_xs"][0])
     xb_mid = grid(cb["cx"] + cb["inf_p"]["d_xs"][-1])
-    c.wire("metal1", [(xa_mid, y_mid), (xb_mid, y_mid)], W_M1)
+    c.wire("metal1", [(xa_mid, y_mid), (xb_mid, y_mid)], 0.290)
 
     # Gates a and b
     ya, yb = row.y_tracks[trk_a], row.y_tracks[trk_b]
@@ -367,6 +462,15 @@ def place_tgate(
 
     # Terminal `b` = d_xs (strap near channel edge of NMOS & PMOS, bridge vertically at max(d_xs))
     xb_join = _connect_col_drains_m1(c, row, col, y_t2)
+
+    # On wide ROW_DRV transmission gates, add 0.48 um multi-viali vertical M1 shunts on `a` (s_xs)
+    # (`b` = d_xs is already shunted inside `_connect_col_drains_m1`!) to slash locali/pdc R by ~6x!
+    if row.height >= 10.0 and in_n["w_f"] >= 1.80:
+        y_nb_top = grid(min(in_n["c_y2"] - 0.160, row.y_n_top - 0.240))
+        _shunt_sd_bar_m1(c, cx, in_n["s_xs"], y_na, grid(y_nb_top - 0.580), toward_pos=True)
+    if row.height >= 10.0 and in_p["w_f"] >= 1.80:
+        y_pb_bot = grid(max(in_p["c_y1"] + 0.160, row.y_p_bot + 0.240))
+        _shunt_sd_bar_m1(c, cx, in_p["s_xs"], y_pa, grid(y_pb_bot + 0.580), toward_pos=False)
 
     return {
         "a": (xa_join, y_t2),
@@ -514,7 +618,7 @@ def place_dff_r(
       Xsfb qi   rst_n s2  nand2(1.2, 1.6)
       Xtg4 s2   s1    tgate(0.8, 1.6, p=clkb, pb=clki)
       Xbq1 s1   q     inv(wn*1.5, wp*1.5)
-      Xbq2 q    qb    inv(wn*1.5, wp*1.5)
+      Xbq2 qi   qb    inv(wn*1.5, wp*1.5)
     """
     y0, y1, y2, y3, y4 = row.y_tracks
 
@@ -546,7 +650,6 @@ def place_dff_r(
     c.wire("metal1", [(tg3["b"][0], y2), sq["a"]], W_M1)
     c.wire("metal1", [(sq["y_col_x"], y2), sfb["a"]], W_M1)
     c.wire("metal1", [(sfb["y_col_x"], y2), tg4["a"]], W_M1)
-    c.wire("metal1", [(bq1["y_col_x"], y2), bq2["a"]], W_M1)
 
     # B. clkb horizontal M2 bus at y1 (ci.y -> tg1.p, tg2.pb, tg3.pb, tg4.p)
     c.via1(ci["y_col_x"], y1)
@@ -599,6 +702,13 @@ def place_dff_r(
     c.via1(bq1["a"][0], y_s1)
     c.wire("metal2", [(tg3["b"][0], y_s1), (bq1["a"][0], y_s1)], 0.240)
 
+    # G2. qi -> bq2.a on M2 at y_m1 (NMOS side, 100% clear of Y_M1_HOP=6.65 & Y_M2_N2=1.95!)
+    c.wire("metal1", [(sq["y_col_x"], y_m1), (sq["y_col_x"], y2)], W_M1)
+    c.wire("metal1", [(bq2["a"][0], y_m1), (bq2["a"][0], y2)], W_M1)
+    c.via1(sq["y_col_x"], y_m1)
+    c.via1(bq2["a"][0], y_m1)
+    c.wire("metal2", [(sq["y_col_x"], y_m1), (bq2["a"][0], y_m1)], 0.240)
+
     # H. rst_n on M3 at y0: m2.b -> sfb.b (zero crossing with clkb/clki/mid!)
     c.via1(m2["b"][0], y0)
     slc.via2_clean(c, m2["b"][0], y0)
@@ -616,17 +726,19 @@ def place_dff_r(
     }, x
 
 
-def finish_cmos_row(c: Cell, row: RowSpec, x1: float, x2: float, tap_pitch: float = 12.0) -> None:
-    """Paint continuous pwell/nwell, VSS/VDD tap bars, M1 rails, and periodic well-tap vias."""
+def finish_cmos_row(c: Cell, row: RowSpec, x1: float, x2: float, tap_pitch: float = 1.6) -> None:
+    """Paint continuous pwell/nwell, VSS/VDD tap bars, wide M1 rails, and dense viali stitching."""
     x1, x2 = grid(x1), grid(x2)
     c.rect("pwell", grid(x1 - 0.220), grid(row.y_vss - 0.500), grid(x2 + 0.220), row.nwell_y1)
     c.rect("nwell", grid(x1 - 0.220), row.nwell_y1, grid(x2 + 0.220), row.nwell_y2)
     draw_tap_h(c, "psubdiff", x1, x2, row.y_vss, half_w=0.175)
     draw_tap_h(c, "nsubdiff", x1, x2, row.y_vdd, half_w=0.175)
-    c.wire("metal1", [(x1, row.y_vss), (x2, row.y_vss)], 0.440)
-    c.wire("metal1", [(x1, row.y_vdd), (x2, row.y_vdd)], 0.440)
+    w_rail = 0.540 if row.height >= 10.0 else 0.440
+    c.wire("metal1", [(x1, row.y_vss), (x2, row.y_vss)], w_rail)
+    c.wire("metal1", [(x1, row.y_vdd), (x2, row.y_vdd)], w_rail)
     span = max(1.0, x2 - x1)
-    n_taps = max(2, int(span // tap_pitch) + 1)
+    eff_pitch = min(tap_pitch, 1.6)
+    n_taps = max(2, int(span // eff_pitch) + 1)
     for i in range(n_taps + 1):
         tx = grid(x1 + 0.350 + (span - 0.700) * i / n_taps)
         viali_pad(c, tx, row.y_vss)

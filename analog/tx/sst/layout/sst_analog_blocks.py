@@ -49,8 +49,8 @@ SLICE_Y_PAD_P = -2.600
 SLICE_Y_VSS_PWR = 5.400
 SLICE_Y_VDRV = 8.150
 SLICE_Y_VSS_DRV = 11.400
-SLICE_Y_DIN_P = 14.000
-SLICE_Y_DIN_N = 15.000
+SLICE_Y_DIN_P = 13.450
+SLICE_Y_DIN_N = 15.550
 SLICE_Y_VDD_DRV = 18.800
 SLICE_Y_EN_PIN = 19.650
 
@@ -104,7 +104,7 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
     # ------------------------------------------------------------------
     draw_tap_h(c, "psubdiff", -hx, +hx, SLICE_Y_VSS_PWR, half_w=0.220)
     c.rect("metal1", -hx, grid(SLICE_Y_VSS_PWR - 0.250), +hx, grid(SLICE_Y_VSS_PWR + 0.250))
-    c.rect("metal3", -hx, grid(SLICE_Y_VSS_PWR - 0.400), +hx, grid(SLICE_Y_VSS_PWR + 0.400))
+    c.rect("metal3", -hx, grid(SLICE_Y_VSS_PWR - 0.500), +hx, grid(SLICE_Y_VSS_PWR + 0.500))
     for tx in (-3.400, 0.000, +3.400):
         viali_pad(c, tx, SLICE_Y_VSS_PWR)
         c.via1(tx, SLICE_Y_VSS_PWR)
@@ -114,6 +114,10 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
         locali_v(c, tx, 4.500, SLICE_Y_VSS_PWR)
         viali_pad(c, tx, 4.520)
         c.wire("metal1", [(tx, 4.520), (tx, SLICE_Y_VSS_PWR)], 0.340)
+    for tx in (-0.630, +0.630):
+        viali_pad(c, tx, SLICE_Y_VSS_PWR)
+        c.via1(tx, SLICE_Y_VSS_PWR)
+        via2_clean(c, tx, SLICE_Y_VSS_PWR)
 
     # Place Xpup/Xpun (3.8/0.15 nf=2 -> w_f=1.90) & Xpdp/Xpdn (2.6/0.15 nf=1 -> w_f=2.60)
     y_pwr = 7.750
@@ -170,10 +174,11 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
         c.via1(rx, ry)
         c.wire("metal2", [(rx, ry), (rx, y_sw)], 0.500)
 
-        # pulldown source (x_ds = +-0.630) straight down to Band 1 vss rail at y=5.400
+        # pulldown source (x_ds = +-0.630) straight down to Band 1 vss rail at y=5.400 (multi-viali!)
         locali_v(c, x_ds, SLICE_Y_VSS_PWR, inf_pd["c_y1"] + 0.060)
-        viali_pad(c, x_ds, 6.950)
-        c.wire("metal1", [(x_ds, SLICE_Y_VSS_PWR), (x_ds, 6.950)], 0.280)
+        for vy in (6.950, 7.750, 8.550):
+            viali_pad(c, x_ds, vy)
+        c.wire("metal1", [(x_ds, SLICE_Y_VSS_PWR), (x_ds, 8.550)], 0.280)
 
     # Power NMOS gates gp (y=9.750) and gn (y=10.350)
     y_gp, y_gn = 9.750, 10.350
@@ -230,21 +235,21 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
     c.rect("metal1", -hx, grid(SLICE_Y_VDD_DRV - 0.220), +hx, grid(SLICE_Y_VDD_DRV + 0.220))
     c.rect("metal3", -hx, grid(SLICE_Y_VDD_DRV - 0.360), +hx, grid(SLICE_Y_VDD_DRV + 0.360))
     # Keep x=0.000 free on M2 so `en` vertical M2 pin exits cleanly to top perimeter!
-    for tx in (-3.400, +3.400):
+    for tx in (-3.750, +3.750):
         viali_pad(c, tx, SLICE_Y_VDD_DRV)
         c.via1(tx, SLICE_Y_VDD_DRV)
         via2_clean(c, tx, SLICE_Y_VDD_DRV)
     viali_pad(c, 0.000, SLICE_Y_VDD_DRV)
 
-    # Build local driver MOS devices:
-    #   NAND2: N nf=2 w_f=0.65 (series), P nf=2 w_f=0.55 (parallel: mid=vdd, outer=out)
-    #   INV:   N nf=1 w_f=1.00, P nf=1 w_f=2.00
+    # Build local driver MOS devices (v4.3 strengthened PMOS for zero SS -40C crowbar):
+    #   NAND2: N nf=2 w_f=1.00 (series), P nf=2 w_f=1.20 (parallel: mid=vdd, outer=out)
+    #   INV:   N nf=1 w_f=1.10, P nf=1 w_f=2.20
     y_dn_top = 13.000
     y_dp_bot = 16.000
-    mn_nd, in_nd = cache.build_mos(N_LVT, 0.65, 0.15, 2, grid(y_dn_top - 0.325), False)
-    mp_nd, ip_nd = cache.build_mos(P_STD, 0.55, 0.15, 2, grid(y_dp_bot + 0.275), True)
-    mn_iv, in_iv = cache.build_mos(N_LVT, 1.00, 0.15, 1, grid(y_dn_top - 0.500), False)
-    mp_iv, ip_iv = cache.build_mos(P_STD, 2.00, 0.15, 1, grid(y_dp_bot + 1.000), True)
+    mn_nd, in_nd = cache.build_mos(N_LVT, 1.00, 0.15, 2, grid(y_dn_top - 0.500), False)
+    mp_nd, ip_nd = cache.build_mos(P_STD, 1.20, 0.15, 2, grid(y_dp_bot + 0.600), True)
+    mn_iv, in_iv = cache.build_mos(N_LVT, 1.10, 0.15, 1, grid(y_dn_top - 0.550), False)
+    mp_iv, ip_iv = cache.build_mos(P_STD, 2.20, 0.15, 1, grid(y_dp_bot + 1.100), True)
 
     cx_nd_l, cx_iv_l = -3.100, -1.050
     cx_iv_r, cx_nd_r = +1.050, +3.100
@@ -255,13 +260,16 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
         c.include(mn_iv, dx=cx_iv)
         c.include(mp_iv, dx=cx_iv)
 
-    # Horizontal M3 buses for din_p (y=14.000) and din_n (y=15.000) across exact slice pitch [-hx, +hx]
-    c.rect("metal3", -hx, grid(SLICE_Y_DIN_P - W_M3 / 2.0), +hx, grid(SLICE_Y_DIN_P + W_M3 / 2.0))
-    c.rect("metal3", -hx, grid(SLICE_Y_DIN_N - W_M3 / 2.0), +hx, grid(SLICE_Y_DIN_N + W_M3 / 2.0))
+    # Horizontal M3 buses for din_p (y=13.450) and din_n (y=15.550) across exact slice pitch [-hx, +hx]
+    # Widened 2.10 um pitch (1.66 um edge-to-edge gap) + 0.44 um width slashes mp<->mn Miller cap & R!
+    w_din_m3 = 0.440
+    c.rect("metal3", -hx, grid(SLICE_Y_DIN_P - w_din_m3 / 2.0), +hx, grid(SLICE_Y_DIN_P + w_din_m3 / 2.0))
+    c.rect("metal3", -hx, grid(SLICE_Y_DIN_N - w_din_m3 / 2.0), +hx, grid(SLICE_Y_DIN_N + w_din_m3 / 2.0))
 
     # Wire left half (Xgpb -> Xgp -> gp) and right half (Xgnb -> Xgn -> gn) symmetrically!
     y_g_en = 14.500
     y_g_out = 13.500
+    y_n_out_m1 = 12.500
     en_tap_xs = []
 
     for sgn, cx_nd, cx_iv, y_din, y_gate_pwr in (
@@ -274,17 +282,20 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
         gx_din = grid(cx_nd + (in_nd["g_xs"][-1] if sgn < 0 else in_nd["g_xs"][0]))
         en_tap_xs.append(gx_en)
 
-        # Continuous vertical poly connecting N and P gates for both fingers
-        for gx in (gx_din, gx_en):
-            c.rect("poly", grid(gx - 0.075), y_dn_top, grid(gx + 0.075), y_dp_bot)
-
-        # Contact din gate at y_din (M3 -> via2 -> via1 -> polycont)
-        poly_cont_pad(c, gx_din, y_din)
-        viali_pad(c, gx_din, y_din)
+        # Dual near-edge poly contacts on gx_din (y=13.450 near NMOS, y=15.550 near PMOS) bridged by M1!
+        # Eliminates the 2.3 um skinny vertical poly run (~723 ohm -> ~200 ohm)!
+        c.rect("poly", grid(gx_din - 0.075), y_dn_top, grid(gx_din + 0.075), grid(SLICE_Y_DIN_P + 0.170))
+        c.rect("poly", grid(gx_din - 0.075), grid(SLICE_Y_DIN_N - 0.170), grid(gx_din + 0.075), y_dp_bot)
+        poly_cont_pad(c, gx_din, SLICE_Y_DIN_P)
+        viali_pad(c, gx_din, SLICE_Y_DIN_P)
+        poly_cont_pad(c, gx_din, SLICE_Y_DIN_N)
+        viali_pad(c, gx_din, SLICE_Y_DIN_N)
+        c.wire("metal1", [(gx_din, SLICE_Y_DIN_P), (gx_din, SLICE_Y_DIN_N)], 0.220)
         c.via1(gx_din, y_din)
         via2_clean(c, gx_din, y_din)
 
-        # Contact en gate at y_g_en (14.500) -> lift to M2 so en crosses cleanly over NAND2 M1 drop!
+        # Continuous vertical poly on static `en` finger + contact at y_g_en (14.500)
+        c.rect("poly", grid(gx_en - 0.075), y_dn_top, grid(gx_en + 0.075), y_dp_bot)
         poly_cont_pad(c, gx_en, y_g_en)
         viali_pad(c, gx_en, y_g_en)
         c.via1(gx_en, y_g_en)
@@ -298,22 +309,25 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
         x_p_out0 = grid(cx_nd + ip_nd["s_xs"][0])
         x_p_out1 = grid(cx_nd + ip_nd["s_xs"][-1])
 
-        # NMOS source -> vss, PMOS center -> vdd
+        # NMOS source -> vss, PMOS center -> vdd (with M1 shunting on NMOS source + direct viali at VDD rail)
         locali_v(c, x_n_vss, SLICE_Y_VSS_DRV, in_nd["c_y1"] + 0.060)
+        viali_pad(c, x_n_vss, 12.300)
+        c.wire("metal1", [(x_n_vss, SLICE_Y_VSS_DRV), (x_n_vss, 12.300)], 0.220)
         locali_v(c, x_p_vdd, ip_nd["c_y2"] - 0.060, SLICE_Y_VDD_DRV)
+        viali_pad(c, x_p_vdd, SLICE_Y_VDD_DRV)
 
-        # Join PMOS outer drains above PMOS on M1 at y = 17.050, drop through open gap x_nd_drop = +-2.150!
-        y_nd_pjoin = 17.050
+        # Join PMOS outer drains above PMOS on M1 at y = 17.650, drop through open gap x_nd_drop = +-2.150!
+        y_nd_pjoin = 17.650
         for xp_o in (x_p_out0, x_p_out1):
             locali_v(c, xp_o, ip_nd["c_y2"] - 0.060, y_nd_pjoin)
             viali_pad(c, xp_o, y_nd_pjoin)
         x_nd_drop = grid(sgn * 2.150)  # strictly in the open gap between NAND2 (+-2.48) and INV (+-1.42)!
         c.wire("metal1", sorted([(x_p_out0, y_nd_pjoin), (x_p_out1, y_nd_pjoin)], key=lambda p: p[0]), W_M1)
         c.wire("metal1", sorted([(x_p_out1 if sgn < 0 else x_p_out0, y_nd_pjoin), (x_nd_drop, y_nd_pjoin)], key=lambda p: p[0]), W_M1)
-        locali_v(c, x_n_out, in_nd["c_y2"] - 0.060, y_g_out)
-        viali_pad(c, x_n_out, y_g_out)
-        c.wire("metal1", sorted([(x_n_out, y_g_out), (x_nd_drop, y_g_out)], key=lambda p: p[0]), W_M1)
-        c.wire("metal1", [(x_nd_drop, y_g_out), (x_nd_drop, y_nd_pjoin)], W_M1)
+        # Tap NMOS drain right inside NMOS diff (y=12.500, strictly below gx_din M1 at 13.45..15.55!)
+        viali_pad(c, x_n_out, y_n_out_m1)
+        c.wire("metal1", sorted([(x_n_out, y_n_out_m1), (x_nd_drop, y_n_out_m1)], key=lambda p: p[0]), W_M1)
+        c.wire("metal1", [(x_nd_drop, y_n_out_m1), (x_nd_drop, y_nd_pjoin)], W_M1)
 
         # Inverter (Xgp / Xgn): shift polycont outward by 0.32 um (clear of drain locali/M1!) with notch-free poly tie
         gx_iv = grid(cx_iv + in_iv["g_xs"][0])
@@ -325,15 +339,20 @@ def build_sst_slice_unit(cache: PdkCache, add_ports: bool = True) -> tuple[Cell,
         viali_pad(c, gx_iv_tap, y_g_out)
         c.wire("metal1", sorted([(x_nd_drop, y_g_out), (gx_iv_tap, y_g_out)], key=lambda p: p[0]), W_M1)
 
-        # INV sources (outer side toward NAND2) -> vss/vdd; INV drains (inner side toward x=0) -> gp/gn
+        # INV sources (outer side toward NAND2) -> vss/vdd with M1 shunting!
         x_iv_s = grid(cx_iv + (in_iv["s_xs"][0] if sgn < 0 else in_iv["d_xs"][0]))
         x_iv_d = grid(cx_iv + (in_iv["d_xs"][0] if sgn < 0 else in_iv["s_xs"][0]))  # +-0.830
         locali_v(c, x_iv_s, SLICE_Y_VSS_DRV, in_iv["c_y1"] + 0.060)
+        viali_pad(c, x_iv_s, 12.050)
+        c.wire("metal1", [(x_iv_s, SLICE_Y_VSS_DRV), (x_iv_s, 12.050)], 0.220)
         locali_v(c, x_iv_s, ip_iv["c_y2"] - 0.060, SLICE_Y_VDD_DRV)
+        viali_pad(c, x_iv_s, 17.650)
+        viali_pad(c, x_iv_s, SLICE_Y_VDD_DRV)
+        c.wire("metal1", [(x_iv_s, 17.650), (x_iv_s, SLICE_Y_VDD_DRV)], 0.220)
 
-        # Join INV N & P drains on locali + M1 -> via1 at y=12.500 (strictly clear of y_g_out=13.500!) -> M2 drop!
+        # Join INV N & P drains on locali + M1 -> via1 at y=12.600 (strictly clear of y_g_out=13.500!) -> M2 drop!
         locali_v(c, x_iv_d, in_iv["c_y2"] - 0.060, ip_iv["c_y1"] + 0.060)
-        y_iv_tap = 12.500
+        y_iv_tap = 12.600
         viali_pad(c, x_iv_d, y_iv_tap)
         c.via1(x_iv_d, y_iv_tap)
         x_m2_drop = grid(sgn * 1.650)
@@ -601,21 +620,28 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     #         ya = 23.905, yb5 = 24.505, a = (74.020, 23.905)
 
     # Shared continuous M3 VSS rail at yb3 = 2.900 joining mim_cd and mim_cg bottom M3 plates!
+    # Plus full-width 1.8 um M5 VSS bottom trunk (y=1.50, [0.60..2.40], >= 2.09 um clear of MIM2 M5 at 4.495!)
     yb3 = mim_cd["yb3"]  # 2.900
-    c.wire("metal3", [(mim_cd["b3_pts"][0][0], yb3), (mim_cg["b3_pts"][0][0], yb3)], 1.000)
-    for vx in (29.700, 59.990, x_vss_mid, mim_cg["b3_pts"][0][0]):
+    y_vss_m5 = 1.500
+    c.rect("metal3", 0.000, grid(yb3 - 0.500), x_east_edge, grid(yb3 + 0.500))
+    c.rect("metal5", 0.000, grid(y_vss_m5 - 1.200), x_east_edge, grid(y_vss_m5 + 1.200))
+    for vx in (10.000, 18.000, 26.000, 34.000, 46.000, 59.990, x_vss_mid, 74.000, 82.000):
         c.wire("metal3", [(vx, y_vss_bot), (vx, yb3)], 0.800)
         via2_clean(c, vx, y_vss_bot)
+    # Distributed via34_pillars along M4/M5-free bottom corridor (y=1.50: M5 top=2.80 -> 1.695 um clear of MIM2 M5 4.495!)
+    # Rightmost pillar at x=80.0 (M5 right=82.4) keeps >= 3.4 um clearance to driver's x_vss_m5_w=87.0 pillar!
+    for px in (10.000, 26.000, 46.000, x_vss_mid, 80.000):
+        via34_pillar(c, px, y_vss_m5, big=False)
 
     # Shared central M5+M3 VSS pillar at (x_vss_mid=63.0, y_pil=48.0) in the M4/M5-free corridor:
-    #   - Joins mim_cd M5 (yb5=87.80) and mim_cg M5 (yb5=24.505) on one straight M5 spine at x=63.0!
-    #   - Ties M5 <-> M3 via ONE via34_pillar(63.0, 48.0), running straight South on M3 to yb3=2.90!
+    #   - Joins mim_cd M5 (yb5=87.80) and mim_cg M5 (yb5=24.505) on one straight M5 spine (stops above mim_cg C2!).
+    #   - Ties M5 <-> M3 via via34_pillar(63.0, 48.0) + (63.0, 1.50), running straight South on heavy 1.4 um M3!
     y_pil = 48.000
     c.wire("metal5", [(mim_cd["b5_pts"][-1][0], mim_cd["yb5"]), (x_vss_mid, mim_cd["yb5"])], 1.600)
     c.wire("metal5", [(x_vss_mid, mim_cg["yb5"]), (x_vss_mid, mim_cd["yb5"])], 1.600)
     c.wire("metal5", [(x_vss_mid, mim_cg["yb5"]), (mim_cg["b5_pts"][0][0], mim_cg["yb5"])], 1.600)
     via34_pillar(c, x_vss_mid, y_pil, big=False)
-    c.wire("metal3", [(x_vss_mid, y_vss_bot), (x_vss_mid, y_pil)], 0.800)
+    c.wire("metal3", [(x_vss_mid, y_vss_bot), (x_vss_mid, y_pil)], 1.400)
 
     # ------------------------------------------------------------------
     # Zone 3: East-Middle — MIM-Free Analog 5T PMOS-Input OTA + Bias
@@ -748,7 +774,7 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     c.wire("metal3", [(x_vg_m3, y_vg_hop), (x_vg_m3, u_pass["G"][1])], 0.400)
     via2_clean(c, x_vg_m3, u_pass["G"][1])
 
-    # Heavy M2/M3/M4 VDD rail over Xpass.D (y_vdd_t = 85.400) -> East VDD spine & East perimeter!
+    # Heavy M2/M3/M4/M5 VDD rail over Xpass.D (y_vdd_t = 85.400) -> East VDD spine & East perimeter!
     c.wire("metal2", [(u_pass["D"][0], y_vdd_t), (x_vdd_e, y_vdd_t)], 1.000)
     c.wire("metal3", [(u_pass["D"][0], y_vdd_t), (x_vdd_e, y_vdd_t)], 1.200)
     for vx in (67.0, 69.5, 72.0, 74.5, 77.0, 79.5, 81.5, x_vdd_e):
@@ -757,6 +783,9 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     via3_array(c, 71.0, y_vdd_t, nx=4, ny=2)
     via3_array(c, 77.5, y_vdd_t, nx=4, ny=2)
     c.rect("metal4", 66.300, grid(y_vdd_t - 0.800), x_east_edge, grid(y_vdd_t + 0.800))
+    via4_array(c, 71.0, y_vdd_t, nx=2, ny=1)
+    via4_array(c, 78.0, y_vdd_t, nx=2, ny=1)
+    c.rect("metal5", 67.500, grid(y_vdd_t - 1.200), x_east_edge, grid(y_vdd_t + 1.200))
 
     # Heavy M2/M3/M4/M5 VDRV trunk over Xpass.S (y_vdrv_t = 74.750):
     #   Joins: Xpass.S, mim_cd["a"] (ya=87.10), OTA fb gates (y_g_fb=51.80), r_bld.R1, East port!
@@ -781,9 +810,9 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     c.wire("metal2", [r_bld["R1"], (x_fb_sense, y_bld)], 0.360)
     via2_clean(c, x_fb_sense, y_bld)
 
-    # M5 low-R reinforcement over East vdrv exit (strictly >= 15 um clear of x_vss_mid=63.0 M5!)
+    # M5 low-R reinforcement over East vdrv exit (width 2.40 flush with driver M5 -> 0 met5.2 notches!)
     via4_array(c, 81.500, y_vdrv_t, nx=2, ny=1)
-    c.rect("metal5", 79.000, grid(y_vdrv_t - 1.100), x_east_edge, grid(y_vdrv_t + 1.100))
+    c.rect("metal5", 79.000, grid(y_vdrv_t - 1.200), x_east_edge, grid(y_vdrv_t + 1.200))
 
     # Export `vbg` cleanly West at flush x = 0.000, y = 89.200 (above r_bias top 87.90)
     y_vbg = 89.200
@@ -793,15 +822,16 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     if add_ports:
         # Exact schematic port order: vbg vdrv vdd vss
         c.port("vbg",  "metal2", 0.000,       y_vbg)
-        c.port("vdrv", "metal4", x_east_port, y_vdrv_t)
-        c.port("vdd",  "metal4", x_east_port, y_vdd_t)
-        c.port("vss",  "metal2", x_east_port, y_vss_bot)
+        c.port("vdrv", "metal5", x_east_port, y_vdrv_t)
+        c.port("vdd",  "metal5", x_east_port, y_vdd_t)
+        c.port("vss",  "metal5", x_east_port, y_vss_m5)
 
     return c, {
         "vbg":  (0.000,       y_vbg),
         "vdrv": (x_east_port, y_vdrv_t),
         "vdd":  (x_east_port, y_vdd_t),
         "vss":  (x_east_port, y_vss_bot),
+        "y_vss_m5": y_vss_m5,
         "x_east_edge": x_east_edge,
     }
 

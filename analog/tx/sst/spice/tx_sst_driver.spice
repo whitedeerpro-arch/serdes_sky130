@@ -36,76 +36,93 @@ X2 an ap vdd vss sst_inv wn={wn} wp={wp}
 
 * --- 4-Phase 1 GHz Clock Buffer + Symmetric 25%-Duty (250 ps) Pulse Generator ---
 * Input: phi0, phi90, phi180, phi270 (1 GHz, 50% duty, 0/90/180/270 deg).
-* Output: p0..p3 (active-high 250 ps pulses), pb0..pb3 (active-low 250 ps pulses).
-* Slot 0 [0..250ps]:   phi0=1, phi90=0, phi180=0, phi270=1 -> p0=NOR2(c90,c180), pb0=NAND2(c0,c270)
-* Slot 1 [250..500ps]: phi0=1, phi90=1, phi180=0, phi270=0 -> p1=NOR2(c180,c270), pb1=NAND2(c90,c0)
-* Slot 2 [500..750ps]: phi0=0, phi90=1, phi180=1, phi270=0 -> p2=NOR2(c270,c0), pb2=NAND2(c180,c90)
-* Slot 3 [750..1000ps]:phi0=0, phi90=0, phi180=1, phi270=1 -> p3=NOR2(c0,c90), pb3=NAND2(c270,c180)
-.subckt sst_pulsegen_4ph phi0 phi90 phi180 phi270 p0 p1 p2 p3 pb0 pb1 pb2 pb3 vdd vss
+* Output: p0..p3 (active-high 250 ps pulses; v4.3 pure static CMOS MUX eliminates pb0..pb3!).
+* Slot 0 [0..250ps]:   phi0=1, phi90=0, phi180=0, phi270=1 -> p0=NOR2(c90,c180)
+* Slot 1 [250..500ps]: phi0=1, phi90=1, phi180=0, phi270=0 -> p1=NOR2(c180,c270)
+* Slot 2 [500..750ps]: phi0=0, phi90=1, phi180=1, phi270=0 -> p2=NOR2(c270,c0)
+* Slot 3 [750..1000ps]:phi0=0, phi90=0, phi180=1, phi270=1 -> p3=NOR2(c0,c90)
+.subckt sst_pulsegen_4ph phi0 phi90 phi180 phi270 p0 p1 p2 p3 vdd vss
 * Stage 1: input sharpening inverters + cross-coupled complementary alignment
-Xi0  phi0   b0   vdd vss sst_inv wn=2.5 wp=5.0 nfn=1 nfp=2
-Xi90 phi90  b90  vdd vss sst_inv wn=2.5 wp=5.0 nfn=1 nfp=2
-Xi18 phi180 b180 vdd vss sst_inv wn=2.5 wp=5.0 nfn=1 nfp=2
-Xi27 phi270 b270 vdd vss sst_inv wn=2.5 wp=5.0 nfn=1 nfp=2
+Xi0  phi0   b0   vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xi90 phi90  b90  vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xi18 phi180 b180 vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xi27 phi270 b270 vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
 Xcc1a b0  b180 vdd vss sst_cc_align wn=0.6 wp=1.2
 Xcc1b b90 b270 vdd vss sst_cc_align wn=0.6 wp=1.2
 * Stage 2: restore polarity & drive pulse gates
-Xj0  b0   c0   vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=4
-Xj90 b90  c90  vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=4
-Xj18 b180 c180 vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=4
-Xj27 b270 c270 vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=4
+Xj0  b0   c0   vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xj90 b90  c90  vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xj18 b180 c180 vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xj27 b270 c270 vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
 Xcc2a c0  c180 vdd vss sst_cc_align wn=0.8 wp=1.6
 Xcc2b c90 c270 vdd vss sst_cc_align wn=0.8 wp=1.6
-* Stage 3: 1-gate-delay 25%-duty pulse generators (strong PMOS NOR2 for crisp SS -40C pulses)
-Xp0  c90  c180 p0  vdd vss sst_nor2  wn=2.8 wp=12.0 nfn=2 nfp=4
-Xp1  c180 c270 p1  vdd vss sst_nor2  wn=2.8 wp=12.0 nfn=2 nfp=4
-Xp2  c270 c0   p2  vdd vss sst_nor2  wn=2.8 wp=12.0 nfn=2 nfp=4
-Xp3  c0   c90  p3  vdd vss sst_nor2  wn=2.8 wp=12.0 nfn=2 nfp=4
-Xpb0 c0   c270 pb0 vdd vss sst_nand2 wn=6.0 wp=5.0  nfn=2 nfp=2
-Xpb1 c90  c0   pb1 vdd vss sst_nand2 wn=6.0 wp=5.0  nfn=2 nfp=2
-Xpb2 c180 c90  pb2 vdd vss sst_nand2 wn=6.0 wp=5.0  nfn=2 nfp=2
-Xpb3 c270 c180 pb3 vdd vss sst_nand2 wn=6.0 wp=5.0  nfn=2 nfp=2
-* Weak cross-coupled edge alignment between p_k and pb_k
-Xccp0 p0 pb0 vdd vss sst_cc_align wn=0.7 wp=1.4
-Xccp1 p1 pb1 vdd vss sst_cc_align wn=0.7 wp=1.4
-Xccp2 p2 pb2 vdd vss sst_cc_align wn=0.7 wp=1.4
-Xccp3 p3 pb3 vdd vss sst_cc_align wn=0.7 wp=1.4
+* Stage 3: 1-gate-delay 25%-duty active-HIGH pulse generators (wn=1.90 balances SS -40C RCX & SS +85C CPEX!)
+Xp0  c90  c180 p0  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+Xp1  c180 c270 p1  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+Xp2  c270 c0   p2  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+Xp3  c0   c90  p3  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
 .ends sst_pulsegen_4ph
 
-* --- Differential Quarter-Rate 4:1 MUX + Zero-Stacked-PMOS Pre-Driver ---
-* Stiff 1 GHz buffers drive the 4 transmission gates onto shared differential nodes
-* (mux_p, mux_n), followed by 2 fast 4 Gb/s stages (NAND2 + INV, zero stacked PMOS!).
-* en=0 forces out_p=out_n=0 with zero static crowbar (saves dynamic power when FFE=0).
-.subckt sst_mux4_predrv d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 pb0 pb1 pb2 pb3 en out_p out_n vdd vss
+* --- Differential Quarter-Rate Pure Static CMOS 4:1 MUX + 3-Stage Tapered Pre-Driver (v4.3) ---
+* NAND2(p_k, db_k) -> swapped NAND2(e/o) -> swapped NOR2(e, o) -> Xmb INV -> Xmp2 INV (FO<=2.8 everywhere!).
+* Positive leg takes db0..db3 and inverts 5x -> out_p = d_k; Negative leg takes d0..d3 -> out_n = db_k.
+.subckt sst_mux4_predrv d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 out_p out_n vdd vss
 + params: scale=1.0
-* Stiff 1 GHz data drivers: db_k -> inv -> s_kp = d_k; d_k -> inv -> s_kn = ~d_k
-Xbp0 db0 s0p vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbp1 db1 s1p vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbp2 db2 s2p vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbp3 db3 s3p vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbn0 d0  s0n vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbn1 d1  s1n vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbn2 d2  s2n vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-Xbn3 d3  s3n vdd vss sst_inv wn={2.4*scale} wp={4.8*scale} nfn=1 nfp=2
-* 4:1 Transmission-gate MUX (positive leg: mux_p = d_k; negative leg: mux_n = ~d_k)
-Xtp0 s0p mux_p p0 pb0 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtp1 s1p mux_p p1 pb1 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtp2 s2p mux_p p2 pb2 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtp3 s3p mux_p p3 pb3 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtn0 s0n mux_n p0 pb0 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtn1 s1n mux_n p1 pb1 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtn2 s2n mux_n p2 pb2 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-Xtn3 s3n mux_n p3 pb3 vdd vss sst_tgate wn={2.4*scale} wp={4.0*scale} nfn=1 nfp=2
-* Tiny cross-coupled keeper on mux_p/mux_n (always differential -> zero crowbar, zero floating nodes)
-Xccm mux_p mux_n vdd vss sst_cc_align wn={max(0.45,0.45*scale)} wp={max(0.9,0.9*scale)}
-* Stage 1 (4 Gb/s): NAND2 enable-gated inverting pre-driver (parallel PMOS, fast LVT NMOS!)
-* When en=1: pre1_p=~d_k, pre1_n=d_k; when en=0: pre1_p=pre1_n=1 (zero crowbar, zero downstream toggle)
-Xp1p mux_p en pre1_p vdd vss sst_nand2 wn={5.2*scale} wp={4.6*scale} nfn=2 nfp=2
-Xp1n mux_n en pre1_n vdd vss sst_nand2 wn={5.2*scale} wp={4.6*scale} nfn=2 nfp=2
-* Stage 2 (4 Gb/s): output pre-driver (when en=1: out_p=d_k, out_n=~d_k; when en=0: out_p=out_n=0)
-Xp2p pre1_p out_p vdd vss sst_inv wn={5.5*scale} wp={11.0*scale} nfn=2 nfp=4
-Xp2n pre1_n out_n vdd vss sst_inv wn={5.5*scale} wp={11.0*scale} nfn=2 nfp=4
+* Positive leg (out_p = d_k via 5 inversions of db_k)
+Xg0p p0 db0 g0p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg1p p1 db1 g1p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg2p p2 db2 g2p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg3p p3 db3 g3p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xepa g0p g2p ep vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xepb g2p g0p ep vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xopa g1p g3p op vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xopb g3p g1p op vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xmp1a ep op pre1p vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmp1b op ep pre1p vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmbp pre1p midp  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=2 nfp=4
+Xmp2 midp  out_p vdd vss sst_inv   wn={10.0*scale} wp={26.1*scale} nfn=4 nfp=9
+* Negative leg (out_n = db_k via 5 inversions of d_k)
+Xg0n p0 d0 g0n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg1n p1 d1 g1n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg2n p2 d2 g2n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg3n p3 d3 g3n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xena g0n g2n en_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xenb g2n g0n en_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xona g1n g3n on_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xonb g3n g1n on_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xmn1a en_ on_ pre1n vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmn1b on_ en_ pre1n vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmbn pre1n midn  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=2 nfp=4
+Xmn2 midn  out_n vdd vss sst_inv   wn={10.0*scale} wp={26.1*scale} nfn=4 nfp=9
 .ends sst_mux4_predrv
+
+* --- Enable-Gated Post-Cursor FFE Static CMOS 4:1 MUX + Pre-Driver (5-stage delay-matched; en=0 -> out_p=out_n=0) ---
+.subckt sst_mux4_predrv_en d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 en out_p out_n vdd vss
++ params: scale=0.35
+Xenb en enb vdd vss sst_inv wn=1.0 wp=2.0 nfn=1 nfp=1
+* Positive leg (out_p = ~midp & en = d_k & en)
+Xg0p p0 db0 g0p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg1p p1 db1 g1p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg2p p2 db2 g2p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg3p p3 db3 g3p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xep  g0p g2p ep vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xop  g1p g3p op vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xmp1a ep op pre1p vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmp1b op ep pre1p vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmbp pre1p midp  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=1 nfp=2
+Xmp2 midp  enb out_p vdd vss sst_nor2 wn={7.6*scale} wp={30.0*scale} nfn=1 nfp=4
+* Negative leg (out_n = ~midn & en = db_k & en)
+Xg0n p0 d0 g0n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg1n p1 d1 g1n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg2n p2 d2 g2n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg3n p3 d3 g3n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xen  g0n g2n en_ vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xon  g1n g3n on_ vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xmn1a en_ on_ pre1n vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmn1b on_ en_ pre1n vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmbn pre1n midn  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=1 nfp=2
+Xmn2 midn  enb out_n vdd vss sst_nor2 wn={7.6*scale} wp={30.0*scale} nfn=1 nfp=4
+.ends sst_mux4_predrv_en
 
 * --- N-over-N Differential SST Unit Slice (nominal 800 ohm per side @ TT) ---
 * Both pull-up (to vdrv ~ 0.44 V) and pull-down (to vss = 0 V) are LVT NMOS driven by
@@ -116,10 +133,11 @@ Xp2n pre1_n out_n vdd vss sst_inv wn={5.5*scale} wp={11.0*scale} nfn=2 nfp=4
 .subckt sst_slice_unit din_p din_n en pad_p pad_n vdrv vdd vss
 + params: wpu=3.8 wpd=2.6 lres=3.75
 * Local enable-gated drivers: when en=1, gp=din_p, gn=din_n; when en=0, gp=gn=0 (Hi-Z)
-Xgpb din_p en gpb vdd vss sst_nand2 wn=0.65 wp=0.55 nfn=1 nfp=1
-Xgnb din_n en gnb vdd vss sst_nand2 wn=0.65 wp=0.55 nfn=1 nfp=1
-Xgp  gpb   gp vdd vss sst_inv wn=1.0 wp=2.0 nfn=1 nfp=1
-Xgn  gnb   gn vdd vss sst_inv wn=1.0 wp=2.0 nfn=1 nfp=1
+* v4.3: strengthened PMOS on Xgpb/Xgnb (1.0/1.2) + Xgp/Xgn (1.1/2.2) eliminates SS -40C post-layout crowbar!
+Xgpb din_p en gpb vdd vss sst_nand2 wn=1.00 wp=1.20 nfn=1 nfp=1
+Xgnb din_n en gnb vdd vss sst_nand2 wn=1.00 wp=1.20 nfn=1 nfp=1
+Xgp  gpb   gp vdd vss sst_inv wn=1.10 wp=2.20 nfn=1 nfp=1
+Xgn  gnb   gn vdd vss sst_inv wn=1.10 wp=2.20 nfn=1 nfp=1
 * Positive leg (pad_p)
 Xpup vdrv gp swp vss serdes_nfet_lvt w={wpu} l=0.15 nf=2
 Xpdp swp  gn vss vss serdes_nfet_lvt w={wpd} l=0.15 nf=1
@@ -201,12 +219,12 @@ Xcd5b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
 + params: wpu=3.8 wpd=2.6 lres=3.75 ltop=63.0 lbot=37.0
 * On-chip V_drv sub-regulator
 Xldo vbg vdrv vdd vss sst_vdrv_ldo ltop={ltop} lbot={lbot}
-* Shared 4-phase 25%-duty pulse generator (1 GHz clocks only!)
-Xpg phi0 phi90 phi180 phi270 p0 p1 p2 p3 pb0 pb1 pb2 pb3 vdd vss sst_pulsegen_4ph
-* Main-cursor 4:1 MUX + pre-driver (always enabled when TX active; scale=1.0 drives 23x 1.2u slices, FO=1.7)
-Xmux_m d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 pb0 pb1 pb2 pb3 vdd mp mn vdd vss sst_mux4_predrv scale=1.0
-* Post-cursor 4:1 MUX + pre-driver (rotated by 1 phase and inverted: db3, db0, db1, db2; scale=0.45 drives 5 slices)
-Xmux_f db3 db0 db1 db2 d3 d0 d1 d2 p0 p1 p2 p3 pb0 pb1 pb2 pb3 ffe_en fp fn vdd vss sst_mux4_predrv scale=0.45
+* Shared 4-phase 25%-duty active-HIGH pulse generator (1 GHz clocks only; zero pb0..pb3!)
+Xpg phi0 phi90 phi180 phi270 p0 p1 p2 p3 vdd vss sst_pulsegen_4ph
+* Main-cursor pure static CMOS 4:1 MUX + pre-driver (scale=1.0 drives 23x 1.2u slices)
+Xmux_m d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 mp mn vdd vss sst_mux4_predrv scale=1.0
+* Post-cursor FFE pure static CMOS 4:1 MUX + pre-driver (rotated by 1 phase and inverted; scale=0.35 drives 5 slices)
+Xmux_f db3 db0 db1 db2 d3 d0 d1 d2 p0 p1 p2 p3 ffe_en fp fn vdd vss sst_mux4_predrv_en scale=0.35
 * Main SST slice banks (1 + 2 + 4 + 8 + 8 = 23 unit slices, active-HIGH enables)
 Xm_1x  mp mn m0 pad_p pad_n vdrv vdd vss sst_slice_unit wpu={wpu} wpd={wpd} lres={lres}
 Xm_2x  mp mn m1 pad_p pad_n vdrv vdd vss sst_bank_2x    wpu={wpu} wpd={wpd} lres={lres}

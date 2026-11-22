@@ -83,18 +83,24 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
         c.rect("metal3", x_west_port, grid(yp - 0.220), grid(xp + 0.220), grid(yp + 0.220))
         phi_ports[nm] = (x_west_port, yp)
 
-    # 3. Join `vss` (`Xser` West M3 spine -> vertical M2 at x=0.600 flush with x=0.000 -> `Xldo` y_vss_bot=1.20 M2)
-    #    Crosses underneath `phi0..phi270` M3 cleanly; export `vss` at West perimeter (0.000, 1.20).
-    x_vss_w = grid(dx_ser + ser_meta["x_vss_w"])   # 0.600 (width 1.20 -> exact flush West edge 0.000!)
+    # 3. Join `vss` (`Xser` West M5 & M3 spine -> flush West M5 x=0.90 [0.0..1.8] + M2 -> `Xldo` y_vss_m5=1.50!)
+    #    Crosses cleanly above/below `phi0..phi270` M3; export `vss` on M5 at West perimeter (0.000, 1.50)!
+    x_vss_w = grid(dx_ser + ser_meta["x_vss_w"])       # 0.600
+    x_vss_m5_w = grid(dx_ser + ser_meta["x_vss_m5_w"]) # 0.900 (width 1.80 -> exact flush West edge 0.000!)
     y_ser_vss_hi = grid(dy_ser + ser_meta["vss_ys"][-1])
-    y_ldo_vss = drv_meta["ports"]["vss"][2]        # 1.200 on M2
-    c.wire("metal2", [(x_vss_w, y_ser_vss_hi), (x_vss_w, y_ldo_vss)], 1.200)
+    y_ldo_vss_m5 = drv_meta["y_vss_m5_bot"]            # 1.500 on M5
+    c.wire("metal2", [(x_vss_w, y_ser_vss_hi), (x_vss_w, 1.200)], 1.200)
+    c.wire("metal5", [(x_vss_m5_w, y_ser_vss_hi), (x_vss_m5_w, y_ldo_vss_m5)], 1.800)
+    # Widen bottom M5 VSS trunk across Xldo & Xdrv (y=[-4.8..2.7] = 7.5 um, >=2.0 um clear of Xser top VDD M5)
+    # so TOP_RCX Vdrv ref lift stays < 2.5 mV across full 232.5 um span!
+    c.rect("metal5", 0.000, -4.800, 222.400, 2.700)
 
-    # 4. Join `vdd` (`Xser` East M3 spine -> M2 north into empty East corridor y=-4.0 -> West to x_drv_vdd_e -> north to y_drv_r1_vdd)
-    #    Uses pure M2 in the empty East corridor (never re-enters Xser M3 ChC and stays clear of all East enable M3 routes)!
+    # 4. Join `vdd` (`Xser` East M5 spine -> straight North into `Xdrv` East M5 spine x=229.4! + M2 backup)
     x_ser_vdd = grid(dx_ser + ser_meta["x_vdd_e"])
+    x_ser_vdd_m5 = grid(dx_ser + ser_meta["x_vdd_m5_e"])
     y_ser_vdd_hi = grid(dy_ser + ser_meta["vdd_ys"][-1])
     x_drv_vdd_e = drv_meta["x_vdd_e"]
+    x_drv_vdd_m5_e = drv_meta["x_vdd_m5_e"]
     y_drv_r1_vdd = drv_meta.get("y_r1_vdd", drv_meta["y_r2_vdd"])
     y_vdd_jog = -4.000
     for vy_off in (-0.600, -1.200):
@@ -105,6 +111,7 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
         (x_drv_vdd_e, y_vdd_jog),
         (x_drv_vdd_e, y_drv_r1_vdd),
     ], 1.400)
+    c.wire("metal5", [(x_ser_vdd_m5, y_ser_vdd_hi), (x_drv_vdd_m5_e, -0.500)], 2.000)
 
     # 5. `vbg` already exits cleanly at (0.000, 89.200); extend `vdd`/`vdrv` North flush to y_north_port!
     _, x_vbg, y_vbg = drv_meta["ports"]["vbg"]
@@ -112,10 +119,11 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
         c.rect("metal2", x_west_port, grid(y_vbg - 0.220), grid(x_vbg + 0.220), grid(y_vbg + 0.220))
 
     y_north = drv_meta["y_north_port"]
-    y_north_edge = grid(y_north + 0.220)  # Flush with m3/m2/f2 & vbg North edge (89.420)!
+    y_north_edge = grid(y_north + 0.220)
     x_vdd_sp = drv_meta["x_vdd_sp"]
     x_vdrv_sp = drv_meta["x_vdrv_sp"]
     c.rect("metal4", grid(x_vdd_sp - 0.800), drv_meta["y_vdd_t"], grid(x_vdd_sp + 0.800), y_north_edge)
+    c.rect("metal5", grid(x_vdd_sp - 1.000), drv_meta["y_vdd_t"], grid(x_vdd_sp + 1.000), y_north_edge)
     c.rect("metal4", grid(x_vdrv_sp - 1.000), drv_meta["y_vdrv_t"], grid(x_vdrv_sp + 1.000), y_north_edge)
 
     # 6. Export exact 38 perimeter ports in exact `serdes_tx_sst_top` schematic order!
@@ -132,8 +140,8 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
         port_locs[nm] = drv_meta["ports"][nm]
     port_locs["vbg"] = ("metal2", x_west_port, y_vbg)
     port_locs["vdrv"] = ("metal4", x_vdrv_sp, y_north)
-    port_locs["vdd"] = ("metal4", x_vdd_sp, y_north)
-    port_locs["vss"] = ("metal2", x_west_port, y_ldo_vss)
+    port_locs["vdd"] = ("metal5", x_vdd_sp, y_north)
+    port_locs["vss"] = ("metal5", x_west_port, y_ldo_vss_m5)
 
     if add_ports:
         order = (

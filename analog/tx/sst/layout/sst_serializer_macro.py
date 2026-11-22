@@ -35,6 +35,8 @@ from sst_layout_common import (  # noqa: E402
     grid,
     via2_clean,
     via3_pad,
+    via3_array,
+    via4_array,
 )
 import sst_cmos_cells as scc  # noqa: E402
 
@@ -149,34 +151,34 @@ def _build_lane_row(
             add(qb_n, u["qb"])
 
     x = 0.0
-    # Stage 0: 4x 250 MHz input capture DFFs (wn=0.8, wp=1.6)
+    # Stage 0: 4x 250 MHz input capture DFFs (Xr0..Xr2 on clk250b, Xr3 on clk250 -> exact natural r0,r1,r2,r3 order!)
     r_dffs: list[dict] = []
     for k in range(4):
         u, x = scc.place_dff_r(c, cache, row, x, wn=0.8, wp=1.6, gap_l=0.900)
-        wire_dff_ctrl(u, "clk250", d_in_global=dins[k])
+        wire_dff_ctrl(u, ("clk250" if k == 3 else "clk250b"), d_in_global=dins[k])
         r_dffs.append(u)
 
-    # Stage 1 interleaved as (Xma, Xda, Xmb, Xdb) for direct M1 abutment on ma & mb!
+    # Stage 1 interleaved as (Xma, Xda, Xmb, Xdb) with staggered 500 MHz clocks (Xda=clk500, Xdb=clk500b)!
     u_ma, x = scc.place_mux2(c, cache, row, x, wn=0.9, wp=1.8, gap_l=1.360)
-    add("clk250", u_ma["sel"], "metal2")
-    add("clk250b", u_ma["sel_b"], "metal2")
+    add("clk250b", u_ma["sel"], "metal2")
+    add("clk250", u_ma["sel_b"], "metal2")
 
-    u_da, x = scc.place_dff_r(c, cache, row, x, wn=1.0, wp=2.0, gap_l=0.900)
-    wire_dff_ctrl(u_da, "clk500b")
+    u_da, x = scc.place_dff_r(c, cache, row, x, wn=1.2, wp=2.4, gap_l=0.900)
+    wire_dff_ctrl(u_da, "clk500")
 
     u_mb, x = scc.place_mux2(c, cache, row, x, wn=0.9, wp=1.8, gap_l=1.360)
-    add("clk250", u_mb["sel"], "metal2")
-    add("clk250b", u_mb["sel_b"], "metal2")
+    add("clk250b", u_mb["sel"], "metal2")
+    add("clk250", u_mb["sel_b"], "metal2")
 
-    u_db, x = scc.place_dff_r(c, cache, row, x, wn=1.0, wp=2.0, gap_l=0.900)
+    u_db, x = scc.place_dff_r(c, cache, row, x, wn=1.2, wp=2.4, gap_l=0.900)
     wire_dff_ctrl(u_db, "clk500b")
 
-    # Stage 2: 2:1 MUX (Xmc, wn=1.2, wp=2.4) + 1 GHz DFF (Xd1g, wn=1.4, wp=2.8)
-    u_mc, x = scc.place_mux2(c, cache, row, x, wn=1.2, wp=2.4, gap_l=1.360)
+    # Stage 2: 2:1 MUX (Xmc, wn=1.5, wp=3.0) + 1 GHz DFF (Xd1g, wn=1.5, wp=3.0)
+    u_mc, x = scc.place_mux2(c, cache, row, x, wn=1.5, wp=3.0, gap_l=1.360)
     add("clk500", u_mc["sel"], "metal2")
     add("clk500b", u_mc["sel_b"], "metal2")
 
-    u_d1g, x = scc.place_dff_r(c, cache, row, x, wn=1.4, wp=2.8, gap_l=0.900)
+    u_d1g, x = scc.place_dff_r(c, cache, row, x, wn=1.5, wp=3.0, gap_l=0.900)
     wire_dff_ctrl(u_d1g, "c0")
 
     # Stage 3: 4-Phase Stagger Retimer DFF(s) with direct M1 abutment from Xd1g -> Xst*
@@ -199,10 +201,10 @@ def _build_lane_row(
     _local_m2_nmos_strap(c, r_dffs[2]["q"][0], u_ma["a"][0], Y_M2_N2, src_y1=2.510, dst_y1=2.050)
     # r0: Xr0.q -> Xma.b on PMOS M2 P1 (Xma.tb.a already spans y=1.98..7.42)
     _local_m2_pmos_strap(c, r_dffs[0]["q"][0], u_ma["b"][0], Y_M2_P1, src_y0=5.990, dst_y0=None)
-    # r1: Xr1.q -> Xmb.b on PMOS M2 P2 (wide 0.300 M1 stub bridges cleanly to Xmb.tb.a viali_pad at 7.33 -> 0 notch!)
-    _local_m2_pmos_strap(c, r_dffs[1]["q"][0], u_mb["b"][0], Y_M2_P2, src_y0=5.990, dst_y0=7.330, dst_w=0.300)
-    # r3: Xr3.q -> Xmb.a on PMOS M2 P3 (extend Xmb.ta.a M1 from 7.33 to 8.18)
-    _local_m2_pmos_strap(c, r_dffs[3]["q"][0], u_mb["a"][0], Y_M2_P3, src_y0=5.990, dst_y0=7.330)
+    # r1: Xr1.q -> Xmb.a on PMOS M2 P2 (wide 0.300 M1 stub bridges cleanly to Xmb.ta.a viali_pad at 7.33 -> 0 notch!)
+    _local_m2_pmos_strap(c, r_dffs[1]["q"][0], u_mb["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=7.330, dst_w=0.300)
+    # r3: Xr3.q -> Xmb.b on PMOS M2 P3 (extend Xmb.tb.a M1 from 7.33 to 8.18)
+    _local_m2_pmos_strap(c, r_dffs[3]["q"][0], u_mb["b"][0], Y_M2_P3, src_y0=5.990, dst_y0=7.330)
     # da: Xda.q -> Xmc.a on PMOS M2 P1 (strictly east of r0 end; Xmc.ta.a spans 1.68..8.02)
     _local_m2_pmos_strap(c, u_da["q"][0], u_mc["a"][0], Y_M2_P1, src_y0=5.990, dst_y0=None)
     # db: Xdb.q -> Xmc.b on PMOS M2 P2 (P2=7.68 pad top=7.84 overlaps Xmc.tb.a viali_pad 7.785..8.075 -> 0 notch!)
@@ -232,52 +234,51 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
     y2 = row.y_tracks[2]
 
     # ------------------------------------------------------------------
-    # 1. Left Group (x ~ 52..86): /4 divider Xdiv250 + Xb250a/b + Xo250
+    # 1. Left Group (x ~ 48..86): /4 divider Xdiv250 + parallel Xb250a/b + Xo250
     # ------------------------------------------------------------------
-    x = 52.000
+    x = 48.000
     u250, x = scc.place_dff_r(c, cache, row, x, wn=1.5, wp=3.0, gap_l=0.900)
     add("rst_n", u250["rst_n"], "metal3")
-    # Self-feedback clk250b_i (u250.qb -> u250.d) on NMOS M2 Y_M2_N2 (u250.d already reaches y=1.38!)
-    _local_m2_nmos_strap(c, u250["qb"][0], u250["d"][0], Y_M2_N2, src_y1=2.510, dst_y1=None)
-
-    ua250, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.000, trk_g=2)
-    ub250, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=0.900, trk_g=2)
+    ua250, x = scc.place_inv(c, cache, row, x, 4.0, 8.0, 2, 3, gap_l=1.000, trk_g=2)
+    ub250, x = scc.place_inv(c, cache, row, x, 3.0, 6.0, 2, 2, gap_l=0.900, trk_g=2)
     uo250, x = scc.place_inv(c, cache, row, x, 1.5, 3.0, 1, 2, gap_l=1.000, trk_g=2)
+    # Self-feedback + parallel Xb250b input: clk250b_i (u250.qb -> u250.d AND -> ub250.a) on NMOS M2 Y_M2_N2!
+    _local_m2_nmos_strap(c, u250["qb"][0], u250["d"][0], Y_M2_N2, src_y1=2.510, dst_y1=None)
+    c.wire("metal1", [(ub250["a"][0], Y_M2_N2), (ub250["a"][0], y2)], slc.W_M1)
+    c.via1(ub250["a"][0], Y_M2_N2)
+    c.wire("metal2", [(u250["qb"][0], Y_M2_N2), (ub250["a"][0], Y_M2_N2)], 0.240)
     # clk250_i: u250.q -> ua250.a on direct pure M1 at y=6.65!
     c.wire("metal1", [(u250["q"][0], 5.990), (u250["q"][0], Y_M1_HOP), (ua250["a"][0], Y_M1_HOP), ua250["a"]], slc.W_M1)
-    # clk250b: ua250.y -> ub250.a (direct M1 at y2) + ua250.y -> uo250.a (local PMOS M2 P2)
-    c.wire("metal1", [(ua250["y_col_x"], y2), ub250["a"]], slc.W_M1)
+    # clk250b: ua250.y -> uo250.a (local PMOS M2 P2)
     _local_m2_pmos_strap(c, ua250["y_col_x"], uo250["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=y2)
     add("clk250b",    ua250["y"])
     add("clk250",     ub250["y"])
     add("clk250_out", uo250["y"])
 
     # ------------------------------------------------------------------
-    # 2. Center Group (x ~ 91.8..114.8): 4-phase clock buffers Xc0..Xc27b
-    #    Directly beneath shifted Driver South ports phi0..phi270 (local 92.8..104.8)!
+    # 2. Center Group (x ~ 89.5..118.5): 4-phase clock buffers Xc0..Xc27b (v4.3 strengthened!)
     # ------------------------------------------------------------------
-    x = 91.800
+    x = 89.500
     clk_specs = [
-        ("phi0",   "c0",   2.0, 4.0, 3.5, 7.0),
-        ("phi90",  "c90",  1.5, 3.0, 2.5, 5.0),
-        ("phi180", "c180", 1.5, 3.0, 2.5, 5.0),
-        ("phi270", "c270", 1.5, 3.0, 2.5, 5.0),
+        ("phi0",   "c0",   2.4, 4.8, 4.4, 8.8, 2, 2, 2, 3),
+        ("phi90",  "c90",  2.0, 4.0, 3.6, 7.2, 1, 2, 2, 3),
+        ("phi180", "c180", 2.0, 4.0, 3.6, 7.2, 1, 2, 2, 3),
+        ("phi270", "c270", 2.0, 4.0, 3.6, 7.2, 1, 2, 2, 3),
     ]
-    for pin_in, pin_out, wn1, wp1, wn2, wp2 in clk_specs:
-        u1, x = scc.place_inv(c, cache, row, x, wn1, wp1, 1, 2, gap_l=1.100, trk_g=2)
-        u2, x = scc.place_inv(c, cache, row, x, wn2, wp2, 2, 3, gap_l=0.800, trk_g=2)
+    for pin_in, pin_out, wn1, wp1, wn2, wp2, nfn1, nfp1, nfn2, nfp2 in clk_specs:
+        u1, x = scc.place_inv(c, cache, row, x, wn1, wp1, nfn1, nfp1, gap_l=1.100, trk_g=2)
+        u2, x = scc.place_inv(c, cache, row, x, wn2, wp2, nfn2, nfp2, gap_l=0.800, trk_g=2)
         c.wire("metal1", [(u1["y_col_x"], y2), u2["a"]], slc.W_M1)
         add(pin_in,  u1["a"])
         add(pin_out, u2["y"])
 
     # ------------------------------------------------------------------
-    # 3. Right-Center Group (x ~ 117.0..150.0): Xb500a/b + Xo500 + /2 divider Xdiv500
+    # 3. Right-Center Group (x ~ 121.0..158.0): parallel Xb500a/b + Xo500 + /2 divider Xdiv500
     # ------------------------------------------------------------------
-    x = 117.000
-    ua500, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=1.000, trk_g=2)
-    ub500, x = scc.place_inv(c, cache, row, x, 2.5, 5.0, 2, 2, gap_l=0.900, trk_g=2)
+    x = grid(max(x + 2.000, 121.000))
+    ua500, x = scc.place_inv(c, cache, row, x, 4.0, 8.0, 2, 3, gap_l=1.000, trk_g=2)
+    ub500, x = scc.place_inv(c, cache, row, x, 4.0, 8.0, 2, 3, gap_l=0.900, trk_g=2)
     uo500, x = scc.place_inv(c, cache, row, x, 1.5, 3.0, 1, 2, gap_l=1.000, trk_g=2)
-    c.wire("metal1", [(ua500["y_col_x"], y2), ub500["a"]], slc.W_M1)
     _local_m2_pmos_strap(c, ua500["y_col_x"], uo500["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=y2)
     add("clk500b",    ua500["y"])
     add("clk500",     ub500["y"])
@@ -286,8 +287,11 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
     u500, x = scc.place_dff_r(c, cache, row, x, wn=1.5, wp=3.0, gap_l=1.100)
     add("c0",    u500["clk"])
     add("rst_n", u500["rst_n"], "metal3")
-    # Self-feedback clk500b_i (u500.qb -> u500.d) on NMOS M2 Y_M2_N2 (u500.d already reaches y=1.38!)
+    # Self-feedback + parallel Xb500b input: clk500b_i (u500.qb -> u500.d AND -> ub500.a) on NMOS M2 Y_M2_N2!
     _local_m2_nmos_strap(c, u500["qb"][0], u500["d"][0], Y_M2_N2, src_y1=2.510, dst_y1=None)
+    c.wire("metal1", [(ub500["a"][0], Y_M2_N2), (ub500["a"][0], y2)], slc.W_M1)
+    c.via1(ub500["a"][0], Y_M2_N2)
+    c.wire("metal2", [(ub500["a"][0], Y_M2_N2), (u500["d"][0], Y_M2_N2)], 0.240)
 
     # clk500_i: u500.q -> ua500.a -> u250.clk on single continuous local PMOS M2 P1 strap!
     x_q500 = u500["q"][0]
@@ -318,23 +322,23 @@ def build_sst_serializer16(
     row = scc.ROW_SER
     H = row.height  # 9.500
 
-    # Build 5 rows
+    # Build 5 rows (v4.3: 500 ps stagger lead c180/c270/c0/c90 -> >=200 ps setup at SS -40C RCX!)
     r0_c, r0_n, r0_w = _build_lane_row(
         cache, 0, ("din0", "din4", "din8", "din12"),
-        [("c270", "l0", 1.5, 3.0, "d0", "db0")],
+        [("c180", "l0", 1.5, 3.0, "d0", "db0")],
     )
     r1_c, r1_n, r1_w = _build_lane_row(
         cache, 1, ("din1", "din5", "din9", "din13"),
-        [("c0", "l1", 1.5, 3.0, "d1", "db1")],
+        [("c270", "l1", 1.5, 3.0, "d1", "db1")],
     )
     r2_c, r2_n, r2_w = _build_clk_div_row(cache)
     r3_c, r3_n, r3_w = _build_lane_row(
         cache, 2, ("din2", "din6", "din10", "din14"),
-        [("c180", "l2", 1.2, 2.4, "l2h", None), ("c90", "l2h", 1.5, 3.0, "d2", "db2")],
+        [("c180", "l2", 1.5, 3.0, "l2h", None), ("c0", "l2h", 1.5, 3.0, "d2", "db2")],
     )
     r4_c, r4_n, r4_w = _build_lane_row(
         cache, 3, ("din3", "din7", "din11", "din15"),
-        [("c180", "l3", 1.2, 2.4, "l3h", None), ("c180", "l3h", 1.5, 3.0, "d3", "db3")],
+        [("c180", "l3", 1.5, 3.0, "l3h", None), ("c90", "l3h", 1.5, 3.0, "d3", "db3")],
     )
 
     # Stagger the 4 lane rows by 1.20 um (> 0.96 um M4 pitch) so identical-column pins never collide on M4!
@@ -343,7 +347,7 @@ def build_sst_serializer16(
     x_row_l = -1.000
     x_row_r = x_max_w
     for rc, rdx in zip((r0_c, r1_c, r2_c, r3_c, r4_c), row_dxs):
-        scc.finish_cmos_row(rc, row, grid(x_row_l - rdx), grid(x_row_r - rdx), tap_pitch=12.0)
+        scc.finish_cmos_row(rc, row, grid(x_row_l - rdx), grid(x_row_r - rdx), tap_pitch=1.6)
 
     # Compact 5-row abutted mirrored placement (shared VDD/VSS rails, ChA = ChB = 0.0 um!):
     #   Row 0 (normal):  VSS=0.00,  VDD=9.50
@@ -372,23 +376,56 @@ def build_sst_serializer16(
         for net, pts in mapped.items():
             all_nets.setdefault(net, []).extend(pts)
 
-    # Power rail vertical straps: VSS West at x=-3.60 (clear of rst_n M4 at x=-1.90), VDD East!
+    # Power rail straps: parallel 0.48 um M2 atop ALL 6 M1 rails + West VSS & East VDD M3/M4/M5 spines!
     x_vss_w = grid(x_row_l - 2.600)
-    x_rst_w = grid(x_row_l - 0.900)
+    x_vss_m5_w = -3.300            # width 1.80 -> [-4.20..-2.40] (flush x=0.000 in top at dx=+4.20!)
+    x_rst_w = grid(x_row_l - 0.500) # -1.500 -> 0.53 um M4 gap to x_vss_m5_w via4 M4 (-2.25)!
     x_vdd_e = grid(x_row_r + 1.400)
+    x_vdd_m5_e = 225.200           # width 2.00 -> [224.2..226.2] (aligns with driver x_vdd_m5_e=229.4 in top!)
     vss_ys = [y_r0, y_r1, y_r3_vss]
     vdd_ys = [grid(y_r0 + H), grid(y_r2 + H), y_top]
+    # Parallel M2 over-straps on every M1 power rail (0.48 um wide -> >=0.19 um clear of y_s1 M2!)
+    for yv in vss_ys + vdd_ys:
+        c.wire("metal2", [(x_row_l, yv), (x_row_r, yv)], 0.480)
+        n_v1 = max(2, int((x_row_r - x_row_l) // 4.0) + 1)
+        for i in range(n_v1 + 1):
+            c.via1(grid(x_row_l + 0.400 + (x_row_r - x_row_l - 0.800) * i / n_v1), yv)
+
     for yv in vss_ys:
         c.wire("metal1", [(x_vss_w, yv), (x_row_l, yv)], 0.560)
+        c.wire("metal2", [(x_vss_w, yv), (x_row_l, yv)], 0.560)
         c.via1(x_vss_w, yv)
         via2_clean(c, x_vss_w, yv)
+        via3_array(c, x_vss_w, yv, nx=2, ny=2)
+        c.wire("metal4", [(x_vss_w, yv), (x_vss_m5_w, yv)], 1.400)
+        via4_array(c, x_vss_m5_w, yv, nx=1, ny=1)
+        c.wire("metal5", [(x_vss_m5_w, yv), (220.000, yv)], 1.800)
     c.wire("metal3", [(x_vss_w, vss_ys[0]), (x_vss_w, vss_ys[-1])], 1.200)
+    c.wire("metal5", [(x_vss_m5_w, vss_ys[0]), (x_vss_m5_w, vss_ys[-1])], 1.800)
 
     for yv in vdd_ys:
         c.wire("metal1", [(x_row_r, yv), (x_vdd_e, yv)], 0.560)
+        c.wire("metal2", [(x_row_r, yv), (x_vdd_e, yv)], 0.560)
         c.via1(x_vdd_e, yv)
         via2_clean(c, x_vdd_e, yv)
+        via3_array(c, x_vdd_e, yv, nx=2, ny=2)
+        c.wire("metal4", [(x_vdd_e, yv), (x_vdd_m5_e, yv)], 1.400)
+        via4_array(c, x_vdd_m5_e, yv, nx=1, ny=1)
+        c.wire("metal5", [(1.000, yv), (x_vdd_m5_e, yv)], 1.800)
     c.wire("metal3", [(x_vdd_e, vdd_ys[0]), (x_vdd_e, vdd_ys[-1])], 1.200)
+    c.wire("metal5", [(x_vdd_m5_e, vdd_ys[0]), (x_vdd_m5_e, vdd_ys[-1])], 2.000)
+
+    # Distributed mid-rail M5-to-M2 stitch pillars across all 6 power rails (slashes serializer vdd/vss RCX R 10x!)
+    ser_pwr_pillars: list[tuple[float, float]] = []
+    ser_pillar_xs = (37.700, 83.300, 141.500, 186.600, 210.800)
+    for yv in vss_ys + vdd_ys:
+        for xp in ser_pillar_xs:
+            if xp <= x_row_r - 1.500:
+                via4_array(c, xp, yv, nx=1, ny=1)
+                via3_array(c, xp, yv, nx=2, ny=1)
+                for dxv in (-0.300, +0.300):
+                    via2_clean(c, grid(xp + dxv), yv)
+                ser_pwr_pillars.append((xp, yv))
 
     # Collinear horizontal M3 `rst_n` buses across each row, joined on M4 at x_rst_w
     rst_pts = all_nets.pop("rst_n", [])
@@ -413,6 +450,12 @@ def build_sst_serializer16(
         if (7.5 <= yt <= 11.4) or (19.2 <= yt <= 21.4) or (25.1 <= yt <= 30.8) or (45.5 <= yt <= 48.6)
     }
     router = ManhattanRouter(m3_tracks, m4_min_pitch=0.960, preferred_tracks=pref_tracks)
+    for xp, yp in ser_pwr_pillars:
+        for yt in m3_tracks:
+            if abs(yt - yp) <= 0.900:
+                router.reserve_m3_span(yt, grid(xp - 1.100), grid(xp + 1.100), "__ser_pwr__")
+        for dx_r in (-0.800, 0.000, +0.800):
+            router.reserve_m4_seg(grid(xp + dx_r), grid(yp - 1.100), grid(yp + 1.100), "__ser_pwr__")
     for ry in rst_ys:
         router.reserve_m3_span(ry, x_rst_w - 0.5, x_row_r + 0.5, "rst_n")
     router.reserve_m4_seg(x_rst_w, y_south_port, max(rst_ys), "rst_n")
@@ -489,8 +532,8 @@ def build_sst_serializer16(
         port_locs[pnm] = ("metal4", px, py)
     for pnm, (px, py) in north_ports.items():
         port_locs[pnm] = ("metal4", px, py)
-    port_locs["vdd"] = ("metal3", x_vdd_e, vdd_ys[-1])
-    port_locs["vss"] = ("metal3", x_vss_w, vss_ys[0])
+    port_locs["vdd"] = ("metal5", x_vdd_m5_e, vdd_ys[-1])
+    port_locs["vss"] = ("metal5", x_vss_m5_w, vss_ys[0])
 
     if add_ports:
         order = (
@@ -508,7 +551,9 @@ def build_sst_serializer16(
         "north_ports": north_ports,
         "south_ports": south_ports,
         "x_vss_w": x_vss_w,
+        "x_vss_m5_w": x_vss_m5_w,
         "x_vdd_e": x_vdd_e,
+        "x_vdd_m5_e": x_vdd_m5_e,
         "y_north_port": y_north_port,
         "y_south_port": y_south_port,
         "vss_ys": vss_ys,

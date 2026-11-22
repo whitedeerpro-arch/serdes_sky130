@@ -31,28 +31,28 @@ Xtg3 m2 s1 clki clkb vdd vss sst_tgate wn={wn} wp={wp} nfn=1 nfp=1
 Xsq  s1 qi vdd vss sst_inv wn={wn*1.2} wp={wp*1.2}
 Xsfb qi rst_n s2 vdd vss sst_nand2 wn=1.2 wp=1.6 nfn=1 nfp=1
 Xtg4 s2 s1 clkb clki vdd vss sst_tgate wn=0.8 wp=1.6 nfn=1 nfp=1
-* Clean output buffers (matched q / qb)
+* Clean output buffers (parallel q = ~s1, qb = ~qi for zero q->qb skew!)
 Xbq1 s1 q  vdd vss sst_inv wn={wn*1.5} wp={wp*1.5}
-Xbq2 q  qb vdd vss sst_inv wn={wn*1.5} wp={wp*1.5}
+Xbq2 qi qb vdd vss sst_inv wn={wn*1.5} wp={wp*1.5}
 .ends sst_dff_r
 
 * --- Single 4:1 Lane Serializer (250 MHz -> 500 MHz -> 1 GHz) ---
 * Serializes (x0, x1, x2, x3) captured on clk250 rising -> l_out at 1 GHz on phi0 rising:
 * chronological order x0, x1, x2, x3.
 .subckt sst_lane_ser4 x0 x1 x2 x3 clk250 clk250b clk500 clk500b clk1g rst_n l_out vdd vss
-* Stage 0: 250 MHz input word capture (4 DFFs, small size -> ultra-low power)
-Xr0 x0 clk250 rst_n r0 r0b vdd vss sst_dff_r wn=0.8 wp=1.6
-Xr1 x1 clk250 rst_n r1 r1b vdd vss sst_dff_r wn=0.8 wp=1.6
-Xr2 x2 clk250 rst_n r2 r2b vdd vss sst_dff_r wn=0.8 wp=1.6
-Xr3 x3 clk250 rst_n r3 r3b vdd vss sst_dff_r wn=0.8 wp=1.6
-* Stage 1: 4:2 MUX (sel=clk250: 1 -> r0/r1, 0 -> r2/r3) + 500 MHz register on clk500b rising
-Xma r2 r0 clk250 clk250b ma vdd vss sst_mux2 wn=0.9 wp=1.8
-Xmb r3 r1 clk250 clk250b mb vdd vss sst_mux2 wn=0.9 wp=1.8
-Xda ma clk500b rst_n da dab vdd vss sst_dff_r wn=1.0 wp=2.0
-Xdb mb clk500b rst_n db dbb vdd vss sst_dff_r wn=1.0 wp=2.0
+* Stage 0: 250 MHz input word capture (Xr0..Xr2 on clk250b rising @ ~1.2ns, Xr3 on clk250 rising @ ~3.2ns -> natural r0,r1,r2,r3 order!)
+Xr0 x0 clk250b rst_n r0 r0b vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr1 x1 clk250b rst_n r1 r1b vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr2 x2 clk250b rst_n r2 r2b vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr3 x3 clk250  rst_n r3 r3b vdd vss sst_dff_r wn=0.8 wp=1.6
+* Stage 1: 4:2 MUX + half-cycle staggered 500 MHz registers (Xda on clk500 rising, Xdb on clk500b rising -> +1.0 ns setup to Xd1g!)
+Xma r2 r0 clk250b clk250 ma vdd vss sst_mux2 wn=0.9 wp=1.8
+Xmb r1 r3 clk250b clk250 mb vdd vss sst_mux2 wn=0.9 wp=1.8
+Xda ma clk500  rst_n da dab vdd vss sst_dff_r wn=1.2 wp=2.4
+Xdb mb clk500b rst_n db dbb vdd vss sst_dff_r wn=1.2 wp=2.4
 * Stage 2: 2:1 MUX (sel=clk500: 0 -> da, 1 -> db) + 1 GHz register on phi0 rising
-Xmc da db clk500 clk500b mc vdd vss sst_mux2 wn=1.2 wp=2.4
-Xd1g mc clk1g rst_n l_out l_outb vdd vss sst_dff_r wn=1.4 wp=2.8
+Xmc da db clk500 clk500b mc vdd vss sst_mux2 wn=1.5 wp=3.0
+Xd1g mc clk1g rst_n l_out l_outb vdd vss sst_dff_r wn=1.5 wp=3.0
 .ends sst_lane_ser4
 
 * --- Complete 16:4 Pure Static CMOS Serializer + Divider + 4-Phase Stagger Retimer ---
@@ -68,24 +68,24 @@ Xd1g mc clk1g rst_n l_out l_outb vdd vss sst_dff_r wn=1.4 wp=2.8
 + clk500_out clk250_out
 + vdd vss
 
-* Local clock buffers for serializer (keeps heavy serializer fanout off high-speed driver clocks)
-Xc0   phi0   c0b   vdd vss sst_inv wn=2.0 wp=4.0
-Xc0b  c0b    c0    vdd vss sst_inv wn=3.5 wp=7.0
-Xc90  phi90  c90b  vdd vss sst_inv wn=1.5 wp=3.0
-Xc90b c90b   c90   vdd vss sst_inv wn=2.5 wp=5.0
-Xc18  phi180 c18b  vdd vss sst_inv wn=1.5 wp=3.0
-Xc18b c18b   c180  vdd vss sst_inv wn=2.5 wp=5.0
-Xc27  phi270 c27b  vdd vss sst_inv wn=1.5 wp=3.0
-Xc27b c27b   c270  vdd vss sst_inv wn=2.5 wp=5.0
+* Local clock buffers for serializer (v4.3 strengthened to minimize SS -40C RCX clock insertion delay)
+Xc0   phi0   c0b   vdd vss sst_inv wn=2.4 wp=4.8
+Xc0b  c0b    c0    vdd vss sst_inv wn=4.4 wp=8.8
+Xc90  phi90  c90b  vdd vss sst_inv wn=2.0 wp=4.0
+Xc90b c90b   c90   vdd vss sst_inv wn=3.6 wp=7.2
+Xc18  phi180 c18b  vdd vss sst_inv wn=2.0 wp=4.0
+Xc18b c18b   c180  vdd vss sst_inv wn=3.6 wp=7.2
+Xc27  phi270 c27b  vdd vss sst_inv wn=2.0 wp=4.0
+Xc27b c27b   c270  vdd vss sst_inv wn=3.6 wp=7.2
 
 * Static CMOS /2 and /4 dividers (c0 1 GHz -> clk500 500 MHz -> clk250 250 MHz)
 Xdiv500 clk500b_i c0        rst_n clk500_i clk500b_i vdd vss sst_dff_r wn=1.5 wp=3.0
 Xdiv250 clk250b_i clk500_i  rst_n clk250_i clk250b_i vdd vss sst_dff_r wn=1.5 wp=3.0
-* Buffered internal distribution clocks
-Xb500a clk500_i  clk500b vdd vss sst_inv wn=2.5 wp=5.0
-Xb500b clk500b   clk500  vdd vss sst_inv wn=2.5 wp=5.0
-Xb250a clk250_i  clk250b vdd vss sst_inv wn=2.5 wp=5.0
-Xb250b clk250b   clk250  vdd vss sst_inv wn=2.5 wp=5.0
+* Parallel 1-stage complementary internal distribution buffers (eliminates serial Xb500a->Xb500b delay!)
+Xb500a clk500_i  clk500b vdd vss sst_inv wn=4.0 wp=8.0
+Xb500b clk500b_i clk500  vdd vss sst_inv wn=4.0 wp=8.0
+Xb250a clk250_i  clk250b vdd vss sst_inv wn=4.0 wp=8.0
+Xb250b clk250b_i clk250  vdd vss sst_inv wn=3.0 wp=6.0
 * Export divider clocks
 Xo500 clk500b clk500_out vdd vss sst_inv wn=1.5 wp=3.0
 Xo250 clk250b clk250_out vdd vss sst_inv wn=1.5 wp=3.0
@@ -96,15 +96,16 @@ Xlane1 din1 din5 din9  din13 clk250 clk250b clk500 clk500b c0 rst_n l1 vdd vss s
 Xlane2 din2 din6 din10 din14 clk250 clk250b clk500 clk500b c0 rst_n l2 vdd vss sst_lane_ser4
 Xlane3 din3 din7 din11 din15 clk250 clk250b clk500 clk500b c0 rst_n l3 vdd vss sst_lane_ser4
 
-* 4-Phase Stagger Retimer (>= 500 ps setup margin, >= 100 ps hold margin on every path!):
-*   Lane 0 -> phi270 rising -> d0/db0 (valid for Slot 0 Main & Slot 1 Post)
-*   Lane 1 -> phi0   rising -> d1/db1 (valid for Slot 1 Main & Slot 2 Post)
-*   Lane 2 -> phi180 half-step -> phi90  rising -> d2/db2 (valid for Slot 2 Main & Slot 3 Post)
-*   Lane 3 -> phi180 half-step -> phi180 rising -> d3/db3 (valid for Slot 3 Main & Slot 0 Post)
-Xst0  l0   c270 rst_n d0   db0  vdd vss sst_dff_r wn=1.5 wp=3.0
-Xst1  l1   c0   rst_n d1   db1  vdd vss sst_dff_r wn=1.5 wp=3.0
-Xst2a l2   c180 rst_n l2h  l2hb vdd vss sst_dff_r wn=1.2 wp=2.4
-Xst2b l2h  c90  rst_n d2   db2  vdd vss sst_dff_r wn=1.5 wp=3.0
-Xst3a l3   c180 rst_n l3h  l3hb vdd vss sst_dff_r wn=1.2 wp=2.4
-Xst3b l3h  c180 rst_n d3   db3  vdd vss sst_dff_r wn=1.5 wp=3.0
+* 4-Phase Stagger Retimer (v4.3: 500 ps phase lead before Main Slot k -> >=200 ps setup at SS -40C RCX
+* AND >=70 ps Post-1 FFE hold at FF 1.95V -40C, preserving exact natural din0..din15 bit order!):
+*   Lane 0 -> phi180 rising (500ps)  -> d0/db0 (valid for Slot 0 Main [1000..1250] & Slot 1 Post [1250..1500])
+*   Lane 1 -> phi270 rising (750ps)  -> d1/db1 (valid for Slot 1 Main [1250..1500] & Slot 2 Post [1500..1750])
+*   Lane 2 -> phi180 half-step -> phi0  rising (1000ps) -> d2/db2 (valid for Slot 2 Main & Slot 3 Post)
+*   Lane 3 -> phi180 half-step -> phi90 rising (1250ps) -> d3/db3 (valid for Slot 3 Main & Slot 0 Post)
+Xst0  l0   c180 rst_n d0   db0  vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst1  l1   c270 rst_n d1   db1  vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst2a l2   c180 rst_n l2h  l2hb vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst2b l2h  c0   rst_n d2   db2  vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst3a l3   c180 rst_n l3h  l3hb vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst3b l3h  c90  rst_n d3   db3  vdd vss sst_dff_r wn=1.5 wp=3.0
 .ends serdes_tx_sst_serializer16

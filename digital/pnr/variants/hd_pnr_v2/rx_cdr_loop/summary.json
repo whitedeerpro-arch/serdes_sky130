@@ -1,0 +1,69 @@
+{
+  "block": "rx_cdr_loop",
+  "variant": "hd_pnr_v2",
+  "params": {},
+  "rtl_files": [
+    "digital/pnr/rtl_v2/bbpd_window_vote.sv",
+    "digital/pnr/rtl_v2/cdr_phase_frequency.sv",
+    "digital/pnr/rtl_v2/pi_step_commutator.sv",
+    "digital/pnr/rtl_v2/rx_cdr_loop.sv"
+  ],
+  "clocks_mhz": {
+    "ctrl_clk": 250.0
+  },
+  "synthesis": {
+    "synth_cells": 2136,
+    "synth_area_um2": 31910.6048
+  },
+  "pnr": {
+    "die_w_um": 304.47,
+    "die_h_um": 245.575,
+    "die_area_um2": 74770.22,
+    "core_w_um": 294.4,
+    "core_h_um": 233.92,
+    "std_cells": 2517,
+    "phys_cells": 4130,
+    "total_cells": 6647,
+    "design_area_um2": 44205.0,
+    "utilization_pct": 64.0,
+    "openroad_drt_drvs": 0
+  },
+  "sta_250mhz": {
+    "tt_025C_1v80": {
+      "setup_wns_ns": 1.9286,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.2164,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ss_100C_1v60": {
+      "setup_wns_ns": 0.0252,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.5516,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ff_n40C_1v95": {
+      "setup_wns_ns": 2.2459,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.1145,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    }
+  },
+  "magic_drc_total": 0,
+  "netgen_lvs": "MATCH",
+  "lvs_match": true,
+  "artifacts": {
+    "variant_dir": "digital/pnr/variants/hd_pnr_v2/rx_cdr_loop",
+    "results_dir": "results/digital/pnr_v2/rx_cdr_loop",
+    "png": "digital/pnr/variants/hd_pnr_v2/rx_cdr_loop/rx_cdr_loop.png",
+    "gds": "digital/pnr/variants/hd_pnr_v2/rx_cdr_loop/rx_cdr_loop.gds",
+    "def": "digital/pnr/variants/hd_pnr_v2/rx_cdr_loop/rx_cdr_loop.def",
+    "verilog": "digital/pnr/variants/hd_pnr_v2/rx_cdr_loop/rx_cdr_loop.v"
+  },
+  "elapsed_s": 372.4
+}

@@ -1,0 +1,66 @@
+{
+  "block": "tx_ingress_control",
+  "variant": "hd_pnr_v2",
+  "params": {},
+  "rtl_files": [
+    "digital/pnr/rtl_v2/tx_ingress_control.sv"
+  ],
+  "clocks_mhz": {
+    "word_clk": 250.0
+  },
+  "synthesis": {
+    "synth_cells": 39,
+    "synth_area_um2": 660.6336
+  },
+  "pnr": {
+    "die_w_um": 72.0,
+    "die_h_um": 48.0,
+    "die_area_um2": 3456.0,
+    "core_w_um": 62.56,
+    "core_h_um": 35.36,
+    "std_cells": 81,
+    "phys_cells": 189,
+    "total_cells": 270,
+    "design_area_um2": 915.0,
+    "utilization_pct": 41.0,
+    "openroad_drt_drvs": 0
+  },
+  "sta_250mhz": {
+    "tt_025C_1v80": {
+      "setup_wns_ns": 2.4323,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.1255,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ss_100C_1v60": {
+      "setup_wns_ns": 1.2365,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.3751,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ff_n40C_1v95": {
+      "setup_wns_ns": 2.6359,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.1038,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    }
+  },
+  "magic_drc_total": 0,
+  "netgen_lvs": "MATCH",
+  "lvs_match": true,
+  "artifacts": {
+    "variant_dir": "digital/pnr/variants/hd_pnr_v2/tx_ingress_control",
+    "results_dir": "results/digital/pnr_v2/tx_ingress_control",
+    "png": "digital/pnr/variants/hd_pnr_v2/tx_ingress_control/tx_ingress_control.png",
+    "gds": "digital/pnr/variants/hd_pnr_v2/tx_ingress_control/tx_ingress_control.gds",
+    "def": "digital/pnr/variants/hd_pnr_v2/tx_ingress_control/tx_ingress_control.def",
+    "verilog": "digital/pnr/variants/hd_pnr_v2/tx_ingress_control/tx_ingress_control.v"
+  },
+  "elapsed_s": 31.6
+}

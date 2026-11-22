@@ -1,0 +1,73 @@
+{
+  "block": "pll_control_top",
+  "variant": "hd_pnr_v2",
+  "params": {
+    "CODE_BITS": 5
+  },
+  "rtl_files": [
+    "digital/pnr/rtl_v2/mon_sync.sv",
+    "digital/pnr/rtl_v2/mon_persist.sv",
+    "digital/pnr/rtl_v2/pll_startup_supervisor.sv",
+    "digital/pnr/rtl_v2/pll_coarse_ctrl.sv",
+    "digital/pnr/rtl_v2/pll_lock_detect.sv",
+    "digital/pnr/rtl_v2/pll_control_top.sv"
+  ],
+  "clocks_mhz": {
+    "ref_clk": 250.0
+  },
+  "synthesis": {
+    "synth_cells": 1136,
+    "synth_area_um2": 14795.44
+  },
+  "pnr": {
+    "die_w_um": 210.51,
+    "die_h_um": 170.41,
+    "die_area_um2": 35873.009,
+    "core_w_um": 200.1,
+    "core_h_um": 157.76,
+    "std_cells": 1311,
+    "phys_cells": 2008,
+    "total_cells": 3319,
+    "design_area_um2": 20324.0,
+    "utilization_pct": 64.0,
+    "openroad_drt_drvs": 0
+  },
+  "sta_250mhz": {
+    "tt_025C_1v80": {
+      "setup_wns_ns": 1.7148,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.1189,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ss_100C_1v60": {
+      "setup_wns_ns": 0.0794,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.2682,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ff_n40C_1v95": {
+      "setup_wns_ns": 1.9705,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.0256,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    }
+  },
+  "magic_drc_total": 0,
+  "netgen_lvs": "MATCH",
+  "lvs_match": true,
+  "artifacts": {
+    "variant_dir": "digital/pnr/variants/hd_pnr_v2/pll_control_top",
+    "results_dir": "results/digital/pnr_v2/pll_control_top",
+    "png": "digital/pnr/variants/hd_pnr_v2/pll_control_top/pll_control_top.png",
+    "gds": "digital/pnr/variants/hd_pnr_v2/pll_control_top/pll_control_top.gds",
+    "def": "digital/pnr/variants/hd_pnr_v2/pll_control_top/pll_control_top.def",
+    "verilog": "digital/pnr/variants/hd_pnr_v2/pll_control_top/pll_control_top.v"
+  },
+  "elapsed_s": 181.9
+}

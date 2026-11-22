@@ -66,6 +66,8 @@ DRC_EXCLUDE_FILE = OL_HD / "drc_exclude.cells"
 
 RESULTS_BASE = REPO / "results/digital/pnr"
 VARIANT_BASE = REPO / "digital/pnr/variants/hd_pnr"
+RESULTS_BASE_V2 = REPO / "results/digital/pnr_v2"
+VARIANT_BASE_V2 = REPO / "digital/pnr/variants/hd_pnr_v2"
 
 
 @dataclass
@@ -293,6 +295,191 @@ BLOCKS: dict[str, BlockSpec] = {
     ),
 }
 
+BLOCKS_V2: dict[str, BlockSpec] = {
+    "tx_ingress_control": BlockSpec(
+        name="tx_ingress_control",
+        rtl_files=[
+            "digital/pnr/rtl_v2/tx_ingress_control.sv",
+        ],
+        clocks=[
+            ClockSpec(
+                name="word_clk",
+                port="word_clk",
+                period_ns=4.0,
+                inputs=["enable", "clock_good", "in_valid", "in_data*"],
+                outputs=["word_ready", "capture_data*", "capture_valid", "a_valid", "b_valid"],
+            )
+        ],
+        reset_ports=["rst_n"],
+        die_area=(0.0, 0.0, 72.0, 48.0),
+        core_area=(4.6, 5.44, 67.16, 40.80),
+        place_density=0.58,
+        pdn_v_pitch=24.0,
+        pdn_v_offset=8.0,
+        pdn_h_pitch=20.0,
+        pdn_h_offset=6.0,
+        use_met5_pdn=True,
+        abc_target_ps=2200,
+        setup_margin_ns=0.20,
+        hold_margin_ns=0.05,
+        output_load_pf=0.015,
+        cts_sink_clustering=False,
+    ),
+    "pll_control_top": BlockSpec(
+        name="pll_control_top",
+        rtl_files=[
+            "digital/pnr/rtl_v2/mon_sync.sv",
+            "digital/pnr/rtl_v2/mon_persist.sv",
+            "digital/pnr/rtl_v2/pll_startup_supervisor.sv",
+            "digital/pnr/rtl_v2/pll_coarse_ctrl.sv",
+            "digital/pnr/rtl_v2/pll_lock_detect.sv",
+            "digital/pnr/rtl_v2/pll_control_top.sv",
+        ],
+        clocks=[
+            ClockSpec(
+                name="ref_clk",
+                port="ref_clk",
+                period_ns=4.0,
+                inputs=[
+                    "enable",
+                    "start",
+                    "tclass*",
+                    "lo_run*",
+                    "hi_run*",
+                    "stop_code*",
+                    "stop_sel*",
+                ],
+                outputs=[
+                    "precharge_en",
+                    "pfd_rst_b",
+                    "cp_en",
+                    "locked",
+                    "busy",
+                    "fault",
+                    "state_id*",
+                    "fault_code*",
+                    "vco_code*",
+                    "lo_code*",
+                    "hi_code*",
+                    "coarse_busy",
+                    "coarse_done",
+                    "fast_end",
+                    "slow_end",
+                    "switches*",
+                ],
+            )
+        ],
+        reset_ports=["rst_n"],
+        async_input_ports=[
+            "abort_async",
+            "bias_ready_async",
+            "pre_ref_ready_async",
+            "hi_async",
+            "lo_async",
+            "pw_late_async",
+        ],
+        params={"CODE_BITS": 5},
+        utilization=46.0,
+        aspect_ratio=0.80,
+        core_space=5.0,
+        place_density=0.72,
+        pdn_v_pitch=32.0,
+        pdn_v_offset=8.0,
+        pdn_h_pitch=32.0,
+        pdn_h_offset=8.0,
+        use_met5_pdn=True,
+        abc_target_ps=1000,
+        setup_margin_ns=0.50,
+        hold_margin_ns=0.05,
+    ),
+    "rx_cdr_loop": BlockSpec(
+        name="rx_cdr_loop",
+        rtl_files=[
+            "digital/pnr/rtl_v2/bbpd_window_vote.sv",
+            "digital/pnr/rtl_v2/cdr_phase_frequency.sv",
+            "digital/pnr/rtl_v2/pi_step_commutator.sv",
+            "digital/pnr/rtl_v2/rx_cdr_loop.sv",
+        ],
+        clocks=[
+            ClockSpec(
+                name="ctrl_clk",
+                port="ctrl_clk",
+                period_ns=4.0,
+                inputs=[
+                    "enable",
+                    "bundle_valid",
+                    "previous_data",
+                    "data_samples*",
+                    "edge_samples*",
+                ],
+                outputs=[
+                    "phase_code*",
+                    "select_a*",
+                    "select_b*",
+                    "fine_b*",
+                    "locked",
+                    "holdover",
+                    "range_limited",
+                    "phase_applied",
+                    "frequency_q*",
+                    "phase_debt_q*",
+                ],
+            )
+        ],
+        reset_ports=["rst_n"],
+        utilization=46.0,
+        aspect_ratio=0.80,
+        core_space=5.0,
+        place_density=0.72,
+        pdn_v_pitch=36.0,
+        pdn_v_offset=8.0,
+        pdn_h_pitch=36.0,
+        pdn_h_offset=8.0,
+        use_met5_pdn=True,
+        abc_target_ps=1000,
+        setup_margin_ns=0.50,
+        hold_margin_ns=0.06,
+    ),
+    "rx_word_host_path": BlockSpec(
+        name="rx_word_host_path",
+        rtl_files=[
+            "digital/pnr/rtl_v2/rx_word_map.sv",
+            "digital/pnr/rtl_v2/rx_word_align16.sv",
+            "digital/pnr/rtl_v2/rx_async_word_fifo.sv",
+            "digital/pnr/rtl_v2/rx_word_host_path.sv",
+        ],
+        clocks=[
+            ClockSpec(
+                name="word_clk",
+                port="word_clk",
+                period_ns=4.0,
+                inputs=["phys*", "training_enable"],
+                outputs=["word_online", "aligned", "offset*"],
+            ),
+            ClockSpec(
+                name="host_clk",
+                port="host_clk",
+                period_ns=4.0,
+                inputs=["host_ready"],
+                outputs=["host_data*", "host_valid", "host_online", "host_error"],
+            ),
+        ],
+        reset_ports=["arst_n"],
+        utilization=46.0,
+        aspect_ratio=0.80,
+        core_space=5.0,
+        place_density=0.72,
+        pdn_v_pitch=36.0,
+        pdn_v_offset=8.0,
+        pdn_h_pitch=36.0,
+        pdn_h_offset=8.0,
+        use_met5_pdn=True,
+        abc_target_ps=1000,
+        setup_margin_ns=0.50,
+        hold_margin_ns=0.18,
+    ),
+}
+
 
 def run_cmd(
     argv: list[str],
@@ -332,7 +519,32 @@ def load_excluded_cells() -> set[str]:
     return excluded
 
 
-def should_exclude_for_synth(cell_name: str, drc_exclude: set[str]) -> bool:
+SLOW_SS_CELL_TOKENS = (
+    "__nor3",
+    "__nor4",
+    "__or3",
+    "__or4",
+    "__nand4",
+    "__and4",
+    "__o211",
+    "__o221",
+    "__o31",
+    "__o32",
+    "__o41",
+    "__a211",
+    "__a221",
+    "__a222",
+    "__a31",
+    "__a32",
+    "__a41",
+    "__mux4",
+    "__fa_",
+    "__ha_",
+    "__maj3",
+)
+
+
+def should_exclude_for_synth(cell_name: str, drc_exclude: set[str], fast_ss: bool = False) -> bool:
     if cell_name in drc_exclude:
         return True
     if cell_name.endswith("_0"):
@@ -359,15 +571,20 @@ def should_exclude_for_synth(cell_name: str, drc_exclude: set[str]) -> bool:
         "__dlb",
         "__edf",
     )
-    return any(tok in cell_name for tok in bad_tokens)
+    if any(tok in cell_name for tok in bad_tokens):
+        return True
+    if fast_ss and any(tok in cell_name for tok in SLOW_SS_CELL_TOKENS):
+        return True
+    return False
 
 
-def build_filtered_synth_lib(src_lib: Path, dst_lib: Path) -> Path:
+def build_filtered_synth_lib(src_lib: Path, dst_lib: Path, fast_ss: bool = False) -> Path:
     """Create a Liberty copy with DRC-excluded, special, and weak _1 cells removed for Yosys.
 
     A ``*_1`` cell is excluded only when a ``*_2`` variant exists in the library
     (matching SKY130 OpenLane ``no_synth.cells`` practice while retaining
     unique ``_1`` cells such as ``dfrtn_1``, ``dfstp_1``, and ``conb_1``).
+    When ``fast_ss=True``, also removes 3/4-PMOS-stack cells that take >1.5 ns at SS 100C/1.60V.
     """
     dst_lib.parent.mkdir(parents=True, exist_ok=True)
     drc_exclude = load_excluded_cells()
@@ -386,7 +603,7 @@ def build_filtered_synth_lib(src_lib: Path, dst_lib: Path) -> Path:
     for line in lines:
         if not skipping:
             m = cell_re.match(line)
-            if m and (should_exclude_for_synth(m.group(1), drc_exclude) or m.group(1) in weak_one):
+            if m and (should_exclude_for_synth(m.group(1), drc_exclude, fast_ss=fast_ss) or m.group(1) in weak_one):
                 skipping = True
                 brace_depth = line.count("{") - line.count("}")
                 if brace_depth <= 0:
@@ -466,7 +683,7 @@ def write_sdc(block: BlockSpec, sdc_path: Path, post_route: bool = False) -> Non
     sdc_path.write_text("\n".join(lines) + "\n")
 
 
-def run_yosys(block: BlockSpec, work: Path, synth_lib: Path) -> tuple[Path, dict[str, Any]]:
+def run_yosys(block: BlockSpec, work: Path, synth_lib: Path, v2: bool = False) -> tuple[Path, dict[str, Any]]:
     synth_v = work / f"{block.name}_synth.v"
     ys_path = work / "synth.ys"
     rtl_abs = [str((REPO / f).resolve()) for f in block.rtl_files]
@@ -477,21 +694,53 @@ def run_yosys(block: BlockSpec, work: Path, synth_lib: Path) -> tuple[Path, dict
     ]
     for pname, pval in block.params.items():
         cmds.append(f"chparam -set {pname} {pval} {block.name}")
-    cmds += [
-        f"hierarchy -check -top {block.name}",
-        f"synth -top {block.name} -flatten",
-        f"dfflibmap -liberty {synth_lib}",
-        f"abc -D {block.abc_target_ps} -liberty {synth_lib}",
-        "splitnets",
-        "opt_clean -purge",
-        "hilomap -hicell sky130_fd_sc_hd__conb_1 HI -locell sky130_fd_sc_hd__conb_1 LO",
-        "insbuf -buf sky130_fd_sc_hd__buf_2 A X",
-        "rename -hide",
-        "opt_clean -purge",
-        "check -assert",
-        f"stat -liberty {synth_lib}",
-        f"write_verilog -noattr -noexpr -nohex -nodec {synth_v}",
-    ]
+    insbuf_cell = "sky130_fd_sc_hd__buf_8" if v2 else "sky130_fd_sc_hd__buf_2"
+    if v2:
+        # Preserve (* keep *) replicated fanout-splitting registers by skipping opt_merge on kept cells
+        cmds += [
+            f"hierarchy -check -top {block.name}",
+            "flatten",
+            "proc",
+            "opt_expr",
+            "opt_clean",
+            "check",
+            "opt_dff",
+            "memory -nomap",
+            "opt_clean",
+            "memory_map",
+            "opt_expr",
+            "opt_clean",
+            "techmap",
+            "opt_expr",
+            "opt_clean",
+            f"dfflibmap -liberty {synth_lib}",
+            f"abc -D {block.abc_target_ps} -liberty {synth_lib}",
+            "splitnets",
+            "opt_clean -purge",
+            "hilomap -hicell sky130_fd_sc_hd__conb_1 HI -locell sky130_fd_sc_hd__conb_1 LO",
+            f"insbuf -buf {insbuf_cell} A X",
+            "rename -hide",
+            "opt_clean -purge",
+            "check -assert",
+            f"stat -liberty {synth_lib}",
+            f"write_verilog -noattr -noexpr -nohex -nodec {synth_v}",
+        ]
+    else:
+        cmds += [
+            f"hierarchy -check -top {block.name}",
+            f"synth -top {block.name} -flatten",
+            f"dfflibmap -liberty {synth_lib}",
+            f"abc -D {block.abc_target_ps} -liberty {synth_lib}",
+            "splitnets",
+            "opt_clean -purge",
+            "hilomap -hicell sky130_fd_sc_hd__conb_1 HI -locell sky130_fd_sc_hd__conb_1 LO",
+            f"insbuf -buf {insbuf_cell} A X",
+            "rename -hide",
+            "opt_clean -purge",
+            "check -assert",
+            f"stat -liberty {synth_lib}",
+            f"write_verilog -noattr -noexpr -nohex -nodec {synth_v}",
+        ]
     ys_path.write_text("\n".join(cmds) + "\n")
     proc = run_cmd([str(YOSYS), "-s", str(ys_path)], work, work / "01_yosys.log", timeout=180)
     log = proc.stdout
@@ -504,7 +753,7 @@ def run_yosys(block: BlockSpec, work: Path, synth_lib: Path) -> tuple[Path, dict
     }
 
 
-def openroad_dont_use_tcl() -> str:
+def openroad_dont_use_tcl(v2: bool = False) -> str:
     drc_exclude = sorted(load_excluded_cells())
     patterns = [
         "*_0",
@@ -521,6 +770,16 @@ def openroad_dont_use_tcl() -> str:
         "sky130_fd_sc_hd__clkinv_1",
         "sky130_fd_sc_hd__clkinv_2",
     ] + drc_exclude
+    if v2:
+        # Prevent OpenROAD resizer from downsizing fast _2/_4 cells back to slow _1 or 4-stack cells
+        patterns += [f"sky130_fd_sc_hd{tok}*" for tok in SLOW_SS_CELL_TOKENS]
+        # Exclude weak _1 logic/FF/buf/inv cells where _2 exists (prevent buf_1 slew bombs on critical paths!)
+        lib_text = LIB_SS.read_text()
+        all_c = set(re.findall(r'cell\s*\(\s*"([^"]+)"\s*\)', lib_text))
+        for c in sorted(all_c):
+            if c.endswith("_1") and (c[:-2] + "_2") in all_c:
+                if "__conb_1" not in c:
+                    patterns.append(c)
     lines = ["set dont_use_list {"]
     for p in patterns:
         lines.append(f"  {p}")
@@ -531,7 +790,7 @@ def openroad_dont_use_tcl() -> str:
     return "\n".join(lines)
 
 
-def run_openroad_pnr(block: BlockSpec, work: Path, synth_v: Path, sdc_path: Path) -> dict[str, Any]:
+def run_openroad_pnr(block: BlockSpec, work: Path, synth_v: Path, sdc_path: Path, v2: bool = False) -> dict[str, Any]:
     routed_def = work / f"{block.name}.def"
     routed_v = work / f"{block.name}.v"
     routed_pg_v = work / f"{block.name}_pg.v"
@@ -561,48 +820,59 @@ add_pdn_connect -grid stdcell_grid -layers {{met4 met5}}
     pnr_tcl = work / "pnr.tcl"
     cts_cluster_flag = "-sink_clustering_enable" if block.cts_sink_clustering else ""
     pdn_pin_layer = "met5" if block.use_met5_pdn else "met4"
-    pnr_tcl.write_text(
-        f"""
-read_lef {TLEF_NOM}
-read_lef {SC_LEF}
-define_corners ss ff
-read_liberty -corner ss {LIB_SS}
-read_liberty -corner ff {LIB_FF}
-read_verilog {synth_v}
-link_design {block.name}
-read_sdc {sdc_path}
+    if v2:
+        cts_buf_list = "{sky130_fd_sc_hd__clkbuf_16}"
+        cts_extra = "-sink_clustering_size 14 -sink_clustering_max_diameter 50" if block.cts_sink_clustering else ""
+        td_flag = "" if block.die_area else "-timing_driven "
+        hold_max_buf = 300 if block.die_area else 80
+        hold_allow_flag = "-allow_setup_violations " if block.die_area else ""
+        pin_pre = "place_pins -hor_layers met3 -ver_layers met2 -random"
+        pin_post = "" if block.die_area else "place_pins -hor_layers met3 -ver_layers met2"
+        wire_rc_block = """
+set_wire_rc -corner ss -signal -resistance 0.0014 -capacitance 0.00018
+set_wire_rc -corner ss -clock  -resistance 0.0005 -capacitance 0.00015
+set_wire_rc -corner ff -signal -resistance 0.0007 -capacitance 0.00009
+set_wire_rc -corner ff -clock  -resistance 0.0003 -capacitance 0.00008
+"""
+        opt_flow = f"""
+global_placement {td_flag}-density {block.place_density:.2f} -pad_left 1 -pad_right 1
+{pin_post}
+estimate_parasitics -placement
+set_max_transition 0.55 [current_design]
+repair_design -slew_margin 0 -cap_margin 0
+repair_tie_fanout -separation 0 sky130_fd_sc_hd__conb_1/HI
+repair_tie_fanout -separation 0 sky130_fd_sc_hd__conb_1/LO
+detailed_placement
+check_placement -verbose
 
-{openroad_dont_use_tcl()}
+clock_tree_synthesis -root_buf sky130_fd_sc_hd__clkbuf_16 \\
+  -buf_list {cts_buf_list} \\
+  {cts_cluster_flag} {cts_extra}
+set_propagated_clock [all_clocks]
+estimate_parasitics -placement
+repair_clock_nets
+detailed_placement
 
-{fp_cmd}
+repair_timing -setup -slack_margin {block.setup_margin_ns:.3f} -max_buffer_percent 1
+detailed_placement
+estimate_parasitics -placement
+repair_timing -hold -slack_margin {block.hold_margin_ns:.3f} {hold_allow_flag}-max_buffer_percent {hold_max_buf}
+detailed_placement
 
-make_tracks li1  -x_offset 0.23 -x_pitch 0.46 -y_offset 0.17 -y_pitch 0.34
-make_tracks met1 -x_offset 0.17 -x_pitch 0.34 -y_offset 0.17 -y_pitch 0.34
-make_tracks met2 -x_offset 0.23 -x_pitch 0.46 -y_offset 0.23 -y_pitch 0.46
-make_tracks met3 -x_offset 0.34 -x_pitch 0.68 -y_offset 0.34 -y_pitch 0.68
-make_tracks met4 -x_offset 0.46 -x_pitch 0.92 -y_offset 0.46 -y_pitch 0.92
-make_tracks met5 -x_offset 1.70 -x_pitch 3.40 -y_offset 1.70 -y_pitch 3.40
-
-place_pins -hor_layers met3 -ver_layers met2 -random
-
-tapcell -distance 14 \\
-  -tapcell_master sky130_fd_sc_hd__tapvpwrvgnd_1 \\
-  -endcap_master sky130_fd_sc_hd__decap_3
-
-add_global_connection -net VPWR -inst_pattern {{.*}} -pin_pattern {{^VPWR$|^VPB$}} -power
-add_global_connection -net VGND -inst_pattern {{.*}} -pin_pattern {{^VGND$|^VNB$}} -ground
-set_voltage_domain -name CORE -power VPWR -ground VGND
-define_pdn_grid -name stdcell_grid -voltage_domains CORE -pins {{{pdn_pin_layer}}}
-add_pdn_stripe -grid stdcell_grid -layer met1 -width 0.48 -followpins
-add_pdn_stripe -grid stdcell_grid -layer met4 -width 1.60 -pitch {block.pdn_v_pitch:.2f} -offset {block.pdn_v_offset:.2f}
-add_pdn_connect -grid stdcell_grid -layers {{met1 met4}}
-{met5_block}
-pdngen
-
+global_route -congestion_iterations 60 -allow_congestion
+estimate_parasitics -global_routing
+repair_timing -setup -slack_margin {block.setup_margin_ns:.3f} -max_buffer_percent 1
+repair_timing -hold -slack_margin {block.hold_margin_ns:.3f} {hold_allow_flag}-max_buffer_percent {hold_max_buf}
+detailed_placement
+check_placement -verbose
+"""
+    else:
+        pin_pre = "place_pins -hor_layers met3 -ver_layers met2 -random"
+        wire_rc_block = """
 set_wire_rc -signal -layer met2
 set_wire_rc -clock -layer met3
-set_routing_layers -signal met1-met5 -clock met1-met5
-
+"""
+        opt_flow = f"""
 global_placement -density {block.place_density:.2f} -pad_left 1 -pad_right 1
 estimate_parasitics -placement
 repair_design -max_wire_length 800
@@ -624,6 +894,227 @@ detailed_placement
 estimate_parasitics -placement
 repair_timing -setup -slack_margin {block.setup_margin_ns:.3f} -max_buffer_percent 50
 repair_timing -hold -slack_margin {block.hold_margin_ns:.3f} -allow_setup_violations -max_buffer_percent 50
+detailed_placement
+check_placement -verbose
+"""
+    eco_post_route = ""
+    pnr_tcl.write_text(
+        f"""
+read_lef {TLEF_NOM}
+read_lef {SC_LEF}
+define_corners ss ff
+read_liberty -corner ss {LIB_SS}
+read_liberty -corner ff {LIB_FF}
+read_verilog {synth_v}
+link_design {block.name}
+read_sdc {sdc_path}
+
+{openroad_dont_use_tcl(v2=v2)}
+
+{fp_cmd}
+
+make_tracks li1  -x_offset 0.23 -x_pitch 0.46 -y_offset 0.17 -y_pitch 0.34
+make_tracks met1 -x_offset 0.17 -x_pitch 0.34 -y_offset 0.17 -y_pitch 0.34
+make_tracks met2 -x_offset 0.23 -x_pitch 0.46 -y_offset 0.23 -y_pitch 0.46
+make_tracks met3 -x_offset 0.34 -x_pitch 0.68 -y_offset 0.34 -y_pitch 0.68
+make_tracks met4 -x_offset 0.46 -x_pitch 0.92 -y_offset 0.46 -y_pitch 0.92
+make_tracks met5 -x_offset 1.70 -x_pitch 3.40 -y_offset 1.70 -y_pitch 3.40
+
+{pin_pre}
+
+tapcell -distance 14 \\
+  -tapcell_master sky130_fd_sc_hd__tapvpwrvgnd_1 \\
+  -endcap_master sky130_fd_sc_hd__decap_3
+
+add_global_connection -net VPWR -inst_pattern {{.*}} -pin_pattern {{^VPWR$|^VPB$}} -power
+add_global_connection -net VGND -inst_pattern {{.*}} -pin_pattern {{^VGND$|^VNB$}} -ground
+set_voltage_domain -name CORE -power VPWR -ground VGND
+define_pdn_grid -name stdcell_grid -voltage_domains CORE -pins {{{pdn_pin_layer}}}
+add_pdn_stripe -grid stdcell_grid -layer met1 -width 0.48 -followpins
+add_pdn_stripe -grid stdcell_grid -layer met4 -width 1.60 -pitch {block.pdn_v_pitch:.2f} -offset {block.pdn_v_offset:.2f}
+add_pdn_connect -grid stdcell_grid -layers {{met1 met4}}
+{met5_block}
+pdngen
+
+{wire_rc_block}
+set_routing_layers -signal met1-met5 -clock met1-met5
+
+{opt_flow}
+
+filler_placement {{sky130_fd_sc_hd__decap_12 sky130_fd_sc_hd__decap_8 sky130_fd_sc_hd__decap_6 sky130_fd_sc_hd__decap_4 sky130_fd_sc_hd__decap_3 sky130_fd_sc_hd__fill_8 sky130_fd_sc_hd__fill_4 sky130_fd_sc_hd__fill_2 sky130_fd_sc_hd__fill_1}}
+add_global_connection -net VPWR -inst_pattern {{.*}} -pin_pattern {{^VPWR$|^VPB$}} -power
+add_global_connection -net VGND -inst_pattern {{.*}} -pin_pattern {{^VGND$|^VNB$}} -ground
+
+global_route -congestion_iterations 60 -allow_congestion
+set_propagated_clock [all_clocks]
+detailed_route -output_drc {drc_rpt} -bottom_routing_layer met1 -top_routing_layer met5 -droute_end_iter 35 -verbose 1
+{eco_post_route}
+write_def {routed_def}
+write_verilog {routed_v}
+write_verilog -include_pwr_gnd -remove_cells {{sky130_fd_sc_hd__fill_1 sky130_fd_sc_hd__fill_2 sky130_fd_sc_hd__fill_4 sky130_fd_sc_hd__fill_8 sky130_fd_sc_hd__tapvpwrvgnd_1}} {routed_pg_v}
+
+puts "=== METRICS_REPORT ==="
+report_design_area
+set db [ord::get_db]
+set block_db [[$db getChip] getBlock]
+set dbu [expr {{double([$block_db getDbUnitsPerMicron])}}]
+set die [$block_db getDieArea]
+set die_w [expr {{([$die xMax] - [$die xMin]) / $dbu}}]
+set die_h [expr {{([$die yMax] - [$die yMin]) / $dbu}}]
+set core [$block_db getCoreArea]
+set core_w [expr {{([$core xMax] - [$core xMin]) / $dbu}}]
+set core_h [expr {{([$core yMax] - [$core yMin]) / $dbu}}]
+set std_cnt 0
+set phys_cnt 0
+foreach inst [$block_db getInsts] {{
+  set mname [[$inst getMaster] getName]
+  if {{[string match "*__fill_*" $mname] || [string match "*__decap_*" $mname] || [string match "*__tap*" $mname]}} {{
+    incr phys_cnt
+  }} else {{
+    incr std_cnt
+  }}
+}}
+puts [format "DIE_UM: %.3f %.3f %.3f" $die_w $die_h [expr {{$die_w * $die_h}}]]
+puts [format "CORE_UM: %.3f %.3f %.3f" $core_w $core_h [expr {{$core_w * $core_h}}]]
+puts [format "INST_COUNTS: std=%d phys=%d total=%d" $std_cnt $phys_cnt [expr {{$std_cnt + $phys_cnt}}]]
+"""
+    )
+
+    proc = run_cmd(
+        [str(OPENROAD), "-threads", "1", "-no_init", "-exit", str(pnr_tcl)],
+        work,
+        work / "02_openroad_pnr.log",
+        timeout=1200,
+    )
+    log = proc.stdout
+
+    # Post-route OpenRCX ECO closure passes (up to 3 SPEF-driven passes; stops immediately once SS>=+0.02 & FF_hold>=+0.005!)
+    if v2 and not block.die_area:
+        sdc_eco = work / f"{block.name}_eco.sdc"
+        write_sdc(block, sdc_eco, post_route=True)
+        for eco_pass in (1, 2, 3):
+            spef_eco_max = work / f"{block.name}_eco_max.spef"
+            spef_eco_min = work / f"{block.name}_eco_min.spef"
+            for tag, rcx_rule, sp_out in [("max", RCX_MAX, spef_eco_max), ("min", RCX_MIN, spef_eco_min)]:
+                ext_tcl = work / f"eco_ext_{tag}.tcl"
+                ext_tcl.write_text(
+                    f"""read_lef {TLEF_NOM}
+read_lef {SC_LEF}
+read_def {routed_def}
+define_process_corner -ext_model_index 0 eco_{tag}
+extract_parasitics -ext_model_file {rcx_rule}
+write_spef {sp_out}
+exit
+"""
+                )
+                run_cmd([str(OPENROAD), "-threads", "1", "-no_init", "-exit", str(ext_tcl)],
+                        work, work / f"02b_eco_p{eco_pass}_ext_{tag}.log", timeout=180)
+
+            gb = 0.20 if eco_pass == 1 else (0.10 if eco_pass == 2 else 0.05)
+            eco_tcl = work / f"pnr_eco_p{eco_pass}.tcl"
+            eco_tcl.write_text(
+                f"""read_lef {TLEF_NOM}
+read_lef {SC_LEF}
+define_corners ss ff
+read_liberty -corner ss {LIB_SS}
+read_liberty -corner ff {LIB_FF}
+read_def {routed_def}
+read_sdc {sdc_eco}
+{openroad_dont_use_tcl(v2=True)}
+
+read_spef -corner ss {spef_eco_max}
+read_spef -corner ff {spef_eco_min}
+
+set init_wns [sta::worst_slack -corner ss -max]
+set init_hold [sta::worst_slack -corner ff -min]
+puts [format "ECO_P{eco_pass}_INIT: SS_WNS=%.4f FF_HOLD=%.4f" $init_wns $init_hold]
+if {{{eco_pass} > 1 && $init_wns >= 0.02 && $init_hold >= 0.005}} {{
+  puts "ECO_P{eco_pass}_SKIP_ALREADY_CLOSED"
+  exit 0
+}}
+
+set db_eco [ord::get_db]
+set blk_eco [[$db_eco getChip] getBlock]
+foreach inst [$blk_eco getInsts] {{
+  set mn [[$inst getMaster] getName]
+  if {{[string match "*__fill_*" $mn] || [string match "*__decap_*" $mn]}} {{
+    odb::dbInst_destroy $inst
+  }}
+}}
+
+{wire_rc_block}
+set_routing_layers -signal met1-met5 -clock met1-met5
+
+# SPEF-driven greedy replace_cell ECO directly on exact post-route max/min SPEF
+# (avoids RSZ-0021 wire-load downsizing, adds ZERO extra buffers, preserves FF hold!)
+set all_masters {{}}
+foreach lib [$db_eco getLibs] {{
+  foreach m [$lib getMasters] {{ dict set all_masters [$m getName] 1 }}
+}}
+proc _next_drv {{mname all_masters}} {{
+  if {{[regexp {{^(sky130_fd_sc_hd__[a-z0-9]+)_([0-9]+)$}} $mname -> base drv]}} {{
+    foreach d {{2 4 6 8 12 16}} {{
+      if {{$d > $drv}} {{
+        set cand "${{base}}_${{d}}"
+        if {{[dict exists $all_masters $cand]}} {{ return $cand }}
+      }}
+    }}
+  }}
+  return ""
+}}
+set eco_swapped 0
+set_clock_uncertainty -setup [expr {{0.10 + {gb}}}] [all_clocks]
+for {{set iter 0}} {{$iter < 25}} {{incr iter}} {{
+  set wns [sta::worst_slack -corner ss -max]
+  if {{$wns >= 0.02}} {{ break }}
+  set paths [find_timing_paths -corner ss -path_delay max -group_count 40 -endpoint_count 1 -slack_max 0.02]
+  if {{[llength $paths] == 0}} {{ break }}
+  set seen {{}}
+  set improved 0
+  foreach pe $paths {{
+    set p [$pe path]
+    foreach pin [$p pins] {{
+      if {{[$pin is_top_level_port]}} {{ continue }}
+      set inst [$pin instance]
+      if {{$inst eq "NULL"}} {{ continue }}
+      set iname [get_full_name $inst]
+      if {{[dict exists $seen $iname]}} {{ continue }}
+      dict set seen $iname 1
+      set dbinst [$blk_eco findInst $iname]
+      if {{$dbinst eq "NULL"}} {{ continue }}
+      set mname [[$dbinst getMaster] getName]
+      if {{[string match "*clkbuf*" $mname] || [string match "*clkinv*" $mname]}} {{ continue }}
+      set cand [_next_drv $mname $all_masters]
+      if {{$cand eq ""}} {{ continue }}
+      set old_wns [sta::worst_slack -corner ss -max]
+      set old_tns [sta::total_negative_slack -corner ss -max]
+      set old_hold [sta::worst_slack -corner ff -min]
+      set hold_floor [expr {{$old_hold < 0.025 ? ($old_hold - 0.002) : 0.025}}]
+      if {{[catch {{replace_cell $iname $cand}}]}} {{ continue }}
+      set new_wns [sta::worst_slack -corner ss -max]
+      set new_tns [sta::total_negative_slack -corner ss -max]
+      set new_hold [sta::worst_slack -corner ff -min]
+      if {{($new_wns > $old_wns + 0.001 || ($new_wns >= $old_wns - 0.001 && $new_tns > $old_tns + 0.005)) && $new_hold >= $hold_floor}} {{
+        incr eco_swapped
+        set improved 1
+      }} else {{
+        catch {{replace_cell $iname $mname}}
+      }}
+    }}
+  }}
+  puts [format "ECO_P{eco_pass}_ITER %d: swapped=%d SS_WNS_REAL=%.4f SS_TNS_GB=%.4f FF_HOLD=%.4f" $iter $eco_swapped [expr {{[sta::worst_slack -corner ss -max] + {gb}}}] [sta::total_negative_slack -corner ss -max] [sta::worst_slack -corner ff -min]]
+  if {{!$improved}} {{ break }}
+}}
+set_clock_uncertainty -setup 0.10 [all_clocks]
+set need_hold_fix [expr {{[sta::worst_slack -corner ff -min] < 0.015}}]
+if {{$eco_swapped == 0 && !$need_hold_fix}} {{
+  puts "ECO_P{eco_pass}_NO_CHANGES"
+  exit 0
+}}
+if {{$need_hold_fix}} {{
+  estimate_parasitics -placement
+  repair_timing -hold -slack_margin 0.05 -max_buffer_percent 15
+}}
 detailed_placement
 check_placement -verbose
 
@@ -664,15 +1155,17 @@ puts [format "DIE_UM: %.3f %.3f %.3f" $die_w $die_h [expr {{$die_w * $die_h}}]]
 puts [format "CORE_UM: %.3f %.3f %.3f" $core_w $core_h [expr {{$core_w * $core_h}}]]
 puts [format "INST_COUNTS: std=%d phys=%d total=%d" $std_cnt $phys_cnt [expr {{$std_cnt + $phys_cnt}}]]
 """
-    )
-
-    proc = run_cmd(
-        [str(OPENROAD), "-threads", "1", "-no_init", "-exit", str(pnr_tcl)],
-        work,
-        work / "02_openroad_pnr.log",
-        timeout=1200,
-    )
-    log = proc.stdout
+            )
+            proc = run_cmd(
+                [str(OPENROAD), "-threads", "1", "-no_init", "-exit", str(eco_tcl)],
+                work,
+                work / f"02c_openroad_eco_p{eco_pass}.log",
+                timeout=1200,
+            )
+            if "=== METRICS_REPORT ===" in proc.stdout:
+                log = proc.stdout
+            if f"ECO_P{eco_pass}_SKIP_ALREADY_CLOSED" in proc.stdout or f"ECO_P{eco_pass}_NO_CHANGES" in proc.stdout:
+                break
 
     die_m = re.search(r"DIE_UM:\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)", log)
     core_m = re.search(r"CORE_UM:\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)", log)
@@ -1030,6 +1523,7 @@ def render_layout_png(
     sta_info: dict[str, Any],
     drc_total: int,
     lvs_status: str,
+    title_suffix: str = "",
 ) -> None:
     u_top, top_rects, top_labels, uses = _parse_mag_rects(mag_path)
 
@@ -1161,7 +1655,7 @@ def render_layout_png(
         f"DRT DRVs={pnr_info['openroad_drt_drvs']} | Magic DRC={drc_total} | LVS={lvs_status}\n"
         f"250 MHz Post-Route RCX STA: TT setup={tt_s:+.3f} ns, SS(100C/1.60V) setup={ss_s:+.3f} ns, FF(-40C/1.95V) hold={ff_h:+.3f} ns"
     )
-    ax.set_title(f"SKY130A sky130_fd_sc_hd P&R — {block.name}\n{subtitle}", fontsize=10, fontweight="bold", pad=10)
+    ax.set_title(f"SKY130A sky130_fd_sc_hd P&R{title_suffix} — {block.name}\n{subtitle}", fontsize=10, fontweight="bold", pad=10)
     ax.legend(
         handles=legend_handles,
         loc="upper left",
@@ -1178,35 +1672,42 @@ def render_layout_png(
     plt.close(fig)
 
 
-def run_block(block_name: str) -> dict[str, Any]:
-    block = BLOCKS[block_name]
+def run_block(block_name: str, v2: bool = False) -> dict[str, Any]:
+    block_map = BLOCKS_V2 if v2 else BLOCKS
+    results_base = RESULTS_BASE_V2 if v2 else RESULTS_BASE
+    variant_base = VARIANT_BASE_V2 if v2 else VARIANT_BASE
+    block = block_map[block_name]
     t0 = time.time()
-    work = RESULTS_BASE / block.name
+    work = results_base / block.name
     work.mkdir(parents=True, exist_ok=True)
-    variant_dir = VARIANT_BASE / block.name
+    variant_dir = variant_base / block.name
     variant_dir.mkdir(parents=True, exist_ok=True)
 
-    synth_lib = build_filtered_synth_lib(LIB_TT, RESULTS_BASE / "_work/sky130_fd_sc_hd__tt_synth.lib")
+    if v2:
+        synth_lib = build_filtered_synth_lib(LIB_SS, results_base / "_work/sky130_fd_sc_hd__ss_fast_synth.lib", fast_ss=True)
+    else:
+        synth_lib = build_filtered_synth_lib(LIB_TT, results_base / "_work/sky130_fd_sc_hd__tt_synth.lib")
 
-    print(f"[{block.name}] 1/6 Yosys synthesis...", flush=True)
-    synth_v, synth_info = run_yosys(block, work, synth_lib)
+    tag = f"{block.name}{'_v2' if v2 else ''}"
+    print(f"[{tag}] 1/6 Yosys synthesis...", flush=True)
+    synth_v, synth_info = run_yosys(block, work, synth_lib, v2=v2)
 
     sdc_path = work / f"{block.name}.sdc"
     write_sdc(block, sdc_path, post_route=False)
 
-    print(f"[{block.name}] 2/6 OpenROAD P&R + OpenRCX (1 thread)...", flush=True)
-    pnr_info = run_openroad_pnr(block, work, synth_v, sdc_path)
+    print(f"[{tag}] 2/6 OpenROAD P&R + OpenRCX (1 thread)...", flush=True)
+    pnr_info = run_openroad_pnr(block, work, synth_v, sdc_path, v2=v2)
 
-    print(f"[{block.name}] 3/6 3-Corner Post-Route STA (TT / SS / FF)...", flush=True)
+    print(f"[{tag}] 3/6 3-Corner Post-Route STA (TT / SS / FF)...", flush=True)
     sta_info = run_sta_3corner(block, work, pnr_info)
 
-    print(f"[{block.name}] 4/6 Magic DEF->MAG/GDS + Full DRC + LVS extraction...", flush=True)
+    print(f"[{tag}] 4/6 Magic DEF->MAG/GDS + Full DRC + LVS extraction...", flush=True)
     magic_info = run_magic_drc_gds_ext(block, work, Path(pnr_info["routed_def"]))
 
-    print(f"[{block.name}] 5/6 Netgen LVS...", flush=True)
+    print(f"[{tag}] 5/6 Netgen LVS...", flush=True)
     lvs_info = run_netgen_lvs(block, work, Path(magic_info["lvs_spice_path"]), Path(pnr_info["routed_pg_v"]))
 
-    print(f"[{block.name}] 6/6 Rendering white-background layout PNG...", flush=True)
+    print(f"[{tag}] 6/6 Rendering white-background layout PNG...", flush=True)
     png_work = work / f"{block.name}.png"
     render_layout_png(
         block,
@@ -1216,9 +1717,10 @@ def run_block(block_name: str) -> dict[str, Any]:
         sta_info,
         magic_info["magic_drc_total"],
         lvs_info["lvs_status"],
+        title_suffix=" (v2)" if v2 else "",
     )
 
-    # Export clean deliverables to digital/pnr/variants/hd_pnr/<block>/
+    # Export clean deliverables to digital/pnr/variants/hd_pnr[_v2]/<block>/
     exports = {
         f"{block.name}.def": Path(pnr_info["routed_def"]),
         f"{block.name}.gds": Path(magic_info["gds_path"]),
@@ -1232,6 +1734,7 @@ def run_block(block_name: str) -> dict[str, Any]:
     elapsed = round(time.time() - t0, 1)
     summary = {
         "block": block.name,
+        "variant": "hd_pnr_v2" if v2 else "hd_pnr",
         "params": block.params,
         "rtl_files": block.rtl_files,
         "clocks_mhz": {c.name: round(1000.0 / c.period_ns, 2) for c in block.clocks},
@@ -1266,10 +1769,11 @@ def run_block(block_name: str) -> dict[str, Any]:
     (work / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     (variant_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(
-        f"[{block.name}] DONE in {elapsed}s | cells={pnr_info['std_cells']} | "
+        f"[{tag}] DONE in {elapsed}s | cells={pnr_info['std_cells']} | "
         f"{pnr_info['die_w_um']:.1f}x{pnr_info['die_h_um']:.1f} um | "
         f"DRT={pnr_info['openroad_drt_drvs']} | DRC={magic_info['magic_drc_total']} | "
         f"LVS={lvs_info['lvs_status']} | "
+        f"TT_setup={sta_info['tt_025C_1v80']['setup_wns_ns']} ns | "
         f"SS_setup={sta_info['ss_100C_1v60']['setup_wns_ns']} ns | "
         f"FF_hold={sta_info['ff_n40C_1v95']['hold_wns_ns']} ns",
         flush=True,
@@ -1280,19 +1784,32 @@ def run_block(block_name: str) -> dict[str, Any]:
 def main() -> None:
     ap = argparse.ArgumentParser(description="SKY130A Digital RTL-to-GDS/MAG P&R Flow")
     ap.add_argument(
+        "--v2",
+        action="store_true",
+        help="Run timing-closed v2 RTL flow (outputs to digital/pnr/variants/hd_pnr_v2)",
+    )
+    ap.add_argument(
         "blocks",
         nargs="*",
         choices=list(BLOCKS.keys()),
         help="Blocks to run (default: all 4 blocks)",
     )
     args = ap.parse_args()
-    targets = args.blocks or list(BLOCKS.keys())
+    block_map = BLOCKS_V2 if args.v2 else BLOCKS
+    variant_base = VARIANT_BASE_V2 if args.v2 else VARIANT_BASE
+    targets = args.blocks or list(block_map.keys())
     all_summaries: list[dict[str, Any]] = []
     for name in targets:
-        all_summaries.append(run_block(name))
-    if len(targets) == len(BLOCKS):
-        summary_path = VARIANT_BASE / "all_blocks_summary.json"
-        summary_path.write_text(json.dumps(all_summaries, indent=2) + "\n")
+        all_summaries.append(run_block(name, v2=args.v2))
+    # Refresh all_blocks_summary.json whenever all 4 block summaries exist
+    existing: list[dict[str, Any]] = []
+    for name in block_map:
+        sp = variant_base / name / "summary.json"
+        if sp.exists():
+            existing.append(json.loads(sp.read_text()))
+    if len(existing) == len(block_map):
+        summary_path = variant_base / "all_blocks_summary.json"
+        summary_path.write_text(json.dumps(existing, indent=2) + "\n")
 
 
 if __name__ == "__main__":

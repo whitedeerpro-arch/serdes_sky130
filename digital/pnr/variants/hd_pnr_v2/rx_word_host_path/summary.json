@@ -1,0 +1,70 @@
+{
+  "block": "rx_word_host_path",
+  "variant": "hd_pnr_v2",
+  "params": {},
+  "rtl_files": [
+    "digital/pnr/rtl_v2/rx_word_map.sv",
+    "digital/pnr/rtl_v2/rx_word_align16.sv",
+    "digital/pnr/rtl_v2/rx_async_word_fifo.sv",
+    "digital/pnr/rtl_v2/rx_word_host_path.sv"
+  ],
+  "clocks_mhz": {
+    "word_clk": 250.0,
+    "host_clk": 250.0
+  },
+  "synthesis": {
+    "synth_cells": 2021,
+    "synth_area_um2": 30355.3632
+  },
+  "pnr": {
+    "die_w_um": 297.205,
+    "die_h_um": 239.765,
+    "die_area_um2": 71259.357,
+    "core_w_um": 287.04,
+    "core_h_um": 228.48,
+    "std_cells": 2332,
+    "phys_cells": 4118,
+    "total_cells": 6450,
+    "design_area_um2": 40031.0,
+    "utilization_pct": 61.0,
+    "openroad_drt_drvs": 0
+  },
+  "sta_250mhz": {
+    "tt_025C_1v80": {
+      "setup_wns_ns": 1.8818,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.2214,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ss_100C_1v60": {
+      "setup_wns_ns": 0.0338,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.2372,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    },
+    "ff_n40C_1v95": {
+      "setup_wns_ns": 2.3101,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.0738,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true
+    }
+  },
+  "magic_drc_total": 0,
+  "netgen_lvs": "MATCH",
+  "lvs_match": true,
+  "artifacts": {
+    "variant_dir": "digital/pnr/variants/hd_pnr_v2/rx_word_host_path",
+    "results_dir": "results/digital/pnr_v2/rx_word_host_path",
+    "png": "digital/pnr/variants/hd_pnr_v2/rx_word_host_path/rx_word_host_path.png",
+    "gds": "digital/pnr/variants/hd_pnr_v2/rx_word_host_path/rx_word_host_path.gds",
+    "def": "digital/pnr/variants/hd_pnr_v2/rx_word_host_path/rx_word_host_path.def",
+    "verilog": "digital/pnr/variants/hd_pnr_v2/rx_word_host_path/rx_word_host_path.v"
+  },
+  "elapsed_s": 322.8
+}

@@ -22,4 +22,4 @@
 - **信道**：[channel_model.md](channel_model.md)
 
 ## 公共器件与跨模块专题
-- [cml_swing_target.md](cml_swing_target.md) · [fixed_load_resistors.md](fixed_load_resistors.md) · [fixed_poly_ac_overlay.md](fixed_poly_ac_overlay.md) · [wide_load_planning.md](wide_load_planning.md) · [power_audit.md](power_audit.md)
+- [digital_top_v3.md](digital_top_v3.md)（统一精简 SKY130A 数字顶层宏 P&R 与 3 角 OpenRCX/DRC/LVS 签核）· [cml_swing_target.md](cml_swing_target.md) · [fixed_load_resistors.md](fixed_load_resistors.md) · [fixed_poly_ac_overlay.md](fixed_poly_ac_overlay.md) · [wide_load_planning.md](wide_load_planning.md) · [power_audit.md](power_audit.md)

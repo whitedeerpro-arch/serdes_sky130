@@ -289,15 +289,19 @@ module rx_word_host_shared #(
     wire        fifo_ready;
     wire        fifo_overflow;
     wire        host_overflow;
-    wire        word_online_rst;
+    wire        word_online_int;
     reg         align_prime0;
     reg         align_prime1;
     reg         payload_started;
     reg         source_fault;
     (* ASYNC_REG = "TRUE" *) reg [1:0] fault_host;
 
-    always @(posedge word_clk or negedge word_online_rst) begin
-        if (!word_online_rst) begin
+    // Clean async reset from primary arst_n + synchronous clear on !word_online_int (zero derived-FF async resets!)
+    always @(posedge word_clk or negedge arst_n) begin
+        if (!arst_n) begin
+            align_prime0 <= 1'b0;
+            align_prime1 <= 1'b0;
+        end else if (!word_online_int) begin
             align_prime0 <= 1'b0;
             align_prime1 <= 1'b0;
         end else begin
@@ -313,7 +317,8 @@ module rx_word_host_shared #(
         .TRAIN_HITS(TRAIN_HITS)
     ) u_align (
         .clk            (word_clk),
-        .rst_n          (word_online_rst),
+        .rst_n          (arst_n),
+        .sclr           (!word_online_int),
         .chunk_valid    (align_chunk_valid),
         .training_enable(training_enable),
         .chunk          (data_samples),
@@ -325,10 +330,13 @@ module rx_word_host_shared #(
 
     wire wv_a       = aligned_valid && !training_enable;
     wire retraining = training_enable && (payload_started || aligned_valid);
-    wire ovf_hit    = word_online_rst && wv_a && !source_fault && !fifo_ready;
+    wire ovf_hit    = word_online_int && wv_a && !source_fault && !fifo_ready;
 
-    always @(posedge word_clk or negedge word_online_rst) begin
-        if (!word_online_rst) begin
+    always @(posedge word_clk or negedge arst_n) begin
+        if (!arst_n) begin
+            payload_started <= 1'b0;
+            source_fault    <= 1'b0;
+        end else if (!word_online_int) begin
             payload_started <= 1'b0;
             source_fault    <= 1'b0;
         end else begin
@@ -348,7 +356,7 @@ module rx_word_host_shared #(
         .w_data      (aligned_data),
         .w_ready     (fifo_ready),
         .w_online    (word_online),
-        .w_online_rst(word_online_rst),
+        .w_online_rst(word_online_int),
         .w_overflow  (fifo_overflow),
         .r_valid     (host_valid),
         .r_online    (host_online),
@@ -358,8 +366,12 @@ module rx_word_host_shared #(
     );
 
     reg host_error_r;
-    always @(posedge host_clk or negedge host_online) begin
-        if (!host_online) begin
+    // Clean async reset from primary arst_n + synchronous clear on !host_online (zero derived-FF async resets!)
+    always @(posedge host_clk or negedge arst_n) begin
+        if (!arst_n) begin
+            fault_host   <= 2'b00;
+            host_error_r <= 1'b0;
+        end else if (!host_online) begin
             fault_host   <= 2'b00;
             host_error_r <= 1'b0;
         end else begin

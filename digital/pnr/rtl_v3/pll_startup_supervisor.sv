@@ -72,6 +72,7 @@ module pll_startup_supervisor #(
     localparam [BW-1:0] BAD_LAST     = BAD_M1[BW-1:0];
 
     (* fsm_encoding = "none" *) reg [7:0] state;
+    reg [7:0] next_state;
     reg [CW-1:0] cycles;
     reg [GW-1:0] good_count;
     reg [BW-1:0] bad_count;
@@ -80,14 +81,12 @@ module pll_startup_supervisor #(
 
     wire quality_good = frequency_good && phase_good;
     wire rails_ready  = bias_ready && pre_ref_ready;
+    wire outputs_ok   = enable && !abort_sync[1] && rails_ready;
 
+    // Pure combinational next-state & digital host status decode
     always @* begin
-        precharge_en = 1'b0;
-        pfd_rst_b    = 1'b0;
-        cp_en        = 1'b0;
-        locked       = 1'b0;
-        busy         = |state[5:1];
-        fault        = state[7];
+        busy  = |state[5:1];
+        fault = state[7];
         case (state)
             IDLE:       state_id = 3'd0;
             WAIT_READY: state_id = 3'd1;
@@ -98,11 +97,71 @@ module pll_startup_supervisor #(
             TRACK:      state_id = 3'd6;
             default:    state_id = 3'd7;
         endcase
-        if (rst_n && enable && !abort_async && !abort_sync[1] && rails_ready) begin
-            precharge_en = state[2];
-            pfd_rst_b    = state[4] || state[5] || state[6];
-            cp_en        = state[5] || state[6];
-            locked       = state[6];
+
+        next_state = state;
+        if (!enable) begin
+            next_state = IDLE;
+        end else if (abort_sync[1]) begin
+            next_state = FAULT;
+        end else if (state != IDLE && state != WAIT_READY && state != FAULT && !rails_ready) begin
+            next_state = FAULT;
+        end else if ((state == ACQUIRE || state == TRACK) && range_fault) begin
+            next_state = FAULT;
+        end else begin
+            case (state)
+                IDLE: begin
+                    if (start) next_state = WAIT_READY;
+                end
+                WAIT_READY: begin
+                    if (rails_ready)           next_state = PRECHARGE;
+                    else if (cycles >= WAIT_LAST) next_state = FAULT;
+                end
+                PRECHARGE: begin
+                    if (cycles >= PRE_LAST) next_state = GAP;
+                end
+                GAP: begin
+                    if (cycles == GAP_LAST) next_state = FLUSH;
+                end
+                FLUSH: begin
+                    if (cycles == FLUSH_LAST) next_state = ACQUIRE;
+                end
+                ACQUIRE: begin
+                    if (quality_valid && quality_good && good_count >= GOOD_LAST)
+                        next_state = TRACK;
+                    else if (cycles >= ACQUIRE_LAST)
+                        next_state = FAULT;
+                end
+                TRACK: begin
+                    if (quality_valid) begin
+                        if (!quality_good && bad_count >= BAD_LAST)
+                            next_state = ACQUIRE;
+                    end else if (quality_age >= QUALITY_LAST) begin
+                        next_state = FAULT;
+                    end
+                end
+                FAULT: begin
+                    if (start && rails_ready) next_state = WAIT_READY;
+                end
+                default: begin
+                    next_state = FAULT;
+                end
+            endcase
+        end
+    end
+
+    // Glitch-free pure FF analog control & lock outputs (updated synchronously from next_state
+    // & synchronized abort_sync[1], asynchronously cleared to safe 0 on !rst_n; zero cycle shift).
+    always @(posedge ctrl_clk or negedge rst_n) begin
+        if (!rst_n) begin
+            precharge_en <= 1'b0;
+            pfd_rst_b    <= 1'b0;
+            cp_en        <= 1'b0;
+            locked       <= 1'b0;
+        end else begin
+            precharge_en <= outputs_ok && (next_state == PRECHARGE);
+            pfd_rst_b    <= outputs_ok && (next_state == FLUSH || next_state == ACQUIRE || next_state == TRACK);
+            cp_en        <= outputs_ok && (next_state == ACQUIRE || next_state == TRACK);
+            locked       <= outputs_ok && (next_state == TRACK);
         end
     end
 

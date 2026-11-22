@@ -9,6 +9,7 @@ module rx_word_align16 #(
 ) (
     input  wire        clk,
     input  wire        rst_n,
+    input  wire        sclr,
     input  wire        chunk_valid,
     input  wire        training_enable,
     input  wire [15:0] chunk,
@@ -95,12 +96,13 @@ module rx_word_align16 #(
     wire hit_gate   = (TRAIN_HITS <= 1) ? 1'b1 : (TRAIN_HITS == 2) ? hit_sr[0] : (TRAIN_HITS == 3) ? hit_sr[1] : hit_sr[2];
     wire hit_lock_c = s2b_vtf_0 && at_eq_cand && hit_gate;
 
-    // Async-reset control registers ONLY (14 FFs!)
+    // Async-reset (clean arst_n) + synchronous epoch-clear (sclr) control & X-safe offset/cand FFs (32 FFs)
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             s1_valid     <= 1'b0;
             s2a_valid    <= 1'b0;
             s2b_valid    <= 1'b0;
+            s2b_vtf_0    <= 1'b0;
             hit_sr       <= 3'b000;
             s2c_lock_off <= 1'b0;
             s2c_lock_0   <= 1'b0;
@@ -109,10 +111,36 @@ module rx_word_align16 #(
             s2c_clear    <= 1'b0;
             aligned      <= 1'b0;
             word_valid   <= 1'b0;
+            offset       <= 4'd0;
+            cand         <= 4'd0;
+            off0_a       <= 1'b0; off0_b <= 1'b0; off0_c <= 1'b0;
+            off1_a       <= 1'b0; off1_b <= 1'b0;
+            off2_a       <= 1'b0; off2_b <= 1'b0;
+            off3_a       <= 1'b0; off3_b <= 1'b0;
+        end else if (sclr) begin
+            s1_valid     <= 1'b0;
+            s2a_valid    <= 1'b0;
+            s2b_valid    <= 1'b0;
+            s2b_vtf_0    <= 1'b0;
+            hit_sr       <= 3'b000;
+            s2c_lock_off <= 1'b0;
+            s2c_lock_0   <= 1'b0;
+            s2c_lock_12  <= 1'b0;
+            s2c_lock_3   <= 1'b0;
+            s2c_clear    <= 1'b0;
+            aligned      <= 1'b0;
+            word_valid   <= 1'b0;
+            offset       <= 4'd0;
+            cand         <= 4'd0;
+            off0_a       <= 1'b0; off0_b <= 1'b0; off0_c <= 1'b0;
+            off1_a       <= 1'b0; off1_b <= 1'b0;
+            off2_a       <= 1'b0; off2_b <= 1'b0;
+            off3_a       <= 1'b0; off3_b <= 1'b0;
         end else begin
             s1_valid  <= chunk_valid;
             s2a_valid <= s1_valid;
             s2b_valid <= s2a_valid;
+            s2b_vtf_0 <= s2a_valid && s2a_train && found_c;
 
             // Payload valid emits at Stage 2a (1 cycle faster!) once aligned
             word_valid <= s2a_valid && !s2a_train && aligned;
@@ -136,6 +164,21 @@ module rx_word_align16 #(
                     hit_sr <= 3'b000;
                 end
             end
+
+            if (s2c_lock_off) offset <= s2c_at;
+            if (s2c_lock_0) begin
+                off0_a <= s2c_at[0]; off0_b <= s2c_at[0]; off0_c <= s2c_at[0];
+            end
+            if (s2c_lock_12) begin
+                off1_a <= s2c_at[1]; off1_b <= s2c_at[1];
+                off2_a <= s2c_at[2]; off2_b <= s2c_at[2];
+            end
+            if (s2c_lock_3) begin
+                off3_a <= s2c_at[3]; off3_b <= s2c_at[3];
+            end
+            if (s2b_vtf_0) begin
+                cand <= s2b_at;
+            end
         end
     end
 
@@ -154,26 +197,10 @@ module rx_word_align16 #(
 
         s2b_train  <= s2a_train;
         s2b_found  <= found_c;
-        s2b_vtf_0  <= s2a_valid && s2a_train && found_c;
         s2b_at     <= at_c;
         s2b_at_cmp <= at_c;
         s2c_at     <= s2b_at;
 
         word_data <= shifted_word;
-
-        if (s2c_lock_off) offset <= s2c_at;
-        if (s2c_lock_0) begin
-            off0_a <= s2c_at[0]; off0_b <= s2c_at[0]; off0_c <= s2c_at[0];
-        end
-        if (s2c_lock_12) begin
-            off1_a <= s2c_at[1]; off1_b <= s2c_at[1];
-            off2_a <= s2c_at[2]; off2_b <= s2c_at[2];
-        end
-        if (s2c_lock_3) begin
-            off3_a <= s2c_at[3]; off3_b <= s2c_at[3];
-        end
-        if (s2b_vtf_0) begin
-            cand <= s2b_at;
-        end
     end
 endmodule

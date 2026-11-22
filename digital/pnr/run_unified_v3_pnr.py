@@ -292,8 +292,8 @@ def build_v3_block_spec(
     # Snap core box to exact SKY130 unithd grid (0.46 um X, 2.72 um Y)
     x0 = round(round(margin_x / 0.46) * 0.46, 2)
     y0 = round(round(margin_y / 2.72) * 2.72, 2)
-    core_w = round(int((die_w - 2 * x0) / 0.46) * 0.46, 2)
-    core_h = round(int((die_h - 2 * y0) / 2.72) * 2.72, 2)
+    core_w = round(int((die_w - 2 * x0) / 0.46 + 1e-6) * 0.46, 2)
+    core_h = round(int((die_h - 2 * y0) / 2.72 + 1e-6) * 2.72, 2)
     x1 = round(x0 + core_w, 2)
     y1 = round(y0 + core_h, 2)
     die_w_s = round(x1 + x0, 2)
@@ -566,6 +566,140 @@ def verify_pin_regions_in_def(def_path: Path, pin_groups: list[PinGroup], die_w:
     }
 
 
+def build_v3_synth_lib(src_lib: Path, dst_lib: Path) -> Path:
+    """Create filtered SS Liberty for v3.1 Yosys synthesis.
+
+    Matches v3.0 fast_ss filtering while unlocking ``sky130_fd_sc_hd__mux4_2``
+    (saves 168 cells / ~901 um^2 in rx_word_host_shared with 0.000 ns SS setup penalty;
+    ``fa_*``/``ha_*`` stay excluded because SKY130 HD full-adder 3-PMOS carry delay
+    degrades 250/125 MHz rx_cdr_loop SS setup by -0.84 ns).
+    """
+    dst_lib.parent.mkdir(parents=True, exist_ok=True)
+    drc_exclude = base.load_excluded_cells()
+    lines = src_lib.read_text().splitlines(keepends=True)
+    cell_re = re.compile(r'^\s*cell\s*\(\s*"([^"]+)"\s*\)\s*\{')
+
+    all_cells = {m.group(1) for line in lines if (m := cell_re.match(line))}
+    weak_one = {
+        c for c in all_cells
+        if c.endswith("_1") and (c[:-2] + "_2") in all_cells and "__conb_" not in c
+    }
+    unlock_compound = {"sky130_fd_sc_hd__mux4_2"}
+
+    out: list[str] = []
+    skipping = False
+    brace_depth = 0
+    for line in lines:
+        if not skipping:
+            m = cell_re.match(line)
+            if m:
+                cname = m.group(1)
+                exclude = (
+                    base.should_exclude_for_synth(cname, drc_exclude, fast_ss=True)
+                    or cname in weak_one
+                )
+                if cname in unlock_compound:
+                    exclude = False
+                if exclude:
+                    skipping = True
+                    brace_depth = line.count("{") - line.count("}")
+                    if brace_depth <= 0:
+                        skipping = False
+                    continue
+            out.append(line)
+        else:
+            brace_depth += line.count("{") - line.count("}")
+            if brace_depth <= 0:
+                skipping = False
+    dst_lib.write_text("".join(out))
+    return dst_lib
+
+
+def v3_openroad_dont_use_tcl() -> str:
+    """OpenROAD dont_use policy for v3.1:
+    - Exclude clkbuf_* / clkinv_* BEFORE repair_design so resizer NEVER caches clkbuf_16
+      as a data/hold buffer (CTS explicit -root_buf / -buf_list still uses clkbuf_16/8/4!).
+    - Unlock compact DRC-clean hold delay cells (dlygate4sd1/2/3_1, dlymetal6s2s/4s_1,
+      buf_1, buf_2) so repair_timing -hold inserts tiny delay cells instead of giant clkbuf_16!
+    - Unlock sky130_fd_sc_hd__mux4_2 while keeping slow _1 logic and 3/4-stack cells excluded.
+    """
+    drc_exclude = sorted(base.load_excluded_cells())
+    allow_cells = {
+        "sky130_fd_sc_hd__buf_1",
+        "sky130_fd_sc_hd__mux4_2",
+        "sky130_fd_sc_hd__dlygate4sd1_1",
+        "sky130_fd_sc_hd__dlygate4sd2_1",
+        "sky130_fd_sc_hd__dlygate4sd3_1",
+        "sky130_fd_sc_hd__dlymetal6s2s_1",
+        "sky130_fd_sc_hd__dlymetal6s4s_1",
+        "sky130_fd_sc_hd__conb_1",
+    }
+    patterns = [
+        "*_0",
+        "sky130_fd_sc_hd__lpflow_*",
+        "sky130_fd_sc_hd__sdf*",
+        "sky130_fd_sc_hd__sedf*",
+        "sky130_fd_sc_hd__sdlclkp*",
+        "sky130_fd_sc_hd__probe*",
+        "sky130_fd_sc_hd__ebuf*",
+        "sky130_fd_sc_hd__clkdlybuf*",
+        "sky130_fd_sc_hd__dlymetal6s6s_1",
+        "sky130_fd_sc_hd__clkbuf_*",
+        "sky130_fd_sc_hd__clkinv_*",
+        "sky130_fd_sc_hd__bufbuf_16",
+        "sky130_fd_sc_hd__bufbuf_8",
+        "sky130_fd_sc_hd__buf_16",
+    ] + drc_exclude
+    for tok in base.SLOW_SS_CELL_TOKENS:
+        if tok == "__mux4":
+            patterns += ["sky130_fd_sc_hd__mux4_1", "sky130_fd_sc_hd__mux4_4"]
+        else:
+            patterns.append(f"sky130_fd_sc_hd{tok}*")
+    lib_text = base.LIB_SS.read_text()
+    all_c = set(re.findall(r'cell\s*\(\s*"([^"]+)"\s*\)', lib_text))
+    for c in sorted(all_c):
+        if c.endswith("_1") and (c[:-2] + "_2") in all_c and c not in allow_cells:
+            patterns.append(c)
+
+    lines = ["set dont_use_list {"]
+    for p in patterns:
+        lines.append(f"  {p}")
+    lines.append("}")
+    lines.append("foreach pat $dont_use_list {")
+    lines.append("  catch { set_dont_use $pat }")
+    lines.append("}")
+    return "\n".join(lines)
+
+
+def audit_netlist_v(verilog_path: Path) -> dict[str, Any]:
+    """Audit post-route gate-level netlist for hold buffers, clkbuf_16, dly*, and compound cells."""
+    txt = verilog_path.read_text()
+    cells = re.findall(r"^\s*(sky130_fd_sc_hd__\S+)\s+(\S+)\s*\(", txt, re.M)
+    hold_bd: dict[str, int] = {}
+    clkbuf_bd: dict[str, int] = {}
+    dly_bd: dict[str, int] = {}
+    compound_bd: dict[str, int] = {}
+    for master, inst in cells:
+        short = master.replace("sky130_fd_sc_hd__", "")
+        if inst.startswith("hold"):
+            hold_bd[short] = hold_bd.get(short, 0) + 1
+        if short.startswith("clkbuf_"):
+            clkbuf_bd[short] = clkbuf_bd.get(short, 0) + 1
+        if short.startswith("dly"):
+            dly_bd[short] = dly_bd.get(short, 0) + 1
+        if short.startswith(("mux4_", "fa_", "ha_")):
+            compound_bd[short] = compound_bd.get(short, 0) + 1
+    return {
+        "hold_buffers_total": sum(hold_bd.values()),
+        "hold_clkbuf_16": hold_bd.get("clkbuf_16", 0),
+        "hold_breakdown": dict(sorted(hold_bd.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "clkbuf_total_breakdown": dict(sorted(clkbuf_bd.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "dly_total": sum(dly_bd.values()),
+        "dly_breakdown": dict(sorted(dly_bd.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "compound_cells": dict(sorted(compound_bd.items(), key=lambda kv: (-kv[1], kv[0]))),
+    }
+
+
 def run_v3_yosys(block: base.BlockSpec, work: Path, synth_lib: Path) -> tuple[Path, dict[str, Any]]:
     """Per-subsystem Yosys synthesis with domain-appropriate ABC delay targets:
       - 250 MHz data blocks (rx_word_map, rx_word_host_shared): abc -D 1000
@@ -834,8 +968,7 @@ read_verilog {synth_v}
 link_design {block.name}
 read_sdc {sdc_path}
 
-{base.openroad_dont_use_tcl(v2=True)}
-set_dont_use {{sky130_fd_sc_hd__bufbuf_16 sky130_fd_sc_hd__bufbuf_8}}
+{v3_openroad_dont_use_tcl()}
 
 initialize_floorplan -die_area {{{da}}} -core_area {{{ca}}} -site unithd
 
@@ -911,12 +1044,12 @@ set cx0 [expr {{int({block.core_area[0]} * 1000)}}]
 set cy0 [expr {{int({block.core_area[1]} * 1000)}}]
 set cx1 [expr {{int({block.core_area[2]} * 1000)}}]
 set cy1 [expr {{int({block.core_area[3]} * 1000)}}]
-set pll_x1 [expr {{int({die_w} * 0.202 * 1000)}}]
-set tx_x0  [expr {{int({die_w} * 0.208 * 1000)}}]
-set tx_x1  [expr {{int({die_w} * 0.252 * 1000)}}]
-set tx_y0  [expr {{$cy0 + 85000}}]
-set tx_y1  [expr {{$cy1 - 85000}}]
-set rx_x0  [expr {{int({die_w} * 0.258 * 1000)}}]
+set pll_x1 [expr {{int({die_w} * 0.165 * 1000)}}]
+set tx_x0  [expr {{int({die_w} * 0.170 * 1000)}}]
+set tx_x1  [expr {{int({die_w} * 0.215 * 1000)}}]
+set tx_y0  [expr {{$cy0 + 70000}}]
+set tx_y1  [expr {{$cy1 - 70000}}]
+set rx_x0  [expr {{int({die_w} * 0.220 * 1000)}}]
 set r_pll [odb::dbRegion_create $blk_fp "reg_pll"]
 odb::dbBox_create $r_pll $cx0 $cy0 $pll_x1 $cy1
 set r_tx  [odb::dbRegion_create $blk_fp "reg_tx"]
@@ -1101,8 +1234,7 @@ read_liberty -corner ss {base.LIB_SS}
 read_liberty -corner ff {base.LIB_FF}
 read_def {routed_def}
 read_sdc {sdc_eco}
-{base.openroad_dont_use_tcl(v2=True)}
-set_dont_use {{sky130_fd_sc_hd__bufbuf_16 sky130_fd_sc_hd__bufbuf_8}}
+{v3_openroad_dont_use_tcl()}
 
 read_spef -corner ss {spef_eco_max}
 read_spef -corner ff {spef_eco_min}
@@ -1115,7 +1247,7 @@ set init_hold [expr {{$init_hold_ff < $init_hold_ss ? $init_hold_ff : $init_hold
 # ant_post_rpt from the prior pass (OpenROAD buffers -report_file until process exit)!
 set init_ant [check_antennas -report_file {work}/_ant_tmp.rpt]
 puts [format "ECO_P{eco_pass}_INIT: SS_WNS=%.4f FF_HOLD=%.4f SS_HOLD=%.4f ANT=%d" $init_wns $init_hold_ff $init_hold_ss $init_ant]
-if {{$init_wns >= 0.05 && $init_hold >= 0.025 && $init_ant == 0}} {{
+if {{$init_wns >= 0.05 && $init_hold >= 0.035 && $init_ant == 0}} {{
   puts "ECO_P{eco_pass}_SKIP_ALREADY_CLOSED"
   exit 0
 }}
@@ -1132,9 +1264,14 @@ foreach inst [$blk_eco getInsts] {{
 {wire_rc_block}
 set_routing_layers -signal met1-met5 -clock met1-met5
 
+set drc_excl_map {{}}
+foreach xc {{{' '.join(sorted(base.load_excluded_cells()))}}} {{ dict set drc_excl_map $xc 1 }}
 set all_masters {{}}
 foreach lib [$db_eco getLibs] {{
-  foreach m [$lib getMasters] {{ dict set all_masters [$m getName] 1 }}
+  foreach m [$lib getMasters] {{
+    set mn [$m getName]
+    if {{![dict exists $drc_excl_map $mn]}} {{ dict set all_masters $mn 1 }}
+  }}
 }}
 proc _next_drv {{mname all_masters}} {{
   if {{[regexp {{^sky130_fd_sc_hd__clkbuf_([0-9]+)$}} $mname -> drv]}} {{
@@ -1187,7 +1324,7 @@ if {{$init_wns < 0.06 && {eco_pass} <= 6}} {{
           set old_wns [sta::worst_slack -corner ss -max]
           set old_tns [sta::total_negative_slack -corner ss -max]
           set old_hold [sta::worst_slack -corner ff -min]
-          set hold_floor [expr {{$old_hold < 0.025 ? ($old_hold - 0.002) : 0.025}}]
+          set hold_floor [expr {{$old_hold < 0.035 ? ($old_hold - 0.002) : 0.035}}]
           if {{[catch {{replace_cell $iname $cand}}]}} {{ continue }}
           set new_wns [sta::worst_slack -corner ss -max]
           set new_tns [sta::total_negative_slack -corner ss -max]
@@ -1215,17 +1352,18 @@ set post_hold_ss [sta::worst_slack -corner ss -min]
 # 0 new cells, 0 new nets, 100% LVS clean, strictly guarded by FF_HOLD >= 0.10 ns!).
 # Runs only on violating paths where data-cell upsizing has saturated (passes 1..4).
 set eco_cloned 0
-if {{$post_eco_wns < 0.05 && $post_hold_ff >= 0.10 && {eco_pass} <= 4}} {{
+if {{$post_eco_wns < 0.05 && $post_hold_ff >= 0.10 && {eco_pass} <= 5}} {{
   set launch_leaves {{}}
   set cap_leaves {{}}
   foreach clk_grp {{{clk_groups_tcl}}} {{
     set paths [find_timing_paths -corner ss -path_delay max -path_group $clk_grp -group_count 15 -endpoint_count 1 -slack_max 0.05]
     foreach pe $paths {{
-      set p [$pe path]
-      set pins [$p pins]
-      if {{[llength $pins] < 2}} {{ continue }}
-      set sp_inst [[lindex $pins 0] instance]
-      set ep_inst [[lindex $pins end] instance]
+      set sp_pin [get_property $pe startpoint]
+      set ep_pin [get_property $pe endpoint]
+      if {{$sp_pin eq "" || $ep_pin eq ""}} {{ continue }}
+      if {{[$sp_pin is_top_level_port] || [$ep_pin is_top_level_port]}} {{ continue }}
+      set sp_inst [$sp_pin instance]
+      set ep_inst [$ep_pin instance]
       if {{$sp_inst eq "NULL" || $ep_inst eq "NULL"}} {{ continue }}
       set sp_db [$blk_eco findInst [get_full_name $sp_inst]]
       set ep_db [$blk_eco findInst [get_full_name $ep_inst]]
@@ -1281,7 +1419,7 @@ if {{$post_eco_wns < 0.05 && $post_hold_ff >= 0.10 && {eco_pass} <= 4}} {{
   }}
 }}
 
-set need_hold_fix [expr {{$post_hold_ff < 0.015 || $post_hold_ss < 0.015}}]
+set need_hold_fix [expr {{$post_hold_ff < 0.035 || $post_hold_ss < 0.035}}]
 if {{$eco_swapped == 0 && $eco_cloned == 0 && !$need_hold_fix && $init_ant == 0}} {{
   puts "ECO_P{eco_pass}_NO_CHANGES"
   exit 0
@@ -1457,6 +1595,7 @@ puts [format "CORE_UM: %.3f %.3f %.3f" $core_w $core_h [expr {{$core_w * $core_h
 
     wl = parse_wirelength_from_log(log)
     cell_stats = count_cells_in_def(routed_def)
+    netlist_audit = audit_netlist_v(routed_v)
     ant_viols = parse_antenna_violations(ant_post_rpt, log)
     pin_check = verify_pin_regions_in_def(
         routed_def,
@@ -1478,6 +1617,7 @@ puts [format "CORE_UM: %.3f %.3f %.3f" $core_w $core_h [expr {{$core_w * $core_h
         "antenna_violations": ant_viols,
         "wirelength": wl,
         "cell_stats": cell_stats,
+        "netlist_audit": netlist_audit,
         "pin_check": pin_check,
         "std_cells": cell_stats["std_cells"],
         "phys_cells": cell_stats["phys_cells"],
@@ -1870,9 +2010,9 @@ def collect_v2_baseline() -> dict[str, Any]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Lean Unified serdes_digital_top_v3 P&R & Signoff Flow")
-    ap.add_argument("--die-w", type=float, default=354.20, help="Target die width in um (default: 354.20)")
-    ap.add_argument("--die-h", type=float, default=323.68, help="Target die height in um (default: 323.68)")
-    ap.add_argument("--place-density", type=float, default=0.64, help="Global placement density (default: 0.64)")
+    ap.add_argument("--die-w", type=float, default=338.10, help="Target die width in um (default: 338.10)")
+    ap.add_argument("--die-h", type=float, default=307.36, help="Target die height in um (default: 307.36)")
+    ap.add_argument("--place-density", type=float, default=0.70, help="Global placement density (default: 0.70)")
     ap.add_argument("--setup-margin", type=float, default=0.35, help="Pre-route setup repair margin ns (default: 0.35)")
     ap.add_argument("--hold-margin", type=float, default=0.08, help="Pre-route hold repair margin ns (default: 0.08)")
     ap.add_argument("--resume-eco", action="store_true", help="Resume ECO/STA/DRC/LVS/PNG from existing Pass-0 DEF")
@@ -1893,10 +2033,9 @@ def main() -> None:
     variant_dir = VARIANT_BASE / block.name
     variant_dir.mkdir(parents=True, exist_ok=True)
 
-    synth_lib = base.build_filtered_synth_lib(
+    synth_lib = build_v3_synth_lib(
         base.LIB_SS,
-        RESULTS_BASE / "_work/sky130_fd_sc_hd__ss_fast_synth.lib",
-        fast_ss=True,
+        RESULTS_BASE / "_work/sky130_fd_sc_hd__ss_v31_synth.lib",
     )
 
     print(
@@ -1944,13 +2083,16 @@ def main() -> None:
 
     print(f"[{block.name}] 2/6 OpenROAD P&R + Cardinal Pins + Decap + Antenna + ECO (1 thread)...", flush=True)
     pnr_info = run_v3_openroad_pnr(block, pin_groups, work, synth_v, sdc_path, resume_eco=args.resume_eco)
+    na = pnr_info["netlist_audit"]
     print(
         f"[{block.name}]   Die={pnr_info['die_w_um']:.2f}x{pnr_info['die_h_um']:.2f} um "
         f"({pnr_info['die_area_um2']:.0f} um^2) | Util={pnr_info['utilization_pct']:.1f}% | "
         f"Std={pnr_info['std_cells']} | Decap={pnr_info['cell_stats']['decap_cells_total']} "
         f"({pnr_info['cell_stats']['decap_cap_pf']:.2f} pF) | Diodes={pnr_info['cell_stats']['diode_cells']} | "
         f"Ant={pnr_info['antenna_violations']} | DRT={pnr_info['openroad_drt_drvs']} | "
-        f"WL={pnr_info['wirelength']['total_um']} um | PinRegionViols={pnr_info['pin_check']['region_violations']}",
+        f"WL={pnr_info['wirelength']['total_um']} um | PinRegionViols={pnr_info['pin_check']['region_violations']}\n"
+        f"[{block.name}]   NetlistAudit: hold_total={na['hold_buffers_total']} (hold_clkbuf_16={na['hold_clkbuf_16']}, "
+        f"breakdown={na['hold_breakdown']}) | dly={na['dly_total']} | compound={na['compound_cells']}",
         flush=True,
     )
 
@@ -2029,6 +2171,7 @@ def main() -> None:
             "antenna_violations": pnr_info["antenna_violations"],
             "wirelength": pnr_info["wirelength"],
             "cell_stats": pnr_info["cell_stats"],
+            "netlist_audit": pnr_info["netlist_audit"],
             "pin_check": pnr_info["pin_check"],
         },
         "sta_3corner": sta_info,

@@ -39,6 +39,8 @@ N_STD = "sky130_fd_pr__nfet_01v8"
 N_LVT = "sky130_fd_pr__nfet_01v8_lvt"
 P_STD = "sky130_fd_pr__pfet_01v8"
 P_LVT = "sky130_fd_pr__pfet_01v8_lvt"
+R_0P35 = "sky130_fd_pr__res_high_po_0p35"
+R_0P69 = "sky130_fd_pr__res_high_po_0p69"
 R_2P85 = "sky130_fd_pr__res_high_po_2p85"
 R_5P73 = "sky130_fd_pr__res_high_po_5p73"
 MIM1 = "sky130_fd_pr__cap_mim_m3_1"
@@ -414,8 +416,12 @@ def generate_rx_ref_spice(
     subckts = _parse_spice_subckts([
         COMMON_SPICE_DIR / "sky130_primitives.spice",
         COMMON_SPICE_DIR / "sky130_pfet_lvt.spice",
+        REPO / "analog/common/bias/spice/bias_v2.spice",
         RX_SPICE_DIR / "rx_ctle_pdk.spice",
         RX_SPICE_DIR / "rx_dt_sampler.spice",
+        RX_SPICE_DIR / "rx_cmos_pi.spice",
+        RX_SPICE_DIR / "rx_cmos_deser16.spice",
+        RX_SPICE_DIR / "rx_cmos_top.spice",
     ])
     if top_src_subckt not in subckts:
         raise KeyError(f"Unknown subckt {top_src_subckt}")

@@ -71,6 +71,24 @@
 - **`tb_serdes_digital_top_v3`**：PASS（4 子系统联合验证：PLL 423 周期锁定 `vco_code=18`、TX 预热与 A/B 流水、RX `offset=11` 对齐与异步 FIFO 60 字 0 错、CDR 跨 `arst_n` 纪元复位持续跟踪且 PI 选通严格独热）。
 - **v3.1 专项验证**：确认 `pll_startup_supervisor` 周期中段拉高 `abort_async` 不产生模拟端口组合毛刺并在同步后安全进入 `FAULT 5`、确认 `rx_word_align16` 异步复位后 32 个控制/偏移/候选寄存器全零无 X 态。
 
+## VCS SDF 后布局门级仿真（GLS）+ SVA + Verdi FSDB 签核
+
+使用本机 Synopsys **VCS-MX O-2018.09-SP2** 与 **Verdi O-2018.09-SP2 PLI** 对签核门级网表 [serdes_digital_top_v3.v](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.v) 完成 4 模式（RTL 黄金 + 3 角 OpenRCX 导出 SDF 3.0）门级后仿签核（脚本：[run_v3_gls_vcs.py](../../digital/pnr/run_v3_gls_vcs.py)，测试台：[tb_serdes_digital_top_v3_gls.sv](../../digital/pnr/rtl_v3/tb_serdes_digital_top_v3_gls.sv)，文件清单：[rtl_v3.f](../../digital/pnr/rtl_v3/rtl_v3.f) / [gls_v3.f](../../digital/pnr/rtl_v3/gls_v3.f)）。单线程 OpenROAD（`-threads 1`）从签核 `.def` + `nom/max/min` OpenRCX `.spef` 导出三份完整 SDF 3.0（每角均含 **12,026 IOPATH、12,489 INTERCONNECT、1,375 TIMINGCHECK**，覆盖全部 2,750 SETUP、2,750 HOLD、806 RECOVERY、806 REMOVAL；VCS 反标 `0` 报错，156 条提示全为顶层输出端口上层互连 `SDFCOM_UHICD`）。
+
+| 仿真模式 | SDF 反标 / 标志 | 状态 | 同步时序违例 | 异步 FIFO 未选中体 `s1_b*` 跨越 | SVA 通过 / 失败 | PLL 模拟端口毛刺 | RX 错字 (`e0/e1`) | CDR `+300` / `−300 ppm` 峰值误差 (ps) |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| `rtl_golden` | RTL 黄金 | **PASS** | **0** | 0 | 122,608 / **0** | **0** | 0 (`82 / 34`) | `21.08` / `22.84` |
+| `gls_tt_025C_1v80` | `typ` + `+neg_tchk -negdelay` + Verdi FSDB | **PASS** | **0** | 13（0 X 逸出） | 122,608 / **0** | **0** | 0 (`83 / 34`) | `21.08` / `22.84` |
+| `gls_ss_100C_1v60` | `max` + `+neg_tchk -negdelay` | **PASS** | **0** | 22（0 X 逸出） | 122,608 / **0** | **0** | 0 (`83 / 34`) | `24.13` / `24.19` |
+| `gls_ff_n40C_1v95` | `min` + `+neg_tchk -negdelay` | **PASS** | **0** | 5（0 X 逸出） | 122,608 / **0** | **0** | 0 (`83 / 34`) | `21.08` / `22.84` |
+
+关键签核细节与透明披露：
+
+- **4 子系统门级实测（全角默认生产参数）**：PLL 冷启动 5-bit 粗调 4,953 拍锁定 `vco_code=26` 且周期中段 `pll_abort_async` 脉冲零毛刺进入 `FAULT 5`；TX 250 MHz 16 字捕获与 A/B 排空全匹配；RX 跨异步 `rx_word_clk` (4.000 ns) → `host_clk` (3.920 ns) 含周期背压完成 `offset=11`（83 字）与 `arst_n` 纪元复位恢复 `offset=5`（34 字）全 0 错字；RX CDR 通过共享 `rx_word_map` 在实测 PI LUT 上完成 `+300 ppm` 闭环锁定与不停机 `−300 ppm` 反向重锁（`wraps = 21/17..18`，RMS `8.98–9.79 ps`，0 非法 PI 跳变）。
+- **SVA 协议断言（每模式 122,608 拍全通过 / 0 失败）**：全周期实时监测 `rx_select_a`/`rx_select_b` 严格独热且互斥、`rx_fine_b` 合法温度计码、`precharge_en`/`pfd_rst_b`/`cp_en`/`pll_locked` 零 X/Z 且零 `< 8 ns` 组合毛刺、`host_valid` 期间 `host_data` 零 X/Z、`tx_capture_valid` 期间 `tx_capture_data` 零 X/Z。
+- **CDC 同步器时序检查豁免与未选中体追踪**：全片 1,375 个触发器中，仅对 **24 个明确的第一级异步/CDC 同步触发器**通过 `+optconfigfile`（`noTiming`，保留全部 SDF 延迟）关闭违例检查：PLL 异步输入首级 8 例（`_5051_`/`_5052_`/`_5059_`/`_5144_`/`_5145_`/`_5170_`/`_5171_`/`_5172_`）、RX↔Host 跨时钟域首级 14 例（`_8022_`、`w_gray_r1` `_8523_.._8527_`、`_8528_`、`_8530_`、`r_gray_w1` `_8591_.._8595_`、`_8596_`）及 `arst_n` 复位同步首级 2 例（`r_rst_s0` `_8606_`、`w_rst_s0` `_8612_`）；其余 **1,351 个触发器全部开启完整 `$setuphold`/`$recrem` 检查并确认 0 同步时序违例**。异步 FIFO 一级 4 体无条件预取触发器 `s1_b0..s1_b3`（64 例，未豁免）在异步写未选中存储体时产生 13 / 22 / 5 次预期跨时钟提示，由 Gray 指针保护的 `s1_hi`/`s1_valid` 完全屏蔽，0 X 态逸出至 `host_data`。
+- **工具环境说明**：本机许可不含 `VT_VCS_XProp` 扩展，门级仿真采用 VCS 原生 4 态标准单元 UDP 传播（所有未复位寄存器初态为 `X`）；Verdi 波形已导出至 `results/digital/gls_v3_1/serdes_digital_top_v3_tt_gls.fsdb`（4.1 MB），汇总 JSON 位于 `results/digital/gls_v3_1/summary.json`。
+
 ## 交付物与适用范围
 
 - 交付物位于 [digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/)：`.def`、`.gds`、`.v`、`_pg.v`、`.png` 与 [summary.json](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json)。

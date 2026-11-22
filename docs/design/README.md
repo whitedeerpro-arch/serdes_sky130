@@ -3,7 +3,7 @@
 项目级采用状态与验证数字唯一汇总见 [current.md](../status/current.md)，执行队列见 [prelayout_plan.md](../status/prelayout_plan.md)，修订线与源文件见 [revisions.md](../overview/revisions.md)。本目录保存各模块原理、尺寸推导、边界与局部验证记录。
 
 ## PLL 与时钟
-- **核心与环路**：[pll_loop.md](pll_loop.md) · [r6_lock_confirmation.md](r6_lock_confirmation.md) · [r6_mainline_review.md](r6_mainline_review.md) · [pll_cp_window.md](pll_cp_window.md) · [pll_coarse_windows.md](pll_coarse_windows.md)
+- **核心与环路**：[pll_loop.md](pll_loop.md) · [r6_lock_confirmation.md](r6_lock_confirmation.md) · [r6_mainline_review.md](r6_mainline_review.md) · [pll_cp_window.md](pll_cp_window.md) · [pll_cp_v4.md](pll_cp_v4.md)（1/4 副本主动伺服 + 宽摆幅 PDK 候选）· [pll_coarse_windows.md](pll_coarse_windows.md)
 - **VCO 与电容阵列**：[pll_vco.md](pll_vco.md) · [pll_vco_r6_ptat.md](pll_vco_r6_ptat.md)（融合 BIAS v2 PTAT 尾流温补，45/45 跨三温单码候选）· [r6_map_audit.md](r6_map_audit.md) · [vco_bank_optimization.md](vco_bank_optimization.md)
 - **分频器与时钟接收**：[pll_divider.md](pll_divider.md)（主线 r3 CML ÷8）· [pll_sync_prescaler8.md](pll_sync_prescaler8.md)（2-Stack 同步 CML 候选）· [pll_tspc_reclock_divider.md](pll_tspc_reclock_divider.md)（纯 CMOS Equalized Nikolic SAFF-TSPC 重定时候选）· [clock_receiver.md](clock_receiver.md)（CML→CMOS）· [ref_amp.md](ref_amp.md)
 - **供电与纹波预算**：[pll_ripple_budget.md](pll_ripple_budget.md) · [pll_supply_options.md](pll_supply_options.md) · [pll_supply_variants.md](pll_supply_variants.md) · [pll_timing_supply_review.md](pll_timing_supply_review.md)

@@ -4,7 +4,7 @@
 
 ## PLL 与时钟
 - **核心与环路**：[pll_loop.md](pll_loop.md) · [r6_lock_confirmation.md](r6_lock_confirmation.md) · [r6_mainline_review.md](r6_mainline_review.md) · [pll_cp_window.md](pll_cp_window.md) · [pll_cp_v4.md](pll_cp_v4.md)（1/4 副本主动伺服 + 宽摆幅 PDK 候选）· [pll_coarse_windows.md](pll_coarse_windows.md)
-- **VCO 与电容阵列**：[pll_vco.md](pll_vco.md) · [pll_vco_r6_ptat.md](pll_vco_r6_ptat.md)（融合 BIAS v2 PTAT 尾流温补，45/45 跨三温单码候选）· [pll_vco_r6_perf.md](pll_vco_r6_perf.md)（r6+PTAT `28/66` + `sym9_clean` CPEX 精度与 PLL v4 相噪/抖动标定）· [r6_map_audit.md](r6_map_audit.md) · [vco_bank_optimization.md](vco_bank_optimization.md)
+- **VCO 与电容阵列**：[pll_vco.md](pll_vco.md) · [pll_vco_r6_ptat.md](pll_vco_r6_ptat.md)（融合 BIAS v2 PTAT 尾流温补，45/45 跨三温单码候选）· [pll_vco_r6_perf.md](pll_vco_r6_perf.md)（r6+PTAT `28/66` + `sym9_clean` CPEX 精度与 PLL v4 相噪/抖动标定）· [vco_5g_shootout.md](vco_5g_shootout.md)（5 Gb/s 拓展目标三架构对比：稳压 CMOS 环振 / Maneatis / 5 GHz LC+÷2）· [r6_map_audit.md](r6_map_audit.md) · [vco_bank_optimization.md](vco_bank_optimization.md)
 - **分频器与时钟接收**：[pll_divider.md](pll_divider.md)（主线 r3 CML ÷8）· [pll_sync_prescaler8.md](pll_sync_prescaler8.md)（2-Stack 同步 CML 候选）· [pll_tspc_reclock_divider.md](pll_tspc_reclock_divider.md)（纯 CMOS Equalized Nikolic SAFF-TSPC 重定时候选）· [clock_receiver.md](clock_receiver.md)（CML→CMOS）· [ref_amp.md](ref_amp.md)
 - **供电与纹波预算**：[pll_ripple_budget.md](pll_ripple_budget.md) · [pll_supply_options.md](pll_supply_options.md) · [pll_supply_variants.md](pll_supply_variants.md) · [pll_timing_supply_review.md](pll_timing_supply_review.md)
 

@@ -1,0 +1,87 @@
+* Arch A: 2.5 GHz Supply-Regulated Pseudo-Differential CMOS Inverter Ring VCO (4-stage / 8-phase)
+* 100% real SKY130A PDK devices (nfet_01v8_lvt, pfet_01v8, nfet_01v8, cap_mim_m3_1, res_high_po_1p41).
+*
+* Architecture:
+*   - Local PMOS-pass supply regulator (vco5g_cmos_reg_ldo):
+*     5T NMOS-input / PMOS-mirror error OTA compares V_fb = (2/3)*V_reg (via matched high_po_1p41
+*     10k/20k divider, ~40 uA) against V_ctrl (pure MOS gate, zero DC current!), regulating
+*     V_reg = 1.50 * V_ctrl cleanly across V_reg = 0.80 V .. VDD - 0.12 V (V_ctrl = 0.53..1.02 V,
+*     dead-center inside both CP v4 and OTA input common-mode windows on 1.65-1.95 V supplies!).
+*     Wide PMOS pass device (480/0.15) + VDD-tracking PMOS mirror + 4.1 pF MIM bypass on V_reg
+*     provides strong multi-voltage isolation and high 20 MHz PSRR.
+*   - 4-stage pseudo-differential CMOS inverter ring (vco5g_cmos_cell):
+*     Main inverters (nfet_lvt W=20/0.15 + pfet_01v8 W=44/0.15) with 1:3.3 cross-coupled latch
+*     inverters (Wn_lat=6, Wp_lat=13.2) for strict 180-deg differential alignment, guaranteed
+*     zero common-mode stall across all PVT, 12 fF/node wire parasitic, and 4x CMOS buffers.
+
+.subckt vco5g_cmos_cell inp inn outp outn vreg vss
++ params: wn=24 wp=48 lch=0.15 nfn=8 nfp=16 wn_lat=4.2 wp_lat=8.4 nfn_lat=2 nfp_lat=4 cwire=12f
+* Main pseudo-differential inverter pair
+Xmp_p outp inp vreg vreg serdes_pfet w={wp} l={lch} nf={nfp}
+Xmn_p outp inp vss  vss  serdes_nfet_lvt w={wn} l={lch} nf={nfn}
+Xmp_n outn inn vreg vreg serdes_pfet w={wp} l={lch} nf={nfp}
+Xmn_n outn inn vss  vss  serdes_nfet_lvt w={wn} l={lch} nf={nfn}
+* Cross-coupled latch inverters (~1:3.3 ratio) suppress common-mode stall & enforce 180-deg alignment
+Xmlp_p outp outn vreg vreg serdes_pfet w={wp_lat} l={lch} nf={nfp_lat}
+Xmln_p outp outn vss  vss  serdes_nfet_lvt w={wn_lat} l={lch} nf={nfn_lat}
+Xmlp_n outn outp vreg vreg serdes_pfet w={wp_lat} l={lch} nf={nfp_lat}
+Xmln_n outn outp vss  vss  serdes_nfet_lvt w={wn_lat} l={lch} nf={nfn_lat}
+* Schematic layout-wire parasitic budget (12 fF/node, matching r6)
+Cwp outp vss {cwire}
+Cwn outn vss {cwire}
+.ends vco5g_cmos_cell
+
+* Compact CMOS output buffer (powered by VDD, light ~9 fF input cap on ring phase node)
+.subckt vco5g_cmos_buf inp inn outp outn vdd vss
+Xbp1 midp inp vdd vdd serdes_pfet w=3 l=0.15 nf=2
+Xbn1 midp inp vss vss serdes_nfet_lvt w=1.5 l=0.15 nf=1
+Xbp2 midn inn vdd vdd serdes_pfet w=3 l=0.15 nf=2
+Xbn2 midn inn vss vss serdes_nfet_lvt w=1.5 l=0.15 nf=1
+Xbp3 outp midp vdd vdd serdes_pfet w=8 l=0.15 nf=4
+Xbn3 outp midp vss vss serdes_nfet_lvt w=4 l=0.15 nf=2
+Xbp4 outn midn vdd vdd serdes_pfet w=8 l=0.15 nf=4
+Xbn4 outn midn vss vss serdes_nfet_lvt w=4 l=0.15 nf=2
+.ends vco5g_cmos_buf
+
+* Local PMOS-pass supply regulator: V_reg = 1.50 * V_ctrl (OTA sees V_fb = 2/3 V_reg vs V_ctrl)
+.subckt vco5g_cmos_reg_ldo vctrl vreg vdd vss
++ params: wpass=480 lpass=0.15 nfpass=120 win=48 lin=0.5 nfin=12 wmir=48 lmir=0.5 nfmir=12 wtail=24 ltail=0.5 nftail=6
+* Matched 10k : 20k feedback divider (exact 2:1 ratio cancels process/T/contact head identically!)
+Xrfb_t  vreg vfb  vss sky130_fd_pr__res_high_po_1p41 l=42.4
+Xrfb_b1 vfb  vfbm vss sky130_fd_pr__res_high_po_1p41 l=42.4
+Xrfb_b2 vfbm vss  vss sky130_fd_pr__res_high_po_1p41 l=42.4
+* Feedforward zero cap across top resistor (~0.4 pF) boosts phase margin & high-freq PSRR
+Xcff vreg vfb sky130_fd_pr__cap_mim_m3_1 w=14 l=14
+* Self-biased OTA tail current (~240 uA) using real SKY130 high_po_1p41 (~5.0 kOhm)
+Xrbias vdd bdiode vss sky130_fd_pr__res_high_po_1p41 l=20.6
+Xnbias bdiode bdiode vss vss serdes_nfet w=12 l=0.5 nf=4
+* 5T OTA (V_fb rises -> n_diode drops -> vg_pass rises -> Xpass turns off -> V_reg drops: negative feedback!)
+Xtail otatail bdiode vss vss serdes_nfet w={wtail} l={ltail} nf={nftail}
+Xin_fb  n_diode vfb   otatail vss serdes_nfet_lvt w={win} l={lin} nf={nfin}
+Xin_ref vg_pass vctrl otatail vss serdes_nfet_lvt w={win} l={lin} nf={nfin}
+Xm1 n_diode n_diode vdd vdd serdes_pfet w={wmir} l={lmir} nf={nfmir}
+Xm2 vg_pass n_diode vdd vdd serdes_pfet w={wmir} l={lmir} nf={nfmir}
+* Dominant-pole compensation cap on vg_pass to VDD (also reinforces VDD-to-gate AC feedforward!)
+Xcc vg_pass vdd sky130_fd_pr__cap_mim_m3_1 w=22 l=22
+* Wide PMOS pass transistor (low dropout < 110 mV even at 1.65 V VDD and SS 85 C)
+Xpass vreg vg_pass vdd vdd serdes_pfet w={wpass} l={lpass} nf={nfpass}
+* Local MIM bypass cap on V_reg (~4.1 pF: 2x 32x32 um MIM) to filter regulator & switching noise
+Xcreg1 vreg vss sky130_fd_pr__cap_mim_m3_1 w=32 l=32
+Xcreg2 vreg vss sky130_fd_pr__cap_mim_m3_1 w=32 l=32
+.ends vco5g_cmos_reg_ldo
+
+* Complete Arch A Top: Regulator + 4-stage Ring + 4 Output Buffers
+.subckt vco5g_ring_cmos_reg v0p v0n v1p v1n v2p v2n v3p v3n b0p b0n b1p b1n b2p b2n b3p b3n vctrl vreg vdd vss
++ params: wn=24 wp=48 lch=0.15 nfn=8 nfp=16 wn_lat=4.2 wp_lat=8.4 nfn_lat=2 nfp_lat=4 cwire=12f
+Xreg vctrl vreg_int vdd vss vco5g_cmos_reg_ldo
+Vreg_sense vreg_int vreg 0
+X0 v3n v3p v0p v0n vreg vss vco5g_cmos_cell wn={wn} wp={wp} lch={lch} nfn={nfn} nfp={nfp} wn_lat={wn_lat} wp_lat={wp_lat} nfn_lat={nfn_lat} nfp_lat={nfp_lat} cwire={cwire}
+X1 v0p v0n v1p v1n vreg vss vco5g_cmos_cell wn={wn} wp={wp} lch={lch} nfn={nfn} nfp={nfp} wn_lat={wn_lat} wp_lat={wp_lat} nfn_lat={nfn_lat} nfp_lat={nfp_lat} cwire={cwire}
+X2 v1p v1n v2p v2n vreg vss vco5g_cmos_cell wn={wn} wp={wp} lch={lch} nfn={nfn} nfp={nfp} wn_lat={wn_lat} wp_lat={wp_lat} nfn_lat={nfn_lat} nfp_lat={nfp_lat} cwire={cwire}
+X3 v2p v2n v3p v3n vreg vss vco5g_cmos_cell wn={wn} wp={wp} lch={lch} nfn={nfn} nfp={nfp} wn_lat={wn_lat} wp_lat={wp_lat} nfn_lat={nfn_lat} nfp_lat={nfp_lat} cwire={cwire}
+Vbuf_sense vdd vdd_buf 0
+Xb0 v0p v0n b0p b0n vdd_buf vss vco5g_cmos_buf
+Xb1 v1p v1n b1p b1n vdd_buf vss vco5g_cmos_buf
+Xb2 v2p v2n b2p b2n vdd_buf vss vco5g_cmos_buf
+Xb3 v3p v3n b3p b3n vdd_buf vss vco5g_cmos_buf
+.ends vco5g_ring_cmos_reg

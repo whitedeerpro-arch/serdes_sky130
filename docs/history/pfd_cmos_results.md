@@ -125,8 +125,8 @@ CMOS 反馈节点约 −0.038 至 1.884 V，模型中存在寄生耦合造成的
 
 ## 产物与覆盖边界
 
-汇总数据：[CSV](../data/pfd_cmos_points.csv)。矢量图：[响应曲线](../figures/clocking/pll/core/pfd_cmos_transfer.svg)、
-[时序波形](../figures/clocking/pll/core/pfd_cmos_waveforms.svg)。
+汇总数据：[CSV](../data/pfd_cmos_points.csv)。矢量图：[响应曲线](../figures/clocking/pll/core/pfd_cmos_transfer.png)、
+[时序波形](../figures/clocking/pll/core/pfd_cmos_waveforms.png)。
 运行目录中保留 run.json、metrics.json、完整输入快照/依赖 SHA256、日志、原始波形和逐周期积分数据。
 
 - `results/analog/pll/pfd/functional/20261027T141425Z_*`：首次 250 MHz 基准；

@@ -56,7 +56,7 @@ DC时线尾管关闭，4 ns后开启；未强设AC电容初态。100 ns瞬态覆
 
 - [晶体管TX+PCB模板](../../analog/tx/output_driver/tb/pcb_channel/tb_serializer16_pcb_ngspice.cir.in)和[测试条件](../../analog/tx/output_driver/tb/pcb_channel/case.toml)。替换项目/PDK/工艺角/通道占位符，复制声明的原始stimuli.inc并保留hsa兼容设置。各运行目录也保留完整输入快照。
 - [汇总指标](../data/tx_pcb_channel_integration.json)：训练延迟、采样、跳变、共模、供电窗口均值及诊断。各run/raw包含逐位采样、逐边沿残差和2UI数组。
-- [C0运行](../../results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C0_debug/metrics.json)、[C2运行](../../results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6/metrics.json)、[C3运行](../../results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C3_loss10/metrics.json)。同目录run.json含命令、PDK解析路径、输入SHA256、日志/记录终点状态。
+- C0运行 (`results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C0_debug/metrics.json`)、C2运行 (`results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6/metrics.json`)、C3运行 (`results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C3_loss10/metrics.json`)。同目录run.json含命令、PDK解析路径、输入SHA256、日志/记录终点状态。
 
 三组均完整运行至100 ns，最大瞬态步长4 ps；收集时核对输入哈希、记录终点、有限数值、严格递增时间、训练标记及跳变匹配。尚未进行瞬态步长/网格收敛签核、噪声、失调、PVT、相噪、实际采样器或CDR验证。未改变v0.1冻结包。
 

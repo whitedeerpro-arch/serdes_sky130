@@ -2,7 +2,7 @@
 
 2026-10-30。当前基线完成 **45 个 MOS/电压/温度工况的独立输出级 + 45 个真实加载串化链**，近无损 RLC 下均无有限码型采样/跳变错误；但串化器仅 **36/45** 满足既有 75 mV / 0.15 UI 裕量草案。6 dB PCB 的弱角已有错误，因此本轮是表征完成，不是 TX 全 PVT 通过。
 
-数据：[汇总 JSON](../data/tx_pvt.json)；执行档案：[campaign](../../results/analog/tx/pvt/20261029T172144Z)；测试边界：[契约](../../verification/contracts/tx_pvt.toml)。未改冻结 v0.1、现有串化器或输出级默认电路，两个实际 MOS 候选另列。
+数据：[汇总 JSON](../data/tx_pvt.json)；执行档案：campaign (`results/analog/tx/pvt/20261029T172144Z`)；测试边界：[契约](../../verification/contracts/tx_pvt.toml)。未改冻结 v0.1、现有串化器或输出级默认电路，两个实际 MOS 候选另列。
 
 ## 测试层次和边界
 

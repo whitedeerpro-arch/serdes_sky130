@@ -2,7 +2,7 @@
 
 **选用 `b32_h2` 的70pF电气数值作为减容基点：本体MIM从218pF降到70pF（−67.9%），核心从102pF降到50pF。** 首轮核心通过full-rule DRC/LVS/端口检查，面积0.087021→0.062096mm²（−28.64%）；本页下表和旧PEX证据对应该首轮。后续单层紧凑核心已至0.052396mm²，新增[第二轮电容/面积迭代](ldo_cap_area.md)验证12pF及同值叠层候选，后者核心0.039775mm²。各提取快照分开追溯，原r4/PLL采用状态保留。
 
-入口：[电路核心](../../analog/common/ldo/spice/ldo_hv18_core_smallcap.spice)、[供电宏](../../analog/common/ldo/spice/pll_supply_hv18_smallcap.spice)、[物理候选](../../analog/common/ldo/layout/variants/smallcap_pdk/README.md)、[小数据](../data/ldo_smallcap.json)、[结果索引](../../results/catalog/ldo_smallcap.json)、[固定证据清单](../../config/ldo_smallcap_evidence.json)。
+入口：[电路核心](../../analog/ldo/spice/ldo_hv18_core_smallcap.spice)、[供电宏](../../analog/ldo/spice/pll_supply_hv18_smallcap.spice)、[物理候选](../../results/catalog/retired_pre_release_20261123.json)、[小数据](../data/ldo_smallcap.json)、[结果索引](../../results/catalog/ldo_smallcap.json)、[固定证据清单](../../config/ldo_smallcap_evidence.json)。
 
 ## 电路和面积
 
@@ -35,7 +35,7 @@ MOS尺寸、反馈电压DAC、开关/使能拓扑均保持。物理MIM使用真�
 
 ## 局部失配首轮（2026-11-14）
 
-**TT和FS热ll各16颗样本，逐颗修调后均满足本轮DC/AC门槛；固定一个名义码不能覆盖这些样本。** 这轮支持继续使用70pF候选和6位逐颗修调，尚不构成完整失配或良率资格。原始结果与身份见[失配索引](../../results/catalog/ldo_smallcap_mismatch.json)，测试台见[失配执行器](../../analog/common/ldo/tb/cap_sizing/mismatch.py)。
+**TT和FS热ll各16颗样本，逐颗修调后均满足本轮DC/AC门槛；固定一个名义码不能覆盖这些样本。** 这轮支持继续使用70pF候选和6位逐颗修调，尚不构成完整失配或良率资格。原始结果与身份见[失配索引](../../results/catalog/ldo_smallcap_mismatch.json)，测试台见[失配执行器](../../analog/ldo/tb/cap_sizing/mismatch.py)。
 
 | 工况 / 样本数 | 固定名义码输出，27°C校准工况 | 逐颗修调后受检负载输出 | 20MHz PSRR最低 | PM最低 |
 |---|---|---|---|---|
@@ -72,7 +72,7 @@ MOS尺寸、反馈电压DAC、开关/使能拓扑均保持。物理MIM使用真�
 
 ## 成本、复跑和维护
 
-测试台见[cap_sizing](../../analog/common/ldo/tb/cap_sizing/README.md)。短分析按工艺/RC合deck，单deck包含81条DC与17条AC；本轮局部PVT使用两个worker，完整网格为分钟级任务。核心PEX展开更多器件，受检deck约1–2分钟。完整PDK与显式精简族库的r4五条件四组AC表逐值相同；MC不使用此裁剪。
+测试台见[cap_sizing](../../analog/ldo/tb/cap_sizing/README.md)。短分析按工艺/RC合deck，单deck包含81条DC与17条AC；本轮局部PVT使用两个worker，完整网格为分钟级任务。核心PEX展开更多器件，受检deck约1–2分钟。完整PDK与显式精简族库的r4五条件四组AC表逐值相同；MC不使用此裁剪。
 
 ```bash
 uv run python verification/plotting/ldo_smallcap.py --manifest config/ldo_smallcap_evidence.json

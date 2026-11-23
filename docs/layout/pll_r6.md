@@ -20,7 +20,7 @@
 
 ## 已实现的局部迭代
 
-[生成器与候选几何](../../analog/pll/vco/layout/variants/r6_pdk/README.md)包括真正的 r6 电容半单元，以及沿用 Gemini 对称主体的变容器。半单元有两指共享漏极、正确的 MIM 上/下极板与三个外部端口；变容器去掉穿入保护环的错误 dummy，保留四个真实指、走线与保护环。
+[生成器与候选几何](../../analog/pll/vco/layout/variants/sym9_clean/README.md)包括真正的 r6 电容半单元，以及沿用 Gemini 对称主体的变容器。半单元有两指共享漏极、正确的 MIM 上/下极板与三个外部端口；变容器去掉穿入保护环的错误 dummy，保留四个真实指、走线与保护环。
 
 ![本轮真实叶单元几何](../figures/layout/pll/pll_r6_leaves.png)
 

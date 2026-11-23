@@ -6,11 +6,11 @@ Complete hierarchical SKY130A PDK physical layout suite for the 4 Gb/s Zero-CML 
 
 | Cell | Size (`W × H µm`) | Area (`µm²`) | AR | Devices (Raw / Merged) | Ports | Magic Full DRC | Netgen LVS | Prop Err | Floating Poly | `review_cell.py` (`phys` / `rc_dev`) |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| [`sst_slice_unit_pdk.mag`](sst_slice_unit_pdk.mag) | `8.80 × 25.17` | `221.5` | `0.35` | `18 / 18` | `8 / 8` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`sst_vdrv_ldo_pdk.mag`](sst_vdrv_ldo_pdk.mag) | `86.50 × 88.62` | `7,665.6` | `0.98` | `25 / 15` | `4 / 4` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_tx_sst_driver_pdk.mag`](serdes_tx_sst_driver_pdk.mag) | `231.50 × 90.08` | `20,853.5` | `2.57` | `705 / 695` | `27 / 27` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_tx_sst_serializer16_pdk.mag`](serdes_tx_sst_serializer16_pdk.mag) | `227.98 × 51.62` | `11,768.3` | `4.42` | `1,132 / 1,132` | `33 / 33` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_tx_sst_top_pdk.mag`](serdes_tx_sst_top_pdk.mag) | `231.50 × 146.98` | `34,025.9` | `1.58` | `1,837 / 1,827` | `38 / 38` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `sst_slice_unit_pdk.mag` | `8.80 × 25.17` | `221.5` | `0.35` | `18 / 18` | `8 / 8` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `sst_vdrv_ldo_pdk.mag` | `86.50 × 88.62` | `7,665.6` | `0.98` | `25 / 15` | `4 / 4` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_tx_sst_driver_pdk.mag` | `231.50 × 90.08` | `20,853.5` | `2.57` | `705 / 695` | `27 / 27` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_tx_sst_serializer16_pdk.mag` | `227.98 × 51.62` | `11,768.3` | `4.42` | `1,132 / 1,132` | `33 / 33` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_tx_sst_top_pdk.mag` | `231.50 × 146.98` | `34,025.9` | `1.58` | `1,837 / 1,827` | `38 / 38` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
 
 ## Extracted Parasitics (CPEX & Native Magic RCX)
 

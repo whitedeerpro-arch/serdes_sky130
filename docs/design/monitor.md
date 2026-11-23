@@ -24,7 +24,7 @@
 
 ## 接口约定
 
-- 模拟积木吃电流不吃栅压：偏置来自 [bias_dist](../../analog/common/bias/spice/bias_dist.spice) 的 `serdes_bias_pcopy`（一指 = vbg / r_ref / 4 ≈ 2.5 µA）。不改偏置模块内部（温度感测不从带隙核心环取 PTAT，避免给其环路加负载）。
+- 模拟积木吃电流不吃栅压：偏置来自 [bias_dist](../../analog/bias/spice/bias_dist.spice) 的 `serdes_bias_pcopy`（一指 = vbg / r_ref / 4 ≈ 2.5 µA）。不改偏置模块内部（温度感测不从带隙核心环取 PTAT，避免给其环路加负载）。
 - 比较器输出异步，进数字域先过 `mon_sync`；门控/ready 类信号还要过 `mon_persist`。
 - 门限梯的码在本轮网表里是静态参数（行为译码）；数字驱动的动态码在混合仿真时接。
 - 都是慢速件：比较器在 1 mV/µs 斜坡下的滞后约 2 mV，判决时间按 µs 计。

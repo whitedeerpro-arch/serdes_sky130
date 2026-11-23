@@ -2,7 +2,7 @@
 
 - **版图生成器**：[build_saff_reclock_prescaler8_2g_pdk.py](../../build_saff_reclock_prescaler8_2g_pdk.py)（`v2`：交错紧邻布局 + v7 后仿感知器件尺寸）
 - **对应规范网表**：[tspc_reclock_prescaler8_2g.spice](../../../spice/tspc_reclock_prescaler8_2g.spice)（`pll_saff_reclock_prescaler8_2g` `v7`，纯 SKY130 MOS，零电阻/零 MIM 电容）
-- **构建与独立复核目录**：[`results/layout/pll_divider/20261120_saff_reclock_2g_v2/`](../../../../../../results/layout/pll_divider/20261120_saff_reclock_2g_v2/)、[`results/layout_review/saff_reclock_2g_20261120_v2/`](../../../../../../results/layout_review/saff_reclock_2g_20261120_v2/)
+- **构建与独立复核目录**：`results/layout/pll_divider/20261120_saff_reclock_2g_v2/` (`results/layout/pll_divider/20261120_saff_reclock_2g_v2`)、`results/layout_review/saff_reclock_2g_20261120_v2/` (`results/layout_review/saff_reclock_2g_20261120_v2`)
 
 ## 几何与物理提取指标（v2）
 

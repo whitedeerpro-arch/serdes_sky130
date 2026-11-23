@@ -8,7 +8,7 @@
 
 当前顶层为[pll_core_r6k4q](../../analog/pll/top/spice/pll_core_r6k4q.spice)：r6五bit VCO、轻dummy前端、标准单元延迟复位PFD、200 µA转向CP、4.13 kΩ/18 pF环路滤波。quiet域供给VCO/首级buffer/CP/LF，host域供给PFD/预分频/反馈接收器；尾偏置保留1 MΩ/16 pF。
 
-输入为[135条件r6映射表](../../results/analog/pll/vco/r6/map_20261112T062237Z/table.json)。码由映射表选定，Vctrl为其模型估计；不是芯片实际粗搜。50 ns释放预充、52 ns释放PFD复位，保留已有振荡/分频kick与nodeset；250 MHz参考直接进入PFD。没有从零上电、ready链、焊盘参考路径、PEX、动态TX或随机抖动资格。
+输入为135条件r6映射表 (`results/analog/pll/vco/r6/map_20261112T062237Z/table.json`)。码由映射表选定，Vctrl为其模型估计；不是芯片实际粗搜。50 ns释放预充、52 ns释放PFD复位，保留已有振荡/分频kick与nodeset；250 MHz参考直接进入PFD。没有从零上电、ready链、焊盘参考路径、PEX、动态TX或随机抖动资格。
 
 旧r5原生闭环、TX静态联合、CP/分频局部失配记录按原源/负载边界保留。当前代码/负载变化需要自己的记录，不能将这些点加到r6覆盖中。未改采用参数，也未触碰正在进行的Bias/LDO/PLL版图。
 

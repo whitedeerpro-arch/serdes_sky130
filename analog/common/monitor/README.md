@@ -1,7 +1,7 @@
 # 监测单元（模拟）
 
 慢速监测用的小模拟积木：连续时间比较器、电流×电阻门限梯（对地 / 对电源）、16:1 抽头选择、窗口比较器、VBE 温度感测。
-通用件，不含使用方常数：门限由码和电流决定，电流来自偏置分配的拷贝（[bias_dist](../bias/spice/bias_dist.spice) 的 `serdes_bias_pcopy`）。
+通用件，不含使用方常数：门限由码和电流决定，电流来自偏置分配的拷贝（[bias_dist](../../bias/spice/bias_dist.spice) 的 `serdes_bias_pcopy`）。
 数字配套见 [digital/common](../../../digital/common/README.md)，整体说明与表征结果见 [监测工具包](../../../docs/design/monitor.md)。
 
 | 单元 | 端口 | 说明 |

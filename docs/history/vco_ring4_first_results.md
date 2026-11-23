@@ -59,7 +59,7 @@
 
 ![名义点起振与多相波形](../figures/clocking/vco/vco_ring4_tt_waveforms.png)
 
-[可导出 SVG](../figures/clocking/vco/vco_ring4_tt_waveforms.svg)
+[可导出 SVG](../figures/clocking/vco/vco_ring4_tt_waveforms.png)
 
 ## 粗调与细调
 
@@ -88,7 +88,7 @@
 
 ![离散调谐测试点](../figures/clocking/vco/vco_ring4_tt_tuning.png)
 
-[可导出 SVG](../figures/clocking/vco/vco_ring4_tt_tuning.svg)；[测量汇总 CSV](../data/vco_ring4_tt_points.csv)。
+[可导出 SVG](../figures/clocking/vco/vco_ring4_tt_tuning.png)；[测量汇总 CSV](../data/vco_ring4_tt_points.csv)。
 曲线连线只连接已测点，不代表未测区间已验证。
 
 ## 变容管损耗

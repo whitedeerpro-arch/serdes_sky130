@@ -41,4 +41,4 @@ uv run python verification/layout/review_gemini.py --output-dir results/layout/g
 
 ## 本轮绘制
 
-新增[PDK MIM 阵列](../common/ldo/layout/variants/mim_pdk/README.md)，作为独立迭代保留，未覆盖 Gemini 原候选。当前优先目标已转为[PLL 模拟核版图](../../docs/layout/pll_r6.md)，从真实半单元/变容器的实现与寄生校准推进；HV/native LDO 器件作为后续独立模块。各模块均以当前电路为准，不通过改参考网表迁就几何。
+新增[LDO v2_cur PDK](../ldo/layout/variants/v2_cur_pdk/README.md)，作为独立迭代保留，未覆盖 Gemini 原候选。当前优先目标已转为[PLL 模拟核版图](../../docs/layout/pll_r6.md)，从真实半单元/变容器的实现与寄生校准推进；HV/native LDO 器件作为后续独立模块。各模块均以当前电路为准，不通过改参考网表迁就几何。

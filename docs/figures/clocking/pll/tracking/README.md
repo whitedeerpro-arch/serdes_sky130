@@ -6,4 +6,4 @@
 
 | 图组 | 用途 | 适用范围／来源 |
 |---|---|---|
-| pll_tracking_assessment [PNG](pll_tracking_assessment.png) / [SVG](pll_tracking_assessment.svg) | 工程估算 | SciPy局部线性模型及已有波形分析；不是器件噪声或实测闭环AC注入；[报告](../../../../history/pll_tracking_assessment.md) |
+| pll_tracking_assessment [PNG](pll_tracking_assessment.png) / [SVG](pll_tracking_assessment.png) | 工程估算 | SciPy局部线性模型及已有波形分析；不是器件噪声或实测闭环AC注入；[报告](../../../../history/pll_tracking_assessment.md) |

@@ -27,8 +27,8 @@ DROPS = (0.36, 0.39, 0.41, 0.44)
 INCLUDES = ('analog/common/devices/spice/sky130_primitives.spice',
             'analog/common/devices/spice/sky130_pfet_lvt.spice',
             'analog/common/devices/spice/cmos_logic.spice',
-            'analog/common/bias/spice/bandgap.spice',
-            'analog/common/bias/spice/bias_dist.spice',
+            'analog/bias/spice/bandgap.spice',
+            'analog/bias/spice/bias_dist.spice',
             'analog/pll/cp/spice/charge_pump.spice',
             'analog/pll/cp/spice/charge_pump_steer.spice')
 SOURCES = (str(Path(__file__).resolve().relative_to(ROOT)), str(TEMPLATE.relative_to(ROOT)),

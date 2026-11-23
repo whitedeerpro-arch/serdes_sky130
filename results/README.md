@@ -1,6 +1,17 @@
 # 运行结果与归档入口
 
-2026-10-29 已完成一次阶段整理。大波形无损归档，小文件保留原运行路径；已有指标、run_id 和原始字节哈希不改写。
+本机波形使用两种归档方式。2026-11-20 的整理由 `waveform_archive.py` 将波形移至 `/opt/serdes_archive`，原路径保留软链接，读取与续跑沿用原路径。2026-10-29 的历史批量归档使用 `tar.xz` 并按下文命令读取或恢复。[11 月 20 日归档清单](catalog/waveform_archive_20261120.json)
+
+## 本机波形软链接
+
+归档工具忽略配置的近期时段和活动仿真目录，每个波形在复制校验后才替换为软链接。逐文件 SHA-256 清单写入 `results/maintenance/waveform_archive/`。
+
+```bash
+uv run python verification/maintenance/waveform_archive.py verify
+uv run python verification/maintenance/waveform_archive.py restore results/某个运行目录
+```
+
+## 历史打包归档
 
 ```text
 results/
@@ -16,7 +27,7 @@ results/
   schematics/                        历史原理图导出实验
 ```
 
-- [阶段审阅与波形](acceptance/20261029-rx-functional/README.md)
+- 阶段审阅与波形 (`results/acceptance/20261029-rx-functional/README.md`)
 - [按模块／实验索引](catalog/README.md)，[逐运行TSV](catalog/experiments.tsv)
 - [原文件→归档成员索引](catalog/artifacts.tsv)，[完整归档账本](catalog/archive_ledger.json)
 - [清理策略](../verification/results/retention.toml)，[阶段结论](../docs/history/stage_review_20261029.md)

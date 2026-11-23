@@ -5,8 +5,8 @@ Monitor comparator: trip points from a slow triangle ramp (serdes_cmp)
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
-.include "@PROJECT_ROOT@/analog/common/bias/spice/bandgap.spice"
-.include "@PROJECT_ROOT@/analog/common/bias/spice/bias_dist.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bandgap.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bias_dist.spice"
 .include "@PROJECT_ROOT@/analog/common/monitor/spice/monitor.spice"
 Vdd vdd 0 @SUPPLY@
 Xref vbg i0 i1 i2 i3 vgi vdd 0 serdes_bias_ref

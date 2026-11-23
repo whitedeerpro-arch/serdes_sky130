@@ -8,7 +8,7 @@
 
 旧 [r2 置换表](../../../digital/tx/tb/data/serializer_state_permutations.hex)以独立的 `{c500[1:0],c1g}` 为索引，八个状态中只有状态 0 为 identity。`tx_ingress_preprocessor` 固化的是该表与锁存状态的控制契约，适合未来需要旧 r2 逆置换且状态定义已核实的边界；它不是 v3 状态检测器，当前 v3 不采用。即便选择表中 identity，也不能据此证明状态检测或其他角点物理映射。
 
-`parallel_serializer/20261107T044921Z` 的 [plan](../../../results/analog/tx/parallel_serializer/20261107T044921Z/plan.json)和 [summary](../../../results/analog/tx/parallel_serializer/20261107T044921Z/summary.json)固定 TT、初始化计数器、真实 v3 分发/入口/串化及驱动，理想 2 GHz 源、真实偏置和 R tt：175 个计数样本无错步，22 个有效字，输入边界和半字保持通过；serializer、pad、remote 均 256 payload bit 零错、位映射 0–15，远端散布约 0.034 UI、位中心最小有符号裕量约 194 mV。`run.py` 从输入捕获字构造逐位序列、用训练定位并分别测眼图和 `bit_mapping`；它回放 guard 而未接 preprocessor。标签仅是 RTL 事件源，不是物理标签路径。上述单点支持当前边界 identity，不能推广为全部 PVT 或无初始化启动。
+`parallel_serializer/20261107T044921Z` 的 plan (`results/analog/tx/parallel_serializer/20261107T044921Z/plan.json`)和 summary (`results/analog/tx/parallel_serializer/20261107T044921Z/summary.json`)固定 TT、初始化计数器、真实 v3 分发/入口/串化及驱动，理想 2 GHz 源、真实偏置和 R tt：175 个计数样本无错步，22 个有效字，输入边界和半字保持通过；serializer、pad、remote 均 256 payload bit 零错、位映射 0–15，远端散布约 0.034 UI、位中心最小有符号裕量约 194 mV。`run.py` 从输入捕获字构造逐位序列、用训练定位并分别测眼图和 `bit_mapping`；它回放 guard 而未接 preprocessor。标签仅是 RTL 事件源，不是物理标签路径。上述单点支持当前边界 identity，不能推广为全部 PVT 或无初始化启动。
 
 ## 分类与最小下一步
 

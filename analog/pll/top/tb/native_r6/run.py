@@ -33,8 +33,8 @@ DROP = ("pll_core_r5k4.spice", "clock_frontend_r5.spice", "cap_bank_4b.spice", "
 INCLUDES = [p for p in nk.INCLUDES if not any(d in p for d in DROP)] + [
     "analog/pll/vco/spice/cap_bank_5b.spice", "analog/pll/vco/spice/vco_delay_r6.spice", "analog/pll/vco/spice/vco_ring4_r6.spice",
     "analog/pll/top/spice/clock_frontend_r6q.spice", "analog/pll/pfd/spice/pfd_sc.spice",
-    "analog/common/ldo/spice/ldo_passives.spice", "analog/common/ldo/spice/ldo_hv18_core_r4.spice",
-    "analog/common/ldo/spice/pll_supply_hv18_r4.spice", "analog/common/ldo/spice/pll_bias_filter_r4.spice",
+    "analog/ldo/spice/ldo_passives.spice", "analog/ldo/spice/ldo_hv18_core_r4.spice",
+    "analog/ldo/spice/pll_supply_hv18_r4.spice", "analog/ldo/spice/pll_bias_filter_r4.spice",
     "analog/pll/top/spice/pll_core_r6k4q.spice"]
 PROBES = "v(ref) v(fb0) v(ctrl) v(z) v(b0p) v(b0n) v(xpll.xclock.v0p) v(xpll.xclock.v0n) v(vq) v(xpll.vbias_q) v(up) v(dn)"
 

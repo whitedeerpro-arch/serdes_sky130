@@ -6,4 +6,4 @@
 
 | 图组 | 用途 | 适用范围／来源 |
 |---|---|---|
-| serializer16_fold_ui_comparison [PNG](serializer16_fold_ui_comparison.png) / [SVG](serializer16_fold_ui_comparison.svg) | 专项诊断 | 改变折叠基准的plot层诊断；不改变电路或实际位误差；[报告](../../../history/eye_fold_ui_sweep.md) |
+| serializer16_fold_ui_comparison [PNG](serializer16_fold_ui_comparison.png) / [SVG](serializer16_fold_ui_comparison.png) | 专项诊断 | 改变折叠基准的plot层诊断；不改变电路或实际位误差；[报告](../../../history/eye_fold_ui_sweep.md) |

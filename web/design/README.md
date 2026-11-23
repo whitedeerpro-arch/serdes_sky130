@@ -18,11 +18,13 @@ uv run python -m serdes_flow.design_viewer --open
 
 画布：单击查看模块，双击或点击「模块 ↗」下钻；拖动平移，按钮或 Ctrl+滚轮缩放；「上层」和面包屑返回父级。目录和搜索可直接定位子模块。画布连线表示归属，信号、时钟、负载与假设在「边界」页。
 
+「证据」可直接预览模块波形与版图。点击图可查看原图，点「查看验证边界」可读激励、负载、修订和结论。搜索支持图名，例如 `SAFF-TSPC` 或 `r6 TT`。总览提供当前状态与执行计划入口。
+
 ## 数据与归属
 
 | 内容 | 位置 | 维护方式 |
 |---|---|---|
-| 模块层次、结构摘要、模型规划与资料引用 | [design_catalog.json](../../config/design_catalog.json) | 手工维护稳定的 `id`、`parent`、边界和资料路径；每个模块首入口指向 current.md |
+| 模块层次、结构摘要、模型规划与资料引用 | [design_catalog.json](../../config/design_catalog.json) | 每个模块用稳定 ID 和父级归属维护。引用表首项指向 current.md；`figures` 登记图、简短适用范围和原报告路径 |
 | 采用状态、验证数字与实际驱动边界 | [current.md](../../docs/status/current.md) | 项目级唯一汇总；不在目录数据另抄一份数字 |
 | 新增迭代 | `docs/design/iterations/<模块id>/<UTC>_<随机id>.json` | 页面「添加迭代」追加独立记录；保留已有记录 |
 | 静态浏览数据 | [catalog.js](catalog.js) | 派生数据，运行下面的导出命令更新 |

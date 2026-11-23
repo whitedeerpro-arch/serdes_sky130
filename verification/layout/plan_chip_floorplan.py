@@ -341,14 +341,14 @@ def load_inventory() -> Dict[str, RawMacro]:
     )
     inv["ldo_v2_cur"] = parse_mag(
         "ldo_v2_cur",
-        "analog/common/ldo/layout/variants/v2_cur_pdk/serdes_pll_supply_hv18_v2_cur_pdk.mag",
+        "analog/ldo/layout/variants/v2_cur_pdk/serdes_pll_supply_hv18_v2_cur_pdk.mag",
         "serdes_pll_supply_hv18_v2_cur_pdk",
         internal_cap_pf=60.0,
         notes="HV18 LDO v2 current-mode (3.3V->1.8V quiet, 60.0 pF stacked MIM2)",
     )
     inv["bias_top_v2"] = parse_mag(
         "bias_top_v2",
-        "analog/common/bias/layout/variants/v2_pdk/serdes_bias_top_v2_pdk.mag",
+        "analog/bias/layout/variants/v2_pdk/serdes_bias_top_v2_pdk.mag",
         "serdes_bias_top_v2_pdk",
         internal_cap_pf=8.0,
         notes="BIAS v2 unified macro (FC-OTA BG + Vbuf + 16-tap Pbuf + pcopy, 8 pF MIM2)",
@@ -411,28 +411,28 @@ def load_inventory() -> Dict[str, RawMacro]:
     )
     inv["bias_lpf_slow"] = parse_mag(
         "bias_lpf_slow",
-        "analog/common/ldo/layout/variants/r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk.mag",
+        "analog/ldo/layout/variants/bias_filter_r4_pdk/serdes_pll_bias_lowpass_slow_r4_pdk.mag",
         "serdes_pll_bias_lowpass_slow_r4_pdk",
         internal_cap_pf=16.0,
         notes="1 MOhm / 16 pF VCO tail bias lowpass filter (0% M5)",
     )
     inv["bias_cml_v2"] = parse_mag(
         "bias_cml_v2",
-        "analog/common/bias/layout/variants/v2_pdk/serdes_bias_cml_v2_pdk.mag",
+        "analog/bias/layout/variants/v2_pdk/serdes_bias_cml_v2_pdk.mag",
         "serdes_bias_cml_v2_pdk",
         internal_cap_pf=5.0,
         notes="Local CML bias diode + 5 pF stacked MIM2 (x2: VCO PTAT + Host Clock)",
     )
     inv["bias_cp_v2"] = parse_mag(
         "bias_cp_v2",
-        "analog/common/bias/layout/variants/v2_pdk/serdes_bias_cp_v2_pdk.mag",
+        "analog/bias/layout/variants/v2_pdk/serdes_bias_cp_v2_pdk.mag",
         "serdes_bias_cp_v2_pdk",
         internal_cap_pf=0.0,
         notes="Local CP bias mirror diode (vbn/vbp, 0% M5)",
     )
     inv["bias_ctle_v2"] = parse_mag(
         "bias_ctle_v2",
-        "analog/common/bias/layout/variants/v2_pdk/serdes_bias_ctle_v2_pdk.mag",
+        "analog/bias/layout/variants/v2_pdk/serdes_bias_ctle_v2_pdk.mag",
         "serdes_bias_ctle_v2_pdk",
         internal_cap_pf=0.0,
         notes="Local RX CTLE bias diode (0% M5)",

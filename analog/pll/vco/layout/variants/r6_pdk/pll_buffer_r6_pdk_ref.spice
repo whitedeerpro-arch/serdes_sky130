@@ -1,7 +1,0 @@
-.subckt pll_buffer_r6_pdk inp inn outp outn vbias vdd vss
-Xp outn inp tail vss sky130_fd_pr__nfet_01v8_lvt w=12 l=.15
-Xn outp inn tail vss sky130_fd_pr__nfet_01v8_lvt w=12 l=.15
-Xt tail vbias vss vss sky130_fd_pr__nfet_01v8 w=12 l=.5
-Xr0 vdd outn vss sky130_fd_pr__res_high_po_2p85 l=4.14
-Xr1 vdd outp vss sky130_fd_pr__res_high_po_2p85 l=4.14
-.ends pll_buffer_r6_pdk

@@ -1,6 +1,6 @@
 # PFD、CP、LF 的下一阶段边界
 
-本轮 r3 分频链验证期间，已开始 CP 的小范围 DC 顺从扫描。原电路保持不变，数据在当前 [r3 campaign](../../results/analog/pll/pvt_buffered/20261029T152825Z/cp_boundary_initial.json)。这是进入下一阶段的初始表征，不是这三个模块已通过 PVT。
+本轮 r3 分频链验证期间，已开始 CP 的小范围 DC 顺从扫描。原电路保持不变，数据在当前 r3 campaign (`results/analog/pll/pvt_buffered/20261029T152825Z/cp_boundary_initial.json`)。这是进入下一阶段的初始表征，不是这三个模块已通过 PVT。
 
 ## 先把 VCO 需要的控制范围映射到 CP
 

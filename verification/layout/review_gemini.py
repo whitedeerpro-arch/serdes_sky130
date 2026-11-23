@@ -20,14 +20,14 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check import exported_ports  # noqa: E402
 
-PASSIVES = "analog/common/ldo/spice/ldo_passives.spice"
+PASSIVES = "analog/ldo/spice/ldo_passives.spice"
 CASES = [
-    ("analog/common/ldo/layout", "serdes_ldo_mim16", [PASSIVES]),
-    ("analog/common/ldo/layout", "serdes_ldo_ref_res", [PASSIVES]),
-    ("analog/common/ldo/layout", "serdes_pll_bias_lowpass_slow_r4",
-     [PASSIVES, "analog/common/ldo/spice/pll_bias_filter_r4.spice"]),
-    ("analog/common/ldo/layout", "serdes_ldo_hv18_core_r4",
-     [PASSIVES, "analog/common/ldo/spice/ldo_hv18_core_r4.spice"]),
+    ("analog/ldo/layout", "serdes_ldo_mim16", [PASSIVES]),
+    ("analog/ldo/layout", "serdes_ldo_ref_res", [PASSIVES]),
+    ("analog/ldo/layout", "serdes_pll_bias_lowpass_slow_r4",
+     [PASSIVES, "analog/ldo/spice/pll_bias_filter_r4.spice"]),
+    ("analog/ldo/layout", "serdes_ldo_hv18_core_r4",
+     [PASSIVES, "analog/ldo/spice/ldo_hv18_core_r4.spice"]),
     ("analog/pll/vco/layout", "pll_vco_varactor", ["analog/pll/vco/layout/pll_vco_varactor_ref.spice"]),
     ("analog/pll/vco/layout", "pll_vco_cap_unit", ["analog/pll/vco/layout/pll_vco_cap_unit_ref.spice"]),
 ]

@@ -164,7 +164,7 @@ def main() -> None:
         w = extract_if_needed(audit_root, cell, vco_dir / f"{cell}.mag", vco_dir / f"{cell}_ref.spice")
         cells.append(("pll_vco", cell, w, True, "vss"))
 
-    ldo_dir = REPO / "analog/common/ldo/layout/variants/mim_pdk"
+    ldo_dir = REPO / "analog/ldo/layout/variants/mim_pdk"
     w_ldo = extract_if_needed(audit_root, "serdes_ldo_mim16_pdk",
                               ldo_dir / "serdes_ldo_mim16_pdk.mag", ldo_dir / "mim_pdk_ref.spice")
     cells.append(("ldo", "serdes_ldo_mim16_pdk", w_ldo, True, "minus"))

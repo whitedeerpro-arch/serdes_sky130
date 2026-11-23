@@ -31,6 +31,6 @@
 
 ## 证据
 
-- 归档 [SDC](../../../results/digital/tx/ingress_timing/20261107T052206Z/execution/baseline_ss_n40C_1v60_10ff.sdc)，SHA-256 `89434003149632eb67a29ab58092ee04ef3a71dfdb31be98d033704c397cc9e8`；[路径报告](../../../results/digital/tx/ingress_timing/20261107T052206Z/baseline_ss_n40C_1v60_10ff.log)，SHA-256 `6c13076074ff4ea06767c2d6157858dd21f32f706206f39e74f4305c14cf7111`。
+- 归档 SDC (`results/digital/tx/ingress_timing/20261107T052206Z/execution/baseline_ss_n40C_1v60_10ff.sdc`)，SHA-256 `89434003149632eb67a29ab58092ee04ef3a71dfdb31be98d033704c397cc9e8`；路径报告 (`results/digital/tx/ingress_timing/20261107T052206Z/baseline_ss_n40C_1v60_10ff.log`)，SHA-256 `6c13076074ff4ea06767c2d6157858dd21f32f706206f39e74f4305c14cf7111`。
 - 映射网表 `execution/mapped.v` SHA-256 `c32888bd3abd63b7ce7dcc556b77c756f3e6360592fd7cc147fc5c591ed80caf`；[SDC 生成脚本](../../../verification/digital/tx_ingress_timing.py) SHA-256 `e575fd8d917624d41d14eae109fdd9670f8ea54a924cf1c0ff1fc9b8101d5968`；[RTL](../../../digital/tx/rtl/tx_ingress_control.sv) SHA-256 `d68cd2d803fda6c2f83a46e62a29ad84b56b783c2ce1e01312bc6ac3a129c3a0`。
 - 本次只读已归档报告和电路/RTL，没有运行新仿真或修改原有 SDC、RTL 与结论。

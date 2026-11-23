@@ -1,10 +1,10 @@
 # CML→CMOS 时钟接收器
 
-> **当前修订**：PLL r4。全速 2 GHz 用 `serdes_cml_to_cmos_r4`（[网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice)），250 MHz 反馈仍用 `serdes_cml_to_cmos_pvt_candidate`（[网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)）。两者拓扑和输入源跟随器相同，抽出 buffer 看到的负载不变。
-> **关键数字**：全速转换在标准边界 45/45（占空比 0.477–0.511），原生 VCO 5 个工作点四路全部正常（含 r3 失败的 SS/1.65 V/−40 °C）；250 MHz 反馈 45/45。前端功耗 TT 增加约 4.2 mW（每路约 1 mW）。
-> **主要缺口**：SS 热角幅度余量约 110 mV；1.95 V 下输出过冲到约 2.05 V（I-11）。
+现行 PLL r6q 采用 ÷8 后的 250 MHz 反馈接收 `serdes_cml_to_cmos_pvt_candidate`，全速支路的历史 r4 表征见下文。2 GHz 局部候选为交流耦合 r5 v6，已完成 CPEX PVT、原生 RCX 压力点、CPEX 失配与 CMOS ÷8 冷启动夹具验证。r5 v6 的 RC 失配与 PLL 闭环资格仍待验证。[反馈网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)、[r5 v6 候选与证据](../../analog/common/cml_to_cmos/layout/variants/r5_pdk/README.md)
 
-## 电路
+历史 r4 的幅度余量和过冲数据属于该版全速支路。器件端电压与恢复级复位仍按所用修订逐项核对。[r4 网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice)、[项目状态](../status/current.md)
+
+## r3/r4 电路与恢复级
 
 ```mermaid
 flowchart LR
@@ -86,13 +86,13 @@ SS 冷角功耗增量较大，是因为 r3 在那里转换器没有翻转。
 
 1.95 V 下 CMOS 输出最高约 2.049 V（SS/1.95 V/−40 °C），下冲最深约 −84 mV（SS/1.65 V/−40 °C），比 r3 的约 2.026 V 略高。
 
-## 适用范围
+## r4 适用范围
 
 - 边界温度是确定性仿真在特定激励下的局部结果，不是带噪声/失配的额定值。
 - 1.95 V 冷角 CMOS 输出峰值约 2.022–2.026 V，器件端电压未核对。
 - 偏置为理想参考；无提取寄生。
 
-## 待解决
+## r4 遗留问题
 
 - SS 热角幅度余量约 110 mV（[问题清单](../status/open_issues.md) I-04 的遗留项）。
 - 1.95 V 过冲（r4 约 2.05 V）与器件端电压（I-11）。

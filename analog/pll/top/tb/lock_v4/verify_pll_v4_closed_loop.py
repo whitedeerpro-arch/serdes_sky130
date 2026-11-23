@@ -36,7 +36,7 @@ from serdes_flow.waves import crossings  # noqa: E402
 
 SC_LIB = Path("/home/host/.volare/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice")
 PTAT_TABLE = REPO / "results/analog/pll/vco/r6_ptat/map_p67_28_66/table.json"
-LDO_V2_SUMMARY = REPO / "results/analog/common/ldo/v2/20261120T070822.297791Z_schem_pvt/summary.json"
+LDO_V2_SUMMARY = REPO / "results/analog/ldo/v2/20261120T070822.297791Z_schem_pvt/summary.json"
 DEFAULT_CAMP = REPO / "results/analog/pll/top/v4_closed_loop_20261123"
 DEFAULT_FIG = REPO / "docs/figures/clocking/pll_v4_closed_loop_20261123.png"
 
@@ -63,12 +63,12 @@ INCLUDES = [
     "analog/pll/cp/spice/charge_pump_steer_v4.spice",
     "analog/pll/loop_filter/spice/passive_rc_precharge.spice",
     "analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice",
-    "analog/common/ldo/spice/ldo_passives.spice",
-    "analog/common/ldo/spice/pll_bias_filter_r4.spice",
-    "analog/common/ldo/spice/ldo_v2_passives.spice",
-    "analog/common/ldo/spice/ldo_hv18_core_v2.spice",
-    "analog/common/ldo/spice/pll_supply_hv18_v2_cur.spice",
-    "analog/common/bias/spice/bias_v2.spice",
+    "analog/ldo/spice/ldo_passives.spice",
+    "analog/ldo/spice/pll_bias_filter_r4.spice",
+    "analog/ldo/spice/ldo_v2_passives.spice",
+    "analog/ldo/spice/ldo_hv18_core_v2.spice",
+    "analog/ldo/spice/pll_supply_hv18_v2_cur.spice",
+    "analog/bias/spice/bias_v2.spice",
     "analog/pll/vco/spice/vco_ptat_bias.spice",
     "analog/pll/top/spice/pll_top_r6_v4_upgrade.spice",
 ]

@@ -47,12 +47,12 @@ flowchart LR
 
 | 电阻角 | 完成角数 | 分频错误 | `q2` 最小摆幅 | `q4` 最小摆幅 | `q8` 最小摆幅 | `sk4_ps` 区间 / 跨度 | `sk8_ps` 区间 / 跨度 | 最小尾管 `Vds-Vdsat` | 电源电流区间 | 证据目录 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `hh` | 45 / 45 | 0 | `535.7 mVpp` (`fs_v1650_t85`) | `543.4 mVpp` (`fs_v1650_t85`) | `554.9 mVpp` (`ss_v1650_t-40`) | `[-10.63, -7.49]` / `3.15 ps` | `[-6.43, +2.35]` / `8.79 ps` | `+0.295 V` (`fs_v1650_t85` `ckdrv`) | `8.10–11.70 mA` | [hh summary](../../results/analog/pll/divider/sync2_pvt/hh_20261115T184418Z/summary.json) |
-| `ll` | 45 / 45 | 0 | `515.9 mVpp` (`fs_v1650_t85`) | `521.0 mVpp` (`fs_v1650_t85`) | `528.1 mVpp` (`fs_v1650_t85`) | `[-10.43, -6.45]` / `3.98 ps` | `[-6.19, -3.83]` / `2.36 ps` | `+0.230 V` (`fs_v1650_t85` `ckdrv`) | `10.48–14.87 mA` | [ll summary](../../results/analog/pll/divider/sync2_pvt/ll_20261115T185818Z/summary.json) |
+| `hh` | 45 / 45 | 0 | `535.7 mVpp` (`fs_v1650_t85`) | `543.4 mVpp` (`fs_v1650_t85`) | `554.9 mVpp` (`ss_v1650_t-40`) | `[-10.63, -7.49]` / `3.15 ps` | `[-6.43, +2.35]` / `8.79 ps` | `+0.295 V` (`fs_v1650_t85` `ckdrv`) | `8.10–11.70 mA` | hh summary (`results/analog/pll/divider/sync2_pvt/hh_20261115T184418Z/summary.json`) |
+| `ll` | 45 / 45 | 0 | `515.9 mVpp` (`fs_v1650_t85`) | `521.0 mVpp` (`fs_v1650_t85`) | `528.1 mVpp` (`fs_v1650_t85`) | `[-10.43, -6.45]` / `3.98 ps` | `[-6.19, -3.83]` / `2.36 ps` | `+0.230 V` (`fs_v1650_t85` `ckdrv`) | `10.48–14.87 mA` | ll summary (`results/analog/pll/divider/sync2_pvt/ll_20261115T185818Z/summary.json`) |
 
 ### 2. 本地失配 Monte Carlo（[`sync2_mc/run.py`](../../analog/pll/divider/tb/sync2_mc/run.py)，`n=48/角, k=3.66`）
 
-证据：[MC summary](../../results/analog/pll/divider/sync2_mc/20261115T200049Z/summary.json)
+证据：MC summary (`results/analog/pll/divider/sync2_mc/20261115T200049Z/summary.json`)
 
 | 工艺角 | `divide_fail` | 95% 置信区间 | `q2` mean/sd (min) | `q4` mean/sd (min) | `q8` mean/sd (min) | `mean - k*sd`（门槛 400 mVpp） | `mux_tail` 最小值 | `vbias_ck` mean ± sd |
 |---|---|---|---|---|---|---|---|---|
@@ -64,7 +64,7 @@ flowchart LR
 
 ### 3. PLL 前端边界集成（[`run_sync2_cmp.py`](../../analog/pll/top/tb/frontend_r6/run_sync2_cmp.py)）
 
-证据：[frontend summary](../../results/analog/pll/top/frontend_r6_sync2/20261115T191208Z/summary.json)
+证据：frontend summary (`results/analog/pll/top/frontend_r6_sync2/20261115T191208Z/summary.json`)
 
 | 边界工况 (`cond:rc:code:vctrl`) | `r3_lean` 格点误差 / `b0_late` / `I_host` | `sync2_eq`（无 `Ikick`）格点误差 / `b0_late` / `fb_ratio` / `I_host` |
 |---|---|---|
@@ -78,7 +78,7 @@ flowchart LR
 
 ### 4. PDK 核心模块版图检查与 CPEX/RCX 后仿对比
 
-生成器：[`build_sync_prescaler8_pdk.py`](../../analog/pll/divider/layout/build_sync_prescaler8_pdk.py)；单元级 DRC/LVS：[pdk_blocks_r5 summary](../../results/layout/sync2_divider/pdk_blocks_r5/summary.json)；后仿脚本：[`pex_blocks.py`](../../analog/pll/divider/tb/sync2_pvt/pex_blocks.py)（[pex summary](../../results/analog/pll/divider/sync2_block_pex/20261115T214630Z/summary.json)）。
+生成器：[`build_sync_prescaler8_pdk.py`](../../analog/pll/divider/layout/build_sync_prescaler8_pdk.py)；单元级 DRC/LVS：pdk_blocks_r5 summary (`results/layout/sync2_divider/pdk_blocks_r5/summary.json`)；后仿脚本：[`pex_blocks.py`](../../analog/pll/divider/tb/sync2_pvt/pex_blocks.py)（pex summary (`results/analog/pll/divider/sync2_block_pex/20261115T214630Z/summary.json`)）。
 
 全部 5 个核心 PDK 单元均实现双端多晶栅条连接（`trim_top_gate=False`）、左右匹配虚设多晶电阻及 `M4` 宽电源干线，均实现 **`DRC = 0`、`LVS = True`、`LVS_PROPERTY_ERRORS = False`**，宽度统一为 `25.8 µm`：
 

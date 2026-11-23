@@ -13,17 +13,17 @@
   <header class="topbar">
     <a href="#serdes" class="brand"><span class="brand-mark">S<span></span></span><span>Simple SerDes<small>DESIGN WORKSPACE</small></span></a>
     <div class="top-divider"></div><span class="project-spec">SKY130 <span>·</span> 1.8 V <span>·</span> 4 Gb/s</span>
-    <div class="search-wrap"><span class="search-symbol">⌕</span><input id="search" type="search" placeholder="搜索模块、迭代、设计问题…" aria-label="搜索设计资料"><kbd>/</kbd><div id="search-results" class="search-results" hidden></div></div>
+    <div class="search-wrap"><span class="search-symbol">⌕</span><input id="search" type="search" placeholder="搜索模块、迭代或图表…" aria-label="搜索设计资料"><kbd>/</kbd><div id="search-results" class="search-results" hidden></div></div>
     <span id="connection" class="connection"><i></i>本地浏览</span>
   </header>
   <div class="workspace">
     <aside class="sidebar">
       <div class="sidebar-heading"><span>设计目录</span><span id="module-count"></span></div>
       <nav id="module-tree" aria-label="设计模块层级"></nav>
-      <div class="sidebar-footer"><span class="small-overline">DESIGN METHOD</span><p>边界拆分，模型规划。<br>每次改进，都有归属。</p><button class="text-button" id="method-link">查看验证与尺寸设计方法 ↗</button></div>
+      <div class="sidebar-footer"><button class="text-button" id="method-link">验证与尺寸设计方法 ↗</button></div>
     </aside>
     <main class="main-area">
-      <div class="location-bar"><div id="breadcrumbs" class="breadcrumbs"></div><button id="open-source" class="quiet-button">设计文档 ↗</button></div>
+      <div class="location-bar"><div id="breadcrumbs" class="breadcrumbs"></div><button id="open-source" class="quiet-button">当前状态 ↗</button></div>
       <div class="work-area">
         <section class="graph-panel" aria-label="模块结构视图">
           <div class="graph-heading"><div><span class="small-overline">DESIGN HIERARCHY</span><h1 id="graph-title">SerDes</h1><p id="graph-subtitle"></p></div><button id="graph-up" class="quiet-button">↑ 上层</button></div>

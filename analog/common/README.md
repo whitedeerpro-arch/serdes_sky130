@@ -1,7 +1,12 @@
-# 公共模拟模块
+# Shared Analog Primitives (`analog/common/`)
 
-偏置、电流舵/CML 缓冲以及双向电平转换，供 PLL 与后续 TX/RX 复用。
-各模块独立表征输入共模、输出负载、功耗和 PVT。
+Reusable low-level analog cells and wrappers shared across PLL, TX, and RX.
+*(Note: The top-level **BIAS** and **LDO** subsystems have been promoted to [`analog/bias/`](../bias/README.md) and [`analog/ldo/`](../ldo/README.md).)*
 
-cml_to_cmos 已有带输入缓冲与时钟恢复的原型；cml_buffer 同时提供 VCO 延迟单元和可选时钟缓冲。
-devices/ 保存工艺器件薄封装及扩散几何估算。
+| Directory | Role |
+|---|---|
+| [`cml_to_cmos/`](cml_to_cmos/) | Full-speed (`r5_pdk`, v6 CPEX 45/45 & 200-sample MC PASS) and 250 MHz feedback CML→CMOS clock receivers |
+| [`devices/`](devices/) | SKY130A MOSFET/resistor/capacitor thin wrappers & diffusion geometry helpers |
+| [`monitor/`](monitor/) | Auxiliary on-chip comparator & temperature-sensor monitor blocks ([monitor.md](../../docs/design/monitor.md)) |
+| `pads/` | Pad / ESD parasitic model stubs |
+| [`cml_buffer/`](cml_buffer/), [`cml_mux/`](cml_mux/), [`cmos_to_cml/`](cmos_to_cml/) | CML delay/buffer/MUX/level-shifter primitives (VCO delay stage + legacy CML TX/RX reference) |

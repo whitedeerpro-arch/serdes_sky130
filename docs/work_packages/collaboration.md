@@ -20,6 +20,8 @@
 
 ## 活跃登记与交付（自2026-11-13整理后追加）
 
+- 2026-11-20 / Codex / 展示与归档：状态、文档导航、系统图和本地工作台已刷新，旧波形可从原路径读取。使用 0 个 ngspice worker。Bias/LDO v2 的进行中源码沿原工作区交接。[整理记录](../history/workbench_refresh_20261120.md)
+
 - 2026-11-13 / Codex / 工作流整理：范围为README、AGENTS导航、docs的目标/计划/状态入口与历史迁移、工作台资料目录和导出；0仿真，不修改DUT/RTL/原始结果/采用参数；具体产物与核对见[整理记录](../history/workflow_reorganization_20261113.md)。本条不声明其他执行者名额空闲。下一工程动作见计划M1-LOOP；实际仿真领取另行登记。
 
 后续每项只追加一段“任务—可写范围—资源—状态—交付/阻塞—下一动作”，不把当前模块数字复制到日志。停止工作前标明仍在跑的任务与续跑身份；完成后归还名额。
@@ -31,21 +33,21 @@
 
 - 2026-11-15 / Codex / bank开关分配：所有者提出按电容位权分配Ron，并提醒快振荡器接大电容、慢振荡器接小电容。新增 `layout_cap_unit/switch_allocation.py`、独立结果/索引与融合报告分配段落，固定读取r6的135条件码表与9块矩形规划，不改采用DUT/规划或旧结果。比较总W31µm的等比例、小位优先和大位优先分配及原W46.5µm对照；真实SVT叶DRC/LVS/电容提取后，在固定相位DC1.5V做局部AC并按理想互连合成32码。明确振荡器快慢不等于NMOS快慢，补SS热ll与SF冷ll。实时NG0，领取最多2worker，全机≤4；仅短卡，结果不作环振/噪声资格。
 
-- 2026-11-14 / Codex / LDO减容：范围为新增 `analog/common/ldo/tb/cap_sizing/`、独立smallcap候选与局部版图/文档，不改r4采用网表和其他进行中文件。计划最多2个ngspice worker；启动前实时查询为0个。先基准DC/AC与候选压力点，按完整终点续跑，再对入选候选补PVT/噪声/启动及物理面积；原布局保持可追溯。此项由所有者明确要求解决电容面积，属于当前供电局部迭代。
+- 2026-11-14 / Codex / LDO减容：范围为新增 `analog/ldo/tb/cap_sizing/`、独立smallcap候选与局部版图/文档，不改r4采用网表和其他进行中文件。计划最多2个ngspice worker；启动前实时查询为0个。先基准DC/AC与候选压力点，按完整终点续跑，再对入选候选补PVT/噪声/启动及物理面积；原布局保持可追溯。此项由所有者明确要求解决电容面积，属于当前供电局部迭代。
 
 - 2026-11-14 / Codex / LDO减容资源调整：短筛已结束，完整局部PVT当前2个NG；实时全机也仅这2个。追加1个串行worker用于r4/b32的启动、负载阶跃与独立噪声，任务合计最多3个，全机仍≤4，留1个空位；每次开NG前继续查全局。54pF候选已发现PSRR不足，不采用；候选与原r4分开，旧参数门槛未放宽。
 
 - 2026-11-14 / Codex / LDO减容最终局部验证：70pF/Rhv1k组合完成1215DC/255AC，核心PEX压力点虽过34dB但仅约0.1dB余量；同70pF调整Rhv到2k的短筛明显改善，现补其自身PVT/启动/噪声/PEX。原理图PVT与动态最多各2worker，最后阶段任务总上限4、全机≤4（开跑前无其他NG），逐任务结束即归还；无整机PLL长仿真。候选按实际参数分别命名，不把旧结果转给新参数。
 
-- 2026-11-14 / Codex / LDO减容交付：独立b32_h2（70pF；Rhv2k/32pF、Rcas31.25k/16pF、Cout4pF）完成自己的1215DC/255AC、三工况6启动/6噪声/3阶跃、6个核心电容PEX压力点；核心与4/16/32pF叶DRC0/LVS/端口通过。新源码、物理候选、固定数据清单与对比图见docs/design/ldo_smallcap.md、config/ldo_smallcap_evidence.json、analog/common/ldo/layout/variants/smallcap_pdk/。54pF失败和70pF/Rhv1k窄余量历史保留。已记录FS人工±4mA/1ns峰1.984V，不接受该快卸载边界；当前PLL仍按原r4集成记录，后续先核实际负载/宏回灌。所有本任务NG均结束，当前占用0，全部名额归还；未提交/清理其他工作区改动。新增与相关检查26项通过，diff检查通过。
+- 2026-11-14 / Codex / LDO减容交付：独立b32_h2（70pF；Rhv2k/32pF、Rcas31.25k/16pF、Cout4pF）完成自己的1215DC/255AC、三工况6启动/6噪声/3阶跃、6个核心电容PEX压力点；核心与4/16/32pF叶DRC0/LVS/端口通过。新源码、物理候选、固定数据清单与对比图见docs/design/ldo_smallcap.md、config/ldo_smallcap_evidence.json、analog/ldo/layout/variants/smallcap_pdk/。54pF失败和70pF/Rhv1k窄余量历史保留。已记录FS人工±4mA/1ns峰1.984V，不接受该快卸载边界；当前PLL仍按原r4集成记录，后续先核实际负载/宏回灌。所有本任务NG均结束，当前占用0，全部名额归还；未提交/清理其他工作区改动。新增与相关检查26项通过，diff检查通过。
 
 - 2026-11-14 / Codex / 70pF LDO失配：范围为新增cap_sizing/mismatch.py及对应MC结果、smallcap模块失配记录；不改DUT尺寸/采用状态。全机实时ngspice为0，领取最多2worker，先完整PDK的抽样/seed复现小样本，再TT与FS热ll局部MC，逐样本27°C选码后保码检查DC/PSRR/双注入PM；PNP和HV模型盲点明确保留。按固定seed/chunk/源快照续跑，不覆盖减容历史结果。
 
-- 2026-11-14 / Codex / 70pF LDO失配交付：campaign `results/analog/common/ldo/smallcap_mismatch/20261113T172749.615910Z`，seed70、chunk4、完整PDK，TT/FS热ll各16样本完成；每样本扫64码后保码检查3负载DC与10mA PSRR/双注入PM，32个受检样本均过本轮门槛。每工况另1个名义记录、1个首样本重跑；重跑标量及完整AC谱复现，跨样本变化确认。详细范围/统计限制在docs/design/ldo_smallcap.md，哈希与固定汇总在results/catalog/ldo_smallcap_mismatch.json。首轮TT两样本开发运行保留，未并入统计。当前全机NG为0，本任务2名额已归还；未改DUT或当前PLL采用状态。已有相关检查9项通过，新增文档链接另行复核；下一步完整MC/模型盲点补充、保码PVT及实际PLL/宏PEX按主线承接，不把本轮初筛追认为良率资格。
+- 2026-11-14 / Codex / 70pF LDO失配交付：campaign `results/analog/ldo/smallcap_mismatch/20261113T172749.615910Z`，seed70、chunk4、完整PDK，TT/FS热ll各16样本完成；每样本扫64码后保码检查3负载DC与10mA PSRR/双注入PM，32个受检样本均过本轮门槛。每工况另1个名义记录、1个首样本重跑；重跑标量及完整AC谱复现，跨样本变化确认。详细范围/统计限制在docs/design/ldo_smallcap.md，哈希与固定汇总在results/catalog/ldo_smallcap_mismatch.json。首轮TT两样本开发运行保留，未并入统计。当前全机NG为0，本任务2名额已归还；未改DUT或当前PLL采用状态。已有相关检查9项通过，新增文档链接另行复核；下一步完整MC/模型盲点补充、保码PVT及实际PLL/宏PEX按主线承接，不把本轮初筛追认为良率资格。
 
 - 2026-11-14 / Codex / LDO周边大电容第二轮：范围为cap_sizing的参考/隔离栅RC候选、剩余大电容盘点与局部结果，不改PLL/r4/70pF已交付源。全机实时NG为0，领取最多2worker；先物理面积与RC/噪声取舍，短筛后只对入选候选补完整局部PVT、启动/噪声及必要MC/PEX。已有4pF输出快卸载失败不因本轮更改而清除；尾偏置16pF和PLL环路电容分别按其实际功能评估，不重复计入70pF。
 
-- 2026-11-14 / Antigravity / Bandgap与70pF LDO版图重构交付：范围为 `analog/common/bias/layout/`（新增 `build_bias_pdk.py` 并安装至 `variants/pdk/`）及 `analog/common/ldo/layout/`（完善 `build_ldo_smallcap.py` 并安装至 `variants/smallcap_pdk/`），不改任何设计侧 `.spice`、`config/ldo_smallcap_evidence.json`、历史 `results/layout/ldo_smallcap/20261114_b32_h2/` 或 Codex 进行中的 `cap_sizing` 文件；全程 0 个 ngspice worker（仅运行 Magic DRC/提取与 Netgen LVS）。交付：(1) Bandgap+Bias 全套 11 个 PDK 版图单元（真实 `w=1` `res_high_po`，二维共质心 + 3D MIM 底板屏蔽，顶层 `212.4×147.1 µm`，全部 `DRC=0 / LVS=MATCH`），运行记录在 `results/layout/bias_pdk/20261114_compact_w1_v2/`；(2) 70 pF `b32_h2` 减容 LDO 紧凑核心（`248.4×210.9 µm`，保持 `vss out vin off ibias fb ref` 端口顺序）及完整 Probe/Prod 供电宏（`416.5×216.2 µm`，全部 7 单元 `DRC=0 / LVS=MATCH`），运行记录在 `results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/`。任务已结束，下一步如需完整供电宏电容/RC PEX 回灌由主线按配额安排。
+- 2026-11-14 / Antigravity / Bandgap与70pF LDO版图重构交付：范围为 `analog/bias/layout/`（新增 `build_bias_pdk.py` 并安装至 `variants/pdk/`）及 `analog/ldo/layout/`（完善 `build_ldo_smallcap.py` 并安装至 `variants/smallcap_pdk/`），不改任何设计侧 `.spice`、`config/ldo_smallcap_evidence.json`、历史 `results/layout/ldo_smallcap/20261114_b32_h2/` 或 Codex 进行中的 `cap_sizing` 文件；全程 0 个 ngspice worker（仅运行 Magic DRC/提取与 Netgen LVS）。交付：(1) Bandgap+Bias 全套 11 个 PDK 版图单元（真实 `w=1` `res_high_po`，二维共质心 + 3D MIM 底板屏蔽，顶层 `212.4×147.1 µm`，全部 `DRC=0 / LVS=MATCH`），运行记录在 `results/layout/bias_pdk/20261114_compact_w1_v2/`；(2) 70 pF `b32_h2` 减容 LDO 紧凑核心（`248.4×210.9 µm`，保持 `vss out vin off ibias fb ref` 端口顺序）及完整 Probe/Prod 供电宏（`416.5×216.2 µm`，全部 7 单元 `DRC=0 / LVS=MATCH`），运行记录在 `results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/`。任务已结束，下一步如需完整供电宏电容/RC PEX 回灌由主线按配额安排。
 
 - 2026-11-14 / Codex / LDO周边减容续做：实时NG为0，沿用本任务最多2worker。已读取Antigravity紧凑70pF核心/宏交付，不改其已安装目录和生成器；8pF隔离栅候选用当前生成器另建 `20261114_cas8_compact`，与 `20261114_b32_h2_macro_v2` 核心在相同最差PSRR点作电容PEX比较。旧8pF试图有3个M3最小面积DRC，只有诊断提取，不能标记物理通过；新旧历史分别保留。参考缩容的噪声对照已完成，尚未采用新参数。
 
@@ -56,7 +58,7 @@
 - 2026-11-14 / Codex / LDO周边第二轮交付：盘点、参考RC噪声对照及8/12/16pF真实布局比较已入docs/design/ldo_cap_area.md。12pF通过2x6 DRC0/LVS和单压力点PEX35.06dB，非工艺8pF量化，但当前核心面积未降；8pF同代核心PEX33.55dB失败且面积更大，均不替代当前16pF。独立stack_core70保持70pF数值，核心39,774.73µm²（较紧凑单层−24.1%）；自身1215DC/255AC、6核心电容PEX点、6启动/6noise/3阶跃、TT/FS各8样本MC及首样本标量/完整AC谱复现完成。完整/精简PDK40张AC表逐值相同，模型族改从实际候选/PEX推导并纳入MIM2；MC仍完整PDK。保留人工快卸载1.984V失败边界。外围1MΩ/16pF叠层完整块DRC0/LVS，面积6,226.62µm²（−39.8%），三组被动PEX小卡的1/5pF代理下截止变化约0.1%，noise与DC偏置复核完成；不是原生PLL/尾门负载资格。
   固定输入清单config/ldo_cap_area_evidence.json、数据/图docs/data/ldo_cap_area.json与docs/figures/layout/ldo/cap_area/comparison.png、索引results/catalog/ldo_cap_area.json；独立叠层DUT源和生成器已交付，当前PLL/r4/单层已安装版图未替换。原理图MC/噪声与名义核心PEX分别记录，未宣称PEX统计/噪声或完整宏通过。两份未启动参考/隔离栅PVT方案和一次未启动的旧模型族清单方案保留prepared记录，未计覆盖；早期M3最小面积布局、叠层对齐/间距及小卡noise图号错误运行保留诊断，不混入最终证据。全部本任务NG已退出，全机当前0，4名额全部归还；相关检查19项通过、身份/配置/diff核对通过。未提交或清理他人工作区文件；后续完整叠层宏回灌、M5地回流/RC与实际PLL由主线承接。
 
-- 2026-11-14 / Antigravity / Bandgap v2紧凑重构与PLL r6k4q模拟核版图开工：可写范围为 `verification/layout/plot_mag.py`、`analog/common/bias/layout/`（按 `bias_pdk_floorplan_plan.png` 压紧 `build_bias_pdk.py` 并输出至 `results/layout/bias_pdk/20261114_plan_v2/` 及更新 `variants/pdk/`）、`analog/pll/**/layout/`（补齐分频/前端dummy/反馈接收/标准单元PFD/转向CP/k4环路滤波/慢尾滤波PDK单元、1:1规划蓝图及四级折叠VCO→`r6q`前端→`pll_core_r6k4q`层次组装，输出至 `results/layout/pll_r6k4q/` 与对应 `variants/*pdk/`）及对应版图文档；不修改任何设计侧 `.spice` 采用网表，不触碰 `ldo_cap_area` / `smallcap` 文件。当前全机实时ngspice为0；物理几何构建、Magic DRC/PEX提取与Netgen LVS占0个ngspice worker（后续若做局部端点回灌另行查进程并按≤2 worker登记）。
+- 2026-11-14 / Antigravity / Bandgap v2紧凑重构与PLL r6k4q模拟核版图开工：可写范围为 `verification/layout/plot_mag.py`、`analog/bias/layout/`（按 `bias_pdk_floorplan_plan.png` 压紧 `build_bias_pdk.py` 并输出至 `results/layout/bias_pdk/20261114_plan_v2/` 及更新 `variants/pdk/`）、`analog/pll/**/layout/`（补齐分频/前端dummy/反馈接收/标准单元PFD/转向CP/k4环路滤波/慢尾滤波PDK单元、1:1规划蓝图及四级折叠VCO→`r6q`前端→`pll_core_r6k4q`层次组装，输出至 `results/layout/pll_r6k4q/` 与对应 `variants/*pdk/`）及对应版图文档；不修改任何设计侧 `.spice` 采用网表，不触碰 `ldo_cap_area` / `smallcap` 文件。当前全机实时ngspice为0；物理几何构建、Magic DRC/PEX提取与Netgen LVS占0个ngspice worker（后续若做局部端点回灌另行查进程并按≤2 worker登记）。
 
 - 2026-11-14 / Codex / Bandgap电容与局部设计复核：LDO按70pF本体＋独立16pF尾滤波保容量建议，转查共享BG。范围为新增bias/tb/cap_sizing局部测试、BG模块设计/小数据/索引；不改已采用bandgap/bias_dist源码、Bias/PLL既有布局或主线采用参数。实时全机NG为0，领取最多2worker；先区分裸BG默认Cvgi10pF与分配参考2pF、真实拷贝加载，建立双环局部AC/PSRR，再筛Cc、Cvbg、Cvgi。减容候选需自己的启动/噪声边界，原有135点/MC结果只按旧源继承；PNP模型失配缺口不变。
 

@@ -13,7 +13,7 @@ from serdes_flow import project, scalar_raw
 
 ROOT = project.ROOT
 HERE = Path(__file__).resolve()
-RUNNER = ROOT / 'analog/common/bias/tb/physical_reference_card/run.py'
+RUNNER = ROOT / 'analog/bias/tb/physical_reference_card/run.py'
 spec = importlib.util.spec_from_file_location('physical_reference_publish', RUNNER)
 card = importlib.util.module_from_spec(spec); spec.loader.exec_module(card)
 read, sha, dump = card.read, card.sha, card.dump

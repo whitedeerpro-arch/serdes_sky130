@@ -1,7 +1,7 @@
 * PLL core r5 / k = 4 with a quiet supply domain (docs/design/pll_loop.md "供电路径与HV18稳压"): pll_core_r5k4 with the
 * r5q frontend.  quiet (vdd_q): VCO, the four extraction buffers, the steering CP and the k = 4 loop filter (its VDD
 * capacitor units and precharge gates).  host (vdd): PFD, prescaler, receivers.  The VCO / buffer tails take vbias
-* through the 1 MOhm / 16 pF tail filter (serdes_pll_bias_lowpass_slow_r4, analog/common/ldo/spice/pll_bias_filter_r4.spice)
+* through the 1 MOhm / 16 pF tail filter (serdes_pll_bias_lowpass_slow_r4, analog/ldo/spice/pll_bias_filter_r4.spice)
 * after the local CML diode; the prescaler and receivers keep the unfiltered vbias.  The CP bias vbp must come from a
 * diode on vdd_q; vbn and ibias are current copies from host.  cfg0..3 are driven at the quiet level.  The supply
 * itself (HV18 r4 or an external 1.8 V on vdd_q) is outside.  Needs the r5 core's files, clock_frontend_r5q.spice,

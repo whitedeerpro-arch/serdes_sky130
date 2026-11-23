@@ -70,7 +70,7 @@ flowchart LR
 
 PDK的MIM1生成器有叠层兼容选项；上层器件镜像放置，使两层的底板接触位于相反侧，再按实际提取的端口接线。官方器件说明明确支持M3/M4两种MIM构造叠放，模型电压范围0–5V，覆盖这里的3.0–3.6V输入范围。[SkyWater器件说明](https://skywater-pdk.readthedocs.io/en/main/rules/device-details.html#mim-capacitors)
 
-独立源：[叠层无源](../../analog/common/ldo/spice/ldo_stacked_passives.spice)、[核心](../../analog/common/ldo/spice/ldo_hv18_core_stacked.spice)、[供电宏](../../analog/common/ldo/spice/pll_supply_hv18_stacked.spice)。规范化去掉名称/注释后，与实际测试的stack_core70源一致。版图由[叠层阵列](../../analog/common/ldo/layout/build_stacked_mim.py)和[叠层核心](../../analog/common/ldo/layout/build_ldo_stacked_core.py)独立生成；已安装单层版图和生成器未改写。
+独立源：[叠层无源](../../analog/ldo/spice/ldo_stacked_passives.spice)、[核心](../../analog/ldo/spice/ldo_hv18_core_stacked.spice)、[供电宏](../../analog/ldo/spice/pll_supply_hv18_stacked.spice)。规范化去掉名称/注释后，与实际测试的stack_core70源一致。版图由[叠层阵列](../../analog/ldo/layout/build_stacked_mim.py)和[叠层核心](../../analog/ldo/layout/build_ldo_stacked_core.py)独立生成；已安装单层版图和生成器未改写。
 
 | 检查 | 叠层候选自身结果 |
 |---|---|

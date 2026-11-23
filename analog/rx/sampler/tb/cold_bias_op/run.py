@@ -20,12 +20,12 @@ from serdes_flow import boundary, project, spice, watch
 ROOT=project.ROOT
 SOURCE=ROOT/'results/analog/rx/sampler/readout_deser/20261105T195801Z_ac_trim32_realbias_rhh'
 SOURCE_DECK=SOURCE/'fs_v1650_t-40/tb.cir'
-DIST=ROOT/'results/analog/common/bias/dist_pvt/20261103T212249Z'
+DIST=ROOT/'results/analog/bias/dist_pvt/20261103T212249Z'
 OUT=ROOT/'results/analog/rx/sampler/cold_bias_op'
 BC='rx_cold_bias_dist_seed_v1'
 CELLS=('analog/common/devices/spice/sky130_primitives.spice',
        'analog/common/devices/spice/sky130_pfet_lvt.spice',
-       'analog/common/bias/spice/bandgap.spice', 'analog/common/bias/spice/bias_dist.spice')
+       'analog/bias/spice/bandgap.spice', 'analog/bias/spice/bias_dist.spice')
 CASES={'fs_v1650_t-40':('fs_hh',1.65),'ff_v1950_t-40':('ff_hh',1.95)}
 NODES=('bias_vbg','vgi_bias','vbias','vctle')
 VECTORS=('vbg','vgi','vcml','vctle','iref','icml','ictle')

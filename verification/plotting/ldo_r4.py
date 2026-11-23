@@ -205,11 +205,11 @@ def main(manifest):
         if plans["calibration"]["cell_sha256"][rel] != h: raise ValueError("Calibration DUT differs")
         for key in ("startup", "noise", "cap_load"):
             check(ROOT / data[key]["campaign"] / "source" / rel, h)
-    tail = ROOT / "analog/common/ldo/spice/pll_bias_filter_r4.spice"
+    tail = ROOT / "analog/ldo/spice/pll_bias_filter_r4.spice"
     for key in ("startup", "noise"):
         check(ROOT / data[key]["campaign"] / "source" / tail.relative_to(ROOT), sha(tail))
     for key in ("bias_fast", "bias_slow"):
-        passive = ROOT / "analog/common/ldo/spice/ldo_passives.spice"
+        passive = ROOT / "analog/ldo/spice/ldo_passives.spice"
         check(passive, plans[key]["originals"][str(passive)])
         check(ROOT / plans[key]["parent_summary"], plans[key]["parent_summary_sha256"])
     check(tail, plans["bias_slow"]["originals"][str(tail)])

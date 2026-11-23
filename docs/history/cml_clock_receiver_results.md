@@ -65,7 +65,7 @@ TT 的原始瞬态极值约 −37 mV / 1.876 V，存在开关过冲；极值不�
 
 ![TT 与 SS 的输入、原始时钟及恢复时钟](../figures/common/level_conversion/cml_clock_receiver_waveforms.png)
 
-[可导出 SVG](../figures/common/level_conversion/cml_clock_receiver_waveforms.svg)；[最终版本测试点 CSV](../data/cml_clock_receiver_points.csv)。
+[可导出 SVG](../figures/common/level_conversion/cml_clock_receiver_waveforms.png)；[最终版本测试点 CSV](../data/cml_clock_receiver_points.csv)。
 
 另测 TT、1 GHz：输出占空比约 49.909%，接收器功耗约 2.230 mW；其余条件相同。
 1 GHz 尚未扩展到其他工艺角。
@@ -104,7 +104,7 @@ MOS 的 Cgs/Cgd 以及电源、偏置耦合仍然存在。
 
 ![真实 VCO 负载与八路 CMOS 相位](../figures/clocking/distribution/vco_receiver_eight_phases.png)
 
-[可导出 SVG](../figures/clocking/distribution/vco_receiver_eight_phases.svg)；[联调测量 CSV](../data/vco_receiver_integration.csv)。
+[可导出 SVG](../figures/clocking/distribution/vco_receiver_eight_phases.png)；[联调测量 CSV](../data/vco_receiver_integration.csv)。
 
 | 功耗项 | 直接接收 | 加 CML buffer |
 |---|---:|---:|

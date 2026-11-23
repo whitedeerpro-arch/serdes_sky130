@@ -1,6 +1,6 @@
 # 锁存器与分频器结构探索
 
-2026-10-29。按“都试试、主要观察边界”的要求，建立独立探索电路，保留 lowov r2 工作设计和冻结发布。数值入口为 [JSON](../data/cml_latch_topology_experiments.json)，[campaign](../../results/analog/pll/divider/topology_exploration/20261029T140545Z)保留每个网表、偏置、日志、波形和生成命令。
+2026-10-29。按“都试试、主要观察边界”的要求，建立独立探索电路，保留 lowov r2 工作设计和冻结发布。数值入口为 [JSON](../data/cml_latch_topology_experiments.json)，campaign (`results/analog/pll/divider/topology_exploration/20261029T140545Z`)保留每个网表、偏置、日志、波形和生成命令。
 
 本轮比较的是候选可行性和接口敏感性，不进行产品资格判定。没有实现新的 replica 共模伺服或 CMFB，候选时钟共模和 PMOS 负载栅偏置由外部理想源提供；电流偏置沿用真实 MOS 镜，folded 支路有独立 PMOS 二极管参考。没有体正偏、失配、随机噪声或提取寄生，也没有重跑完整 PLL。
 

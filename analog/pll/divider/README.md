@@ -9,8 +9,8 @@
 | 家族 | 实现 | 用途与状态 |
 |---|---|---|
 | **CML（11 端口）Var 1（主线）** | [cml_prescaler8.spice](spice/cml_prescaler8.spice)、[cml_div2.spice](spice/cml_div2.spice)、[cml_latch.spice](spice/cml_latch.spice) | 现行工作修订 r3 三级固定 CML ÷8；物理清理版在 [layout/variants/review_clean](layout/variants/review_clean/README.md) |
-| **CML（11 端口）Var 2（候选）** | [sync_prescaler8_2stack.spice](spice/sync_prescaler8_2stack.spice) | 2-Stack 同步 CML 候选，版图在 [layout/variants/sync2_routed](layout/variants/sync2_routed/README.md)（见 [pll_sync_prescaler8.md](../../../docs/design/pll_sync_prescaler8.md)，身份与 RC 复核边界未关闭） |
-| **CMOS/TSPC（10 端口）Var 1** | [cmos_prescaler8_2g.spice](spice/cmos_prescaler8_2g.spice) | 级联 C²MOS 纹波 ÷8 基线，版图在 [layout/variants/cmos_2g_pdk](layout/variants/cmos_2g_pdk/README.md)（`verify_r5_pdk.py` / `pll_pending_review.py` 引用） |
+| **CML（11 端口）Var 2（候选）** | [sync_prescaler8_2stack.spice](spice/sync_prescaler8_2stack.spice) | 2-Stack 同步 CML 候选，版图在 `layout/variants/sync2_routed`（已归档至 `retired_pre_release_20261123.json`）（见 [pll_sync_prescaler8.md](../../../docs/design/pll_sync_prescaler8.md)，身份与 RC 复核边界未关闭） |
+| **CMOS/TSPC（10 端口）Var 1** | [cmos_prescaler8_2g.spice](spice/cmos_prescaler8_2g.spice) | 级联 C²MOS 纹波 ÷8 基线，版图在 `layout/variants/cmos_2g_pdk`（已归档至 `retired_pre_release_20261123.json`）（`verify_r5_pdk.py` / `pll_pending_review.py` 引用） |
 | **CMOS/TSPC（10 端口）Var 2（主推候选）** | [tspc_reclock_prescaler8_2g.spice](spice/tspc_reclock_prescaler8_2g.spice) | Equalized Nikolic SAFF-TSPC + 1 GHz 同步计数 + 三路 2 GHz 重定时 ÷8（含 9T 动态对照）；版图 v2 在 [layout/variants/saff_reclock_2g_pdk](layout/variants/saff_reclock_2g_pdk/README.md)，报告见 [pll_tspc_reclock_divider.md](../../../docs/design/pll_tspc_reclock_divider.md) |
 
 ## 测试台

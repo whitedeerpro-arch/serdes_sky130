@@ -15,9 +15,9 @@
   - **512 ns LF 预充**：`TT` 与 `SS hh 1.65 V −40 °C` 均稳态建立至 **`0.1–3.0 mV`** 内，且对 `Vbg` 反冲 **`≤ 0.005 mV`**。
 - **采用状态**：独立候选（`variants/v2_pdk/`），**未更改** `config/bias_working_revision.toml` 现行基线。
 
-入口：[电路网表](../../analog/common/bias/spice/bias_v2.spice)、[叶单元生成器](../../analog/common/bias/layout/build_bias_v2_pdk.py)、[顶层集成生成器](../../analog/common/bias/layout/build_bias_top_v2.py)、[PDK 交付目录](../../analog/common/bias/layout/variants/v2_pdk/README.md)、[PVT/AC 台](../../analog/common/bias/tb/v2/run_pvt_ac.py)、[启动台](../../analog/common/bias/tb/v2/run_startup.py)、[MC 台](../../analog/common/bias/tb/v2/run_mc.py)、[后仿台](../../analog/common/bias/tb/v2/run_postlayout.py)。
+入口：[电路网表](../../analog/bias/spice/bias_v2.spice)、[叶单元生成器](../../analog/bias/layout/build_bias_v2_pdk.py)、[顶层集成生成器](../../analog/bias/layout/build_bias_top_v2.py)、[PDK 交付目录](../../analog/bias/layout/variants/v2_pdk/README.md)、[PVT/AC 台](../../analog/bias/tb/v2/run_pvt_ac.py)、[启动台](../../analog/bias/tb/v2/run_startup.py)、[MC 台](../../analog/bias/tb/v2/run_mc.py)、[后仿台](../../analog/bias/tb/v2/run_postlayout.py)。
 
-![BIAS v2 统一顶层集成宏版图](../../analog/common/bias/layout/variants/v2_pdk/serdes_bias_top_v2_pdk.png)
+![BIAS v2 统一顶层集成宏版图](../../analog/bias/layout/variants/v2_pdk/serdes_bias_top_v2_pdk.png)
 
 ---
 
@@ -31,7 +31,7 @@
 
 ---
 
-## 2. 7 单元物理签核汇总（`analog/common/bias/layout/variants/v2_pdk/`）
+## 2. 7 单元物理签核汇总（`analog/bias/layout/variants/v2_pdk/`）
 
 | 单元 | 尺寸 (µm) | 面积 (µm²) | 长宽比 | 相对 v1 | DRC | LVS | 提取类型 | 端口数 |
 |---|---:|---:|---:|---:|---:|---|---|---:|
@@ -66,4 +66,4 @@
 
 - `serdes_bias_ref_v2_pdk` 与 `serdes_bias_top_v2_pdk` 后仿为完整 CPEX（`vbuf/pbuf/cml/cp/ctle` 已含独立 RCX）；整宏级全金属 RCX 留待顶层电源网集成阶段补跑。
 - 在 `+50 mV / 10 ps` 极陡电源阶跃下，`bias_top` 后仿 `Icml` 瞬态峰在 `sf_hh 1.95 V −40 °C` 可达 `19.6%`（主要源于 `vgi` 节点对地耦合寄生在 10 ps 边沿瞬态分压，下游 `bias_cml` 本地 5 pF `Cdec` 会进一步滤除）。
-- 运行目录：`results/analog/common/bias/v2/`（`20261120T090254Z_pvt_ac`、`20261120T090820Z_startup_fast`、`20261120T091915Z_mc200`、`20261120T145746Z_postlayout`）。
+- 运行目录：`results/analog/bias/v2/`（`20261120T090254Z_pvt_ac`、`20261120T090820Z_startup_fast`、`20261120T091915Z_mc200`、`20261120T145746Z_postlayout`）。

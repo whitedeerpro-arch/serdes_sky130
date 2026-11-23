@@ -70,9 +70,9 @@ def main():
         cal_mc.append({k: d[k] for k in ("condition", "dut", "pdk_resistors", "samples", "seed", "chunk", "hold", "lanes")})
         assert d["samples"] == d["lanes"]["d0"]["n"] == 96
 
-    bias_dc = read("results/analog/common/bias/dist_pvt/20261103T212249Z/summary.json")
+    bias_dc = read("results/analog/bias/dist_pvt/20261103T212249Z/summary.json")
     assert len(bias_dc) == 135
-    bias_mc = read("results/analog/common/bias/dist_mc/20261103T212743Z/summary.json")
+    bias_mc = read("results/analog/bias/dist_mc/20261103T212743Z/summary.json")
     assert bias_mc["samples"] == 200
 
     def merged_bias(paths, include_code=False):
@@ -86,13 +86,13 @@ def main():
         return rows
 
     startup = merged_bias([
-        "results/analog/common/bias/bandgap_startup/20261104T063625Z_ramp1u_dist/summary.json",
-        "results/analog/common/bias/bandgap_startup/20261104T064156Z_ramp1u_dist/summary.json",
+        "results/analog/bias/bandgap_startup/20261104T063625Z_ramp1u_dist/summary.json",
+        "results/analog/bias/bandgap_startup/20261104T064156Z_ramp1u_dist/summary.json",
     ])
     assert len(startup) == 135 and all(r["ok"] for r in startup.values())
     pbuf = merged_bias([
-        "results/analog/common/bias/pbuf_pvt/20261104T061421Z/summary.json",
-        "results/analog/common/bias/pbuf_pvt/20261104T072912Z/summary.json",
+        "results/analog/bias/pbuf_pvt/20261104T061421Z/summary.json",
+        "results/analog/bias/pbuf_pvt/20261104T072912Z/summary.json",
     ], include_code=True)
     assert len(pbuf) == 405
     clocking = read("docs/data/clocking_progress_20261106.json")

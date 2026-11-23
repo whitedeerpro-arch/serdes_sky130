@@ -19,8 +19,8 @@ INCLUDES=('analog/common/devices/spice/sky130_primitives.spice',
  'analog/common/cml_buffer/spice/cml_delay_resistive.spice',
  'analog/common/cml_buffer/spice/cml_buffer.spice',
  'analog/pll/vco/spice/cap_bank_5b.spice','analog/pll/vco/spice/vco_delay_r6.spice',
- 'analog/pll/vco/spice/vco_ring4_r6.spice','analog/common/ldo/spice/ldo_passives.spice',
- 'analog/common/ldo/spice/pll_bias_filter_r4.spice')
+ 'analog/pll/vco/spice/vco_ring4_r6.spice','analog/ldo/spice/ldo_passives.spice',
+ 'analog/ldo/spice/pll_bias_filter_r4.spice')
 PROBES='v(ctrl) v(ctrl_dc) i(vsin) v(v0p) v(v0n) v(vbias_q)'
 
 

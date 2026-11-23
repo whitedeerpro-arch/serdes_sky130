@@ -176,7 +176,7 @@ def build_tx_c2_deck(c: corners.Condition, n_zq: int, t_stop: float = T_LIVE_STO
 .lib "{project.model_library()}" {c.process}
 .include "{ROOT}/analog/common/devices/spice/sky130_primitives.spice"
 .include "{ROOT}/analog/common/devices/spice/sky130_pfet_lvt.spice"
-.include "{ROOT}/analog/common/bias/spice/bias_v2.spice"
+.include "{ROOT}/analog/bias/spice/bias_v2.spice"
 .include "{ROOT}/analog/tx/sst/spice/tx_sst_driver.spice"
 .include "{ROOT}/analog/tx/sst/spice/tx_sst_serializer16.spice"
 .include "{ROOT}/analog/tx/sst/spice/tx_sst_top.spice"
@@ -305,7 +305,7 @@ def build_live_deck(c: corners.Condition, n_zq: int, pi_code: int) -> str:
 .lib "{project.model_library()}" {c.process}
 .include "{ROOT}/analog/common/devices/spice/sky130_primitives.spice"
 .include "{ROOT}/analog/common/devices/spice/sky130_pfet_lvt.spice"
-.include "{ROOT}/analog/common/bias/spice/bias_v2.spice"
+.include "{ROOT}/analog/bias/spice/bias_v2.spice"
 .include "{ROOT}/analog/tx/sst/spice/tx_sst_driver.spice"
 .include "{ROOT}/analog/tx/sst/spice/tx_sst_serializer16.spice"
 .include "{ROOT}/analog/tx/sst/spice/tx_sst_top.spice"
@@ -422,7 +422,7 @@ def build_replay_deck(
 .lib "{project.model_library()}" {c.process}
 .include "{ROOT}/analog/common/devices/spice/sky130_primitives.spice"
 .include "{ROOT}/analog/common/devices/spice/sky130_pfet_lvt.spice"
-.include "{ROOT}/analog/common/bias/spice/bias_v2.spice"
+.include "{ROOT}/analog/bias/spice/bias_v2.spice"
 .include "{ROOT}/analog/rx/cmos_rx/spice/rx_ctle_pdk.spice"
 .include "{ROOT}/analog/rx/cmos_rx/spice/rx_cmos_pi.spice"
 .include "{ROOT}/analog/rx/cmos_rx/spice/rx_dt_sampler.spice"

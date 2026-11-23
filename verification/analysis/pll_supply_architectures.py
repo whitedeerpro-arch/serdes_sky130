@@ -84,7 +84,7 @@ def main():
     inputs += [identity(CONFIG), identity(Path(__file__).resolve()), identity(ROOT / "src/serdes_flow/spice.py"),
                identity(ROOT / "analog/pll/vco/spice/vco_ring4_4b.spice"),
                identity(ROOT / "analog/common/cml_buffer/spice/cml_buffer.spice"),
-               identity(ROOT / "analog/common/bias/spice/bias_dist.spice")]
+               identity(ROOT / "analog/bias/spice/bias_dist.spice")]
     power = []
     for name, v in cfg["variants"].items():
         for current in cfg["planning"]["load_currents_ma"]:

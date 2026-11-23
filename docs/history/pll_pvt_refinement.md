@@ -73,7 +73,7 @@ SS、1.65 V、85°C 的实际 buffer 输出共模约为 1.511 V，差分摆幅�
 
 ## 证据与适用范围
 
-运行目录：[本轮 campaign](../../results/analog/pll/pvt_refinement/20261029T100030Z)。其中保存独立源快照、每次完整 TB、日志、数值结果及 `execution/*.txt` 命令记录；没有增加持久 Python 源文件。转换器 [单元模板](../../analog/common/cml_to_cmos/tb/pvt/tb_cml_to_cmos_candidate_ngspice.cir.in) 和前端 联调模板 (`../../analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`) 可供后续模型拓展。
+运行目录：本轮 campaign (`results/analog/pll/pvt_refinement/20261029T100030Z`)。其中保存独立源快照、每次完整 TB、日志、数值结果及 `execution/*.txt` 命令记录；没有增加持久 Python 源文件。转换器 [单元模板](../../analog/common/cml_to_cmos/tb/pvt/tb_cml_to_cmos_candidate_ngspice.cir.in) 和前端 联调模板 (`../../analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`) 可供后续模型拓展。
 
 测试中的 CML 电阻仍为理想名义值，偏置参考电流仍为外部理想电流源，未开启随机噪声或失配，未包含提取寄生。1.95 V 冷角的 CMOS 节点仍可上冲至约 2.026 V，器件端电压适用范围检查尚未收口。未完成 45 环境网格、闭环捕获 PVT、无扰跳码或相位噪声签核。当前候选不替换冻结版本。
 

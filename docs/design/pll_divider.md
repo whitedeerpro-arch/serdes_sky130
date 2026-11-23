@@ -1,8 +1,10 @@
 # CML ÷8 prescaler（r3）
 
-> **当前修订**：PLL r3 `pll_cml_prescaler8`——三级低过驱动 CML ÷2，÷2→÷4、÷4→÷8 之间各加一个 CML buffer（[网表](../../analog/pll/divider/spice/cml_prescaler8.spice)，[配置](../../config/pll_working_revision.toml)）。
+> **当前修订**：PLL r6q 仍用 r3 `pll_cml_prescaler8`。三级低过驱动 CML ÷2，÷2→÷4、÷4→÷8 之间各加一个 CML buffer。[网表](../../analog/pll/divider/spice/cml_prescaler8.spice)、[工作修订](../../config/pll_working_revision.toml)
 > **关键数字**：真实偏置 + PDK 电阻，45 条件 × hh / ll：÷2 / ÷4 / ÷8 与 250 MHz 反馈全部正确，最低 258 / 342 / 377 mVpp（第一级保持管 W 40，后两级 W 80；原来全 W 80 时第一级最低 156 mVpp）。
-> **主要缺口**：分频器没有确定性复位，TX 取用的多相抽头来自不同支路的独立 prescaler；FS/1.65 V/−40 °C 首级尾管处于饱和边界（VDS − VDSAT ≈ −5 mV）。
+> **主要缺口**：分频器没有确定性复位。FS/1.65 V/−40 °C 首级尾管接近饱和边界（VDS − VDSAT ≈ −5 mV）。现行 TX v3 使用单路 2 GHz 种子同步分发；多路独立 prescaler 抽头属于早期 TX 分发。[TX 时钟](tx_clock_distribution.md)
+
+可独立比较 11 端口同步 CML 与 10 端口 CMOS 家族，各自的版图和验证边界在候选资料中维护。[双叠层同步 CML](pll_sync_prescaler8.md)、[SAFF-TSPC](pll_tspc_reclock_divider.md)、[保留变体](../../analog/pll/divider/layout/README.md)
 
 ## 局部失配（2026-11-08）
 

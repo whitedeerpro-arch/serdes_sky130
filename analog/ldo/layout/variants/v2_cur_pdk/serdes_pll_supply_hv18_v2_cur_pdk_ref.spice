@@ -1,0 +1,369 @@
+* LVS reference netlist for serdes_pll_supply_hv18_v2_cur_pdk
+.subckt serdes_ldo_v2_rf50k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+.ends serdes_ldo_v2_rf50k
+
+.subckt serdes_ldo_v2_rf200k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr3 n3 b sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+.ends serdes_ldo_v2_rf200k
+
+.subckt serdes_ldo_v2_rf400k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr3 n3 n4 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr4 n4 n5 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr5 n5 n6 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr6 n6 n7 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr7 n7 b sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+.ends serdes_ldo_v2_rf400k
+
+.subckt serdes_ldo_v2_rf1p2m a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr3 n3 n4 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr4 n4 n5 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr5 n5 n6 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr6 n6 n7 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr7 n7 n8 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr8 n8 n9 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr9 n9 n10 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr10 n10 n11 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr11 n11 n12 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr12 n12 n13 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr13 n13 n14 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr14 n14 n15 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr15 n15 n16 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr16 n16 n17 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr17 n17 n18 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr18 n18 n19 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr19 n19 n20 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr20 n20 n21 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr21 n21 n22 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr22 n22 n23 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr23 n23 b sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+.ends serdes_ldo_v2_rf1p2m
+
+.subckt serdes_ldo_v2_rf1p6m a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr3 n3 n4 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr4 n4 n5 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr5 n5 n6 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr6 n6 n7 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr7 n7 n8 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr8 n8 n9 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr9 n9 n10 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr10 n10 n11 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr11 n11 n12 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr12 n12 n13 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr13 n13 n14 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr14 n14 n15 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr15 n15 n16 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr16 n16 n17 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr17 n17 n18 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr18 n18 n19 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr19 n19 n20 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr20 n20 n21 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr21 n21 n22 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr22 n22 n23 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr23 n23 n24 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr24 n24 n25 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr25 n25 n26 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr26 n26 n27 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr27 n27 n28 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr28 n28 n29 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr29 n29 n30 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr30 n30 n31 sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+Xr31 n31 b sub sky130_fd_pr__res_high_po w=0.5 l=75.640
+.ends serdes_ldo_v2_rf1p6m
+
+.subckt serdes_ldo_v2_r12k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=1.0 l=36.660
+.ends serdes_ldo_v2_r12k
+
+.subckt serdes_ldo_v2_r5k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=1.0 l=14.580
+.ends serdes_ldo_v2_r5k
+
+.subckt serdes_ldo_v2_ru4k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_ru4k
+
+.subckt serdes_ldo_v2_rdiv1k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr2 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr3 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv1k
+
+.subckt serdes_ldo_v2_rdiv2k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv2k
+
+.subckt serdes_ldo_v2_rdiv4k a b sub
+Xr0 a b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv4k
+
+.subckt serdes_ldo_v2_rdiv8k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 n1 b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv8k
+
+.subckt serdes_ldo_v2_rdiv16k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr3 n3 b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv16k
+
+.subckt serdes_ldo_v2_rdiv32k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr3 n3 n4 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr4 n4 n5 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr5 n5 n6 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr6 n6 n7 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr7 n7 b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv32k
+
+.subckt serdes_ldo_v2_rdiv40k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr3 n3 n4 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr4 n4 n5 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr5 n5 n6 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr6 n6 n7 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr7 n7 n8 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr8 n8 n9 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr9 n9 b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv40k
+
+.subckt serdes_ldo_v2_rdiv64k a b sub
+Xr0 a n1 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr1 n1 n2 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr2 n2 n3 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr3 n3 n4 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr4 n4 n5 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr5 n5 n6 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr6 n6 n7 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr7 n7 n8 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr8 n8 n9 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr9 n9 n10 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr10 n10 n11 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr11 n11 n12 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr12 n12 n13 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr13 n13 n14 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr14 n14 n15 sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+Xr15 n15 b sub sky130_fd_pr__res_high_po w=1.0 l=11.425
+.ends serdes_ldo_v2_rdiv64k
+
+.subckt serdes_ldo_v2_mim0p75 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=13.500 l=13.500 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=13.500 l=13.500 mf=1
+.ends serdes_ldo_v2_mim0p75
+
+.subckt serdes_ldo_v2_mim1p0 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=15.600 l=15.600 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=15.600 l=15.600 mf=1
+.ends serdes_ldo_v2_mim1p0
+
+.subckt serdes_ldo_v2_mim2p0 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=22.195 l=22.195 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=22.195 l=22.195 mf=1
+.ends serdes_ldo_v2_mim2p0
+
+.subckt serdes_ldo_v2_mim3p5 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+.ends serdes_ldo_v2_mim3p5
+
+.subckt serdes_ldo_v2_mim7p0 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_1 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_1 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+.ends serdes_ldo_v2_mim7p0
+
+.subckt serdes_ldo_v2_mim10p5 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_1 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_1 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_2 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_2 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+.ends serdes_ldo_v2_mim10p5
+
+.subckt serdes_ldo_v2_mim14p0 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_1 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_1 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_2 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_2 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_3 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_3 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+.ends serdes_ldo_v2_mim14p0
+
+.subckt serdes_ldo_v2_mim21p0 a b
+Xc1_0 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_0 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_1 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_1 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_2 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_2 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_3 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_3 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_4 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_4 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+Xc1_5 a b sky130_fd_pr__cap_mim_m3_1 w=29.415 l=29.415 mf=1
+Xc2_5 b a sky130_fd_pr__cap_mim_m3_2 w=29.415 l=29.415 mf=1
+.ends serdes_ldo_v2_mim21p0
+* LDO v2 HV18 Core (3.0-3.6 V -> 1.8 V, 2-10 mA)
+*
+* Key architectural improvements over r4 / smallcap:
+* 1. Self-tracking PMOS HV pre-regulator (Xpre_p/Xpre_d/Xpre_sink/Xrpre/Xcpre/Xcva)
+*    replaces the passive 2 kOhm / 32 pF RC filter, achieving >33 dB supply isolation
+*    on va with 16 pF total cap and full headroom down to Vin=3.0 V (FS 85 C).
+*    Xrpre_off (1.2 MOhm) cleanly pulls pre_d/pre_g to vin when enable=0 (zero off leak).
+* 2. High-R cascode gate filter (Xrcas=400 kOhm, Xccas=21 pF) pushes casg pole to 19 kHz
+*    while keeping C_gd(Xcas)/(C_gd+Ccas) < -23 dB at 20 MHz.
+* 3. High-bandwidth low-noise 2-stage EA (Xpl/Xpr w=120 l=1, Xnl/Xnm w=20 l=2, Xp2 w=150 l=2)
+*    with RC Miller compensation (Xrzero=5 kOhm, Xccomp=1.0 pF) + gate HF shaper (Xcghf=1.0 pF)
+*    for >45 dB 20 MHz PSRR, >69 deg PM across PVT, and <250 uVrms noise (1 kHz - 200 MHz).
+* 4. All devices use characterized SKY130 5 V / NVT bins with explicit multi-finger geometry.
+*
+* Ports: vin out ref ibias fb off vss
+
+.subckt serdes_ldo_hv18_core_v2 vin out ref ibias fb off vss
+* Self-tracking HV PMOS pre-regulator -> quiet EA rail va
+Xpre_sink pre_d ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=9 l=2 nf=3 ad=2.61 as=2.61 pd=21.48 ps=21.48
+Xrpre_off vin pre_d vss serdes_ldo_v2_rf1p2m
+Xpre_d pre_d pre_d va va sky130_fd_pr__pfet_g5v0d10v5 w=300 l=2 nf=60 ad=87.00 as=87.00 pd=634.80 ps=634.80
+Xrpre pre_d pre_g vss serdes_ldo_v2_rf400k
+Xcpre pre_g vin serdes_ldo_v2_mim2p0
+Xpre_p va pre_g vin vin sky130_fd_pr__pfet_g5v0d10v5 w=150 l=2 nf=30 ad=43.50 as=43.50 pd=317.40 ps=317.40
+Xcva va vss serdes_ldo_v2_mim14p0
+
+* High-R / stacked-MIM cascode gate filter
+Xrcas vin casg vss serdes_ldo_v2_rf400k
+Xccas casg vss serdes_ldo_v2_mim21p0
+
+* EA current mirrors & local bias decoupling
+Xnb ibias ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=30 l=2 nf=6 ad=8.70 as=8.70 pd=63.48 ps=63.48
+Xnr bp ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=30 l=2 nf=6 ad=8.70 as=8.70 pd=63.48 ps=63.48
+Xpd bp bp va va sky130_fd_pr__pfet_g5v0d10v5 w=30 l=2 nf=6 ad=8.70 as=8.70 pd=63.48 ps=63.48
+Xcbp bp va serdes_ldo_v2_mim0p75
+
+* Wideband low-noise 2-stage error amplifier
+Xpt tail bp va va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=2 nf=24 ad=34.80 as=34.80 pd=253.92 ps=253.92
+Xpl d fb tail va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=1 nf=24 ad=34.80 as=34.80 pd=253.92 ps=253.92
+Xpr x ref tail va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=1 nf=24 ad=34.80 as=34.80 pd=253.92 ps=253.92
+Xpl_dum va va tail va sky130_fd_pr__pfet_g5v0d10v5 w=40 l=1 nf=8 ad=11.60 as=11.60 pd=84.64 ps=84.64
+Xnl d d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=2 nf=4 ad=5.80 as=5.80 pd=42.32 ps=42.32
+Xnm x d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=2 nf=4 ad=5.80 as=5.80 pd=42.32 ps=42.32
+Xnl_dum vss vss vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=2 nf=4 ad=5.80 as=5.80 pd=42.32 ps=42.32
+Xn2 gate x vss vss sky130_fd_pr__nfet_g5v0d10v5 w=90 l=0.5 nf=9 ad=26.10 as=26.10 pd=185.22 ps=185.22
+Xp2 gate bp va va sky130_fd_pr__pfet_g5v0d10v5 w=150 l=2 nf=30 ad=43.50 as=43.50 pd=317.40 ps=317.40
+
+* Miller compensation + high-frequency noise shaper on pass gate
+Xrzero x cz vss serdes_ldo_v2_r5k
+Xccomp cz gate serdes_ldo_v2_mim1p0
+Xcghf gate vss serdes_ldo_v2_mim1p0
+
+* Cascoded native-NMOS power stage (zero HV exposure on 1.8 V output)
+Xcas vin casg mid vss sky130_fd_pr__nfet_05v0_nvt w=2000 l=0.9 nf=200 ad=580.00 as=580.00 pd=4116.00 ps=4116.00
+Xpass mid gate out vss sky130_fd_pr__nfet_05v0_nvt w=1200 l=0.9 nf=120 ad=348.00 as=348.00 pd=2469.60 ps=2469.60
+
+* Shutdown clamps (off = host when enable = 0)
+Xoff gate off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.90 as=2.90 pd=20.58 ps=20.58
+Xboff ibias off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.90 as=2.90 pd=20.58 ps=20.58
+.ends serdes_ldo_hv18_core_v2
+
+* LDO v2 Current-Mode Bias Input HV18 PLL Supply Macro (`v2_cur`)
+*
+* Fixes the BIAS v2 (`serdes_bias_top_v2`) vs LDO v2 (`serdes_pll_supply_hv18_v2`)
+* interface mismatch:
+*   - `serdes_bias_top_v2` keeps high-Z `vgi` strictly internal and exports 10 uA
+*     current-mode outputs `i_ldo0` / `i_ldo1` (`Xpc_ldo0/1`, 4x 8/4 `pfet_01v8_lvt`).
+*   - Legacy `serdes_pll_supply_hv18_v2` expected voltage input `vgi` and instantiated
+*     a redundant BIAS v1 `serdes_bias_pcopy n=4` (w=24/4, -25% ratio error vs v2 w=32/4).
+*   - `serdes_pll_supply_hv18_v2_cur` removes `Xcopy` and accepts `i_ldo` (10 uA)
+*     directly from `serdes_bias_top_v2.i_ldo0` into `serdes_ldo_hv18_core_v2`'s local
+*     1:1 unit-finger-matched 5 V NMOS diode mirror (`Xnb` 30/2 nf=6 -> `Xnr` 30/2 nf=6
+*     + `Xpre_sink` 9/2 nf=3 + `Xboff` 10/0.5 shutdown clamp).
+*
+* Subcircuits:
+*   serdes_pll_supply_hv18_v2_cur        : 13-port production macro
+*   serdes_pll_supply_hv18_v2_cur_probe  : 15-port stability/loop-break wrapper
+*
+* Dependencies:
+*   analog/common/devices/spice/sky130_primitives.spice
+*   analog/ldo/spice/ldo_v2_passives.spice
+*   analog/ldo/spice/ldo_hv18_core_v2.spice
+
+.subckt serdes_pll_supply_hv18_v2_cur vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 vss
+Xloop vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 fb fb vss serdes_pll_supply_hv18_v2_cur_probe
+.ends serdes_pll_supply_hv18_v2_cur
+
+.subckt serdes_pll_supply_hv18_v2_cur_probe vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 fb_return fb_input vss
+* Enable inverter and soft-start reference filter (i_ldo feeds Xcore local diode Xnb directly)
+Xinv_n off enable vss vss sky130_fd_pr__nfet_01v8 w=1 l=0.15
+Xinv_p off enable host host sky130_fd_pr__pfet_01v8 w=2 l=0.15
+Xrefgate_n bg enable ref_start vss sky130_fd_pr__nfet_01v8 w=2 l=0.15
+Xrefgate_p bg off ref_start host sky130_fd_pr__pfet_01v8 w=4 l=0.15
+Xrefres ref_start ref_local vss serdes_ldo_v2_rf1p6m
+Xrefcap ref_local vss serdes_ldo_v2_mim10p5
+Xrefreset ref_local off vss vss sky130_fd_pr__nfet_01v8 w=2 l=0.15
+* HV18 LDO core (local NMOS diode Xnb 30/2 nf=6 + matched Xnr 30/2 nf=6 + Xpre_sink 9/2 nf=3 + Xboff)
+Xcore vin quiet ref_local i_ldo fb_input off vss serdes_ldo_hv18_core_v2
+
+* Head-R-calibrated 6-bit unit-matched feedback divider + lead zero Cff
+Xrtop quiet fb_return vss serdes_ldo_v2_rdiv40k
+Xcff fb_return quiet serdes_ldo_v2_mim0p75
+Xrfixed fb_return n5 vss serdes_ldo_v2_rdiv64k
+Xr5 n5 n4 vss serdes_ldo_v2_rdiv32k
+Xr4 n4 n3 vss serdes_ldo_v2_rdiv16k
+Xr3 n3 n2 vss serdes_ldo_v2_rdiv8k
+Xr2 n2 n1 vss serdes_ldo_v2_rdiv4k
+Xr1 n1 n0 vss serdes_ldo_v2_rdiv2k
+Xr0 n0 vss vss serdes_ldo_v2_rdiv1k
+Xrdum_t0 vss vss vss serdes_ldo_v2_rdiv4k
+Xrdum_t1 vss vss vss serdes_ldo_v2_rdiv4k
+Xrdum_b0 vss vss vss serdes_ldo_v2_rdiv4k
+Xrdum_b1 vss vss vss serdes_ldo_v2_rdiv4k
+Xs5 n5 t5 n4 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs4 n4 t4 n3 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs3 n3 t3 n2 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs2 n2 t2 n1 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs1 n1 t1 n0 vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+Xs0 n0 t0 vss vss sky130_fd_pr__nfet_01v8 w=20 l=0.15
+* Fast 0.15 um proportional AC-coupled active transient overshoot clamp
+Xcl_en cl_top off quiet quiet sky130_fd_pr__pfet_01v8 w=4 l=0.15 nf=2 ad=1.16 as=1.16 pd=9.16 ps=9.16
+Xcl_rref cl_top cl_nb vss serdes_ldo_v2_rf200k
+Xcl_nref cl_nb cl_nb vss vss sky130_fd_pr__nfet_01v8 w=24 l=0.15 nf=6 ad=6.96 as=6.96 pd=51.48 ps=51.48
+Xcl_rhp cl_nb v_det vss serdes_ldo_v2_rf50k
+Xcl_chp v_det quiet serdes_ldo_v2_mim2p0
+Xcl_off v_det off vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15 nf=2 ad=1.16 as=1.16 pd=9.16 ps=9.16
+Xcl_n1 v_b v_det vss vss sky130_fd_pr__nfet_01v8 w=56 l=0.15 nf=14 ad=16.24 as=16.24 pd=120.12 ps=120.12
+Xcl_r1 quiet v_b vss serdes_ldo_v2_r12k
+Xcl_p2 vg_clamp v_b quiet quiet sky130_fd_pr__pfet_01v8 w=96 l=0.15 nf=16 ad=27.84 as=27.84 pd=201.28 ps=201.28
+Xcl_r2 vg_clamp vss vss serdes_ldo_v2_r5k
+Xcl_off2 vg_clamp off vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15 nf=2 ad=1.16 as=1.16 pd=9.16 ps=9.16
+Xclamp quiet vg_clamp vss vss sky130_fd_pr__nfet_01v8 w=144 l=0.15 nf=36 ad=41.76 as=41.76 pd=308.88 ps=308.88
+
+* Local stacked output decoupling
+Xcout quiet vss serdes_ldo_v2_mim7p0
+.ends serdes_pll_supply_hv18_v2_cur_probe
+
+.subckt serdes_pll_supply_hv18_v2_cur_pdk vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 vss
+Xtop vin host quiet bg i_ldo enable t0 t1 t2 t3 t4 t5 vss serdes_pll_supply_hv18_v2_cur
+.ends serdes_pll_supply_hv18_v2_cur_pdk

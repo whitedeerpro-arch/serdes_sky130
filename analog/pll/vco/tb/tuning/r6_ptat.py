@@ -31,7 +31,7 @@ RESULTS = ROOT / "results/analog/pll/vco/r6_ptat"
 
 PRIMS = ROOT / "analog/common/devices/spice/sky130_primitives.spice"
 PLVT = ROOT / "analog/common/devices/spice/sky130_pfet_lvt.spice"
-BIAS_V2 = ROOT / "analog/common/bias/spice/bias_v2.spice"
+BIAS_V2 = ROOT / "analog/bias/spice/bias_v2.spice"
 VCO_PTAT = ROOT / "analog/pll/vco/spice/vco_ptat_bias.spice"
 CML_DEL = ROOT / "analog/common/cml_buffer/spice/cml_delay_resistive.spice"
 CML_BUF = ROOT / "analog/common/cml_buffer/spice/cml_buffer.spice"

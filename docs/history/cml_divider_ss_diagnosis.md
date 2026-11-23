@@ -59,4 +59,4 @@ Vbias 可以调，但应把分频逻辑尾偏置与源跟随下拉偏置分开�
 
 这不是把原管的 Vbias 单独降低，而是通过更大的尾管在较低过驱动下提供所需电流。6 倍候选测得整条被测支路约 10.14 mW，原版约 9.19 mW；另有局部参考约 0.234 mW。原版已经停跳，因此这些数值不是等功能的能效比较。面积、偏置分发、其他角及与真实 VCO 的联调仍需检查。
 
-数值见 [JSON](../data/cml_divider_ss_diagnosis.json)，完整 TB、源快照、工作区参数和命令记录见 [运行目录](../../results/analog/pll/divider/ss_diagnosis/20261029T111238Z)。本轮只形成诊断候选，没有修改生产分频器。
+数值见 [JSON](../data/cml_divider_ss_diagnosis.json)，完整 TB、源快照、工作区参数和命令记录见 运行目录 (`results/analog/pll/divider/ss_diagnosis/20261029T111238Z`)。本轮只形成诊断候选，没有修改生产分频器。

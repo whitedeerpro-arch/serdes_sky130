@@ -18,7 +18,7 @@
 
 引用宽卡明确验证的模型副本，原PDK不改。准备目录固定脚本、原电路、模型身份、宽卡数据、工具/配置及ngspice初始化文件；候选另存副本，三个模式的子电路名字隔离。按deck续跑，只接受完整有限标量、正确执行身份与deck哈希；运行输出和分析只追加。
 
-集成者review后补存vg与初始化配置身份，完成目录为`results/analog/common/bias/physical_reference_card/20261112T054945.997244Z_a179ce18`。更早`20261112T054802.675317Z_ce4d74de`仅准备、未运行，不继续使用其旧输入身份。
+集成者review后补存vg与初始化配置身份，完成目录为`results/analog/bias/physical_reference_card/20261112T054945.997244Z_a179ce18`。更早`20261112T054802.675317Z_ce4d74de`仅准备、未运行，不继续使用其旧输入身份。
 
 ## 所测结果
 
@@ -40,11 +40,11 @@
 
 ## 执行与下一步
 
-[运行器](../../analog/common/bias/tb/physical_reference_card/run.py)与[离线测试](../../tests/test_physical_reference_card.py)已交付：5项检查覆盖实际w1校准、六段/五开关连接、八段主串、跨case名字与节点隔离、三次OP及45个独立输出；集成者已重跑。单worker等全局空位后执行，校准/物理deck分别22.5/46.4秒。发布器重新读取45个原始标量并核对源码/几何/变体/证据；[数据](../data/physical_reference_card.json)、[索引](../../results/catalog/physical_reference_card.json)保留身份。
+[运行器](../../analog/bias/tb/physical_reference_card/run.py)与[离线测试](../../tests/test_physical_reference_card.py)已交付：5项检查覆盖实际w1校准、六段/五开关连接、八段主串、跨case名字与节点隔离、三次OP及45个独立输出；集成者已重跑。单worker等全局空位后执行，校准/物理deck分别22.5/46.4秒。发布器重新读取45个原始标量并核对源码/几何/变体/证据；[数据](../data/physical_reference_card.json)、[索引](../../results/catalog/physical_reference_card.json)保留身份。
 
 ```bash
 uv run pytest -q tests/test_physical_reference_card.py
-uv run python analog/common/bias/tb/physical_reference_card/run.py --resume results/analog/common/bias/physical_reference_card/20261112T054945.997244Z_a179ce18
+uv run python analog/bias/tb/physical_reference_card/run.py --resume results/analog/bias/physical_reference_card/20261112T054945.997244Z_a179ce18
 ```
 
 接下来在局部driver上保持原参考，只改变前驱/端接电阻以隔离负载效应，再按差异扩压力角、供电/RC、启动及必要失配/噪声。不能据本卡先宣布新参考或TX通过。

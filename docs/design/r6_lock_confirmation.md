@@ -50,7 +50,7 @@
 
 ## 变容器热噪声模型审计
 
-安装PDK的[冻结模型](../../results/analog/pll/vco/varactor_noise/20261114T123118.337085Z/source/sky130_fd_pr__cap_var_lvt.model.spice)含电压表达式电阻 `rg`。单只W5.2/L0.5/vm4、TT27°C、Vgate1.55 V/Vwell1.166 V的纯DC卡中，端口有非零耗散导纳，但ngspice `.noise` 输出为零：
+安装PDK的冻结模型 (`results/analog/pll/vco/varactor_noise/20261114T123118.337085Z/source/sky130_fd_pr__cap_var_lvt.model.spice`)含电压表达式电阻 `rg`。单只W5.2/L0.5/vm4、TT27°C、Vgate1.55 V/Vwell1.166 V的纯DC卡中，端口有非零耗散导纳，但ngspice `.noise` 输出为零：
 
 | 频点 | 端口实部导纳 | 按被动热平衡4kT·Re(Y)应有的电流PSD | 模型 `.noise` |
 |---|---:|---:|---:|
@@ -93,4 +93,4 @@
 
 ## 固定证据
 
-[小数据](../data/r6_lock_confirmation.json)、[索引](../../results/catalog/r6_lock_confirmation.json)保存各输入与波形/执行/模型清单的SHA256。600 ns及全部局部卡的完整中间汇总保留在[追加分析](../../results/analog/pll/top/lock_confirmation/20261114T140058.381774Z/summary.json)。100 ns入口复核保留在[前一轮记录](r6_mainline_review.md)。所有新结果追加目录，未替换当前采用组合。
+[小数据](../data/r6_lock_confirmation.json)、[索引](../../results/catalog/r6_lock_confirmation.json)保存各输入与波形/执行/模型清单的SHA256。600 ns及全部局部卡的完整中间汇总保留在追加分析 (`results/analog/pll/top/lock_confirmation/20261114T140058.381774Z/summary.json`)。100 ns入口复核保留在[前一轮记录](r6_mainline_review.md)。所有新结果追加目录，未替换当前采用组合。

@@ -1,20 +1,21 @@
-# RX开发入口
+# Receiver (`analog/rx/`)
 
-先做输入终端/共模接口和线性CTLE，再做真实采样器，最后接CDR和解串。已有CTLE、四相采样、PI、静态CMOS读出和公共pair对齐；数字CDR与16位串转并已做实际RTL/行为plant闭环，整机物理收口待完成。
+## 1. Active 4 Gb/s Mainline — Zero-CML CMOS RX (`cmos_rx/`)
 
-- `input/`：两只50 Ω到外部vcm，替换原测试夹具的终端；真实共模参考/缓冲尚未实现。
-- `ctle/`：LVT差分输入、两个镜像电流sink、源极R/C退化，四档实际MOS开关电容。
-- `sampler/`：真实CML四相采样、静态CMOS读出与真实公共时钟pair重定时；完整16UI降速/数字映射时序待完成。
-- `pi/`：真实MOS相位选择/电流加权插值与两对差分时钟输出；外部控制码测试，尚无硬件译码/重定时。
-- `cdr/`：模拟顶层预留；实际RTL数字CDR与串转并在digital/rx，TX PLL锁定不代表RX已恢复时钟。
-- `top/`：已有真实TX驱动器/PCB/RX加载联合测试，源边界在TX隔离buffer输入；实际采样器/CDR顶层仍待设计。
+- **Directory**: [`cmos_rx/`](cmos_rx/) (`spice/`, `tb/`, `layout/variants/v2_pdk/`)
+- **Design Doc**: [docs/design/rx_cmos_v2.md](../../docs/design/rx_cmos_v2.md)
+- **Architecture**: On-die `100 Ω` termination + 4-level tunable CTLE → 2 GHz 64-code pure-CMOS Phase Interpolator + 8-phase 1 GHz quadrature ÷2 → 8× quarter-rate Double-Tail dynamic CMOS slicers (4 Data + 4 Edge) → pitch-matched 8→32 static CMOS deserializer (`250 MHz` word clock).
+- **Signoff**: `245.30 × 195.40 µm = 47,931.6 µm²`, 8/8 cells Magic full-rule `DRC = 0`, Netgen `LVS = MATCH`, **45/45** schematic link + **3/3 CPEX** post-layout transient PASS (`TT`, `SS -40 °C`, `FF -40 °C`: `0/64` data, `0/27..30` edge, `TT 36.11 mW`), standalone PI 64-code TT CPEX `|INL| = 0.0177 UI` (100% monotonic).
 
-接口、证据和下一步见[RX前端首版](../../docs/history/rx_frontend_first_design.md)。
+## 2. Legacy CML Reference Subdirectories
 
-真实加载与裁剪边界对照见[TX—PCB—RX联调](../../docs/history/rx_loaded_link.md)。
+Retained for historical comparison against the earlier CML sampler/PI receiver architecture (`ac_trim/c2/W40`):
 
-固定4Gb/s多端口的PLL共享、PI补偿频差与下一步实现见[CDR架构选择](../../docs/history/rx_cdr_architecture.md)。
-
-采样器、真实PI/CTLE加载及RTL交接轨迹回放见[当前结果](../../docs/history/rx_sampler_control.md)。
-
-后续CMOS判决读出、实际RTL长时CDR闭环和16位字流见[闭环结果](../../docs/history/rx_cdr_closed_loop.md)。
+| Directory | Historical Role | Design Reference |
+|---|---|---|
+| [`input/`](input/) | Early 50 Ω termination fixture | [rx_frontend.md](../../docs/design/rx_frontend.md) |
+| [`ctle/`](ctle/) | Early standalone LVT CTLE characterization (45×4 AC/DC) | [rx_frontend.md](../../docs/design/rx_frontend.md) |
+| [`pi/`](pi/) | Legacy current-weighted CML phase interpolator | [rx_pi_sampler.md](../../docs/design/rx_pi_sampler.md) |
+| [`sampler/`](sampler/) | Legacy half-rate CML samplers + readout | [rx_pi_sampler.md](../../docs/design/rx_pi_sampler.md) |
+| `cdr/` | Analog CDR placeholder (actual RTL CDR lives in `digital/pnr/rtl_v3/`) | [rx_cdr_digital.md](../../docs/design/rx_cdr_digital.md) |
+| [`top/`](top/) | Early TX-PCB-RX loaded link integration benches | [rx_pi_sampler.md](../../docs/design/rx_pi_sampler.md) |

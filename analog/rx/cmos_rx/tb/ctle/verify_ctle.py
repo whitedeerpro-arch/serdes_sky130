@@ -26,7 +26,7 @@ TEMPLATE = """\
 RX CTLE PDK-mapped AC/DC characterization; static code @EQ_CODE@, input CM @INPUT_CM@
 .lib "@MODEL_LIBRARY@" @CORNER@
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
-.include "@PROJECT_ROOT@/analog/common/bias/spice/bias_v2.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bias_v2.spice"
 .include "@PROJECT_ROOT@/analog/rx/cmos_rx/spice/rx_ctle_pdk.spice"
 Vdd vdd 0 @SUPPLY@
 * BIAS v2 CTLE current (50 uA nominal) into real serdes_bias_ctle_v2 diode

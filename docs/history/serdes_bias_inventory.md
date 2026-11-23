@@ -1,6 +1,6 @@
 # 级间 buffer、SS 冷热角与偏置来源
 
-2026-10-29。补测见 [数值 JSON](../data/ss_buffer_bias.json)和 [campaign](../../results/analog/pll/divider/ss_buffer_bias/20261029T151245Z)。当前工作网表没有修改；新 buffer 仍是探索候选。
+2026-10-29。补测见 [数值 JSON](../data/ss_buffer_bias.json)和 campaign (`results/analog/pll/divider/ss_buffer_bias/20261029T151245Z`)。当前工作网表没有修改；新 buffer 仍是探索候选。
 
 ## buffer 解决了什么
 

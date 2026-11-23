@@ -250,7 +250,7 @@ def main() -> None:
         "Layer Stack Separation — serdes_bias_cp_pdk (Common-Centroid DN-MN-MN-DN + Xdp)",
     )
     render_layer_stack(
-        REPO / "analog/common/ldo/layout/variants/mim_pdk/serdes_ldo_mim16_pdk.mag",
+        REPO / "analog/ldo/layout/variants/mim_pdk/serdes_ldo_mim16_pdk.mag",
         "serdes_ldo_mim16_pdk",
         out_dir / "ldo/ldo_mim16_layer_stack.png",
         "Layer Stack Separation — serdes_ldo_mim16_pdk (16 x 1pF PDK MIM Array)",
@@ -301,7 +301,7 @@ def main() -> None:
     render_grid(
         [
             ("Gemini4 Argon Raw: serdes_bias_pcopy_n20",
-             REPO / "analog/common/bias/layout/serdes_bias_pcopy_n20.mag",
+             REPO / "analog/bias/layout/serdes_bias_pcopy_n20.mag",
              "serdes_bias_pcopy_n20", "Hand-drawn | DRC=9 (mcon.2/licon.2/via.2) | 0 ports"),
             ("Migrated PDK: serdes_bias_pcopy_n20_pdk",
              args.bias_run / "serdes_bias_pcopy_n20_pdk/serdes_bias_pcopy_n20_pdk.mag",

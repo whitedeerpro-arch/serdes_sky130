@@ -4,7 +4,7 @@
 
 ## 证据身份与范围
 
-审查 [原型](../../../analog/tx/input_register/spice/word_capture16_staggered.spice) 和 [20261106T200647Z](../../../results/analog/tx/staggered_ingress/20261106T200647Z/plan.json) 的保存 deck、快照与 summary。计划中的原型 SHA-256 `426ee6ae…d688a6fb` 与当前文件一致；旧脚本计划哈希为 `c9d4ebca…5b2c6e1b`，旧模板计划哈希为 `369e13a9…6f50a3e3`。当前脚本与模板均已修改，因此旧结论以保存 deck、快照和旧 summary 为范围。旧 deck 的 `Vclock`、`Bclock`、`Bsp/Bsn` 共用理想 `ck_u`，并非实际 CML 字时钟接收器；新模板的行为不能倒灌到旧结果。六个压力条件 summary 均 measured、functional=true，每例检查八字；第九字只为最后一次下一字更新提供激励。
+审查 [原型](../../../analog/tx/input_register/spice/word_capture16_staggered.spice) 和 20261106T200647Z (`results/analog/tx/staggered_ingress/20261106T200647Z/plan.json`) 的保存 deck、快照与 summary。计划中的原型 SHA-256 `426ee6ae…d688a6fb` 与当前文件一致；旧脚本计划哈希为 `c9d4ebca…5b2c6e1b`，旧模板计划哈希为 `369e13a9…6f50a3e3`。当前脚本与模板均已修改，因此旧结论以保存 deck、快照和旧 summary 为范围。旧 deck 的 `Vclock`、`Bclock`、`Bsp/Bsn` 共用理想 `ck_u`，并非实际 CML 字时钟接收器；新模板的行为不能倒灌到旧结果。六个压力条件 summary 均 measured、functional=true，每例检查八字；第九字只为最后一次下一字更新提供激励。
 
 ## 极性、位序与保持
 

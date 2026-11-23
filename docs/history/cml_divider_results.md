@@ -100,7 +100,7 @@ TT、1.8 V、27°C、2 GHz 正弦输入、差分 400 mVpp、共模 1.632 V，
 
 ![分频链与整数反馈脉冲](../figures/clocking/dividers/cml_divider_waveforms.png)
 
-矢量图：[SVG](../figures/clocking/dividers/cml_divider_waveforms.svg)。灰色计数曲线由四位组合解码，
+矢量图：[SVG](../figures/clocking/dividers/cml_divider_waveforms.png)。灰色计数曲线由四位组合解码，
 跳变期间的尖峰不代表注册反馈输出也存在这些毛刺；两者分开检查。
 
 ## 测试、归档和未完成项

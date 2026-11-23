@@ -26,7 +26,7 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| cml_clock_receiver_waveforms [PNG](common/level_conversion/cml_clock_receiver_waveforms.png) / [SVG](common/level_conversion/cml_clock_receiver_waveforms.svg) | 接口表征 | 时钟接收器及VCO/分频接口；不能用作静态数据转换验收；[报告](../history/cml_clock_receiver_results.md) |
+| cml_clock_receiver_waveforms [PNG](common/level_conversion/cml_clock_receiver_waveforms.png) / [SVG](common/level_conversion/cml_clock_receiver_waveforms.png) | 接口表征 | 时钟接收器及VCO/分频接口；不能用作静态数据转换验收；[报告](../history/cml_clock_receiver_results.md) |
 
 ## VCO
 
@@ -34,8 +34,8 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| vco_ring4_tt_tuning [PNG](clocking/vco/vco_ring4_tt_tuning.png) / [SVG](clocking/vco/vco_ring4_tt_tuning.svg) | 单元表征 | 早期四级环振固定偏置/调谐表征；最终参数以冻结版本为准；[报告](../history/vco_ring4_first_results.md) |
-| vco_ring4_tt_waveforms [PNG](clocking/vco/vco_ring4_tt_waveforms.png) / [SVG](clocking/vco/vco_ring4_tt_waveforms.svg) | 单元表征 | 早期四级环振固定偏置/调谐表征；最终参数以冻结版本为准；[报告](../history/vco_ring4_first_results.md) |
+| vco_ring4_tt_tuning [PNG](clocking/vco/vco_ring4_tt_tuning.png) / [SVG](clocking/vco/vco_ring4_tt_tuning.png) | 单元表征 | 早期四级环振固定偏置/调谐表征；最终参数以冻结版本为准；[报告](../history/vco_ring4_first_results.md) |
+| vco_ring4_tt_waveforms [PNG](clocking/vco/vco_ring4_tt_waveforms.png) / [SVG](clocking/vco/vco_ring4_tt_waveforms.png) | 单元表征 | 早期四级环振固定偏置/调谐表征；最终参数以冻结版本为准；[报告](../history/vco_ring4_first_results.md) |
 
 ## 分频架构探索
 
@@ -43,8 +43,8 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| cml_divider_waveforms [PNG](clocking/dividers/cml_divider_waveforms.png) / [SVG](clocking/dividers/cml_divider_waveforms.svg) | 演进记录 | 早期全CML整数分频/四级链；当前默认只使用三级÷8；[报告](../history/cml_divider_results.md) |
-| hybrid_divider_waveforms [PNG](clocking/dividers/hybrid_divider_waveforms.png) / [SVG](clocking/dividers/hybrid_divider_waveforms.svg) | 演进记录 | 历史250MHz后级CMOS分频实验；不代表已确认的2GHz自由分频域；[报告](../history/hybrid_divider_results.md) |
+| cml_divider_waveforms [PNG](clocking/dividers/cml_divider_waveforms.png) / [SVG](clocking/dividers/cml_divider_waveforms.png) | 演进记录 | 早期全CML整数分频/四级链；当前默认只使用三级÷8；[报告](../history/cml_divider_results.md) |
+| hybrid_divider_waveforms [PNG](clocking/dividers/hybrid_divider_waveforms.png) / [SVG](clocking/dividers/hybrid_divider_waveforms.png) | 演进记录 | 历史250MHz后级CMOS分频实验；不代表已确认的2GHz自由分频域；[报告](../history/hybrid_divider_results.md) |
 
 ## 时钟抽出与分发
 
@@ -52,9 +52,9 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| physical_clock_distribution_ui [PNG](clocking/distribution/physical_clock_distribution_ui.png) / [SVG](clocking/distribution/physical_clock_distribution_ui.svg) | 局部联调 | 实际相位微调/扇出缓冲及旧锁存参数1024bit记录；不替代冻结版256bit证据；[报告](../history/physical_clock_distribution_results.md) |
-| pll_replay_clock_phases_ui [PNG](clocking/distribution/pll_replay_clock_phases_ui.png) / [SVG](clocking/distribution/pll_replay_clock_phases_ui.svg) | 演进记录 | 历史PLL时钟回放及串化比较；含源理想化/记录处理边界；[报告](../history/pll_clock_replay_results.md) |
-| vco_receiver_eight_phases [PNG](clocking/distribution/vco_receiver_eight_phases.png) / [SVG](clocking/distribution/vco_receiver_eight_phases.svg) | 接口表征 | 时钟接收器及VCO/分频接口；不能用作静态数据转换验收；[报告](../history/cml_clock_receiver_results.md) |
+| physical_clock_distribution_ui [PNG](clocking/distribution/physical_clock_distribution_ui.png) / [SVG](clocking/distribution/physical_clock_distribution_ui.png) | 局部联调 | 实际相位微调/扇出缓冲及旧锁存参数1024bit记录；不替代冻结版256bit证据；[报告](../history/physical_clock_distribution_results.md) |
+| pll_replay_clock_phases_ui [PNG](clocking/distribution/pll_replay_clock_phases_ui.png) / [SVG](clocking/distribution/pll_replay_clock_phases_ui.png) | 演进记录 | 历史PLL时钟回放及串化比较；含源理想化/记录处理边界；[报告](../history/pll_clock_replay_results.md) |
+| vco_receiver_eight_phases [PNG](clocking/distribution/vco_receiver_eight_phases.png) / [SVG](clocking/distribution/vco_receiver_eight_phases.png) | 接口表征 | 时钟接收器及VCO/分频接口；不能用作静态数据转换验收；[报告](../history/cml_clock_receiver_results.md) |
 
 ## PLL/PFD/CP/LF搭建
 
@@ -62,13 +62,13 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| pfd_cmos_transfer [PNG](clocking/pll/core/pfd_cmos_transfer.png) / [SVG](clocking/pll/core/pfd_cmos_transfer.svg) | 单元表征 | PFD脉宽与接口，不独立证明CP电荷或PLL捕获；[报告](../history/pfd_cmos_results.md) |
-| pfd_cmos_waveforms [PNG](clocking/pll/core/pfd_cmos_waveforms.png) / [SVG](clocking/pll/core/pfd_cmos_waveforms.svg) | 单元表征 | PFD脉宽与接口，不独立证明CP电荷或PLL捕获；[报告](../history/pfd_cmos_results.md) |
-| pfd_cp_charge [PNG](clocking/pll/core/pfd_cp_charge.png) / [SVG](clocking/pll/core/pfd_cp_charge.svg) | 局部联调 | PFD/CP/LF开环电荷与滤波响应；[报告](../history/pfd_cp_lf_results.md) |
-| pfd_cp_lf_response [PNG](clocking/pll/core/pfd_cp_lf_response.png) / [SVG](clocking/pll/core/pfd_cp_lf_response.svg) | 局部联调 | PFD/CP/LF开环电荷与滤波响应；[报告](../history/pfd_cp_lf_results.md) |
-| pll_balanced_extraction [PNG](clocking/pll/core/pll_balanced_extraction.png) / [SVG](clocking/pll/core/pll_balanced_extraction.svg) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../history/pll_first_debug.md) |
-| pll_mixed_acquisition [PNG](clocking/pll/core/pll_mixed_acquisition.png) / [SVG](clocking/pll/core/pll_mixed_acquisition.svg) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../history/pll_first_debug.md) |
-| pll_transistor_first_response [PNG](clocking/pll/core/pll_transistor_first_response.png) / [SVG](clocking/pll/core/pll_transistor_first_response.svg) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../history/pll_first_debug.md) |
+| pfd_cmos_transfer [PNG](clocking/pll/core/pfd_cmos_transfer.png) / [SVG](clocking/pll/core/pfd_cmos_transfer.png) | 单元表征 | PFD脉宽与接口，不独立证明CP电荷或PLL捕获；[报告](../history/pfd_cmos_results.md) |
+| pfd_cmos_waveforms [PNG](clocking/pll/core/pfd_cmos_waveforms.png) / [SVG](clocking/pll/core/pfd_cmos_waveforms.png) | 单元表征 | PFD脉宽与接口，不独立证明CP电荷或PLL捕获；[报告](../history/pfd_cmos_results.md) |
+| pfd_cp_charge [PNG](clocking/pll/core/pfd_cp_charge.png) / [SVG](clocking/pll/core/pfd_cp_charge.png) | 局部联调 | PFD/CP/LF开环电荷与滤波响应；[报告](../history/pfd_cp_lf_results.md) |
+| pfd_cp_lf_response [PNG](clocking/pll/core/pfd_cp_lf_response.png) / [SVG](clocking/pll/core/pfd_cp_lf_response.png) | 局部联调 | PFD/CP/LF开环电荷与滤波响应；[报告](../history/pfd_cp_lf_results.md) |
+| pll_balanced_extraction [PNG](clocking/pll/core/pll_balanced_extraction.png) / [SVG](clocking/pll/core/pll_balanced_extraction.png) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../history/pll_first_debug.md) |
+| pll_mixed_acquisition [PNG](clocking/pll/core/pll_mixed_acquisition.png) / [SVG](clocking/pll/core/pll_mixed_acquisition.png) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../history/pll_first_debug.md) |
+| pll_transistor_first_response [PNG](clocking/pll/core/pll_transistor_first_response.png) / [SVG](clocking/pll/core/pll_transistor_first_response.png) | 演进记录 | 首轮PLL调试，多种实现视图；逐图回到原报告判断范围；[报告](../history/pll_first_debug.md) |
 
 ## PLL预充与启动
 
@@ -76,12 +76,12 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| lf_cold_precharge [PNG](clocking/pll/startup/lf_cold_precharge.png) / [SVG](clocking/pll/startup/lf_cold_precharge.svg) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
-| pll_native_precharged_capture_ui [PNG](clocking/pll/startup/pll_native_precharged_capture_ui.png) / [SVG](clocking/pll/startup/pll_native_precharged_capture_ui.svg) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
-| pll_precharged_mixed_capture [PNG](clocking/pll/startup/pll_precharged_mixed_capture.png) / [SVG](clocking/pll/startup/pll_precharged_mixed_capture.svg) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
-| pll_precharged_tracking [PNG](clocking/pll/startup/pll_precharged_tracking.png) / [SVG](clocking/pll/startup/pll_precharged_tracking.svg) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
-| pll_startup_mixed_handoff_ui [PNG](clocking/pll/startup/pll_startup_mixed_handoff_ui.png) / [SVG](clocking/pll/startup/pll_startup_mixed_handoff_ui.svg) | 阶段/设计依据 | 双节点预充/混合启动与RTL监督器分层证据；原生扩展冷启动尚未验收；[报告](../history/pll_startup_optimization.md) |
-| pll_startup_precharge_optimization_ui [PNG](clocking/pll/startup/pll_startup_precharge_optimization_ui.png) / [SVG](clocking/pll/startup/pll_startup_precharge_optimization_ui.svg) | 阶段/设计依据 | 双节点预充/混合启动与RTL监督器分层证据；原生扩展冷启动尚未验收；[报告](../history/pll_startup_optimization.md) |
+| lf_cold_precharge [PNG](clocking/pll/startup/lf_cold_precharge.png) / [SVG](clocking/pll/startup/lf_cold_precharge.png) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
+| pll_native_precharged_capture_ui [PNG](clocking/pll/startup/pll_native_precharged_capture_ui.png) / [SVG](clocking/pll/startup/pll_native_precharged_capture_ui.png) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
+| pll_precharged_mixed_capture [PNG](clocking/pll/startup/pll_precharged_mixed_capture.png) / [SVG](clocking/pll/startup/pll_precharged_mixed_capture.png) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
+| pll_precharged_tracking [PNG](clocking/pll/startup/pll_precharged_tracking.png) / [SVG](clocking/pll/startup/pll_precharged_tracking.png) | 演进记录 | 预充及捕获/频率阶跃的分层记录；后续双节点启动见startup报告；[报告](../history/pll_precharge_capture.md) |
+| pll_startup_mixed_handoff_ui [PNG](clocking/pll/startup/pll_startup_mixed_handoff_ui.png) / [SVG](clocking/pll/startup/pll_startup_mixed_handoff_ui.png) | 阶段/设计依据 | 双节点预充/混合启动与RTL监督器分层证据；原生扩展冷启动尚未验收；[报告](../history/pll_startup_optimization.md) |
+| pll_startup_precharge_optimization_ui [PNG](clocking/pll/startup/pll_startup_precharge_optimization_ui.png) / [SVG](clocking/pll/startup/pll_startup_precharge_optimization_ui.png) | 阶段/设计依据 | 双节点预充/混合启动与RTL监督器分层证据；原生扩展冷启动尚未验收；[报告](../history/pll_startup_optimization.md) |
 
 ## PLL跟踪研判
 
@@ -89,7 +89,7 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| pll_tracking_assessment [PNG](clocking/pll/tracking/pll_tracking_assessment.png) / [SVG](clocking/pll/tracking/pll_tracking_assessment.svg) | 工程估算 | SciPy局部线性模型及已有波形分析；不是器件噪声或实测闭环AC注入；[报告](../history/pll_tracking_assessment.md) |
+| pll_tracking_assessment [PNG](clocking/pll/tracking/pll_tracking_assessment.png) / [SVG](clocking/pll/tracking/pll_tracking_assessment.png) | 工程估算 | SciPy局部线性模型及已有波形分析；不是器件噪声或实测闭环AC注入；[报告](../history/pll_tracking_assessment.md) |
 
 ## 串化器设计演进
 
@@ -97,15 +97,15 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| serializer16_2ui_eye [PNG](tx/serializer/serializer16_2ui_eye.png) / [SVG](tx/serializer/serializer16_2ui_eye.svg) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
-| serializer16_edge_phase_ui [PNG](tx/serializer/serializer16_edge_phase_ui.png) / [SVG](tx/serializer/serializer16_edge_phase_ui.svg) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
-| serializer16_first_waveforms [PNG](tx/serializer/serializer16_first_waveforms.png) / [SVG](tx/serializer/serializer16_first_waveforms.svg) | 演进记录 | 旧 PNG 与 2ui_eye 字节相同，PNG 保留为兼容别名；SVG 独立保留，不作当前验收依据 |
-| serializer16_physical_clock_2ui [PNG](tx/serializer/serializer16_physical_clock_2ui.png) / [SVG](tx/serializer/serializer16_physical_clock_2ui.svg) | 局部联调 | 实际相位微调/扇出缓冲及旧锁存参数1024bit记录；不替代冻结版256bit证据；[报告](../history/physical_clock_distribution_results.md) |
-| serializer16_pll_replay_2ui [PNG](tx/serializer/serializer16_pll_replay_2ui.png) / [SVG](tx/serializer/serializer16_pll_replay_2ui.svg) | 演进记录 | 历史PLL时钟回放及串化比较；含源理想化/记录处理边界；[报告](../history/pll_clock_replay_results.md) |
-| serializer16_power [PNG](tx/serializer/serializer16_power.png) / [SVG](tx/serializer/serializer16_power.svg) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
-| serializer16_retimed_2ui_eye [PNG](tx/serializer/serializer16_retimed_2ui_eye.png) / [SVG](tx/serializer/serializer16_retimed_2ui_eye.svg) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
-| serializer16_retimed_boundary_ui [PNG](tx/serializer/serializer16_retimed_boundary_ui.png) / [SVG](tx/serializer/serializer16_retimed_boundary_ui.svg) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
-| serializer16_waveforms_ui [PNG](tx/serializer/serializer16_waveforms_ui.png) / [SVG](tx/serializer/serializer16_waveforms_ui.svg) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
+| serializer16_2ui_eye [PNG](tx/serializer/serializer16_2ui_eye.png) / [SVG](tx/serializer/serializer16_2ui_eye.png) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
+| serializer16_edge_phase_ui [PNG](tx/serializer/serializer16_edge_phase_ui.png) / [SVG](tx/serializer/serializer16_edge_phase_ui.png) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
+| serializer16_first_waveforms [PNG](tx/serializer/serializer16_first_waveforms.png) / [SVG](tx/serializer/serializer16_first_waveforms.png) | 演进记录 | 旧 PNG 与 2ui_eye 字节相同，PNG 保留为兼容别名；SVG 独立保留，不作当前验收依据 |
+| serializer16_physical_clock_2ui [PNG](tx/serializer/serializer16_physical_clock_2ui.png) / [SVG](tx/serializer/serializer16_physical_clock_2ui.png) | 局部联调 | 实际相位微调/扇出缓冲及旧锁存参数1024bit记录；不替代冻结版256bit证据；[报告](../history/physical_clock_distribution_results.md) |
+| serializer16_pll_replay_2ui [PNG](tx/serializer/serializer16_pll_replay_2ui.png) / [SVG](tx/serializer/serializer16_pll_replay_2ui.png) | 演进记录 | 历史PLL时钟回放及串化比较；含源理想化/记录处理边界；[报告](../history/pll_clock_replay_results.md) |
+| serializer16_power [PNG](tx/serializer/serializer16_power.png) / [SVG](tx/serializer/serializer16_power.png) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
+| serializer16_retimed_2ui_eye [PNG](tx/serializer/serializer16_retimed_2ui_eye.png) / [SVG](tx/serializer/serializer16_retimed_2ui_eye.png) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
+| serializer16_retimed_boundary_ui [PNG](tx/serializer/serializer16_retimed_boundary_ui.png) / [SVG](tx/serializer/serializer16_retimed_boundary_ui.png) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
+| serializer16_waveforms_ui [PNG](tx/serializer/serializer16_waveforms_ui.png) / [SVG](tx/serializer/serializer16_waveforms_ui.png) | 演进记录 | 理想时钟下组合树/重定时首轮比较；不是最终末级参数验收；[报告](../history/serializer16_first_results.md) |
 
 ## TX输出驱动
 
@@ -113,8 +113,8 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| serializer_output_stage_integration_ui [PNG](tx/output_driver/serializer_output_stage_integration_ui.png) / [SVG](tx/output_driver/serializer_output_stage_integration_ui.svg) | 接口表征 | 首版线驱动、端接/损耗夹具及实际输入加载；不是全链路RX/CDR；[报告](../history/tx_output_stage_and_link_plan.md) |
-| tx_line_driver_channel_eyes_ui [PNG](tx/output_driver/tx_line_driver_channel_eyes_ui.png) / [SVG](tx/output_driver/tx_line_driver_channel_eyes_ui.svg) | 接口表征 | 首版线驱动、端接/损耗夹具及实际输入加载；不是全链路RX/CDR；[报告](../history/tx_output_stage_and_link_plan.md) |
+| serializer_output_stage_integration_ui [PNG](tx/output_driver/serializer_output_stage_integration_ui.png) / [SVG](tx/output_driver/serializer_output_stage_integration_ui.png) | 接口表征 | 首版线驱动、端接/损耗夹具及实际输入加载；不是全链路RX/CDR；[报告](../history/tx_output_stage_and_link_plan.md) |
+| tx_line_driver_channel_eyes_ui [PNG](tx/output_driver/tx_line_driver_channel_eyes_ui.png) / [SVG](tx/output_driver/tx_line_driver_channel_eyes_ui.png) | 接口表征 | 首版线驱动、端接/损耗夹具及实际输入加载；不是全链路RX/CDR；[报告](../history/tx_output_stage_and_link_plan.md) |
 
 ## 信道模型与TX/PCB实验
 
@@ -122,10 +122,10 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| pcb_channel_family_frequency [PNG](channel/characterization/pcb_channel_family_frequency.png) / [SVG](channel/characterization/pcb_channel_family_frequency.svg) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../history/pcb_channel_family.md) |
-| pcb_channel_family_pulses_ui [PNG](channel/characterization/pcb_channel_family_pulses_ui.png) / [SVG](channel/characterization/pcb_channel_family_pulses_ui.svg) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../history/pcb_channel_family.md) |
-| tx_pcb_channel_2ui [PNG](channel/characterization/tx_pcb_channel_2ui.png) / [SVG](channel/characterization/tx_pcb_channel_2ui.svg) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../history/tx_pcb_channel_integration.md) |
-| tx_pcb_channel_effects_ui [PNG](channel/characterization/tx_pcb_channel_effects_ui.png) / [SVG](channel/characterization/tx_pcb_channel_effects_ui.svg) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../history/tx_pcb_channel_integration.md) |
+| pcb_channel_family_frequency [PNG](channel/characterization/pcb_channel_family_frequency.png) / [SVG](channel/characterization/pcb_channel_family_frequency.png) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../history/pcb_channel_family.md) |
+| pcb_channel_family_pulses_ui [PNG](channel/characterization/pcb_channel_family_pulses_ui.png) / [SVG](channel/characterization/pcb_channel_family_pulses_ui.png) | 模型表征 | 合成100Ω PCB通道族；不是具体PCB实测；[报告](../history/pcb_channel_family.md) |
+| tx_pcb_channel_2ui [PNG](channel/characterization/tx_pcb_channel_2ui.png) / [SVG](channel/characterization/tx_pcb_channel_2ui.png) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../history/tx_pcb_channel_integration.md) |
+| tx_pcb_channel_effects_ui [PNG](channel/characterization/tx_pcb_channel_effects_ui.png) / [SVG](channel/characterization/tx_pcb_channel_effects_ui.png) | 局部联调 | 实际TX驱动合成PCB；没有完整RX/CDR；[报告](../history/tx_pcb_channel_integration.md) |
 
 ## ISI/均衡原理说明
 
@@ -133,7 +133,7 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| channel_equalization_pulse_shaping [PNG](channel/explanations/channel_equalization_pulse_shaping.png) / [SVG](channel/explanations/channel_equalization_pulse_shaping.svg) | 原理说明 | ISI/均衡/理想升余弦解释；不是TX通过实际PCB后的结果；[报告](../history/pcb_channel_family.md) |
+| channel_equalization_pulse_shaping [PNG](channel/explanations/channel_equalization_pulse_shaping.png) / [SVG](channel/explanations/channel_equalization_pulse_shaping.png) | 原理说明 | ISI/均衡/理想升余弦解释；不是TX通过实际PCB后的结果；[报告](../history/pcb_channel_family.md) |
 
 ## RX输入/CTLE
 
@@ -141,10 +141,10 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| rx_ctle_c2_replay_2ui [PNG](rx/frontend/rx_ctle_c2_replay_2ui.png) / [SVG](rx/frontend/rx_ctle_c2_replay_2ui.svg) | 单元表征 | CTLE DC/AC与保存通道电压回放；完整加载由后续实验补充；[报告](../history/rx_frontend_first_design.md) |
-| rx_ctle_characterization [PNG](rx/frontend/rx_ctle_characterization.png) / [SVG](rx/frontend/rx_ctle_characterization.svg) | 单元表征 | CTLE DC/AC与保存通道电压回放；完整加载由后续实验补充；[报告](../history/rx_frontend_first_design.md) |
-| rx_loaded_link_2ui [PNG](rx/frontend/rx_loaded_link_2ui.png) / [SVG](rx/frontend/rx_loaded_link_2ui.svg) | 局部联调 | 切点在TX隔离buffer输入，真实驱动/通道/RX加载，不含被切去的串化器/PLL；[报告](../history/rx_loaded_link.md) |
-| rx_loaded_link_boundary_ui [PNG](rx/frontend/rx_loaded_link_boundary_ui.png) / [SVG](rx/frontend/rx_loaded_link_boundary_ui.svg) | 局部联调 | 切点在TX隔离buffer输入，真实驱动/通道/RX加载，不含被切去的串化器/PLL；[报告](../history/rx_loaded_link.md) |
+| rx_ctle_c2_replay_2ui [PNG](rx/frontend/rx_ctle_c2_replay_2ui.png) / [SVG](rx/frontend/rx_ctle_c2_replay_2ui.png) | 单元表征 | CTLE DC/AC与保存通道电压回放；完整加载由后续实验补充；[报告](../history/rx_frontend_first_design.md) |
+| rx_ctle_characterization [PNG](rx/frontend/rx_ctle_characterization.png) / [SVG](rx/frontend/rx_ctle_characterization.png) | 单元表征 | CTLE DC/AC与保存通道电压回放；完整加载由后续实验补充；[报告](../history/rx_frontend_first_design.md) |
+| rx_loaded_link_2ui [PNG](rx/frontend/rx_loaded_link_2ui.png) / [SVG](rx/frontend/rx_loaded_link_2ui.png) | 局部联调 | 切点在TX隔离buffer输入，真实驱动/通道/RX加载，不含被切去的串化器/PLL；[报告](../history/rx_loaded_link.md) |
+| rx_loaded_link_boundary_ui [PNG](rx/frontend/rx_loaded_link_boundary_ui.png) / [SVG](rx/frontend/rx_loaded_link_boundary_ui.png) | 局部联调 | 切点在TX隔离buffer输入，真实驱动/通道/RX加载，不含被切去的串化器/PLL；[报告](../history/rx_loaded_link.md) |
 
 ## RX相位插值
 
@@ -190,8 +190,8 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| mux2_cmos_select_transient [PNG](studies/cmos_select/mux2_cmos_select_transient.png) / [SVG](studies/cmos_select/mux2_cmos_select_transient.svg) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../history/cmos_select_trial.md) |
-| serializer16_cmos_select_comparison [PNG](studies/cmos_select/serializer16_cmos_select_comparison.png) / [SVG](studies/cmos_select/serializer16_cmos_select_comparison.svg) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../history/cmos_select_trial.md) |
+| mux2_cmos_select_transient [PNG](studies/cmos_select/mux2_cmos_select_transient.png) / [SVG](studies/cmos_select/mux2_cmos_select_transient.png) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../history/cmos_select_trial.md) |
+| serializer16_cmos_select_comparison [PNG](studies/cmos_select/serializer16_cmos_select_comparison.png) / [SVG](studies/cmos_select/serializer16_cmos_select_comparison.png) | 未选替代方案 | CMOS驱动换流选择的替代方案比较；未选作当前CML方案；[报告](../history/cmos_select_trial.md) |
 
 ## 时钟叠图/相位间隔诊断
 
@@ -199,11 +199,11 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| clock_2g_edge_zoom_ui [PNG](studies/clock_timing/clock_2g_edge_zoom_ui.png) / [SVG](studies/clock_timing/clock_2g_edge_zoom_ui.svg) | 专项诊断 | 同一物理时钟记录的周期/过零叠图；没有新增SPICE，不等于随机抖动测量；[报告](../history/clock_overlay_results.md) |
-| clock_cycle_overlays_ui [PNG](studies/clock_timing/clock_cycle_overlays_ui.png) / [SVG](studies/clock_timing/clock_cycle_overlays_ui.svg) | 专项诊断 | 同一物理时钟记录的周期/过零叠图；没有新增SPICE，不等于随机抖动测量；[报告](../history/clock_overlay_results.md) |
-| multirate_clock_design_edge_overlay [PNG](studies/clock_timing/multirate_clock_design_edge_overlay.png) / [SVG](studies/clock_timing/multirate_clock_design_edge_overlay.svg) | 专项诊断 | 多频多相时钟叠图及设计对齐；原始节点不自动等间距；[报告](../history/pll_multiphase_clock_overlay.md) |
-| pll_eight_phase_design_aligned_eye [PNG](studies/clock_timing/pll_eight_phase_design_aligned_eye.png) / [SVG](studies/clock_timing/pll_eight_phase_design_aligned_eye.svg) | 专项诊断 | 多频多相时钟叠图及设计对齐；原始节点不自动等间距；[报告](../history/pll_multiphase_clock_overlay.md) |
-| pll_multiphase_250ps_fold [PNG](studies/clock_timing/pll_multiphase_250ps_fold.png) / [SVG](studies/clock_timing/pll_multiphase_250ps_fold.svg) | 专项诊断 | 多频多相时钟叠图及设计对齐；原始节点不自动等间距；[报告](../history/pll_multiphase_clock_overlay.md) |
+| clock_2g_edge_zoom_ui [PNG](studies/clock_timing/clock_2g_edge_zoom_ui.png) / [SVG](studies/clock_timing/clock_2g_edge_zoom_ui.png) | 专项诊断 | 同一物理时钟记录的周期/过零叠图；没有新增SPICE，不等于随机抖动测量；[报告](../history/clock_overlay_results.md) |
+| clock_cycle_overlays_ui [PNG](studies/clock_timing/clock_cycle_overlays_ui.png) / [SVG](studies/clock_timing/clock_cycle_overlays_ui.png) | 专项诊断 | 同一物理时钟记录的周期/过零叠图；没有新增SPICE，不等于随机抖动测量；[报告](../history/clock_overlay_results.md) |
+| multirate_clock_design_edge_overlay [PNG](studies/clock_timing/multirate_clock_design_edge_overlay.png) / [SVG](studies/clock_timing/multirate_clock_design_edge_overlay.png) | 专项诊断 | 多频多相时钟叠图及设计对齐；原始节点不自动等间距；[报告](../history/pll_multiphase_clock_overlay.md) |
+| pll_eight_phase_design_aligned_eye [PNG](studies/clock_timing/pll_eight_phase_design_aligned_eye.png) / [SVG](studies/clock_timing/pll_eight_phase_design_aligned_eye.png) | 专项诊断 | 多频多相时钟叠图及设计对齐；原始节点不自动等间距；[报告](../history/pll_multiphase_clock_overlay.md) |
+| pll_multiphase_250ps_fold [PNG](studies/clock_timing/pll_multiphase_250ps_fold.png) / [SVG](studies/clock_timing/pll_multiphase_250ps_fold.png) | 专项诊断 | 多频多相时钟叠图及设计对齐；原始节点不自动等间距；[报告](../history/pll_multiphase_clock_overlay.md) |
 
 ## 眼图折叠方法
 
@@ -211,7 +211,7 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| serializer16_fold_ui_comparison [PNG](studies/eye_folding/serializer16_fold_ui_comparison.png) / [SVG](studies/eye_folding/serializer16_fold_ui_comparison.svg) | 专项诊断 | 改变折叠基准的plot层诊断；不改变电路或实际位误差；[报告](../history/eye_fold_ui_sweep.md) |
+| serializer16_fold_ui_comparison [PNG](studies/eye_folding/serializer16_fold_ui_comparison.png) / [SVG](studies/eye_folding/serializer16_fold_ui_comparison.png) | 专项诊断 | 改变折叠基准的plot层诊断；不改变电路或实际位误差；[报告](../history/eye_fold_ui_sweep.md) |
 
 ## 串化器逐级时序溯源
 
@@ -219,9 +219,9 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| divider_phase_spacing_audit [PNG](studies/serializer_timing/divider_phase_spacing_audit.png) / [SVG](studies/serializer_timing/divider_phase_spacing_audit.svg) | 专项诊断 | 相位接法与末级锁存跟踪/恢复的局部溯源；驱动比较支撑后续选型；[报告](../history/serializer_timing_root_cause.md) |
-| serializer_latch_drive_probe_2ui [PNG](studies/serializer_timing/serializer_latch_drive_probe_2ui.png) / [SVG](studies/serializer_timing/serializer_latch_drive_probe_2ui.svg) | 专项诊断 | 相位接法与末级锁存跟踪/恢复的局部溯源；驱动比较支撑后续选型；[报告](../history/serializer_timing_root_cause.md) |
-| serializer_timing_root_cause [PNG](studies/serializer_timing/serializer_timing_root_cause.png) / [SVG](studies/serializer_timing/serializer_timing_root_cause.svg) | 专项诊断 | 相位接法与末级锁存跟踪/恢复的局部溯源；驱动比较支撑后续选型；[报告](../history/serializer_timing_root_cause.md) |
+| divider_phase_spacing_audit [PNG](studies/serializer_timing/divider_phase_spacing_audit.png) / [SVG](studies/serializer_timing/divider_phase_spacing_audit.png) | 专项诊断 | 相位接法与末级锁存跟踪/恢复的局部溯源；驱动比较支撑后续选型；[报告](../history/serializer_timing_root_cause.md) |
+| serializer_latch_drive_probe_2ui [PNG](studies/serializer_timing/serializer_latch_drive_probe_2ui.png) / [SVG](studies/serializer_timing/serializer_latch_drive_probe_2ui.png) | 专项诊断 | 相位接法与末级锁存跟踪/恢复的局部溯源；驱动比较支撑后续选型；[报告](../history/serializer_timing_root_cause.md) |
+| serializer_timing_root_cause [PNG](studies/serializer_timing/serializer_timing_root_cause.png) / [SVG](studies/serializer_timing/serializer_timing_root_cause.png) | 专项诊断 | 相位接法与末级锁存跟踪/恢复的局部溯源；驱动比较支撑后续选型；[报告](../history/serializer_timing_root_cause.md) |
 
 ## PLL PVT与物理滤波器（首轮）
 
@@ -229,10 +229,10 @@ PNG/SVG 为同一组的不同格式。图片已按模块／专题搬迁；本页
 
 | 图组 | 用途 | 适用范围／报告 |
 |---|---|---|
-| pll_pvt_frequency_coverage [PNG](clocking/pll/pvt/pll_pvt_frequency_coverage.png) / [SVG](clocking/pll/pvt/pll_pvt_frequency_coverage.svg) | 单元表征 | 九环境开环调谐与固定控制点，非闭环锁频或全PVT签核；[报告](../history/pll_pvt_first_results.md) |
-| pll_lf_poly_mim_corners [PNG](clocking/pll/pvt/pll_lf_poly_mim_corners.png) / [SVG](clocking/pll/pvt/pll_lf_poly_mim_corners.svg) | 模型表征 | 七个独立RC/温度条件及滤波器阻抗，不含完整版图寄生；[报告](../history/pll_pvt_first_results.md) |
-| pll_pvt_loop_filter_comparison [PNG](clocking/pll/pvt/pll_pvt_loop_filter_comparison.png) / [SVG](clocking/pll/pvt/pll_pvt_loop_filter_comparison.svg) | 局部联调 | 仅TT实际PFD/CP与理想/物理LF对照，行为VCO/理想分频；[报告](../history/pll_pvt_first_results.md) |
-| pll_pvt_clock_interface_failure [PNG](clocking/pll/pvt/pll_pvt_clock_interface_failure.png) / [SVG](clocking/pll/pvt/pll_pvt_clock_interface_failure.svg) | 专项诊断 | SS低压热角VCO与buffer保持差分活动，CMOS读出缺失；局部接口证据；[报告](../history/pll_pvt_first_results.md) |
+| pll_pvt_frequency_coverage [PNG](clocking/pll/pvt/pll_pvt_frequency_coverage.png) / [SVG](clocking/pll/pvt/pll_pvt_frequency_coverage.png) | 单元表征 | 九环境开环调谐与固定控制点，非闭环锁频或全PVT签核；[报告](../history/pll_pvt_first_results.md) |
+| pll_lf_poly_mim_corners [PNG](clocking/pll/pvt/pll_lf_poly_mim_corners.png) / [SVG](clocking/pll/pvt/pll_lf_poly_mim_corners.png) | 模型表征 | 七个独立RC/温度条件及滤波器阻抗，不含完整版图寄生；[报告](../history/pll_pvt_first_results.md) |
+| pll_pvt_loop_filter_comparison [PNG](clocking/pll/pvt/pll_pvt_loop_filter_comparison.png) / [SVG](clocking/pll/pvt/pll_pvt_loop_filter_comparison.png) | 局部联调 | 仅TT实际PFD/CP与理想/物理LF对照，行为VCO/理想分频；[报告](../history/pll_pvt_first_results.md) |
+| pll_pvt_clock_interface_failure [PNG](clocking/pll/pvt/pll_pvt_clock_interface_failure.png) / [SVG](clocking/pll/pvt/pll_pvt_clock_interface_failure.png) | 专项诊断 | SS低压热角VCO与buffer保持差分活动，CMOS读出缺失；局部接口证据；[报告](../history/pll_pvt_first_results.md) |
 
 ## 演进关系示例
 

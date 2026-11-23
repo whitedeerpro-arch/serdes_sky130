@@ -12,18 +12,18 @@
 
 | 电路 | Xschem | SVG | PDF 页 |
 |---|---|---|---:|
-| PLL 核心及反馈连接 | [pll_balanced_core.sch](../../analog/pll/top/schematic/pll_balanced_core.sch) | [预览](../schematics/svg/pll_balanced_core.svg) | 1 |
-| 四相抽出、接收器与三条有偏置 dummy | [pll_clock_frontend_balanced.sch](../../analog/pll/top/schematic/pll_clock_frontend_balanced.sch) | [预览](../schematics/svg/pll_clock_frontend_balanced.svg) | 2 |
-| 四级差分 VCO | [pll_vco_ring4.sch](../../analog/pll/vco/schematic/pll_vco_ring4.sch) | [预览](../schematics/svg/pll_vco_ring4.svg) | 3 |
-| CML 延迟单元晶体管电路 | [serdes_cml_delay.sch](../../analog/common/cml_buffer/schematic/serdes_cml_delay.sch) | [预览](../schematics/svg/serdes_cml_delay.svg) | 4 |
-| 1:2:4 电容阵列 / 单元 | [cap bank](../../analog/pll/vco/schematic/pll_vco_cap_bank.sch)、[cap unit](../../analog/pll/vco/schematic/pll_vco_cap_unit.sch) | [阵列](../schematics/svg/pll_vco_cap_bank.svg)、[单元](../schematics/svg/pll_vco_cap_unit.svg) | 5–6 |
-| CML buffer | [serdes_cml_buffer.sch](../../analog/common/cml_buffer/schematic/serdes_cml_buffer.sch) | [预览](../schematics/svg/serdes_cml_buffer.svg) | 7 |
-| CML→CMOS 接收器 | [serdes_cml_to_cmos.sch](../../analog/common/cml_to_cmos/schematic/serdes_cml_to_cmos.sch) | [预览](../schematics/svg/serdes_cml_to_cmos.svg) | 8 |
-| 接收器差分增益级 / 时钟恢复级 | [diff to SE](../../analog/common/cml_to_cmos/schematic/serdes_rx_diff_to_se.sch)、[clock restorer](../../analog/common/cml_to_cmos/schematic/serdes_rx_clock_restorer.sch) | [增益级](../schematics/svg/serdes_rx_diff_to_se.svg)、[恢复级](../schematics/svg/serdes_rx_clock_restorer.svg) | 9–10 |
-| CML ÷8 / ÷2 / latch | [÷8](../../analog/pll/divider/schematic/pll_cml_prescaler8.sch)、[÷2](../../analog/pll/divider/schematic/pll_cml_div2.sch)、[latch](../../analog/pll/divider/schematic/pll_cml_latch.sch) | [÷8](../schematics/svg/pll_cml_prescaler8.svg) | 11–13 |
-| PFD | [pll_pfd.sch](../../analog/pll/pfd/schematic/pll_pfd.sch) | [预览](../schematics/svg/pll_pfd.svg) | 14 |
-| CP | [pll_cp.sch](../../analog/pll/cp/schematic/pll_cp.sch) | [预览](../schematics/svg/pll_cp.svg) | 15 |
-| LF | [pll_loop_filter.sch](../../analog/pll/loop_filter/schematic/pll_loop_filter.sch) | [预览](../schematics/svg/pll_loop_filter.svg) | 16 |
+| PLL 核心及反馈连接 | [pll_balanced_core.sch](../../analog/pll/top/schematic/pll_balanced_core.sch) | [预览](../schematics/png/pll_balanced_core.png) | 1 |
+| 四相抽出、接收器与三条有偏置 dummy | [pll_clock_frontend_balanced.sch](../../analog/pll/top/schematic/pll_clock_frontend_balanced.sch) | [预览](../schematics/png/pll_clock_frontend_balanced.png) | 2 |
+| 四级差分 VCO | [pll_vco_ring4.sch](../../analog/pll/vco/schematic/pll_vco_ring4.sch) | [预览](../schematics/png/pll_vco_ring4.png) | 3 |
+| CML 延迟单元晶体管电路 | [serdes_cml_delay.sch](../../analog/common/cml_buffer/schematic/serdes_cml_delay.sch) | [预览](../schematics/png/serdes_cml_delay.png) | 4 |
+| 1:2:4 电容阵列 / 单元 | [cap bank](../../analog/pll/vco/schematic/pll_vco_cap_bank.sch)、[cap unit](../../analog/pll/vco/schematic/pll_vco_cap_unit.sch) | [阵列](../schematics/png/pll_vco_cap_bank.png)、[单元](../schematics/png/pll_vco_cap_unit.png) | 5–6 |
+| CML buffer | [serdes_cml_buffer.sch](../../analog/common/cml_buffer/schematic/serdes_cml_buffer.sch) | [预览](../schematics/png/serdes_cml_buffer.png) | 7 |
+| CML→CMOS 接收器 | [serdes_cml_to_cmos.sch](../../analog/common/cml_to_cmos/schematic/serdes_cml_to_cmos.sch) | [预览](../schematics/png/serdes_cml_to_cmos.png) | 8 |
+| 接收器差分增益级 / 时钟恢复级 | [diff to SE](../../analog/common/cml_to_cmos/schematic/serdes_rx_diff_to_se.sch)、[clock restorer](../../analog/common/cml_to_cmos/schematic/serdes_rx_clock_restorer.sch) | [增益级](../schematics/png/serdes_rx_diff_to_se.png)、[恢复级](../schematics/png/serdes_rx_clock_restorer.png) | 9–10 |
+| CML ÷8 / ÷2 / latch | [÷8](../../analog/pll/divider/schematic/pll_cml_prescaler8.sch)、[÷2](../../analog/pll/divider/schematic/pll_cml_div2.sch)、[latch](../../analog/pll/divider/schematic/pll_cml_latch.sch) | [÷8](../schematics/png/pll_cml_prescaler8.png) | 11–13 |
+| PFD | [pll_pfd.sch](../../analog/pll/pfd/schematic/pll_pfd.sch) | [预览](../schematics/png/pll_pfd.png) | 14 |
+| CP | [pll_cp.sch](../../analog/pll/cp/schematic/pll_cp.sch) | [预览](../schematics/png/pll_cp.png) | 15 |
+| LF | [pll_loop_filter.sch](../../analog/pll/loop_filter/schematic/pll_loop_filter.sch) | [预览](../schematics/png/pll_loop_filter.png) | 16 |
 
 其余页为 CMOS 门、传输门、DFF/latch 和 MOS 适配器，可从父图继续进入。
 完整的文件、端口与参数清单见 [manifest.json](../schematics/manifest.json)。

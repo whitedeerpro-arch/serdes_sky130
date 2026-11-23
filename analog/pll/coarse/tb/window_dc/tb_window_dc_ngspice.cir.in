@@ -4,8 +4,8 @@ PLL Vctrl window detector (pll_vctrl_window): DC trip points of hi and lo
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
 .include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
-.include "@PROJECT_ROOT@/analog/common/bias/spice/bandgap.spice"
-.include "@PROJECT_ROOT@/analog/common/bias/spice/bias_dist.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bandgap.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bias_dist.spice"
 .include "@PROJECT_ROOT@/analog/common/monitor/spice/monitor.spice"
 .include "@PROJECT_ROOT@/analog/pll/coarse/spice/vctrl_window.spice"
 Vdd vdd 0 @SUPPLY@

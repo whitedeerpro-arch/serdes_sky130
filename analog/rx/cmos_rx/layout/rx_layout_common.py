@@ -416,7 +416,7 @@ def generate_rx_ref_spice(
     subckts = _parse_spice_subckts([
         COMMON_SPICE_DIR / "sky130_primitives.spice",
         COMMON_SPICE_DIR / "sky130_pfet_lvt.spice",
-        REPO / "analog/common/bias/spice/bias_v2.spice",
+        REPO / "analog/bias/spice/bias_v2.spice",
         RX_SPICE_DIR / "rx_ctle_pdk.spice",
         RX_SPICE_DIR / "rx_dt_sampler.spice",
         RX_SPICE_DIR / "rx_cmos_pi.spice",

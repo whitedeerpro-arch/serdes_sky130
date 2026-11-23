@@ -121,8 +121,8 @@ Kvco 来自早期加载 VCO 在 1.300–1.306 V 的局部数据，非新时钟�
 ## 归档与状态
 
 [结果 CSV](../data/pfd_cp_points.csv)、[平均模型数据](../data/pll_loop_small_signal.json)、
-[配置](../../config/pll_loop_prototype.toml)。矢量图：[电荷响应](../figures/clocking/pll/core/pfd_cp_charge.svg)、
-[滤波响应](../figures/clocking/pll/core/pfd_cp_lf_response.svg)。
+[配置](../../config/pll_loop_prototype.toml)。矢量图：[电荷响应](../figures/clocking/pll/core/pfd_cp_charge.png)、
+[滤波响应](../figures/clocking/pll/core/pfd_cp_lf_response.png)。
 块级 CP 结果在 `results/analog/pll/cp/dc/`，独立 LF 在 `results/analog/pll/loop_filter/`，
 实际接口在 `results/analog/pll/top/{pfd_cp,pfd_cp_lf}/`，保存输入快照/依赖 SHA256、日志、波形和指标。
 主要最终 CP 扫描为 `20261027T161726Z_*`，完成的三块开环联调为 `20261027T161935Z_*`。

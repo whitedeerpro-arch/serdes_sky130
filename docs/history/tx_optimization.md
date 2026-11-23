@@ -2,7 +2,7 @@
 
 2026-10-30。工作修订 r2 已完成：同一有限测试下，串化器满足原草案裕量门槛由 **36/45 → 45/45**，串化/输出/固定 RLC 全链功能 **45/45**；输出级从禁用初态启动 **45/45**。这是分层晶体管级表征，完整噪声、失配、无源极值和版图签核仍未完成。
 
-当前参数入口：[工作版配置](../../config/tx_working_revision.toml)；[完整数值](../data/tx_optimization.json)；[运行与全部失败对照](../../results/analog/tx/optimization/20261030T100258Z)。冻结 v0.1 及旧共享单元保留。
+当前参数入口：[工作版配置](../../config/tx_working_revision.toml)；[完整数值](../data/tx_optimization.json)；运行与全部失败对照 (`results/analog/tx/optimization/20261030T100258Z`)。冻结 v0.1 及旧共享单元保留。
 
 ## 电路修改
 

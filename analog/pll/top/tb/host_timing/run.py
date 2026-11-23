@@ -37,8 +37,8 @@ nk = importlib.util.module_from_spec(_n)
 _n.loader.exec_module(nk)
 RESULTS = ROOT / "results/analog/pll/top/host_timing"
 INCLUDES = [p for p in nk.INCLUDES if p != "analog/pll/top/spice/pll_core_r5k4.spice"] + [
-    "analog/pll/top/spice/clock_frontend_r5q.spice", "analog/common/ldo/spice/ldo_passives.spice",
-    "analog/common/ldo/spice/pll_bias_filter_r4.spice"]
+    "analog/pll/top/spice/clock_frontend_r5q.spice", "analog/ldo/spice/ldo_passives.spice",
+    "analog/ldo/spice/pll_bias_filter_r4.spice"]
 PROBES = "v(xfe.v0p) v(xfe.v0n) v(ref) v(up) v(dn) v(fb0) v(cm0p) v(d08p) v(d08n)"
 CP = "wn=20 wp=80 wsn=8 wsp=16 up_wn=2 up_wp=8 dn_wn=4 dn_wp=8 pnf=16 nnf=4 ntail=2 cdum=0.3p"
 VQ = 1.8

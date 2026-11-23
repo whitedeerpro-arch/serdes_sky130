@@ -99,4 +99,4 @@ results/verification/mixed_signal/build/Vmixed_cdr_top \
 
 具体记录、图和适用范围见 [联调结果](../../docs/history/mixed_signal_cosim.md) 与 [case.toml](case.toml)。
 
-已归集GTKWave会话和VCD/FST，运行 `verification/mixed_signal/view.sh`；查看[阶段波形说明](../../results/acceptance/20261029-rx-functional/README.md)。大文件保留策略与10ns成本估算见[阶段审阅](../../docs/history/stage_review_20261029.md)。
+已归集GTKWave会话和VCD/FST，运行 `verification/mixed_signal/view.sh`；查看阶段波形说明 (`results/acceptance/20261029-rx-functional/README.md`)。大文件保留策略与10ns成本估算见[阶段审阅](../../docs/history/stage_review_20261029.md)。

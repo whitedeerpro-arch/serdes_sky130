@@ -14,12 +14,12 @@ from serdes_flow.project import ROOT
 
 
 FILES = [ROOT/p for p in (
-    'analog/common/bias/spice/bandgap.spice',
-    'analog/common/bias/spice/bias_dist.spice',
-    'analog/common/ldo/spice/ldo_passives.spice',
-    'analog/common/ldo/spice/ldo_hv18_core_smallcap.spice',
-    'analog/common/ldo/spice/pll_supply_hv18_smallcap.spice',
-    'analog/common/ldo/spice/pll_bias_filter_r4.spice',
+    'analog/bias/spice/bandgap.spice',
+    'analog/bias/spice/bias_dist.spice',
+    'analog/ldo/spice/ldo_passives.spice',
+    'analog/ldo/spice/ldo_hv18_core_smallcap.spice',
+    'analog/ldo/spice/pll_supply_hv18_smallcap.spice',
+    'analog/ldo/spice/pll_bias_filter_r4.spice',
     'analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice',
     'analog/pll/loop_filter/spice/passive_rc_precharge.spice')]
 ROOTS = [('serdes_pll_supply_hv18_smallcap', 'LDO70pF candidate, excludes shared BG and tail filter'),
@@ -32,7 +32,7 @@ ROOTS = [('serdes_pll_supply_hv18_smallcap', 'LDO70pF candidate, excludes shared
 def inventory():
     # Resolve canonical primitive locations from the LDO's actual source list.
     import importlib.util
-    sp=importlib.util.spec_from_file_location('ldo_inventory_parent',ROOT/'analog/common/ldo/tb/cap_sizing/run.py')
+    sp=importlib.util.spec_from_file_location('ldo_inventory_parent',ROOT/'analog/ldo/tb/cap_sizing/run.py')
     caps=importlib.util.module_from_spec(sp);sp.loader.exec_module(caps)
     files=list(dict.fromkeys([*caps.r4.reg.BIAS,*[p for p in FILES if p.exists()]]))
     subs=netlist.parse(files)

@@ -89,6 +89,6 @@ TT、27°C、1.8 V、C2 6 dB信道，最大步长4 ps、目标终点100 ns。保
 
 本轮已验证缩小模型内部的真实输入加载，仍排除了被删除串化器/PLL的反向反馈、实际共享供电/回流/偏置、RX pad/ESD提取以及未来采样器kickback。下一步可以在同一夹具加入真实采样器，替换20 fF输出代理，并先用受控时钟验证。
 
-- [proxy100f_boundary运行](../../results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_proxy100f_boundary/metrics.json)：输入、日志、哈希与终点见同目录。
-- [real_rx_eq00运行](../../results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_real_rx_eq00/metrics.json)：输入、日志、哈希与终点见同目录。
-- [real_rx_eq11运行](../../results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_real_rx_eq11/metrics.json)：输入、日志、哈希与终点见同目录。
+- proxy100f_boundary运行 (`results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_proxy100f_boundary/metrics.json`)：输入、日志、哈希与终点见同目录。
+- real_rx_eq00运行 (`results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_real_rx_eq00/metrics.json`)：输入、日志、哈希与终点见同目录。
+- real_rx_eq11运行 (`results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_real_rx_eq11/metrics.json`)：输入、日志、哈希与终点见同目录。

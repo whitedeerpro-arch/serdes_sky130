@@ -74,7 +74,7 @@ TSPC 等动态 CMOS 也是后续功耗/面积比较方向，但动态节点的�
 - 没有执行完整单片晶体管级 PLL 的 45 条件闭环捕获网格；PFD/CP/LF 的新 PVT 网格也尚未扩扫。
 - 电源和偏置在 DC 工作点已建立，再启动时钟/振荡；没有验证电源爬升或偏置使能瞬态。启动时的短周期与稳态周期分开记录，不能把它们误记为随机抖动。
 
-全部渲染 TB、输入 SPICE 快照、模拟器日志及命令记录在 [campaign](../../results/analog/pll/pvt_lowov/20261029T114507Z)。单元 [PVT 模板](../../analog/pll/divider/tb/pvt/tb_prescaler8_lowov_ngspice.cir.in)和 原生前端模板 (`../../analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`)已加入层级测试目录。
+全部渲染 TB、输入 SPICE 快照、模拟器日志及命令记录在 campaign (`results/analog/pll/pvt_lowov/20261029T114507Z`)。单元 [PVT 模板](../../analog/pll/divider/tb/pvt/tb_prescaler8_lowov_ngspice.cir.in)和 原生前端模板 (`../../analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in`, retired in `retired_legacy_vars_20261120.json`)已加入层级测试目录。
 
 ## 最终原生回接测点与恢复检查
 

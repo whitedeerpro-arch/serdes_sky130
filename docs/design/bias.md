@@ -2,7 +2,7 @@
 
 > **2026-11-14电容复核**：共享参考先保留13 pF（Cc6＋Cvbg5＋Cvgi2）；11 pF/Cc4/Rz30k是未采用候选。双环局部AC、启动/噪声与版图Rz串段端头差异见[电容复核](bias_cap_review.md)。本轮不改下述原有135条件/失配结论的适用范围。
 
-> **当前状态**（2026-11-04）：带隙 + 恒摆幅 V→I 参考（5 bit r_ref 修调）、vcm 缓冲、到各模块的电流分配（[bias_dist.spice](../../analog/common/bias/spice/bias_dist.spice)）已设计并过 135 条件（MOS 角 × 电阻角 × 电压 × 温度）。测试台用 [`serdes_flow.bias`](../../src/serdes_flow/bias.py) 把理想参考源换成真实参考（RX link_pvt `--bias real --rpdk`）；此前的 PVT 结果都是理想源。
+> **当前状态**（2026-11-04）：带隙 + 恒摆幅 V→I 参考（5 bit r_ref 修调）、vcm 缓冲、到各模块的电流分配（[bias_dist.spice](../../analog/bias/spice/bias_dist.spice)）已设计并过 135 条件（MOS 角 × 电阻角 × 电压 × 温度）。测试台用 [`serdes_flow.bias`](../../src/serdes_flow/bias.py) 把理想参考源换成真实参考（RX link_pvt `--bias real --rpdk`）；此前的 PVT 结果都是理想源。
 > **关键数字**：参考电流 10 µA（vbg / r_ref）；每个 CML 域一路 212.5 µA 拷贝进 nfet 5/0.5 二极管（原来是理想 0.85 mA 进 20/0.5，电流密度相同，功耗 1/4）；CTLE、CP 各 50 µA。摆幅代理 I·R 在 135 条件内 407–426 mV（理想源 405–409 mV）；修调后每个模块的摆幅失配 σ 1.6–1.9 %。
 > **主要缺口**：真实偏置已接RX窗口/部分读出、VCO工作区/相噪、分频单元、CP DC及r5＋TX v3静态联调，但没有当前整机的动态/闭环/启动资格。PSRR门槛只定到VCO整体（[规格](../overview/spec.md#抖动与相位噪声预算)：20 MHz下电源到频率≤150 MHz/V），偏置单独门槛没有拆。B2和去耦已设计；逐块边界见[设计框图](../overview/development_map.md)，共享参考耦合见[设计审查](../history/design_coupling_review_20261106.md)。
 
@@ -51,7 +51,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 ### 结论与建议
 
 1. **参考电流按恒摆幅定义：I = m·Vbg / R，R 用与 CML 负载同类、同几何单元的 high_po。** 摆幅 I·R_load = m·Vbg·R_load/R 与电阻角（±12.5 %）和电阻温度系数无关；尾电流随之变 ±12.5 %。顺带：CP 电流同样定义时 Icp·R_lf 不随电阻角变（环路带宽稳定）。代价：R 偏高（hh）时 R·C 时间常数变大 12.5 %，CML 速度裕量在 SS + hh 下要重验——新的 PVT 维度是 MOS 角 × 电阻角（库里有 `ss_hh` 等组合段）。短电阻接触头使温度系数随长度变，负载和参考用同一种单元拼接。
-2. **带隙核心（实现 [bandgap.spice](../../analog/common/bias/spice/bandgap.spice)）：电压模式、PMOS 电流源、电平移位。** 匹配的 pfet_lvt 电流源给 Q1（1×）和 R1 + Q2（8×）→ PTAT 电流 ΔVBE/R1；第三支路 VBE3 + I·R2 = vbg。两核心支路顶上各串同值 Rs（50 kΩ），把误差放大器输入从 VBE（0.57–0.84 V）抬到 0.90–1.03 V，普通 nfet 输入对在 1.65 V、−40…85 °C 都在饱和区；支路电流由镜像强制相等，Rs 不放大失调（抽头方案会放大约 1.5 倍）。
+2. **带隙核心（实现 [bandgap.spice](../../analog/bias/spice/bandgap.spice)）：电压模式、PMOS 电流源、电平移位。** 匹配的 pfet_lvt 电流源给 Q1（1×）和 R1 + Q2（8×）→ PTAT 电流 ΔVBE/R1；第三支路 VBE3 + I·R2 = vbg。两核心支路顶上各串同值 Rs（50 kΩ），把误差放大器输入从 VBE（0.57–0.84 V）抬到 0.90–1.03 V，普通 nfet 输入对在 1.65 V、−40…85 °C 都在饱和区；支路电流由镜像强制相等，Rs 不放大失调（抽头方案会放大约 1.5 倍）。
    - 曾试过电流模式（Banba 型，R_a 并在 PNP 上，一个放大器直接出 VBE/R + ΔVBE/R 电流）：PNP 截止时两支路都是纯电阻、完全对称，放大器输入恒等，存在一整片假平衡（−40 °C 实测卡在 3.9 µA）。启动电路要判断"PNP 是否导通"，阈值随温度变，放弃。现结构只有零电流一个简并态，由启动电路处理。
    - 电流源和放大器的 PMOS 用 pfet_lvt：普通 pfet 在 −40 °C 需要 |Vgs| ≈ 1.3 V，1.65 V 下放大器输出够不到、输入对被压进线性区。代价是匹配（A_VT 19.8），用面积补（核心 W 24 / L 8）。
    - 误差放大器（`serdes_bg_amp`）：NMOS 输入对 + LVT 镜像负载（L 12 µm，W/L 4），第二级 NMOS 共源 + LVT 负载。第一级失效时输出为高、电流下降——不存在高电流锁定（PMOS 共源第二级 + 自偏置电流沉的版本在直流上有约 100 µA 的锁定解）。系统失调 −1.8…+0.8 mV（随 PVT），对 vbg 约 ±10 mV。
@@ -62,7 +62,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 
 ### 结果（TT 以外的条件都由合并 deck 扫，nodeset 给初值；物理状态由上电瞬态核对）
 
-[bandgap_pvt](../../analog/common/bias/tb/bandgap_pvt/run.py)，15 个库段（5 MOS 角 × 电阻 tt/ll/hh）× 3 电压 × 3 温度 = 135 条件：
+[bandgap_pvt](../../analog/bias/tb/bandgap_pvt/run.py)，15 个库段（5 MOS 角 × 电阻 tt/ll/hh）× 3 电压 × 3 温度 = 135 条件：
 
 | 量 | 范围 |
 |---|---|
@@ -73,7 +73,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 | 放大器输入共模 | 0.90–1.03 V |
 | vbg 支路、V→I PMOS 的 Vsd − Vdsat | ≥ 98 / ≥ 117 mV（1.65 V） |
 
-同一电路的直流解不唯一：不给 nodeset 时，部分条件解到 V→I 环路的零电流 / 饱和态。上电瞬态（[bandgap_startup](../../analog/common/bias/tb/bandgap_startup/run.py)）检查实际到达的状态。
+同一电路的直流解不唯一：不给 nodeset 时，部分条件解到 V→I 环路的零电流 / 饱和态。上电瞬态（[bandgap_startup](../../analog/bias/tb/bandgap_startup/run.py)）检查实际到达的状态。
 
 **稳定与上电**（交流环路增益：在放大器输入串联注入，T = −Δv_return/Δv_drive；3 MHz 以上 Rs 与输入栅电容使电压注入失效，以瞬态为准）：
 - 初版两环都振荡（上电不收敛、电源阶跃峰值 0.15–0.64 V）：核心环 vg 带约 8 pF PMOS 栅电容、Miller 只有 1 pF；V→I 环多一个 β = gm(Mv)·r_ref = (gm/Id)·vbg ≈ 10 的增益（与电流无关），两级放大器把穿越推到 10–30 MHz。
@@ -81,7 +81,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 - 上电（1 µs 斜坡，135 条件）：全部到达工作点（vbg 差 < 2 mV、电流差 < 1 %），vbg 建立 5.5–13.4 µs。+50 mV / 10 ps 电源阶跃：vbg 瞬时 85–115 mV（极陡边沿经 PMOS 栅源耦合到高阻 vbg 节点），电流 2.9–5.3 %。
 - 直流电源调整率：vbg 39–51 mV/V（约 −27 dB），电流 0.1–2.4 %/V；来源是误差放大器的系统失调随 VDD 变（da 随 VDD 移动、第二级 NMOS 的 Vgs 不跟），已含在 PVT 的 ±1.24 % 内。改进方向：第二级跟踪 da（PMOS 共源需先解决锁定）或共源共栅。
 
-**失配**（[bandgap_mc](../../analog/common/bias/tb/bandgap_mc/run.py)，`tt_mm`，200 样本，MOS 与电阻；PNP 无失配模型）：
+**失配**（[bandgap_mc](../../analog/bias/tb/bandgap_mc/run.py)，`tt_mm`，200 样本，MOS 与电阻；PNP 无失配模型）：
 - vbg σ 26.8 mV（2.2 %），3σ 容差 ±90 mV；参考电流 / I·R σ 2.5 %。逐项估计：pfet_lvt 源失配（M3 对 M1/M2 约 15 mV、M1 对 M2 约 8 mV，LVT 匹配差且 gm/Id 偏高）、误差放大器失调约 11 mV、两个 Rs 失配约 7.5 mV。
 - 每个样本 vbg(85) − vbg(−40)：σ 4.8 mV，与 27 °C 误差的相关 +0.25 → 室温修调一次后全温残差约 ±10–15 mV。
 - **修调（已实现）：修 r_ref 而不是 R2。** 参考电流和 vcm 都是 vbg / r_ref 的形式，一个修调同时校正两者，且不改 vbg 的温度系数（修 R2 = 修 PTAT 增益，5 % 会多出约 11 mV 全温跨度）。r_ref = 112 k + 5 个二进制段（LSB 780 Ω），每段并一个 NMOS 开关（段在 r_ref 接地端，节点 < 0.3 V），码 0 / 15 / 31 → 电流 9.20 / 10.05 / 11.16 µA、vcm 0.966 / 1.053 / 1.165 V（TT）：单调，步长约 0.6 %，范围 −8.5…+11 %，覆盖 MC 的 3σ（±7.6 %）。
@@ -107,7 +107,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 - 拷贝的栅电容并在 V→I 环的主极点上：三个拷贝约 24 pF，cvgi 因此从 10 pF 降到 2 pF。拷贝更多时穿越频率只会更低。
 - Mv 与原来的 4 个输出都改成 4 指（`nfv`），与拷贝同一单元。
 
-**结果**（[dist_pvt](../../analog/common/bias/tb/dist_pvt/run.py)、[dist_mc](../../analog/common/bias/tb/dist_mc/run.py)、[bandgap_startup](../../analog/common/bias/tb/bandgap_startup/run.py) `--dist`）：
+**结果**（[dist_pvt](../../analog/bias/tb/dist_pvt/run.py)、[dist_mc](../../analog/bias/tb/dist_mc/run.py)、[bandgap_startup](../../analog/bias/tb/bandgap_startup/run.py) `--dist`）：
 
 | 量 | 结果 |
 |---|---|
@@ -125,7 +125,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 
 ## 电源抑制与去耦
 
-[dist_psrr](../../analog/common/bias/tb/dist_psrr/run.py)：vdd 上加 AC，90 条件（5 MOS 角 × 电阻 tt/hh × 3 电压 × 3 温度），下表取各频率最差值。未定门槛，等 I-05 的抖动预算（[ref_amp](ref_amp.md) 同样处理）。
+[dist_psrr](../../analog/bias/tb/dist_psrr/run.py)：vdd 上加 AC，90 条件（5 MOS 角 × 电阻 tt/hh × 3 电压 × 3 温度），下表取各频率最差值。未定门槛，等 I-05 的抖动预算（[ref_amp](ref_amp.md) 同样处理）。
 
 | 量 | 去耦 | 1 kHz | 100 kHz | 1 MHz | 10 MHz | 100 MHz | 1 GHz |
 |---|---|---:|---:|---:|---:|---:|---:|
@@ -144,14 +144,14 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 
 ## LF 预充缓冲 B2
 
-[serdes_ref_pbuf](../../analog/common/bias/spice/bias_dist.spice)：把 LF 两个状态节点（Cf 2 pF、Ci 40 pF）从 0 V 充到目标电压，窗口 128 个参考周期 = 512 ns。环路从 ±40 mV 初值能捕获，所以设计目标 ±10 mV。
+[serdes_ref_pbuf](../../analog/bias/spice/bias_dist.spice)：把 LF 两个状态节点（Cf 2 pF、Ci 40 pF）从 0 V 充到目标电压，窗口 128 个参考周期 = 512 ns。环路从 ±40 mV 初值能捕获，所以设计目标 ±10 mV。
 
 - 目标电压 = 10 µA 拷贝 × high_po 电阻串，16 档（0.95–1.35 V），与 r_ref 同类电阻，随电阻角不变。
 - 单级 LVT 输入 OTA 跟随器，负载电容就是主极点，任何负载都稳定；尾电流 300 µA（10 µA 二极管 × 30），en 只开关尾管（开关管 L 0.18：L 0.15 这组指宽落在 FS 下 Pclm < 0 的模型分档）。
 - **两路拷贝常通（静态约 20 µA）。** 第一版连二极管支路一起关断：拷贝漏极摆动约 1 V，经 Cgd 踢 vgi，慢的 V→I 环要约 1 µs 才恢复。测试台里参考电流和目标电压摆动约 10 %（只挂了两路拷贝，片上 vgi 电容更大，会小一些），但所有模块都共用这条线。
 - **LF 预充门改为普通 NMOS + LVT PMOS（`pll_lf_tgate_lvt`）。** 普通 CMOS 门在目标电压附近有死区：1.65 V −40 °C 下 PMOS |Vth| 约 1.1 V，NMOS 过驱动接近零，SS / SF 上 Ci 要 1 µs 以上才充到。
 
-[pbuf_pvt](../../analog/common/bias/tb/pbuf_pvt/run.py)，405 个工况（码 0 / 7 / 15 × 45 条件 × 电阻 tt/ll/hh）：
+[pbuf_pvt](../../analog/bias/tb/pbuf_pvt/run.py)，405 个工况（码 0 / 7 / 15 × 45 条件 × 电阻 tt/ll/hh）：
 
 | 码 | 目标 | 误差（z − 目标） | 到 10 mV | 到 1 mV |
 |---|---|---|---|---|
@@ -164,7 +164,7 @@ TT/1.8 V/27 °C 下全局 `vbias` 约 1.040 V，PLL `vbias_logic` 约 0.771 V。
 - 释放扰动（[release.py](../../analog/pll/loop_filter/tb/precharge/release.py)，500 Ω 参考源）：目标 1.1 V 时 ctrl 1 ns 后 +1.7…+2.3 mV，50 ns 后 +0.5 mV；1.4 V 时 +5.2 / +1.4 mV（原普通门 1 ns 后 +1.04 mV）。LVT PMOS 最小沟长 0.35 µm，栅电容大一倍多。
 - 关断漏电（`pbuf_pvt --leak`，en 低，z 固定）：最差 186 nA（FS 85 °C），FF 70 nA、TT 9 nA、SS 1 nA。路径：vdd → B2 负载管 Xlb（关断的 LVT，W 96 µm）→ pref → 两个关断的 LVT 预充门 → z；FS 1.95 V 85 °C 下三处电流都是 185 nA。普通 PMOS 负载在 1.65 V −40 °C 没有余量，所以先留着。折算静态相差 15 ps（50 µA、250 MHz）。估算参考杂散的抖动约 20 fs，进 I-05 预算时核对。
 
-结果：`results/analog/common/bias/pbuf_pvt/20261104T061421Z`（尾管开关 L 0.15）、`20261104T072912Z`（L 0.18 回归：码 7，电阻 tt/hh，结果相同）、`20261104T073305Z_leak`；`dist_psrr/20261104T053255Z`（无去耦）、`20261104T063254Z`（有去耦）；`bandgap_startup/20261104T063625Z_ramp1u_dist`、`20261104T064156Z_ramp1u_dist`（SS、FS，30 µs，15 µs 窗口内没建立完的 4 个条件在这里到达工作点）。
+结果：`results/analog/bias/pbuf_pvt/20261104T061421Z`（尾管开关 L 0.15）、`20261104T072912Z`（L 0.18 回归：码 7，电阻 tt/hh，结果相同）、`20261104T073305Z_leak`；`dist_psrr/20261104T053255Z`（无去耦）、`20261104T063254Z`（有去耦）；`bandgap_startup/20261104T063625Z_ramp1u_dist`、`20261104T064156Z_ramp1u_dist`（SS、FS，30 µs，15 µs 窗口内没建立完的 4 个条件在这里到达工作点）。
 
 ## 待解决
 

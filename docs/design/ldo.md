@@ -4,7 +4,7 @@
 
 3.3 V→1.8 V 主路线的 r3 候选为 **双原生 NMOS 调整路径、独立隔离级栅极滤波、两级 HV 误差放大器**，另有背靠背 HV PMOS 隔离单元和稳压/外供旁路供电宏。这批局部候选未替换现行 PLL 的供电。
 
-入口：[电路与测试台](../../analog/common/ldo/README.md)、[工作修订](../../config/ldo_working_revision.toml)、[现有功耗审计](power_audit.md)。历史架构比较保留在[供电 VAR 规划](pll_supply_variants.md)；其中“本轮不仿真”只描述当次规划，不代表本次实现阶段。
+入口：[电路与测试台](../../analog/ldo/README.md)、[工作修订](../../config/ldo_working_revision.toml)、[现有功耗审计](power_audit.md)。历史架构比较保留在[供电 VAR 规划](pll_supply_variants.md)；其中“本轮不仿真”只描述当次规划，不代表本次实现阶段。
 
 ![供电结构与边界](../figures/clocking/pll/core/ldo_hv18.png)
 

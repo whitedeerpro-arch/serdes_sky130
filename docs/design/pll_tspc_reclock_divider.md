@@ -2,7 +2,7 @@
 
 **结论**：针对前代纯 CMOS 2 GHz 同步预分频器（`cmos_sync_prescaler8_2g`，已退档）在 `SS 1.65 V −40 °C` 后仿/失配崩溃的问题，本轮提出并完成了 **Equalized Nikolic SAFF-TSPC + 1 GHz 同步 2-bit 计数器 + 三路同构 2 GHz 重定时 DFF** 架构（`pll_saff_reclock_prescaler8_2g` `v7`，100% 纯 SKY130 MOS、零电阻/零 MIM 电容，10 端口接口兼容 `pll_cmos_prescaler8_2g`）。
 
-- **原理图**：45/45 全角 PVT 通过（最大级间偏斜 **`12.14 ps`**，`q8` 占空比 `0.498–0.505`）；宿主电源敏感度 `Kd` 较级联纹波 `cmos_ripple` 降低 **2.3×–2.85×**（TT `0.120`、FS85 `0.153`、SS-40 `0.353 ps/mV`）；`SS 1.65 V −40 °C hh` 理想时钟最高可跑 **`2.80 GHz`**，低频 `FF 1.95 V 85 °C ll @ 0.10 GHz` 零漏电失效。
+- **原理图**：45/45 全角 PVT 通过（最大级间偏斜 **`12.14 ps`**，`q8` 占空比 `0.498–0.505`）；宿主电源敏感度 `Kd` 较级联纹波 `cmos_ripple` 降低 **2.3×–2.85×**（TT `0.120`、FS85 `0.153`、SS-40 `0.353 ps/mV`）；`SS 1.65 V −40 °C hh` 理想时钟最高可跑 **`2.80 GHz`**，在 `FF 1.95 V 85 °C ll @ 0.10 GHz` 的理想时钟夹具计数无错。
 - **物理版图 `v2` 交错紧邻布局**（[variants/saff_reclock_2g_pdk](../../analog/pll/divider/layout/variants/saff_reclock_2g_pdk/README.md)）：`97.335 × 17.520 µm = 1,705.31 µm²`，full-rule `DRC = 0`、Netgen `LVS = MATCH`（零属性误差）、`0` 浮空非器件 poly、Magic 原生 RCX 电阻减半（`1,291` 段、`b1↔b2` 密勒耦合清零）。
 - **后仿验证**：
   - **45 角 CPEX PVT**（真实 `r5_pdk` v6 CPEX 驱动、0.5 ns 冷上电、零 `Ikick`）：**45/45 功能通过（`bad = 0`）**，**44/45 过 30 ps 级间偏斜门槛**（中位数 **`4.28 ps`**、TT `4.08 ps`、第 2 差 `15.61 ps`、仅 `ss_v1650_t-40_hh` 为 `45.61 ps`），全 45 角 `q8` 占空比 **`0.4972–0.5046`**。
@@ -43,6 +43,8 @@
 | `cmos_sync_s4`（已退档） | RCX/MC 寒角失败 | — | `0.129 / 0.163 / 0.385` | `2.50 GHz`（`2.80 GHz` 失败） | 静态安全 | — |
 | `tspc9_reclock`（9T 动态对照） | `SS -40 °C` 失败 | — | — | `< 2.00 GHz` | 动态漏电受限 | — |
 | **`saff_reclock`（v7，本轮主推）** | **9/9 PASS**（`q4-q2` `0.1–3.4 ps`，max `10.5 ps`） | **45/45 PASS**（max `12.14 ps`，`q8` duty `0.498–0.505`） | **`0.120 / 0.153 / 0.353`**（较 ripple 降 2.3–2.85×） | **`2.80 GHz`**（`bad=0`，`max_sk=32.7 ps`） | **PASS**（`bad=0`，`max_sk=3.0 ps`） | `2.34–3.82` |
+
+FF 热角的 0.10 GHz 点对应 `saff_reclock__ff_v1950_t85_id_0.10G`，15 次计数采样无错。固定扫频汇总 (`results/analog/pll/divider/tspc_study/20261120_multiangle/freq_shmoo/analysis/20261119T175236.889158Z/summary.json`)
 
 ---
 

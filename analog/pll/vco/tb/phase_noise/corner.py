@@ -161,7 +161,7 @@ def main():
         st["cp"] = last_path(call(py + [str(ROOT / "analog/pll/cp/tb/noise/run.py"), "--cond", c.tag, "--vout", str(vctrl), "--rcorner", a.rpdk]))
         save()
     if "bias" not in st:
-        st["bias"] = last_path(call(py + [str(ROOT / "analog/common/bias/tb/dist_noise/run.py"), "--process", c.process, "--supply", str(c.supply), "--temps", str(c.temp), "--rcorner", a.rpdk]))
+        st["bias"] = last_path(call(py + [str(ROOT / "analog/bias/tb/dist_noise/run.py"), "--process", c.process, "--supply", str(c.supply), "--temps", str(c.temp), "--rcorner", a.rpdk]))
         save()
     print(f"Kvco {st['kvco'] / 1e6:.0f} MHz/V (1.1-1.3 V secant {st['tune']['kvco'] / 1e6:.0f}), Kb {st['kb'] / 1e9:.2f} GHz/V, Kvdd {st['kvdd'] / 1e6:.0f} MHz/V", flush=True)
     bc = f"{c.process}_v{round(c.supply * 1000)}_t{c.temp}"

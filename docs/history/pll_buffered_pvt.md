@@ -2,7 +2,7 @@
 
 本轮将两个真实 CML buffer 加入每个 prescaler，位置为 ÷2→÷4 和 ÷4→÷8；四条真实/供电 dummy 路径保持相同结构。工作入口见 [配置](../../config/pll_working_revision.toml)，上一版见 [r2](pll_lowov_pvt.md)。冻结 v0.1 不变。
 
-2026-10-30 完成本轮验证。标准 2 GHz 输入下的 45 条件分频和反馈转换均有正确稳态功能，全速 CMOS 为 44/45。四个选定条件的真实 VCO 在约 2 GHz 均能驱动 CML 分频和反馈；SS 冷角的全速 CMOS 仍失败。可以以此版本推进 PFD/CP/LF，**收口范围是 VCO/CML 反馈链的本轮功能验证，不是整个时钟前端或产品 PVT 已签核**。数值见 [JSON](../data/pll_buffered_pvt.json)，全部源快照、网表和日志见 [campaign](../../results/analog/pll/pvt_buffered/20261029T152825Z)。
+2026-10-30 完成本轮验证。标准 2 GHz 输入下的 45 条件分频和反馈转换均有正确稳态功能，全速 CMOS 为 44/45。四个选定条件的真实 VCO 在约 2 GHz 均能驱动 CML 分频和反馈；SS 冷角的全速 CMOS 仍失败。可以以此版本推进 PFD/CP/LF，**收口范围是 VCO/CML 反馈链的本轮功能验证，不是整个时钟前端或产品 PVT 已签核**。数值见 [JSON](../data/pll_buffered_pvt.json)，全部源快照、网表和日志见 campaign (`results/analog/pll/pvt_buffered/20261029T152825Z`)。
 
 ## 标准输入的 45 条件复测
 

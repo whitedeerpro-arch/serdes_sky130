@@ -7,9 +7,9 @@
 - **全面刷新电气指标（全 `100 mΩ` RCX 实测）**：20 MHz PSRR 最差 **`43.42 dB`**（TT `49.63–49.96 dB`，高于 34 dB 门槛 `+9.4 dB`，比 `smallcap` 高 `+7.5 dB`）；Middlebrook 环路 PM **`≥ 63.21°`**（TT `74.8–75.6°`，12/12 单交越）；**`±4 mA / 1 ns` 快卸载尖峰**在 `FS 85 °C` 压至 **`1.9042 V`**（较 `smallcap` 失败值 `1.984 V` 狂降 `−79.8 mV`），`TT 27 °C` 压至 **`1.9009 V`**（均远低于 `1.95 V` 器件上沿）。
 - **采用状态**：独立候选（`variants/v2_pdk/`），**未更改** `config/ldo_working_revision.toml` 中的现行采用基线。
 
-入口：[核心网表](../../analog/common/ldo/spice/ldo_hv18_core_v2.spice)、[供电宏网表](../../analog/common/ldo/spice/pll_supply_hv18_v2.spice)、[无源单元](../../analog/common/ldo/spice/ldo_v2_passives.spice)、[版图生成器](../../analog/common/ldo/layout/build_ldo_v2_pdk.py)、[PDK 交付目录](../../analog/common/ldo/layout/variants/v2_pdk/README.md)、[原理图/CPEX 验证台](../../analog/common/ldo/tb/v2/run_v2.py)、[RCX 验收台](../../analog/common/ldo/tb/v2/verify_rcx.py)。
+入口：[核心网表](../../analog/ldo/spice/ldo_hv18_core_v2.spice)、[供电宏网表](../../analog/ldo/spice/pll_supply_hv18_v2.spice)、[无源单元](../../analog/ldo/spice/ldo_v2_passives.spice)、[版图生成器](../../analog/ldo/layout/build_ldo_v2_pdk.py)、[PDK 交付目录](../../analog/ldo/layout/variants/v2_cur_pdk/README.md)、[原理图/CPEX 验证台](../../analog/ldo/tb/v2/run_v2.py)、[RCX 验收台](../../analog/ldo/tb/v2/verify_rcx.py)。
 
-![LDO v2 生产宏版图总览](../../analog/common/ldo/layout/variants/v2_pdk/serdes_pll_supply_hv18_v2_pdk.png)
+![LDO v2 生产宏版图总览](../../analog/ldo/layout/variants/v2_cur_pdk/serdes_pll_supply_hv18_v2_cur_pdk.png)
 
 ---
 
@@ -50,7 +50,7 @@
 
 - 本轮验收按 `2–10 mA` PLL 安静模拟域负载边界执行；UVLO 与短路过流保护（OCP）留在系统级电源管理层统一规划，未并入本核心。
 - 尚未接真实 PLL r6 闭环或跑 200 样本失配 MC；未修改现行 `config/ldo_working_revision.toml`。
-- 完整运行产物位于 `results/analog/common/ldo/v2/`：
+- 完整运行产物位于 `results/analog/ldo/v2/`：
   - 原理图 15 角 PVT：`20261120T070822.297791Z_schem_pvt/summary.json`
   - 原理图全 PDK 动态：`20261120T073417.659705Z_schem_dyn_fullpdk/summary.json`
   - 后仿 CPEX：`20261120T102608.250446Z_pex_cpex/summary.json`

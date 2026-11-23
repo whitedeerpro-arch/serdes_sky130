@@ -117,7 +117,7 @@ PLL安静供电新增 [HV18 r4局部候选](../design/ldo_r4.md)：静态Vin/qui
 
 | 证据 | 文档／实现／运行入口 |
 |---|---|
-| 偏置、放大器、vcm、B2 | [bias](../design/bias.md)、[bandgap.spice](../../analog/common/bias/spice/bandgap.spice)、[bias_dist.spice](../../analog/common/bias/spice/bias_dist.spice)、[bias测试台](../../analog/common/bias/tb) |
+| 偏置、放大器、vcm、B2 | [bias](../design/bias.md)、[bandgap.spice](../../analog/bias/spice/bandgap.spice)、[bias_dist.spice](../../analog/bias/spice/bias_dist.spice)、[bias测试台](../../analog/bias/tb) |
 | VCO、反馈与接收器 | [VCO](../design/pll_vco.md)、[divider](../design/pll_divider.md)、[receiver](../design/clock_receiver.md)、[PLL工作修订](../../config/pll_working_revision.toml) |
 | PFD/CP/LF/启动 | [PLL环路](../design/pll_loop.md)、[数字启动监督](../../digital/pll/README.md)、[r5工作区与环路评估](design_coupling_review_20261106.md) |
 | TX变体和原生压力点 | [时钟分发](../design/tx_clock_distribution.md)、[串化器](../design/tx_serializer.md)、[驱动](../design/tx_output_driver.md)、[原生8/10恢复](clocking_progress_20261106.md) |

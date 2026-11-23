@@ -9,7 +9,7 @@
 | PI、四相CML采样、CMOS读出 | 名义实际MOS短窗、采样与pair重定时 | [采样与控制](rx_sampler_control.md) / [RX阶段](rx_cdr_closed_loop.md) |
 | CDR、训练、16位串并 | 10组实际RTL/行为plant长时跟踪，199360个payload字无错字 | [RTL闭环](rx_cdr_closed_loop.md) |
 | 实时数模接口 | 实际RTL和MOS PI/CTLE/采样/CMOS闭环192UI，5个payload字无误；固定模拟控制端对照96UI | [实时联调](mixed_signal_cosim.md) |
-| 数据记录与复查 | 连续求解、有限波形窗口、进度/ETA；VCD/FST/GTKWave加载与往返转换检查 | [波形入口](../../results/acceptance/20261029-rx-functional/README.md) |
+| 数据记录与复查 | 连续求解、有限波形窗口、进度/ETA；VCD/FST/GTKWave加载与往返转换检查 | 波形入口 (`results/acceptance/20261029-rx-functional/README.md`) |
 
 此次收口保留三个后续实现边界：物理16UI降速/整字保持及数字时序、PI控制在全部码型下的更新裕量、系统时钟域接入策略。PVT、失配、噪声、版图提取仍为独立阶段；没有把短窗无错字扩展成统计BER结论。生产CDR参数保持原值，192UI接口测试用单独的快速增益覆盖。
 

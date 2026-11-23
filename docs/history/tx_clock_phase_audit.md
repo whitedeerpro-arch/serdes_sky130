@@ -2,7 +2,7 @@
 
 2026-10-30。**本轮TX PVT沿用冻结v0.1的PLL边沿源，未把新增r3分频buffer的相位带入。** 因此当前弱角和even/odd数据仍对应旧时钟边界。新增r3的极性/相位需要重新核对，不能照搬原标定。
 
-本次补了r3原生时钟采样，以及该时钟理想化后接真实TX分发buffer/串化器负载的两个极性对照；没有重验r3数据流。数据见 [JSON](../data/tx_clock_phase_audit.json)，执行见 [campaign](../../results/analog/tx/clock_distribution/buffered_phase_audit/20261030T091451Z)。
+本次补了r3原生时钟采样，以及该时钟理想化后接真实TX分发buffer/串化器负载的两个极性对照；没有重验r3数据流。数据见 [JSON](../data/tx_clock_phase_audit.json)，执行见 campaign (`results/analog/tx/clock_distribution/buffered_phase_audit/20261030T091451Z`)。
 
 ## buffer影响哪几路
 

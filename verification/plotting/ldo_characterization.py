@@ -35,7 +35,7 @@ def main(reg_path,dyn_path,stability_path,reference_path,switch_path,modes_path)
     modes=load(modes_path)[0] if modes_path else None
     if len(st['rows'])!=135 or any(len(x['crossings'])!=1 or x['crossings'][0]['direction']!='down' for x in st['rows']):raise ValueError('Unexpected dual-injection crossings')
     if sp['parent']!=r['campaign'] or dp['parent']!=r['campaign']:raise ValueError('Different parent circuit boundary')
-    core_rel='analog/common/ldo/spice/ldo_hv18_core.spice'
+    core_rel='analog/ldo/spice/ldo_hv18_core.spice'
     if rp['sources'][core_rel]!=rfp['sources'][core_rel] or rp['sources'][core_rel]!=sha(ROOT/core_rel):raise ValueError('Current and screened core differ')
     rows=r['rows'];dr=d['rows'];margins=[g['pm_deg'] for x in rows for g in x['return_ratio_crossings']]
     if len(rows)!=135 or any(len(x['return_ratio_crossings'])!=1 for x in rows):raise ValueError('Expected 135 unique DC/AC conditions and one downward crossing each')

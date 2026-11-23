@@ -27,7 +27,7 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     for key in ('screen','refined','rejected','pvt','dynamic','baseline','pex','layout'):
         ap.add_argument('--'+key,type=Path)
-    ap.add_argument('--original-mag',type=Path,default=ROOT/'analog/common/ldo/layout/variants/r4_pdk/serdes_ldo_hv18_core_r4_pdk.mag')
+    ap.add_argument('--original-mag',type=Path,default=ROOT/'analog/ldo/layout/variants/r4_pdk/serdes_ldo_hv18_core_r4_pdk.mag')
     ap.add_argument('--pex-worst',type=Path)
     ap.add_argument('--manifest',type=Path,help='explicit evidence manifest; no latest-run discovery')
     ap.add_argument('--selected')

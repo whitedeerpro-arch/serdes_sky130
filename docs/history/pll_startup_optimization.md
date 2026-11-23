@@ -57,7 +57,7 @@ abort_async需由独立时钟的参考看门狗产生，可在参考停钟时立
 
 Icarus已验证正常交接、频率正确但相位错误不误锁、连续好/坏窗、过期测量、失锁再捕获、超时、范围/偏置故障、停钟外部abort、重启及禁用。默认参数另核对512ns/8ns/8ns。Verilator lint和Yosys通用综合check通过，计数器宽度按参数裁剪。
 
-这些检查不包含SKY130映射后STA、CDC/复位签核或RTL与模拟实时联仿。[输入哈希及命令](../../results/digital/pll/startup_supervisor/nominal_smoke/checks.json)。
+这些检查不包含SKY130映射后STA、CDC/复位签核或RTL与模拟实时联仿。输入哈希及命令 (`results/digital/pll/startup_supervisor/nominal_smoke/checks.json`)。
 
 | 层次 | 测试入口 | 本轮状态 |
 |---|---|---|

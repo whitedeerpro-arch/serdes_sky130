@@ -7,9 +7,9 @@
 - `config/ldo_working_revision.toml`
 - `docs/design/ldo.md`
 - `docs/data/ldo_characterization.json`（明确的campaign、summary/raw/deck/execution身份，禁止按“最新运行”另找结果）
-- `analog/common/ldo/tb/{regulation,stability,dynamic,power_switch,modes}/run.py`，仅阅读其测量定义。
+- `analog/ldo/tb/{regulation,stability,dynamic,power_switch,modes}/run.py`，仅阅读其测量定义。
 
-结果波形在当前机器的`results/analog/common/ldo/`。若外部环境只有git源码/汇总，没有波形本体，则交付“汇总复核”，列出无法复核的raw身份，不能称为波形复核通过。
+结果波形在当前机器的`results/analog/ldo/`。若外部环境只有git源码/汇总，没有波形本体，则交付“汇总复核”，列出无法复核的raw身份，不能称为波形复核通过。
 
 ## 工作
 

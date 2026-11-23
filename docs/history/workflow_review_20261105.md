@@ -4,7 +4,7 @@
 
 ## 证据与耗时
 
-审计入口：[`serdes_flow.audit`](../../src/serdes_flow/audit.py)。原始审计位于 [workflow_audit/20261105](../../results/verification/workflow_audit/20261105/)，小规模实测位于 [mc_profile/20261105T122900Z](../../results/verification/mc_profile/20261105T122900Z/)。
+审计入口：[`serdes_flow.audit`](../../src/serdes_flow/audit.py)。原始审计位于 workflow_audit/20261105 (`results/verification/workflow_audit/20261105`)，小规模实测位于 mc_profile/20261105T122900Z (`results/verification/mc_profile/20261105T122900Z`)。
 
 | 对象 | 观察 | 含义 |
 |---|---|---|

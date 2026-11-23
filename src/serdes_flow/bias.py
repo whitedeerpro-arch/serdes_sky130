@@ -5,7 +5,7 @@
 
 The benches so far feed each module's bias diode from an ideal current source on a separate ideal
 supply (docs/design/bias.md).  real() swaps every such source for a PMOS copy of the constant-swing
-reference (analog/common/bias/spice/bias_dist.spice) on the bench's main supply, so the reference's
+reference (analog/bias/spice/bias_dist.spice) on the bench's main supply, so the reference's
 own PVT / resistor-corner behaviour and the supply reach the bias as they would on chip:
 
   0.85 mA into the CML diode nfet 20 / 0.5 nf 4  -> serdes_bias_pcopy n=85 (212.5 uA) into
@@ -23,8 +23,8 @@ import re
 
 from .project import ROOT
 
-BIAS_INC = ("analog/common/devices/spice/sky130_pfet_lvt.spice", "analog/common/bias/spice/bandgap.spice",
-            "analog/common/bias/spice/bias_dist.spice")
+BIAS_INC = ("analog/common/devices/spice/sky130_pfet_lvt.spice", "analog/bias/spice/bandgap.spice",
+            "analog/bias/spice/bias_dist.spice")
 NODESET = (".nodeset v(bias_vbg)=1.23 v(xbias_ref.xbg.s)=1.23 v(xbias_ref.vg)=0.9 v(vgi_bias)=0.9"
            " v(xbias_ref.xbg.ta)=0.95 v(xbias_ref.xbg.tb)=0.95")
 _UNIT = {"t": 1e12, "g": 1e9, "meg": 1e6, "k": 1e3, "m": 1e-3, "u": 1e-6, "n": 1e-9, "p": 1e-12, "f": 1e-15}

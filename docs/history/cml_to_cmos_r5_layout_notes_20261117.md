@@ -27,7 +27,7 @@ flowchart LR
 
 | 项目 | 结果 | 证据 |
 |---|---|---|
-| ÷8 CMOS 预分频 `pll_cmos_prescaler8_2g_pdk` | DRC 0、LVS 匹配、面积 1032.33 µm²；后仿 r4_pdk→÷8 45/45 PASS | [README](../../analog/pll/divider/layout/variants/cmos_2g_pdk/README.md) |
+| ÷8 CMOS 预分频 `pll_cmos_prescaler8_2g_pdk` | DRC 0、LVS 匹配、面积 1032.33 µm²；后仿 r4_pdk→÷8 45/45 PASS | [README](../../results/catalog/retired_pre_release_20261123.json) |
 | r5 原理图 `ss_v1650_t-40_mm` | 200/200 翻转，199/200 占空比合格（v4_1d_final PEX 只有 51/200 翻转） | `results/analog/common/cml_to_cmos/fullrate_pvt/20261117T004128Z_r5_pvt45_and_tt_mc/` |
 | r5 版图 v1 | 82=82 器件，DRC 60 处（8 条规则），网络 45 vs 43 | `results/layout/cml_to_cmos/20261117_r5_v1/` |
 | r5 版图 v2 | **LVS 匹配**；DRC 剩 via3 尺寸 + capm.11 | `results/layout/cml_to_cmos/20261117_r5_v2/` |

@@ -48,7 +48,7 @@ TT、27°C、1.8 V；4个共模×4个静态码，共16组完整OP/AC/DC。DC差�
 
 ## 6 dB真实通道电压记录驱动CTLE
 
-使用此前[真实TX+C2通道运行](../../results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6/metrics.json)的0–100 ns原始差分及共模，重建`ip=CM+Vdiff/2`、`in=CM−Vdiff/2`两个PWL电压源，驱动实际晶体管CTLE。没有重复或延长记录，没有强改输入共模。源记录已包含50 Ω/端终端和100 fF/端输入代理，回放测试台不再增加终端。
+使用此前真实TX+C2通道运行 (`results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6/metrics.json`)的0–100 ns原始差分及共模，重建`ip=CM+Vdiff/2`、`in=CM−Vdiff/2`两个PWL电压源，驱动实际晶体管CTLE。没有重复或延长记录，没有强改输入共模。源记录已包含50 Ω/端终端和100 fF/端输入代理，回放测试台不再增加终端。
 
 **这是独立CTLE电压回放，尚未把真实输入门电容/导纳反馈到PCB。** 正式全链路应替换原100 fF/端总代用负载，而非在其上再次叠加真实RX。当前约25–34 fF小信号门电容不等于已完成加载兼容验证。
 

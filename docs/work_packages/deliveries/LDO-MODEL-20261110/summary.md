@@ -21,7 +21,7 @@ MOS 子电路第 30–33 行声明 `w,l,nf,mult`，把 `w,l,nf` 传给内部 MOS
 
 ## 高阻 poly 热噪声：已由实测修正
 
-此前仅按源码静态推断 `res_high_po` 不产生热噪声是不正确的。源模型的 `rhead_model` 与 `rbody_model` 确实标有 `isnoisy=0`，寄生子电路也仅含两只电容；但 [ngspice 47 实测](../../../../results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/summary.json)日志显示 `isnoisy` 参数不识别并被忽略，普通 `high_po` 的电阻噪声实际存在。此前发送的“不可视为包含电阻热噪声”结论已由此修正。
+此前仅按源码静态推断 `res_high_po` 不产生热噪声是不正确的。源模型的 `rhead_model` 与 `rbody_model` 确实标有 `isnoisy=0`，寄生子电路也仅含两只电容；但 ngspice 47 实测 (`results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/summary.json`)日志显示 `isnoisy` 参数不识别并被忽略，普通 `high_po` 的电阻噪声实际存在。此前发送的“不可视为包含电阻热噪声”结论已由此修正。
 
 TT、27 °C 的独立测试：理想 1 kΩ 的等效热噪声电阻为 999.9997 Ω；`high_po` 的 1 kΩ 附近器件为 1012.68 Ω；行为电阻主体的 `xhigh_po` 名义约 1 MΩ，但等效仅 159.75 Ω；r4 中 32 个约 31.25 kΩ `high_po` 串联的实例等效 1.00069 MΩ。测试台、raw、日志、模型与快照哈希记录在 evidence 中；该结果是当前安装 PDK 和 ngspice 47 的特定测试，不能外推为完整 LDO 噪声或其他模拟器的验证。
 

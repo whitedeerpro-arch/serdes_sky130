@@ -1,6 +1,6 @@
 # PLL：PFD/CP/LF 接入后的选角 PVT
 
-2026-10-30。当前 r3 在四个选定工况的分层闭环中完成局部跟踪；原生短时接回另列。冻结 v0.1 未改。数据见 [JSON](../data/pll_loop_pvt.json)，执行档案见 [campaign](../../results/analog/pll/loop_pvt/20261029T162452Z)。
+2026-10-30。当前 r3 在四个选定工况的分层闭环中完成局部跟踪；原生短时接回另列。冻结 v0.1 未改。数据见 [JSON](../data/pll_loop_pvt.json)，执行档案见 campaign (`results/analog/pll/loop_pvt/20261029T162452Z`)。
 
 ## 本轮实际完成
 

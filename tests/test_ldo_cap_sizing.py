@@ -6,7 +6,7 @@ import pytest
 
 from serdes_flow.project import ROOT
 
-spec = importlib.util.spec_from_file_location('ldo_cap_sizing_test', ROOT/'analog/common/ldo/tb/cap_sizing/run.py')
+spec = importlib.util.spec_from_file_location('ldo_cap_sizing_test', ROOT/'analog/ldo/tb/cap_sizing/run.py')
 runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 
@@ -66,10 +66,10 @@ def test_published_cells_equal_measured_candidate_after_name_changes():
     v=next(x for x in runner.VARIANTS if x['name']=='b32_h2')
     cells=runner.cell_sources(v)
     def code(text):return [x.strip() for x in text.splitlines() if x.strip() and not x.lstrip().startswith('*')]
-    core=(ROOT/'analog/common/ldo/spice/ldo_hv18_core_smallcap.spice').read_text()
+    core=(ROOT/'analog/ldo/spice/ldo_hv18_core_smallcap.spice').read_text()
     expected=cells['ldo_hv18_core_r4.spice'].replace('serdes_ldo_hv18_core_r4','serdes_ldo_hv18_core_smallcap')
     assert code(core)==code(expected)
-    macro=(ROOT/'analog/common/ldo/spice/pll_supply_hv18_smallcap.spice').read_text()
+    macro=(ROOT/'analog/ldo/spice/pll_supply_hv18_smallcap.spice').read_text()
     expected=cells['pll_supply_hv18_r4.spice'].split('* Candidate filter AFTER')[0].replace('serdes_pll_supply_hv18_r4','serdes_pll_supply_hv18_smallcap').replace('serdes_ldo_hv18_core_r4','serdes_ldo_hv18_core_smallcap')
     assert code(macro)==code(expected)
 
@@ -119,7 +119,7 @@ def test_stacked_core_retains_nominal_units_and_reference_output_first_layer(tmp
 def test_published_stacked_cells_equal_measured_sources_after_names():
     cells=runner.cell_sources(next(v for v in runner.VARIANTS if v['name']=='stack_core70'))
     def code(t):return [s.strip() for s in t.splitlines() if s.strip() and not s.lstrip().startswith('*')]
-    src=ROOT/'analog/common/ldo/spice'
+    src=ROOT/'analog/ldo/spice'
     expected=cells['ldo_hv18_core_r4.spice'].replace('serdes_ldo_hv18_core_r4','serdes_ldo_hv18_core_stacked')
     assert code((src/'ldo_hv18_core_stacked.spice').read_text())==code(expected)
     expected=cells['pll_supply_hv18_r4.spice'].split('* Candidate filter AFTER')[0]

@@ -4,7 +4,7 @@ import importlib.util
 from serdes_flow import netlist
 from serdes_flow.project import ROOT
 
-sp=importlib.util.spec_from_file_location('bias_caps_test',ROOT/'analog/common/bias/tb/cap_sizing/run.py')
+sp=importlib.util.spec_from_file_location('bias_caps_test',ROOT/'analog/bias/tb/cap_sizing/run.py')
 runner=importlib.util.module_from_spec(sp);sp.loader.exec_module(runner)
 
 
@@ -54,7 +54,7 @@ def test_compensation_rz_keeps_four_real_contacted_segments(tmp_path):
 
 
 def test_natural_startup_ramps_all_clamps_and_noise_has_only_dc_sources():
-    spec=importlib.util.spec_from_file_location('bias_caps_dynamic_test',ROOT/'analog/common/bias/tb/cap_sizing/dynamic.py')
+    spec=importlib.util.spec_from_file_location('bias_caps_dynamic_test',ROOT/'analog/bias/tb/cap_sizing/dynamic.py')
     dynamic=importlib.util.module_from_spec(spec);spec.loader.exec_module(dynamic)
     e=dict(section='tt',supply_v=1.8,temp_c=27,load='dist',files=['bandgap.spice'],mode='startup',step_v=.05)
     startup=dynamic.deck(e)

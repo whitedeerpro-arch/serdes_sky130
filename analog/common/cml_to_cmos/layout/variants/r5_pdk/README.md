@@ -3,7 +3,7 @@
 现行版图已升级为 **v6**（`Xbp` 改用 LVT NMOS、去除了在冷角失效并放大失配的 `Xk_rp/Xk_rn + restorer_r5`、后端改为居中平衡 2 级 CMOS 缓冲，并将 `XCac` 竖放压缩横向宽度），本地独立复查与全套 PEX 电学门槛（含 CPEX vs Magic 原生 RCX 极端角、45 角 PVT、200 样本 `ss_v1650_t-40_mm` MC 与 `/8` CMOS 分频器 7 极端角冷上电联调）全部通过；整机 PLL 闭环及高低温耦合 RC 全链仍按顶层计划另行复核。
 
 - 历史基线记录（v3 未采用前）：[复核与固定证据](../../../../../../results/catalog/pll_pending_receiver_review_20261117.json) · [跨模块结论](../../../../../../docs/layout/pll_pending_review_20261117.md) · [历史过程](../../../../../../docs/history/cml_to_cmos_r5_layout_notes_20261117.md)
-- v6 独立复查：[rc_summary.json](../../../../../../results/layout_review/cml_to_cmos_r5_20261118T1445Z_v6/rc_summary.json)
+- v6 独立复查：rc_summary.json (`results/layout_review/cml_to_cmos_r5_20261118T1445Z_v6/rc_summary.json`)
 - v6 验证活动：`results/analog/common/cml_to_cmos/r5_pdk/20261118T1457Z_v6/`
 
 ## 布局与身份

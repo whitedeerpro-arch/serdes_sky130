@@ -126,7 +126,7 @@ M=2 的四部分分别约 6.517、1.312、1.077、0.278 mW，总计约 **9.184 m
 
 ![三级 CML 基准与 CMOS 后级](../figures/clocking/dividers/hybrid_divider_waveforms.png)
 
-矢量图：[SVG](../figures/clocking/dividers/hybrid_divider_waveforms.svg)。核心动态点和执行状态见
+矢量图：[SVG](../figures/clocking/dividers/hybrid_divider_waveforms.png)。核心动态点和执行状态见
 [CSV](../data/hybrid_divider_points.csv)。图中 M=2 的 tick 和 clk_out 使用不同计数状态，不能假定同相。
 
 ## 频率规划与使用边界

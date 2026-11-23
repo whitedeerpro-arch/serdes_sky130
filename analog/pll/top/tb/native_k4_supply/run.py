@@ -12,7 +12,7 @@ diode on vq).  Variants (docs/design/ldo_r4.md, static configuration):
        is, so its code and Vctrl come from the code table's 1.8 V entry of the same process, temperature and R corner
   ext  vin and vq tied to one ideal source at the point's supply, LDO cell present with enable low (the 1.8 V
        configuration); code from the point's own entry
-The LDO and the tail filter start from the operating point (settled; their power-up is analog/common/ldo r4_startup).
+The LDO and the tail filter start from the operating point (settled; their power-up is analog/ldo r4_startup).
 Precharge, release and analysis as analog/pll/top/tb/native_k4: capture time, offset, Vctrl, 2 GHz frequency, plus the
 quiet rail's mean and peak-to-peak and the filtered tail line over the last 200 ns.
 """
@@ -33,9 +33,9 @@ _n.loader.exec_module(nk)
 RESULTS = ROOT / "results/analog/pll/top/native_k4_supply"
 LDO_DATA = ROOT / "docs/data/ldo_r4.json"
 INCLUDES = [p for p in nk.INCLUDES if p != "analog/pll/top/spice/pll_core_r5k4.spice"] + [
-    "analog/pll/top/spice/clock_frontend_r5q.spice", "analog/common/ldo/spice/ldo_passives.spice",
-    "analog/common/ldo/spice/ldo_hv18_core_r4.spice", "analog/common/ldo/spice/pll_supply_hv18_r4.spice",
-    "analog/common/ldo/spice/pll_bias_filter_r4.spice", "analog/pll/top/spice/pll_core_r5k4q.spice"]
+    "analog/pll/top/spice/clock_frontend_r5q.spice", "analog/ldo/spice/ldo_passives.spice",
+    "analog/ldo/spice/ldo_hv18_core_r4.spice", "analog/ldo/spice/pll_supply_hv18_r4.spice",
+    "analog/ldo/spice/pll_bias_filter_r4.spice", "analog/pll/top/spice/pll_core_r5k4q.spice"]
 PROBES = "v(ref) v(fb0) v(ctrl) v(z) v(c0p) v(vq) v(xpll.vbias_q)"
 
 

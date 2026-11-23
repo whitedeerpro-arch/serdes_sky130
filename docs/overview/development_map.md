@@ -16,7 +16,7 @@
 
 ![RX结构参考](../figures/system/rx_blocks.png)
 
-图中修订标记是绘图时的结构参考；采用值以工作修订为准，不从截图判断当前电路。图源在对应图片目录；旧Xschem见[历史原理图入口](../history/schematics.md)。
+框图以 r6q 时钟前端、v3 TX 和 W40 RX 字路径为基准。虚线连接标出待验证的原生时钟接口、候选夹具和控制接口；偏置支路使用点线。图源与重绘命令见[系统图目录](../figures/system/README.md)，旧 Xschem 入口见[历史原理图](../history/schematics.md)。
 
 ## 2. 各次迭代的验证边界
 
@@ -34,12 +34,12 @@
 | B04 B2预充 | LF双节点预充目标、建立、误差及释放 | [Bias](../design/bias.md)、[PLL环路](../design/pll_loop.md) |
 | C01 VCO | 四级环、阵列/变容器、量程/窗口、寄生与噪声 | [VCO](../design/pll_vco.md)、[粗码窗口](../design/pll_coarse_windows.md)、[PLL版图](../layout/pll_r6.md) |
 | C02 抽出/dummy | 相位抽头、buffer隔离、支路等效加载与功耗 | [VCO](../design/pll_vco.md)、[PLL环路](../design/pll_loop.md)、[架构决定](../status/architecture_decisions.md) |
-| C03 ÷2/÷8 | 再生、保持、级间buffer、原生源/启动及尾管余量 | [分频器](../design/pll_divider.md) |
+| C03 ÷2/÷8 | 再生、保持、级间buffer、原生源/启动及尾管余量 | [CML 主线](../design/pll_divider.md)、[SAFF-TSPC 候选](../design/pll_tspc_reclock_divider.md) |
 | C04 反馈接收 | 反馈CML→CMOS、PFD负载、停钟/复位 | [接收器](../design/clock_receiver.md)、[环路](../design/pll_loop.md) |
 | C05 历史/外部全速接收 | 与反馈接收及RX静态数据转换分别表征 | [接收器](../design/clock_receiver.md) |
 | C06 PFD | 标准单元复位环时序、死区、失配与相位窗 | [PLL环路](../design/pll_loop.md)、[数字PLL](../../digital/pll/README.md) |
-| C07 CP | 转向电流、控制电压窗口、净电荷、决策余量 | [CP窗口](../design/pll_cp_window.md)、[环路](../design/pll_loop.md) |
-| C08 LF | 实体R/MIM、电源分接、控制端导纳与预充 | [环路](../design/pll_loop.md)、[纹波预算](../design/pll_ripple_budget.md) |
+| C07 CP | 转向电流、控制电压窗口、净电荷、决策余量 | [CP窗口](../design/pll_cp_window.md)、[CP v4 PDK](../../analog/pll/cp/layout/variants/v4_pdk/README.md) |
+| C08 LF | 实体R/MIM、电源分接、控制端导纳与预充 | [环路](../design/pll_loop.md)、[融合版图 v2](../../analog/pll/loop_filter/layout/variants/fused_pdk/README.md) |
 | C09 启动/锁定 | ready、粗搜、捕获/失锁、看门狗、质量测量 | [环路](../design/pll_loop.md)、[监测](../design/monitor.md)、[数字PLL](../../digital/pll/README.md) |
 | C10 粗码/背景切码 | 搜索/停止策略、跨位动态、跨供电域驱动 | [粗码窗口](../design/pll_coarse_windows.md)、[CP窗口](../design/pll_cp_window.md)、[监测](../design/monitor.md) |
 | 供电 | quiet/host域、HV18静态配置、参考/尾偏置路径及预算 | [LDO](../design/ldo.md)、[r4](../design/ldo_r4.md)、[定时复核](../design/pll_timing_supply_review.md)、[供电方案](../design/pll_supply_options.md) |
@@ -84,5 +84,3 @@
 | 数据/原始运行身份 | [results/catalog](../../results/catalog/README.md)、[docs/data](../data/)；按固定campaign/工况找，不取“最新” |
 | 历史覆盖核对 | [design_status_evidence.json](../data/design_status_evidence.json)、[审计器](../../verification/design_status_audit.py)；是固定时间点证据，不自动更新为当前资格 |
 | 继承争议 | 原记录与实际deck/波形，历史入口见[索引](../history/index.md)；反例写到所属模块与问题编号 |
-
-本次整理只迁移入口和汇总职责，没有重跑电路验证。历史结果、撤回结论、数值未完成工况和未建模项保留。

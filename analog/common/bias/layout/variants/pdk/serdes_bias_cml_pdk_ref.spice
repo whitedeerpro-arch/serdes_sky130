@@ -1,9 +1,0 @@
-* Physical PDK variant of bias_dist.spice serdes_bias_cml (5x 1pF MIM)
-.subckt serdes_bias_cml_pdk iin vss
-Xd iin iin vss vss sky130_fd_pr__nfet_01v8 w=5 l=0.5
-Xc0 iin vss sky130_fd_pr__cap_mim_m3_1 w=22.2 l=22.2
-Xc1 iin vss sky130_fd_pr__cap_mim_m3_1 w=22.2 l=22.2
-Xc2 iin vss sky130_fd_pr__cap_mim_m3_1 w=22.2 l=22.2
-Xc3 iin vss sky130_fd_pr__cap_mim_m3_1 w=22.2 l=22.2
-Xc4 iin vss sky130_fd_pr__cap_mim_m3_1 w=22.2 l=22.2
-.ends serdes_bias_cml_pdk

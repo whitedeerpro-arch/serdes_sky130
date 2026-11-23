@@ -1,16 +1,20 @@
-# PLL
+# Phase-Locked Loop (`analog/pll/`)
 
-PFD、CP、VCO、反馈分频器、环路滤波器和 top 集成。
-模块测试在自身 tb/，跨模块和闭环测试在 top/tb/。
-已建立四级差分 VCO、CML 分频器、静态 CMOS PFD 和接收器集成原型。反馈默认 2 GHz/8=250 MHz，
-默认反馈为 CML 固定 ÷8；自由 CMOS 分频接多相 CML 转换后的最高 2 GHz CMOS 域，时序待验证。
-锁定判据和闭环电路尚待实现。
+SKY130A 250 MHz → **2 GHz 8-phase PLL v4** subsystem providing quadrature/octature clocks for both the 4 Gb/s Zero-CML TX (`sst`) and RX (`cmos_rx`).
 
-top/tb/vco_receiver/ 已实现 VCO 与真实时钟接收器的联调，用来比较直接连接及额外 CML 缓冲。
-它不包含 PFD、CP 或闭环 PLL。
+## Active 4 Gb/s Mainline (`pll_top_r6_v4_upgrade`)
 
-top/tb/divider_pfd/ 使用理想差分时钟驱动真实分频器、接收器和 PFD，已验证默认 ÷8 与 ÷4 接口。
-它不包含实际 VCO 或 CP，结果见 [PFD 测试记录](../../docs/history/pfd_cmos_results.md)。
+- **Integrated Top**: [`top/spice/pll_top_r6_v4_upgrade.spice`](top/spice/pll_top_r6_v4_upgrade.spice) — closed-loop lock verified across **7/7 PVT corners** via [`top/tb/lock_v4/verify_pll_v4_closed_loop.py`](top/tb/lock_v4/verify_pll_v4_closed_loop.py) (`−4.75..+2.25 ppm`, `TT 35.8 mW`, RMS jitter `1.91 ps` TT / `2.29 ps` worst, `FoM_jitter = −222.1..−224.4 dB`).
+- **Design Reports**: [pll_vco_r6_perf.md](../../docs/design/pll_vco_r6_perf.md), [pll_vco_r6_ptat.md](../../docs/design/pll_vco_r6_ptat.md), [pll_cp_v4.md](../../docs/design/pll_cp_v4.md), [pll_tspc_reclock_divider.md](../../docs/design/pll_tspc_reclock_divider.md), [pll_loop.md](../../docs/design/pll_loop.md).
 
-此前 top/tb/hybrid_divider_pfd/ 实验为三级 CML ÷8，经接收器进入 250 MHz CMOS 后级与 PFD。
-结果见 [混合分频记录](../../docs/history/hybrid_divider_results.md)。旧全 CML 可编程反馈保留为历史探索。
+## Submodules
+
+| Submodule | Active Mainline Implementation | Signed-Off PDK Layout | Notes |
+|---|---|---|---|
+| [`vco/`](vco/) | 4-stage `r6` 5-bit ring VCO + BIAS v2 PTAT tail bias (`28/66`) | `layout/variants/sym9_clean/`, `ptat_bias_pdk/` | `sym9_clean` CPEX 8-phase err `≤ 0.76 ps` (5/5 corners); 45/45 single-code across `−40..85 °C` |
+| [`cp/`](cp/) | 200 µA steering CP with 1/4-replica active servo (`v4` / `v4.1`) | `layout/variants/v4_pdk/` | Wide `Vctrl` compliance; v4.1 cuts `Vctrl` glitch `2.2–3.5×` (`−60 dBc` ref spur) |
+| [`loop_filter/`](loop_filter/) | Passive 2nd-order RC (`Rz = 4.13 kΩ`, `Ci = 18 pF`, `Cp`) + precharge | `layout/variants/fused_pdk/` | 6-site stacked MIM1+MIM2 (`6,382 µm²`, DRC=0/LVS=MATCH) |
+| [`pfd/`](pfd/) | Standard-cell PFD (`pll_pfd_sc_dly`) + phase-window lock detector | `layout/variants/pdk/` | Zero dead-zone; 200-sample cold MC 0 stall |
+| [`divider/`](divider/README.md) | Equalized Nikolic SAFF-TSPC reclocked ÷8 (`tspc_reclock_prescaler8_2g`) | `layout/variants/saff_reclock_2g_pdk/` | `1,705 µm²` CMOS ÷8 (legacy CML `r3` retained in `review_clean/`) |
+| [`coarse/`](coarse/) | 5-bit coarse-band handoff & window benches | Digital FSM in `digital/pnr/rtl_v3/` | — |
+| [`top/`](top/) | Closed-loop PLL v4 & legacy r5/r6 verification testbenches | Chip floorplan integration | `tb/lock_v4/` (mainline) + `tb/native_r6/`, `tb/frontend_r6/` |

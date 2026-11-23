@@ -6,7 +6,7 @@ import re
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('physical_reference_test', ROOT/'analog/common/bias/tb/physical_reference_card/run.py')
+spec = importlib.util.spec_from_file_location('physical_reference_test', ROOT/'analog/bias/tb/physical_reference_card/run.py')
 card = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(card)
 

@@ -6,14 +6,14 @@ Complete SKY130A PDK physical layout suite for the 4 Gb/s **RX v2.2 Zero-CML (CM
 
 | Cell | Size (`W × H µm`) | Area (`µm²`) | AR | Devices (Raw / Merged) | Ports | Magic Full DRC | Netgen LVS | Prop Err | Floating Poly | `review_cell.py` (`phys` / `rc_dev`) |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| [`serdes_rx_term_pdk.mag`](serdes_rx_term_pdk.mag) | `33.35 × 16.36` | `545.61` | `2.04` | `8 / 2` | `4 / 4` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_rx_ctle_pdk.mag`](serdes_rx_ctle_pdk.mag) | `37.40 × 26.20` | `979.88` | `1.43` | `20 / 19` | `9 / 9` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_rx_dt_slicer_pdk.mag`](serdes_rx_dt_slicer_pdk.mag) | `29.60 × 31.54` | `933.58` | `0.94` | `51 / 51` | `13 / 13` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_rx_qdiv2_8ph_pdk.mag`](serdes_rx_qdiv2_8ph_pdk.mag) | `122.40 × 16.57` | `2,028.17` | `7.39` | `146 / 146` | `15 / 15` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
-| [`serdes_rx_pi_rotator_2g_pdk.mag`](serdes_rx_pi_rotator_2g_pdk.mag) | `121.90 × 51.40` | `6,265.66` | `2.37` | `588 / 588` | `38 / 38` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
-| [`serdes_rx_cmos_pi_8ph_pdk.mag`](serdes_rx_cmos_pi_8ph_pdk.mag) | `124.88 × 68.72` | `8,581.75` | `1.82` | `734 / 734` | `47 / 47` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
-| [`serdes_rx_cmos_deser16_pdk.mag`](serdes_rx_cmos_deser16_pdk.mag) | `238.46 × 86.48` | `20,622.02` | `2.76` | `1,868 / 1,868` | `52 / 52` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
-| [`serdes_rx_cmos_top_pdk.mag`](serdes_rx_cmos_top_pdk.mag) | `245.30 × 195.40` | `47,931.62` | `1.26` | `3,039 / 3,032` | `76 / 76` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
+| `serdes_rx_term_pdk.mag` | `33.35 × 16.36` | `545.61` | `2.04` | `8 / 2` | `4 / 4` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_rx_ctle_pdk.mag` | `37.40 × 26.20` | `979.88` | `1.43` | `20 / 19` | `9 / 9` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_rx_dt_slicer_pdk.mag` | `29.60 × 31.54` | `933.58` | `0.94` | `51 / 51` | `13 / 13` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_rx_qdiv2_8ph_pdk.mag` | `122.40 × 16.57` | `2,028.17` | `7.39` | `146 / 146` | `15 / 15` | **0** | **MATCH** | **False** | **0** | `True` / `True` |
+| `serdes_rx_pi_rotator_2g_pdk.mag` | `121.90 × 51.40` | `6,265.66` | `2.37` | `588 / 588` | `38 / 38` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
+| `serdes_rx_cmos_pi_8ph_pdk.mag` | `124.88 × 68.72` | `8,581.75` | `1.82` | `734 / 734` | `47 / 47` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
+| `serdes_rx_cmos_deser16_pdk.mag` | `238.46 × 86.48` | `20,622.02` | `2.76` | `1,868 / 1,868` | `52 / 52` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
+| `serdes_rx_cmos_top_pdk.mag` | `245.30 × 195.40` | `47,931.62` | `1.26` | `3,039 / 3,032` | `76 / 76` | **0** | **MATCH** | **False** | **0** | `True` / `WL+conn=True`* |
 
 Notes:
 - `serdes_rx_term_pdk` port count: `rx_ctle_pdk.spice` defines 4 ports (`inp inn vcm vss`), including the shared p-sub guard ring terminal `vss` for the 8 `sky130_fd_pr__res_high_po_5p73` bars.

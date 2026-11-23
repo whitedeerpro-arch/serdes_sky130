@@ -6,7 +6,7 @@ LDO另按[电容与面积方案](ldo_cap_area.md)保留70 pF本体，算独立�
 
 ## 构造与电容作用
 
-[带隙核心](../../analog/common/bias/spice/bandgap.spice)利用PNP面积比8产生正温度系数的ΔVBE，经R1=11 kΩ和R2=106.5 kΩ加权，与负温度系数的VBE相加，输出约1.23 V。两支路各有50 kΩ电平移位电阻，改善低电源、低温下误差放大器的输入余量；PMOS电流源由两级放大器共同控制。启动电路帮助离开零电流平衡。
+[带隙核心](../../analog/bias/spice/bandgap.spice)利用PNP面积比8产生正温度系数的ΔVBE，经R1=11 kΩ和R2=106.5 kΩ加权，与负温度系数的VBE相加，输出约1.23 V。两支路各有50 kΩ电平移位电阻，改善低电源、低温下误差放大器的输入余量；PMOS电流源由两级放大器共同控制。启动电路帮助离开零电流平衡。
 
 第二个单级OTA构成V→I环，把参考电阻顶端保持在Vbg，产生约10 µA并经PMOS拷贝送往各模块。5 bit修调改变参考电阻，修的是电流及I·R代理量，不能直接当作Vbg/PTAT增益修调。TT本轮名义码下Vbg约1.2368 V、Iref约10.046 µA。
 
@@ -17,7 +17,7 @@ LDO另按[电容与面积方案](ldo_cap_area.md)保留70 pF本体，算独立�
 | `Cvgi`，V→I控制栅到Vdd | 2 pF | V→I环补偿；实际还依赖外部拷贝管的栅电容。轻载对减容更敏感。 |
 | 每个 `serdes_bias_cml` 本地二极管节点 | 5 pF/实例 | 本地偏置去耦，随模块实例数另计；本轮未减。 |
 
-裸 `serdes_bandgap` 的默认 `Cvgi=10 pF`，而实际共享[分配参考](../../analog/common/bias/spice/bias_dist.spice)明确覆盖为2 pF并增加Vbg的5 pF。13 pF是后者的口径。
+裸 `serdes_bandgap` 的默认 `Cvgi=10 pF`，而实际共享[分配参考](../../analog/bias/spice/bias_dist.spice)明确覆盖为2 pF并增加Vbg的5 pF。13 pF是后者的口径。
 
 ## 适用范围与测量
 
@@ -82,6 +82,6 @@ TT模型、0.9 V共模、10 Hz小信号电阻卡：27°C时合并单段为20.014
 
 ## 复跑与证据
 
-入口：[测试台与命令](../../analog/common/bias/tb/cap_sizing/README.md)、[固定证据清单](../../config/bias_cap_review_evidence.json)、[小数据](../data/bias_cap_review.json)、[结果索引](../../results/catalog/bias_cap_review.json)。清单指定具体analysis和版图快照，汇总记录其SHA256；各campaign保留源码、模型、deck及哈希，按身份续跑，不搜索“最新一次”。
+入口：[测试台与命令](../../analog/bias/tb/cap_sizing/README.md)、[固定证据清单](../../config/bias_cap_review_evidence.json)、[小数据](../data/bias_cap_review.json)、[结果索引](../../results/catalog/bias_cap_review.json)。清单指定具体analysis和版图快照，汇总记录其SHA256；各campaign保留源码、模型、deck及哈希，按身份续跑，不搜索“最新一次”。
 
 早期单输入断环、Rz小卡频点数不符及第一次动态JSON导出失败的目录保留诊断，未计入上述覆盖；最终分析来自固定清单中的完整输出。

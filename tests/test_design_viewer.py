@@ -74,3 +74,7 @@ def test_project_hierarchy_and_evidence_links_are_valid():
         assert "boundary" in node
         for ref in node.get("references", []) + [a for record in node.get("iterations", []) for a in record.get("attachments", [])]:
             assert workspace.artifact(ref["path"]).exists()
+        for figure in node.get("figures", []):
+            assert workspace.artifact(figure["path"]).suffix in {".png", ".svg"}
+            assert workspace.artifact(figure["report"]).suffix == ".md"
+            assert figure["title"] and figure["scope"]

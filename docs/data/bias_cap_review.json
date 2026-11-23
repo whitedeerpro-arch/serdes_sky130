@@ -2,27 +2,27 @@
   "report": "docs/design/bias_cap_review.md",
   "inputs": {
     "pilot": {
-      "path": "results/analog/common/bias/cap_sizing/20261114T092214.773474Z/analysis/20261114T092251.426412Z/summary.json",
+      "path": "results/analog/bias/cap_sizing/20261114T092214.773474Z/analysis/20261114T092251.426412Z/summary.json",
       "sha256": "bfc877dba0ea7343e6e0898238846f50109ffbe0980b22556bc38d9658b83d83"
     },
     "full_pilot": {
-      "path": "results/analog/common/bias/cap_sizing/20261114T092247.416280Z/analysis/20261114T092759.364641Z/summary.json",
+      "path": "results/analog/bias/cap_sizing/20261114T092247.416280Z/analysis/20261114T092759.364641Z/summary.json",
       "sha256": "5353bdd674d0810cf89a0dddd2fe952807d393e2321e39493a9f0c455737ce50"
     },
     "screen": {
-      "path": "results/analog/common/bias/cap_sizing/20261114T092738.618596Z/analysis/20261114T093143.263054Z/summary.json",
+      "path": "results/analog/bias/cap_sizing/20261114T092738.618596Z/analysis/20261114T093143.263054Z/summary.json",
       "sha256": "43d22b736be6980205aeb1b2c72248d30e71c6ae2cb36fea950129dc97f8a70a"
     },
     "physical_rz": {
-      "path": "results/analog/common/bias/cap_sizing/20261114T093709.382597Z/analysis/20261114T093743.804307Z/summary.json",
+      "path": "results/analog/bias/cap_sizing/20261114T093709.382597Z/analysis/20261114T093743.804307Z/summary.json",
       "sha256": "642b9bcab36116cadac1fb9a93bb6ec1716bdbcc8e643bfc4e52c68543eb12c8"
     },
     "dynamic": {
-      "path": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/analysis/20261114T094537.453531Z/summary.json",
+      "path": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/analysis/20261114T094537.453531Z/summary.json",
       "sha256": "ebd1c79462d06a2a75071c8ecda665ff062d77709f42fbd7e75bb1b7448cb4fc"
     },
     "rz_card": {
-      "path": "results/analog/common/bias/rz_segments/20261114T094804.664966Z/summary.json",
+      "path": "results/analog/bias/rz_segments/20261114T094804.664966Z/summary.json",
       "sha256": "1d75733558df58cddd734f6fb558d521e1e63b0c3fe20e0fdba0e9b385d14bdf"
     },
     "layout_snapshot": {
@@ -262,7 +262,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_light_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_light_startup",
       "vbg_v": 1.2368001717341224,
       "iref_ua": 10.046075092990453,
       "reach_op": true,
@@ -288,7 +288,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_dist_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_dist_startup",
       "vbg_v": 1.2368001715076222,
       "iref_ua": 10.046075131263931,
       "reach_op": true,
@@ -314,7 +314,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_light_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_light_startup",
       "vbg_v": 1.2193225735387803,
       "iref_ua": 9.10385362690516,
       "reach_op": true,
@@ -340,7 +340,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_dist_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_dist_startup",
       "vbg_v": 1.2193225735976292,
       "iref_ua": 9.103853883142893,
       "reach_op": true,
@@ -366,7 +366,7 @@
       "mode": "startup",
       "step_v": -0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_light_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_light_startup",
       "vbg_v": 1.2452205365283007,
       "iref_ua": 11.147432095208721,
       "reach_op": true,
@@ -392,7 +392,7 @@
       "mode": "startup",
       "step_v": -0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_dist_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_dist_startup",
       "vbg_v": 1.2452205362071653,
       "iref_ua": 11.147432342335401,
       "reach_op": true,
@@ -418,7 +418,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_light_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_light_startup",
       "vbg_v": 1.2368001719557338,
       "iref_ua": 10.046074909485036,
       "reach_op": true,
@@ -444,7 +444,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_dist_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_dist_startup",
       "vbg_v": 1.2368001713414771,
       "iref_ua": 10.046075150787683,
       "reach_op": true,
@@ -470,7 +470,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_light_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_light_startup",
       "vbg_v": 1.2193225736291828,
       "iref_ua": 9.103853682825056,
       "reach_op": true,
@@ -496,7 +496,7 @@
       "mode": "startup",
       "step_v": 0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_dist_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_dist_startup",
       "vbg_v": 1.219322573646711,
       "iref_ua": 9.10385354920826,
       "reach_op": true,
@@ -522,7 +522,7 @@
       "mode": "startup",
       "step_v": -0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_light_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_light_startup",
       "vbg_v": 1.24522053690255,
       "iref_ua": 11.147432124399401,
       "reach_op": true,
@@ -548,7 +548,7 @@
       "mode": "startup",
       "step_v": -0.05,
       "t_end_s": 6e-05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_dist_startup",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_dist_startup",
       "vbg_v": 1.2452205368918952,
       "iref_ua": 11.147431806540782,
       "reach_op": true,
@@ -575,7 +575,7 @@
       "deck": "prepared/phys6_rp_tt_light_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_light_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_light_noise",
       "noise_uv": {
         "vbg": 424.7804521228355,
         "vgi": 62.08692859731799
@@ -599,7 +599,7 @@
       "deck": "prepared/phys6_rp_tt_dist_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_dist_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_tt_dist_noise",
       "noise_uv": {
         "vbg": 424.35827445230115,
         "vgi": 51.02356126893117,
@@ -624,7 +624,7 @@
       "deck": "prepared/phys6_rp_ss_hh_light_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_light_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_light_noise",
       "noise_uv": {
         "vbg": 378.8036174181503,
         "vgi": 46.24807495706371
@@ -648,7 +648,7 @@
       "deck": "prepared/phys6_rp_ss_hh_dist_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_dist_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ss_hh_dist_noise",
       "noise_uv": {
         "vbg": 378.7159825546741,
         "vgi": 38.06014548836601,
@@ -673,7 +673,7 @@
       "deck": "prepared/phys6_rp_ff_ll_light_noise.cir",
       "mode": "noise",
       "step_v": -0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_light_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_light_noise",
       "noise_uv": {
         "vbg": 462.9593137011339,
         "vgi": 79.10521166407896
@@ -697,7 +697,7 @@
       "deck": "prepared/phys6_rp_ff_ll_dist_noise.cir",
       "mode": "noise",
       "step_v": -0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_dist_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/phys6_rp_ff_ll_dist_noise",
       "noise_uv": {
         "vbg": 462.0980425056979,
         "vgi": 64.55432400082381,
@@ -722,7 +722,7 @@
       "deck": "prepared/cc4_r30p_tt_light_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_light_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_light_noise",
       "noise_uv": {
         "vbg": 435.39801710890333,
         "vgi": 63.26071660782714
@@ -746,7 +746,7 @@
       "deck": "prepared/cc4_r30p_tt_dist_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_dist_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_tt_dist_noise",
       "noise_uv": {
         "vbg": 434.856773998862,
         "vgi": 51.92990960243722,
@@ -771,7 +771,7 @@
       "deck": "prepared/cc4_r30p_ss_hh_light_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_light_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_light_noise",
       "noise_uv": {
         "vbg": 388.66434508027805,
         "vgi": 47.10551209442202
@@ -795,7 +795,7 @@
       "deck": "prepared/cc4_r30p_ss_hh_dist_noise.cir",
       "mode": "noise",
       "step_v": 0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_dist_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ss_hh_dist_noise",
       "noise_uv": {
         "vbg": 388.496951709378,
         "vgi": 38.80266283819679,
@@ -820,7 +820,7 @@
       "deck": "prepared/cc4_r30p_ff_ll_light_noise.cir",
       "mode": "noise",
       "step_v": -0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_light_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_light_noise",
       "noise_uv": {
         "vbg": 474.8197305952995,
         "vgi": 80.72582205064792
@@ -844,7 +844,7 @@
       "deck": "prepared/cc4_r30p_ff_ll_dist_noise.cir",
       "mode": "noise",
       "step_v": -0.05,
-      "run": "results/analog/common/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_dist_noise",
+      "run": "results/analog/bias/cap_sizing/20261114T093914.556592Z_dynamic/cc4_r30p_ff_ll_dist_noise",
       "noise_uv": {
         "vbg": 473.79707094373504,
         "vgi": 65.69505351902848,
@@ -854,7 +854,7 @@
     }
   ],
   "rz_card": {
-    "campaign": "results/analog/common/bias/rz_segments/20261114T094804.664966Z",
+    "campaign": "results/analog/bias/rz_segments/20261114T094804.664966Z",
     "pdk": "c6d73a35f524070e85faff4a6a9eef49553ebc2b",
     "groups": {
       "merged_length": [

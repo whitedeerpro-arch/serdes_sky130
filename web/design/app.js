@@ -186,6 +186,22 @@
     b.addEventListener("click", () => openArtifact(ref.path, ref.title));
     return b;
   }
+  function evidenceFigure(figure) {
+    const card = el("figure", {class:"evidence-figure"});
+    const preview = el("a", {class:"figure-preview", href:repoURL(figure.path), "aria-label":"查看原图：" + figure.title});
+    preview.append(el("img", {src:repoURL(figure.path), alt:figure.title, loading:"lazy"}));
+    preview.addEventListener("click", event => {
+      if (fileMode || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      openArtifact(figure.path, figure.title);
+    });
+    const caption = el("figcaption");
+    const report = el("button", {class:"text-button"}, "查看验证边界 ↗");
+    report.addEventListener("click", () => openArtifact(figure.report, figure.title + " · 验证边界"));
+    caption.append(el("strong", {}, figure.title), el("p", {}, figure.scope), report);
+    card.append(preview, caption);
+    return card;
+  }
   function renderInspector() {
     const n = nodes.get(selected), d = domain(n.id), h = $("#inspector-heading"), body = $("#inspector-body");
     h.replaceChildren();
@@ -195,11 +211,14 @@
     $("#focus-selected").disabled = !children(selected).length || selected === focus;
     body.replaceChildren();
     if (tab === "overview") {
-      body.append(el("p", {class:"body-summary"}, n.summary), label("模块现状"));
-      const grid = el("div", {class:"fact-grid"});
-      Object.entries(n.facts || {}).forEach(([k, v]) => { const f = el("div", {class:"fact"}); f.append(el("span", {}, k), el("p", {}, v)); grid.append(f); });
-      body.append(grid);
-      if (n.id === "pll") body.append(el("p", {class:"integration-note"}, "PLL 顶层集成已有。近期 VCO、分频和环路参数的改进，分别保留模型规划与局部验证记录。"));
+      body.append(el("p", {class:"body-summary"}, n.summary));
+      const entries = n.id === "serdes" ? n.references?.slice(0, 2) : n.references?.slice(1, 2);
+      entries?.forEach(ref => body.append(reference(ref)));
+      if (n.figures?.length) {
+        const figures = el("button", {class:"quiet-button figure-jump"}, "查看波形与版图 ↗");
+        figures.addEventListener("click", () => setTab("evidence"));
+        body.append(figures);
+      }
       const kids = children(n.id);
       if (kids.length) {
         body.append(label("下一级模块"));
@@ -208,7 +227,6 @@
           const b = el("button", {class:"child-link"}); b.append(el("span", {}, c.name), el("small", {}, `${c.key || c.state}  ›`)); b.addEventListener("click", () => select(c.id, true)); list.append(b);
         }); body.append(list);
       }
-      if (n.references?.length) { body.append(label("设计入口"), reference(n.references[0])); }
     } else if (tab === "boundary") {
       [["输入边界", "inputs"], ["输出边界", "outputs"], ["适用范围与假设", "assumptions"]].forEach(([title, key]) => {
         body.append(label(title)); const ul = el("ul", {class:`boundary-list${key === "assumptions" ? " assumptions" : ""}`});
@@ -246,6 +264,13 @@
       const refs = new Map();
       (n.references || []).forEach(r => refs.set(r.path, r));
       (n.iterations || []).forEach(r => (r.attachments || []).forEach(a => refs.set(a.path, a)));
+      if (n.figures?.length) {
+        body.append(label("波形与版图"));
+        n.figures.forEach(figure => {
+          body.append(evidenceFigure(figure));
+          refs.delete(figure.path);
+        });
+      }
       body.append(label("设计资料与验证依据"));
       refs.forEach(r => body.append(reference(r)));
       body.append(el("p", {class:"subtle-copy"}, "来源保留在仓库文档、模型脚本、工作电路与图中；数值判据以对应记录的边界为准。"));
@@ -258,15 +283,24 @@
     if (!query) {box.hidden = true; return;}
     const hits = [];
     catalog.nodes.forEach(n => {
-      const base = [n.id, n.key, n.name, n.subtitle, n.summary, ...Object.values(n.facts || {})].join(" ").toLowerCase();
+      const base = [n.id, n.key, n.name, n.subtitle, n.summary].join(" ").toLowerCase();
       const iteration = (n.iterations || []).find(i => [i.title, i.problem, i.model, i.changes].join(" ").toLowerCase().includes(query));
-      if (base.includes(query) || iteration) hits.push({n, iteration: !base.includes(query) ? iteration : null, score:n.name.toLowerCase().includes(query) ? 0 : 1});
+      const figure = (n.figures || []).find(f => f.title.toLowerCase().includes(query));
+      if (base.includes(query) || iteration || figure) hits.push({n, iteration, figure, score:n.name.toLowerCase().includes(query) ? 0 : 1});
     });
-    hits.sort((a, b) => a.score - b.score).slice(0, 16).forEach(({n, iteration}) => {
-      const b = el("button", {class:"search-result"}); b.append(el("strong", {}, iteration ? iteration.title : n.name), el("small", {}, parents(n.id).map(x => x.name).join(" / ")));
-      b.addEventListener("click", () => {select(n.id, true); if (iteration) setTab("iterations"); box.hidden = true; $("#search").value = "";}); box.append(b);
+    hits.sort((a, b) => a.score - b.score).slice(0, 16).forEach(({n, iteration, figure}) => {
+      const match = figure || iteration;
+      const b = el("button", {class:"search-result"});
+      b.append(el("strong", {}, match?.title || n.name), el("small", {}, parents(n.id).map(x => x.name).join(" / ")));
+      b.addEventListener("click", () => {
+        select(n.id, true);
+        setTab(figure ? "evidence" : iteration ? "iterations" : "overview");
+        box.hidden = true;
+        $("#search").value = "";
+      });
+      box.append(b);
     });
-    if (!hits.length) box.append(el("div", {class:"search-empty"}, "没有匹配的模块或迭代"));
+    if (!hits.length) box.append(el("div", {class:"search-empty"}, "没有匹配的模块、迭代或图表"));
     box.hidden = false;
   }
 

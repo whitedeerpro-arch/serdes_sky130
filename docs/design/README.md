@@ -22,4 +22,4 @@
 - **信道**：[channel_model.md](channel_model.md)
 
 ## 公共器件与跨模块专题
-- [digital_top_v3.md](digital_top_v3.md)（统一精简 SKY130A 数字顶层宏 P&R 与 3 角 OpenRCX/DRC/LVS 签核）· [cml_swing_target.md](cml_swing_target.md) · [fixed_load_resistors.md](fixed_load_resistors.md) · [fixed_poly_ac_overlay.md](fixed_poly_ac_overlay.md) · [wide_load_planning.md](wide_load_planning.md) · [power_audit.md](power_audit.md)
+- [digital_top_v3.md](digital_top_v3.md)（统一精简 SKY130A 数字顶层宏 P&R 与 3 角 OpenRCX/DRC/LVS 签核）· [serdes_5g_feasibility.md](serdes_5g_feasibility.md)（4 Gb/s CP v4.1/LDO 微修复核与 5 Gb/s / 800 mVpp TX+RX 可行性瓶颈摸底）· [cml_swing_target.md](cml_swing_target.md) · [fixed_load_resistors.md](fixed_load_resistors.md) · [fixed_poly_ac_overlay.md](fixed_poly_ac_overlay.md) · [wide_load_planning.md](wide_load_planning.md) · [power_audit.md](power_audit.md)

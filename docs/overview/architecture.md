@@ -1,91 +1,61 @@
 # 架构与接口
 
-> 一个共享 2 GHz 多相 PLL 驱动本地 TX 串化器和每路 RX 的相位插值器；TX 是 16:1 的 2:1 CML 选择树，RX 是半速四相采样加数字 PI-CDR。所有电路先按模块独立验证，再用实际负载/电平/边界条件逐层衔接。
+> **当前 4 Gb/s Zero-CML 主线架构**：共享 **2 GHz 八相 PLL v4** 驱动本地 **Zero-CML SST 发送端（TX v4.3）** 与每路 **Zero-CML CMOS 接收端（RX v2.2）**，全部控制/对齐/FIFO/CDR 逻辑整合在统一多速率数字顶层宏 **`serdes_digital_top_v3`（v3.1）** 中，由独立 **HV18 LDO（`v2_cur`）** 与 **BIAS v2** 提供干净电源与偏置。
 
-当前修订、采用与验证汇总见 **[current.md](../status/current.md)**，模块资料见[模块地图](development_map.md)，开发依赖见[执行计划](../status/prelayout_plan.md)。本页维护连接关系和接口，不代表所有箭头已在同一套实际电路中验证。
+当前采用状态与实测验证边界统一见 **[current.md](../status/current.md)**，片级物理整合见 **[chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md)**，模块文档见 **[docs/design/README.md](../design/README.md)**。
 
-## 系统框图
+---
 
-![PLL、偏置与TX模块边界](../figures/system/clock_tx_blocks.png)
+## 1. 系统总览与时钟域
 
-![RX模块边界与控制回路](../figures/system/rx_blocks.png)
+![片级物理规划与子系统拓扑](../figures/system/serdes_chip_floorplan_20261123.png)
 
-## 时钟域
-
-| 时钟域 | 来源 | 用途 | 边界责任 |
+| 时钟域 | 频率 / 周期 | 来源 | 用途与驱动边界 |
 |---|---|---|---|
-| VCO 多相 CML | 2 GHz环振，四路差分抽出、八个极性 | TX选择时钟、RX PI锚点、PLL反馈 | 相位节点与buffer输出分别约束加载；实际接入范围查current.md |
-| PLL 反馈 | 支路0→三级CML ÷2→CML→CMOS→250 MHz | PFD | 与TX派生时钟分开；真实源、负载和启动由PLL接口验收 |
-| TX 选择时钟 | v3：同一2G源同步计数器＋复制单元；r2独立抽头保留历史 | 串化器四级选择 | 与字捕获/保持的共同纪元、相对时序及物理guard/blank对应 |
-| 自由 CMOS 分频 | 可选的多相CML→CMOS后按需分频 | 其他时钟域 | 规划/历史接口，不是当前精简PLL前端的必经路径 |
-| RX 恢复时钟 | PI输出四相2 GHz | 数据/边沿采样 | 以连续调相跟踪每路远端频偏，不调共享VCO |
-| RX 恢复字时钟 | PI后取点→CML ÷2→CMOS Johnson ÷4，w每16 UI | CDR控制、字输出 | 物理读出映射与动态PI控制时序由RX接口共同验收 |
-| 系统时钟 | 外部 | 并行接口 | [map→align→FIFO](../design/rx_host_cdc.md)连接恢复字域；容量、频偏、溢出恢复和物理CDC分别约束 |
+| **参考时钟 (`ref_clk`)** | `250 MHz` / `4.0 ns` | 外部参考 | PLL PFD 参考输入及 `pll_control_top` 根时钟（内部同步 ÷4 至 `62.5 MHz` 驱动 5-bit 粗搜/启动监督） |
+| **VCO 多相时钟** | `2 GHz`（八相 `45°` 间隔） | 四级环振 `r6` + PTAT `28/66`（`sym9_clean` CPEX） | 经缓冲馈送 PLL 反馈（`r5` CML→CMOS + SAFF-TSPC ÷8）、TX SST 4 相时钟入口（`phi0..phi270`）及 RX 2 GHz CMOS PI 锚点 |
+| **PLL 反馈 (`fb_clk`)** | `250 MHz` / `4.0 ns` | `r5` CML→CMOS + SAFF-TSPC 重定时 ÷8 | 进入标准单元 PFD (`pll_pfd_sc_dly`) 与相位窗锁定检测 |
+| **TX 字时钟 (`tx_word_clk`)** | `250 MHz` / `4.0 ns` | TX SST 内部 `2G → 1G → 500M → 250M` 同步分频输出 | 驱动 `tx_ingress_control` 16-bit 字捕获与 16:4 CMOS 串化器 |
+| **RX 恢复 8 相时钟** | `1 GHz`（4 数据相 + 4 边沿相） | 2 GHz 64 码纯 CMOS PI + 8 相正交 ÷2 (`qdiv2`) | 驱动四分之一速 Double-Tail 动态 CMOS 采样器（4 Data + 4 Edge），连续调相跟踪每路远端 `±300 ppm` 频偏 |
+| **RX 恢复字时钟 (`rx_word_clk`)** | `250 MHz` / `4.0 ns` | RX `deser16` 8→32 解串器输出 | 驱动共享 `rx_word_map`、`rx_word_align16`、异步 FIFO 写端；内部同步 ÷2 至 `125 MHz` (`cdr_clk_div2`) 驱动 2 阶 BBPD CDR |
+| **宿主时钟 (`host_clk`)** | `250 MHz`（异步） | 外部系统域 | 异步 FIFO 读端（格雷码指针双拍同步 + 无条件预取保护） |
 
-PLL 反馈与时钟分发是两项独立功能：调整后级派生时钟不改变 VCO；默认反馈总分频为 8。500 MHz 参考在 VCO ≤ 2 GHz 时不能走 ÷8，要用 ÷4 抽头（选择与未用级关断尚未集成）。低参考（如 50 MHz → 400 MHz VCO）只用于低线速，现有电容阵列未证明覆盖 400 MHz。
+---
 
-## VCO 八相顺序
+## 2. 关键信号链结构
 
-物理级号不是相位顺序。实测上升过零顺序（d_k = q_kp − q_kn）：
+### 2.1 PLL v4（250 MHz → 2 GHz 八相）
+- **VCO 八相顺序**（物理级号并非相位顺序，实测上升过零顺序 `d_k = q_kp − q_kn`，2 GHz 下相邻间隔 `62.5 ps = 0.25 UI`）：
+  `0°: d0` · `45°: −d1` · `90°: d2` · `135°: −d3` · `180°: −d0` · `225°: d1` · `270°: −d2` · `315°: d3`
+- **环路组成**：`pll_pfd_sc_dly` → 200 µA 主动伺服宽摆幅电荷泵 `CP v4/v4.1` → 6 站点堆叠 MIM1+MIM2 融合二阶无源滤波器 `LF v2`（`Rz = 4.13 kΩ, Ci = 18 pF`）→ `VCO r6`（5-bit / 31 单元电容阵 + BIAS v2 PTAT `28/66` 尾流温补）→ `r5` CML→CMOS + `SAFF-TSPC ÷8`。
+- **安静供电域**：HV18 Native-NMOS LDO（`v2_cur`）提供独立安静供电轨 `quiet ≈ 1.79 V`，配 `1 MΩ / 16 pF` 慢 RC 滤波器（`bias_filter_r4`）隔离尾偏置噪声。
 
-| 相位 | 0° | 45° | 90° | 135° | 180° | 225° | 270° | 315° |
-|---|---|---|---|---|---|---|---|---|
-| 时钟极性 | d0 | −d1 | d2 | −d3 | −d0 | d1 | −d2 | d3 |
+### 2.2 TX Zero-CML SST v4.3（16:1，4 Gb/s）
+- **前端串化**：全静态 CMOS 16:4 多路选择树 + 四相交错重定时（无静态 CML 功耗），由 2 GHz 派生 `1 GHz / 500 MHz / 250 MHz` 时钟。
+- **输出级**：28 个并联 N-over-N **源端串联端接（SST）** 切片（23 主抽头 Main + 5 后一拍均衡 Post-1 FFE），由片上 `1.8 V → 0.44 V` 子稳压器（`sst_vdrv_ldo_pdk`）供电，直接提供匹配 `100 Ω` 差分输出阻抗与 400 mVpp 摆幅，驱动 `C0–C5` PCB 信道。
 
-2 GHz 下相邻相位约 62.5 ps（0.25 UI）。
+### 2.3 RX Zero-CML CMOS v2.2（1:16，4 Gb/s）
+- **模拟前端**：片上 `100 Ω` 差分端接（至 BIAS `Vcm`）+ 4 档可调阻容退化 LVT CTLE。
+- **时钟与采样**：2 GHz 64 码纯 CMOS 相位插值器（每码 `7.8125 ps = 0.03125 UI`，跨扇区连续回卷无毛刺）→ 8 相 1 GHz 正交分频 → 8 路四分之一速 **Double-Tail 动态 CMOS 采样器**（4 数据 + 4 边沿）→ 节距匹配的 8→32 静态 CMOS 解串器。
+- **数字 CDR 与宿主出口**：`serdes_digital_top_v3` 内共享单个 `rx_word_map`，同时馈送二阶 Alexander BBPD CDR（125 MHz 域，跟踪 `±300 ppm` 频偏）与 16-bit 字对齐/异步 FIFO（250 MHz 域跨时钟出口）。
 
-## 串化分配
+---
 
-当前实现 2:1 × 4 级（8 + 4 + 2 + 1 个选择器），bit0 先出，配对保持连续位序：
+## 3. 目录所有权与工程约定
 
-| 级次 | 配对 | 选择时钟 | 每路数据率 |
-|---|---|---|---|
-| 16 → 8 | d[j] 与 d[j+8] | 250 MHz | 0.5 Gb/s |
-| 8 → 4 | 上级 j 与 j+4 | 500 MHz | 1 Gb/s |
-| 4 → 2 | 上级 j 与 j+2 | 1 GHz | 2 Gb/s |
-| 2 → 1 | 偶数流与奇数流 | 2 GHz | 4 Gb/s |
-
-末级是两只 CML 重定时锁存器（A/B）加最终 2:1 选择器。4:1 × 2 级是备选方案，需要约 25% 的选择窗口，未实现。
-
-## 多端口 PI-CDR
-
-每个时钟组一个共享 PLL，供本地所有 TX 和各 RX 的 PI；每路 RX 有独立的 PI 相位组、采样器和数字跟踪环，不调共享 VCO。多个远端节点各有独立的 ppm 偏差，所以每路必须独立跟踪。
-
-持续调相补偿频差：采样相位 φ(t) = 2π f_base t + θ(t)，f_sample = f_base + (1/2π) dθ/dt。64 码时每码 7.8125 ps = 0.03125 UI；远端快 100 ppm（半速频差 200 kHz）时平均约 78 ns 前进一码，5 µs 转一圈。相位码 0–63 回卷，物理输出必须跨扇区连续无毛刺。
-
-采样相位：数据 0°/180°、边沿 90°/270°，2 GHz 半速，bang-bang（Alexander）鉴相。首版保留 CTLE，不做 DFE。
-
-## 编码与速率
-
-当前目标是 4 Gb/s 原始线速、16 bit × 250 MHz，不含编码。若加 8b/10b：保持 4 Gb/s 线速时有效载荷上限 3.2 Gb/s；保持 4 Gb/s 有效载荷则线速需 5 Gb/s，现有时钟计划不支持。可选 16 bit × 200 MHz → 20 bit 编码 → 20→16 gearbox。编码、加扰、gearbox 尚未加入；模拟开发用训练标记/PRBS。
-
-## 目录与所有权
-
-| 目录 | 内容 |
+| 目录 | 职责 |
 |---|---|
-| `analog/common/` | 公共单元：偏置、CML buffer/延迟单元、CML 选择器/锁存器、CML↔CMOS 转换、器件适配器 |
-| `analog/pll/` | VCO、分频器、PFD、CP、LF、顶层集成 |
-| `analog/tx/` | 时钟分发、串化器、输出驱动 |
-| `analog/rx/` | 输入端接、CTLE、PI、采样器、顶层联调 |
-| `digital/` | PLL 启动监督、RX CDR/解串 RTL |
-| `verification/` | 共享激励、PVT 计划、契约、信道模型、混合仿真 |
+| `analog/pll/` | 2 GHz PLL v4（`vco/`、`cp/`、`loop_filter/`、`pfd/`、`divider/`、`coarse/`、`top/`） |
+| `analog/tx/` | 发送端：主线 `sst/`（Zero-CML SST v4.3）；历史 CML 保留在 `serializer/`、`output_driver/`、`clock_distribution/`、`input_register/` |
+| `analog/rx/` | 接收端：主线 `cmos_rx/`（Zero-CML CMOS v2.2）；历史 CML 保留在 `ctle/`、`pi/`、`sampler/`、`input/`、`top/` |
+| `analog/ldo/` | HV18 安静供电 LDO（`v2_cur` 主线 + `bias_filter_r4` + 历史减容研究） |
+| `analog/bias/` | 带隙参考、FC-OTA、缓冲与偏置分配（`BIAS v2` 主线 + v1 参考） |
+| `analog/common/` | 跨模块底层原语（`cml_to_cmos/` `r5`、`devices/`、`monitor/`、CML 单元） |
+| `analog/layout/` | 公共 SKY130A Magic PDK 版图绘图内核（`scripts/layout_core.py`） |
+| `digital/` | 统一精简数字顶层 `pnr/rtl_v3/`、OpenROAD P&R 与 VCS SDF GLS 流程，及各子系统单元 RTL |
+| `src/serdes_flow/` | 仿真编排、PVT/MC、眼图/抖动分析、SKY130 $g_m/I_D$ 与贝叶斯/Pareto 优化库 |
+| `verification/` | PCB 信道 `.s4p` 模型（`C0–C5`）、片级版图规划与 DRC/LVS 独立审阅、PDN 稳定性与绘图 |
 
-每个模块含 `spice/`（权威实现）、`behavioral/`、`schematic/`、`layout/`、`tb/<case>/`。子电路名带模块前缀（`serdes_`、`pll_`）。DUT 只放电路和参数；电源、源阻抗、负载、激励、测量放测试台，不在 DUT 里写理想负载、绝对路径或 `.end`。Xschem 原理图是历史导出，未同步 r3/TX r2，见 [原理图记录](../history/schematics.md)。
+每个活跃模拟模块仅按需包含 `spice/`（权威网表）、`tb/<case>/`（独立测试台）与 `layout/`（PDK 生成器与签核摘要）；DUT 只放电路与参数，电源/激励/负载/测量统一在测试台。
 
-## 接口约定
-
-| 模块 | 端口 |
-|---|---|
-| bias | 偏置电压/参考电流、vdd、vss；注明电流输出顺从范围 |
-| cml_buffer | inp、inn、outp、outn、vbias、vdd、vss（非反相） |
-| cml_to_cmos | inp、inn、outp、outn、vbias、vdd、vss；时钟版带状态恢复，输入停钟时保持状态 |
-| cmos_to_cml | clk_in/数据、outp、outn、偏置、vdd、vss |
-| pfd | ref、fb、rst_b、up、dn、vdd、vss；rst_b 低有效，UP/DN 高有效 |
-| cp | up、dn、out、vbn、vbp、vdd、vss；UP 注入电荷 |
-| vco | r6叶单元：q0p/q0n…q3p/q3n、vctrl、b0…b4（5 bit）、vbias、vdd、vss；PLL核外部对应cfg0…cfg4，参考[实际VCO网表](../../analog/pll/vco/spice/vco_ring4_r6.spice)与[quiet core](../../analog/pll/top/spice/pll_core_r6k4q.spice) |
-| divider（prescaler8） | clkp、clkn、q2/q4/q8 差分抽头、vbias、vdd、vss |
-| loop_filter | cp_in、ctrl、z、pre_ref、pre_en、vdd、vss（预充版） |
-| rx_input_termination | inp、inn、vcm；两只 50 Ω |
-| rx_ctle_rc | inp、inn、outp、outn、eq0、eq1、vbias、vdd、vss |
-
-信号约定：差分电压为 `v(outp) − v(outn)`，共模为两端平均；电流先注明 SPICE 支路方向再换算；所有时间指标注明边沿、阈值和负载。
+> **历史 CML 参考框图**：早期全 CML 2:1 树与半速采样架构框图保留在 [clock_tx_blocks.png](../figures/system/clock_tx_blocks.png) 与 [rx_blocks.png](../figures/system/rx_blocks.png)，用于对比功耗、面积与架构演进（编码/8b10b/加扰未纳入当前 4 Gb/s 原始线速首版）。

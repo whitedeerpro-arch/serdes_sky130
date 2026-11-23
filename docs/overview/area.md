@@ -1,21 +1,29 @@
-# 面积粗估（版图前）
+# 芯片面积汇总（实测版图签核）
 
-> 本页是下述固定历史deck的混合修订粗估（含r5 PLL、11-03 RX等），不是r6当前整机面积。当前物理实现范围与采用状态见[current.md](../status/current.md)，真实几何和提取见[PLL版图](../layout/pll_r6.md)。保留原数值用于规划对照。
+> **权威实测数据**：以下全部宏尺寸均直接读取自 SKY130A 已签核（`Magic DRC = 0` / `Netgen LVS = MATCH`）的真实 `.mag` 与 `.def` 外框；完整摆位坐标、引脚对齐与阻尼 PDN 填充方案见 **[chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md)**（生成脚本：[plan_chip_floorplan.py](../../verification/layout/plan_chip_floorplan.py)）。
 
-**下列历史deck估算的器件加电阻约 0.30 mm²，另有 MIM 约 0.036 mm²（MIM 在金属 3–4 层，可部分叠在电路上方）；不含数字（CDR、启动/粗码控制、TX 入口）、焊盘、ESD 和块间布线。** 用于规划和比较，不是版图。
+---
 
-| 块 | 器件 + 电阻（mm²） | MIM（mm²） | 主要部分 |
-|---|---:|---:|---|
-| PLL 核心（r5 VCO + 4 支路 + PFD + 转向 CP + LF） | 0.080 | 0.016 | 4 条 ÷8 prescaler 各约 0.013；VCO 0.004；CP 0.0035；LF 的 18 pF 是 MIM 主体 |
-| PLL 粗码窗口检测 | 0.009 | ~0 | 两比较器约 0.004（为匹配取大器件），两条门限梯约 0.005 |
-| TX（串化/捕获 + 时钟分发 + 输出级） | 0.082 | 0 | 串化/捕获 0.055，时钟分发 0.024，输出级 0.004 |
-| 偏置（带隙 + V→I + CML 拷贝，TX bench 里的那份） | 0.036 | 0.014 | 电流源大器件（W/L 6/4 拷贝、带隙 L 8–12）；电容为补偿和去耦 |
-| RX 模拟（CTLE + PI + 半速采样 + 读出 1:16 + PI 控制驱动） | 0.069 | 0.006 | 读出 0.035，采样 0.020，PI 0.011；用的是 11-03 修订、理想四相时钟 |
-| 合计 | 约 0.28 | 约 0.036 | 上界（MIM 不能叠放）约 0.31 |
+## 1. 4 Gb/s Zero-CML 实测片级面积（`0.5084 mm²` 核心）
 
-方法：[area_estimate.py](../../verification/analysis/area_estimate.py) 让 ngspice 展开层次（参数已求值），按实例分组累加：MOS 按指状几何 (W/nf + 0.6) × (nf (L + 0.6) + 0.6) µm²，乘 4（阱、保护环、局部布线）；电阻按 high_po 几何（PDK 器件直接用 w/l，理想电阻按项目换算规则），乘 1.5；MIM 按 2 fF/µm² × 1.3 间距，乘 1.2，单列。数据 [area_estimate.json](../data/area_estimate.json)；所用 deck 在 JSON 里逐块记录（PLL 由 native_k4 的 include 清单现场拼装，TX 为 11-07 的 45 条件完整 TX 运行，RX 为 11-03 的混合仿真 deck，窗口检测为 window_dc）。
+片级规划核心外框 **`845.4 × 601.4 µm = 508,424 µm²（0.5084 mm²）`**，21 个功能宏合计 `302,393 µm²`（`59.5%`），空腔部署 12 块阻尼 MIM1+MIM2 PDN 去耦阵（`109,500 µm²` / `761.0 pF`），总物理填充率 **`81.0%`**，**`0.0 µm²` 重叠**，全片总片上电容 **`957.9 pF`**。
 
-适用范围：
-- 系数是经验值（模拟版图典型 3–5 倍有源面积），误差可到 ±50 %；比较各块相对大小比绝对值可靠。
-- TX 统计排除了信道模型；bench 里的偏置一并列出（整片只需一份带隙，各模块另有电流拷贝）。RX 没有端接、CDR 数字和 PLL→RX 时钟缓冲；PLL 没有 B2 预充缓冲和启动/粗码数字。
-- 未含温度感测（约为窗口检测的一半）、监测工具包的其他实例。
+| 子系统 | 包含已签核宏 | 宏数量 | 实测面积 (`µm²`) | 占核心比 | 版图入口 |
+|---|---|---:|---:|---:|---|
+| **Digital Top v3.1** | `serdes_digital_top_v3`（PLL Ctrl + TX Ingress + RX Align/FIFO + BBPD CDR） | 1 | `103,932` | `20.4%` | [digital_top_v3.md](../design/digital_top_v3.md) |
+| **RX Zero-CML v2.2** | `serdes_rx_cmos_top_pdk` + 独立 8 相分频/PI/采样/解串一体化宏 | 1 (+ 复用) | `47,932` | `9.4%` | [rx/cmos_rx/v2_pdk](../../analog/rx/cmos_rx/layout/variants/v2_pdk/README.md) |
+| **TX Zero-CML SST v4.3** | `serdes_tx_sst_top_pdk`（16:4 串化 + 28-slice SST + `0.44 V` LDO） | 1 | `34,026` | `6.7%` | [tx/sst/v4_pdk](../../analog/tx/sst/layout/variants/v4_pdk/README.md) |
+| **PLL v4 模拟核** | VCO `sym9_clean` + PTAT 偏置 + CP v4 + 融合 LF v2 + PFD + SAFF-TSPC ÷8 + `r5` CML→CMOS 等 | 9 | `32,684` | `6.4%` | [docs/layout/README.md](../layout/README.md) |
+| **HV18 LDO v2_cur** | `serdes_pll_supply_hv18_v2_cur_pdk` + VCO 慢尾偏置滤波 `bias_filter_r4` | 2 | `29,859` | `5.9%` | [ldo/v2_cur_pdk](../../analog/ldo/layout/variants/v2_cur_pdk/README.md) |
+| **BIAS v2** | `serdes_bias_top_v2_pdk` + 本地 `cml`/`cp`/`ctle` 偏置拷贝宏 | 4 | `28,274` | `5.6%` | [bias/v2_pdk](../../analog/bias/layout/variants/v2_pdk/README.md) |
+| **其余辅助/扇出宏** | 时钟扇出 / 本地复制缓冲与对齐预留宏 | 3 | `25,686` | `5.1%` | [chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md) |
+| **功能宏合计** | 全部 21 个独立签核宏 | **21** | **`302,393`** | **`59.5%`** | — |
+| **阻尼 PDN 去耦阵** | 12 块 MIM1+MIM2 + 串联阻尼电阻（`761.0 pF`, `R_eq = 1.51 Ω`） | 12 | `109,500` | `21.5%` | [chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md) |
+| **走线通道与隔离沟** | 2 GHz 时钟通道、安静模拟保护沟与电源总线 | — | `96,531` | `19.0%` | — |
+| **芯片核心总计** | **`845.4 × 601.4 µm`**（不含外圈 Padring / ESD） | — | **`508,424`** (`0.5084 mm²`) | **`100.0%`** | — |
+
+---
+
+## 2. 历史参考：早期版图前 CML 粗估（2026-11-07）
+
+早期未画版图前对旧全 CML 架构（r5 PLL + CML TX + 11-03 CML RX，不含数字宏、LDO、阻尼 PDN 与布线通道）的脚本粗估合计约 `0.28 mm²` 有源 + `0.036 mm²` MIM（≈ `0.31 mm²`，原始数据 [area_estimate.json](../data/area_estimate.json)，脚本 [area_estimate.py](../../verification/analysis/area_estimate.py)）。切换到 Zero-CML 架构并完成真实版图后，TX 仅 `0.034 mm²`、RX 仅 `0.048 mm²`、全套数字 Top 仅 `0.104 mm²`，含全部 LDO/Bias/PDN 去耦与布线通道的整片核心控制在 `0.508 mm²`。

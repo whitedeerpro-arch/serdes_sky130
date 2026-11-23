@@ -8,7 +8,9 @@
 
 ## 项目与规格
 
-SKY130、1.8 V、4 Gb/s SerDes：250 MHz 参考 → 2 GHz 四级 CML 环振 PLL → 16:1 CML 电流舵串化 → 100 Ω 线驱动；RX 为端接/CTLE → PI → 四相半速 CML 采样 → 数字 CDR → 16 位解串。
+SKY130A、1.8 V、4 Gb/s Zero-CML NRZ SerDes：
+- **时钟与供电**：250 MHz 参考 → 2 GHz 四级环振 PLL v4（`r6` + PTAT `28/66` + CP v4/v4.1 + 融合 LF + SAFF-TSPC ÷8 + `r5` CML→CMOS），由独立 [`analog/ldo/`](analog/ldo/README.md)（HV18 `v2_cur`）与 [`analog/bias/`](analog/bias/README.md)（BIAS v2）供电与偏置；
+- **TX / RX / Digital**：TX 为 Zero-CML 16:4 CMOS 串化 + 四相 N-over-N 28-slice SST 线驱动（`analog/tx/sst/`，v4.3，含 2-tap FFE）；RX 为端接/CTLE → 2 GHz 64 码纯 CMOS PI → 四分之一速 Double-Tail 动态 CMOS 采样 → 8→32 解串（`analog/rx/cmos_rx/`，v2.2）；数字为统一精简多速率顶层宏 `serdes_digital_top_v3`（`digital/pnr/`，v3.1）。早期全 CML 版本保留在各自旧目录作历史参考。
 
 规格政策（2026-10-30 与所有者确认）：
 

@@ -1,66 +1,35 @@
 # 版本与基线
 
-> 当前组合、采用状态与验证边界见[current.md](../status/current.md)，本页只维护修订关系和源文件导航。执行顺序见[计划](../status/prelayout_plan.md)。
+> 项目级采用状态与验证数字唯一入口见 **[current.md](../status/current.md)**，设计文档索引见 **[docs/design/README.md](../design/README.md)**。本页维护当前 4 Gb/s Zero-CML 主线源码入口与历史基线对应关系。
 
-## 基线政策
+---
 
-- 源码、文档、配置和小数据由git管理，`results/`只留磁盘（索引入库）。当前推进基准为`baseline-prelayout-20261113`；上次交接标签`baseline-handover-20261030`保留作历史，不再作为当前组合入口。
-- 每个模块的当前修订记录在 `config/*_working_revision.toml`，内容包括源文件、关键参数和历史身份；项目级验证汇总链接current.md。改电路时更新对应文件，不覆盖旧单元：新单元用新文件/子电路名，旧单元保留给依赖它的模块和历史证据。
-- 改动后在关键工况上重跑该模块的回归，再扩展到 45 条件。建议的关键工况取自历史上暴露问题的点：TT/1.8 V/27 °C、SS/1.65 V/−40 °C、SS/1.65 V/85 °C、FS/1.65 V/85 °C、FS/1.65 V/−40 °C（分频尾管余量），以及 FF/FS/1.95 V/−40 °C（CMOS 过冲）。
-- v0.1 曾以"冻结"形式发布，但之后分频器、VCO、转换器等都继续修改，冻结并未真正约束开发。保留其目录与哈希清单作为历史证据，不再新建冻结版本。
+## 1. 当前 4 Gb/s Zero-CML 发布主线源码入口
 
-## 修订线
+| 子系统 | 权威网表 / RTL 源码 | 已签核 PDK 版图目录 | 设计文档 |
+|---|---|---|---|
+| **PLL v4 顶层** | [`pll_top_r6_v4_upgrade.spice`](../../analog/pll/top/spice/pll_top_r6_v4_upgrade.spice) | 片级整合（各子宏独立签核） | [pll_vco_r6_perf.md](../design/pll_vco_r6_perf.md) |
+| **VCO r6 + PTAT** | [`vco_ring4_r6.spice`](../../analog/pll/vco/spice/vco_ring4_r6.spice)、[`vco_ptat_bias.spice`](../../analog/pll/vco/spice/vco_ptat_bias.spice) | [`sym9_clean`](../../analog/pll/vco/layout/variants/sym9_clean/README.md) · [`ptat_bias_pdk`](../../analog/pll/vco/layout/variants/ptat_bias_pdk/README.md) | [pll_vco_r6_ptat.md](../design/pll_vco_r6_ptat.md) |
+| **CP v4 / v4.1 & LF v2** | [`charge_pump_steer_v4.spice`](../../analog/pll/cp/spice/charge_pump_steer_v4.spice)（v4.1 微修 [`charge_pump_steer_v4p1_cand.spice`](../../analog/pll/cp/spice/charge_pump_steer_v4p1_cand.spice)）、[`passive_rc_pdk_k4.spice`](../../analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice) | [`cp/v4_pdk`](../../analog/pll/cp/layout/variants/v4_pdk/README.md) · [`lf/fused_pdk`](../../analog/pll/loop_filter/layout/variants/fused_pdk/README.md) | [pll_cp_v4.md](../design/pll_cp_v4.md) |
+| **PFD / ÷8 / `r5` 接收器** | [`pfd_sc.spice`](../../analog/pll/pfd/spice/pfd_sc.spice)、[`tspc_reclock_prescaler8_2g.spice`](../../analog/pll/divider/spice/tspc_reclock_prescaler8_2g.spice)、[`cml_to_cmos_r5.spice`](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice) | [`pfd/pdk`](../../analog/pll/pfd/layout/variants/pdk/README.md) · [`saff_reclock_2g_pdk`](../../analog/pll/divider/layout/variants/saff_reclock_2g_pdk/README.md) · [`r5_pdk`](../../analog/common/cml_to_cmos/layout/variants/r5_pdk/README.md) | [pll_tspc_reclock_divider.md](../design/pll_tspc_reclock_divider.md)、[clock_receiver.md](../design/clock_receiver.md) |
+| **HV18 LDO v2_cur** | [`pll_supply_hv18_v2_cur.spice`](../../analog/ldo/spice/pll_supply_hv18_v2_cur.spice) | [`ldo/v2_cur_pdk`](../../analog/ldo/layout/variants/v2_cur_pdk/README.md) · [`bias_filter_r4_pdk`](../../analog/ldo/layout/variants/bias_filter_r4_pdk/README.md) | [ldo_v2.md](../design/ldo_v2.md) |
+| **BIAS v2** | [`bias_v2.spice`](../../analog/bias/spice/bias_v2.spice) | [`bias/v2_pdk`](../../analog/bias/layout/variants/v2_pdk/README.md) | [bias_v2.md](../design/bias_v2.md) |
+| **TX Zero-CML SST v4.3** | [`analog/tx/sst/spice/`](../../analog/tx/sst/spice/) | [`tx/sst/v4_pdk`](../../analog/tx/sst/layout/variants/v4_pdk/README.md) | [tx_sst_v4.md](../design/tx_sst_v4.md) |
+| **RX Zero-CML CMOS v2.2** | [`analog/rx/cmos_rx/spice/`](../../analog/rx/cmos_rx/spice/) | [`rx/cmos_rx/v2_pdk`](../../analog/rx/cmos_rx/layout/variants/v2_pdk/README.md) | [rx_cmos_v2.md](../design/rx_cmos_v2.md) |
+| **Digital Top v3.1** | [`digital/pnr/rtl_v3/serdes_digital_top_v3.sv`](../../digital/pnr/rtl_v3/serdes_digital_top_v3.sv) | [`hd_pnr_v3_unified`](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json) | [digital_top_v3.md](../design/digital_top_v3.md) |
+| **PCB 信道家族（C0–C5）** | [`config/channel_family.toml`](../../config/channel_family.toml)、`verification/models/channel/pcb_family/*.s4p` | — | [channel_model.md](../design/channel_model.md) |
 
-| 模块组 | 工作修订 / 设计入口 | 历史修订如何使用 |
-|---|---|---|
-| PLL前端与环路 | [pll_working_revision.toml](../../config/pll_working_revision.toml)、[环路](../design/pll_loop.md) | r5/4bit与更早版本按实际输入/负载保留；不得转为r6码表、噪声或原生闭环资格 |
-| TX分发/入口/树/驱动 | [tx_working_revision.toml](../../config/tx_working_revision.toml)、[完整TX](../design/tx_parallel_serializer.md) | baseline_revision保留r2；各源边界分别继承；候选局部完成不自动改采用组合 |
-| PLL供电 | [ldo_working_revision.toml](../../config/ldo_working_revision.toml)、[LDO r4](../design/ldo_r4.md) | r1–r3动态供电开关是历史方案 |
-| RX前端/PI/采样/读出/数字 | [rx_working_revision.toml](../../config/rx_working_revision.toml) | stock/ac/旧pair与mutable include记录按原边界，不追认为当前W40读出资格 |
-| Bias/带隙/参考缓冲 | [bias_working_revision.toml](../../config/bias_working_revision.toml)、[Bias](../design/bias.md) | 理想参考、候选定宽参考串及生产参考分别标识 |
-| Channel | [channel_family.toml](../../config/channel_family.toml)、[信道](../design/channel_model.md) | 合成模型与真实板线/封装提取分别标识 |
+---
 
-### PLL 源文件与修订关系
+## 2. 版本与演进策略
 
-当前是 [clock_frontend_r6q.spice](../../analog/pll/top/spice/clock_frontend_r6q.spice) ＋ [vco_ring4_r6.spice](../../analog/pll/vco/spice/vco_ring4_r6.spice)，完整环路为 [pll_core_r6k4q.spice](../../analog/pll/top/spice/pll_core_r6k4q.spice)。r5/4bit 与早期 r3 保留最近 2–3 个 Var；更早 v0.1–r4 历史文件已归档退休（见 [retired_legacy_vars_20261120.json](../../results/catalog/retired_legacy_vars_20261120.json)）。
+- **不覆盖旧单元**：新架构/新修订使用独立文件或目录（如 `analog/tx/sst/`、`analog/rx/cmos_rx/`、`digital/pnr/rtl_v3/`），历史 CML 电路与 `config/*_working_revision.toml` 机器参数按原身份保留以维持回归可追溯。
+- **已退役旧版物理产物归档**：过时的中间版图变体（`hd_pnr_v2`、LDO `r4/smallcap/mim/v2_pdk`、BIAS v1 `pdk`、CP v3 `pdk`、LF v1 `pdk`、Divider `cmos_2g/sync2`、VCO `r6_pdk` 等）均已带 SHA-256 存证归档至盘外，详见 [`retired_pre_release_20261123.json`](../../results/catalog/retired_pre_release_20261123.json)、[`retired_legacy_vars_20261120.json`](../../results/catalog/retired_legacy_vars_20261120.json) 与 [`retired_divider_vars_20261120.json`](../../results/catalog/retired_divider_vars_20261120.json)。
+- **5 Gb/s 拓展探索分支**：超额目标探索（5G 环振/LC-PLL 与 5 Gb/s 链路摸底）隔离保存在本地分支 `exp/5g-stretch`，不混入 4 Gb/s 发布主线 `main`。
 
-| 单元 | 当前采用（r6） | 最近对照 / 候选 |
-|---|---|---|
-| 原生时钟前端 | [clock_frontend_r6q.spice](../../analog/pll/top/spice/clock_frontend_r6q.spice) | [clock_frontend_r5q.spice](../../analog/pll/top/spice/clock_frontend_r5q.spice)、[clock_frontend_r5.spice](../../analog/pll/top/spice/clock_frontend_r5.spice) |
-| 完整 PLL 核心 | [pll_core_r6k4q.spice](../../analog/pll/top/spice/pll_core_r6k4q.spice) | [pll_core_r5k4q.spice](../../analog/pll/top/spice/pll_core_r5k4q.spice)、[pll_core_r5k4.spice](../../analog/pll/top/spice/pll_core_r5k4.spice) |
-| VCO 与电容阵列 | [vco_ring4_r6.spice](../../analog/pll/vco/spice/vco_ring4_r6.spice)、[vco_delay_r6.spice](../../analog/pll/vco/spice/vco_delay_r6.spice)、[cap_bank_5b.spice](../../analog/pll/vco/spice/cap_bank_5b.spice) | [vco_ring4_4b.spice](../../analog/pll/vco/spice/vco_ring4_4b.spice)、[cap_bank_4b.spice](../../analog/pll/vco/spice/cap_bank_4b.spice) |
-| 时钟接收器（反馈 / 全速） | [cml_to_cmos_pvt_candidate.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)（250 MHz 反馈） | [cml_to_cmos_r4.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice)、[cml_to_cmos_r5.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice)（v6） |
-| ÷8 prescaler | [cml_prescaler8.spice](../../analog/pll/divider/spice/cml_prescaler8.spice)、[cml_div2.spice](../../analog/pll/divider/spice/cml_div2.spice)、[cml_latch.spice](../../analog/pll/divider/spice/cml_latch.spice) | CML 候选 [sync_prescaler8_2stack.spice](../../analog/pll/divider/spice/sync_prescaler8_2stack.spice)；纯 CMOS/TSPC 候选 [cmos_prescaler8_2g.spice](../../analog/pll/divider/spice/cmos_prescaler8_2g.spice)、[tspc_reclock_prescaler8_2g.spice](../../analog/pll/divider/spice/tspc_reclock_prescaler8_2g.spice)（独立 10 端口分支，未切换主线；旧分频归档见 [retired_divider_vars_20261120.json](../../results/catalog/retired_divider_vars_20261120.json)） |
-| PFD / 锁定检测 | [pfd_sc.spice](../../analog/pll/pfd/spice/pfd_sc.spice)、[phase_window.spice](../../analog/pll/pfd/spice/phase_window.spice) | [pfd_cmos.spice](../../analog/pll/pfd/spice/pfd_cmos.spice) |
-| CP / LF | [charge_pump_steer.spice](../../analog/pll/cp/spice/charge_pump_steer.spice)、[passive_rc_pdk_k4.spice](../../analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice) | [charge_pump.spice](../../analog/pll/cp/spice/charge_pump.spice)、[passive_rc_precharge.spice](../../analog/pll/loop_filter/spice/passive_rc_precharge.spice) |
-| 启动监督 RTL | [pll_startup_supervisor.sv](../../digital/pll/rtl/pll_startup_supervisor.sv) | [pll_control_top.sv](../../digital/pll/rtl/pll_control_top.sv) |
+---
 
-### TX 工作结构源文件
+## 3. 历史基线参考
 
-| 单元 | 文件 |
-|---|---|
-| 串化器 | [serializer16_retimed_lowov.spice](../../analog/tx/serializer/spice/serializer16_retimed_lowov.spice) |
-| 低过驱动逻辑单元与偏置 | [cml_lowov_cells.spice](../../analog/common/cml_mux/spice/cml_lowov_cells.spice) |
-| 时钟分发 | [tx_clock_dist_v3.py](../../analog/tx/clock_distribution/spice/tx_clock_dist_v3.py)（v3 规范入口；r2 基线 [cml_clock_distribution_tx_lowov.spice](../../analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice)） |
-| 输出级 | [cml_line_driver_lowvt_enable.spice](../../analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice) |
-| P-LVT 适配器 | [sky130_pfet_lvt.spice](../../analog/common/devices/spice/sky130_pfet_lvt.spice) |
-
-### RX 工作结构源文件
-
-| 单元 | 文件 |
-|---|---|
-| 端接 / CTLE | [rx_input_termination.spice](../../analog/rx/input/spice/rx_input_termination.spice)、[rx_ctle_rc.spice](../../analog/rx/ctle/spice/rx_ctle_rc.spice) |
-| PI | [pi_rotator.spice](../../analog/rx/pi/spice/pi_rotator.spice) 及同目录单元 |
-| 采样与修调 | [rx_half_rate_samples_ac.spice](../../analog/rx/sampler/spice/rx_half_rate_samples_ac.spice)、[rx_offset_trim.spice](../../analog/rx/sampler/spice/rx_offset_trim.spice)；窗口用ac_trim，读出/校准用ac_trim_rk |
-| 物理读出 | [rx_readout_demux2.spice](../../analog/rx/sampler/spice/rx_readout_demux2.spice)、[rx_readout_deser16.spice](../../analog/rx/sampler/spice/rx_readout_deser16.spice)；旧pair只作历史/对照 |
-| 数字 | [digital/rx/rtl](../../digital/rx/rtl/) |
-
-## 修订之间的依赖
-
-PLL→TX已有开环原生静态、回放动态与理想源动态三种边界，具体驱动及覆盖统一见[current.md](../status/current.md#3-tx-被什么时钟驱动过)。改变VCO、dummy、负载或供电域后，按源/负载差异检查受影响接口。RX理想锚点不自动变成原生锚点；PLL预充锁定不自动变成从零启动。
-
-采用新修订时列继承、需重校与作废的边界；未改CP/分频等单元的局部结果继续保留。具体流程见[工作流](../status/workflow.md)和[PVT继承规则](../verification/pvt_coverage.md)。本页整理前的修订/数字表留在[历史快照](../history/revisions_snapshot_20261113.md)。
-
-## v0.1 历史基线
-
-2026-10-28 发布：PLL（250 MHz 参考、÷8、50 µA CP、6.5 kΩ/40 pF/2 pF LF）、双节点预充与启动监督、匹配抽出与时钟分发、16:1 CML 串化器（末级锁存器尾管 24 µm、每端 200 Ω）。快照与逐文件哈希在 [releases/v0.1-design-freeze-20261028](../../releases/v0.1-design-freeze-20261028/README.md)，说明见 [历史记录](../history/design_freeze_v0p1.md)。依赖它的共享旧单元保持原样。
+- **`baseline-prelayout-20261113`**（历史全 CML 版图前基线）：PLL `pll_core_r6k4q` + CML ÷8、TX `v3/extra5`（[`serializer16_retimed_lowov.spice`](../../analog/tx/serializer/spice/serializer16_retimed_lowov.spice) + [`cml_line_driver_lowvt_enable.spice`](../../analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice)）、RX `ac_trim/c2/W40`（[`rx_half_rate_samples_ac.spice`](../../analog/rx/sampler/spice/rx_half_rate_samples_ac.spice)）、HV18 LDO `r4` 与 Bias v1。详见 [历史快照](../history/revisions_snapshot_20261113.md)。
+- **`v0.1-design-freeze-20261028`**（早期原型冻结基线）：快照与逐文件哈希保留在 [releases/v0.1-design-freeze-20261028](../../releases/v0.1-design-freeze-20261028/README.md)，说明见 [历史记录](../history/design_freeze_v0p1.md)。

@@ -1,0 +1,73 @@
+* Upgraded Integrated 2 GHz PLL Top-Level Candidate (r6 + BIAS v2 + PTAT 28/66 + LDO v2_cur + CP v4).
+* Isolated candidate netlist; does NOT modify adopted mainline pll_core_r6k4q.spice or working revisions.
+*
+* Integrated analog upgrades:
+*   1. BIAS v2 + VCO PTAT 28/66 blend (`serdes_bias_top_v2_ptat` from vco_ptat_bias.spice + bias_v2.spice):
+*      - Single-stage FC-OTA bandgap (zero B-sources, head-R calibrated, stacked MIM2),
+*      - Constant-swing `icml` (n=85) for host CML divider/receiver/dummies,
+*      - 28/66 PTAT-blended `icml_vco` (`serdes_bias_cml_blend_v2`) for VCO + extraction buffers (45/45 3-temp single-code),
+*      - Current-mode `i_ldo0` (10 uA) directly into LDO v2_cur,
+*      - Current-mode `i_ldo1` (10 uA) directly into CP v4 dummy-follower OTA (`ibias`),
+*      - Current-mode `icp` (50 uA) into local `serdes_bias_cp_v2` (generates `vbn` on VSS and `vbp` on `vdd_q`).
+*   2. HV18 LDO v2 current-mode (`serdes_pll_supply_hv18_v2_cur` from pll_supply_hv18_v2_cur.spice):
+*      - 1:1 current-mode `i_ldo0` input, 60 pF stacked MIM2, active overshoot clamp, 3.0-3.6 V -> 1.8 V quiet rail.
+*   3. Wide-swing active-matching steering CP v4 (`pll_cp_steer_v4` from charge_pump_steer_v4.spice):
+*      - 1/4-scale unit-finger replica + 8T servo OTA + Miller MIM cap (0.193% mismatch, +230 mV upper headroom).
+*   4. Exact mainline r6 PLL blocks (unchanged):
+*      - `pll_pfd_sc_dly` (standard-cell PFD with dlygate4sd1_1),
+*      - `pll_loop_filter_k4` (4.13 kOhm / 18 pF PDK loop filter with dual-node precharge),
+*      - `pll_clock_frontend_r6q` (`pll_vco_ring4_r6`, 4x `serdes_cml_buffer`, `pll_cml_prescaler8`,
+*        `serdes_cml_to_cmos_pvt_candidate`, 3x `pll_frontend_dummy_load`),
+*      - `serdes_pll_bias_lowpass_slow_r4` (1 MOhm / 16 pF VCO tail filter).
+*
+* Dependencies loaded by testbench:
+*   sky130_primitives.spice, sky130_pfet_lvt.spice, cmos_logic.spice,
+*   cml_delay_resistive.spice, cml_buffer.spice, cml_to_cmos.spice, cml_to_cmos_pvt_candidate.spice,
+*   cap_bank_5b.spice, vco_delay_r6.spice, vco_ring4_r6.spice,
+*   cml_latch.spice, cml_div2.spice, cml_prescaler8.spice, clock_frontend_r6q.spice,
+*   pfd_sc.spice (+ sky130_fd_sc_hd.spice), charge_pump_steer_v4.spice,
+*   passive_rc_precharge.spice, passive_rc_pdk_k4.spice,
+*   ldo_passives.spice, pll_bias_filter_r4.spice,
+*   ldo_v2_passives.spice, ldo_hv18_core_v2.spice, pll_supply_hv18_v2_cur.spice,
+*   bias_v2.spice, vco_ptat_bias.spice.
+
+.subckt pll_core_r6k4q_v4 ref rst_b vbn vbp ibias vbias vbias_vco cfg0 cfg1 cfg2 cfg3 cfg4 pre_ref pre_en ctrl z up dn fb0
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n vdd vdd_q vss
+Xtail vbias_vco vbias_q vss serdes_pll_bias_lowpass_slow_r4
+Xclock ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias_q fb0 vdd vdd_q vss
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n pll_clock_frontend_r6q
+Xpfd ref fb0 rst_b up dn vdd vss pll_pfd_sc_dly
+Xcp up dn cpo vbn vbp ibias vdd_q vss pll_cp_steer_v4
+Xlf cpo ctrl z pre_ref pre_en vdd_q vss pll_loop_filter_k4
+.ends pll_core_r6k4q_v4
+
+.subckt pll_top_r6_v4_upgrade vin vdd vdd_q vss ref rst_b en_ldo
++ cfg0 cfg1 cfg2 cfg3 cfg4
++ g4 g3 g2 g1 g0
++ t0 t1 t2 t3 t4 t5
++ pre_ref pre_en
++ vbg ctrl z up dn fb0
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n
++ params: nf_const=28 nf_ptat=66
+
+* --- Integrated BIAS v2 + 28/66 PTAT VCO bias macro ---
+Xbias vbg vcm pref icml icml_vco ictle icp i_ldo0 i_ldo1
++ g4 g3 g2 g1 g0 vss vss vss vss vss vdd vss
++ serdes_bias_top_v2_ptat nf_const={nf_const} nf_ptat={nf_ptat}
+
+* Local bias diodes & clean terminations for unused shared-chip bias branches
+Xdcml_host icml     vss serdes_bias_cml_v2
+Xdcml_vco  icml_vco vss serdes_bias_cml_v2
+Xdcp       icp vbp  vdd_q vss serdes_bias_cp_v2
+Xdctle     ictle    vss serdes_bias_ctle_v2
+Cvcm       vcm      vss 5p
+Cpref      pref     vss 100f
+Rpref_b    pref     vss 100Meg
+
+* --- Current-mode HV18 LDO v2_cur (3.0-3.6 V -> 1.8 V quiet rail) ---
+Xldo vin vdd vdd_q vbg i_ldo0 en_ldo t0 t1 t2 t3 t4 t5 vss serdes_pll_supply_hv18_v2_cur
+
+* --- Upgraded r6 PLL core with CP v4, PTAT VCO tail, mainline PFD/LF/VCO/div8 ---
+Xcore ref rst_b icp vbp i_ldo1 icml icml_vco cfg0 cfg1 cfg2 cfg3 cfg4 pre_ref pre_en ctrl z up dn fb0
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n vdd vdd_q vss pll_core_r6k4q_v4
+.ends pll_top_r6_v4_upgrade

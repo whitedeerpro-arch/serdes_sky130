@@ -1,0 +1,35 @@
+{
+  "id": "20261107T102821Z_b9a39b64d0",
+  "module": "tx.clocking",
+  "date": "2026-11-07",
+  "timestamp": "2026-11-07T10:28:21.099586+00:00",
+  "title": "末级建立不足的选择时钟改进：局部校准与TT/FS完整回归",
+  "phase": "validation",
+  "problem": "完整TX的FS低压热角在字捕获/保持正确时仍有0.52mV裕量、0.333UI散布及额外交越。",
+  "model": "保持输入/负载不变追加内部观测，再登记g3/c2g边界；原样切片校准后比较时移与实际缓冲级。",
+  "changes": "2GHz选择路径extra中间缓冲由1增至3；末级MUX/保持尺寸与其余时钟级数不变。",
+  "validation": "4基线/20时移点及实际1/2/3级局部比较完成；新边界完整120ns：TT155.675mV/0.03137UI、FS128.293mV/0.08961UI，256载荷、训练/marker/位序、捕获/保持和计数正确。",
+  "conclusion": "两点串化眼图门槛恢复，继续扩SS低压冷角。内部摆幅I-17、全45点/源阻抗/噪声/MC和物理guard仍开。",
+  "attachments": [
+    {
+      "title": "tx_final_retime.md",
+      "path": "docs/design/tx_final_retime.md"
+    },
+    {
+      "title": "tx_parallel_serializer.md",
+      "path": "docs/design/tx_parallel_serializer.md"
+    },
+    {
+      "title": "tx_final_retime_boundary.png",
+      "path": "docs/figures/tx/ingress/tx_final_retime_boundary.png"
+    },
+    {
+      "title": "tx_parallel_serializer_eye.png",
+      "path": "docs/figures/tx/ingress/tx_parallel_serializer_eye.png"
+    },
+    {
+      "title": "tx_final_retime_characterization.md",
+      "path": "docs/history/tx_final_retime_characterization.md"
+    }
+  ]
+}

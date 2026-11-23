@@ -1,0 +1,54 @@
+* Parallel two-level MIM: M3=b, M4=a, M5=b. Explicit1pF devices; no mf scaling.
+* Only core supply/cascode filters use these; reference/output/Miller unchanged.
+.subckt serdes_ldo_stack32 a b
+X1_0 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_1 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_2 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_3 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_4 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_5 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_6 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_7 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_8 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_9 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_10 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_11 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_12 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_13 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_14 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_15 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X2_0 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_1 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_2 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_3 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_4 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_5 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_6 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_7 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_8 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_9 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_10 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_11 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_12 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_13 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_14 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_15 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+.ends serdes_ldo_stack32
+.subckt serdes_ldo_stack16 a b
+X1_0 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_1 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_2 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_3 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_4 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_5 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_6 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X1_7 a b sky130_fd_pr__cap_mim_m3_1 w=22.1965 l=22.1965
+X2_0 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_1 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_2 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_3 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_4 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_5 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_6 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+X2_7 b a sky130_fd_pr__cap_mim_m3_2 w=22.1965 l=22.1965
+.ends serdes_ldo_stack16

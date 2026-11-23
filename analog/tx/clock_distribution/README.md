@@ -1,0 +1,30 @@
+# CML相位路由与时钟分发
+
+当前工作版本（v3 / S4 同步计数器＋2 GHz 副本）规范生成器入口：[tx_clock_dist_v3.py](spice/tx_clock_dist_v3.py)（原 `analog/tx/serializer/tb/clock_replay/variants/dist_v3.py` 保留薄兼容 shim；历史 r2 基线见 `spice/cml_clock_distribution_tx_lowov.spice`）。
+
+---
+
+## 历史 r2 固定相位路由说明
+
+测试路径为原生PLL连续边沿记录 → 理想CML边沿源 → 实际MOS预驱动/电容微调 → 实际MOS扇出buffer → 串化器选择端。
+每路两级非反相CML buffer，共8级；直接连接现有串化器8/4/2/3组本地时钟源跟随器负载。
+2GHz路的3组包括末级选择器和两只重定时锁存器。
+
+固定路由（输入源端口正负定义即所选相位极性）：
+
+| 路径 | 所选PLL节点对 | 电容微调，每端 |
+|---|---|---:|
+| 250MHz | d08p / d08n，VCO相位0的÷8 | 100fF |
+| 500MHz | d24p / d24n，VCO相位2的÷4 | 500fF |
+| 1GHz | d32p / d32n，VCO相位3的÷2 | 160fF |
+| 2GHz | b0n / b0p，相位0抽出buffer的互补极性 | 270fF |
+
+微调电容接在预驱动输出，后级buffer驱动实际选择器负载；不是行为时间延迟。
+路由/电容配置由独立时钟标定得到，未使用负载数据来调相。
+配置是本TT启动状态的固定接线，不含自动相位选择/校准或确定相位复位硬件。
+
+源端理想化保留PLL每个边沿的时刻、频率、占空比和粗相位，将共模/摆幅/斜率设置为1.63V/400mVpp差分/0.08UI。
+该理想边界按本轮要求隔开PLL端口反作用；buffer之后的真实时钟负载和数据耦合参与仿真。
+电阻和微调电容仍是理想无源值，未映射到提取版图。
+
+结果见[实际时钟分发结果](../../../docs/history/physical_clock_distribution_results.md)；测试记录在results/analog/tx/clock_distribution/calibration/。

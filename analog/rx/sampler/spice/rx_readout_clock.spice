@@ -1,0 +1,17 @@
+* RX readout clock chains from the CML readout clock rkp/rkn (serdes_rx_half_rate_samples_ac_rk).
+* full: 2 GHz CMOS clock (r4 full-rate receiver + two inverters, as in serdes_rx_cmos_pair_align);
+* div2: CML divide-by-2 (PLL r2 pll_cml_div2) then the same receiver: 1 GHz CMOS clock for a CML
+* 1:2 demux.  Exploratory (2026-11-02).  Dependencies: cml_to_cmos.spice, cml_to_cmos_r4.spice,
+* cmos_logic.spice, pll/divider cml_latch.spice and cml_div2.spice.
+.subckt serdes_rx_readout_clock_full rkp rkn ck vbias vdd vss
+Xconv rkp rkn ckp ckn vbias vdd vss serdes_cml_to_cmos_r4
+Xb1 ckn cki vdd vss serdes_cmos_inv wn=2 wp=4
+Xb2 cki ck vdd vss serdes_cmos_inv wn=8 wp=16
+.ends serdes_rx_readout_clock_full
+
+.subckt serdes_rx_readout_clock_div2 rkp rkn ck vbias vdd vss
+Xdiv rkp rkn qp qn mp mn vbias vdd vss pll_cml_div2
+Xconv qp qn ckp ckn vbias vdd vss serdes_cml_to_cmos_r4
+Xb1 ckn cki vdd vss serdes_cmos_inv wn=2 wp=4
+Xb2 cki ck vdd vss serdes_cmos_inv wn=8 wp=16
+.ends serdes_rx_readout_clock_div2

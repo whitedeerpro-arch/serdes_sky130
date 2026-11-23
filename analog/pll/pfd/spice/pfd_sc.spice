@@ -1,0 +1,42 @@
+* PFD from sky130_fd_sc_hd library cells (2026-11-11, chosen for layout; docs/design/pll_loop.md "PFD 标准单元版").
+* Same structure as pll_pfd (pfd_cmos.spice): two reset DFFs (dfrtp_1, D tied high), NAND of the two outputs, two
+* inverters as reset delay (no added capacitance), AND with rst_b -> clear_b (active-low reset of both DFFs); UP / DN
+* buffered by inv_4 then inv_8 (inv_2 / inv_4 left a 40-54 ps UP / DN width asymmetry into the steering CP's unequal
+* input loads at the low-voltage corners).  Against pll_pfd with the k = 4 CP (pfd/tb/pfd_cp_sc, 7 corners, nominal):
+* zero-charge phase +0...+11 ps, no dead zone (gain +-5 / +-40 ps 0.82-1.18), UP / DN width 226-710 ps.  Needs
+* $PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice (no junction areas there: delays optimistic
+* until extraction).  Pin order as pll_pfd.
+.subckt pll_pfd_sc ref fb rst_b up dn vdd vss
+Xup ref vdd clear_b vss vss vdd vdd qu sky130_fd_sc_hd__dfrtp_1
+Xdn fb vdd clear_b vss vss vdd vdd qd sky130_fd_sc_hd__dfrtp_1
+Xdetect qu qd vss vss vdd vdd request_b sky130_fd_sc_hd__nand2_1
+Xd1 request_b vss vss vdd vdd rd1 sky130_fd_sc_hd__inv_1
+Xd2 rd1 vss vss vdd vdd rd2 sky130_fd_sc_hd__inv_1
+Xclear rst_b rd2 vss vss vdd vdd clear_b sky130_fd_sc_hd__and2_1
+Xub1 qu vss vss vdd vdd ub sky130_fd_sc_hd__inv_4
+Xub2 ub vss vss vdd vdd up sky130_fd_sc_hd__inv_8
+Xdb1 qd vss vss vdd vdd db sky130_fd_sc_hd__inv_4
+Xdb2 db vss vss vdd vdd dn sky130_fd_sc_hd__inv_8
+.ends pll_pfd_sc
+
+* ADOPTED (2026-11-12): pll_pfd_sc_dly.  pll_pfd_sc above stuck (one output permanently high) in 5 of 100 mismatch
+* samples at SF 1.65 V -40 C: its reset loop (late clock edge -> Q -> nand2 -> 2 x inv_1 -> and2 -> RESET_B release,
+* 226-710 ps nominal) is only 1.02-1.2 x the dfrtp_1 RESET_B removal constraint of the Liberty tables (0.68 ns
+* ss_n40C_1v60, 0.30 tt_025C_1v80, 0.19 ff), so with mismatch the late DFF re-captures D = 1.  One dlygate4sd1_1
+* (0.32 / 0.16 / 0.10 ns at the same corners, i.e. scaling with the constraint) makes the loop 307-963 ps, 1.4-1.65 x.
+* Mismatch MC (pfd/tb/pfd_cp_mc --pfd sc_dly, SF / SS 1.65 V -40 C x 100): no stuck sample, no dead zone, static
+* offset |mean| + k sd 239 / 256 ps (pll_pfd 167 / 189).  Nominal 7 corners against pll_pfd_sc (pfd/tb/pfd_cp_sc
+* sc8 / sc8_dly): zero-charge phase +3...+16 ps, gain +-5 / +-40 ps 0.96-1.14.
+.subckt pll_pfd_sc_dly ref fb rst_b up dn vdd vss
+Xup ref vdd clear_b vss vss vdd vdd qu sky130_fd_sc_hd__dfrtp_1
+Xdn fb vdd clear_b vss vss vdd vdd qd sky130_fd_sc_hd__dfrtp_1
+Xdetect qu qd vss vss vdd vdd request_b sky130_fd_sc_hd__nand2_1
+Xd1 request_b vss vss vdd vdd rd1 sky130_fd_sc_hd__inv_1
+Xd2 rd1 vss vss vdd vdd rd2 sky130_fd_sc_hd__inv_1
+Xd3 rd2 vss vss vdd vdd rd3 sky130_fd_sc_hd__dlygate4sd1_1
+Xclear rst_b rd3 vss vss vdd vdd clear_b sky130_fd_sc_hd__and2_1
+Xub1 qu vss vss vdd vdd ub sky130_fd_sc_hd__inv_4
+Xub2 ub vss vss vdd vdd up sky130_fd_sc_hd__inv_8
+Xdb1 qd vss vss vdd vdd db sky130_fd_sc_hd__inv_4
+Xdb2 db vss vss vdd vdd dn sky130_fd_sc_hd__inv_8
+.ends pll_pfd_sc_dly

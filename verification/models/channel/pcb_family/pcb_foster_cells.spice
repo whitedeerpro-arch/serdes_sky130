@@ -1,0 +1,22 @@
+* Positive-component synthetic medium. All dimensional parameters are per metre.
+.subckt pcb_foster_shunt a g params: dx=1
+Cinf a g {9.1e-11*dx}
+Rd0 a d0 {2.6525823848649225e+02/dx}
+Cd0 d0 g {3.0000000000000001e-12*dx}
+Rd1 a d1 {2.6525823848649225e+01/dx}
+Cd1 d1 g {3.0000000000000001e-12*dx}
+Rd2 a d2 {2.6525823848649219e+00/dx}
+Cd2 d2 g {3.0000000000000001e-12*dx}
+.ends pcb_foster_shunt
+.subckt pcb_foster_cell a b g params: dx=1
+Xsa a g pcb_foster_shunt dx={dx/2}
+Rdc a r {3.0000000000000000e+00*dx}
+Lext r s0 {2.2811214448909561e-07*dx}
+Rsk0 s0 s1 {4.1286250392006508e+01*dx}
+Lsk0 s0 s1 {6.5709108316175381e-08*dx}
+Rsk1 s1 s2 {1.3055858728676017e+02*dx}
+Lsk1 s1 s2 {2.0779044529782565e-08*dx}
+Rsk2 s2 b {4.1286250392006508e+02*dx}
+Lsk2 s2 b {6.5709108316175374e-09*dx}
+Xsb b g pcb_foster_shunt dx={dx/2}
+.ends pcb_foster_cell

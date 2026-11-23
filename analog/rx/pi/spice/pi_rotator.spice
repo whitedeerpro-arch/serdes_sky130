@@ -1,0 +1,29 @@
+* Full360 analog PI clock bank:4 native differential phase pairs =>8 anchors.
+* c0..c3 must be ordered phase ADVANCES0,45,90,135deg, not raw physical ring stage order.
+* Their reversed polarities supply180,225,270,315deg anchors.
+* Two physical differential outputs supply4 logical phases:
+* dp-dn=data0deg; ep-en=edge90deg; dn-dp=data180deg; en-ep=edge270deg.
+* Coarse onehots and thermometer controls are external; no binary decoder/retiming/CDR here.
+* Only change a coarse selector while its mixer leg has zero current; settle before reusing it.
+.subckt serdes_pi_rotator c0p c0n c1p c1n c2p c2n c3p c3n
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ dp dn ep en vbias vdd vss params: cmix=120f ib_wt=6 ib_r=800 mix_wt=1.5 mix_r=600 out_wt=12 out_r=600
+Xib0 c0p c0n u0p u0n vbias vdd vss serdes_cml_buffer wn=12 wt={ib_wt} rload={ib_r}
+Xib1 c1p c1n u1p u1n vbias vdd vss serdes_cml_buffer wn=12 wt={ib_wt} rload={ib_r}
+Xib2 c2p c2n u2p u2n vbias vdd vss serdes_cml_buffer wn=12 wt={ib_wt} rload={ib_r}
+Xib3 c3p c3n u3p u3n vbias vdd vss serdes_cml_buffer wn=12 wt={ib_wt} rload={ib_r}
+Xmux0a u0p u0n u1p u1n u2p u2n u3p u3n u0n u0p u1n u1p u2n u2p u3n u3p
++ a0 a1 a2 a3 a4 a5 a6 a7 m0ap m0an vdd vss serdes_pi_clock_mux8
+Xmux0b u0p u0n u1p u1n u2p u2n u3p u3n u0n u0p u1n u1p u2n u2p u3n u3p
++ b0 b1 b2 b3 b4 b5 b6 b7 m0bp m0bn vdd vss serdes_pi_clock_mux8
+Xmix0 m0ap m0an m0bp m0bn f0 f1 f2 f3 f4 f5 f6 f7
++ dp dn vbias vdd vss serdes_pi_sector cmix={cmix} wtail={mix_wt} rload={mix_r} out_w=48 out_wt={out_wt} out_r={out_r}
+Xmux1a u2p u2n u3p u3n u0n u0p u1n u1p u2n u2p u3n u3p u0p u0n u1p u1n
++ a0 a1 a2 a3 a4 a5 a6 a7 m1ap m1an vdd vss serdes_pi_clock_mux8
+Xmux1b u2p u2n u3p u3n u0n u0p u1n u1p u2n u2p u3n u3p u0p u0n u1p u1n
++ b0 b1 b2 b3 b4 b5 b6 b7 m1bp m1bn vdd vss serdes_pi_clock_mux8
+Xmix1 m1ap m1an m1bp m1bn f0 f1 f2 f3 f4 f5 f6 f7
++ ep en vbias vdd vss serdes_pi_sector cmix={cmix} wtail={mix_wt} rload={mix_r} out_w=48 out_wt={out_wt} out_r={out_r}
+.ends serdes_pi_rotator

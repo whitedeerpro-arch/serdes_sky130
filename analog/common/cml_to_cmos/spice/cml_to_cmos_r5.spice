@@ -1,0 +1,42 @@
+* Full-rate 2 GHz CML-to-CMOS clock receiver, revision r5 (AC-coupled self-biased pre-driver + balanced 2-stage CMOS buffer).
+* Eliminates both ss_v1650_t-40_mm mismatch skew/duty-cycle blow-up and SS-cold Magic RCX collapse:
+*   1. AC-coupled MIM cap (sky130_fd_pr__cap_mim_m3_1, ~100 fF) + 20 kOhm poly feedback resistor
+*      (sky130_fd_pr__res_high_po_0p35, ~20 kOhm) around Xbp/Xbn blocks Diff-to-SE DC/mismatch offset and
+*      biases near the Xbp switching threshold (continuous >= 1 GHz clock only; not for DC data).
+*   2. LVT-NMOS pre-driver Xbp/Xbn (4.5/10.0) + weak cross-coupled Xk_bp/Xk_bn (0.6/1.2) -> Xop/Xon (3.6/6.4)
+*      -> centered balanced buffer Xm1p/Xm1n (1.8/6.0) + weak cross-coupled Xkc_p/Xkc_n (0.42/1.0) -> Xo1p/Xo1n (3.2/8.0).
+* Dependencies: sky130_primitives.spice, cml_to_cmos.spice, cml_to_cmos_r4_v4.spice.
+
+.subckt serdes_rx_inverter_lvt in out vdd vss params: wn=4.5 wp=10.0 nfn=3 nfp=4
+Xn out in vss vss serdes_nfet_lvt w={wn} nf={nfn}
+Xp out in vdd vdd serdes_pfet w={wp} nf={nfp}
+.ends serdes_rx_inverter_lvt
+
+.subckt serdes_cml_to_cmos_r5 inp inn outp outn vbias vdd vss
++ params: wsf=32 wsf_sink=3 win=16 wload=32 wtail=32
+Xfp vdd inp fp vss serdes_nfet_lvt w={wsf} nf=8
+Xfn vdd inn fn vss serdes_nfet_lvt w={wsf} nf=8
+Xsp fp vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1
+Xsn fn vbias vss vss serdes_nfet w={wsf_sink} l=0.5 nf=1
+Xap fp fn ap vbias vdd vss serdes_rx_diff_to_se_v4
++ win={win} nfin=4 wload={wload} nfload=8 wtail={wtail} nftail=10
+Xan fn fp an vbias vdd vss serdes_rx_diff_to_se_v4
++ win={win} nfin=4 wload={wload} nfload=8 wtail={wtail} nftail=10
+* AC-coupled self-biased pre-driver (~100 fF MIM + ~20 kOhm poly R)
+XCac_p ap_ac ap sky130_fd_pr__cap_mim_m3_1 w=5.0 l=9.9
+XCac_n an_ac an sky130_fd_pr__cap_mim_m3_1 w=5.0 l=9.9
+XRfb_p ap_ac bp vss sky130_fd_pr__res_high_po_0p35 l=18.0
+XRfb_n an_ac bn vss sky130_fd_pr__res_high_po_0p35 l=18.0
+Xbp ap_ac bp vdd vss serdes_rx_inverter_lvt wn=4.5 wp=10.0 nfn=3 nfp=4
+Xbn an_ac bn vdd vss serdes_rx_inverter_lvt wn=4.5 wp=10.0 nfn=3 nfp=4
+Xk_bp bn bp vdd vss serdes_rx_inverter wn=0.6 wp=1.2 nfn=1 nfp=1
+Xk_bn bp bn vdd vss serdes_rx_inverter wn=0.6 wp=1.2 nfn=1 nfp=1
+Xop bp rawp vdd vss serdes_rx_inverter wn=3.6 wp=6.4 nfn=2 nfp=4
+Xon bn rawn vdd vss serdes_rx_inverter wn=3.6 wp=6.4 nfn=2 nfp=4
+Xm1p rawp midp vdd vss serdes_rx_inverter wn=1.8 wp=6.0 nfn=1 nfp=4
+Xm1n rawn midn vdd vss serdes_rx_inverter wn=1.8 wp=6.0 nfn=1 nfp=4
+Xkc_p midn midp vdd vss serdes_rx_inverter wn=0.42 wp=1.0 nfn=1 nfp=1
+Xkc_n midp midn vdd vss serdes_rx_inverter wn=0.42 wp=1.0 nfn=1 nfp=1
+Xo1p midp outp vdd vss serdes_rx_inverter wn=3.2 wp=8.0 nfn=2 nfp=4
+Xo1n midn outn vdd vss serdes_rx_inverter wn=3.2 wp=8.0 nfn=2 nfp=4
+.ends serdes_cml_to_cmos_r5

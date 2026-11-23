@@ -1,0 +1,163 @@
+* Loop filter for the r5 / 4-bit PLL at k = 4 (Icp 200 uA), PDK devices; candidate (docs/design/pll_loop.md).
+* Rz: res_high_po_0p69, L 7.594 um = 4.13 kOhm at tt 27 C (409 ohm + 490 ohm/um, operating-point calibration).
+* Ci: 18 cap_mim_m3_1 units of ~1 pF (side 22.1965 um, as passive_rc_pdk_candidate), 6 to ground and 12 to VDD (0.67,
+* the supply-tone split of docs/design/pll_vco.md; to be re-set with this filter).  One instance per unit: the PDK
+* subcircuit's mf only scales its mismatch term, not the capacitance.  No Cf: the VCO control node's own
+* 0.2-0.7 pF is the shunt capacitor.  Dual-node precharge gates as passive_rc_precharge (needs that file and
+* sky130_pfet_lvt.spice); the integrator gate is half the 40 pF version's size for the 18 pF node.
+* Geometry / model view, not extracted layout.
+.subckt pll_loop_filter_k4 cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=7.594 cside=22.1965 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg00 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg01 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg02 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg03 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg04 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg05 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv00 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv01 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv02 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv03 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv04 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv05 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv06 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv07 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv08 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv09 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv10 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv11 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k4
+
+* Candidate split 6.5 to ground / 11.5 to VDD (23 / 36 = 0.639): one VDD unit replaced by two half-area units, one to
+* each rail.  Linear model of the 20 MHz supply tone (control node 0.58-0.83 pF, ~0.9 of it VDD-referenced, behind Rz):
+* worst ~148 MHz/V at the seven stress points against 155 (12 / 6) and 155 (11 / 7).
+.subckt pll_loop_filter_k4_h13 cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=7.594 cside=22.1965 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg00 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg01 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg02 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg03 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg04 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg05 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv00 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv01 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv02 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv03 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv04 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv05 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv06 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv07 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv08 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv09 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv10 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv11 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside/sqrt(2)} l={cside/sqrt(2)}
+Xcg06 z vss sky130_fd_pr__cap_mim_m3_1 w={cside/sqrt(2)} l={cside/sqrt(2)}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k4_h13
+
+* Candidate split 7 to ground / 11 to VDD (0.61), otherwise identical: the 20 MHz supply tone through the 12 / 6 filter
+* gives 155 MHz/V at FS 1.95 V 85 C (null alpha 0.565 there, 0.66-0.76 elsewhere; analog/pll/vco/tb/psrr_lf).
+.subckt pll_loop_filter_k4_s7 cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=7.594 cside=22.1965 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg00 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg01 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg02 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg03 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg04 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg05 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv00 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv01 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv02 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv03 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv04 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv05 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv06 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv07 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv08 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv09 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv10 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg06 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k4_s7
+
+* Option-2 candidate (PLL closure step 7, analog/pll/top/theory/loop_psrr.py): k = 8 loop, Rz 2.17 kOhm (high_po
+* 0.69 x 3.587 um, R = 415 + 489 l at tt 27 C), Ci 33 MIM units (~33 pF) split 22 to VDD / 11 to ground (2 / 3).
+* Not adopted; for the supply-tone and control-node impedance benches only (the CP must be resized for 400 uA).
+.subckt pll_loop_filter_k8c cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=3.587 cside=22.1965 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg00 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg01 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg02 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg03 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg04 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg05 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg06 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg07 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg08 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg09 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg10 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv00 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv01 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv02 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv03 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv04 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv05 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv06 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv07 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv08 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv09 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv10 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv11 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv12 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv13 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv14 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv15 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv16 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv17 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv18 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv19 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv20 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv21 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k8c
+
+* Stacked PCell-compliant capacitor-fusion candidate for k = 4 (18 x 1 pF -> 6 stacked 27.22 x 27.22 um sites = 12 units):
+* 2 sites (2 MIM1 + 2 MIM2 = 6.00 pF) to VSS + 4 sites (4 MIM1 + 4 MIM2 = 12.00 pF) to VDD, keeping 1:2 supply split
+* and w/l = 27.22 um <= 30.0 um PDK PCell guard while halving 2D footprint via M3(vdd/vss)-M4(z)-M5(vdd/vss) stacking.
+.subckt pll_loop_filter_k4_fused cp_in ctrl z pre_ref pre_en vdd vss
++ params: rlength=7.594 cside=27.22 wn_fast=4 wp_fast=8 wn_int=8 wp_int=16
+Vlink cp_in ctrl 0
+Xrz ctrl z vss sky130_fd_pr__res_high_po_0p69 l={rlength}
+Xcg1_0 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg1_1 z vss sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcg2_0 vss z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcg2_1 vss z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv1_0 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv1_1 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv1_2 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv1_3 z vdd sky130_fd_pr__cap_mim_m3_1 w={cside} l={cside}
+Xcv2_0 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv2_1 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv2_2 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xcv2_3 vdd z sky130_fd_pr__cap_mim_m3_2 w={cside} l={cside}
+Xinv pre_en pre_b vdd vss serdes_cmos_inv wn=4 wp=8
+Xfast pre_ref ctrl pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_fast} wp={wp_fast}
+Xint pre_ref z pre_en pre_b vdd vss pll_lf_tgate_lvt wn={wn_int} wp={wp_int}
+.ends pll_loop_filter_k4_fused

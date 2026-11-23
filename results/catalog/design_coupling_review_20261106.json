@@ -1,0 +1,159 @@
+{
+  "date": "2026-11-06",
+  "report": "docs/history/design_coupling_review_20261106.md",
+  "purpose": "Bounded design review; open-loop VCO frequency bracketing and linear loop sensitivities only",
+  "artifacts": [
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/calculations.json",
+      "sha256": "81a395c47eaba600f32f11b2402fd9d36597d770f66ffb9fb26d6082e33f90e9"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/vco_probe.json",
+      "sha256": "cc28b30b1a26e9ea9bb6537c7890c22b7daec5a356e33828cbe43c67b8de2294"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pilot/tb.cir",
+      "sha256": "187ec56063eecbf5ed7f56eba2acb94041991ae0126cdbc2e91502cf54984605"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pilot/execution.json",
+      "sha256": "3bfc4082ed85c023a1156fb6535967a7d04956edaa5dffca0c7c4fc868d19429"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/ff_ll/tb.cir",
+      "sha256": "9b87bbb18a49615e187652d5988cbab223e5798ba64ef971b122f52586373f1f"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/ff_ll/execution.json",
+      "sha256": "5b628966914dbee73f2e9263494a7d085be0372143fd944461c86efde80f8549"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/ff_ll/simulator.log",
+      "sha256": "82e9120950578c1598d13c35402b14ceebe3711b1a90cc98028ce921253926db"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/common/bias/spice/bandgap.spice",
+      "sha256": "88cbbafc1492e8f0f4b8a63562dd8b34884092609492339c91a4b2bd7c151f87"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/common/bias/spice/bias_dist.spice",
+      "sha256": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/common/cml_buffer/spice/cml_buffer.spice",
+      "sha256": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/common/cml_buffer/spice/cml_delay_resistive.spice",
+      "sha256": "109e9a438051ba16d66bb8c3c891fb0b80d318fec460ec53b637f8b7105724f1"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/common/devices/spice/sky130_pfet_lvt.spice",
+      "sha256": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/common/devices/spice/sky130_primitives.spice",
+      "sha256": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/pll/vco/spice/cap_bank_3b.spice",
+      "sha256": "3939c05be2e6105318b77a76267cbfc0f836abee12226c0cd9c0350ec2bb476d"
+    },
+    {
+      "path": "results/verification/design_coupling_review/20261105T125427Z/pdk_resistors/analog/pll/vco/spice/vco_ring4_pvt_candidate.spice",
+      "sha256": "b4113e7f2be469c95910bbb7cc327f6f1c22b002d4ecf11e5e8ac8998f388d0c"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/ff_v1950_t-40_rll_v5b/state.json",
+      "sha256": "aba6565b6d93668b79fe9c599a0de400fa561eeaebcf83729135e7f054471d60"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/fs_v1650_t85_rhh_v5/state.json",
+      "sha256": "7fb49ff11a40fd1f5b93d69978f7523c50b6a197e104874d52567fe90fa040da"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/fs_v1950_t85_rhh_v5b/state.json",
+      "sha256": "88995dbc3139f11ef37ca71de8327a38a81b205dc84ccaf1bd8b6c71941b7eee"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/sf_v1650_t85_rhh_v5/state.json",
+      "sha256": "f705f8e1f7000db20927a56d337fe72f91a5b0e4e8b40eb56ea681b4d56b7caa"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/ss_v1650_t-40_rhh_v5/state.json",
+      "sha256": "1f77aef94adeda902608736c37f89d1ce7b3d142d3868dc12abe14c9e34b8e84"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/ss_v1650_t85_rhh_v5b/state.json",
+      "sha256": "9c70c3c2a4c5eb2024ee4ecd0f47ec7d9b6b83e6774d33bfd7c71ec88628a9cf"
+    },
+    {
+      "path": "results/analog/pll/vco/phase_noise_corner/tt_v1800_t27_rtt_v5b/state.json",
+      "sha256": "9a82e35bedca176da32c54161aafba8e4329d77436e7f780ba85c8e9a6de5bb4"
+    },
+    {
+      "path": "verification/design_coupling_review.py",
+      "sha256": "a53e93e8492ae76600535f4f89d48a658aab0b857d2e04f67ef71f0900530e71"
+    }
+  ],
+  "waveform_checks": [
+    {
+      "code": 6,
+      "vctrl_v": 1.05,
+      "end_s": 2.4000000000000003e-08,
+      "samples": 6001,
+      "measured_periods": 11,
+      "period_std_over_mean": 3.5876481893429674e-06
+    },
+    {
+      "code": 6,
+      "vctrl_v": 1.2,
+      "end_s": 2.4000000000000003e-08,
+      "samples": 6001,
+      "measured_periods": 11,
+      "period_std_over_mean": 3.645955233881155e-06
+    },
+    {
+      "code": 6,
+      "vctrl_v": 1.35,
+      "end_s": 2.4000000000000003e-08,
+      "samples": 6001,
+      "measured_periods": 11,
+      "period_std_over_mean": 2.3142710333723183e-06
+    },
+    {
+      "code": 7,
+      "vctrl_v": 1.05,
+      "end_s": 2.4000000000000003e-08,
+      "samples": 6001,
+      "measured_periods": 10,
+      "period_std_over_mean": 3.291633927417508e-06
+    },
+    {
+      "code": 7,
+      "vctrl_v": 1.2,
+      "end_s": 2.4000000000000003e-08,
+      "samples": 6001,
+      "measured_periods": 10,
+      "period_std_over_mean": 4.050109774282358e-06
+    },
+    {
+      "code": 7,
+      "vctrl_v": 1.35,
+      "end_s": 2.4000000000000003e-08,
+      "samples": 6001,
+      "measured_periods": 11,
+      "period_std_over_mean": 1.072871755425723e-06
+    }
+  ],
+  "execution_notes": "cosh overflow during dynamic gmin stepping; logs subsequently report dynamic/true gmin completion. Both decks exit 0, all six waves finite and reach 24 ns. Not an error-free or startup qualification.",
+  "simulation_elapsed_s": {
+    "pilot": 26.88273859024048,
+    "ff_ll": 99.33737301826477
+  },
+  "limits": [
+    "No closed-loop/noise/MC or full-PVT rerun",
+    "30 fF output load proxies",
+    "RC and extra-delay calculations are illustrative sensitivities, not foundry qualified corners"
+  ]
+}

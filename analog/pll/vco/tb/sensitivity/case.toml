@@ -1,0 +1,19 @@
+id = "sensitivity"
+dut = "analog/pll/vco"
+level = "block"
+status = "prototype"
+purpose = "分别扫描电源和负载，注明控制电压和偏置。"
+analyses = ["tran","parameter_sweep"]
+measurements = ["supply_pushing","load_pulling","frequency","swing","power"]
+shared_stimuli = []
+
+[implementation]
+view = "schematic"
+simulator = "ngspice"
+testbench = "analog/pll/vco/tb/startup/tb_ring4_ngspice.cir.in"
+
+[sweep]
+parameters = ["supply", "cload"]
+
+[requirements]
+status = "exploratory"

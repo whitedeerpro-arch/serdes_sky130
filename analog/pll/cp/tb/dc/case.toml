@@ -1,0 +1,19 @@
+id = "dc"
+dut = "analog/pll/cp"
+level = "block"
+status = "prototype"
+purpose = "固定控制状态并扫描输出电压，检查源灌电流和关断泄漏。"
+analyses = ["dc"]
+measurements = ["source_current","sink_current","current_mismatch","compliance_range","leakage"]
+shared_stimuli = []
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_cp_dc_ngspice.cir.in"
+
+[sweep]
+parameters = ["Vout=0.1..1.7 V", "TT/SS/FF", "TT 125 degC"]
+
+[requirements]
+status = "unspecified"

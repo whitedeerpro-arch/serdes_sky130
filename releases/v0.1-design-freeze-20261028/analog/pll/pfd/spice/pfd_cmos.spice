@@ -1,0 +1,20 @@
+* Rising-edge phase/frequency detector. UP/DN active high, rst_b active low.
+* ref leads fb => longer UP; fb leads ref => longer DN.
+* Reset delay is implemented with loaded CMOS gates, not ideal time delay.
+* Minimum pulse must later be co-designed with the actual charge pump.
+.subckt pll_pfd ref fb rst_b up dn vdd vss
++ params: reset_cap=5f out_wn=4 out_wp=8
+Xup vdd ref clear_b qu vdd vss pll_cmos_dff_reset
+Xdn vdd fb clear_b qd vdd vss pll_cmos_dff_reset
+Xdetect qu qd request_b vdd vss serdes_cmos_nand2
+Xdelay1 request_b rd1 vdd vss serdes_cmos_inv
+Xdelay2 rd1 rd2 vdd vss serdes_cmos_inv
+Cd1 rd1 vss {reset_cap}
+Cd2 rd2 vss {reset_cap}
+Xclear rst_b rd2 clear_b vdd vss serdes_cmos_and2
+* Output and feedback branches are explicit so external CP loading is observable.
+Xub1 qu ub vdd vss serdes_cmos_inv wn=2 wp=4
+Xub2 ub up vdd vss serdes_cmos_inv wn={out_wn} wp={out_wp}
+Xdb1 qd db vdd vss serdes_cmos_inv wn=2 wp=4
+Xdb2 db dn vdd vss serdes_cmos_inv wn={out_wn} wp={out_wp}
+.ends pll_pfd

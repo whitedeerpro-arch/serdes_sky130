@@ -1,0 +1,147 @@
+{
+  "revision": "hv18_r4_static_pins_ref_rc_voltage_trim",
+  "status": "local_circuit_candidate_not_integrated",
+  "data": "docs/data/ldo_r4.json",
+  "data_sha256": "881983282b7d12c3d4d566a6fc490273f8b73f078df47282df2819498ea1ea76",
+  "inputs": {
+    "calibration": {
+      "summary": "results/analog/common/ldo/r4/20261110T111227.910607Z_2c6e23d2/analysis/20261110T112255.051358Z/summary.json",
+      "sha256": "d9fac2f011002a428cea0c54b7c6d84ded3b6c0fdaa8f73b43197658ebdf20e4",
+      "campaign": "results/analog/common/ldo/r4/20261110T111227.910607Z_2c6e23d2",
+      "rows": 1088
+    },
+    "grid": {
+      "summary": "results/analog/common/ldo/r4/20261110T112415.433032Z_31c78a41/analysis/20261110T113439.088634Z/summary.json",
+      "sha256": "969e01431e91c5c605bd85c599345293de3f954c1348902d966d71b2d7f480af",
+      "campaign": "results/analog/common/ldo/r4/20261110T112415.433032Z_31c78a41",
+      "rows": 1215
+    },
+    "passives": {
+      "summary": "results/analog/common/ldo/r4_passive_card/20261110T111228.178530Z_7224790f/analysis/20261110T111616.203887Z/summary.json",
+      "sha256": "6430a7dd724cbfe30671f7e05090ca631120971b5e83d47cd45d66cd4d1730c5",
+      "campaign": "results/analog/common/ldo/r4_passive_card/20261110T111228.178530Z_7224790f",
+      "rows": 27
+    },
+    "startup": {
+      "summary": "results/analog/common/ldo/r4_startup/20261110T113541.207446Z_8767c44a/analysis/20261110T121415.082649Z/summary.json",
+      "sha256": "94faf0ec28471c04a1fe0a89bacf14cde86efabe6d130947b912178c908f4740",
+      "campaign": "results/analog/common/ldo/r4_startup/20261110T113541.207446Z_8767c44a",
+      "rows": 18
+    },
+    "noise": {
+      "summary": "results/analog/common/ldo/r4_dc_noise/20261110T120141.651192Z_9a75685f/analysis/20261110T121709.593625Z/summary.json",
+      "sha256": "f813ec4e52640d74e136a1f6b9736d60986f08a3c2a582f1c2c16b970a2c4599",
+      "campaign": "results/analog/common/ldo/r4_dc_noise/20261110T120141.651192Z_9a75685f",
+      "rows": 18
+    },
+    "bias_fast": {
+      "summary": "results/analog/common/ldo/r4_bias_filter/20261110T112350.767887Z_4f102ee3/analysis/20261110T112510.331833Z/summary.json",
+      "sha256": "9970107cff9d5cf84cf914507246720fbd3c8c5a137f4e684cdd53e30bc76bae",
+      "campaign": "results/analog/common/ldo/r4_bias_filter/20261110T112350.767887Z_4f102ee3",
+      "rows": 3
+    },
+    "bias_slow": {
+      "summary": "results/analog/common/ldo/r4_bias_filter/20261110T113540.869125Z_59f58e7a/analysis/20261110T113649.627631Z/summary.json",
+      "sha256": "5a4a04cd251bfcf292599bf882eb7b0e6836b6e2eed400e3e307e060b9b5d379",
+      "campaign": "results/analog/common/ldo/r4_bias_filter/20261110T113540.869125Z_59f58e7a",
+      "rows": 3
+    },
+    "cap_load": {
+      "summary": "results/analog/common/ldo/r4_cap_load/20261110T120319.075181Z_64e49ca1/analysis/20261110T120930.012231Z/summary.json",
+      "sha256": "13c08945879050887b4c4b55d5de78b42c30a7894c88ce693c3ff85b061cfb97",
+      "campaign": "results/analog/common/ldo/r4_cap_load/20261110T120319.075181Z_64e49ca1",
+      "rows": 16
+    },
+    "resistor_noise": {
+      "summary": "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/summary.json",
+      "sha256": "3b98468fb6afbadaaf37b79d030e3718b6796fffc82c95685782ebe444a97120",
+      "campaign": "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z",
+      "rows": 4
+    }
+  },
+  "statistics": {
+    "vout_v": [
+      1.7759504184435657,
+      1.8148047287400095
+    ],
+    "vin_excess_ua": [
+      105.18376974930945,
+      146.58892140950903
+    ],
+    "host_power_mw": [
+      0.0909775599647456,
+      0.1773162081948813
+    ],
+    "psrr_20mhz_db": [
+      38.43644757039258,
+      51.574116882402464
+    ],
+    "host_300khz_v_v": [
+      0.020568608548362743,
+      0.041209518525883324
+    ],
+    "host_1mhz_v_v": [
+      0.0009999246005079425,
+      0.008777594443377789
+    ],
+    "host_20mhz_v_v": [
+      0.0003398097068336403,
+      0.000853745586320216
+    ],
+    "middlebrook_pm_deg": [
+      71.278416791295,
+      81.4279932495088
+    ],
+    "grid_transient_op_fallback_count": 0,
+    "noise_rms_uv": {
+      "hv2": [
+        201.22820004213418,
+        245.99796186354965
+      ],
+      "hv10": [
+        199.99384909056783,
+        239.57780271594896
+      ],
+      "tail": [
+        33.990960648975864,
+        51.539411303101616
+      ]
+    },
+    "hv2_startup": {
+      "peak_v": [
+        1.775552708494544,
+        1.8011549670487201
+      ],
+      "final_v": [
+        1.77417901036577,
+        1.800749183430222
+      ],
+      "off_floor_v": [
+        0.00015453824175917796,
+        0.08517997243127515
+      ],
+      "final_pp_mv": [
+        0.015561398416741312,
+        1.111385952094146
+      ]
+    },
+    "hv10_startup": {
+      "peak_v": [
+        1.7755562819988258,
+        1.801145679706656
+      ],
+      "final_v": [
+        1.7741491846770294,
+        1.8007045085578253
+      ],
+      "off_floor_v": [
+        3.146739339363255e-05,
+        0.0453100519779983
+      ],
+      "final_pp_mv": [
+        0.015561762119808975,
+        1.1114386647761432
+      ]
+    }
+  }
+}

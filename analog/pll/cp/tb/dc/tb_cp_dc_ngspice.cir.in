@@ -1,0 +1,31 @@
+SKY130 CP DC source/sink/leakage versus output voltage
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.param supply=1.8 irefn=50u irefp=50u
+Vdd vdd 0 {supply}
+Vbias vb 0 {supply}
+In vb vbn {irefn}
+Ip vbp 0 {irefp}
+Xbn vbn vbn 0 0 serdes_nfet w=5 l=1
+Xbp vbp vbp vb vb serdes_pfet w=20 l=1 nf=4
+Xup vdd 0 ou vbn vbp vdd 0 pll_cp
+Xdn 0 vdd od vbn vbp vdd 0 pll_cp
+Xboth vdd vdd ob vbn vbp vdd 0 pll_cp
+Xoff 0 0 oo vbn vbp vdd 0 pll_cp
+Vout sweep 0 0.9
+Eu ou 0 sweep 0 1
+Ed od 0 sweep 0 1
+Eb ob 0 sweep 0 1
+Eo oo 0 sweep 0 1
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set wr_singlescale
+set wr_vecnames
+dc Vout 0.1 1.7 0.02
+wrdata dc.tsv i(Eu) i(Ed) i(Eb) i(Eo) v(vbn) v(vbp)
+quit
+.endc
+.end

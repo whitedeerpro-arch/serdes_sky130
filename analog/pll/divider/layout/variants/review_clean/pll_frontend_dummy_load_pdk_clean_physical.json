@@ -1,0 +1,108 @@
+{
+  "cell": "pll_frontend_dummy_load_pdk_clean",
+  "inputs": {
+    "pll_frontend_dummy_load_pdk_clean.mag": {
+      "source": "results/layout_review/pll_20261115/dummy_clean/pll_frontend_dummy_load_pdk_clean.mag",
+      "sha256": "9a8053671385d7ec8d1e509a4b8640ccebc5685ae3811d9d40ac08ed77a637b0"
+    },
+    "reference.spice": {
+      "source": "results/layout_review/pll_20261115/dummy_clean/reference.spice",
+      "sha256": "2f7272acc31fc2798b3a2fb99a0e13becc926dc3bee43cffce68c340fb3ab80b"
+    }
+  },
+  "checker_exit": 0,
+  "physical_passed": true,
+  "ports": [
+    "clkp",
+    "clkn",
+    "vbias",
+    "vdd",
+    "vss"
+  ],
+  "bbox_um": [
+    -10.2,
+    -4.0,
+    10.2,
+    16.4
+  ],
+  "size_um": [
+    20.4,
+    20.4
+  ],
+  "magic": "/home/host/.local/opt/magic-8.3.685-capfix/bin/magic-capfix",
+  "extraction": "C + device AD/AS/PD/PS; wire R not extracted",
+  "parasitics": {
+    "extracted_mos_segments": 66,
+    "ad_um2": 52.45,
+    "as_um2": 77.05,
+    "pd_um": 345.44,
+    "ps_um": 509.74,
+    "pex_cap_elements": 18,
+    "total_substrate_cap_fF": 23.574,
+    "total_coupling_cap_fF": 14.649,
+    "port_caps_fF": {
+      "clkp": {
+        "to_substrate_fF": 2.359,
+        "coupling_sum_fF": 2.989,
+        "total_node_fF": 5.348
+      },
+      "clkn": {
+        "to_substrate_fF": 2.359,
+        "coupling_sum_fF": 2.989,
+        "total_node_fF": 5.348
+      },
+      "vbias": {
+        "to_substrate_fF": 1.869,
+        "coupling_sum_fF": 0.422,
+        "total_node_fF": 2.291
+      },
+      "vdd": {
+        "to_substrate_fF": 2.979,
+        "coupling_sum_fF": 11.125,
+        "total_node_fF": 14.103
+      }
+    },
+    "top_coupling_fF": [
+      {
+        "node_a": "a_n1679_1828#",
+        "node_b": "vdd",
+        "cap_fF": 4.049
+      },
+      {
+        "node_a": "a_85_1828#",
+        "node_b": "vdd",
+        "cap_fF": 4.049
+      },
+      {
+        "node_a": "clkn",
+        "node_b": "vdd",
+        "cap_fF": 1.513
+      },
+      {
+        "node_a": "clkp",
+        "node_b": "vdd",
+        "cap_fF": 1.513
+      },
+      {
+        "node_a": "a_n1679_1828#",
+        "node_b": "clkp",
+        "cap_fF": 1.465
+      },
+      {
+        "node_a": "a_85_1828#",
+        "node_b": "clkn",
+        "cap_fF": 1.465
+      },
+      {
+        "node_a": "a_n1679_1828#",
+        "node_b": "vbias",
+        "cap_fF": 0.223
+      },
+      {
+        "node_a": "a_85_1828#",
+        "node_b": "vbias",
+        "cap_fF": 0.199
+      }
+    ]
+  }
+}

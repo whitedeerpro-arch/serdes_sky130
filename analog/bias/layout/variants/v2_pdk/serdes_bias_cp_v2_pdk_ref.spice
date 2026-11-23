@@ -1,0 +1,10 @@
+* BIAS v2 serdes_bias_cp_v2_pdk (shared-diff [D,DN,MN,MN,DN,D] + [D,4xDP,D])
+.subckt serdes_bias_cp_v2_pdk vbn vbp vcp vss
+Xdn vbn vbn vss vss sky130_fd_pr__nfet_01v8 w=5 l=1
+Xmn vbp vbn vss vss sky130_fd_pr__nfet_01v8 w=5 l=1
+Xdum_nl vbn vss vss vss sky130_fd_pr__nfet_01v8 w=2.5 l=1
+Xdum_nr vbn vss vss vss sky130_fd_pr__nfet_01v8 w=2.5 l=1
+Xdp vbp vbp vcp vcp sky130_fd_pr__pfet_01v8 w=20 l=1
+Xdum_pl vcp vcp vcp vcp sky130_fd_pr__pfet_01v8 w=5 l=1
+Xdum_pr vcp vcp vcp vcp sky130_fd_pr__pfet_01v8 w=5 l=1
+.ends serdes_bias_cp_v2_pdk

@@ -1,0 +1,448 @@
+{
+  "date": "2026-11-20",
+  "status": "retired_legacy_versions_keep_recent_2_to_3_vars",
+  "source_commit": "d1c9457b1b59c68743ec6a8cd06486e13e8c3c8b",
+  "scope": "Obsolete v0.1/r1/r2/r3/r4 SPICE revisions, superseded layout variant sym9_pdk, and legacy testbenches beyond recent 2-3 Var versions per module (non-divider batch).",
+  "reason": "Keep each design module focused on its active baseline plus at most 2-3 recent variants; full source bytes remain archived locally and recoverable via git source_commit.",
+  "files": [
+    {
+      "former_path": "analog/pll/top/spice/clock_frontend_balanced.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/spice/clock_frontend_balanced.spice",
+      "sha256": "62f4fe5873f4072baf0a443ba3ae194e770604555399fa17066e3f85dfac0b75",
+      "bytes": 2729
+    },
+    {
+      "former_path": "analog/pll/top/spice/clock_frontend_pvt_candidate.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/spice/clock_frontend_pvt_candidate.spice",
+      "sha256": "4d74de06fd72340a6191acc88cc7eb621b96376b92383e0c9177c5934226f5ea",
+      "bytes": 2939
+    },
+    {
+      "former_path": "analog/pll/top/spice/clock_frontend_lowov.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/spice/clock_frontend_lowov.spice",
+      "sha256": "5c7d555172e66a83b7e9d0ecb4b7cd5077b77d6bdb63f47974e1da8177492323",
+      "bytes": 3167
+    },
+    {
+      "former_path": "analog/pll/top/spice/clock_frontend_r4.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/spice/clock_frontend_r4.spice",
+      "sha256": "b0b9315c4227da9632e82e0e2189779243a9bd50b859d6e4279c50d30b0b8fc3",
+      "bytes": 3508
+    },
+    {
+      "former_path": "analog/pll/top/spice/pll_balanced_core.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/spice/pll_balanced_core.spice",
+      "sha256": "dfeaee24b9b640b5d88b732c306a895f023dd7893e57151f211d4e3a1f5b3f3d",
+      "bytes": 745
+    },
+    {
+      "former_path": "analog/pll/top/spice/pll_balanced_startup_core.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/spice/pll_balanced_startup_core.spice",
+      "sha256": "21121636b87c3c3264258c5523316e01f850017a1d20a291af9994b5b0b6d020",
+      "bytes": 796
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/case.toml",
+      "sha256": "4c78aca8c66aaf597c50e49900e3af3ea7a7cd51ea0c361e58ad6ed948edebbd",
+      "bytes": 1388
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_calibrated_mixed_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_calibrated_mixed_ngspice.cir.in",
+      "sha256": "38a3b3f61f0003801f5a7402b97e2da46a6534cf3d5c0e3cd134ba67bbd9bd3a",
+      "bytes": 1839
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_clock_harvest_checkpoints_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_clock_harvest_checkpoints_ngspice.cir.in",
+      "sha256": "9be6e0d278c0e429a39f2764202b6328ff200d167fde45c12ceeddf9b2e5784a",
+      "bytes": 21758
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_clock_harvest_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_clock_harvest_ngspice.cir.in",
+      "sha256": "9614561c633c8a34570647de07b9376ccc9bb7f0c3b5504560b257a177357605",
+      "bytes": 7386
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_mixed_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_mixed_ngspice.cir.in",
+      "sha256": "f08d6474dbdf1f5f86cbb002a6f4b143315959aac9ccaf3db1d8adb8a0fc2888",
+      "bytes": 1778
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_precharged_capture_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_precharged_capture_ngspice.cir.in",
+      "sha256": "a52caefbe8f862b424b4d83cad2c7e5993f015f9b1fe5b9ba296f01835483657",
+      "bytes": 6943
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_precharged_checkpoint_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_precharged_checkpoint_ngspice.cir.in",
+      "sha256": "8eddfb6cfa4d5325def5d6560c16c2d691b9e34f100587bbb47b73f3005fb814",
+      "bytes": 19367
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_pll_transistor_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_pll_transistor_ngspice.cir.in",
+      "sha256": "f73ca1cd9b05c4ca4bcb72e04e115872a7ae21786be4873b86378b147ba65d36",
+      "bytes": 6901
+    },
+    {
+      "former_path": "analog/pll/top/tb/acquisition/tb_vco_balanced_probe_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/acquisition/tb_vco_balanced_probe_ngspice.cir.in",
+      "sha256": "439bc1874d7905eecf54d5bc10efd2e0ecf57bbd579a5ea91a0472c9ff2ce5f2",
+      "bytes": 5263
+    },
+    {
+      "former_path": "analog/pll/top/tb/divider_pfd/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/divider_pfd/case.toml",
+      "sha256": "d8a9670cee47e7b0da859790188bebb78fed409865c98bd5cb04c71bb27edb38",
+      "bytes": 602
+    },
+    {
+      "former_path": "analog/pll/top/tb/divider_pfd/tb_divider_pfd_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/divider_pfd/tb_divider_pfd_ngspice.cir.in",
+      "sha256": "fb9da6983ebde5c924bfe0a5a14776438226d0a32cb42b4e2e4a9d45cb421a01",
+      "bytes": 2609
+    },
+    {
+      "former_path": "analog/pll/top/tb/hybrid_divider_pfd/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/hybrid_divider_pfd/case.toml",
+      "sha256": "65c79372600843db93ed14e21ae3058e46143934ba21b86bb4100132663a08d0",
+      "bytes": 554
+    },
+    {
+      "former_path": "analog/pll/top/tb/hybrid_divider_pfd/tb_hybrid_divider_pfd_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/hybrid_divider_pfd/tb_hybrid_divider_pfd_ngspice.cir.in",
+      "sha256": "dbc396be00f9b36342f00ff346d4fae79333b40b5e5c94dedc859cd28d4106c9",
+      "bytes": 2616
+    },
+    {
+      "former_path": "analog/pll/top/tb/loop_pvt/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/loop_pvt/case.toml",
+      "sha256": "a1fc138d0d87b264d7f1f83445b9a291af652991460560778e8b554615de64ca",
+      "bytes": 795
+    },
+    {
+      "former_path": "analog/pll/top/tb/loop_pvt/tb_loop_measured_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/loop_pvt/tb_loop_measured_ngspice.cir.in",
+      "sha256": "b3993d18fb847c4b59b805f430288127802cf30b4acd25d480ebd9159b9687d9",
+      "bytes": 1839
+    },
+    {
+      "former_path": "analog/pll/top/tb/loop_pvt/tb_native_handoff_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/loop_pvt/tb_native_handoff_ngspice.cir.in",
+      "sha256": "3d900c0766eed8579185da9ad378d4216da9631aca892ef59c7890e9a853008e",
+      "bytes": 5092
+    },
+    {
+      "former_path": "analog/pll/top/tb/loop_pvt/tb_pfd_cp_packet_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/loop_pvt/tb_pfd_cp_packet_ngspice.cir.in",
+      "sha256": "16ec1337893b158a6419ff07618e79df83729dbd11086335eb631aa159f79eee",
+      "bytes": 1170
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt/case.toml",
+      "sha256": "979b6f4bd4c5f2dc4bdf8d0757770b5d0636908813e35a50cd2219a47be23ea6",
+      "bytes": 1241
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt/tb_frontend_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt/tb_frontend_ngspice.cir.in",
+      "sha256": "c7cc9cd3a581298ce9244bb5deff19a9dca546ec0a311a536f95956738fa989b",
+      "bytes": 3325
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt/tb_loop_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt/tb_loop_ngspice.cir.in",
+      "sha256": "19043837398138bbba6eee139d1d60fbf0916f398703d280a936aa6da7cff446",
+      "bytes": 1700
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_lowov/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_lowov/case.toml",
+      "sha256": "a808cdafac1fe71be27d171857dcc638e233da8b76343f6d2303fc39f38ba067",
+      "bytes": 886
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_lowov/tb_frontend_ngspice.cir.in",
+      "sha256": "c7293a8ca99442b9cc2e5da0de973cce5a6421c25368b91c3ded9e5f725bac4a",
+      "bytes": 4366
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_r4/run.py",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_r4/run.py",
+      "sha256": "7a5e090c99039d002b0483d8a3c7fc94088bed595bac3b0444b3009751d20024",
+      "bytes": 4303
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_r4/tb_frontend_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_r4/tb_frontend_ngspice.cir.in",
+      "sha256": "9935cf52594250d217fc8c7fc8cb5c0d473ad16e7ae97c93b6c31355fcd03a58",
+      "bytes": 5469
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_r4/tuning.py",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_r4/tuning.py",
+      "sha256": "6ef71ff533eca2d2a95235e097f7999f9c43209706fc1caf94f289921e70cc41",
+      "bytes": 5001
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_refinement/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_refinement/case.toml",
+      "sha256": "d4b24c0bbc17f8698917cd40c33eb428beee0d753339c7f2dc50b2f1993efefc",
+      "bytes": 1204
+    },
+    {
+      "former_path": "analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/pvt_refinement/tb_frontend_candidate_ngspice.cir.in",
+      "sha256": "fdf9a8bb8355c5bc10f18a6a34ad920ac1c1957fdf9022714bbb1edc6a68f3e7",
+      "bytes": 3930
+    },
+    {
+      "former_path": "analog/pll/top/tb/startup/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/startup/case.toml",
+      "sha256": "a76aeba96a0dcfa3b386c7a9f6eb0b1304109bee3640acb26e3e6a4207a4eba1",
+      "bytes": 816
+    },
+    {
+      "former_path": "analog/pll/top/tb/startup/tb_pll_startup_mixed_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/startup/tb_pll_startup_mixed_ngspice.cir.in",
+      "sha256": "0315588ea5a59e0a9f92407c210dfa4a1aa4b46e37b9a94f95e6f1344beda9b2",
+      "bytes": 2389
+    },
+    {
+      "former_path": "analog/pll/top/tb/startup/tb_pll_startup_native_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/startup/tb_pll_startup_native_ngspice.cir.in",
+      "sha256": "4e48e45c5f3e126f9ea1781ba6745d79930510aff660be17474d6598d491191e",
+      "bytes": 7347
+    },
+    {
+      "former_path": "analog/pll/top/tb/vco_divider/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/vco_divider/case.toml",
+      "sha256": "a7ebaec48229c8cd450001758dbb6c51adfeabeedb4ddbaedf790c28d84386b7",
+      "bytes": 601
+    },
+    {
+      "former_path": "analog/pll/top/tb/vco_divider/tb_vco_divider_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/vco_divider/tb_vco_divider_ngspice.cir.in",
+      "sha256": "1a88487fd5dc4d844e2e5433e730aca1bf60c78fe60910bceabcf9a87d3528a0",
+      "bytes": 3719
+    },
+    {
+      "former_path": "analog/pll/top/tb/vco_receiver/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/vco_receiver/case.toml",
+      "sha256": "a1b9d71f2a255b23b51b1ea88d3cdee45809c7c6e016e60265d77c91ae3439af",
+      "bytes": 579
+    },
+    {
+      "former_path": "analog/pll/top/tb/vco_receiver/tb_vco_receiver_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/top/tb/vco_receiver/tb_vco_receiver_ngspice.cir.in",
+      "sha256": "4b18b9d1dd2762015a81810e28aa0184ffc37030a89ae28f7cdff3b179a7bb65",
+      "bytes": 2058
+    },
+    {
+      "former_path": "analog/common/ldo/spice/ldo_hv18_r1.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/ldo/spice/ldo_hv18_r1.spice",
+      "sha256": "6a29876fd6c84ee1e6c113505a698eee5ddecec59d2c0c94a52bbdb80f1dc846",
+      "bytes": 1783
+    },
+    {
+      "former_path": "analog/common/ldo/spice/ldo_hv18_r2.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/ldo/spice/ldo_hv18_r2.spice",
+      "sha256": "6006ed573b4089615388c31757e3276e1795c7df3e41caf9d167d64e3323ebac",
+      "bytes": 2043
+    },
+    {
+      "former_path": "analog/common/ldo/spice/pll_supply_hv18.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/ldo/spice/pll_supply_hv18.spice",
+      "sha256": "3a2444b55ca00ecb9f0705ac6578d7a2d0aa7e8c62353ef51dea1500ba55e697",
+      "bytes": 884
+    },
+    {
+      "former_path": "analog/common/ldo/spice/ldo_hv18_core.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/ldo/spice/ldo_hv18_core.spice",
+      "sha256": "8ac1dd7473ba3fc36bda36f2332e82dc6ad04c550ae11a04215366ff89cb8c17",
+      "bytes": 2173
+    },
+    {
+      "former_path": "analog/common/ldo/tb/modes/run.py",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/ldo/tb/modes/run.py",
+      "sha256": "d1402b119a06510b600bdf8421b3382a47e0562dff324618099fb684bbdad7b3",
+      "bytes": 6239
+    },
+    {
+      "former_path": "analog/pll/vco/spice/vco_ring4_pvt_candidate.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/spice/vco_ring4_pvt_candidate.spice",
+      "sha256": "b4113e7f2be469c95910bbb7cc327f6f1c22b002d4ecf11e5e8ac8998f388d0c",
+      "bytes": 2675
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/README.md",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/README.md",
+      "sha256": "f2ec74a2fd2066d70325949dc7955af866fc01b9de48a10e9f6a28a6f468ab0e",
+      "bytes": 779
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/physical_summary.json",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/physical_summary.json",
+      "sha256": "1a80facaf268e5ff28d1e555776b1cb766ab8f5c0d80d3f116619598538817f9",
+      "bytes": 4127
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5.mag",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5.mag",
+      "sha256": "48361a51ffc9860e4e804001576c921664368756e47c4aa26453b5859646aa83",
+      "bytes": 473894
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5_lvs.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5_lvs.spice",
+      "sha256": "f4eaec8fcf6eb740b346931be79421e24a1f3267592911fa603cc68fa777d1fd",
+      "bytes": 38392
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5_pex.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5_pex.spice",
+      "sha256": "5d835ab88b2d266423546504e4dc5c8c7d21fcf00fbb77feacc1f73a85a2cbc8",
+      "bytes": 155123
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5_ref.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/pll_vco_core_sym9_s32p5_ref.spice",
+      "sha256": "dff6174fc1dc9e741e92f8aa7b92ac2ad6708183aa3e9f3c95edfdb52238c003",
+      "bytes": 3755
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/cap_bank5_sym9_w075.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/cap_bank5_sym9_w075.png",
+      "sha256": "b460eff1c4c8158d96b8f443fe12521bff0ec7448daef2dcdc0d9a02c312668d",
+      "bytes": 108082
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/delay_buf_core_sym9_c.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/delay_buf_core_sym9_c.png",
+      "sha256": "b8ecf888664791decd304d561cb699908eca5302b5178da2b290714ab54da494",
+      "bytes": 91879
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/delay_core_sym9_c.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/delay_core_sym9_c.png",
+      "sha256": "a785b0ebf15a7603495644f3c847f1f3b49a805c23807d4ebd3b83c116fed569",
+      "bytes": 77167
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/half_tank_sym9_s32p5.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/half_tank_sym9_s32p5.png",
+      "sha256": "b7009f7bd3f93d44a8465c4a1a8013fad5f6bc5f41968476dbbb92757742de98",
+      "bytes": 112643
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/vco_core_sym9_s32p5.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/vco_core_sym9_s32p5.png",
+      "sha256": "883c553c44fdae59cdef6ad59cac9950713a134e56f916b160d9e02ecf63a88d",
+      "bytes": 297285
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/vco_ring4_sym9_s32p5.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/vco_ring4_sym9_s32p5.png",
+      "sha256": "717468ed779da110f50bc7d2d88968830fa149b0ffcbd02296605e8c36ed6d8f",
+      "bytes": 275302
+    },
+    {
+      "former_path": "analog/pll/vco/layout/variants/sym9_pdk/views/vco_stage_sym9_s32p5.png",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/vco/layout/variants/sym9_pdk/views/vco_stage_sym9_s32p5.png",
+      "sha256": "63bfe23650fd2fd66c6895484923ddbfb986c47499d25665c202188f55ed7789",
+      "bytes": 157843
+    },
+    {
+      "former_path": "analog/pll/cp/spice/charge_pump_source_switched.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/cp/spice/charge_pump_source_switched.spice",
+      "sha256": "879b321f0e573e8ffb83646be39c3304241ce6119f63b7c42e1415e0b6481983",
+      "bytes": 626
+    },
+    {
+      "former_path": "analog/pll/cp/spice/charge_pump_enabled.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/cp/spice/charge_pump_enabled.spice",
+      "sha256": "6e176d019338a0358be6790b20ad22e425204976d08ddf178de799fc55398bcb",
+      "bytes": 433
+    },
+    {
+      "former_path": "analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/loop_filter/spice/passive_rc_pdk_candidate.spice",
+      "sha256": "858847838d4130c9d7a190ae1a70e303e4d1d4296e200e541a7f08bae1e89070",
+      "bytes": 2914
+    },
+    {
+      "former_path": "analog/pll/loop_filter/tb/pdk_mapping/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/loop_filter/tb/pdk_mapping/case.toml",
+      "sha256": "54c2f9be8f2b25cacbc13c5df4d0545e575c08306621964bd9b5c01fdddf7eb1",
+      "bytes": 1019
+    },
+    {
+      "former_path": "analog/pll/loop_filter/tb/pdk_mapping/tb_mapping_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/pll/loop_filter/tb/pdk_mapping/tb_mapping_ngspice.cir.in",
+      "sha256": "8e306a51279e6e1686f70e87c5ecd5c70625e38ec5735f5b8bcdf49cbc39138f",
+      "bytes": 935
+    },
+    {
+      "former_path": "analog/common/cml_to_cmos/spice/cml_to_cmos_acsb.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/cml_to_cmos/spice/cml_to_cmos_acsb.spice",
+      "sha256": "1bec9402ab5068802a0187ed2f390b49f595e67a751d91d52eed60babb5e366d",
+      "bytes": 1450
+    },
+    {
+      "former_path": "analog/tx/output_driver/spice/cml_line_driver_biaswell_candidate.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/tx/output_driver/spice/cml_line_driver_biaswell_candidate.spice",
+      "sha256": "103cd11dfb49f1bea27cbc52a9af9c4cc2a237c75371d61ddf95edafc0458959",
+      "bytes": 1720
+    },
+    {
+      "former_path": "analog/tx/output_driver/spice/cml_line_driver_footer_candidate.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/tx/output_driver/spice/cml_line_driver_footer_candidate.spice",
+      "sha256": "afe477edfcb25ea75b1fb4b6a9f2e95c231011c74bc40d79e40533c3078522fb",
+      "bytes": 1554
+    },
+    {
+      "former_path": "analog/tx/serializer/spice/serializer16_tree.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/tx/serializer/spice/serializer16_tree.spice",
+      "sha256": "327b87c8a50b7bf16164be96160d0c4d5c969251297bb6ef6c1f704f902674d7",
+      "bytes": 2677
+    },
+    {
+      "former_path": "analog/tx/serializer/spice/serializer16_tree_cmos_select.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/tx/serializer/spice/serializer16_tree_cmos_select.spice",
+      "sha256": "8bacfc0d6beb752875500c8f3b6d5d9bb29945e33c52a8e2b503ecab4619fa75",
+      "bytes": 2957
+    },
+    {
+      "former_path": "analog/tx/serializer/tb/functional/tb_serializer16_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/tx/serializer/tb/functional/tb_serializer16_ngspice.cir.in",
+      "sha256": "3fea527fde37b98c782b474a7245c7b80de9c646bd4af3239ca8990f3e01db6c",
+      "bytes": 2720
+    },
+    {
+      "former_path": "analog/tx/serializer/tb/functional/tb_serializer16_cmos_select_ngspice.cir.in",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/tx/serializer/tb/functional/tb_serializer16_cmos_select_ngspice.cir.in",
+      "sha256": "8d03127456bfbf1c0d4f02842920ac36ae864a1732a5b4e6336090d2b3df6cd7",
+      "bytes": 3150
+    },
+    {
+      "former_path": "analog/common/cml_mux/spice/cml_mux2_cmos_select.spice",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/cml_mux/spice/cml_mux2_cmos_select.spice",
+      "sha256": "2b3f416e8df0bba3e5eb1cad317f4efa7966b59c6dcefcd5d46c09d0278d7a23",
+      "bytes": 870
+    },
+    {
+      "former_path": "analog/common/cml_mux/tb/cmos_select/case.toml",
+      "archive": "results/maintenance/legacy_vars_retirement/20261120/files/analog/common/cml_mux/tb/cmos_select/case.toml",
+      "sha256": "6a7591b866a79e54c9fee79b6b2b93323516debb8fab38c22af61b68aa6caab4",
+      "bytes": 910
+    }
+  ],
+  "archive_policy": "Local results/maintenance archives are not tracked in Git; exact published bytes remain recoverable from source_commit and former_path."
+}

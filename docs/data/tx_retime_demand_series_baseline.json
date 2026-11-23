@@ -1,0 +1,167 @@
+{
+  "status": "baselines_calibrated_surface_incomplete",
+  "campaign": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032",
+  "summary": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/analysis/20261111T071751.348113Z/summary.json",
+  "summary_sha256": "49552102c8d6afe5d163ac9a146c3a7196f968e46b2255e71c639c2762a318bf",
+  "plan_sha256": "1857079b120d39f5eb7beb153a89776caad30add2fda97e3b079a9bc1a771722",
+  "boundary_sha256": "7775eb96e5c6e94a407a21394e6c212bd1ec3835afcce0caf008ca8ce9dbfe49",
+  "publisher_sha256": "d34ad8e21d96557f2f7529ec922407157700ed96faf7f57e5bab57393fafd1b0",
+  "publisher_snapshot": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/publication/20261111T113758.540099Z/publisher.py",
+  "analysis_source_sha256": {
+    "analog/tx/input_register/tb/retime_demand/series_pwl.py": "6cd9636c724b3c63f7d5d4b38347f4c6ae91242ffea8e2b7efda363ac4712cdf",
+    "src/serdes_flow/serial.py": "c444f425f801fa13071a27029a7fc59c2838c1880253649dfc0475832f04178b",
+    "src/serdes_flow/spice.py": "7d97d104f9b938f912515862bc03a9a74c84d1b3de2d43039f9ae3b0b7204d2f"
+  },
+  "scope": "Recorded full-TX final-rank ports, current driver and direct load, 256 payload bits, training-only phase and independent bit mapping. Prescribed voltage sources omit upstream impedance/feedback; no physical sizing, full-system or 45-PVT/noise/startup qualification.",
+  "amplitude_policy": {
+    "status": "internal_400mV_ceiling_under_review; no_replacement_limit_adopted",
+    "historical_screen": "clock_200to400_observation and local_demand_screen retain the original 200\u2013400 mV band; exceeding 400 alone does not establish physical failure",
+    "current_interpretation": "Read outputs.meets_eye_and_mapping separately; headroom, noise and device stress require additional evidence"
+  },
+  "rows": [
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "baseline",
+        "delay_ps": 0,
+        "differential_scale": 1.0
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.639672153124498,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.09308387376850516,
+            "sample_eye_height_v": 0.18878431029894316,
+            "differential_pp_v": 0.3799980654790114,
+            "transition_spread_ui": 0.1500437848142564,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.09550825230266131,
+            "edge_spread_ui": 0.15492110262624692,
+            "sampling_phase_ui": -0.39957154438623427,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 1.9893671493099605,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.12717326143386673,
+            "sample_eye_height_v": 0.2548329158245426,
+            "differential_pp_v": 0.3746609239184022,
+            "transition_spread_ui": 0.1798514650178929,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.12847536080804273,
+            "edge_spread_ui": 0.1798514650179186,
+            "sampling_phase_ui": -0.053792564378095695,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.30750434297982143,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.2996529693656387,
+        "max_pp_v": 0.30710655540697784,
+        "mean_pp_v": 0.30515243676419607
+      },
+      "c2g_common_mode_mean_v": 1.5707855402428461,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": true,
+      "baseline_max_error_v": {
+        "qp": 2.9680885463179152e-05,
+        "qn": 2.8892322541329563e-05,
+        "lqp": 0.0005157944713252149,
+        "lqn": 0.00015871752668950023,
+        "ahp": 1.4926492695632732e-05,
+        "ahn": 1.5849997238470692e-05,
+        "bhp": 2.5656913525073932e-05,
+        "bhn": 2.544553511452108e-05,
+        "sap": 6.736837390275419e-06,
+        "san": 7.33670325281377e-06,
+        "sbp": 6.720660305492565e-06,
+        "sbn": 7.486393319933171e-06
+      },
+      "baseline_absolute_edge_error_s": {
+        "serializer": 8.693647369871526e-15,
+        "pad": 1.8755160636760733e-13
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_baseline/baseline.raw",
+      "raw_sha256": "a73ff6aeed3f032ffb0e0a7c1cf668eedad3c28854fed2cbd8f4705367d24fd3",
+      "evidence": {
+        "tb.cir": "3ec643bc8d8d1cbbfb1ae89c321a882d6961ac1d4b4f6e53ebb4c08c400ec86a",
+        "execution.json": "f5a7e1a1118f00209166963015333071c9495b31bb20e304485ce2261da3fd25",
+        "simulator.log": "df6bf7c0997c2ea3605f00ac8572a815e3d58d3a73a01911c96abd414df5a27d"
+      }
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+{
+  "date_local": "2026-10-29",
+  "ui_s": 2.5e-10,
+  "status": "nominal_transistor_samples_and_RTL_front_logic_not_complete_CDR",
+  "unit": [
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T191754Z_tt_early",
+      "case": "early",
+      "clock_delay_s": -2.5e-11,
+      "input_vpp_v": 0.35,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.16603927900000132,
+      "early_votes": 23,
+      "late_votes": 0,
+      "sampler_vdd_power_w": 0.009298766825674881,
+      "shifted_clock_cm_v": 0.9504346213561287
+    },
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T191754Z_tt_late",
+      "case": "late",
+      "clock_delay_s": 2.5e-11,
+      "input_vpp_v": 0.35,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.19050045500000112,
+      "early_votes": 23,
+      "late_votes": 0,
+      "sampler_vdd_power_w": 0.0092991434468598,
+      "shifted_clock_cm_v": 0.9504563230504325
+    },
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T191754Z_tt_nominal",
+      "case": "nominal",
+      "clock_delay_s": 0.0,
+      "input_vpp_v": 0.35,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.181581259,
+      "early_votes": 23,
+      "late_votes": 0,
+      "sampler_vdd_power_w": 0.009302171615351722,
+      "shifted_clock_cm_v": 0.9504329096510528
+    },
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T192224Z_tt_delay100",
+      "case": "delay100",
+      "clock_delay_s": 1e-10,
+      "input_vpp_v": 0.35,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.181392047,
+      "early_votes": 0,
+      "late_votes": 23,
+      "sampler_vdd_power_w": 0.009298766825679778,
+      "shifted_clock_cm_v": 0.9504603190786682
+    },
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T192224Z_tt_delay50",
+      "case": "delay50",
+      "clock_delay_s": 5e-11,
+      "input_vpp_v": 0.35,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.19304780200000196,
+      "early_votes": 0,
+      "late_votes": 23,
+      "sampler_vdd_power_w": 0.009295197235381102,
+      "shifted_clock_cm_v": 0.9505084854305533
+    },
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T192224Z_tt_delay75",
+      "case": "delay75",
+      "clock_delay_s": 7.5e-11,
+      "input_vpp_v": 0.35,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.190164938500001,
+      "early_votes": 0,
+      "late_votes": 23,
+      "sampler_vdd_power_w": 0.009294192676379959,
+      "shifted_clock_cm_v": 0.950539925557369
+    },
+    {
+      "run": "results/analog/rx/sampler/functional/20261028T192224Z_tt_weak75",
+      "case": "weak75",
+      "clock_delay_s": 7.5e-11,
+      "input_vpp_v": 0.08,
+      "data_bits_checked": 54,
+      "hold_readouts_checked": 108,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.16381260600000122,
+      "early_votes": 0,
+      "late_votes": 23,
+      "sampler_vdd_power_w": 0.009286301493260976,
+      "shifted_clock_cm_v": 0.9505284255906642
+    }
+  ],
+  "pi_ctle_static": [
+    {
+      "run": "results/analog/rx/sampler/pi_loaded/20261028T192322Z_tt_code00",
+      "pi_code": 0,
+      "data_clock_rise_phase_s": 2.0615454028564738e-10,
+      "data_bits_checked": 51,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.1964394695753816,
+      "late_votes": 22,
+      "early_votes": 0,
+      "net_advance_vote": 22,
+      "data_clock_vpp_v": 0.41432921300000003,
+      "edge_clock_vpp_v": 0.413444979,
+      "ctle_loading_peak_difference_v": 0.057496217000000016,
+      "ctle_loading_rms_difference_v": 0.014919458416314807,
+      "power_scope": "Vdd includes duplicate comparison CTLE; not per-lane power budget. One850u+one50u reference =1.62mW; original scope string incorrectly says two50u branches."
+    },
+    {
+      "run": "results/analog/rx/sampler/pi_loaded/20261028T192322Z_tt_code04",
+      "pi_code": 4,
+      "data_clock_rise_phase_s": 1.7269963642970418e-10,
+      "data_bits_checked": 51,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.19726572926192584,
+      "late_votes": 11,
+      "early_votes": 11,
+      "net_advance_vote": 0,
+      "data_clock_vpp_v": 0.384271758,
+      "edge_clock_vpp_v": 0.38460262,
+      "ctle_loading_peak_difference_v": 0.057543227,
+      "ctle_loading_rms_difference_v": 0.01492945602195596,
+      "power_scope": "Vdd includes duplicate comparison CTLE; not per-lane power budget. One850u+one50u reference =1.62mW; original scope string incorrectly says two50u branches."
+    },
+    {
+      "run": "results/analog/rx/sampler/pi_loaded/20261028T192322Z_tt_code08",
+      "pi_code": 8,
+      "data_clock_rise_phase_s": 1.4364321784830008e-10,
+      "data_bits_checked": 51,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.19059550828078442,
+      "late_votes": 0,
+      "early_votes": 22,
+      "net_advance_vote": -22,
+      "data_clock_vpp_v": 0.41318629799999995,
+      "edge_clock_vpp_v": 0.41346921000000003,
+      "ctle_loading_peak_difference_v": 0.05752518499999998,
+      "ctle_loading_rms_difference_v": 0.014949743259548835,
+      "power_scope": "Vdd includes duplicate comparison CTLE; not per-lane power budget. One850u+one50u reference =1.62mW; original scope string incorrectly says two50u branches."
+    }
+  ],
+  "rtl_pi_dynamic": [
+    {
+      "run": "results/analog/rx/sampler/rtl_pi_wrap/20261028T192648Z_tt_forward",
+      "case": "forward",
+      "outputs": [
+        {
+          "output": "data_clock",
+          "rising_count": 76,
+          "falling_count": 76,
+          "min_half_pulse_s": 2.4256550214568307e-10,
+          "max_half_pulse_s": 2.5171460247477836e-10,
+          "min_period_s": 4.938384828312923e-10,
+          "max_period_s": 5.001425696232647e-10
+        },
+        {
+          "output": "edge_clock",
+          "rising_count": 76,
+          "falling_count": 76,
+          "min_half_pulse_s": 2.383866361513722e-10,
+          "max_half_pulse_s": 2.5410501789456417e-10,
+          "min_period_s": 4.92257679029053e-10,
+          "max_period_s": 5.017765091410299e-10
+        }
+      ],
+      "data_bits_checked": 144,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.18540025279304126,
+      "scope": "RTL trace playback, finite20ps driver model; no physical CDC, clock-safe retimer or closed CDR"
+    },
+    {
+      "run": "results/analog/rx/sampler/rtl_pi_wrap/20261028T192648Z_tt_reverse",
+      "case": "reverse",
+      "outputs": [
+        {
+          "output": "data_clock",
+          "rising_count": 76,
+          "falling_count": 76,
+          "min_half_pulse_s": 2.484773917054538e-10,
+          "max_half_pulse_s": 2.5584154221884174e-10,
+          "min_period_s": 4.998014629093263e-10,
+          "max_period_s": 5.057781892057034e-10
+        },
+        {
+          "output": "edge_clock",
+          "rising_count": 76,
+          "falling_count": 76,
+          "min_half_pulse_s": 2.4915364744937e-10,
+          "max_half_pulse_s": 2.5801240570352816e-10,
+          "min_period_s": 4.996141686534718e-10,
+          "max_period_s": 5.075768707320051e-10
+        }
+      ],
+      "data_bits_checked": 144,
+      "mismatches": 0,
+      "min_decision_margin_v": 0.18974047358990037,
+      "scope": "RTL trace playback, finite20ps driver model; no physical CDC, clock-safe retimer or closed CDR"
+    }
+  ],
+  "measured_vote_vectors": [
+    {
+      "pi_code": 0,
+      "first_bit": 10,
+      "data_hex": "faa6",
+      "edge_hex": "faa6",
+      "previous": 0,
+      "vote": 9,
+      "transition_count": 9
+    },
+    {
+      "pi_code": 0,
+      "first_bit": 26,
+      "data_hex": "c103",
+      "edge_hex": "c103",
+      "previous": 1,
+      "vote": 4,
+      "transition_count": 4
+    },
+    {
+      "pi_code": 0,
+      "first_bit": 42,
+      "data_hex": "3c50",
+      "edge_hex": "3c50",
+      "previous": 1,
+      "vote": 7,
+      "transition_count": 7
+    },
+    {
+      "pi_code": 4,
+      "first_bit": 10,
+      "data_hex": "faa6",
+      "edge_hex": "fa8c",
+      "previous": 0,
+      "vote": 3,
+      "transition_count": 9
+    },
+    {
+      "pi_code": 4,
+      "first_bit": 26,
+      "data_hex": "c103",
+      "edge_hex": "8007",
+      "previous": 1,
+      "vote": -2,
+      "transition_count": 4
+    },
+    {
+      "pi_code": 4,
+      "first_bit": 42,
+      "data_hex": "3c50",
+      "edge_hex": "7841",
+      "previous": 1,
+      "vote": -1,
+      "transition_count": 7
+    },
+    {
+      "pi_code": 8,
+      "first_bit": 10,
+      "data_hex": "faa6",
+      "edge_hex": "f54c",
+      "previous": 0,
+      "vote": -9,
+      "transition_count": 9
+    },
+    {
+      "pi_code": 8,
+      "first_bit": 26,
+      "data_hex": "c103",
+      "edge_hex": "8207",
+      "previous": 1,
+      "vote": -4,
+      "transition_count": 4
+    },
+    {
+      "pi_code": 8,
+      "first_bit": 42,
+      "data_hex": "3c50",
+      "edge_hex": "78a1",
+      "previous": 1,
+      "vote": -7,
+      "transition_count": 7
+    }
+  ],
+  "unimplemented": [
+    "static CML-to-CMOS data readout",
+    "sample demux and alignment",
+    "physical control retimer/CDC",
+    "phase/frequency digital loop",
+    "nativePLL fanout/dummy integration",
+    "realPCB-loaded sampler link"
+  ],
+  "scope": "Nominal TT1.8V27C. Short deterministic PRBS7; mismatches are functional bit comparisons, not statistical BER. No PVT/noise/metastability or timing closure qualification."
+}

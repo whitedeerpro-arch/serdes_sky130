@@ -1,0 +1,218 @@
+{
+  "format_version": 1,
+  "status": "matched",
+  "method": "Per-cell instance name, node order, model, port order and effective parameter dictionary. Explicit default parameters and m=1 normalized. This is schematic/SPICE connectivity equivalence, not layout LVS.",
+  "cells_checked": 29,
+  "instances_checked": 230,
+  "errors": [],
+  "cells": [
+    {
+      "cell": "serdes_nfet",
+      "source": "analog/common/devices/spice/sky130_primitives.spice",
+      "schematic": "analog/common/devices/schematic/serdes_nfet.sch",
+      "port_count": 4,
+      "instance_count": 1
+    },
+    {
+      "cell": "serdes_nfet_lvt",
+      "source": "analog/common/devices/spice/sky130_primitives.spice",
+      "schematic": "analog/common/devices/schematic/serdes_nfet_lvt.sch",
+      "port_count": 4,
+      "instance_count": 1
+    },
+    {
+      "cell": "serdes_pfet",
+      "source": "analog/common/devices/spice/sky130_primitives.spice",
+      "schematic": "analog/common/devices/schematic/serdes_pfet.sch",
+      "port_count": 4,
+      "instance_count": 1
+    },
+    {
+      "cell": "serdes_cmos_inv",
+      "source": "analog/common/devices/spice/cmos_logic.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_inv.sch",
+      "port_count": 4,
+      "instance_count": 2
+    },
+    {
+      "cell": "serdes_cmos_nand2",
+      "source": "analog/common/devices/spice/cmos_logic.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_nand2.sch",
+      "port_count": 5,
+      "instance_count": 4
+    },
+    {
+      "cell": "serdes_cmos_nor2",
+      "source": "analog/common/devices/spice/cmos_logic.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_nor2.sch",
+      "port_count": 5,
+      "instance_count": 4
+    },
+    {
+      "cell": "serdes_cmos_and2",
+      "source": "analog/common/devices/spice/cmos_logic.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_and2.sch",
+      "port_count": 5,
+      "instance_count": 2
+    },
+    {
+      "cell": "serdes_cmos_tgate",
+      "source": "analog/common/devices/spice/cmos_logic.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_tgate.sch",
+      "port_count": 6,
+      "instance_count": 2
+    },
+    {
+      "cell": "serdes_cmos_latch_reset",
+      "source": "analog/common/devices/spice/cmos_dff_reset.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_latch_reset.sch",
+      "port_count": 6,
+      "instance_count": 11
+    },
+    {
+      "cell": "serdes_cmos_dff_reset",
+      "source": "analog/common/devices/spice/cmos_dff_reset.spice",
+      "schematic": "analog/common/devices/schematic/serdes_cmos_dff_reset.sch",
+      "port_count": 6,
+      "instance_count": 5
+    },
+    {
+      "cell": "serdes_cml_delay",
+      "source": "analog/common/cml_buffer/spice/cml_delay_resistive.spice",
+      "schematic": "analog/common/cml_buffer/schematic/serdes_cml_delay.sch",
+      "port_count": 7,
+      "instance_count": 5
+    },
+    {
+      "cell": "serdes_cml_buffer",
+      "source": "analog/common/cml_buffer/spice/cml_buffer.spice",
+      "schematic": "analog/common/cml_buffer/schematic/serdes_cml_buffer.sch",
+      "port_count": 7,
+      "instance_count": 1
+    },
+    {
+      "cell": "serdes_rx_diff_to_se",
+      "source": "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
+      "schematic": "analog/common/cml_to_cmos/schematic/serdes_rx_diff_to_se.sch",
+      "port_count": 6,
+      "instance_count": 5
+    },
+    {
+      "cell": "serdes_rx_inverter",
+      "source": "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
+      "schematic": "analog/common/cml_to_cmos/schematic/serdes_rx_inverter.sch",
+      "port_count": 4,
+      "instance_count": 2
+    },
+    {
+      "cell": "serdes_cml_to_cmos",
+      "source": "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
+      "schematic": "analog/common/cml_to_cmos/schematic/serdes_cml_to_cmos.sch",
+      "port_count": 7,
+      "instance_count": 11
+    },
+    {
+      "cell": "serdes_rx_nand2",
+      "source": "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
+      "schematic": "analog/common/cml_to_cmos/schematic/serdes_rx_nand2.sch",
+      "port_count": 5,
+      "instance_count": 4
+    },
+    {
+      "cell": "serdes_rx_clock_restorer",
+      "source": "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
+      "schematic": "analog/common/cml_to_cmos/schematic/serdes_rx_clock_restorer.sch",
+      "port_count": 6,
+      "instance_count": 18
+    },
+    {
+      "cell": "pll_vco_cap_unit",
+      "source": "analog/pll/vco/spice/cap_bank_3b.spice",
+      "schematic": "analog/pll/vco/schematic/pll_vco_cap_unit.sch",
+      "port_count": 3,
+      "instance_count": 3
+    },
+    {
+      "cell": "pll_vco_cap_bank",
+      "source": "analog/pll/vco/spice/cap_bank_3b.spice",
+      "schematic": "analog/pll/vco/schematic/pll_vco_cap_bank.sch",
+      "port_count": 5,
+      "instance_count": 7
+    },
+    {
+      "cell": "pll_vco_ring4",
+      "source": "analog/pll/vco/spice/vco_ring4.spice",
+      "schematic": "analog/pll/vco/schematic/pll_vco_ring4.sch",
+      "port_count": 15,
+      "instance_count": 20
+    },
+    {
+      "cell": "pll_cml_latch",
+      "source": "analog/pll/divider/spice/cml_latch.spice",
+      "schematic": "analog/pll/divider/schematic/pll_cml_latch.sch",
+      "port_count": 9,
+      "instance_count": 9
+    },
+    {
+      "cell": "pll_cml_div2",
+      "source": "analog/pll/divider/spice/cml_div2.spice",
+      "schematic": "analog/pll/divider/schematic/pll_cml_div2.sch",
+      "port_count": 9,
+      "instance_count": 6
+    },
+    {
+      "cell": "pll_cml_prescaler8",
+      "source": "analog/pll/divider/spice/cml_prescaler8.spice",
+      "schematic": "analog/pll/divider/schematic/pll_cml_prescaler8.sch",
+      "port_count": 11,
+      "instance_count": 3
+    },
+    {
+      "cell": "pll_cmos_dff_reset",
+      "source": "analog/pll/pfd/spice/cmos_dff_reset.spice",
+      "schematic": "analog/pll/pfd/schematic/pll_cmos_dff_reset.sch",
+      "port_count": 6,
+      "instance_count": 1
+    },
+    {
+      "cell": "pll_pfd",
+      "source": "analog/pll/pfd/spice/pfd_cmos.spice",
+      "schematic": "analog/pll/pfd/schematic/pll_pfd.sch",
+      "port_count": 7,
+      "instance_count": 12
+    },
+    {
+      "cell": "pll_cp",
+      "source": "analog/pll/cp/spice/charge_pump.spice",
+      "schematic": "analog/pll/cp/schematic/pll_cp.sch",
+      "port_count": 7,
+      "instance_count": 8
+    },
+    {
+      "cell": "pll_loop_filter",
+      "source": "analog/pll/loop_filter/spice/passive_rc.spice",
+      "schematic": "analog/pll/loop_filter/schematic/pll_loop_filter.sch",
+      "port_count": 3,
+      "instance_count": 4
+    },
+    {
+      "cell": "pll_clock_frontend_balanced",
+      "source": "analog/pll/top/spice/clock_frontend_balanced.spice",
+      "schematic": "analog/pll/top/schematic/pll_clock_frontend_balanced.sch",
+      "port_count": 18,
+      "instance_count": 71
+    },
+    {
+      "cell": "pll_balanced_core",
+      "source": "analog/pll/top/spice/pll_balanced_core.spice",
+      "schematic": "analog/pll/top/schematic/pll_balanced_core.sch",
+      "port_count": 23,
+      "instance_count": 7
+    }
+  ],
+  "netlist": "results/schematics/20261027T173150Z_xschem_netlist/netlist/pll_schematic_library.spice",
+  "limitations": [
+    "Symbol graphics and pin placement require visual review.",
+    "No new transient/PVT/noise simulation; reusable top wiring factored from the existing fixture, with core supplies merged and dummy supply separate."
+  ]
+}

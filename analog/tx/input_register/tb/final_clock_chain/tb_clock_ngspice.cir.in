@@ -1,0 +1,95 @@
+* Prototype final-rank replay; instantiated load must match source deck.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_lowov_cells.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/tx/input_register/spice/final_retime_slice.spice"
+.include "@PROJECT_ROOT@/analog/tx/input_register/spice/final_retime_clock_chain.spice"
+.include "@PROJECT_ROOT@/analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice"
+.include "@PROJECT_ROOT@/verification/models/channel/diff_rlc16.spice"
+Vap ap 0 PWL(0 0 6n 0)
+Van an 0 PWL(0 0 6n 0)
+Vbp bp 0 PWL(0 0 6n 0)
+Vbn bn 0 PWL(0 0 6n 0)
+Vrp rp 0 PWL(0 0 6n 0)
+Vrn rn 0 PWL(0 0 6n 0)
+Vbias vbias 0 PWL(0 0 6n 0)
+Vlogic vbias_logic 0 PWL(0 0 6n 0)
+Vdd vdd 0 PWL(0 0 6n 0)
+Vtxen tx_en 0 @SUPPLY@
+Xclock1 rp rn sp1 sn1 vbias vdd 0 serdes_tx_final_clock_1
+Xslice1 ap an bp bn sp1 sn1 qp1 qn1 vbias vbias_logic vdd 0 serdes_tx_final_retime_slice
+Cqp1 qp1 0 2f
+Cqn1 qn1 0 2f
+Xdriver1 qp1 qn1 tx_en lqp1 lqn1 vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32
+Clpp1 lqp1 0 200f
+Clpn1 lqn1 0 200f
+Rlpp1 lqp1 llp1 .3
+Rlpn1 lqn1 lln1 .3
+Llpp1 llp1 lap1 .5n
+Llpn1 lln1 lan1 .5n
+Clacp1 lap1 ltp1 10n
+Clacn1 lan1 ltn1 10n
+Xchannel1 ltp1 ltn1 lxp1 lxn1 0 serdes_diff_rlc16
+Rlc01 lxp1 lrp1 .01
+Rlc11 lxn1 lrn1 .01
+Clc01 lrp1 0 100f
+Clc11 lrn1 0 100f
+Vlcm1 lcm1 0 .9
+Rlterm01 lrp1 lcm1 50
+Rlterm11 lrn1 lcm1 50
+Xclock2 rp rn sp2 sn2 vbias vdd 0 serdes_tx_final_clock_2
+Xslice2 ap an bp bn sp2 sn2 qp2 qn2 vbias vbias_logic vdd 0 serdes_tx_final_retime_slice
+Cqp2 qp2 0 2f
+Cqn2 qn2 0 2f
+Xdriver2 qp2 qn2 tx_en lqp2 lqn2 vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32
+Clpp2 lqp2 0 200f
+Clpn2 lqn2 0 200f
+Rlpp2 lqp2 llp2 .3
+Rlpn2 lqn2 lln2 .3
+Llpp2 llp2 lap2 .5n
+Llpn2 lln2 lan2 .5n
+Clacp2 lap2 ltp2 10n
+Clacn2 lan2 ltn2 10n
+Xchannel2 ltp2 ltn2 lxp2 lxn2 0 serdes_diff_rlc16
+Rlc02 lxp2 lrp2 .01
+Rlc12 lxn2 lrn2 .01
+Clc02 lrp2 0 100f
+Clc12 lrn2 0 100f
+Vlcm2 lcm2 0 .9
+Rlterm02 lrp2 lcm2 50
+Rlterm12 lrn2 lcm2 50
+Xclock3 rp rn sp3 sn3 vbias vdd 0 serdes_tx_final_clock_3
+Xslice3 ap an bp bn sp3 sn3 qp3 qn3 vbias vbias_logic vdd 0 serdes_tx_final_retime_slice
+Cqp3 qp3 0 2f
+Cqn3 qn3 0 2f
+Xdriver3 qp3 qn3 tx_en lqp3 lqn3 vbias vdd vdd 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32
+Clpp3 lqp3 0 200f
+Clpn3 lqn3 0 200f
+Rlpp3 lqp3 llp3 .3
+Rlpn3 lqn3 lln3 .3
+Llpp3 llp3 lap3 .5n
+Llpn3 lln3 lan3 .5n
+Clacp3 lap3 ltp3 10n
+Clacn3 lan3 ltn3 10n
+Xchannel3 ltp3 ltn3 lxp3 lxn3 0 serdes_diff_rlc16
+Rlc03 lxp3 lrp3 .01
+Rlc13 lxn3 lrn3 .01
+Clc03 lrp3 0 100f
+Clc13 lrn3 0 100f
+Vlcm3 lcm3 0 .9
+Rlterm03 lrp3 lcm3 50
+Rlterm13 lrn3 lcm3 50
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u
+.save @VECTORS@
+.control
+set num_threads=1
+set filetype=binary
+@CASES@
+quit
+.endc
+.end

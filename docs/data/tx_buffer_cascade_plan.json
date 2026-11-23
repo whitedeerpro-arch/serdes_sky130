@@ -1,0 +1,106 @@
+{
+  "status": "prediction_only_not_graded",
+  "sources": {
+    "docs/data/tx_buffer_local.json": "45742c329bb4528009e9dda302001ae37e6e6238a97448817d6d927608ef846d",
+    "docs/data/tx_buffer_joint.json": "84a788293c060dedeef053b9f22d5b138ef0becdb9cf6fb940d821890ac7e99b"
+  },
+  "generator_sha256": "1a9792ea8ab9db14c2066360540cbb2702acc36381a0e1336880d487a79ab494",
+  "rows": [
+    {
+      "condition": "tt_v1800_t27",
+      "observations": [
+        {
+          "source_branch": "baseline",
+          "input_pp_v": 0.5359404095599785,
+          "output_pp_v": 0.5386870141975684
+        },
+        {
+          "source_branch": "tail_only",
+          "input_pp_v": 0.42069342006448585,
+          "output_pp_v": 0.5149936338851591
+        },
+        {
+          "source_branch": "R_only",
+          "input_pp_v": 0.43037248170615916,
+          "output_pp_v": 0.5171267259382617
+        },
+        {
+          "source_branch": "joint_a",
+          "input_pp_v": 0.33762852893400397,
+          "output_pp_v": 0.47272166583210673
+        },
+        {
+          "source_branch": "joint_b",
+          "input_pp_v": 0.31425890794572764,
+          "output_pp_v": 0.4555834005101058
+        }
+      ],
+      "old_stage_limit_v": 0.564846091653531,
+      "old_stage_low_amplitude_gain": 2.0258916167207173,
+      "in_sample_max_residual_v": 0.002826049982296408,
+      "joint_a_scale": 0.6299740100031128,
+      "assumed_modified_low_amplitude_gain": 1.2762590656172395,
+      "two_stages_predicted_xe3_pp_v": 0.29782368150995403,
+      "five_stages_proxy_input_pp_v": 0.5332713243456635,
+      "five_stages_proxy_outputs_pp_v": [
+        0.3406465447829255,
+        0.29896685539819406,
+        0.281225999193377,
+        0.2722889645492243,
+        0.26744444893803904
+      ]
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "observations": [
+        {
+          "source_branch": "baseline",
+          "input_pp_v": 0.5008444245658157,
+          "output_pp_v": 0.5022558105547723
+        },
+        {
+          "source_branch": "tail_only",
+          "input_pp_v": 0.39303446819875987,
+          "output_pp_v": 0.46482117281179014
+        },
+        {
+          "source_branch": "R_only",
+          "input_pp_v": 0.4027115021462542,
+          "output_pp_v": 0.4689790754373566
+        },
+        {
+          "source_branch": "joint_a",
+          "input_pp_v": 0.315790683625073,
+          "output_pp_v": 0.41447925049666656
+        },
+        {
+          "source_branch": "joint_b",
+          "input_pp_v": 0.293555071208528,
+          "output_pp_v": 0.3957887055103724
+        }
+      ],
+      "old_stage_limit_v": 0.5517535729996434,
+      "old_stage_low_amplitude_gain": 1.7071246472413144,
+      "in_sample_max_residual_v": 0.0021843344103806284,
+      "joint_a_scale": 0.6305165199140137,
+      "assumed_modified_low_amplitude_gain": 1.0763702916380318,
+      "two_stages_predicted_xe3_pp_v": 0.26153953593411583,
+      "five_stages_proxy_input_pp_v": 0.4973657471208479,
+      "five_stages_proxy_outputs_pp_v": [
+        0.3172499530224491,
+        0.2622201893870082,
+        0.2331945454123254,
+        0.21494011728985257,
+        0.20236655645988585
+      ]
+    }
+  ],
+  "assumptions": [
+    "2 GHz recorded TT/FS PWL boundaries only; dynamic waveform shape reduced to amplitude",
+    "tanh fit to unchanged Xe3 observations; fit residual is in-sample, not prediction error",
+    "modified-stage transfer assumed to scale by the single measured joint-A amplitude ratio",
+    "five-stage iso input approximated by baseline Xe2 input; final Xe4 has heavier WN32 load",
+    "no c2g, slew, delay, regeneration, PVT, mismatch or noise qualification",
+    "small-amplitude modified transfer and repeated-stage approximation need the new SPICE card"
+  ]
+}

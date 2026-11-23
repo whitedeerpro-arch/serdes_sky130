@@ -1,0 +1,19 @@
+id = "dead_zone"
+dut = "analog/pll/pfd"
+level = "block"
+status = "prototype"
+purpose = "在零相差附近双向细扫端口脉宽与电压时间积分；CP 有效电荷死区仍待 PFD/CP 联调。"
+analyses = ["tran"]
+measurements = ["pulse_width_vs_phase","reset_delay","minimum_pulse_width"]
+shared_stimuli = ["verification/stimuli/spice/pfd_clock_pair.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "../functional/tb_pfd_cmos_ngspice.cir.in"
+
+[sweep]
+parameters = ["phase_error=-50,-10,-2,0,2,10,50 ps", "maximum_step=1,0.5 ps", "reset_cap"]
+
+[requirements]
+status = "unspecified"

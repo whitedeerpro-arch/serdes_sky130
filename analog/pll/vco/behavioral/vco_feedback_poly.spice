@@ -1,0 +1,12 @@
+* Phase-domain VCO plus ideal /N with a quadratic tuning curve f = a0 + a1 V + a2 V^2 (the working map's parabola
+* at one code and condition); for mixed-view loop checks ONLY.  No noise, power, startup or divider state.
+* cload: the VCO control node's small-signal capacitance (ctrl_load bench), placed on ctrl.
+.subckt pll_vco_feedback_poly ctrl fb phase f_ghz vdd vss
++ params: a0=0 a1=1G a2=0 ndiv=8 edge_shape=0.02 cload=0.4p
+Cload ctrl vss {cload}
+Bfreq f_ghz vss V={max(0.5,min(3.5,(a0+a1*v(ctrl,vss)+a2*v(ctrl,vss)*v(ctrl,vss))/1G))}
+Bint vss phase I={v(f_ghz,vss)*1G/ndiv*1n}
+Cphase phase vss 1n
+Rphase phase vss 1T
+Bclock fb vss V={v(vdd,vss)*(0.5+0.5*tanh(sin(6.283185307179586*v(phase,vss))/edge_shape))}
+.ends pll_vco_feedback_poly

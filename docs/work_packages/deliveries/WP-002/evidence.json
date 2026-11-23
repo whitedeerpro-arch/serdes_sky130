@@ -1,0 +1,3246 @@
+{
+  "package_id": "WP-002",
+  "execution_status": "partial",
+  "inputs": [
+    {
+      "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+      "sha256": "0194207e6a043e444c9ea71cab62074dd5c959178a0d124932154442381e5ed6"
+    },
+    {
+      "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+      "sha256": "2a8b62f0b8c957a36b89c56013692c7a313b2f6c996195b8decfde95bf4b2a59"
+    },
+    {
+      "path": "analog/common/cml_mux/spice/cml_mux2.spice",
+      "sha256": "abe9e919a050c6054b0fafbaea72748364767760c756b32797718af93437d3db"
+    },
+    {
+      "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+      "sha256": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6"
+    },
+    {
+      "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+      "sha256": "2f4b6cb4497236e2c3687d5546b53e8bfced7f6226c6203827bb2beac4cba124"
+    },
+    {
+      "path": "analog/common/devices/spice/cmos_logic.spice",
+      "sha256": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517"
+    },
+    {
+      "path": "analog/tx/serializer/tb/native_clock/run.py",
+      "sha256": "dd4e9477cb57688f6667ae80fb02f6a869c94356f73b803021533db666fa3dc2"
+    },
+    {
+      "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+      "sha256": "8c9c89a7a7d34d80a6612c9eb6d13ec31b6db93c56586f3da76e0d029c41023e"
+    },
+    {
+      "path": "analog/tx/serializer/tb/clock_replay/counter.py",
+      "sha256": "2e2aee708504033bb9404a5e4b32ab8de97854e04d1e470a3c9fd75820637758"
+    },
+    {
+      "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+      "sha256": "4121cff3fffa1771f39cdc5e49dbe6b04658f4b2d59f556a7e7b377684bd30f5"
+    },
+    {
+      "path": "config/tx_working_revision.toml",
+      "sha256": "ec33ea088405a89737815ecce413f63ba8c64287c28d40d9706bcfe3a407f7a2"
+    },
+    {
+      "path": "docs/design/tx_serializer.md",
+      "sha256": "63d3e9a35bb404c6cc8f274b5e5a5a08857110787ac00efc9cc61f5aedcabeaf"
+    },
+    {
+      "path": "docs/design/tx_clock_distribution.md",
+      "sha256": "a6e0c148c1de69fa87e110a8e622e8ce6f522a3a5aa8e5002e86fb5266bf5f3d"
+    },
+    {
+      "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+      "sha256": "c180fed1008263413b3c9850a89a8a24552de8d7c6a6414b4d76bbae0d5b7de5"
+    },
+    {
+      "path": "analog/common/devices/spice/sky130_primitives.spice",
+      "sha256": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02"
+    },
+    {
+      "path": "analog/tx/serializer/tb/clock_states/serializer_expected.json",
+      "sha256": "a968ed8f900962f46610a243769b33ae1f786abbef5a6037ebaa931344b252bb"
+    },
+    {
+      "path": "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py",
+      "sha256": "8761d776dcedbfb2530afa9c90f66704d54844f1e113490285036e4f04711478"
+    },
+    {
+      "path": "verification/work_packages/wp002_tx_ingress.py",
+      "sha256": "998d7ef3072cb4ed7d6e9e29141333e5f0498acc77b3dad672df9f11c978329c"
+    }
+  ],
+  "observations": {
+    "serializer": {
+      "kind": "direct_observation_and_static_calculation",
+      "root": {
+        "name": "serdes16_cml_tree_retimed_lowov",
+        "ports": [
+          "d0p",
+          "d0n",
+          "d1p",
+          "d1n",
+          "d2p",
+          "d2n",
+          "d3p",
+          "d3n",
+          "d4p",
+          "d4n",
+          "d5p",
+          "d5n",
+          "d6p",
+          "d6n",
+          "d7p",
+          "d7n",
+          "d8p",
+          "d8n",
+          "d9p",
+          "d9n",
+          "d10p",
+          "d10n",
+          "d11p",
+          "d11n",
+          "d12p",
+          "d12n",
+          "d13p",
+          "d13n",
+          "d14p",
+          "d14n",
+          "d15p",
+          "d15n",
+          "c250p",
+          "c250n",
+          "c500p",
+          "c500n",
+          "c1gp",
+          "c1gn",
+          "c2gp",
+          "c2gn",
+          "qp",
+          "qn",
+          "vbias",
+          "vdd_bias",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {
+          "wdata": "40",
+          "wselect": "96",
+          "wtail": "12",
+          "rload": "500",
+          "rout": "400",
+          "tail_scale": "6",
+          "wsf": "80",
+          "wsf_sink": "4"
+        },
+        "source": {
+          "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+          "line": 5,
+          "end_line": 6
+        }
+      },
+      "rank_counts": {
+        "1": 8,
+        "2": 4,
+        "3": 2,
+        "4": 1
+      },
+      "connections": [
+        {
+          "instance": "Xr1_0",
+          "rank": 1,
+          "A": [
+            "d0p",
+            "d0n"
+          ],
+          "B": [
+            "d8p",
+            "d8n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_0p",
+            "g1_0n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 8,
+            "end_line": 9
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_1",
+          "rank": 1,
+          "A": [
+            "d1p",
+            "d1n"
+          ],
+          "B": [
+            "d9p",
+            "d9n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_1p",
+            "g1_1n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 10,
+            "end_line": 11
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_2",
+          "rank": 1,
+          "A": [
+            "d2p",
+            "d2n"
+          ],
+          "B": [
+            "d10p",
+            "d10n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_2p",
+            "g1_2n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 12,
+            "end_line": 13
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_3",
+          "rank": 1,
+          "A": [
+            "d3p",
+            "d3n"
+          ],
+          "B": [
+            "d11p",
+            "d11n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_3p",
+            "g1_3n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 14,
+            "end_line": 15
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_4",
+          "rank": 1,
+          "A": [
+            "d4p",
+            "d4n"
+          ],
+          "B": [
+            "d12p",
+            "d12n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_4p",
+            "g1_4n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 16,
+            "end_line": 17
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_5",
+          "rank": 1,
+          "A": [
+            "d5p",
+            "d5n"
+          ],
+          "B": [
+            "d13p",
+            "d13n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_5p",
+            "g1_5n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 18,
+            "end_line": 19
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_6",
+          "rank": 1,
+          "A": [
+            "d6p",
+            "d6n"
+          ],
+          "B": [
+            "d14p",
+            "d14n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_6p",
+            "g1_6n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 20,
+            "end_line": 21
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr1_7",
+          "rank": 1,
+          "A": [
+            "d7p",
+            "d7n"
+          ],
+          "B": [
+            "d15p",
+            "d15n"
+          ],
+          "select": [
+            "c250p",
+            "c250n"
+          ],
+          "output": [
+            "g1_7p",
+            "g1_7n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 22,
+            "end_line": 23
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr2_0",
+          "rank": 2,
+          "A": [
+            "g1_0p",
+            "g1_0n"
+          ],
+          "B": [
+            "g1_4p",
+            "g1_4n"
+          ],
+          "select": [
+            "c500p",
+            "c500n"
+          ],
+          "output": [
+            "g2_0p",
+            "g2_0n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 24,
+            "end_line": 25
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr2_1",
+          "rank": 2,
+          "A": [
+            "g1_1p",
+            "g1_1n"
+          ],
+          "B": [
+            "g1_5p",
+            "g1_5n"
+          ],
+          "select": [
+            "c500p",
+            "c500n"
+          ],
+          "output": [
+            "g2_1p",
+            "g2_1n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 26,
+            "end_line": 27
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr2_2",
+          "rank": 2,
+          "A": [
+            "g1_2p",
+            "g1_2n"
+          ],
+          "B": [
+            "g1_6p",
+            "g1_6n"
+          ],
+          "select": [
+            "c500p",
+            "c500n"
+          ],
+          "output": [
+            "g2_2p",
+            "g2_2n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 28,
+            "end_line": 29
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr2_3",
+          "rank": 2,
+          "A": [
+            "g1_3p",
+            "g1_3n"
+          ],
+          "B": [
+            "g1_7p",
+            "g1_7n"
+          ],
+          "select": [
+            "c500p",
+            "c500n"
+          ],
+          "output": [
+            "g2_3p",
+            "g2_3n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 30,
+            "end_line": 31
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr3_0",
+          "rank": 3,
+          "A": [
+            "g2_0p",
+            "g2_0n"
+          ],
+          "B": [
+            "g2_2p",
+            "g2_2n"
+          ],
+          "select": [
+            "c1gp",
+            "c1gn"
+          ],
+          "output": [
+            "g3_0p",
+            "g3_0n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 32,
+            "end_line": 33
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr3_1",
+          "rank": 3,
+          "A": [
+            "g2_1p",
+            "g2_1n"
+          ],
+          "B": [
+            "g2_3p",
+            "g2_3n"
+          ],
+          "select": [
+            "c1gp",
+            "c1gn"
+          ],
+          "output": [
+            "g3_1p",
+            "g3_1n"
+          ],
+          "cell": "serdes_cml_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 34,
+            "end_line": 35
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rload}"
+          }
+        },
+        {
+          "instance": "Xr4_0",
+          "rank": 4,
+          "A": [
+            "g3_0p",
+            "g3_0n"
+          ],
+          "B": [
+            "g3_1p",
+            "g3_1n"
+          ],
+          "select": [
+            "c2gp",
+            "c2gn"
+          ],
+          "output": [
+            "qp",
+            "qn"
+          ],
+          "cell": "serdes_cml_latched_mux2_lowov",
+          "source": {
+            "path": "analog/tx/serializer/spice/serializer16_retimed_lowov.spice",
+            "line": 36,
+            "end_line": 37
+          },
+          "params": {
+            "wdata": "{wdata}",
+            "wselect": "{wselect}",
+            "wtail": "{tail_scale*wtail}",
+            "nftail": "{4*tail_scale}",
+            "wsf": "{wsf}",
+            "wsf_sink": "{wsf_sink}",
+            "rload": "{rout}"
+          }
+        }
+      ],
+      "ideal_static_table": [
+        {
+          "s250": 0,
+          "s500": 0,
+          "s1g": 0,
+          "s2g": 0,
+          "leaf": "d0",
+          "data_pair": [
+            "d0p",
+            "d0n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_0",
+            "Xr1_0"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 0,
+          "s1g": 0,
+          "s2g": 1,
+          "leaf": "d1",
+          "data_pair": [
+            "d1p",
+            "d1n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_1",
+            "Xr1_1"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 0,
+          "s1g": 1,
+          "s2g": 0,
+          "leaf": "d2",
+          "data_pair": [
+            "d2p",
+            "d2n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_2",
+            "Xr1_2"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 0,
+          "s1g": 1,
+          "s2g": 1,
+          "leaf": "d3",
+          "data_pair": [
+            "d3p",
+            "d3n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_3",
+            "Xr1_3"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 1,
+          "s1g": 0,
+          "s2g": 0,
+          "leaf": "d4",
+          "data_pair": [
+            "d4p",
+            "d4n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_0",
+            "Xr1_4"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 1,
+          "s1g": 0,
+          "s2g": 1,
+          "leaf": "d5",
+          "data_pair": [
+            "d5p",
+            "d5n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_1",
+            "Xr1_5"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 1,
+          "s1g": 1,
+          "s2g": 0,
+          "leaf": "d6",
+          "data_pair": [
+            "d6p",
+            "d6n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_2",
+            "Xr1_6"
+          ]
+        },
+        {
+          "s250": 0,
+          "s500": 1,
+          "s1g": 1,
+          "s2g": 1,
+          "leaf": "d7",
+          "data_pair": [
+            "d7p",
+            "d7n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_3",
+            "Xr1_7"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 0,
+          "s1g": 0,
+          "s2g": 0,
+          "leaf": "d8",
+          "data_pair": [
+            "d8p",
+            "d8n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_0",
+            "Xr1_0"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 0,
+          "s1g": 0,
+          "s2g": 1,
+          "leaf": "d9",
+          "data_pair": [
+            "d9p",
+            "d9n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_1",
+            "Xr1_1"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 0,
+          "s1g": 1,
+          "s2g": 0,
+          "leaf": "d10",
+          "data_pair": [
+            "d10p",
+            "d10n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_2",
+            "Xr1_2"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 0,
+          "s1g": 1,
+          "s2g": 1,
+          "leaf": "d11",
+          "data_pair": [
+            "d11p",
+            "d11n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_3",
+            "Xr1_3"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 1,
+          "s1g": 0,
+          "s2g": 0,
+          "leaf": "d12",
+          "data_pair": [
+            "d12p",
+            "d12n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_0",
+            "Xr1_4"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 1,
+          "s1g": 0,
+          "s2g": 1,
+          "leaf": "d13",
+          "data_pair": [
+            "d13p",
+            "d13n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_1",
+            "Xr1_5"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 1,
+          "s1g": 1,
+          "s2g": 0,
+          "leaf": "d14",
+          "data_pair": [
+            "d14p",
+            "d14n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_0",
+            "Xr2_2",
+            "Xr1_6"
+          ]
+        },
+        {
+          "s250": 1,
+          "s500": 1,
+          "s1g": 1,
+          "s2g": 1,
+          "leaf": "d15",
+          "data_pair": [
+            "d15p",
+            "d15n"
+          ],
+          "path": [
+            "Xr4_0",
+            "Xr3_1",
+            "Xr2_3",
+            "Xr1_7"
+          ]
+        }
+      ],
+      "convention": "1 means sp>sn selects B; 0 means sp<sn selects A; equal inputs are undefined",
+      "convention_sources": [
+        {
+          "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+          "line": 13,
+          "excerpt": "* sp>sn selects B; sp<sn selects A. Each data pair is high-CM differential."
+        },
+        {
+          "path": "analog/common/cml_mux/spice/cml_mux2.spice",
+          "line": 2,
+          "excerpt": "* sp>sn selects B; sp<sn selects A. Each data pair is high-CM differential."
+        }
+      ],
+      "scope": "Only this static table replaces the final latched cell by an ideal noninverting MUX. It contains no latch history, clk-to-q, propagation delay, setup/hold, analog dynamics, temporal state sequence, or dynamic word-boundary proof."
+    },
+    "final_latches": {
+      "kind": "direct_wiring_and_polarity_inference",
+      "final_cell": {
+        "name": "serdes_cml_latched_mux2_lowov",
+        "ports": [
+          "ap",
+          "an",
+          "bp",
+          "bn",
+          "sp",
+          "sn",
+          "qp",
+          "qn",
+          "vbias_sf",
+          "vbias_logic",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {
+          "wdata": "40",
+          "wselect": "64",
+          "wtail": "12",
+          "rload": "400",
+          "whold": "40",
+          "wsf": "40",
+          "wsf_sink": "4",
+          "latch_tail_scale": "2",
+          "latch_load_scale": "0.75",
+          "nftail": "4"
+        },
+        "source": {
+          "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+          "line": 55,
+          "end_line": 56
+        }
+      },
+      "latch_cell": {
+        "name": "serdes_cml_data_latch_lowov",
+        "ports": [
+          "dp",
+          "dn",
+          "qp",
+          "qn",
+          "clk_track",
+          "clk_hold",
+          "vbias_logic",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {
+          "wdata": "40",
+          "whold": "40",
+          "wclock": "96",
+          "wtail": "12",
+          "rload": "400",
+          "nftail": "4"
+        },
+        "source": {
+          "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+          "line": 37,
+          "end_line": 38
+        }
+      },
+      "latches": [
+        {
+          "instance": "Xla",
+          "pins": {
+            "dp": "ap",
+            "dn": "an",
+            "qp": "ahp",
+            "qn": "ahn",
+            "clk_track": "sap",
+            "clk_hold": "san",
+            "vbias_logic": "vbias_logic",
+            "vdd": "vdd",
+            "vss": "vss"
+          },
+          "source": {
+            "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+            "line": 65,
+            "end_line": 66
+          },
+          "track_clock": "sap",
+          "hold_clock": "san",
+          "external_track_source": "sp",
+          "external_hold_source": "sn",
+          "clock_followers": [
+            {
+              "instance": "Xfpa",
+              "nodes": [
+                "vdd",
+                "sp",
+                "sap",
+                "vss"
+              ],
+              "cell": "serdes_nfet_lvt",
+              "params": {
+                "w": "{wsf}",
+                "nf": "4"
+              },
+              "source": {
+                "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+                "line": 57,
+                "end_line": 57
+              },
+              "statement": "Xfpa vdd sp sap vss serdes_nfet_lvt w={wsf} nf=4"
+            },
+            {
+              "instance": "Xfna",
+              "nodes": [
+                "vdd",
+                "sn",
+                "san",
+                "vss"
+              ],
+              "cell": "serdes_nfet_lvt",
+              "params": {
+                "w": "{wsf}",
+                "nf": "4"
+              },
+              "source": {
+                "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+                "line": 58,
+                "end_line": 58
+              },
+              "statement": "Xfna vdd sn san vss serdes_nfet_lvt w={wsf} nf=4"
+            }
+          ]
+        },
+        {
+          "instance": "Xlb",
+          "pins": {
+            "dp": "bp",
+            "dn": "bn",
+            "qp": "bhp",
+            "qn": "bhn",
+            "clk_track": "sbn",
+            "clk_hold": "sbp",
+            "vbias_logic": "vbias_logic",
+            "vdd": "vdd",
+            "vss": "vss"
+          },
+          "source": {
+            "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+            "line": 67,
+            "end_line": 68
+          },
+          "track_clock": "sbn",
+          "hold_clock": "sbp",
+          "external_track_source": "sn",
+          "external_hold_source": "sp",
+          "clock_followers": [
+            {
+              "instance": "Xfnb",
+              "nodes": [
+                "vdd",
+                "sn",
+                "sbn",
+                "vss"
+              ],
+              "cell": "serdes_nfet_lvt",
+              "params": {
+                "w": "{wsf}",
+                "nf": "4"
+              },
+              "source": {
+                "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+                "line": 62,
+                "end_line": 62
+              },
+              "statement": "Xfnb vdd sn sbn vss serdes_nfet_lvt w={wsf} nf=4"
+            },
+            {
+              "instance": "Xfpb",
+              "nodes": [
+                "vdd",
+                "sp",
+                "sbp",
+                "vss"
+              ],
+              "cell": "serdes_nfet_lvt",
+              "params": {
+                "w": "{wsf}",
+                "nf": "4"
+              },
+              "source": {
+                "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+                "line": 61,
+                "end_line": 61
+              },
+              "statement": "Xfpb vdd sp sbp vss serdes_nfet_lvt w={wsf} nf=4"
+            }
+          ]
+        }
+      ],
+      "steering": [
+        {
+          "instance": "Xct",
+          "nodes": [
+            "track",
+            "clk_track",
+            "tail",
+            "vss"
+          ],
+          "cell": "serdes_nfet_lvt",
+          "params": {
+            "w": "{wclock}",
+            "nf": "4"
+          },
+          "source": {
+            "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+            "line": 45,
+            "end_line": 45
+          },
+          "statement": "Xct track clk_track tail vss serdes_nfet_lvt w={wclock} nf=4"
+        },
+        {
+          "instance": "Xch",
+          "nodes": [
+            "hold",
+            "clk_hold",
+            "tail",
+            "vss"
+          ],
+          "cell": "serdes_nfet_lvt",
+          "params": {
+            "w": "{wclock}",
+            "nf": "4"
+          },
+          "source": {
+            "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+            "line": 46,
+            "end_line": 46
+          },
+          "statement": "Xch hold clk_hold tail vss serdes_nfet_lvt w={wclock} nf=4"
+        }
+      ],
+      "polarity_source": {
+        "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+        "line": 35,
+        "excerpt": "* clk_track > clk_hold: noninverting track; opposite polarity: regenerate/hold."
+      },
+      "selected_mux": {
+        "instance": "Xm",
+        "nodes": [
+          "ahp",
+          "ahn",
+          "bhp",
+          "bhn",
+          "sp",
+          "sn",
+          "qp",
+          "qn",
+          "vbias_sf",
+          "vbias_logic",
+          "vdd",
+          "vss"
+        ],
+        "cell": "serdes_cml_mux2_lowov",
+        "params": {
+          "wdata": "{wdata}",
+          "wselect": "{wselect}",
+          "wtail": "{wtail}",
+          "nftail": "{nftail}",
+          "rload": "{rload}",
+          "wsf": "{wsf}",
+          "wsf_sink": "{wsf_sink}"
+        },
+        "source": {
+          "path": "analog/common/cml_mux/spice/cml_lowov_cells.spice",
+          "line": 69,
+          "end_line": 70
+        },
+        "statement": "Xm ahp ahn bhp bhn sp sn qp qn vbias_sf vbias_logic vdd vss serdes_cml_mux2_lowov wdata={wdata} wselect={wselect} wtail={wtail} nftail={nftail} rload={rload} wsf={wsf} wsf_sink={wsf_sink}"
+      },
+      "inference": "A is wired to track when sap>san (followers driven by sp/sn), while B is selected; B is wired to track when sbn>sbp (followers driven by sn/sp), while A is selected. The selected branch is wired for hold. Follower lag and transient behavior are unmeasured.",
+      "numerical_setup_s": null,
+      "numerical_hold_s": null,
+      "difference_from_static_table": "Actual Xm selects held ahp/ahn or bhp/bhn; the ideal table traces the original A/B inputs without those latch state variables."
+    },
+    "ingress": {
+      "kind": "direct_wiring_and_bounded_absence_inference",
+      "bench": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+      "paths": [
+        {
+          "lane": 0,
+          "source": "Vd0: d0 to ground PWL",
+          "converter": {
+            "instance": "Xconv0",
+            "nodes": [
+              "d0",
+              "d0p",
+              "d0n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 71,
+              "end_line": 71
+            },
+            "statement": "Xconv0 d0 d0p d0n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d0",
+            "outp": "d0p",
+            "outn": "d0n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d0p",
+            "d0n"
+          ]
+        },
+        {
+          "lane": 1,
+          "source": "Vd1: d1 to ground PWL",
+          "converter": {
+            "instance": "Xconv1",
+            "nodes": [
+              "d1",
+              "d1p",
+              "d1n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 72,
+              "end_line": 72
+            },
+            "statement": "Xconv1 d1 d1p d1n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d1",
+            "outp": "d1p",
+            "outn": "d1n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d1p",
+            "d1n"
+          ]
+        },
+        {
+          "lane": 2,
+          "source": "Vd2: d2 to ground PWL",
+          "converter": {
+            "instance": "Xconv2",
+            "nodes": [
+              "d2",
+              "d2p",
+              "d2n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 73,
+              "end_line": 73
+            },
+            "statement": "Xconv2 d2 d2p d2n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d2",
+            "outp": "d2p",
+            "outn": "d2n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d2p",
+            "d2n"
+          ]
+        },
+        {
+          "lane": 3,
+          "source": "Vd3: d3 to ground PWL",
+          "converter": {
+            "instance": "Xconv3",
+            "nodes": [
+              "d3",
+              "d3p",
+              "d3n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 74,
+              "end_line": 74
+            },
+            "statement": "Xconv3 d3 d3p d3n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d3",
+            "outp": "d3p",
+            "outn": "d3n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d3p",
+            "d3n"
+          ]
+        },
+        {
+          "lane": 4,
+          "source": "Vd4: d4 to ground PWL",
+          "converter": {
+            "instance": "Xconv4",
+            "nodes": [
+              "d4",
+              "d4p",
+              "d4n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 75,
+              "end_line": 75
+            },
+            "statement": "Xconv4 d4 d4p d4n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d4",
+            "outp": "d4p",
+            "outn": "d4n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d4p",
+            "d4n"
+          ]
+        },
+        {
+          "lane": 5,
+          "source": "Vd5: d5 to ground PWL",
+          "converter": {
+            "instance": "Xconv5",
+            "nodes": [
+              "d5",
+              "d5p",
+              "d5n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 76,
+              "end_line": 76
+            },
+            "statement": "Xconv5 d5 d5p d5n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d5",
+            "outp": "d5p",
+            "outn": "d5n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d5p",
+            "d5n"
+          ]
+        },
+        {
+          "lane": 6,
+          "source": "Vd6: d6 to ground PWL",
+          "converter": {
+            "instance": "Xconv6",
+            "nodes": [
+              "d6",
+              "d6p",
+              "d6n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 77,
+              "end_line": 77
+            },
+            "statement": "Xconv6 d6 d6p d6n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d6",
+            "outp": "d6p",
+            "outn": "d6n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d6p",
+            "d6n"
+          ]
+        },
+        {
+          "lane": 7,
+          "source": "Vd7: d7 to ground PWL",
+          "converter": {
+            "instance": "Xconv7",
+            "nodes": [
+              "d7",
+              "d7p",
+              "d7n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 78,
+              "end_line": 78
+            },
+            "statement": "Xconv7 d7 d7p d7n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d7",
+            "outp": "d7p",
+            "outn": "d7n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d7p",
+            "d7n"
+          ]
+        },
+        {
+          "lane": 8,
+          "source": "Vd8: d8 to ground PWL",
+          "converter": {
+            "instance": "Xconv8",
+            "nodes": [
+              "d8",
+              "d8p",
+              "d8n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 79,
+              "end_line": 79
+            },
+            "statement": "Xconv8 d8 d8p d8n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d8",
+            "outp": "d8p",
+            "outn": "d8n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d8p",
+            "d8n"
+          ]
+        },
+        {
+          "lane": 9,
+          "source": "Vd9: d9 to ground PWL",
+          "converter": {
+            "instance": "Xconv9",
+            "nodes": [
+              "d9",
+              "d9p",
+              "d9n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 80,
+              "end_line": 80
+            },
+            "statement": "Xconv9 d9 d9p d9n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d9",
+            "outp": "d9p",
+            "outn": "d9n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d9p",
+            "d9n"
+          ]
+        },
+        {
+          "lane": 10,
+          "source": "Vd10: d10 to ground PWL",
+          "converter": {
+            "instance": "Xconv10",
+            "nodes": [
+              "d10",
+              "d10p",
+              "d10n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 81,
+              "end_line": 81
+            },
+            "statement": "Xconv10 d10 d10p d10n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d10",
+            "outp": "d10p",
+            "outn": "d10n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d10p",
+            "d10n"
+          ]
+        },
+        {
+          "lane": 11,
+          "source": "Vd11: d11 to ground PWL",
+          "converter": {
+            "instance": "Xconv11",
+            "nodes": [
+              "d11",
+              "d11p",
+              "d11n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 82,
+              "end_line": 82
+            },
+            "statement": "Xconv11 d11 d11p d11n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d11",
+            "outp": "d11p",
+            "outn": "d11n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d11p",
+            "d11n"
+          ]
+        },
+        {
+          "lane": 12,
+          "source": "Vd12: d12 to ground PWL",
+          "converter": {
+            "instance": "Xconv12",
+            "nodes": [
+              "d12",
+              "d12p",
+              "d12n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 83,
+              "end_line": 83
+            },
+            "statement": "Xconv12 d12 d12p d12n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d12",
+            "outp": "d12p",
+            "outn": "d12n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d12p",
+            "d12n"
+          ]
+        },
+        {
+          "lane": 13,
+          "source": "Vd13: d13 to ground PWL",
+          "converter": {
+            "instance": "Xconv13",
+            "nodes": [
+              "d13",
+              "d13p",
+              "d13n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 84,
+              "end_line": 84
+            },
+            "statement": "Xconv13 d13 d13p d13n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d13",
+            "outp": "d13p",
+            "outn": "d13n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d13p",
+            "d13n"
+          ]
+        },
+        {
+          "lane": 14,
+          "source": "Vd14: d14 to ground PWL",
+          "converter": {
+            "instance": "Xconv14",
+            "nodes": [
+              "d14",
+              "d14p",
+              "d14n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 85,
+              "end_line": 85
+            },
+            "statement": "Xconv14 d14 d14p d14n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d14",
+            "outp": "d14p",
+            "outn": "d14n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d14p",
+            "d14n"
+          ]
+        },
+        {
+          "lane": 15,
+          "source": "Vd15: d15 to ground PWL",
+          "converter": {
+            "instance": "Xconv15",
+            "nodes": [
+              "d15",
+              "d15p",
+              "d15n",
+              "vbias",
+              "vdata",
+              "0"
+            ],
+            "cell": "serdes_cmos_to_cml_data",
+            "params": {},
+            "source": {
+              "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+              "line": 86,
+              "end_line": 86
+            },
+            "statement": "Xconv15 d15 d15p d15n vbias vdata 0 serdes_cmos_to_cml_data"
+          },
+          "pins": {
+            "din": "d15",
+            "outp": "d15p",
+            "outn": "d15n",
+            "vbias": "vbias",
+            "vdd": "vdata",
+            "vss": "0"
+          },
+          "serializer_ports": [
+            "d15p",
+            "d15n"
+          ]
+        }
+      ],
+      "serializer_instance": {
+        "instance": "Xtree",
+        "nodes": [
+          "d0p",
+          "d0n",
+          "d1p",
+          "d1n",
+          "d2p",
+          "d2n",
+          "d3p",
+          "d3n",
+          "d4p",
+          "d4n",
+          "d5p",
+          "d5n",
+          "d6p",
+          "d6n",
+          "d7p",
+          "d7n",
+          "d8p",
+          "d8n",
+          "d9p",
+          "d9n",
+          "d10p",
+          "d10n",
+          "d11p",
+          "d11n",
+          "d12p",
+          "d12n",
+          "d13p",
+          "d13n",
+          "d14p",
+          "d14n",
+          "d15p",
+          "d15n",
+          "c250p",
+          "c250n",
+          "c500p",
+          "c500n",
+          "c1gp",
+          "c1gn",
+          "c2gp",
+          "c2gn",
+          "qp",
+          "qn",
+          "vbias",
+          "vlogic",
+          "vmux",
+          "0"
+        ],
+        "cell": "serdes16_cml_tree_retimed_lowov",
+        "params": {
+          "wdata": "{wdata}",
+          "wselect": "{wselect}",
+          "wtail": "{wtail}",
+          "rload": "{rload}",
+          "rout": "{rout}",
+          "tail_scale": "{lowov_scale}",
+          "wsf": "{wsf}"
+        },
+        "source": {
+          "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+          "line": 89,
+          "end_line": 90
+        },
+        "statement": "Xtree d0p d0n d1p d1n d2p d2n d3p d3n d4p d4n d5p d5n d6p d6n d7p d7n d8p d8n d9p d9n d10p d10n d11p d11n d12p d12n d13p d13n d14p d14n d15p d15n c250p c250n c500p c500n c1gp c1gn c2gp c2gn qp qn vbias vlogic vmux 0 serdes16_cml_tree_retimed_lowov wdata={wdata} wselect={wselect} wtail={wtail} rload={rload} rout={rout} tail_scale={lowov_scale} wsf={wsf}"
+      },
+      "source_generator": {
+        "path": "analog/tx/serializer/tb/native_clock/run.py",
+        "line": 184,
+        "excerpt": "lines.append(f\"Vd{m[j]} d{m[j]} 0 PWL({' '.join(pts)})\")"
+      },
+      "ingress_word_register_present": false,
+      "absence_scope": "This bench's d0..d15 -> Xconv0..15 -> Xtree path and this serializer subckt. DFFs in clock/detector hierarchies do not register these data lanes.",
+      "converter_cell": {
+        "name": "serdes_cmos_to_cml_data",
+        "ports": [
+          "din",
+          "outp",
+          "outn",
+          "vbias",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {
+          "wdata": "12",
+          "wtail": "12",
+          "rload": "400"
+        },
+        "source": {
+          "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+          "line": 4,
+          "end_line": 5
+        }
+      },
+      "converter_input_devices": [
+        {
+          "instance": "Xinv",
+          "nodes": [
+            "din",
+            "din_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {
+            "wn": "2",
+            "wp": "4"
+          },
+          "source": {
+            "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+            "line": 6,
+            "end_line": 6
+          },
+          "statement": "Xinv din din_b vdd vss serdes_cmos_inv wn=2 wp=4"
+        },
+        {
+          "instance": "Xp",
+          "nodes": [
+            "outn",
+            "din",
+            "tail",
+            "vss"
+          ],
+          "cell": "serdes_nfet_lvt",
+          "params": {
+            "w": "{wdata}",
+            "nf": "4"
+          },
+          "source": {
+            "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+            "line": 9,
+            "end_line": 9
+          },
+          "statement": "Xp outn din tail vss serdes_nfet_lvt w={wdata} nf=4"
+        }
+      ],
+      "converter_other_data_device": {
+        "instance": "Xn",
+        "nodes": [
+          "outp",
+          "din_b",
+          "tail",
+          "vss"
+        ],
+        "cell": "serdes_nfet_lvt",
+        "params": {
+          "w": "{wdata}",
+          "nf": "4"
+        },
+        "source": {
+          "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+          "line": 10,
+          "end_line": 10
+        },
+        "statement": "Xn outp din_b tail vss serdes_nfet_lvt w={wdata} nf=4"
+      },
+      "inverter_cell": {
+        "name": "serdes_cmos_inv",
+        "ports": [
+          "a",
+          "y",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {
+          "wn": "1",
+          "wp": "2"
+        },
+        "source": {
+          "path": "analog/common/devices/spice/cmos_logic.spice",
+          "line": 2,
+          "end_line": 2
+        }
+      },
+      "inverter_devices": [
+        {
+          "instance": "Xn",
+          "nodes": [
+            "y",
+            "a",
+            "vss",
+            "vss"
+          ],
+          "cell": "serdes_nfet",
+          "params": {
+            "w": "{wn}"
+          },
+          "source": {
+            "path": "analog/common/devices/spice/cmos_logic.spice",
+            "line": 3,
+            "end_line": 3
+          },
+          "statement": "Xn y a vss vss serdes_nfet w={wn}"
+        },
+        {
+          "instance": "Xp",
+          "nodes": [
+            "y",
+            "a",
+            "vdd",
+            "vdd"
+          ],
+          "cell": "serdes_pfet",
+          "params": {
+            "w": "{wp}"
+          },
+          "source": {
+            "path": "analog/common/devices/spice/cmos_logic.spice",
+            "line": 4,
+            "end_line": 4
+          },
+          "statement": "Xp y a vdd vdd serdes_pfet w={wp}"
+        }
+      ],
+      "effective_input_gate_geometry": [
+        {
+          "device": "XconvN.Xp",
+          "type": "serdes_nfet_lvt",
+          "width_um": 12.0,
+          "length_um": 0.15,
+          "fingers": 4,
+          "source": {
+            "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+            "line": 9,
+            "end_line": 9
+          }
+        },
+        {
+          "device": "XconvN.Xinv.Xn",
+          "type": "serdes_nfet",
+          "width_um": 2.0,
+          "length_um": 0.15,
+          "fingers": 1,
+          "source": {
+            "path": "analog/common/devices/spice/cmos_logic.spice",
+            "line": 3,
+            "excerpt": "Xn y a vss vss serdes_nfet w={wn}"
+          }
+        },
+        {
+          "device": "XconvN.Xinv.Xp",
+          "type": "serdes_pfet",
+          "width_um": 4.0,
+          "length_um": 0.15,
+          "fingers": 1,
+          "source": {
+            "path": "analog/common/devices/spice/cmos_logic.spice",
+            "line": 4,
+            "excerpt": "Xp y a vdd vdd serdes_pfet w={wp}"
+          }
+        }
+      ],
+      "geometry_sources": [
+        {
+          "name": "serdes_nfet",
+          "ports": [
+            "d",
+            "g",
+            "s",
+            "b"
+          ],
+          "defaults": {
+            "w": "1",
+            "l": "0.15",
+            "nf": "1"
+          },
+          "source": {
+            "path": "analog/common/devices/spice/sky130_primitives.spice",
+            "line": 5,
+            "end_line": 5
+          }
+        },
+        {
+          "name": "serdes_nfet_lvt",
+          "ports": [
+            "d",
+            "g",
+            "s",
+            "b"
+          ],
+          "defaults": {
+            "w": "1",
+            "l": "0.15",
+            "nf": "1"
+          },
+          "source": {
+            "path": "analog/common/devices/spice/sky130_primitives.spice",
+            "line": 13,
+            "end_line": 13
+          }
+        },
+        {
+          "name": "serdes_pfet",
+          "ports": [
+            "d",
+            "g",
+            "s",
+            "b"
+          ],
+          "defaults": {
+            "w": "3",
+            "l": "0.15",
+            "nf": "1"
+          },
+          "source": {
+            "path": "analog/common/devices/spice/sky130_primitives.spice",
+            "line": 21,
+            "end_line": 21
+          }
+        }
+      ],
+      "width_convention": {
+        "path": "analog/common/devices/spice/sky130_primitives.spice",
+        "line": 2,
+        "excerpt": "* w and l are micrometres, w is TOTAL width, nf is finger count."
+      },
+      "input_capacitance_f": null,
+      "input_capacitance_reason": "Gate dimensions identify load devices; no charge/AC extraction or simulation was performed."
+    },
+    "reusable_cmos_dff": {
+      "kind": "source_description_and_wiring",
+      "dff": {
+        "name": "serdes_cmos_dff_reset",
+        "ports": [
+          "d",
+          "clk",
+          "rst_b",
+          "q",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {},
+        "source": {
+          "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+          "line": 18,
+          "end_line": 18
+        }
+      },
+      "latch": {
+        "name": "serdes_cmos_latch_reset",
+        "ports": [
+          "d",
+          "en",
+          "rst_b",
+          "q",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {},
+        "source": {
+          "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+          "line": 4,
+          "end_line": 4
+        }
+      },
+      "dff_instances": [
+        {
+          "instance": "Xcb",
+          "nodes": [
+            "clk",
+            "clk_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 20,
+            "end_line": 20
+          },
+          "statement": "Xcb clk clk_b vdd vss serdes_cmos_inv"
+        },
+        {
+          "instance": "Xme",
+          "nodes": [
+            "clk",
+            "slave_en",
+            "master_en",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_nor2",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 21,
+            "end_line": 21
+          },
+          "statement": "Xme clk slave_en master_en vdd vss serdes_cmos_nor2"
+        },
+        {
+          "instance": "Xse",
+          "nodes": [
+            "clk_b",
+            "master_en",
+            "slave_en",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_nor2",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 22,
+            "end_line": 22
+          },
+          "statement": "Xse clk_b master_en slave_en vdd vss serdes_cmos_nor2"
+        },
+        {
+          "instance": "Xm",
+          "nodes": [
+            "d",
+            "master_en",
+            "rst_b",
+            "m",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_latch_reset",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 23,
+            "end_line": 23
+          },
+          "statement": "Xm d master_en rst_b m vdd vss serdes_cmos_latch_reset"
+        },
+        {
+          "instance": "Xs",
+          "nodes": [
+            "m",
+            "slave_en",
+            "rst_b",
+            "q",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_latch_reset",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 24,
+            "end_line": 24
+          },
+          "statement": "Xs m slave_en rst_b q vdd vss serdes_cmos_latch_reset"
+        }
+      ],
+      "latch_instances": [
+        {
+          "instance": "Xeb",
+          "nodes": [
+            "en",
+            "en_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 5,
+            "end_line": 5
+          },
+          "statement": "Xeb en en_b vdd vss serdes_cmos_inv"
+        },
+        {
+          "instance": "Xpn",
+          "nodes": [
+            "en",
+            "rst_b",
+            "pass_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_nand2",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 6,
+            "end_line": 6
+          },
+          "statement": "Xpn en rst_b pass_b vdd vss serdes_cmos_nand2"
+        },
+        {
+          "instance": "Xpi",
+          "nodes": [
+            "pass_b",
+            "pass",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 7,
+            "end_line": 7
+          },
+          "statement": "Xpi pass_b pass vdd vss serdes_cmos_inv"
+        },
+        {
+          "instance": "Xhn",
+          "nodes": [
+            "en_b",
+            "rst_b",
+            "hold_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_nand2",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 8,
+            "end_line": 8
+          },
+          "statement": "Xhn en_b rst_b hold_b vdd vss serdes_cmos_nand2"
+        },
+        {
+          "instance": "Xhi",
+          "nodes": [
+            "hold_b",
+            "hold",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 9,
+            "end_line": 9
+          },
+          "statement": "Xhi hold_b hold vdd vss serdes_cmos_inv"
+        },
+        {
+          "instance": "Xr",
+          "nodes": [
+            "rst_b",
+            "rst",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 10,
+            "end_line": 10
+          },
+          "statement": "Xr rst_b rst vdd vss serdes_cmos_inv"
+        },
+        {
+          "instance": "Xpass",
+          "nodes": [
+            "d",
+            "x",
+            "pass",
+            "pass_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_tgate",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 11,
+            "end_line": 11
+          },
+          "statement": "Xpass d x pass pass_b vdd vss serdes_cmos_tgate"
+        },
+        {
+          "instance": "Xhold",
+          "nodes": [
+            "q",
+            "x",
+            "hold",
+            "hold_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_tgate",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 12,
+            "end_line": 12
+          },
+          "statement": "Xhold q x hold hold_b vdd vss serdes_cmos_tgate"
+        },
+        {
+          "instance": "Xreset",
+          "nodes": [
+            "x",
+            "rst",
+            "vss",
+            "vss"
+          ],
+          "cell": "serdes_nfet",
+          "params": {
+            "w": "4"
+          },
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 13,
+            "end_line": 13
+          },
+          "statement": "Xreset x rst vss vss serdes_nfet w=4"
+        },
+        {
+          "instance": "Xi",
+          "nodes": [
+            "x",
+            "q_b",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 14,
+            "end_line": 14
+          },
+          "statement": "Xi x q_b vdd vss serdes_cmos_inv"
+        },
+        {
+          "instance": "Xo",
+          "nodes": [
+            "q_b",
+            "q",
+            "vdd",
+            "vss"
+          ],
+          "cell": "serdes_cmos_inv",
+          "params": {},
+          "source": {
+            "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+            "line": 15,
+            "end_line": 15
+          },
+          "statement": "Xo q_b q vdd vss serdes_cmos_inv"
+        }
+      ],
+      "documented_behavior": {
+        "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+        "line": 1,
+        "excerpt": "* Fully static positive-edge DFF; asynchronous active-low reset clears BOTH latches."
+      },
+      "polarity": "positive-edge clk; asynchronous active-low rst_b clears master and slave; noninverting q",
+      "interpretation": "Master enable is NOR(clk,slave_en); slave enable is NOR(clk_b,master_en). Reset drives each internal x low while disabling pass/hold; two inverters produce q=0.",
+      "cell_usage": "Available CMOS cell only; absent from the audited data-lane path.",
+      "clk_to_q_s": null,
+      "setup_s": null,
+      "hold_s": null,
+      "missing_characterization": "No timing characterization for these cells driving this CMOS-to-CML input is provided by this package."
+    },
+    "stimuli": {
+      "kind": "source_extraction_and_calculation",
+      "shared_generator": {
+        "function_source": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 170,
+          "end_line": 185
+        },
+        "bit_index": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 178,
+          "excerpt": "vals = [bits[16 * k + j] for k in range(len(edges))]"
+        },
+        "initial_value": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 179,
+          "excerpt": "pts = [f\"0 {'{supply}' if vals[0] else 0}\"]"
+        },
+        "loop": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 180,
+          "excerpt": "for k in range(1, len(edges)):"
+        },
+        "transition": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 183,
+          "excerpt": "pts.append(f\"{edges[k] - 10e-12:.14e} {a} {edges[k] + 10e-12:.14e} {b}\")"
+        },
+        "offset_each_side_s": 1e-11,
+        "transition_width_s": 2e-11,
+        "output_source": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 184,
+          "excerpt": "lines.append(f\"Vd{m[j]} d{m[j]} 0 PWL({' '.join(pts)})\")"
+        },
+        "remap_contract": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 173,
+          "excerpt": "remap: permutation m (slot j carries input m[j]); input m[j] then carries bit j."
+        },
+        "epoch_behavior": "Word 0 exists at t=0. edges[0] generates no PWL event; only changed lanes for k>=1 transition.",
+        "voltage_levels": "0 V and {supply} V (bench supply in volts)",
+        "bit_source": {
+          "path": "analog/tx/serializer/tb/clock_states/serializer_expected.json",
+          "json_pointer": "/bits",
+          "bit_count": 1088,
+          "first_word_bits": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ]
+        }
+      },
+      "old_native_data": {
+        "revision_scope": "native_clock/run.py data(): PLL r4 open-loop frontend and TX r2 distribution by default",
+        "word_delay": {
+          "value": 7.83e-11,
+          "source": {
+            "path": "analog/tx/serializer/tb/native_clock/run.py",
+            "line": 72,
+            "end_line": 72
+          },
+          "expression": "WORD_DELAY = 78.3e-12"
+        },
+        "words": {
+          "value": 13,
+          "source": {
+            "path": "analog/tx/serializer/tb/native_clock/run.py",
+            "line": 73,
+            "end_line": 73
+          },
+          "expression": "WORDS = 13"
+        },
+        "settle_overrides": {
+          "value": {
+            "fs_hot": 4.5e-08,
+            "fs_v1650_t85": 4.5e-08,
+            "fs_v1650_t-40": 4.5e-08
+          },
+          "source": {
+            "path": "analog/tx/serializer/tb/native_clock/run.py",
+            "line": 71,
+            "end_line": 71
+          },
+          "expression": "SETTLE = {\"fs_hot\": 45e-9, \"fs_v1650_t85\": 45e-9, \"fs_v1650_t-40\": 45e-9}"
+        },
+        "default_settle_s": 3e-08,
+        "default_settle_source": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 263,
+          "excerpt": "first = [x for x in p[\"src250_falls_s\"] if x > SETTLE.get(n, 30e-9)][0]"
+        },
+        "source_250_expression": {
+          "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+          "line": 151,
+          "excerpt": "let src250=v(p08p)-v(p08n)"
+        },
+        "serializer_250_expression": {
+          "path": "analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in",
+          "line": 144,
+          "excerpt": "let d250=v(c250p)-v(c250n)"
+        },
+        "measured_source_falls": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 224,
+          "excerpt": "falls = clock.edges(w.t, w[\"src250\"], -1, t0)"
+        },
+        "first_reference_fall": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 263,
+          "excerpt": "first = [x for x in p[\"src250_falls_s\"] if x > SETTLE.get(n, 30e-9)][0]"
+        },
+        "ui_source": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 223,
+          "excerpt": "ui = 0.5 / f"
+        },
+        "frequency_source": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 222,
+          "excerpt": "f = clock.period_stats(w.t, w[\"pb0\"], t0, t1)[\"frequency_hz\"]"
+        },
+        "word_period": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 262,
+          "excerpt": "period = 16 * p[\"ui_s\"]"
+        },
+        "schedule": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 264,
+          "excerpt": "edges = [first + WORD_DELAY + k * period for k in range(WORDS)]"
+        },
+        "generator_call": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 268,
+          "excerpt": "(d / \"stimuli.inc\").write_text(stimuli(edges, exp[\"bits\"], remap))"
+        },
+        "interpretation": "Epoch center = first source-250 falling edge after settle +78.3 ps; later centers extrapolate at 16 measured UI. Not a trigger on every serializer c250 falling edge. A changed lane's 20 ps ramp spans center +/-10 ps. The first center has no update event because word 0 was set at t=0.",
+        "optional_remap_sources": [
+          {
+            "path": "analog/tx/serializer/tb/native_clock/run.py",
+            "line": 255,
+            "excerpt": "if remap_state is not None:"
+          },
+          {
+            "path": "analog/tx/serializer/tb/native_clock/run.py",
+            "line": 257,
+            "excerpt": "remap = [int(x, 16) for x in rows[remap_state]]"
+          }
+        ],
+        "legacy_lookup": {
+          "path": "analog/tx/serializer/tb/native_clock/run.py",
+          "line": 251,
+          "excerpt": "probes = _latest_probes()"
+        },
+        "lookup_scope": "Historical data() code uses a latest-probe lookup. This extractor does not invoke it or read any results/latest pointer."
+      },
+      "r5_v3_static": {
+        "mode_choices_source": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 112,
+          "excerpt": "ap.add_argument(\"step\", choices=(\"probe\",))"
+        },
+        "generator_call": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 156,
+          "excerpt": "static = native.stimuli([0.0], bits)"
+        },
+        "bit_source": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 155,
+          "excerpt": "bits = json.loads(native.EXPECTED.read_text())[\"bits\"]"
+        },
+        "write_call": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 163,
+          "excerpt": "(d / \"stimuli.inc\").write_text(static)"
+        },
+        "frontend_replacement": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 49,
+          "excerpt": "rep(f'.include \"{ROOT}/analog/pll/top/spice/clock_frontend_r4.spice\"', f'.include \"{ROOT}/analog/pll/vco/spice/cap_bank_4b.spice\"\\n.include \"{ROOT}/analog/pll/vco/spice/vco_ring4_4b.spice\"\\n.include \"{ROOT}/analog/pll/top/spice/clock_frontend_r5.spice\"')"
+        },
+        "distribution_replacement": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 50,
+          "excerpt": "rep(f'.include \"{native.R2_DIST}\"', dist_v3.netlist(dist_cfg))                      # inline: its includes must reach rcorner.to_pdk"
+        },
+        "real_bias_pdk": {
+          "path": "analog/tx/serializer/tb/native_clock/r5_v3.py",
+          "line": 60,
+          "excerpt": "return bias.section(rcorner.to_pdk(bias.real(text, supply=\"vcore\"), camp), c.process, rc)"
+        },
+        "interpretation": "One word (the first 16 bits) held for the whole run; no changed-lane PWL ramps and no dynamic word scheduling/remap call.",
+        "dynamic_word_delay_s": null,
+        "dynamic_reference_edge": null,
+        "dynamic_transition_width_s": null,
+        "dynamic_word_latency_cycles": null,
+        "unknown_reason": "Only a static [0.0] edge list is passed; old WORD_DELAY/WORDS and dynamic ramp code are not exercised.",
+        "doc_scope": {
+          "path": "docs/design/tx_clock_distribution.md",
+          "line": 213,
+          "excerpt": "当前并行输入是静态电平，只验证时钟计数和加载；没有测动态串化眼图或位映射，不能把上述 8 点记为 TX 功能/规格通过。来源、告警、缺失点和恢复命令见[记录](../history/clocking_progress_20261106.md)。"
+        }
+      }
+    },
+    "clocks": {
+      "kind": "direct_wiring_and_source_description",
+      "counter": {
+        "name": "serdes_tx_sync_counter8",
+        "ports": [
+          "clkp",
+          "clkn",
+          "q0p",
+          "q0n",
+          "q1p",
+          "q1n",
+          "q2p",
+          "q2n",
+          "vbias",
+          "vbias_logic",
+          "vdd",
+          "vss"
+        ],
+        "defaults": {
+          "wsf": "240",
+          "wsf_sink": "12",
+          "wdata": "20",
+          "whold": "20",
+          "wclock": "64",
+          "wtail": "72",
+          "nftail": "24",
+          "rload": "600",
+          "gdata": "12",
+          "gselect": "24",
+          "gtail": "9.6",
+          "grload": "1000",
+          "gsf": "20",
+          "gsf_sink": "2"
+        },
+        "source": {
+          "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+          "line": 17,
+          "end_line": 19
+        }
+      },
+      "instances": [
+        {
+          "instance": "Xfp",
+          "nodes": [
+            "vdd",
+            "clkp",
+            "ckp",
+            "vss"
+          ],
+          "cell": "serdes_nfet_lvt",
+          "params": {
+            "w": "{wsf}",
+            "nf": "12"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 21,
+            "end_line": 21
+          },
+          "statement": "Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=12"
+        },
+        {
+          "instance": "Xfn",
+          "nodes": [
+            "vdd",
+            "clkn",
+            "ckn",
+            "vss"
+          ],
+          "cell": "serdes_nfet_lvt",
+          "params": {
+            "w": "{wsf}",
+            "nf": "12"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 22,
+            "end_line": 22
+          },
+          "statement": "Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=12"
+        },
+        {
+          "instance": "Xsp",
+          "nodes": [
+            "ckp",
+            "vbias",
+            "vss",
+            "vss"
+          ],
+          "cell": "serdes_nfet",
+          "params": {
+            "w": "{wsf_sink}",
+            "l": ".5"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 23,
+            "end_line": 23
+          },
+          "statement": "Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=.5"
+        },
+        {
+          "instance": "Xsn",
+          "nodes": [
+            "ckn",
+            "vbias",
+            "vss",
+            "vss"
+          ],
+          "cell": "serdes_nfet",
+          "params": {
+            "w": "{wsf_sink}",
+            "l": ".5"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 24,
+            "end_line": 24
+          },
+          "statement": "Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=.5"
+        },
+        {
+          "instance": "Xm0",
+          "nodes": [
+            "q0n",
+            "q0p",
+            "m0p",
+            "m0n",
+            "ckp",
+            "ckn",
+            "vbias_logic",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_latch",
+          "params": {
+            "wdata": "{wdata}",
+            "whold": "{whold}",
+            "wclock": "{wclock}",
+            "wtail": "{wtail}",
+            "nftail": "{nftail}",
+            "rload": "{rload}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 26,
+            "end_line": 27
+          },
+          "statement": "Xm0 q0n q0p m0p m0n ckp ckn vbias_logic vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}"
+        },
+        {
+          "instance": "Xs0",
+          "nodes": [
+            "m0p",
+            "m0n",
+            "q0p",
+            "q0n",
+            "ckn",
+            "ckp",
+            "vbias_logic",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_latch",
+          "params": {
+            "wdata": "{wdata}",
+            "whold": "{whold}",
+            "wclock": "{wclock}",
+            "wtail": "{wtail}",
+            "nftail": "{nftail}",
+            "rload": "{rload}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 28,
+            "end_line": 29
+          },
+          "statement": "Xs0 m0p m0n q0p q0n ckn ckp vbias_logic vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}"
+        },
+        {
+          "instance": "Xx1",
+          "nodes": [
+            "q1p",
+            "q1n",
+            "q1n",
+            "q1p",
+            "q0p",
+            "q0n",
+            "d1p",
+            "d1n",
+            "vbias",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_mux2",
+          "params": {
+            "wdata": "{gdata}",
+            "wselect": "{gselect}",
+            "wtail": "{gtail}",
+            "rload": "{grload}",
+            "wsf": "{gsf}",
+            "wsf_sink": "{gsf_sink}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 31,
+            "end_line": 32
+          },
+          "statement": "Xx1 q1p q1n q1n q1p q0p q0n d1p d1n vbias vdd vss pll_cml_mux2 wdata={gdata} wselect={gselect} wtail={gtail} rload={grload} wsf={gsf} wsf_sink={gsf_sink}"
+        },
+        {
+          "instance": "Xm1",
+          "nodes": [
+            "d1p",
+            "d1n",
+            "m1p",
+            "m1n",
+            "ckp",
+            "ckn",
+            "vbias_logic",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_latch",
+          "params": {
+            "wdata": "{wdata}",
+            "whold": "{whold}",
+            "wclock": "{wclock}",
+            "wtail": "{wtail}",
+            "nftail": "{nftail}",
+            "rload": "{rload}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 33,
+            "end_line": 34
+          },
+          "statement": "Xm1 d1p d1n m1p m1n ckp ckn vbias_logic vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}"
+        },
+        {
+          "instance": "Xs1",
+          "nodes": [
+            "m1p",
+            "m1n",
+            "q1p",
+            "q1n",
+            "ckn",
+            "ckp",
+            "vbias_logic",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_latch",
+          "params": {
+            "wdata": "{wdata}",
+            "whold": "{whold}",
+            "wclock": "{wclock}",
+            "wtail": "{wtail}",
+            "nftail": "{nftail}",
+            "rload": "{rload}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 35,
+            "end_line": 36
+          },
+          "statement": "Xs1 m1p m1n q1p q1n ckn ckp vbias_logic vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}"
+        },
+        {
+          "instance": "Xt2",
+          "nodes": [
+            "q2p",
+            "q2n",
+            "q2n",
+            "q2p",
+            "q1p",
+            "q1n",
+            "t2p",
+            "t2n",
+            "vbias",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_mux2",
+          "params": {
+            "wdata": "{gdata}",
+            "wselect": "{gselect}",
+            "wtail": "{gtail}",
+            "rload": "{grload}",
+            "wsf": "{gsf}",
+            "wsf_sink": "{gsf_sink}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 38,
+            "end_line": 39
+          },
+          "statement": "Xt2 q2p q2n q2n q2p q1p q1n t2p t2n vbias vdd vss pll_cml_mux2 wdata={gdata} wselect={gselect} wtail={gtail} rload={grload} wsf={gsf} wsf_sink={gsf_sink}"
+        },
+        {
+          "instance": "Xx2",
+          "nodes": [
+            "q2p",
+            "q2n",
+            "t2p",
+            "t2n",
+            "q0p",
+            "q0n",
+            "d2p",
+            "d2n",
+            "vbias",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_mux2",
+          "params": {
+            "wdata": "{gdata}",
+            "wselect": "{gselect}",
+            "wtail": "{gtail}",
+            "rload": "{grload}",
+            "wsf": "{gsf}",
+            "wsf_sink": "{gsf_sink}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 40,
+            "end_line": 41
+          },
+          "statement": "Xx2 q2p q2n t2p t2n q0p q0n d2p d2n vbias vdd vss pll_cml_mux2 wdata={gdata} wselect={gselect} wtail={gtail} rload={grload} wsf={gsf} wsf_sink={gsf_sink}"
+        },
+        {
+          "instance": "Xm2",
+          "nodes": [
+            "d2p",
+            "d2n",
+            "m2p",
+            "m2n",
+            "ckp",
+            "ckn",
+            "vbias_logic",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_latch",
+          "params": {
+            "wdata": "{wdata}",
+            "whold": "{whold}",
+            "wclock": "{wclock}",
+            "wtail": "{wtail}",
+            "nftail": "{nftail}",
+            "rload": "{rload}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 42,
+            "end_line": 43
+          },
+          "statement": "Xm2 d2p d2n m2p m2n ckp ckn vbias_logic vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}"
+        },
+        {
+          "instance": "Xs2",
+          "nodes": [
+            "m2p",
+            "m2n",
+            "q2p",
+            "q2n",
+            "ckn",
+            "ckp",
+            "vbias_logic",
+            "vdd",
+            "vss"
+          ],
+          "cell": "pll_cml_latch",
+          "params": {
+            "wdata": "{wdata}",
+            "whold": "{whold}",
+            "wclock": "{wclock}",
+            "wtail": "{wtail}",
+            "nftail": "{nftail}",
+            "rload": "{rload}"
+          },
+          "source": {
+            "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+            "line": 44,
+            "end_line": 45
+          },
+          "statement": "Xs2 m2p m2n q2p q2n ckn ckp vbias_logic vdd vss pll_cml_latch wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}"
+        }
+      ],
+      "update_polarity_source": {
+        "path": "analog/tx/clock_distribution/spice/tx_clock_counter.spice",
+        "line": 9,
+        "excerpt": "* Next state (slave updates on the falling crossing of ckp - ckn):"
+      },
+      "select_sources": {
+        "path": "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py",
+        "line": 73,
+        "excerpt": "src = {\"250\": \"q2\", \"500\": \"q1\", \"1g\": \"q0\", \"2g\": \"r2g\"}"
+      },
+      "counter_instance": {
+        "path": "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py",
+        "line": 71,
+        "excerpt": "L.append(\"Xcnt kcp kcn q0p q0n q1p q1n q2p q2n vbias vbias_rt vdd vss serdes_tx_sync_counter8\")"
+      },
+      "replica_instance": {
+        "path": "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py",
+        "line": 72,
+        "excerpt": "L.append(\"Xrep krp krn r2gp r2gn hip hin vbias vbias_rt vdd vss serdes_cml_clk_replica_lowov\")"
+      },
+      "bench_initialization": {
+        "path": "analog/tx/serializer/tb/clock_replay/variants/dist_v3.py",
+        "line": 84,
+        "excerpt": "L.append(\".ic \" + \" \".join(f\"v({x}.q{i}p)=1.3 v({x}.q{i}n)=1.6\" for i in range(3)))"
+      },
+      "initialization_scope": "Generated .ic values assist a simulator initial state; counter has no hardware reset port. This is not real-power-up or deterministic-reset proof.",
+      "probe_window": {
+        "value": [
+          1.4e-08,
+          3e-08
+        ],
+        "source": {
+          "path": "analog/tx/serializer/tb/clock_replay/counter.py",
+          "line": 40,
+          "end_line": 40
+        },
+        "expression": "WINDOW = (14e-9, 30e-9)"
+      },
+      "nominal_probe_ui": {
+        "value": 2.5e-10,
+        "source": {
+          "path": "analog/tx/serializer/tb/clock_replay/counter.py",
+          "line": 41,
+          "end_line": 41
+        },
+        "expression": "UI = 250e-12"
+      },
+      "probe_clk_to_q": {
+        "path": "analog/tx/serializer/tb/clock_replay/counter.py",
+        "line": 63,
+        "excerpt": "cq[f\"q{i}\"] = float(np.median(delays)) if delays else None"
+      },
+      "measurement_scope": "counter.py measures counter-output crossing delay relative to its own internal clock falls; this is not the unmeasured ingress CMOS-DFF clk-to-q.",
+      "actual_ingress_update_window_s": null
+    },
+    "metadata": null
+  },
+  "checks": [
+    {
+      "id": "input_identity",
+      "status": "pass",
+      "detail": {
+        "missing": [],
+        "input_count": 18,
+        "source": "current workspace bytes, not git HEAD"
+      }
+    },
+    {
+      "id": "serializer_extraction",
+      "status": "pass",
+      "detail": "Source extraction completed; see observations."
+    },
+    {
+      "id": "final_latches_extraction",
+      "status": "pass",
+      "detail": "Source extraction completed; see observations."
+    },
+    {
+      "id": "ingress_extraction",
+      "status": "pass",
+      "detail": "Source extraction completed; see observations."
+    },
+    {
+      "id": "reusable_cmos_dff_extraction",
+      "status": "pass",
+      "detail": "Source extraction completed; see observations."
+    },
+    {
+      "id": "stimuli_extraction",
+      "status": "pass",
+      "detail": "Source extraction completed; see observations."
+    },
+    {
+      "id": "clocks_extraction",
+      "status": "pass",
+      "detail": "Source extraction completed; see observations."
+    },
+    {
+      "id": "metadata_extraction",
+      "status": "fail",
+      "detail": "ValueError: docs/design/tx_serializer.md: expected one occurrence of '没有并行字捕获寄存器', got 0"
+    },
+    {
+      "id": "r5_dynamic_ingress_contract",
+      "status": "ungraded",
+      "detail": "Static r5 stimulus defines no word launch edge, delay, allowed window or latency contract."
+    },
+    {
+      "id": "ingress_cmos_dff_timing",
+      "status": "ungraded",
+      "detail": "Loaded clk-to-q, setup/hold, clock input shape and PVT/mismatch ranges need characterization."
+    },
+    {
+      "id": "converter_input_capacitance",
+      "status": "ungraded",
+      "detail": "Device widths are known; effective input capacitance/charge versus data, bias and PVT is unmeasured."
+    },
+    {
+      "id": "allowed_dynamic_update_window",
+      "status": "ungraded",
+      "detail": "Actual retimed tree update windows, old/new word mixing and bit mapping need a timed model and circuit measurements."
+    },
+    {
+      "id": "integration_decisions",
+      "status": "ungraded",
+      "detail": "Integrator must set clock/edge domain, word latency, data-valid/startup/reset contract, clock/data delay and jitter budgets and acceptance scope."
+    },
+    {
+      "id": "scope",
+      "status": "pass",
+      "detail": "Read-only source extraction and static enumeration. No simulator, network, result discovery, circuit edit or design signoff."
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "metadata_extraction",
+      "value": null,
+      "reason": "docs/design/tx_serializer.md: expected one occurrence of '没有并行字捕获寄存器', got 0"
+    },
+    {
+      "id": "r5_dynamic_ingress_contract",
+      "value": null,
+      "reason": "Static r5 stimulus defines no word launch edge, delay, allowed window or latency contract."
+    },
+    {
+      "id": "ingress_cmos_dff_timing",
+      "value": null,
+      "reason": "Loaded clk-to-q, setup/hold, clock input shape and PVT/mismatch ranges need characterization."
+    },
+    {
+      "id": "converter_input_capacitance",
+      "value": null,
+      "reason": "Device widths are known; effective input capacitance/charge versus data, bias and PVT is unmeasured."
+    },
+    {
+      "id": "allowed_dynamic_update_window",
+      "value": null,
+      "reason": "Actual retimed tree update windows, old/new word mixing and bit mapping need a timed model and circuit measurements."
+    },
+    {
+      "id": "integration_decisions",
+      "value": null,
+      "reason": "Integrator must set clock/edge domain, word latency, data-valid/startup/reset contract, clock/data delay and jitter budgets and acceptance scope."
+    }
+  ]
+}

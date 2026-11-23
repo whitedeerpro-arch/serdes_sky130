@@ -1,0 +1,60 @@
+* LDO v2 HV18 Core (3.0-3.6 V -> 1.8 V, 2-10 mA)
+*
+* Key architectural improvements over r4 / smallcap:
+* 1. Self-tracking PMOS HV pre-regulator (Xpre_p/Xpre_d/Xpre_sink/Xrpre/Xcpre/Xcva)
+*    replaces the passive 2 kOhm / 32 pF RC filter, achieving >33 dB supply isolation
+*    on va with 16 pF total cap and full headroom down to Vin=3.0 V (FS 85 C).
+*    Xrpre_off (1.2 MOhm) cleanly pulls pre_d/pre_g to vin when enable=0 (zero off leak).
+* 2. High-R cascode gate filter (Xrcas=400 kOhm, Xccas=21 pF) pushes casg pole to 19 kHz
+*    while keeping C_gd(Xcas)/(C_gd+Ccas) < -23 dB at 20 MHz.
+* 3. High-bandwidth low-noise 2-stage EA (Xpl/Xpr w=120 l=1, Xnl/Xnm w=20 l=2, Xp2 w=150 l=2)
+*    with RC Miller compensation (Xrzero=5 kOhm, Xccomp=1.0 pF) + gate HF shaper (Xcghf=1.0 pF)
+*    for >45 dB 20 MHz PSRR, >69 deg PM across PVT, and <250 uVrms noise (1 kHz - 200 MHz).
+* 4. All devices use characterized SKY130 5 V / NVT bins with explicit multi-finger geometry.
+*
+* Ports: vin out ref ibias fb off vss
+
+.subckt serdes_ldo_hv18_core_v2 vin out ref ibias fb off vss
+* Self-tracking HV PMOS pre-regulator -> quiet EA rail va
+Xpre_sink pre_d ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=9 l=2 nf=3 ad=2.61 as=2.61 pd=21.48 ps=21.48
+Xrpre_off vin pre_d vss serdes_ldo_v2_rf1p2m
+Xpre_d pre_d pre_d va va sky130_fd_pr__pfet_g5v0d10v5 w=300 l=2 nf=60 ad=87.00 as=87.00 pd=634.80 ps=634.80
+Xrpre pre_d pre_g vss serdes_ldo_v2_rf400k
+Xcpre pre_g vin serdes_ldo_v2_mim2p0
+Xpre_p va pre_g vin vin sky130_fd_pr__pfet_g5v0d10v5 w=150 l=2 nf=30 ad=43.50 as=43.50 pd=317.40 ps=317.40
+Xcva va vss serdes_ldo_v2_mim14p0
+
+* High-R / stacked-MIM cascode gate filter
+Xrcas vin casg vss serdes_ldo_v2_rf400k
+Xccas casg vss serdes_ldo_v2_mim21p0
+
+* EA current mirrors & local bias decoupling
+Xnb ibias ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=30 l=2 nf=6 ad=8.70 as=8.70 pd=63.48 ps=63.48
+Xnr bp ibias vss vss sky130_fd_pr__nfet_g5v0d10v5 w=30 l=2 nf=6 ad=8.70 as=8.70 pd=63.48 ps=63.48
+Xpd bp bp va va sky130_fd_pr__pfet_g5v0d10v5 w=30 l=2 nf=6 ad=8.70 as=8.70 pd=63.48 ps=63.48
+Xcbp bp va serdes_ldo_v2_mim0p75
+
+* Wideband low-noise 2-stage error amplifier
+Xpt tail bp va va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=2 nf=24 ad=34.80 as=34.80 pd=253.92 ps=253.92
+Xpl d fb tail va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=1 nf=24 ad=34.80 as=34.80 pd=253.92 ps=253.92
+Xpr x ref tail va sky130_fd_pr__pfet_g5v0d10v5 w=120 l=1 nf=24 ad=34.80 as=34.80 pd=253.92 ps=253.92
+Xpl_dum va va tail va sky130_fd_pr__pfet_g5v0d10v5 w=40 l=1 nf=8 ad=11.60 as=11.60 pd=84.64 ps=84.64
+Xnl d d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=2 nf=4 ad=5.80 as=5.80 pd=42.32 ps=42.32
+Xnm x d vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=2 nf=4 ad=5.80 as=5.80 pd=42.32 ps=42.32
+Xnl_dum vss vss vss vss sky130_fd_pr__nfet_g5v0d10v5 w=20 l=2 nf=4 ad=5.80 as=5.80 pd=42.32 ps=42.32
+Xn2 gate x vss vss sky130_fd_pr__nfet_g5v0d10v5 w=90 l=0.5 nf=9 ad=26.10 as=26.10 pd=185.22 ps=185.22
+Xp2 gate bp va va sky130_fd_pr__pfet_g5v0d10v5 w=150 l=2 nf=30 ad=43.50 as=43.50 pd=317.40 ps=317.40
+
+* Miller compensation + high-frequency noise shaper on pass gate
+Xrzero x cz vss serdes_ldo_v2_r5k
+Xccomp cz gate serdes_ldo_v2_mim1p0
+Xcghf gate vss serdes_ldo_v2_mim1p0
+
+* Cascoded native-NMOS power stage (zero HV exposure on 1.8 V output)
+Xcas vin casg mid vss sky130_fd_pr__nfet_05v0_nvt w=2000 l=0.9 nf=200 ad=580.00 as=580.00 pd=4116.00 ps=4116.00
+Xpass mid gate out vss sky130_fd_pr__nfet_05v0_nvt w=1200 l=0.9 nf=120 ad=348.00 as=348.00 pd=2469.60 ps=2469.60
+
+* Shutdown clamps (off = host when enable = 0)
+Xoff gate off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.90 as=2.90 pd=20.58 ps=20.58
+Xboff ibias off vss vss sky130_fd_pr__nfet_g5v0d10v5 w=10 l=0.5 nf=1 ad=2.90 as=2.90 pd=20.58 ps=20.58
+.ends serdes_ldo_hv18_core_v2

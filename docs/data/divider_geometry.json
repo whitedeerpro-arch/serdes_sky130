@@ -1,0 +1,2055 @@
+{
+  "scope": "netlist_geometry_accounting_not_layout_area; WisTOTAL; no double-counting nf",
+  "baseline_note": "earliest smallW parameters from results/analog/pll/divider/initial_exploration.json; equivalent3stage normalization only, not a fabricated macro",
+  "rows": [
+    {
+      "label": "earliest_smallW_unit_normalized_to3stages",
+      "scope": "same3_stage_divide8_equivalent",
+      "reference_base": "releases/v0.1-design-freeze-20261028",
+      "root_cell": "pll_cml_div2",
+      "override": {
+        "wsf": 40,
+        "wsf_sink": 4,
+        "wdata": 20,
+        "whold": 12,
+        "wclock": 24,
+        "wtail": 12,
+        "rload": 600
+      },
+      "repeat": 3,
+      "MOS_instances": 54,
+      "total_fingers": 198.0,
+      "total_width_um": 1008.0,
+      "total_gate_area_um2": 184.79999999999998,
+      "gate_plus_model_diffusion_um2": 555.42,
+      "load_resistors": 12,
+      "devices": [
+        {
+          "path": "/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 12.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 1.7999999999999998,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 12.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 1.7999999999999998,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 12.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 1.7999999999999998,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 12.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 1.7999999999999998,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        }
+      ],
+      "resistors": [
+        {
+          "path": "/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xslave/Rn",
+          "ohm": 600.0
+        }
+      ],
+      "source_sha256": {
+        "releases/v0.1-design-freeze-20261028/analog/pll/divider/spice/cml_latch.spice": "a81cd479ef12277601c1838efeaea8b6872e94af7ff1fc41fe1fe33266bb82a9",
+        "releases/v0.1-design-freeze-20261028/analog/pll/divider/spice/cml_div2.spice": "ca287beb9cc79b1daca5936a4b3223080a0c97b6697e4c0462eedee4c4f27f77",
+        "releases/v0.1-design-freeze-20261028/analog/pll/divider/spice/cml_prescaler8.spice": "71f8939239cb661d7bf5c58828bfd1e5d7bf3e2c654e91d3d8011ba46d5819a5",
+        "releases/v0.1-design-freeze-20261028/analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+        "releases/v0.1-design-freeze-20261028/analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9"
+      }
+    },
+    {
+      "label": "v0.1_frozen_2GHz_design",
+      "scope": "actual_prescaler8",
+      "reference_base": "releases/v0.1-design-freeze-20261028",
+      "root_cell": "pll_cml_prescaler8",
+      "override": {},
+      "repeat": 1,
+      "MOS_instances": 54,
+      "total_fingers": 198.0,
+      "total_width_um": 2304.0,
+      "total_gate_area_um2": 379.2,
+      "gate_plus_model_diffusion_um2": 1219.62,
+      "load_resistors": 12,
+      "devices": [
+        {
+          "path": "/X2/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/X2/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/X2/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X2/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X2/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X2/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X4/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/X4/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/X4/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X4/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X4/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X4/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X8/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/X8/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 40.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 14.5
+        },
+        {
+          "path": "/X8/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X8/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X8/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X8/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        }
+      ],
+      "resistors": [
+        {
+          "path": "/X2/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xslave/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xslave/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xslave/Rn",
+          "ohm": 600.0
+        }
+      ],
+      "source_sha256": {
+        "releases/v0.1-design-freeze-20261028/analog/pll/divider/spice/cml_latch.spice": "a81cd479ef12277601c1838efeaea8b6872e94af7ff1fc41fe1fe33266bb82a9",
+        "releases/v0.1-design-freeze-20261028/analog/pll/divider/spice/cml_div2.spice": "ca287beb9cc79b1daca5936a4b3223080a0c97b6697e4c0462eedee4c4f27f77",
+        "releases/v0.1-design-freeze-20261028/analog/pll/divider/spice/cml_prescaler8.spice": "71f8939239cb661d7bf5c58828bfd1e5d7bf3e2c654e91d3d8011ba46d5819a5",
+        "releases/v0.1-design-freeze-20261028/analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+        "releases/v0.1-design-freeze-20261028/analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9"
+      }
+    },
+    {
+      "label": "lowov_r2",
+      "scope": "actual_prescaler8",
+      "reference_base": "results/analog/pll/pvt_lowov/20261029T114507Z/sources_final",
+      "root_cell": "pll_cml_prescaler8",
+      "override": {},
+      "repeat": 1,
+      "MOS_instances": 58,
+      "total_fingers": 347.0,
+      "total_width_um": 3047.333333333,
+      "total_gate_area_um2": 666.8666666665,
+      "gate_plus_model_diffusion_um2": 1745.56999999964,
+      "load_resistors": 12,
+      "devices": [
+        {
+          "path": "/Xbias/Xsink",
+          "model": "serdes_nfet",
+          "w_um": 3.333333333,
+          "l_um": 0.5,
+          "nf": 1.0,
+          "gate_area_um2": 1.6666666665,
+          "model_diffusion_area_um2": 1.93333333314
+        },
+        {
+          "path": "/Xbias/Xpd",
+          "model": "serdes_pfet",
+          "w_um": 60.0,
+          "l_um": 0.5,
+          "nf": 12.0,
+          "gate_area_um2": 30.0,
+          "model_diffusion_area_um2": 18.849999999999998
+        },
+        {
+          "path": "/Xbias/Xpm",
+          "model": "serdes_pfet",
+          "w_um": 60.0,
+          "l_um": 0.5,
+          "nf": 12.0,
+          "gate_area_um2": 30.0,
+          "model_diffusion_area_um2": 18.849999999999998
+        },
+        {
+          "path": "/Xbias/Xref",
+          "model": "serdes_nfet",
+          "w_um": 20.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 10.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X2/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X2/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X2/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X4/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X4/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X4/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X4/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X8/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X8/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X8/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X8/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        }
+      ],
+      "resistors": [
+        {
+          "path": "/X2/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xslave/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xslave/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xslave/Rn",
+          "ohm": 600.0
+        }
+      ],
+      "source_sha256": {
+        "results/analog/pll/pvt_lowov/20261029T114507Z/sources_final/analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+        "results/analog/pll/pvt_lowov/20261029T114507Z/sources_final/analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+        "results/analog/pll/pvt_lowov/20261029T114507Z/sources_final/analog/pll/divider/spice/cml_prescaler8.spice": "977d886b1fbcf6d09134e2e9346a242a001994e8a8853c663ef2a9afa3590272",
+        "results/analog/pll/pvt_lowov/20261029T114507Z/sources_final/analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+        "results/analog/pll/pvt_lowov/20261029T114507Z/sources_final/analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9"
+      }
+    },
+    {
+      "label": "buffered_r3",
+      "scope": "actual_prescaler8",
+      "reference_base": ".",
+      "root_cell": "pll_cml_prescaler8",
+      "override": {},
+      "repeat": 1,
+      "MOS_instances": 64,
+      "total_fingers": 371.0,
+      "total_width_um": 3167.333333333,
+      "total_gate_area_um2": 693.2666666665,
+      "gate_plus_model_diffusion_um2": 1815.4699999996399,
+      "load_resistors": 16,
+      "devices": [
+        {
+          "path": "/Xbias/Xsink",
+          "model": "serdes_nfet",
+          "w_um": 3.333333333,
+          "l_um": 0.5,
+          "nf": 1.0,
+          "gate_area_um2": 1.6666666665,
+          "model_diffusion_area_um2": 1.93333333314
+        },
+        {
+          "path": "/Xbias/Xpd",
+          "model": "serdes_pfet",
+          "w_um": 60.0,
+          "l_um": 0.5,
+          "nf": 12.0,
+          "gate_area_um2": 30.0,
+          "model_diffusion_area_um2": 18.849999999999998
+        },
+        {
+          "path": "/Xbias/Xpm",
+          "model": "serdes_pfet",
+          "w_um": 60.0,
+          "l_um": 0.5,
+          "nf": 12.0,
+          "gate_area_um2": 30.0,
+          "model_diffusion_area_um2": 18.849999999999998
+        },
+        {
+          "path": "/Xbias/Xref",
+          "model": "serdes_nfet",
+          "w_um": 20.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 10.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X2/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X2/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X2/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X2/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X2/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X2/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/Xb24/Xgain/Xmp",
+          "model": "sky130_fd_pr__nfet_01v8_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xb24/Xgain/Xmn",
+          "model": "sky130_fd_pr__nfet_01v8_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xb24/Xgain/Xtail",
+          "model": "sky130_fd_pr__nfet_01v8",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X4/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X4/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X4/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X4/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X4/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X4/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X4/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/Xb48/Xgain/Xmp",
+          "model": "sky130_fd_pr__nfet_01v8_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xb48/Xgain/Xmn",
+          "model": "sky130_fd_pr__nfet_01v8_lvt",
+          "w_um": 24.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.5999999999999996,
+          "model_diffusion_area_um2": 8.7
+        },
+        {
+          "path": "/Xb48/Xgain/Xtail",
+          "model": "sky130_fd_pr__nfet_01v8",
+          "w_um": 12.0,
+          "l_um": 0.5,
+          "nf": 4.0,
+          "gate_area_um2": 6.0,
+          "model_diffusion_area_um2": 4.35
+        },
+        {
+          "path": "/X8/Xfp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xfn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xsp",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X8/Xsn",
+          "model": "serdes_nfet",
+          "w_um": 4.0,
+          "l_um": 0.5,
+          "nf": 1,
+          "gate_area_um2": 2.0,
+          "model_diffusion_area_um2": 2.32
+        },
+        {
+          "path": "/X8/Xmaster/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xmaster/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xmaster/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xmaster/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xmaster/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xmaster/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xmaster/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        },
+        {
+          "path": "/X8/Xslave/Xdp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xslave/Xdn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 20.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 3.0,
+          "model_diffusion_area_um2": 7.25
+        },
+        {
+          "path": "/X8/Xslave/Xhp",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xslave/Xhn",
+          "model": "serdes_nfet_lvt",
+          "w_um": 80.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 12.0,
+          "model_diffusion_area_um2": 29.0
+        },
+        {
+          "path": "/X8/Xslave/Xct",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xslave/Xch",
+          "model": "serdes_nfet_lvt",
+          "w_um": 64.0,
+          "l_um": 0.15,
+          "nf": 4.0,
+          "gate_area_um2": 9.6,
+          "model_diffusion_area_um2": 23.199999999999996
+        },
+        {
+          "path": "/X8/Xslave/Xtail",
+          "model": "serdes_nfet",
+          "w_um": 72.0,
+          "l_um": 0.5,
+          "nf": 24.0,
+          "gate_area_um2": 36.0,
+          "model_diffusion_area_um2": 21.75
+        }
+      ],
+      "resistors": [
+        {
+          "path": "/X2/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X2/Xslave/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xb24/Xgain/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xb24/Xgain/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X4/Xslave/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xb48/Xgain/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/Xb48/Xgain/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xmaster/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xmaster/Rn",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xslave/Rp",
+          "ohm": 600.0
+        },
+        {
+          "path": "/X8/Xslave/Rn",
+          "ohm": 600.0
+        }
+      ],
+      "source_sha256": {
+        "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+        "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+        "analog/pll/divider/spice/cml_prescaler8.spice": "232052c16b253c050823dddaed41962353dc0d55e7c2f197937382ab6b7fa490",
+        "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+        "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9"
+      }
+    }
+  ],
+  "ratio_r3_to_freeze_gate": 1.828234880449631,
+  "ratio_r3_to_earliest_gate": 3.7514430014421,
+  "ratio_r3_to_r2_gate": 1.039588123562941,
+  "LF_MIM_plate_area_um2": 20692.753714500002,
+  "not_included": [
+    "resistor actual layout",
+    "well isolation",
+    "contacts",
+    "routing",
+    "guard rings",
+    "matching spacing"
+  ],
+  "gate_increment_vs_frozen_um2": {
+    "core_tail_width_increase": 180,
+    "local_bias_reference": 71.6666666665,
+    "input_followers": 36,
+    "interstage_buffers": 26.4,
+    "total": 314.0666666665
+  }
+}

@@ -1,0 +1,19 @@
+id = "functional"
+dut = "analog/pll/pfd"
+level = "block"
+status = "prototype"
+purpose = "覆盖同频相差、正负频差及复位恢复。"
+analyses = ["tran"]
+measurements = ["up_pulse_width","dn_pulse_width","frequency_direction","reset_recovery"]
+shared_stimuli = ["verification/stimuli/spice/pfd_clock_pair.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_pfd_cmos_ngspice.cir.in"
+
+[sweep]
+parameters = ["reference_frequency=50,250,500 MHz", "phase_error", "frequency_error", "reset_sequence", "PVT", "output_load"]
+
+[requirements]
+status = "unspecified"

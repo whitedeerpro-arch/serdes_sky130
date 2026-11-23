@@ -1,0 +1,20 @@
+* Noninverting 2:1 CML data selector, SKY130 prototype.
+* sp>sn selects B; sp<sn selects A. Each data pair is high-CM differential.
+* Local LVT source followers shift select CM; each rank rebuilds output CM.
+* Rload is an ideal on-chip load; no line termination or pad model.
+.subckt serdes_cml_mux2 ap an bp bn sp sn qp qn vbias vdd vss
++ params: wdata=20 wselect=64 wtail=12 rload=400 wsf=40 wsf_sink=4
+Rp vdd qp {rload}
+Rn vdd qn {rload}
+Xap qn ap ta vss serdes_nfet_lvt w={wdata} nf=4
+Xan qp an ta vss serdes_nfet_lvt w={wdata} nf=4
+Xbp qn bp tb vss serdes_nfet_lvt w={wdata} nf=4
+Xbn qp bn tb vss serdes_nfet_lvt w={wdata} nf=4
+Xsp vdd sp slp vss serdes_nfet_lvt w={wsf} nf=4
+Xsn vdd sn sln vss serdes_nfet_lvt w={wsf} nf=4
+Xisp slp vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+Xisn sln vbias vss vss serdes_nfet w={wsf_sink} l=0.5
+Xsa ta sln tail vss serdes_nfet_lvt w={wselect} nf=4
+Xsb tb slp tail vss serdes_nfet_lvt w={wselect} nf=4
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=0.5 nf=4
+.ends serdes_cml_mux2

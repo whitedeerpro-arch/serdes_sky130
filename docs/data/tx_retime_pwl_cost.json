@@ -1,0 +1,350 @@
+{
+  "scope": "Offline PWL simplification counts and reconstruction error, no ngspice or transient timing benchmark.",
+  "campaign": "results/analog/tx/retime_demand/20261111T065010.025374Z_05fb2e30",
+  "plan_sha256": "61451a275b44fd9d50dbee3743ec3d3360b199d264bdd0562a4c2b651de9c6df",
+  "boundary_sha256": "2c843103c1012de3719561042580e72fadf59ce30bb90ee72a49326fff0e92e5",
+  "input_sha256": {
+    "fs_v1650_t85": "54ee7bb22d54761769de669c97b983326dedf861d2610a27413a190999db00e9",
+    "ss_v1650_t-40": "14ff18e0abd26b5e8fc12ffd6366c993def93de376d8a4921ef6332667e7969b"
+  },
+  "analysis_sha256": "d88ae81cfc31ca9833b27209f9198ae7d009a808dcd74d6ce1930c9abbe3cc45",
+  "waves_sha256": "352066bde208e9735c124f486d212e560f1e0249e19f36d5a901de3df0727eea",
+  "method": "Nine original input sources; zero phase shift, 1e-16 s time quantization; shift_pwl enforces its voltage bound at original and retained knots. Independent check records maximum error at all original vertices.",
+  "ngspice_source": {
+    "path": "/home/host/.local/share/simple_serdes_build/ngspice47/ngspice-47/src/spicelib/devices/vsrc/vsrcload.c",
+    "sha256": "8e458485888d75159e9c9aa99a3e372c2dfc14a02bf9be0effffb4cc246fb0c9",
+    "line": 361,
+    "observation": "PWL interpolation loop begins scanning coefficients at index 2 for each call; implementation clue only, no measured runtime share or binary-source provenance established."
+  },
+  "ngspice_binary": {
+    "path": "/opt/ngspice47/bin/ngspice",
+    "sha256": "ceb9a01bcab07edc4745aa0316cbe1bc86a31fc46e42c573139a65a4c25fd761"
+  },
+  "interpretation": "100 uV is inside existing 200 uV input error gate; any revised consumer must still pass unchanged 5 mV per-node and 2 ps absolute-edge baseline gates before scanning. Not evidence of baseline pass or circuit failure.",
+  "cases": [
+    {
+      "condition": "fs_v1650_t85",
+      "tolerance_v": 1e-05,
+      "original_vertices": 58851,
+      "nodes": [
+        {
+          "source": "ap",
+          "knots": 43907,
+          "max_original_vertex_error_v": 4.999460111454468e-06
+        },
+        {
+          "source": "an",
+          "knots": 41168,
+          "max_original_vertex_error_v": 4.9995698960803026e-06
+        },
+        {
+          "source": "bp",
+          "knots": 42726,
+          "max_original_vertex_error_v": 4.999560989871199e-06
+        },
+        {
+          "source": "bn",
+          "knots": 41049,
+          "max_original_vertex_error_v": 4.998969856950808e-06
+        },
+        {
+          "source": "sp",
+          "knots": 55076,
+          "max_original_vertex_error_v": 4.9995144899561694e-06
+        },
+        {
+          "source": "sn",
+          "knots": 54770,
+          "max_original_vertex_error_v": 4.99944180476497e-06
+        },
+        {
+          "source": "vbias",
+          "knots": 6990,
+          "max_original_vertex_error_v": 4.999168746300242e-06
+        },
+        {
+          "source": "vbias_logic",
+          "knots": 8576,
+          "max_original_vertex_error_v": 4.999205278188867e-06
+        },
+        {
+          "source": "vdd",
+          "knots": 2,
+          "max_original_vertex_error_v": 0.0
+        }
+      ],
+      "total_knots": 294264,
+      "max_original_vertex_error_v": 4.9995698960803026e-06
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "tolerance_v": 5e-05,
+      "original_vertices": 58851,
+      "nodes": [
+        {
+          "source": "ap",
+          "knots": 24222,
+          "max_original_vertex_error_v": 2.4998655973051953e-05
+        },
+        {
+          "source": "an",
+          "knots": 21445,
+          "max_original_vertex_error_v": 2.4995889746470823e-05
+        },
+        {
+          "source": "bp",
+          "knots": 23313,
+          "max_original_vertex_error_v": 2.4998238398632466e-05
+        },
+        {
+          "source": "bn",
+          "knots": 22130,
+          "max_original_vertex_error_v": 2.4997546801186488e-05
+        },
+        {
+          "source": "sp",
+          "knots": 35306,
+          "max_original_vertex_error_v": 2.4999084225818535e-05
+        },
+        {
+          "source": "sn",
+          "knots": 35490,
+          "max_original_vertex_error_v": 2.4999126000624372e-05
+        },
+        {
+          "source": "vbias",
+          "knots": 2782,
+          "max_original_vertex_error_v": 2.4984092951818582e-05
+        },
+        {
+          "source": "vbias_logic",
+          "knots": 3574,
+          "max_original_vertex_error_v": 2.499555402390996e-05
+        },
+        {
+          "source": "vdd",
+          "knots": 2,
+          "max_original_vertex_error_v": 0.0
+        }
+      ],
+      "total_knots": 168264,
+      "max_original_vertex_error_v": 2.4999126000624372e-05
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "tolerance_v": 0.0001,
+      "original_vertices": 58851,
+      "nodes": [
+        {
+          "source": "ap",
+          "knots": 17077,
+          "max_original_vertex_error_v": 4.999980185460551e-05
+        },
+        {
+          "source": "an",
+          "knots": 15140,
+          "max_original_vertex_error_v": 4.999918186610053e-05
+        },
+        {
+          "source": "bp",
+          "knots": 16427,
+          "max_original_vertex_error_v": 4.9996857221623614e-05
+        },
+        {
+          "source": "bn",
+          "knots": 15576,
+          "max_original_vertex_error_v": 4.99954516213208e-05
+        },
+        {
+          "source": "sp",
+          "knots": 23619,
+          "max_original_vertex_error_v": 4.9998638748993685e-05
+        },
+        {
+          "source": "sn",
+          "knots": 23694,
+          "max_original_vertex_error_v": 4.99969121481314e-05
+        },
+        {
+          "source": "vbias",
+          "knots": 1655,
+          "max_original_vertex_error_v": 4.999160541729886e-05
+        },
+        {
+          "source": "vbias_logic",
+          "knots": 2376,
+          "max_original_vertex_error_v": 4.991350802852068e-05
+        },
+        {
+          "source": "vdd",
+          "knots": 2,
+          "max_original_vertex_error_v": 0.0
+        }
+      ],
+      "total_knots": 115566,
+      "max_original_vertex_error_v": 4.999980185460551e-05
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "tolerance_v": 1e-05,
+      "original_vertices": 58906,
+      "nodes": [
+        {
+          "source": "ap",
+          "knots": 47788,
+          "max_original_vertex_error_v": 4.999447589693062e-06
+        },
+        {
+          "source": "an",
+          "knots": 46862,
+          "max_original_vertex_error_v": 4.9996929107898325e-06
+        },
+        {
+          "source": "bp",
+          "knots": 50900,
+          "max_original_vertex_error_v": 4.998295392910634e-06
+        },
+        {
+          "source": "bn",
+          "knots": 50562,
+          "max_original_vertex_error_v": 4.999591159293715e-06
+        },
+        {
+          "source": "sp",
+          "knots": 54957,
+          "max_original_vertex_error_v": 4.999752058809648e-06
+        },
+        {
+          "source": "sn",
+          "knots": 55008,
+          "max_original_vertex_error_v": 4.999059171728604e-06
+        },
+        {
+          "source": "vbias",
+          "knots": 8630,
+          "max_original_vertex_error_v": 4.999583704368149e-06
+        },
+        {
+          "source": "vbias_logic",
+          "knots": 14250,
+          "max_original_vertex_error_v": 4.998819802537469e-06
+        },
+        {
+          "source": "vdd",
+          "knots": 2,
+          "max_original_vertex_error_v": 0.0
+        }
+      ],
+      "total_knots": 328959,
+      "max_original_vertex_error_v": 4.999752058809648e-06
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "tolerance_v": 5e-05,
+      "original_vertices": 58906,
+      "nodes": [
+        {
+          "source": "ap",
+          "knots": 32409,
+          "max_original_vertex_error_v": 2.4998718225699434e-05
+        },
+        {
+          "source": "an",
+          "knots": 30953,
+          "max_original_vertex_error_v": 2.499940132971723e-05
+        },
+        {
+          "source": "bp",
+          "knots": 32732,
+          "max_original_vertex_error_v": 2.499452123405632e-05
+        },
+        {
+          "source": "bn",
+          "knots": 31969,
+          "max_original_vertex_error_v": 2.499739559591596e-05
+        },
+        {
+          "source": "sp",
+          "knots": 40368,
+          "max_original_vertex_error_v": 2.4998804261766594e-05
+        },
+        {
+          "source": "sn",
+          "knots": 39956,
+          "max_original_vertex_error_v": 2.4998091671335487e-05
+        },
+        {
+          "source": "vbias",
+          "knots": 3374,
+          "max_original_vertex_error_v": 2.4920251536997284e-05
+        },
+        {
+          "source": "vbias_logic",
+          "knots": 6417,
+          "max_original_vertex_error_v": 2.4990850115091945e-05
+        },
+        {
+          "source": "vdd",
+          "knots": 2,
+          "max_original_vertex_error_v": 0.0
+        }
+      ],
+      "total_knots": 218180,
+      "max_original_vertex_error_v": 2.499940132971723e-05
+    },
+    {
+      "condition": "ss_v1650_t-40",
+      "tolerance_v": 0.0001,
+      "original_vertices": 58906,
+      "nodes": [
+        {
+          "source": "ap",
+          "knots": 23480,
+          "max_original_vertex_error_v": 4.999904826297197e-05
+        },
+        {
+          "source": "an",
+          "knots": 21830,
+          "max_original_vertex_error_v": 4.998623327590046e-05
+        },
+        {
+          "source": "bp",
+          "knots": 23500,
+          "max_original_vertex_error_v": 4.999740261379948e-05
+        },
+        {
+          "source": "bn",
+          "knots": 22609,
+          "max_original_vertex_error_v": 4.999408234063196e-05
+        },
+        {
+          "source": "sp",
+          "knots": 29718,
+          "max_original_vertex_error_v": 4.9999934082833875e-05
+        },
+        {
+          "source": "sn",
+          "knots": 30221,
+          "max_original_vertex_error_v": 4.9999925956445423e-05
+        },
+        {
+          "source": "vbias",
+          "knots": 2240,
+          "max_original_vertex_error_v": 4.9993346482146706e-05
+        },
+        {
+          "source": "vbias_logic",
+          "knots": 4417,
+          "max_original_vertex_error_v": 4.9964212719966206e-05
+        },
+        {
+          "source": "vdd",
+          "knots": 2,
+          "max_original_vertex_error_v": 0.0
+        }
+      ],
+      "total_knots": 158017,
+      "max_original_vertex_error_v": 4.9999934082833875e-05
+    }
+  ]
+}

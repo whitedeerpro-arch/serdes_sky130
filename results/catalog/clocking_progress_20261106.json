@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-06",
+  "report": "docs/history/clocking_progress_20261106.md",
+  "snapshot": {
+    "path": "docs/data/clocking_progress_20261106.json",
+    "sha256": "a291c6bb991a088de55396b085d2d60f9a6a902469a8f704e155317e36cd9c07"
+  },
+  "sources": {
+    "vco": {
+      "path": "results/analog/pll/vco/workmap/20261106T035710Z/summary.json",
+      "sha256": "9ac14bb069ad0314cebd6579d3edd97b3cab10cdf2a17018ba66457fdf4bedeb"
+    },
+    "window4": {
+      "path": "results/analog/pll/vco/workmap/20261106T035710Z/extend.json",
+      "sha256": "3e07c11a8a7a22320424b5a2ce84b88d819afe10d8758d1cb206986e7656a19d"
+    },
+    "window3": {
+      "path": "results/analog/pll/vco/workmap/20261105T220009Z/extend.json",
+      "sha256": "54d539f1e73bd816baf5a7ce6cdd19ba45629159f352130ff1c5c024da69bcad"
+    },
+    "cp": {
+      "path": "results/analog/pll/cp/window/20261106T021356Z/summary.json",
+      "sha256": "16baa39eba4a7a67f5ec4942584a9cbb626590a110d48b21f24bda677224be8d"
+    },
+    "div2": {
+      "path": "results/analog/pll/divider/div2_map/20261105T215442Z_txcounter/summary.json",
+      "sha256": "033b6c5f2252ec3adbc8fe06355a3168a049a458679768b65de24fcdb9769df7"
+    }
+  },
+  "measurement_sources": {
+    "src/serdes_flow/clock.py": "29a624e5bfa3708435747f98fd58afa150f15e53bae46feb203657ea5462f9a8",
+    "analog/tx/serializer/tb/clock_replay/counter.py": "2e2aee708504033bb9404a5e4b32ab8de97854e04d1e470a3c9fd75820637758",
+    "analog/tx/serializer/tb/native_clock/r5_v3.py": "8c9c89a7a7d34d80a6612c9eb6d13ec31b6db93c56586f3da76e0d029c41023e"
+  },
+  "native": {
+    "ff_v1950_t-40:hh": "incomplete",
+    "ff_v1950_t-40:ll": "timeout",
+    "fs_v1650_t85:hh": "measured",
+    "fs_v1650_t85:ll": "measured",
+    "ss_v1650_t-40:hh": "measured",
+    "ss_v1650_t85:hh": "measured",
+    "ss_v1650_t85:ll": "measured",
+    "tt_v1800_t27:hh": "measured",
+    "tt_v1800_t27:ll": "measured",
+    "tt_v1800_t27:tt": "measured"
+  },
+  "legacy_replay_window_counting": {
+    "ff_v1650_t85": true,
+    "ff_v1950_t-40": true,
+    "ff_v1950_t85": true,
+    "fs_v1650_t-40": true,
+    "fs_v1650_t85": false,
+    "sf_v1650_t85": true,
+    "sf_v1950_t-40": true,
+    "ss_v1650_t-40": true,
+    "ss_v1650_t85": true,
+    "ss_v1950_t-40": true,
+    "tt_v1650_t85": true,
+    "tt_v1800_t-40": true,
+    "tt_v1800_t27": true,
+    "tt_v1800_t85": true,
+    "tt_v1950_t-40": true
+  },
+  "figures": [
+    "docs/figures/clocking/vco/vco_r5_4b_code_kvco_grid.png",
+    "docs/figures/clocking/vco/vco_r5_3b_4b_control_windows.png",
+    "docs/figures/clocking/vco/vco_r5_4b_tuning_examples.png",
+    "docs/figures/clocking/pll/charge_pump/cp_real_bias_dc_windows.png",
+    "docs/figures/clocking/dividers/div2_w20_clock_feasible_region.png",
+    "docs/figures/tx/clock_distribution/tx_v3_native_r5_static_summary.png",
+    "docs/figures/tx/clock_distribution/tx_v3_native_r5_counter_sequence.png"
+  ]
+}

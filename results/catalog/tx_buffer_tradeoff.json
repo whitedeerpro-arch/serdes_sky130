@@ -1,0 +1,33 @@
+{
+  "data": "docs/data/tx_buffer_tradeoff.json",
+  "data_sha256": "44cc6c62eb5c8606d494d3c9e027d2e19ee97317c6f4da069c7cd3be19d193e0",
+  "figure": "docs/figures/tx/ingress/tx_buffer_tradeoff.png",
+  "figure_sha256": "f2961fb0cd2df7d23e6ffc177e4d1bc3aa28b8f8181a66bfffd9d37e663019ba",
+  "scope": "Two calibrated ideal-PWL loaded TT/FS cuts, eight-bit contract. TT amplitude of five extra stages and FS serial gates only; iso/I-17, full TX/PVT, noise and mismatch remain open.",
+  "sources": {
+    "tx_buffer_cascade": {
+      "data": "docs/data/tx_buffer_cascade.json",
+      "sha256": "d691b2a8e782bc5c2c8e400c731aeebd05991d1528cc09b8b0681b9c832c8f8d",
+      "catalog_sha256": "d837df629abbc6a72bb8b5b9466922deb49be58a06d97e05b6f925daf244f929",
+      "campaign": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f"
+    },
+    "tx_buffer_sizing": {
+      "data": "docs/data/tx_buffer_sizing.json",
+      "sha256": "26e346f170776dbd89ee957853e33dc76e11f9eedfd1f602256eac7ca1969136",
+      "catalog_sha256": "a1f51e6782f0e824216fe014be5acc0f2d5612f72db0022c6ec32e9200814947",
+      "campaign": "results/analog/tx/buffer_sizing_card/20261110T170620Z_53de1f41"
+    },
+    "tx_buffer_gain_search": {
+      "data": "docs/data/tx_buffer_gain_search.json",
+      "sha256": "af8592b77d15253f8f3fa9aa123e39b86be266d4e14cbcb283657ee32b0e1012",
+      "catalog_sha256": "58e5627ae211a1103a59fd7856efd1f08ce4d2de828223988994a1d52143c927",
+      "campaign": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785"
+    },
+    "tx_buffer_taper": {
+      "data": "docs/data/tx_buffer_taper.json",
+      "sha256": "71cebf78c3e10b9327eed5aa477a38501a2ea569d61fbe66c925ddfaf570290c",
+      "catalog_sha256": "984c76e2078872424c43c7de8f9b3b0b2bd514ae0df444ac2a9b2170a6a4b297",
+      "campaign": "results/analog/tx/buffer_matrix_card/20261110T172325Z_dda392af"
+    }
+  }
+}

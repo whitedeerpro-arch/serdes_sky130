@@ -1,0 +1,19 @@
+id = "input_range"
+dut = "analog/common/cml_to_cmos"
+level = "block"
+status = "prototype"
+purpose = "分别扫描共模、摆幅和速率；通过门限待规格确定。"
+analyses = ["dc","tran"]
+measurements = ["minimum_input_swing","common_mode_range","maximum_verified_rate"]
+shared_stimuli = ["verification/stimuli/spice/cml_diff_sine.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice"
+testbench = "analog/common/cml_to_cmos/tb/functional/tb_cml_to_cmos_ngspice.cir.in"
+
+[sweep]
+parameters = ["corner", "temperature_c", "freq", "vcm", "vdiff_pp", "cload"]
+
+[requirements]
+status = "exploratory"

@@ -1,0 +1,52 @@
+{
+  "data": "docs/data/tx_loaded_clock_model.json",
+  "data_sha256": "e3771acb67e229fb137e012d3fa395fdb0a6b97fe8148fd4598a561bb2a1a84b",
+  "figure": "docs/figures/tx/ingress/tx_loaded_clock_model.png",
+  "figure_sha256": "8dd31d00b725a5e4b8604de3fdc4d6f22162682faf9ceec24499cea51389a5dc",
+  "summary": "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25/model/20261111T174505.452906Z_84e06f0b/summary.json",
+  "summary_sha256": "5a7cf0d38b6a440c830bb543494dec5ff5c15c85061f15ba0486ebd6b76f6312",
+  "holdout_maximum_errors": {
+    "fs_v1650_t85": {
+      "one_step": {
+        "differential_max_error_mv": 11.621092084917976,
+        "common_mode_max_error_mv": 3.604399175174633,
+        "crossing_error_max_abs_ps": 2.6176835176791733,
+        "missing_crossing_associations": 0,
+        "clock_floor_or_complete_event_failures": 0,
+        "rail_excursion_cases": 0
+      },
+      "cascade": {
+        "differential_max_error_mv": 14.833781312685826,
+        "common_mode_max_error_mv": 5.55580568668268,
+        "crossing_error_max_abs_ps": 3.131062810356404,
+        "missing_crossing_associations": 0,
+        "clock_floor_or_complete_event_failures": 0,
+        "rail_excursion_cases": 0
+      },
+      "optimizer_failed_fits": 0,
+      "parameter_bound_active_fits": 6
+    },
+    "ss_v1650_t-40": {
+      "one_step": {
+        "differential_max_error_mv": 17.157306460888616,
+        "common_mode_max_error_mv": 11.638216100968046,
+        "crossing_error_max_abs_ps": 2.100188179614156,
+        "missing_crossing_associations": 0,
+        "clock_floor_or_complete_event_failures": 0,
+        "rail_excursion_cases": 0
+      },
+      "cascade": {
+        "differential_max_error_mv": 36.12689549315637,
+        "common_mode_max_error_mv": 16.682078251322174,
+        "crossing_error_max_abs_ps": 0.9097751845473867,
+        "missing_crossing_associations": 0,
+        "clock_floor_or_complete_event_failures": 0,
+        "rail_excursion_cases": 0
+      },
+      "optimizer_failed_fits": 0,
+      "parameter_bound_active_fits": 6
+    }
+  },
+  "status": "exploratory_fit_and_combined_holdout_measured_no_adoption",
+  "scope": "FS hot and SS cold only; fixed WN24/24/32 and WT15.6/15.6/16; 3 discrete resistor implementations; prescribed bias and omitted upstream feedback."
+}

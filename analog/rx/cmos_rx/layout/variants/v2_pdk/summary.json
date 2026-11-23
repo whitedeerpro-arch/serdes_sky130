@@ -1,0 +1,2284 @@
+{
+  "variant": "v2_pdk",
+  "pdk": "sky130A",
+  "cells": {
+    "serdes_rx_term_pdk": {
+      "cell": "serdes_rx_term_pdk",
+      "source_subckt": "serdes_rx_term_pdk",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_term_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_term_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_term_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/review/serdes_rx_term_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/review/serdes_rx_term_pdk/serdes_rx_term_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/review/serdes_rx_term_pdk/serdes_rx_term_pdk_rcx.spice",
+      "bbox_um": [
+        -18.5,
+        -8.18,
+        14.85,
+        8.18
+      ],
+      "width_um": 33.35,
+      "height_um": 16.36,
+      "area_um2": 545.61,
+      "aspect_ratio": 2.04,
+      "expected_port_count": 4,
+      "exported_port_count": 4,
+      "exported_ports": [
+        "inp",
+        "inn",
+        "vcm",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 45,
+      "rc_resistor_nets": [
+        "vss"
+      ],
+      "raw_device_count": 8,
+      "merged_device_count": 2,
+      "net_count": 4,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 19.226,
+          "M2": 47.991,
+          "M3": 74.054,
+          "M4": 21.482,
+          "M5": 15.84
+        },
+        "total_metal_um2": 178.593,
+        "share_pct": {
+          "M1": 10.8,
+          "M2": 26.9,
+          "M3": 41.5,
+          "M4": 12.0,
+          "M5": 8.9
+        }
+      },
+      "key_port_caps_fF": {
+        "inp": {
+          "to_substrate_fF": 6.859,
+          "coupling_sum_fF": 5.441,
+          "total_node_fF": 12.3
+        },
+        "inn": {
+          "to_substrate_fF": 7.293,
+          "coupling_sum_fF": 5.312,
+          "total_node_fF": 12.605
+        },
+        "vcm": {
+          "to_substrate_fF": 8.457,
+          "coupling_sum_fF": 1.619,
+          "total_node_fF": 10.076
+        }
+      },
+      "internal_cpex_fF": {},
+      "key_net_rcx_ohm": {
+        "inp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "inn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vcm": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vss": {
+          "r_elem_count": 45,
+          "r_sum_ohm": 113578.871,
+          "r_max_elem_ohm": 19091.6
+        }
+      }
+    },
+    "serdes_rx_ctle_pdk": {
+      "cell": "serdes_rx_ctle_pdk",
+      "source_subckt": "serdes_rx_ctle_pdk",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_ctle_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_ctle_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_ctle_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/opt_v2_1/review/serdes_rx_ctle_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/opt_v2_1/review/serdes_rx_ctle_pdk/serdes_rx_ctle_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/opt_v2_1/review/serdes_rx_ctle_pdk/serdes_rx_ctle_pdk_rcx.spice",
+      "bbox_um": [
+        -18.7,
+        -14.6,
+        18.7,
+        11.6
+      ],
+      "width_um": 37.4,
+      "height_um": 26.2,
+      "area_um2": 979.88,
+      "aspect_ratio": 1.43,
+      "expected_port_count": 9,
+      "exported_port_count": 9,
+      "exported_ports": [
+        "inp",
+        "inn",
+        "outp",
+        "outn",
+        "eq0",
+        "eq1",
+        "vbias",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 312,
+      "rc_resistor_nets": [
+        "a_2254_n770#",
+        "a_2854_n770#",
+        "a_n2855_n2050#",
+        "a_n2855_n822#",
+        "vss"
+      ],
+      "raw_device_count": 20,
+      "merged_device_count": 19,
+      "net_count": 15,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 119.047,
+          "M2": 161.399,
+          "M3": 373.651,
+          "M4": 78.607,
+          "M5": 0.0
+        },
+        "total_metal_um2": 732.704,
+        "share_pct": {
+          "M1": 16.2,
+          "M2": 22.0,
+          "M3": 51.0,
+          "M4": 10.7,
+          "M5": 0.0
+        }
+      },
+      "key_port_caps_fF": {
+        "inp": {
+          "to_substrate_fF": 1.776,
+          "coupling_sum_fF": 2.54,
+          "total_node_fF": 4.317
+        },
+        "inn": {
+          "to_substrate_fF": 1.447,
+          "coupling_sum_fF": 2.853,
+          "total_node_fF": 4.301
+        },
+        "outp": {
+          "to_substrate_fF": 2.391,
+          "coupling_sum_fF": 4.765,
+          "total_node_fF": 7.156
+        },
+        "outn": {
+          "to_substrate_fF": 2.153,
+          "coupling_sum_fF": 4.908,
+          "total_node_fF": 7.061
+        },
+        "vbias": {
+          "to_substrate_fF": 9.322,
+          "coupling_sum_fF": 5.766,
+          "total_node_fF": 15.087
+        },
+        "vdd": {
+          "to_substrate_fF": 11.457,
+          "coupling_sum_fF": 3.95,
+          "total_node_fF": 15.408
+        }
+      },
+      "internal_cpex_fF": {},
+      "key_net_rcx_ohm": {
+        "inp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "inn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "outp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "outn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vbias": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vdd": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vss": {
+          "r_elem_count": 242,
+          "r_sum_ohm": 205218.018,
+          "r_max_elem_ohm": 43561.5
+        }
+      }
+    },
+    "serdes_rx_dt_slicer_pdk": {
+      "cell": "serdes_rx_dt_slicer_pdk",
+      "source_subckt": "serdes_rx_dt_slicer",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_dt_slicer_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_dt_slicer_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_dt_slicer_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/review/serdes_rx_dt_slicer_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/review/serdes_rx_dt_slicer_pdk/serdes_rx_dt_slicer_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/review/serdes_rx_dt_slicer_pdk/serdes_rx_dt_slicer_pdk_rcx.spice",
+      "bbox_um": [
+        -14.8,
+        -1.12,
+        14.8,
+        30.42
+      ],
+      "width_um": 29.6,
+      "height_um": 31.54,
+      "area_um2": 933.58,
+      "aspect_ratio": 0.94,
+      "expected_port_count": 13,
+      "exported_port_count": 13,
+      "exported_ports": [
+        "inp",
+        "inn",
+        "clk",
+        "qp",
+        "qn",
+        "t5",
+        "t4",
+        "t3",
+        "t2",
+        "t1",
+        "t0",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 0,
+      "rc_resistor_nets": [],
+      "raw_device_count": 51,
+      "merged_device_count": 51,
+      "net_count": 29,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 202.442,
+          "M2": 167.588,
+          "M3": 102.09,
+          "M4": 59.587,
+          "M5": 0.0
+        },
+        "total_metal_um2": 531.707,
+        "share_pct": {
+          "M1": 38.1,
+          "M2": 31.5,
+          "M3": 19.2,
+          "M4": 11.2,
+          "M5": 0.0
+        }
+      },
+      "key_port_caps_fF": {
+        "inp": {
+          "to_substrate_fF": 1.714,
+          "coupling_sum_fF": 3.684,
+          "total_node_fF": 5.398
+        },
+        "inn": {
+          "to_substrate_fF": 1.25,
+          "coupling_sum_fF": 4.114,
+          "total_node_fF": 5.364
+        },
+        "clk": {
+          "to_substrate_fF": 2.819,
+          "coupling_sum_fF": 5.344,
+          "total_node_fF": 8.163
+        },
+        "qp": {
+          "to_substrate_fF": 1.602,
+          "coupling_sum_fF": 1.933,
+          "total_node_fF": 3.536
+        },
+        "qn": {
+          "to_substrate_fF": 1.544,
+          "coupling_sum_fF": 1.974,
+          "total_node_fF": 3.517
+        },
+        "t5": {
+          "to_substrate_fF": 1.621,
+          "coupling_sum_fF": 5.546,
+          "total_node_fF": 7.168
+        },
+        "t4": {
+          "to_substrate_fF": 1.389,
+          "coupling_sum_fF": 4.148,
+          "total_node_fF": 5.537
+        },
+        "t3": {
+          "to_substrate_fF": 0.819,
+          "coupling_sum_fF": 3.404,
+          "total_node_fF": 4.223
+        },
+        "t2": {
+          "to_substrate_fF": 0.632,
+          "coupling_sum_fF": 2.435,
+          "total_node_fF": 3.067
+        },
+        "t1": {
+          "to_substrate_fF": 1.169,
+          "coupling_sum_fF": 2.559,
+          "total_node_fF": 3.729
+        },
+        "t0": {
+          "to_substrate_fF": 1.772,
+          "coupling_sum_fF": 2.233,
+          "total_node_fF": 4.006
+        },
+        "vdd": {
+          "to_substrate_fF": 48.694,
+          "coupling_sum_fF": 37.864,
+          "total_node_fF": 86.558
+        }
+      },
+      "internal_cpex_fF": {
+        "fn": {
+          "extracted_net": "a_n2647_626#",
+          "to_substrate_fF": 3.383,
+          "coupling_sum_fF": 6.609,
+          "total_node_fF": 9.993
+        },
+        "fp": {
+          "extracted_net": "a_18_1680#",
+          "to_substrate_fF": 3.327,
+          "coupling_sum_fF": 6.18,
+          "total_node_fF": 9.507
+        },
+        "outn_b": {
+          "extracted_net": "a_n1139_5254#",
+          "to_substrate_fF": 2.134,
+          "coupling_sum_fF": 7.156,
+          "total_node_fF": 9.29
+        },
+        "outp_b": {
+          "extracted_net": "a_n682_2407#",
+          "to_substrate_fF": 2.427,
+          "coupling_sum_fF": 6.986,
+          "total_node_fF": 9.413
+        }
+      },
+      "key_net_rcx_ohm": {
+        "inp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "inn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "clk": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "qp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "qn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t5": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t4": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "t0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vdd": {
+          "r_elem_count": 363,
+          "r_sum_ohm": 21370.843,
+          "r_max_elem_ohm": 987.014
+        },
+        "vss": {
+          "r_elem_count": 159,
+          "r_sum_ohm": 6034.695,
+          "r_max_elem_ohm": 166.776
+        }
+      }
+    },
+    "serdes_rx_qdiv2_8ph_pdk": {
+      "cell": "serdes_rx_qdiv2_8ph_pdk",
+      "source_subckt": "serdes_rx_qdiv2_8ph",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_qdiv2_8ph_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_qdiv2_8ph_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_qdiv2_8ph_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/pi/review/serdes_rx_qdiv2_8ph_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_qdiv2_8ph_pdk/serdes_rx_qdiv2_8ph_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_qdiv2_8ph_pdk/serdes_rx_qdiv2_8ph_pdk_rcx.spice",
+      "bbox_um": [
+        -0.6,
+        -7.75,
+        121.8,
+        8.82
+      ],
+      "width_um": 122.4,
+      "height_um": 16.57,
+      "area_um2": 2028.17,
+      "aspect_ratio": 7.39,
+      "expected_port_count": 15,
+      "exported_port_count": 15,
+      "exported_ports": [
+        "dp",
+        "dn",
+        "ep",
+        "en",
+        "rst_n",
+        "ckd0",
+        "ckd1",
+        "ckd2",
+        "ckd3",
+        "cke0",
+        "cke1",
+        "cke2",
+        "cke3",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_review_strict_passed": true,
+      "rc_connectivity_and_wl_preserved": true,
+      "rc_shorted_supply_moscap_as_ps_diffs": 0,
+      "rc_note": "Passed unmodified verification/layout/review_cell.py --rc with strict device/attribute identity.",
+      "rc_resistor_count": 635,
+      "rc_resistor_nets": [
+        "a_10867_n640#",
+        "a_11639_n640#",
+        "a_12177_n814#",
+        "a_12623_n914#",
+        "a_1639_n640#",
+        "a_17623_n914#",
+        "a_2115_n1330#",
+        "a_2177_n814#",
+        "a_2581_122#",
+        "a_2623_n914#",
+        "a_3707_n1330#",
+        "a_4331_122#",
+        "a_498_n1270#",
+        "a_7623_n914#",
+        "vdd",
+        "vss"
+      ],
+      "raw_device_count": 146,
+      "merged_device_count": 146,
+      "net_count": 44,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 377.837,
+          "M2": 128.888,
+          "M3": 569.359,
+          "M4": 137.642,
+          "M5": 0.0
+        },
+        "total_metal_um2": 1213.726,
+        "share_pct": {
+          "M1": 31.1,
+          "M2": 10.6,
+          "M3": 46.9,
+          "M4": 11.3,
+          "M5": 0.0
+        }
+      },
+      "key_port_caps_fF": {
+        "dp": {
+          "to_substrate_fF": 1.377,
+          "coupling_sum_fF": 16.422,
+          "total_node_fF": 17.799
+        },
+        "dn": {
+          "to_substrate_fF": 0.493,
+          "coupling_sum_fF": 15.067,
+          "total_node_fF": 15.56
+        },
+        "ep": {
+          "to_substrate_fF": 0.475,
+          "coupling_sum_fF": 16.233,
+          "total_node_fF": 16.708
+        },
+        "en": {
+          "to_substrate_fF": 0.489,
+          "coupling_sum_fF": 14.956,
+          "total_node_fF": 15.445
+        },
+        "ckd0": {
+          "to_substrate_fF": 2.052,
+          "coupling_sum_fF": 2.588,
+          "total_node_fF": 4.641
+        },
+        "ckd1": {
+          "to_substrate_fF": 2.276,
+          "coupling_sum_fF": 3.177,
+          "total_node_fF": 5.453
+        },
+        "ckd2": {
+          "to_substrate_fF": 2.811,
+          "coupling_sum_fF": 3.12,
+          "total_node_fF": 5.931
+        },
+        "ckd3": {
+          "to_substrate_fF": 2.341,
+          "coupling_sum_fF": 2.184,
+          "total_node_fF": 4.526
+        },
+        "cke0": {
+          "to_substrate_fF": 1.634,
+          "coupling_sum_fF": 2.572,
+          "total_node_fF": 4.206
+        },
+        "cke1": {
+          "to_substrate_fF": 2.092,
+          "coupling_sum_fF": 2.508,
+          "total_node_fF": 4.6
+        },
+        "cke2": {
+          "to_substrate_fF": 3.357,
+          "coupling_sum_fF": 2.845,
+          "total_node_fF": 6.202
+        },
+        "cke3": {
+          "to_substrate_fF": 2.694,
+          "coupling_sum_fF": 1.622,
+          "total_node_fF": 4.316
+        },
+        "vdd": {
+          "to_substrate_fF": 98.086,
+          "coupling_sum_fF": 69.19,
+          "total_node_fF": 167.277
+        }
+      },
+      "internal_cpex_fF": {},
+      "key_net_rcx_ohm": {
+        "dp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "dn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ep": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "en": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vdd": {
+          "r_elem_count": 223,
+          "r_sum_ohm": 16404.005,
+          "r_max_elem_ohm": 268.572
+        },
+        "vss": {
+          "r_elem_count": 68,
+          "r_sum_ohm": 866.837,
+          "r_max_elem_ohm": 109.96
+        }
+      }
+    },
+    "serdes_rx_pi_rotator_2g_pdk": {
+      "cell": "serdes_rx_pi_rotator_2g_pdk",
+      "source_subckt": "serdes_rx_pi_rotator_2g",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_pi_rotator_2g_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_pi_rotator_2g_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_pi_rotator_2g_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/pi/review/serdes_rx_pi_rotator_2g_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_pi_rotator_2g_pdk/serdes_rx_pi_rotator_2g_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_pi_rotator_2g_pdk/serdes_rx_pi_rotator_2g_pdk_rcx.spice",
+      "bbox_um": [
+        -0.3,
+        -0.5,
+        121.6,
+        50.9
+      ],
+      "width_um": 121.9,
+      "height_um": 51.4,
+      "area_um2": 6265.66,
+      "aspect_ratio": 2.37,
+      "expected_port_count": 38,
+      "exported_port_count": 38,
+      "exported_ports": [
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "a0",
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5",
+        "a6",
+        "a7",
+        "b0",
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "f0",
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5",
+        "f6",
+        "f7",
+        "dp",
+        "dn",
+        "ep",
+        "en",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": false,
+      "rc_review_strict_passed": false,
+      "rc_connectivity_and_wl_preserved": true,
+      "rc_shorted_supply_moscap_as_ps_diffs": 2,
+      "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
+      "rc_resistor_count": 3223,
+      "rc_resistor_nets": [
+        "a_10891_1688#",
+        "a_10891_2620#",
+        "a_10891_3628#",
+        "a_10891_4560#",
+        "a_10891_5968#",
+        "a_10891_6900#",
+        "a_10891_7908#",
+        "a_10891_8840#",
+        "a_11173_1838#",
+        "a_11173_3154#",
+        "a_11215_1688#",
+        "a_11215_3288#",
+        "a_11215_7568#",
+        "a_11215_7908#",
+        "a_11215_9508#",
+        "a_13453_1838#",
+        "a_13453_3154#",
+        "a_13495_3288#",
+        "a_13495_3628#",
+        "a_13495_5228#",
+        "a_13495_5968#",
+        "a_13495_7908#",
+        "a_13495_9508#",
+        "a_15733_1838#",
+        "a_15733_3154#",
+        "a_15775_1688#",
+        "a_15775_3288#",
+        "a_15775_5228#",
+        "a_15775_9508#",
+        "a_2938_205#",
+        "a_3091_9024#",
+        "a_3461_1870#",
+        "a_363_2190#",
+        "a_363_2690#",
+        "a_363_4190#",
+        "a_363_4690#",
+        "a_363_6190#",
+        "a_363_6690#",
+        "a_363_8190#",
+        "a_363_8690#",
+        "a_3901_1870#",
+        "a_4341_1870#",
+        "a_4811_1866#",
+        "a_4811_4714#",
+        "a_4811_6146#",
+        "a_4811_8994#",
+        "a_6068_205#",
+        "a_6621_1870#",
+        "a_7061_1870#",
+        "a_7501_1870#",
+        "a_7971_1866#",
+        "a_7971_4714#",
+        "a_7971_6146#",
+        "a_7971_8994#",
+        "a_8893_1838#",
+        "a_8893_3154#",
+        "a_8935_1688#",
+        "a_8935_3288#",
+        "a_8935_7908#",
+        "vdd",
+        "vss"
+      ],
+      "raw_device_count": 588,
+      "merged_device_count": 588,
+      "net_count": 194,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 1129.236,
+          "M2": 633.53,
+          "M3": 1048.296,
+          "M4": 784.478,
+          "M5": 0.0
+        },
+        "total_metal_um2": 3595.54,
+        "share_pct": {
+          "M1": 31.4,
+          "M2": 17.6,
+          "M3": 29.2,
+          "M4": 21.8,
+          "M5": 0.0
+        }
+      },
+      "key_port_caps_fF": {
+        "c0": {
+          "to_substrate_fF": 0.803,
+          "coupling_sum_fF": 0.922,
+          "total_node_fF": 1.725
+        },
+        "c1": {
+          "to_substrate_fF": 0.754,
+          "coupling_sum_fF": 0.975,
+          "total_node_fF": 1.728
+        },
+        "c2": {
+          "to_substrate_fF": 0.745,
+          "coupling_sum_fF": 0.982,
+          "total_node_fF": 1.727
+        },
+        "c3": {
+          "to_substrate_fF": 0.754,
+          "coupling_sum_fF": 0.97,
+          "total_node_fF": 1.725
+        },
+        "c4": {
+          "to_substrate_fF": 0.751,
+          "coupling_sum_fF": 0.973,
+          "total_node_fF": 1.724
+        },
+        "c5": {
+          "to_substrate_fF": 0.745,
+          "coupling_sum_fF": 0.982,
+          "total_node_fF": 1.728
+        },
+        "c6": {
+          "to_substrate_fF": 0.747,
+          "coupling_sum_fF": 0.984,
+          "total_node_fF": 1.731
+        },
+        "c7": {
+          "to_substrate_fF": 0.786,
+          "coupling_sum_fF": 0.933,
+          "total_node_fF": 1.719
+        },
+        "dp": {
+          "to_substrate_fF": 0.741,
+          "coupling_sum_fF": 1.201,
+          "total_node_fF": 1.942
+        },
+        "dn": {
+          "to_substrate_fF": 0.718,
+          "coupling_sum_fF": 1.2,
+          "total_node_fF": 1.919
+        },
+        "ep": {
+          "to_substrate_fF": 0.766,
+          "coupling_sum_fF": 1.089,
+          "total_node_fF": 1.855
+        },
+        "en": {
+          "to_substrate_fF": 0.741,
+          "coupling_sum_fF": 1.201,
+          "total_node_fF": 1.942
+        },
+        "vdd": {
+          "to_substrate_fF": 238.67,
+          "coupling_sum_fF": 180.864,
+          "total_node_fF": 419.534
+        }
+      },
+      "internal_cpex_fF": {
+        "edge_mixn": {
+          "extracted_net": "a_21104_1676#",
+          "to_substrate_fF": 6.069,
+          "coupling_sum_fF": 2.475,
+          "total_node_fF": 8.543
+        },
+        "edge_mixp": {
+          "extracted_net": "a_21104_3548#",
+          "to_substrate_fF": 5.849,
+          "coupling_sum_fF": 2.566,
+          "total_node_fF": 8.415
+        },
+        "data_mixn": {
+          "extracted_net": "a_21104_5956#",
+          "to_substrate_fF": 5.83,
+          "coupling_sum_fF": 2.578,
+          "total_node_fF": 8.409
+        },
+        "data_mixp": {
+          "extracted_net": "a_21104_7828#",
+          "to_substrate_fF": 6.019,
+          "coupling_sum_fF": 2.471,
+          "total_node_fF": 8.49
+        }
+      },
+      "key_net_rcx_ohm": {
+        "c0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c4": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c5": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c6": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c7": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "dp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "dn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ep": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "en": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vdd": {
+          "r_elem_count": 835,
+          "r_sum_ohm": 135021.577,
+          "r_max_elem_ohm": 2413.0
+        },
+        "vss": {
+          "r_elem_count": 1032,
+          "r_sum_ohm": 1228385.274,
+          "r_max_elem_ohm": 69786.7
+        }
+      }
+    },
+    "serdes_rx_cmos_pi_8ph_pdk": {
+      "cell": "serdes_rx_cmos_pi_8ph_pdk",
+      "source_subckt": "serdes_rx_cmos_pi_8ph",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_pi_8ph_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_pi_8ph_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_pi_8ph_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/pi/review/serdes_rx_cmos_pi_8ph_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_cmos_pi_8ph_pdk/serdes_rx_cmos_pi_8ph_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/pi/review/serdes_rx_cmos_pi_8ph_pdk/serdes_rx_cmos_pi_8ph_pdk_rcx.spice",
+      "bbox_um": [
+        -1.9,
+        -0.5,
+        122.98,
+        68.22
+      ],
+      "width_um": 124.88,
+      "height_um": 68.72,
+      "area_um2": 8581.75,
+      "aspect_ratio": 1.82,
+      "expected_port_count": 47,
+      "exported_port_count": 47,
+      "exported_ports": [
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "a0",
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5",
+        "a6",
+        "a7",
+        "b0",
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "f0",
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5",
+        "f6",
+        "f7",
+        "rst_n",
+        "dp",
+        "dn",
+        "ep",
+        "en",
+        "ckd0",
+        "ckd1",
+        "ckd2",
+        "ckd3",
+        "cke0",
+        "cke1",
+        "cke2",
+        "cke3",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": false,
+      "rc_review_strict_passed": false,
+      "rc_connectivity_and_wl_preserved": true,
+      "rc_shorted_supply_moscap_as_ps_diffs": 2,
+      "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
+      "rc_resistor_count": 4380,
+      "rc_resistor_nets": [
+        "a_10867_11240#",
+        "a_10891_1688#",
+        "a_10891_2620#",
+        "a_10891_3628#",
+        "a_10891_4560#",
+        "a_10891_5968#",
+        "a_10891_6900#",
+        "a_10891_7908#",
+        "a_10891_8840#",
+        "a_11173_1838#",
+        "a_11173_3154#",
+        "a_11215_5968#",
+        "a_11215_7908#",
+        "a_11639_11240#",
+        "a_12177_11066#",
+        "a_12623_10966#",
+        "a_13453_1838#",
+        "a_13453_3154#",
+        "a_13495_1688#",
+        "a_13495_3288#",
+        "a_13495_5228#",
+        "a_13495_7568#",
+        "a_13495_7908#",
+        "a_15733_1838#",
+        "a_15733_3154#",
+        "a_15775_5228#",
+        "a_15775_5968#",
+        "a_15775_7568#",
+        "a_1639_11240#",
+        "a_17623_10966#",
+        "a_2115_10550#",
+        "a_2177_11066#",
+        "a_2581_12002#",
+        "a_2623_10966#",
+        "a_2938_205#",
+        "a_3091_9024#",
+        "a_3461_1870#",
+        "a_363_2190#",
+        "a_363_2690#",
+        "a_363_4190#",
+        "a_363_4690#",
+        "a_363_6190#",
+        "a_363_6690#",
+        "a_363_8190#",
+        "a_363_8690#",
+        "a_3707_10550#",
+        "a_3901_1870#",
+        "a_4331_12002#",
+        "a_4341_1870#",
+        "a_4811_1866#",
+        "a_4811_4714#",
+        "a_4811_6146#",
+        "a_4811_8994#",
+        "a_498_10610#",
+        "a_6068_205#",
+        "a_6621_1870#",
+        "a_7061_1870#",
+        "a_7501_1870#",
+        "a_7623_10966#",
+        "a_7971_1866#",
+        "a_7971_4714#",
+        "a_7971_6146#",
+        "a_7971_8994#",
+        "a_8893_1838#",
+        "a_8893_3154#",
+        "a_8935_1688#",
+        "a_8935_3628#",
+        "a_8935_5228#",
+        "a_8935_7908#",
+        "a_8935_9508#",
+        "vdd",
+        "vss"
+      ],
+      "raw_device_count": 734,
+      "merged_device_count": 734,
+      "net_count": 232,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 1507.072,
+          "M2": 762.417,
+          "M3": 1635.961,
+          "M4": 997.146,
+          "M5": 0.0
+        },
+        "total_metal_um2": 4902.596,
+        "share_pct": {
+          "M1": 30.7,
+          "M2": 15.6,
+          "M3": 33.4,
+          "M4": 20.3,
+          "M5": 0.0
+        }
+      },
+      "key_port_caps_fF": {
+        "c0": {
+          "to_substrate_fF": 0.932,
+          "coupling_sum_fF": 0.934,
+          "total_node_fF": 1.866
+        },
+        "c1": {
+          "to_substrate_fF": 0.852,
+          "coupling_sum_fF": 0.999,
+          "total_node_fF": 1.851
+        },
+        "c2": {
+          "to_substrate_fF": 0.843,
+          "coupling_sum_fF": 1.006,
+          "total_node_fF": 1.849
+        },
+        "c3": {
+          "to_substrate_fF": 0.853,
+          "coupling_sum_fF": 0.995,
+          "total_node_fF": 1.847
+        },
+        "c4": {
+          "to_substrate_fF": 0.849,
+          "coupling_sum_fF": 0.998,
+          "total_node_fF": 1.846
+        },
+        "c5": {
+          "to_substrate_fF": 0.843,
+          "coupling_sum_fF": 1.007,
+          "total_node_fF": 1.85
+        },
+        "c6": {
+          "to_substrate_fF": 0.846,
+          "coupling_sum_fF": 1.008,
+          "total_node_fF": 1.854
+        },
+        "c7": {
+          "to_substrate_fF": 0.892,
+          "coupling_sum_fF": 0.945,
+          "total_node_fF": 1.837
+        },
+        "dp": {
+          "to_substrate_fF": 4.22,
+          "coupling_sum_fF": 20.982,
+          "total_node_fF": 25.202
+        },
+        "dn": {
+          "to_substrate_fF": 2.03,
+          "coupling_sum_fF": 19.809,
+          "total_node_fF": 21.838
+        },
+        "ep": {
+          "to_substrate_fF": 2.173,
+          "coupling_sum_fF": 21.316,
+          "total_node_fF": 23.489
+        },
+        "en": {
+          "to_substrate_fF": 2.137,
+          "coupling_sum_fF": 19.695,
+          "total_node_fF": 21.832
+        },
+        "ckd0": {
+          "to_substrate_fF": 2.052,
+          "coupling_sum_fF": 2.588,
+          "total_node_fF": 4.641
+        },
+        "ckd1": {
+          "to_substrate_fF": 2.276,
+          "coupling_sum_fF": 3.177,
+          "total_node_fF": 5.453
+        },
+        "ckd2": {
+          "to_substrate_fF": 2.811,
+          "coupling_sum_fF": 3.12,
+          "total_node_fF": 5.931
+        },
+        "ckd3": {
+          "to_substrate_fF": 2.341,
+          "coupling_sum_fF": 2.184,
+          "total_node_fF": 4.526
+        },
+        "cke0": {
+          "to_substrate_fF": 1.634,
+          "coupling_sum_fF": 2.572,
+          "total_node_fF": 4.206
+        },
+        "cke1": {
+          "to_substrate_fF": 2.092,
+          "coupling_sum_fF": 2.508,
+          "total_node_fF": 4.6
+        },
+        "cke2": {
+          "to_substrate_fF": 3.357,
+          "coupling_sum_fF": 2.845,
+          "total_node_fF": 6.202
+        },
+        "cke3": {
+          "to_substrate_fF": 2.694,
+          "coupling_sum_fF": 1.622,
+          "total_node_fF": 4.316
+        },
+        "vdd": {
+          "to_substrate_fF": 338.52,
+          "coupling_sum_fF": 253.566,
+          "total_node_fF": 592.086
+        }
+      },
+      "internal_cpex_fF": {
+        "edge_mixn": {
+          "extracted_net": "a_21104_1676#",
+          "to_substrate_fF": 6.062,
+          "coupling_sum_fF": 2.496,
+          "total_node_fF": 8.559
+        },
+        "edge_mixp": {
+          "extracted_net": "a_21104_3548#",
+          "to_substrate_fF": 5.849,
+          "coupling_sum_fF": 2.594,
+          "total_node_fF": 8.443
+        },
+        "data_mixn": {
+          "extracted_net": "a_21104_5956#",
+          "to_substrate_fF": 5.823,
+          "coupling_sum_fF": 2.609,
+          "total_node_fF": 8.433
+        },
+        "data_mixp": {
+          "extracted_net": "a_21104_7828#",
+          "to_substrate_fF": 5.989,
+          "coupling_sum_fF": 2.512,
+          "total_node_fF": 8.501
+        }
+      },
+      "key_net_rcx_ohm": {
+        "c0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c4": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c5": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c6": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c7": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "dp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "dn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ep": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "en": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "vdd": {
+          "r_elem_count": 1486,
+          "r_sum_ohm": 172393.475,
+          "r_max_elem_ohm": 2413.0
+        },
+        "vss": {
+          "r_elem_count": 1224,
+          "r_sum_ohm": 1070364.963,
+          "r_max_elem_ohm": 41260.6
+        }
+      }
+    },
+    "serdes_rx_cmos_deser16_pdk": {
+      "cell": "serdes_rx_cmos_deser16_pdk",
+      "source_subckt": "serdes_rx_cmos_deser16",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_deser16_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_deser16_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_deser16_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/deser16/review/serdes_rx_cmos_deser16_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/deser16/review/serdes_rx_cmos_deser16_pdk/serdes_rx_cmos_deser16_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/deser16/review/serdes_rx_cmos_deser16_pdk/serdes_rx_cmos_deser16_pdk_rcx.spice",
+      "bbox_um": [
+        -1.06,
+        -9.24,
+        237.4,
+        77.24
+      ],
+      "width_um": 238.46,
+      "height_um": 86.48,
+      "area_um2": 20622.02,
+      "aspect_ratio": 2.76,
+      "expected_port_count": 52,
+      "exported_port_count": 52,
+      "exported_ports": [
+        "d0",
+        "d1",
+        "d2",
+        "d3",
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "ckd0",
+        "ckd1",
+        "ckd2",
+        "ckd3",
+        "cke0",
+        "cke1",
+        "cke2",
+        "cke3",
+        "rst_n",
+        "wd12",
+        "wd8",
+        "wd4",
+        "wd0",
+        "wd13",
+        "wd9",
+        "wd5",
+        "wd1",
+        "wd14",
+        "wd10",
+        "wd6",
+        "wd2",
+        "wd15",
+        "wd11",
+        "wd7",
+        "wd3",
+        "we13",
+        "we9",
+        "we5",
+        "we1",
+        "we14",
+        "we10",
+        "we6",
+        "we2",
+        "we15",
+        "we11",
+        "we7",
+        "we3",
+        "we12",
+        "we8",
+        "we4",
+        "we0",
+        "wclk",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": false,
+      "rc_review_strict_passed": false,
+      "rc_connectivity_and_wl_preserved": true,
+      "rc_shorted_supply_moscap_as_ps_diffs": 2,
+      "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
+      "rc_resistor_count": 9584,
+      "rc_resistor_nets": [
+        "a_10215_7730#",
+        "a_10575_7830#",
+        "a_12444_10910#",
+        "a_12444_12390#",
+        "a_12444_13950#",
+        "a_12444_9350#",
+        "a_14338_12390#",
+        "a_14338_9350#",
+        "a_15941_n1488#",
+        "a_15971_n1460#",
+        "a_18364_10910#",
+        "a_18364_12390#",
+        "a_18364_13950#",
+        "a_18364_9350#",
+        "a_20025_n1488#",
+        "a_20258_10910#",
+        "a_20258_9350#",
+        "a_24284_10910#",
+        "a_24284_12390#",
+        "a_24284_13950#",
+        "a_24284_9350#",
+        "a_24333_476#",
+        "a_24333_696#",
+        "a_24971_n1460#",
+        "a_2498_10910#",
+        "a_2498_12390#",
+        "a_2498_13950#",
+        "a_2498_9350#",
+        "a_26178_10910#",
+        "a_26178_13950#",
+        "a_26178_9350#",
+        "a_29025_n1488#",
+        "a_30204_10910#",
+        "a_30204_12390#",
+        "a_30204_13950#",
+        "a_30204_9350#",
+        "a_32098_12390#",
+        "a_32098_9350#",
+        "a_36124_10910#",
+        "a_36124_12390#",
+        "a_36124_13950#",
+        "a_36124_9350#",
+        "a_42044_10910#",
+        "a_42044_12390#",
+        "a_42044_13950#",
+        "a_42044_9350#",
+        "a_43938_10910#",
+        "a_43938_9350#",
+        "a_604_10910#",
+        "a_604_12390#",
+        "a_604_13950#",
+        "a_604_9350#",
+        "a_6524_10910#",
+        "a_6524_12390#",
+        "a_6524_13950#",
+        "a_6524_9350#",
+        "a_6527_7750#",
+        "a_653_476#",
+        "a_653_696#",
+        "a_653_9596#",
+        "a_653_9816#",
+        "a_8418_13950#",
+        "a_8418_9350#",
+        "rst_n",
+        "vdd",
+        "vss"
+      ],
+      "raw_device_count": 1868,
+      "merged_device_count": 1868,
+      "net_count": 783,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 3591.757,
+          "M2": 1270.82,
+          "M3": 5032.943,
+          "M4": 1913.773,
+          "M5": 0.0
+        },
+        "total_metal_um2": 11809.293,
+        "share_pct": {
+          "M1": 30.4,
+          "M2": 10.8,
+          "M3": 42.6,
+          "M4": 16.2,
+          "M5": 0.0
+        }
+      },
+      "key_port_caps_fF": {
+        "ckd0": {
+          "to_substrate_fF": 2.898,
+          "coupling_sum_fF": 9.147,
+          "total_node_fF": 12.046
+        },
+        "ckd1": {
+          "to_substrate_fF": 0.767,
+          "coupling_sum_fF": 0.836,
+          "total_node_fF": 1.603
+        },
+        "ckd2": {
+          "to_substrate_fF": 0.902,
+          "coupling_sum_fF": 9.908,
+          "total_node_fF": 10.809
+        },
+        "ckd3": {
+          "to_substrate_fF": 0.761,
+          "coupling_sum_fF": 4.179,
+          "total_node_fF": 4.94
+        },
+        "cke0": {
+          "to_substrate_fF": 0.899,
+          "coupling_sum_fF": 3.71,
+          "total_node_fF": 4.609
+        },
+        "cke1": {
+          "to_substrate_fF": 0.727,
+          "coupling_sum_fF": 0.718,
+          "total_node_fF": 1.446
+        },
+        "cke2": {
+          "to_substrate_fF": 0.769,
+          "coupling_sum_fF": 0.686,
+          "total_node_fF": 1.454
+        },
+        "cke3": {
+          "to_substrate_fF": 0.769,
+          "coupling_sum_fF": 0.686,
+          "total_node_fF": 1.454
+        },
+        "d0": {
+          "to_substrate_fF": 1.21,
+          "coupling_sum_fF": 2.8,
+          "total_node_fF": 4.01
+        },
+        "d1": {
+          "to_substrate_fF": 1.13,
+          "coupling_sum_fF": 3.03,
+          "total_node_fF": 4.16
+        },
+        "d2": {
+          "to_substrate_fF": 1.177,
+          "coupling_sum_fF": 3.001,
+          "total_node_fF": 4.178
+        },
+        "d3": {
+          "to_substrate_fF": 0.879,
+          "coupling_sum_fF": 3.486,
+          "total_node_fF": 4.365
+        },
+        "e0": {
+          "to_substrate_fF": 0.899,
+          "coupling_sum_fF": 3.455,
+          "total_node_fF": 4.354
+        },
+        "e1": {
+          "to_substrate_fF": 1.115,
+          "coupling_sum_fF": 2.993,
+          "total_node_fF": 4.108
+        },
+        "e2": {
+          "to_substrate_fF": 1.13,
+          "coupling_sum_fF": 2.902,
+          "total_node_fF": 4.033
+        },
+        "e3": {
+          "to_substrate_fF": 1.135,
+          "coupling_sum_fF": 2.876,
+          "total_node_fF": 4.011
+        },
+        "wclk": {
+          "to_substrate_fF": 1.206,
+          "coupling_sum_fF": 4.819,
+          "total_node_fF": 6.025
+        },
+        "rst_n": {
+          "to_substrate_fF": 212.52,
+          "coupling_sum_fF": 208.213,
+          "total_node_fF": 420.733
+        },
+        "vdd": {
+          "to_substrate_fF": 1255.06,
+          "coupling_sum_fF": 696.44,
+          "total_node_fF": 1951.5
+        }
+      },
+      "internal_cpex_fF": {},
+      "key_net_rcx_ohm": {
+        "ckd0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ckd3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "cke3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "d0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "d1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "d2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "d3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "e0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "e1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "e2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "e3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "wclk": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "rst_n": {
+          "r_elem_count": 206,
+          "r_sum_ohm": 57810.561,
+          "r_max_elem_ohm": 827.255
+        },
+        "vdd": {
+          "r_elem_count": 3715,
+          "r_sum_ohm": 395482.386,
+          "r_max_elem_ohm": 6750.34
+        },
+        "vss": {
+          "r_elem_count": 3541,
+          "r_sum_ohm": 868830.273,
+          "r_max_elem_ohm": 73412.2
+        }
+      }
+    },
+    "serdes_rx_cmos_top_pdk": {
+      "cell": "serdes_rx_cmos_top_pdk",
+      "source_subckt": "serdes_rx_cmos_top",
+      "mag": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_top_pdk.mag",
+      "ref_spice": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_top_pdk_ref.spice",
+      "png": "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_top_pdk.png",
+      "review_dir": "results/layout/rx_cmos_v2/top/review/serdes_rx_cmos_top_pdk",
+      "pex_spice": "results/layout/rx_cmos_v2/top/review/serdes_rx_cmos_top_pdk/serdes_rx_cmos_top_pdk_pex.spice",
+      "rcx_spice": "results/layout/rx_cmos_v2/top/review/serdes_rx_cmos_top_pdk/serdes_rx_cmos_top_pdk_rcx.spice",
+      "bbox_um": [
+        -5.4,
+        -1.88,
+        239.9,
+        193.52
+      ],
+      "width_um": 245.3,
+      "height_um": 195.4,
+      "area_um2": 47931.62,
+      "aspect_ratio": 1.26,
+      "expected_port_count": 76,
+      "exported_port_count": 76,
+      "exported_ports": [
+        "rxp",
+        "rxn",
+        "vcm_ref",
+        "ibias_ctle",
+        "eq0",
+        "eq1",
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "rst_n",
+        "a0",
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5",
+        "a6",
+        "a7",
+        "b0",
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "f0",
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5",
+        "f6",
+        "f7",
+        "wd0",
+        "wd1",
+        "wd2",
+        "wd3",
+        "wd4",
+        "wd5",
+        "wd6",
+        "wd7",
+        "wd8",
+        "wd9",
+        "wd10",
+        "wd11",
+        "wd12",
+        "wd13",
+        "wd14",
+        "wd15",
+        "we0",
+        "we1",
+        "we2",
+        "we3",
+        "we4",
+        "we5",
+        "we6",
+        "we7",
+        "we8",
+        "we9",
+        "we10",
+        "we11",
+        "we12",
+        "we13",
+        "we14",
+        "we15",
+        "wclk",
+        "ctle_p",
+        "ctle_n",
+        "vdd",
+        "vss"
+      ],
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": false,
+      "rc_review_strict_passed": false,
+      "rc_connectivity_and_wl_preserved": true,
+      "rc_shorted_supply_moscap_as_ps_diffs": 2,
+      "rc_note": "Unmodified review_cell.py passed physical_passed=True (DRC=0, LVS=MATCH, 0 prop err). During --rc, Magic ext2spice assigns node vdd/vss global diff area to as/ps of the first 1-finger D=S=B supply MOS-cap (Xmdum_p/Xmdum_n from frozen rx_cmos_pi.spice) in CPEX vs as=0/ps=0 when extresist splits vdd/vss into rnodes; all W/L/ad/pd/connectivity and resistor subnetworks match 100%.",
+      "rc_resistor_count": 23888,
+      "rc_resistor_nets": [
+        "a_10215_30986#",
+        "a_10575_31086#",
+        "a_11217_11066#",
+        "a_11247_11340#",
+        "a_11271_1788#",
+        "a_11271_2720#",
+        "a_11271_3728#",
+        "a_11271_4660#",
+        "a_11271_6068#",
+        "a_11271_7000#",
+        "a_11271_8008#",
+        "a_11271_8940#",
+        "a_11553_1938#",
+        "a_11553_3254#",
+        "a_11595_1788#",
+        "a_11595_5328#",
+        "a_11595_9608#",
+        "a_12019_11340#",
+        "a_1217_11066#",
+        "a_12444_32606#",
+        "a_12444_34166#",
+        "a_12444_35646#",
+        "a_12444_37206#",
+        "a_1247_11340#",
+        "a_12557_11166#",
+        "a_13003_11066#",
+        "a_13661_20094#",
+        "a_13791_12130#",
+        "a_13833_1938#",
+        "a_13833_3254#",
+        "a_13875_3388#",
+        "a_13875_8008#",
+        "a_13875_9608#",
+        "a_14338_32606#",
+        "a_14565_12190#",
+        "a_15941_21768#",
+        "a_15971_21796#",
+        "a_16113_1938#",
+        "a_16113_3254#",
+        "a_16155_3728#",
+        "a_16155_5328#",
+        "a_16155_7668#",
+        "a_16217_11066#",
+        "a_18003_11066#",
+        "a_1821_20094#",
+        "a_18364_32606#",
+        "a_18364_34166#",
+        "a_18364_35646#",
+        "a_18364_37206#",
+        "a_18591_12130#",
+        "a_1859_17302#",
+        "a_19365_12190#",
+        "a_19581_20094#",
+        "a_20025_21768#",
+        "a_2019_11340#",
+        "a_20258_37206#",
+        "a_24284_32606#",
+        "a_24284_34166#",
+        "a_24284_35646#",
+        "a_24284_37206#",
+        "a_24333_23732#",
+        "a_24333_23952#",
+        "a_2495_10650#",
+        "a_24971_21796#",
+        "a_2498_32606#",
+        "a_25501_20094#",
+        "a_2557_11166#",
+        "a_26178_37206#",
+        "a_29025_21768#",
+        "a_2961_12102#",
+        "a_29659_8430#",
+        "a_29754_8430#",
+        "a_29930_7278#",
+        "a_3003_11066#",
+        "a_30204_32606#",
+        "a_30204_34166#",
+        "a_30204_35646#",
+        "a_30204_37206#",
+        "a_30354_8430#",
+        "a_31421_20094#",
+        "a_32098_32606#",
+        "a_32098_34166#",
+        "a_32098_35646#",
+        "a_32098_37206#",
+        "a_3318_305#",
+        "a_3471_9124#",
+        "a_36124_32606#",
+        "a_36124_34166#",
+        "a_36124_35646#",
+        "a_36124_37206#",
+        "a_37341_20094#",
+        "a_3765_12190#",
+        "a_38018_34166#",
+        "a_38018_35646#",
+        "a_3841_1970#",
+        "a_4087_10650#",
+        "a_42044_32606#",
+        "a_42044_34166#",
+        "a_42044_35646#",
+        "a_42044_37206#",
+        "a_4281_1970#",
+        "a_43261_20094#",
+        "a_43938_34166#",
+        "a_4711_12102#",
+        "a_4721_1970#",
+        "a_5191_1966#",
+        "a_5191_4814#",
+        "a_5191_6246#",
+        "a_5191_9094#",
+        "a_604_32606#",
+        "a_604_34166#",
+        "a_604_35646#",
+        "a_604_37206#",
+        "a_6217_11066#",
+        "a_6448_305#",
+        "a_6524_32606#",
+        "a_6524_34166#",
+        "a_6524_35646#",
+        "a_6524_37206#",
+        "a_6527_31006#",
+        "a_653_23732#",
+        "a_653_23952#",
+        "a_653_32852#",
+        "a_653_33072#",
+        "a_7001_1970#",
+        "a_743_2290#",
+        "a_743_2790#",
+        "a_743_4290#",
+        "a_743_4790#",
+        "a_743_6290#",
+        "a_743_6790#",
+        "a_743_8290#",
+        "a_743_8790#",
+        "a_7441_1970#",
+        "a_7741_20094#",
+        "a_7779_17302#",
+        "a_7881_1970#",
+        "a_8003_11066#",
+        "a_8351_1966#",
+        "a_8351_4814#",
+        "a_8351_6246#",
+        "a_8351_9094#",
+        "a_8565_12190#",
+        "a_878_10710#",
+        "a_9273_1938#",
+        "a_9273_3254#",
+        "a_9315_1788#",
+        "a_9315_3388#",
+        "a_9315_3728#",
+        "a_9315_5328#",
+        "a_9315_7668#",
+        "a_9315_9608#",
+        "ctle_n",
+        "ctle_p",
+        "rst_n",
+        "vdd",
+        "vss"
+      ],
+      "raw_device_count": 3039,
+      "merged_device_count": 3032,
+      "net_count": 1154,
+      "metal_shares": {
+        "area_um2": {
+          "M1": 6862.779,
+          "M2": 3618.02,
+          "M3": 8447.17,
+          "M4": 3949.148,
+          "M5": 5954.524
+        },
+        "total_metal_um2": 28831.641,
+        "share_pct": {
+          "M1": 23.8,
+          "M2": 12.5,
+          "M3": 29.3,
+          "M4": 13.7,
+          "M5": 20.7
+        }
+      },
+      "key_port_caps_fF": {
+        "rxp": {
+          "to_substrate_fF": 13.004,
+          "coupling_sum_fF": 11.351,
+          "total_node_fF": 24.355
+        },
+        "rxn": {
+          "to_substrate_fF": 13.178,
+          "coupling_sum_fF": 11.333,
+          "total_node_fF": 24.511
+        },
+        "ctle_p": {
+          "to_substrate_fF": 20.1,
+          "coupling_sum_fF": 39.208,
+          "total_node_fF": 59.308
+        },
+        "ctle_n": {
+          "to_substrate_fF": 18.453,
+          "coupling_sum_fF": 41.093,
+          "total_node_fF": 59.547
+        },
+        "vcm_ref": {
+          "to_substrate_fF": 10.21,
+          "coupling_sum_fF": 1.631,
+          "total_node_fF": 11.841
+        },
+        "ibias_ctle": {
+          "to_substrate_fF": 15.306,
+          "coupling_sum_fF": 5.766,
+          "total_node_fF": 21.072
+        },
+        "c0": {
+          "to_substrate_fF": 1.248,
+          "coupling_sum_fF": 0.968,
+          "total_node_fF": 2.216
+        },
+        "c1": {
+          "to_substrate_fF": 1.083,
+          "coupling_sum_fF": 1.067,
+          "total_node_fF": 2.15
+        },
+        "c2": {
+          "to_substrate_fF": 1.082,
+          "coupling_sum_fF": 1.074,
+          "total_node_fF": 2.156
+        },
+        "c3": {
+          "to_substrate_fF": 1.147,
+          "coupling_sum_fF": 1.062,
+          "total_node_fF": 2.209
+        },
+        "c4": {
+          "to_substrate_fF": 1.409,
+          "coupling_sum_fF": 1.065,
+          "total_node_fF": 2.474
+        },
+        "c5": {
+          "to_substrate_fF": 1.224,
+          "coupling_sum_fF": 1.074,
+          "total_node_fF": 2.299
+        },
+        "c6": {
+          "to_substrate_fF": 1.21,
+          "coupling_sum_fF": 1.076,
+          "total_node_fF": 2.285
+        },
+        "c7": {
+          "to_substrate_fF": 1.283,
+          "coupling_sum_fF": 0.982,
+          "total_node_fF": 2.265
+        },
+        "wclk": {
+          "to_substrate_fF": 1.475,
+          "coupling_sum_fF": 5.111,
+          "total_node_fF": 6.586
+        },
+        "rst_n": {
+          "to_substrate_fF": 228.84,
+          "coupling_sum_fF": 225.711,
+          "total_node_fF": 454.551
+        },
+        "vdd": {
+          "to_substrate_fF": 2091.48,
+          "coupling_sum_fF": 1301.923,
+          "total_node_fF": 3393.403
+        }
+      },
+      "internal_cpex_fF": {},
+      "key_net_rcx_ohm": {
+        "rxp": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "rxn": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ctle_p": {
+          "r_elem_count": 17,
+          "r_sum_ohm": 3252.771,
+          "r_max_elem_ohm": 666.768
+        },
+        "ctle_n": {
+          "r_elem_count": 23,
+          "r_sum_ohm": 5672.645,
+          "r_max_elem_ohm": 666.768
+        },
+        "vcm_ref": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "ibias_ctle": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c1": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c2": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c3": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c4": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c5": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c6": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "c7": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "wclk": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "note": "< 1 ohm Magic extresist threshold"
+        },
+        "rst_n": {
+          "r_elem_count": 619,
+          "r_sum_ohm": 223641.611,
+          "r_max_elem_ohm": 827.255
+        },
+        "vdd": {
+          "r_elem_count": 9923,
+          "r_sum_ohm": 759557.368,
+          "r_max_elem_ohm": 6750.34
+        },
+        "vss": {
+          "r_elem_count": 8683,
+          "r_sum_ohm": 3033843.37,
+          "r_max_elem_ohm": 335061.0
+        }
+      }
+    }
+  }
+}

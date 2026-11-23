@@ -1,0 +1,17 @@
+G {type=resistor
+format="@name @pinlist @value"
+template="name=R1 value=1"}
+V {}
+S {}
+E {}
+L 4 0 -30 0 -20 {}
+L 4 0 -20 8 -15 {}
+L 4 8 -15 -8 -5 {}
+L 4 -8 -5 8 5 {}
+L 4 8 5 -8 15 {}
+L 4 -8 15 0 20 {}
+L 4 0 20 0 30 {}
+T {@name} 25 -35 0 0 0.22 0.22 {}
+T {@value} 25 -10 0 0 0.21 0.21 {}
+B 5 -2.5 -32.5 2.5 -27.5 {name=p dir=inout}
+B 5 -2.5 27.5 2.5 32.5 {name=n dir=inout}

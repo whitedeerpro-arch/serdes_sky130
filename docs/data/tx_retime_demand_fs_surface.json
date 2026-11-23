@@ -1,0 +1,1084 @@
+{
+  "status": "demand_surface_measured",
+  "campaign": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032",
+  "summary": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/analysis/20261111T072832.336897Z/summary.json",
+  "summary_sha256": "3814787e47e702b6a1b735c17de9f104e01403233dd46422fa66cf74c28865dd",
+  "plan_sha256": "1857079b120d39f5eb7beb153a89776caad30add2fda97e3b079a9bc1a771722",
+  "boundary_sha256": "7775eb96e5c6e94a407a21394e6c212bd1ec3835afcce0caf008ca8ce9dbfe49",
+  "publisher_sha256": "d34ad8e21d96557f2f7529ec922407157700ed96faf7f57e5bab57393fafd1b0",
+  "publisher_snapshot": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/publication/20261111T113856.913603Z/publisher.py",
+  "analysis_source_sha256": {
+    "analog/tx/input_register/tb/retime_demand/series_pwl.py": "6cd9636c724b3c63f7d5d4b38347f4c6ae91242ffea8e2b7efda363ac4712cdf",
+    "src/serdes_flow/serial.py": "c444f425f801fa13071a27029a7fc59c2838c1880253649dfc0475832f04178b",
+    "src/serdes_flow/spice.py": "7d97d104f9b938f912515862bc03a9a74c84d1b3de2d43039f9ae3b0b7204d2f"
+  },
+  "scope": "Recorded full-TX final-rank ports, current driver and direct load, 256 payload bits, training-only phase and independent bit mapping. Prescribed voltage sources omit upstream impedance/feedback; no physical sizing, full-system or 45-PVT/noise/startup qualification.",
+  "amplitude_policy": {
+    "status": "internal_400mV_ceiling_under_review; no_replacement_limit_adopted",
+    "historical_screen": "clock_200to400_observation and local_demand_screen retain the original 200\u2013400 mV band; exceeding 400 alone does not establish physical failure",
+    "current_interpretation": "Read outputs.meets_eye_and_mapping separately; headroom, noise and device stress require additional evidence"
+  },
+  "rows": [
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "baseline",
+        "delay_ps": 0,
+        "differential_scale": 1.0
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.639672153124498,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.09308387376850516,
+            "sample_eye_height_v": 0.18878431029894316,
+            "differential_pp_v": 0.3799980654790114,
+            "transition_spread_ui": 0.1500437848142564,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.09550825230266131,
+            "edge_spread_ui": 0.15492110262624692,
+            "sampling_phase_ui": -0.39957154438623427,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 1.9893671493099605,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.12717326143386673,
+            "sample_eye_height_v": 0.2548329158245426,
+            "differential_pp_v": 0.3746609239184022,
+            "transition_spread_ui": 0.1798514650178929,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.12847536080804273,
+            "edge_spread_ui": 0.1798514650179186,
+            "sampling_phase_ui": -0.053792564378095695,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.30750434297982143,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.2996529693656387,
+        "max_pp_v": 0.30710655540697784,
+        "mean_pp_v": 0.30515243676419607
+      },
+      "c2g_common_mode_mean_v": 1.5707855402428461,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": true,
+      "baseline_max_error_v": {
+        "qp": 2.9680885463179152e-05,
+        "qn": 2.8892322541329563e-05,
+        "lqp": 0.0005157944713252149,
+        "lqn": 0.00015871752668950023,
+        "ahp": 1.4926492695632732e-05,
+        "ahn": 1.5849997238470692e-05,
+        "bhp": 2.5656913525073932e-05,
+        "bhn": 2.544553511452108e-05,
+        "sap": 6.736837390275419e-06,
+        "san": 7.33670325281377e-06,
+        "sbp": 6.720660305492565e-06,
+        "sbn": 7.486393319933171e-06
+      },
+      "baseline_absolute_edge_error_s": {
+        "serializer": 8.693647369871526e-15,
+        "pad": 1.8755160636760733e-13
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_baseline/baseline.raw",
+      "raw_sha256": "a73ff6aeed3f032ffb0e0a7c1cf668eedad3c28854fed2cbd8f4705367d24fd3",
+      "evidence": {
+        "tb.cir": "3ec643bc8d8d1cbbfb1ae89c321a882d6961ac1d4b4f6e53ebb4c08c400ec86a",
+        "execution.json": "f5a7e1a1118f00209166963015333071c9495b31bb20e304485ce2261da3fd25",
+        "simulator.log": "df6bf7c0997c2ea3605f00ac8572a815e3d58d3a73a01911c96abd414df5a27d"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "early20",
+        "delay_ps": -20,
+        "differential_scale": 1.0
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.5603299701320754,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.09638671499047806,
+            "sample_eye_height_v": 0.19381671551516505,
+            "differential_pp_v": 0.3799729262859517,
+            "transition_spread_ui": 0.18821801307077526,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.09719146113702015,
+            "edge_spread_ui": 0.19080847386237565,
+            "sampling_phase_ui": -0.4714087473533726,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 1.9090190490399044,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.13135594159925612,
+            "sample_eye_height_v": 0.26292680907808164,
+            "differential_pp_v": 0.37477243760944967,
+            "transition_spread_ui": 0.2106525872936913,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.13237320035341987,
+            "edge_spread_ui": 0.21065258729373681,
+            "sampling_phase_ui": -0.12658751957189016,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.3075043429798212,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.2996529693656389,
+        "max_pp_v": 0.3071065554069776,
+        "mean_pp_v": 0.3051524367641962
+      },
+      "c2g_common_mode_mean_v": 1.5707849542417105,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_early20/early20.raw",
+      "raw_sha256": "ef4ed84c120d5fa7c477170b79af96af2b3580b40b194a59333774d6c139acfb",
+      "evidence": {
+        "tb.cir": "27494c5484d2e9e5f513a2e3e4a2b6c2ef0afcdddde678781f6027ecf668e365",
+        "execution.json": "095abaa84718eff1b854440e578ad5a2404c5c3c68933681de8a5acfdc48fa36",
+        "simulator.log": "9e343252f6294ba346d8fd6c1a75daa96b4c5f4f51c07db7124bc2dbe1fb9b31"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "late20",
+        "delay_ps": 20,
+        "differential_scale": 1.0
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.7207126378216042,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.08721537146466465,
+            "sample_eye_height_v": 0.17778635123662007,
+            "differential_pp_v": 0.3789196869794982,
+            "transition_spread_ui": 0.13119066757169687,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.08960890860195214,
+            "edge_spread_ui": 0.13193379287264406,
+            "sampling_phase_ui": -0.32498485752628115,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": true
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 2.070110677039027,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.12220827293779013,
+            "sample_eye_height_v": 0.2452935124102703,
+            "differential_pp_v": 0.3743727636836036,
+            "transition_spread_ui": 0.1648113549817188,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.12356027234937923,
+            "edge_spread_ui": 0.16537388374172224,
+            "sampling_phase_ui": 0.021307743699766638,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.3075043429798212,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.29965296936563846,
+        "max_pp_v": 0.30710655540697784,
+        "mean_pp_v": 0.30515243676419607
+      },
+      "c2g_common_mode_mean_v": 1.5707860825498914,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_late20/late20.raw",
+      "raw_sha256": "1762ecd7f8a34c1b74b9326220d9be733db87018fb3e99a2b3161b67fda4f97b",
+      "evidence": {
+        "tb.cir": "41b91db52bb1a013c2c7532054c54102769249dfd9e4c58ec1e28407e2b988b3",
+        "execution.json": "128c9a53cc5a2d051d1be9464f45b6c0c32261525680db78628e2f339f516370",
+        "simulator.log": "c4219c98c1b245a502eeac2bad988868a3b842e982819facefc14edc6239d8c6"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "late40",
+        "delay_ps": 40,
+        "differential_scale": 1.0
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.802927578974797,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.0812019044066453,
+            "sample_eye_height_v": 0.16628661658547605,
+            "differential_pp_v": 0.3772236958210231,
+            "transition_spread_ui": 0.14388075593883456,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.08297958862669703,
+            "edge_spread_ui": 0.1438807559388522,
+            "sampling_phase_ui": -0.24800044184404638,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": true
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 2.1518930763083386,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.11614191114912979,
+            "sample_eye_height_v": 0.2337070823314779,
+            "differential_pp_v": 0.3740037794163673,
+            "transition_spread_ui": 0.1812644447467968,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.11736279711854912,
+            "edge_spread_ui": 0.1812644447468017,
+            "sampling_phase_ui": 0.09822393897581705,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.3075043429798212,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.2996529693656389,
+        "max_pp_v": 0.30710655540697807,
+        "mean_pp_v": 0.3051524367641962
+      },
+      "c2g_common_mode_mean_v": 1.5707865473199403,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_late40/late40.raw",
+      "raw_sha256": "1627d9de3300244b69bf00367f5c0dd5c031f5d095afe346a98faa1a439bc774",
+      "evidence": {
+        "tb.cir": "0d1e768fba474b2b71767cfbb438b65cfd4f13f9009f8f8c973061ac3edb4d58",
+        "execution.json": "5acc81ae772ed05bd275c2088a42ca0abf5b8039d2a0cd8d8f2c3632a525616d",
+        "simulator.log": "247de78299b8fb4855b971e244abef2473801941cf77ccbd0a1420ad23224d4f"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "scale090",
+        "delay_ps": 0,
+        "differential_scale": 0.9
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.637539180570034,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.08502149634713903,
+            "sample_eye_height_v": 0.17259190022355253,
+            "differential_pp_v": 0.37535378277091214,
+            "transition_spread_ui": 0.17200153530511603,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.08744752321162638,
+            "edge_spread_ui": 0.1776212430456212,
+            "sampling_phase_ui": -0.40429172104797484,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 1.9894355407196191,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.11792809348625528,
+            "sample_eye_height_v": 0.23639892040621796,
+            "differential_pp_v": 0.37366966226529197,
+            "transition_spread_ui": 0.20855168543569508,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.11984934752743755,
+            "edge_spread_ui": 0.2085516854356797,
+            "sampling_phase_ui": -0.056037687771847915,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.27675390868183913,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.2696876724290751,
+        "max_pp_v": 0.2763958998662801,
+        "mean_pp_v": 0.2746371930877766
+      },
+      "c2g_common_mode_mean_v": 1.570785516517779,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_scale090/scale090.raw",
+      "raw_sha256": "7dc6faea6d4a88d27175019ec4028fa7699b99ab90e510ef4d22b860695d0786",
+      "evidence": {
+        "tb.cir": "385ec34f69efb55077b684a812f7a4340308248d1080f67ed7b3df0f93752187",
+        "execution.json": "43cae370afb25e5299cd86bd6f568d92fe03f1eeec8c56639ddab02f45c3f68f",
+        "simulator.log": "ac2a9f3b33ee239cdceaf4bc12645e0e6e48592be5966c36687a8c01ae732123"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "scale110",
+        "delay_ps": 0,
+        "differential_scale": 1.1
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.6418162609472344,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.10023969488898288,
+            "sample_eye_height_v": 0.20310701579721885,
+            "differential_pp_v": 0.384690960562845,
+            "transition_spread_ui": 0.13294045799009188,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.10275218335363165,
+            "edge_spread_ui": 0.13662094485539455,
+            "sampling_phase_ui": -0.39523612074507175,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": true
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 1.989204940259246,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.1345313748879213,
+            "sample_eye_height_v": 0.26941223201964637,
+            "differential_pp_v": 0.37556685157341696,
+            "transition_spread_ui": 0.15695802269492354,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.1354098304124131,
+            "edge_spread_ui": 0.15695802269493697,
+            "sampling_phase_ui": -0.051838660535158065,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.3382547772778033,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.3296182663022025,
+        "max_pp_v": 0.337817210947676,
+        "mean_pp_v": 0.3356676804406158
+      },
+      "c2g_common_mode_mean_v": 1.570785539411681,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_scale110/scale110.raw",
+      "raw_sha256": "5910a780bc4c95807c142b0ebca2ac779ecdd7488da9143552117d1f4875e0ea",
+      "evidence": {
+        "tb.cir": "67c3439bd11e31bf49be546bdde1dd406e39d4529aca9b8668ac49f1e68ce2ab",
+        "execution.json": "2736cc932595fb9878e3df5a0e845d7438b9af9b279038c349f8065ca280a68c",
+        "simulator.log": "956cccc17eb1e0086fc274acfe878a0fd1faaa92a47d1fe7e2038a752a1714cd"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "late20_scale090",
+        "delay_ps": 20,
+        "differential_scale": 0.9
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.7187580111210918,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.07849279184574175,
+            "sample_eye_height_v": 0.16023534042592277,
+            "differential_pp_v": 0.3743570905425957,
+            "transition_spread_ui": 0.15159006157700097,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.08098897489933687,
+            "edge_spread_ui": 0.15458476099706786,
+            "sampling_phase_ui": -0.33053020542012507,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 2.0700780948622732,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.11153278103910233,
+            "sample_eye_height_v": 0.2240621761888723,
+            "differential_pp_v": 0.37335429171671364,
+            "transition_spread_ui": 0.19192282073160902,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.11368977274512417,
+            "edge_spread_ui": 0.19417123955628313,
+            "sampling_phase_ui": 0.01829671235405287,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": false
+        }
+      },
+      "c2g_pp_v": 0.2767539086818389,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.2696876724290749,
+        "max_pp_v": 0.2763958998662801,
+        "mean_pp_v": 0.27463719308777657
+      },
+      "c2g_common_mode_mean_v": 1.5707860588248244,
+      "clock_200to400_observation": true,
+      "local_demand_screen": false,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_late20_scale090/late20_scale090.raw",
+      "raw_sha256": "92ef6b6e35e35a51741b02a51161d2eb3ab874828b7fd447dba9867c86acdd78",
+      "evidence": {
+        "tb.cir": "480a8a617d1c0b2aca0c85bd8ee990f94f6fe551dbe5ad7d9c72b1d706cd7c7c",
+        "execution.json": "c8f6536f2923711e0654434365dc47d95fcce62a7ec219ca99bedcb3043b0632",
+        "simulator.log": "952af7d76d78e204d1f335986223b00a93779bd2e15a90bbc07aa8e229c34275"
+      }
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "point": {
+        "id": "late20_scale110",
+        "delay_ps": 20,
+        "differential_scale": 1.1
+      },
+      "outputs": {
+        "serializer": {
+          "metrics": {
+            "training_delay_ui": 1.7228172705826608,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.0949368181934866,
+            "sample_eye_height_v": 0.1932045350013773,
+            "differential_pp_v": 0.38355396591118085,
+            "transition_spread_ui": 0.11507728608986399,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.09737409508689716,
+            "edge_spread_ui": 0.11588188554196677,
+            "sampling_phase_ui": -0.3200070083903823,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": true
+        },
+        "pad": {
+          "metrics": {
+            "training_delay_ui": 2.07001000542677,
+            "training_transitions_matched": 31,
+            "training_errors": 0,
+            "marker_errors": 0,
+            "payload_bits": 256,
+            "bit_errors": 0,
+            "minimum_signed_margin_v": 0.13063783593069178,
+            "sample_eye_height_v": 0.26194812893365793,
+            "differential_pp_v": 0.3753087758885081,
+            "transition_spread_ui": 0.1470319493814615,
+            "matched_transitions": 130,
+            "missing_transitions": 0,
+            "extra_crossings": 0,
+            "training_valid": true,
+            "functional": true,
+            "edge_match_half_width_ui": 0.45,
+            "phase_from_training_only": true,
+            "UI_fitted_to_payload": false
+          },
+          "mapping": {
+            "eye_min_abs_v": 0.13146658971868352,
+            "edge_spread_ui": 0.14703194938147135,
+            "sampling_phase_ui": 0.023881739334821964,
+            "mapping": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "frame_offset_ui": 2,
+            "words_used": 18,
+            "in_order": true
+          },
+          "meets_eye_and_mapping": true
+        }
+      },
+      "c2g_pp_v": 0.3382547772778026,
+      "c2g_cycles": {
+        "complete_cycles": 127,
+        "min_pp_v": 0.3296182663022025,
+        "max_pp_v": 0.337817210947676,
+        "mean_pp_v": 0.3356676804406158
+      },
+      "c2g_common_mode_mean_v": 1.5707860819041521,
+      "clock_200to400_observation": true,
+      "local_demand_screen": true,
+      "baseline_matches": null,
+      "baseline_max_error_v": null,
+      "baseline_absolute_edge_error_s": {
+        "serializer": null,
+        "pad": null
+      },
+      "raw": "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032/fs_v1650_t85_late20_scale110/late20_scale110.raw",
+      "raw_sha256": "56fdde57fb1910cb96d586fc9dfccec23441e6d499c0dfa8e86e5516e9c331c4",
+      "evidence": {
+        "tb.cir": "4c393fea19a1c8084b98ea7c5840cd3ef966f7623f2c61ebfa2b6cc49dd079bf",
+        "execution.json": "c3df38a126eb56ab57094d8af5bf76f671e8b6d5823e70bcd7a925b07f4ca89c",
+        "simulator.log": "5ddf23cc265025cd14c3c27c3096e334cd06282f470f2d8213b1a342c91f369b"
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "report": "docs/design/ldo_cap_area.md",
+  "data": "docs/data/ldo_cap_area.json",
+  "inputs": {
+    "screen": {
+      "path": "results/analog/common/ldo/cap_sizing/20261113T175958.073594Z_peripheral/analysis/20261113T180245.552586Z/summary.json",
+      "sha256": "af8a46e63dcbe5cc1357017dfacebb42781c2f0ee17b006a290aa3a3dbab0a2b"
+    },
+    "noise": {
+      "path": "results/analog/common/ldo/cap_sizing/20261113T180107.514492Z_dynamic/analysis/20261113T180453.263861Z/summary.json",
+      "sha256": "48a31d6dde78b4deebac36a2a42a86af019b21a4e1f27c5587b743143ad69777"
+    },
+    "noise_rc": {
+      "path": "results/analog/common/ldo/cap_sizing/20261113T180639.797264Z_dynamic/analysis/20261113T180749.996218Z/summary.json",
+      "sha256": "9b96b5dfa00e8827837b34bd694732cc5bb12f643e98aa5283fba86d0e7bbc8d"
+    },
+    "inventory": {
+      "path": "results/analog/common/ldo/cap_sizing/20261113T175958.073594Z_peripheral/inventory_v2.json",
+      "sha256": "03c3bad263c0b61f5550e975e987cac602b66cd342ba859faacb7e77686bcadd"
+    },
+    "core16": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/summary.json",
+      "sha256": "37c39fe71bf978c78cdebd9e03d45efeb906cb2b4add17a6d43edd456f505e27"
+    },
+    "core12": {
+      "path": "results/layout/ldo_smallcap/20261114_cas12_compact/summary.json",
+      "sha256": "9997ab68b1b469a6754b232a479a84464adfd9bf9b37f8bad893775294392269"
+    },
+    "core8": {
+      "path": "results/layout/ldo_smallcap/20261114_cas8_compact/summary.json",
+      "sha256": "2747fd5c30d66ba649b824252dce450a8020314c8fb09bc831b97bd5a9ad4dd7"
+    },
+    "corestack": {
+      "path": "results/layout/ldo_stacked/20261114_core70/summary.json",
+      "sha256": "476331d1264c645167bb0fd6d38ef5ed76c0f269b928f1f6097c3f07261b0015"
+    },
+    "pex16": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T064811.987187Z_worst/analysis/20261114T064911.161519Z/summary.json",
+      "sha256": "e80ad0b03b9ccc406c73b7799e48e3bffa4f0edfe6e2c26cbcaba8632245bb3a"
+    },
+    "pex12": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T070004.264858Z_worst/analysis/20261114T070217.565368Z/summary.json",
+      "sha256": "46d222a67193933c1468261708b4f4050f2517b4deb575e5668125e009142a53"
+    },
+    "pex8": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T065105.653887Z_worst/analysis/20261114T065200.262607Z/summary.json",
+      "sha256": "00c314b125127dfe2daf09576ef54f94bc85c440a1d6e9c89c5e8d8895f731f4"
+    },
+    "pexstack": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T070347.072332Z_worst/analysis/20261114T070613.173320Z/summary.json",
+      "sha256": "e7c7bbd3080f70b33cc8fb66875a2aa39e786c8d79eae9464e87ce1aadceac30"
+    },
+    "full_screen": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T070254.616083Z_peripheral/analysis/20261114T070657.676460Z/summary.json",
+      "sha256": "c751cea4896f51478ad7ccc2861df0aa60d27d12be73843503e1afd5d71424e9"
+    },
+    "reduced_screen": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T070550.797002Z_peripheral/analysis/20261114T070659.634154Z/summary.json",
+      "sha256": "90aced291f02bf73201ca57b6960d69e7501d7d8f4fbfa7de1a19a2b4bb51dd3"
+    },
+    "stack_pvt": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T070543.827161Z_pvt/analysis/20261114T071819.837750Z/summary.json",
+      "sha256": "b144d61edfc71a7e8d9cfb7117727195b2781f0c06e255f9a4378f071138317f"
+    },
+    "stack_dynamic": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T070615.871897Z_dynamic/analysis/20261114T072050.110311Z/summary.json",
+      "sha256": "6f7109d15af3f01e2c8e069a170e6b796fb5ec11ce8f64665b7e15677dc7c107"
+    },
+    "stack_mc": {
+      "path": "results/analog/common/ldo/candidate_mismatch/20261114T070744.907393Z/analysis/20261114T071540.405792Z/summary.json",
+      "sha256": "ad1d28b3f6f5d5a611f51b55626bcf2f3b8cb011da1e41adb85022d27167dd25"
+    },
+    "stack_pex_screen": {
+      "path": "results/analog/common/ldo/cap_sizing/20261114T071004.168143Z_screen/analysis/20261114T072143.245983Z/summary.json",
+      "sha256": "068f8167adc6686c4c9f9b78b16d664cbb17efa3c83929872443db1622715878"
+    },
+    "filter16": {
+      "path": "results/layout/ldo_stacked/20261114_filter16_v2/summary.json",
+      "sha256": "127e0211efc496072224101191af960a5763f2474388442a9417d299903ef208"
+    },
+    "filter_card": {
+      "path": "results/analog/common/ldo/stacked_peripheral/20261114T072634.752165Z/analysis/20261114T073147.907774Z/summary.json",
+      "sha256": "2dd76f10bd135d3c18b4fa31101cdbd00670643e8766acaa18777b95e95ebf91"
+    }
+  },
+  "scope": "local cap-area iteration; core-only PEX; global r4/PLL adoption unchanged"
+}

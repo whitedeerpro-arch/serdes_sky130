@@ -1,0 +1,86 @@
+* Candidate ingress: one coherent 16-bit rising-edge capture, then two
+* complementary transparent/hold groups feeding first-rank A/B inputs.
+* Clock convention: clk high selects first-rank B (lanes 8..15).
+* A launch tracks high / holds low; B launch tracks low / holds high.
+* No data reset or valid generator: upstream valid/flush is a separate contract.
+* Two real inverters in each data path delay the next word relative to B close;
+* their hold margin is measured with this complete load, never borrowed from
+* the single-DFF card. Dependencies: SKY130 primitives, cmos_logic, cmos_dff.
+.subckt serdes_tx_launch_latch d en en_b q vdd vss
++ params: wn=1 wp=2 wout=2 wpout=4 wt=1 wfb=.42
+Xt d x en en_b vdd vss serdes_cmos_tgate wn={wt} wp={2*wt}
+Xi x qb vdd vss serdes_cmos_inv wn={wn} wp={wp}
+Xo qb q vdd vss serdes_cmos_inv wn={wout} wp={wpout}
+Xh q x en_b en vdd vss serdes_cmos_tgate wn={wfb} wp={wfb}
+.ends serdes_tx_launch_latch
+
+.subckt serdes_tx_word_capture16_staggered
++ d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15 clk
++ q0 q1 q2 q3 q4 q5 q6 q7 q8 q9 q10 q11 q12 q13 q14 q15 vdd vss
++ params: ckwn=8 ckwp=16 delaywn=1 delaywp=2
+Xck clk clk_b vdd vss serdes_cmos_inv wn={ckwn} wp={ckwp}
+Xs0 d0 clk s0 vdd vss serdes_cmos_dff
+Xs1 d1 clk s1 vdd vss serdes_cmos_dff
+Xs2 d2 clk s2 vdd vss serdes_cmos_dff
+Xs3 d3 clk s3 vdd vss serdes_cmos_dff
+Xs4 d4 clk s4 vdd vss serdes_cmos_dff
+Xs5 d5 clk s5 vdd vss serdes_cmos_dff
+Xs6 d6 clk s6 vdd vss serdes_cmos_dff
+Xs7 d7 clk s7 vdd vss serdes_cmos_dff
+Xs8 d8 clk s8 vdd vss serdes_cmos_dff
+Xs9 d9 clk s9 vdd vss serdes_cmos_dff
+Xs10 d10 clk s10 vdd vss serdes_cmos_dff
+Xs11 d11 clk s11 vdd vss serdes_cmos_dff
+Xs12 d12 clk s12 vdd vss serdes_cmos_dff
+Xs13 d13 clk s13 vdd vss serdes_cmos_dff
+Xs14 d14 clk s14 vdd vss serdes_cmos_dff
+Xs15 d15 clk s15 vdd vss serdes_cmos_dff
+Xd0a s0 b0 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd0b b0 h0 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd1a s1 b1 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd1b b1 h1 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd2a s2 b2 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd2b b2 h2 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd3a s3 b3 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd3b b3 h3 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd4a s4 b4 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd4b b4 h4 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd5a s5 b5 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd5b b5 h5 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd6a s6 b6 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd6b b6 h6 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd7a s7 b7 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd7b b7 h7 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd8a s8 b8 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd8b b8 h8 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd9a s9 b9 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd9b b9 h9 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd10a s10 b10 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd10b b10 h10 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd11a s11 b11 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd11b b11 h11 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd12a s12 b12 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd12b b12 h12 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd13a s13 b13 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd13b b13 h13 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd14a s14 b14 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd14b b14 h14 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xd15a s15 b15 vdd vss serdes_cmos_inv wn={delaywn} wp={delaywp}
+Xd15b b15 h15 vdd vss serdes_cmos_inv wn={2*delaywn} wp={2*delaywp}
+Xl0 h0 clk clk_b q0 vdd vss serdes_tx_launch_latch
+Xl1 h1 clk clk_b q1 vdd vss serdes_tx_launch_latch
+Xl2 h2 clk clk_b q2 vdd vss serdes_tx_launch_latch
+Xl3 h3 clk clk_b q3 vdd vss serdes_tx_launch_latch
+Xl4 h4 clk clk_b q4 vdd vss serdes_tx_launch_latch
+Xl5 h5 clk clk_b q5 vdd vss serdes_tx_launch_latch
+Xl6 h6 clk clk_b q6 vdd vss serdes_tx_launch_latch
+Xl7 h7 clk clk_b q7 vdd vss serdes_tx_launch_latch
+Xl8 h8 clk_b clk q8 vdd vss serdes_tx_launch_latch
+Xl9 h9 clk_b clk q9 vdd vss serdes_tx_launch_latch
+Xl10 h10 clk_b clk q10 vdd vss serdes_tx_launch_latch
+Xl11 h11 clk_b clk q11 vdd vss serdes_tx_launch_latch
+Xl12 h12 clk_b clk q12 vdd vss serdes_tx_launch_latch
+Xl13 h13 clk_b clk q13 vdd vss serdes_tx_launch_latch
+Xl14 h14 clk_b clk q14 vdd vss serdes_tx_launch_latch
+Xl15 h15 clk_b clk q15 vdd vss serdes_tx_launch_latch
+.ends serdes_tx_word_capture16_staggered

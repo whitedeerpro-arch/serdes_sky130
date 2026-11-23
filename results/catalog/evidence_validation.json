@@ -1,0 +1,59 @@
+{
+  "passed": false,
+  "manifest_count": 12,
+  "checks": 716,
+  "archived_references": 23,
+  "failures": [
+    {
+      "manifest": "docs/data/rx_ctle_design_manifest.json",
+      "path": "analog/rx/README.md",
+      "storage": "live",
+      "passed": false,
+      "expected": "8a1f9a05130f5bd35b950601f3324ca507aed07448230c5ad0b3bf5ff9d6c0c3",
+      "actual": "5c734c03bc39e90c093ce9b31dc5dd1fd12817109e5674a1f39aec684ab2b05c",
+      "classification": "preexisting_historical_live_metadata_revision; not_archive_loss_or_circuit_change"
+    },
+    {
+      "manifest": "docs/data/rx_ctle_design_manifest.json",
+      "path": "config/rx_frontend.toml",
+      "storage": "live",
+      "passed": false,
+      "expected": "81e1eb8e63e57a4ec1ed90b39826c79150d3629290a9c3bc905f253135eac589",
+      "actual": "54a489dfbeaba6356e34d64f5a1011352f5c95f54049c868bd8291ef2c2a7a91",
+      "classification": "preexisting_historical_live_metadata_revision; not_archive_loss_or_circuit_change"
+    },
+    {
+      "manifest": "docs/data/rx_ctle_design_manifest.json",
+      "path": "verification/contracts/rx_frontend.toml",
+      "storage": "live",
+      "passed": false,
+      "expected": "adc12de57cb10863e8a8e357a0085ee4ea028452c47984a3f794304874d2293d",
+      "actual": "59517b996cb33daefca003a318621a3c29c0535027cf19ad376a9692d62c1a53",
+      "classification": "preexisting_historical_live_metadata_revision; not_archive_loss_or_circuit_change"
+    },
+    {
+      "manifest": "docs/data/rx_loaded_link_manifest.json",
+      "path": "config/rx_frontend.toml",
+      "storage": "live",
+      "passed": false,
+      "expected": "81e1eb8e63e57a4ec1ed90b39826c79150d3629290a9c3bc905f253135eac589",
+      "actual": "54a489dfbeaba6356e34d64f5a1011352f5c95f54049c868bd8291ef2c2a7a91",
+      "classification": "preexisting_historical_live_metadata_revision; not_archive_loss_or_circuit_change"
+    },
+    {
+      "manifest": "docs/data/rx_loaded_link_manifest.json",
+      "path": "verification/contracts/rx_frontend.toml",
+      "storage": "live",
+      "passed": false,
+      "expected": "adc12de57cb10863e8a8e357a0085ee4ea028452c47984a3f794304874d2293d",
+      "actual": "59517b996cb33daefca003a318621a3c29c0535027cf19ad376a9692d62c1a53",
+      "classification": "preexisting_historical_live_metadata_revision; not_archive_loss_or_circuit_change"
+    }
+  ],
+  "note": "Check path/SHA pairs and path-keyed digest maps in current evidence/design manifests; run-local snapshots retain their own input records.",
+  "matched_references": 711,
+  "missing_references": 0,
+  "preexisting_live_metadata_drift": 5,
+  "archive_reference_integrity_passed": true,
+  "historical_hashes_rewritten": false
+}

@@ -1,0 +1,21 @@
+PFD + phase-error window (pll_phase_window): flag versus phase error, one phase per reference period
+* Real PFD (20 fF on UP / DN for the CP inputs).  ref: 250 MHz; fb shifted per period by the phase list; clr_b pulses low
+* 1.2 ns before every reference edge (low for 0.2 ns); the flag is read 2.5 ns after the edge, before the next clear.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/phase_window.spice"
+Vdd vdd 0 @SUPPLY@
+Vref ref 0 PWL(@REF_PWL@)
+Vfb fb 0 PWL(@FB_PWL@)
+Vclr clr_b 0 PWL(@CLR_PWL@)
+Vrst rst_b 0 @SUPPLY@
+Xpfd ref fb rst_b up dn vdd 0 pll_pfd
+Cup up 0 20f
+Cdn dn 0 20f
+Xw up dn clr_b late vdd 0 pll_phase_window @PW_PARAMS@
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u

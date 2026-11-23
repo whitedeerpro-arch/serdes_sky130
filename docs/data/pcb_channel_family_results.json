@@ -1,0 +1,208 @@
+{
+  "status": "synthetic_channel_exploration_not_board_qualification",
+  "parameters": {
+    "rdc_ohm_per_m": 3.0,
+    "l_external_h_per_m": 2.281121444890956e-07,
+    "c_infinity_f_per_m": 9.1e-11,
+    "skin_pole_hz": [
+      100000000.0,
+      1000000000.0,
+      10000000000.0
+    ],
+    "skin_r_ohm_per_m": [
+      41.28625039200651,
+      130.55858728676017,
+      412.8625039200651
+    ],
+    "skin_l_h_per_m": [
+      6.570910831617538e-08,
+      2.0779044529782565e-08,
+      6.570910831617537e-09
+    ],
+    "dielectric_pole_hz": [
+      200000000.0,
+      2000000000.0,
+      20000000000.0
+    ],
+    "dielectric_c_f_per_m": [
+      3e-12,
+      3e-12,
+      3e-12
+    ],
+    "dielectric_r_ohm_m": [
+      265.25823848649225,
+      26.525823848649225,
+      2.652582384864922
+    ],
+    "skin_scale": 184.63772482520778
+  },
+  "line_rate_bps": 4000000000.0,
+  "ui_s": 2.5e-10,
+  "port_order": [
+    "TX+",
+    "TX-",
+    "RX+",
+    "RX-"
+  ],
+  "single_ended_reference_ohm": 50,
+  "differential_reference_ohm": 100,
+  "frequency_grid_hz": [
+    0,
+    12000000000.0,
+    5000000.0
+  ],
+  "cases": [
+    {
+      "id": "C0_debug",
+      "loss_target_db": 0.2,
+      "purpose": "near-through debug; not ideal all-pass",
+      "backbone_length_m": 0.010016896880278015,
+      "spice_cells_per_leg": [
+        16,
+        16
+      ],
+      "insertion_loss_db_at_2ghz": 0.19999999999940507,
+      "return_loss_db_at_2ghz": 40.82575321940589,
+      "group_delay_ui_at_2ghz": 0.1867296997178538,
+      "differential_to_common_db_at_2ghz": -320.0,
+      "max_singular_value_dc_to_12ghz": 1.0,
+      "max_reciprocity_error": 0.0,
+      "dc_sdd21_real": 0.9996995833708634,
+      "pulse_peak_time_ui": 1.18,
+      "pulse_main_cursor": 0.991033919115004,
+      "sum_abs_other_64_cursors": 0.008743822072314722,
+      "isi_to_main_cursor_ratio": 0.00882292916888554,
+      "finite_65_cursor_eye_opening_bound_v_for_400mvpp_input": 0.39291603881707576,
+      "fft_late_half_peak_relative_to_impulse_peak": 7.862645552445689e-05
+    },
+    {
+      "id": "C1_loss3",
+      "loss_target_db": 3.0,
+      "purpose": "short smooth-loss exploration",
+      "backbone_length_m": 0.15001600187350303,
+      "spice_cells_per_leg": [
+        230,
+        230
+      ],
+      "insertion_loss_db_at_2ghz": 3.000000000000696,
+      "return_loss_db_at_2ghz": 44.031115443294986,
+      "group_delay_ui_at_2ghz": 2.795831582885633,
+      "differential_to_common_db_at_2ghz": -320.0,
+      "max_singular_value_dc_to_12ghz": 0.9999999999999998,
+      "max_reciprocity_error": 0.0,
+      "dc_sdd21_real": 0.995519683518764,
+      "pulse_peak_time_ui": 3.7399999999999998,
+      "pulse_main_cursor": 0.857938147999417,
+      "sum_abs_other_64_cursors": 0.13709562661844532,
+      "isi_to_main_cursor_ratio": 0.15979663212101214,
+      "finite_65_cursor_eye_opening_bound_v_for_400mvpp_input": 0.2883370085523887,
+      "fft_late_half_peak_relative_to_impulse_peak": 1.132980038160689e-06
+    },
+    {
+      "id": "C2_loss6",
+      "loss_target_db": 6.0,
+      "purpose": "proposed primary RX design envelope, not acceptance specification",
+      "backbone_length_m": 0.30002197903471733,
+      "spice_cells_per_leg": [
+        460,
+        460
+      ],
+      "insertion_loss_db_at_2ghz": 5.99999999999992,
+      "return_loss_db_at_2ghz": 41.20181466163503,
+      "group_delay_ui_at_2ghz": 5.591756840620646,
+      "differential_to_common_db_at_2ghz": -320.0,
+      "max_singular_value_dc_to_12ghz": 0.9999999999999997,
+      "max_reciprocity_error": 0.0,
+      "dc_sdd21_real": 0.9910796298422121,
+      "pulse_peak_time_ui": 6.524,
+      "pulse_main_cursor": 0.7119353752105524,
+      "sum_abs_other_64_cursors": 0.2778312337152148,
+      "isi_to_main_cursor_ratio": 0.3902478278074708,
+      "finite_65_cursor_eye_opening_bound_v_for_400mvpp_input": 0.17364165659813505,
+      "fft_late_half_peak_relative_to_impulse_peak": 7.773090023760419e-09
+    },
+    {
+      "id": "C3_loss10",
+      "loss_target_db": 10.0,
+      "purpose": "challenge envelope; equalization/launch budget TBD",
+      "backbone_length_m": 0.5000175949496402,
+      "spice_cells_per_leg": [
+        766,
+        766
+      ],
+      "insertion_loss_db_at_2ghz": 9.999999999999966,
+      "return_loss_db_at_2ghz": 40.912704628683876,
+      "group_delay_ui_at_2ghz": 9.31930748191252,
+      "differential_to_common_db_at_2ghz": -320.0,
+      "max_singular_value_dc_to_12ghz": 1.0,
+      "max_reciprocity_error": 0.0,
+      "dc_sdd21_real": 0.9852211625147762,
+      "pulse_peak_time_ui": 10.287999999999998,
+      "pulse_main_cursor": 0.5427962717924611,
+      "sum_abs_other_64_cursors": 0.4393476819642915,
+      "isi_to_main_cursor_ratio": 0.8094154377911362,
+      "finite_65_cursor_eye_opening_bound_v_for_400mvpp_input": 0.041379435931267854,
+      "fft_late_half_peak_relative_to_impulse_peak": 1.3383396501632365e-08
+    },
+    {
+      "id": "C4_stub",
+      "loss_target_db": 6.0,
+      "stub_length_m": 0.020939578700064413,
+      "stub_series_ohm": 10.0,
+      "purpose": "C2 backbone plus symmetric open testpoint branches; deliberately bad routing",
+      "backbone_length_m": 0.30002197903471733,
+      "spice_cells_per_leg": [
+        460,
+        460
+      ],
+      "insertion_loss_db_at_2ghz": 11.992804015017546,
+      "return_loss_db_at_2ghz": 10.052881229575593,
+      "group_delay_ui_at_2ghz": 5.457050786984071,
+      "differential_to_common_db_at_2ghz": -320.0,
+      "max_singular_value_dc_to_12ghz": 0.9999999999999997,
+      "max_reciprocity_error": 0.0,
+      "dc_sdd21_real": 0.9910796298422121,
+      "pulse_peak_time_ui": 6.595999999999999,
+      "pulse_main_cursor": 0.5826186493496768,
+      "sum_abs_other_64_cursors": 0.40718060015375523,
+      "isi_to_main_cursor_ratio": 0.6988801347300729,
+      "finite_65_cursor_eye_opening_bound_v_for_400mvpp_input": 0.07017521967836862,
+      "fft_late_half_peak_relative_to_impulse_peak": 4.859244902390373e-09
+    },
+    {
+      "id": "C5_skew",
+      "loss_target_db": 6.0,
+      "skew_delta_m": 0.005234894675016103,
+      "purpose": "C2 backbone plus 0.1 UI phase skew at Nyquist",
+      "backbone_length_m": 0.30002197903471733,
+      "spice_cells_per_leg": [
+        464,
+        456
+      ],
+      "insertion_loss_db_at_2ghz": 6.107441454352487,
+      "return_loss_db_at_2ghz": 41.22918104422056,
+      "group_delay_ui_at_2ghz": 5.591270083561799,
+      "differential_to_common_db_at_2ghz": -22.106853888526707,
+      "max_singular_value_dc_to_12ghz": 1.0,
+      "max_reciprocity_error": 0.0,
+      "dc_sdd21_real": 0.9910796358446001,
+      "pulse_peak_time_ui": 6.508,
+      "pulse_main_cursor": 0.7045623598308992,
+      "sum_abs_other_64_cursors": 0.2852012435638155,
+      "isi_to_main_cursor_ratio": 0.40479205223547016,
+      "finite_65_cursor_eye_opening_bound_v_for_400mvpp_input": 0.1677444465068335,
+      "fft_late_half_peak_relative_to_impulse_peak": 6.864762106457895e-09
+    }
+  ],
+  "pulse_fixture": {
+    "dt_s": 1e-12,
+    "fft_points": 65536,
+    "nrZ_pulse_samples": 250,
+    "source_transfer": "(1+s/(2*pi*8GHz))^-2",
+    "input_differential_pp_v": 0.4,
+    "phase": "one constant pulse-peak alignment per channel; not recovered clock",
+    "included": "synthetic PCB and source rolloff only; no actual TX/RX, noise, AC coupling, package",
+    "eye_bound": "finite +/-32UI absolute cursor sum; not complete worst-case or BER; negative means closed bound",
+    "high_frequency_extension": "same analytical synthetic positive-element medium to500GHz; not physical board validation"
+  }
+}

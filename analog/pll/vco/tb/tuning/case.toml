@@ -1,0 +1,19 @@
+id = "tuning"
+dut = "analog/pll/vco"
+level = "block"
+status = "prototype"
+purpose = "每个 Vctrl 单独起振稳定测频，保留 f(Vctrl) 及局部斜率。"
+analyses = ["tran","parameter_sweep"]
+measurements = ["frequency","kvco","differential_swing","output_common_mode","power"]
+shared_stimuli = []
+
+[implementation]
+view = "schematic"
+simulator = "ngspice"
+testbench = "analog/pll/vco/tb/startup/tb_ring4_ngspice.cir.in"
+
+[sweep]
+parameters = ["vctrl_dc", "code0", "code1", "code2"]
+
+[requirements]
+status = "exploratory"

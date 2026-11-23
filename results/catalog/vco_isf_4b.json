@@ -1,0 +1,30 @@
+{
+  "scope": "Historical TT 1.8 V single-rail r5 four-bit VCO, K6, Vctrl 1.195 V, four buffers and 30 fF per node; rp/mp/mt 32-phase ISF pilot. Not current quiet domain or a complete noise budget.",
+  "data": "docs/data/vco_isf_4b.json",
+  "data_sha256": "86b23aa1a8088d2951080b39766cc8db857a0d33b74d6a2f72ae3c021d7babe4",
+  "figure": "docs/figures/clocking/vco/vco_isf_4b_pilot.png",
+  "figure_sha256": "31d0ff2daa53bb32b769048b74fe181e11ad0917d0cdad73bcad5ca68a061bb5",
+  "campaign": "results/analog/pll/vco/phase_noise_isf_4b/20261109T140720.206962Z_be7f42ae",
+  "summary": "results/analog/pll/vco/phase_noise_isf_4b/20261109T140720.206962Z_be7f42ae/analysis/20261109T142859.447402Z_e7b2e355/summary.json",
+  "summary_sha256": "421ab26f69cdc741d3dc68f10ecf48213bcfa6c3852e2a0a4b3267414206ed9e",
+  "evidence": {
+    "rp": {
+      "deck_sha256": "0ec9eceb0e5439307245a34b46c60b2acf37ff42fa0b56f8dee848491b31e4f6",
+      "raw_sha256": "7b4177bb090693658780e0276b7d84c12be8fa9f9f54898a0a3fa93fee191b97",
+      "execution_sha256": "ade9eff5cf4efdabf2fcfd7ccbc74ac9ba4770d60c3d02472548f93c9fc4334a",
+      "t_end_s": 1.859874225e-07
+    },
+    "mp": {
+      "deck_sha256": "db63fda873fa07f0817323ae663ea37f69f40691787380a4a8ecf1ace86b511d",
+      "raw_sha256": "6cb6219aa65e676395a76ade863e3943b48826e8b081d8238456d7aa192232b8",
+      "execution_sha256": "112c311c822f62c13c4c477c95d3fc59b304d511fb2163dd0b5c8d313866219b",
+      "t_end_s": 1.859874225e-07
+    },
+    "mt": {
+      "deck_sha256": "23cdbe5afb4be5c0bf4fee2d13925f76fdc9baea49ca75f8b510ad291a642572",
+      "raw_sha256": "626246af217c9d7ec27378a5dd745b3eeec6a499af1f1bf950f307a2ab812465",
+      "execution_sha256": "81206faa0b4c1d42949db291bf1df233d716b9dc448f8eec5c84faf549d8a82a",
+      "t_end_s": 1.859874225e-07
+    }
+  }
+}

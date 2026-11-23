@@ -1,0 +1,17 @@
+digraph closure_workflow {
+  graph [rankdir=TB, bgcolor="#fafbfc", pad=0.3, nodesep=0.5, ranksep=0.5, fontname="Noto Sans CJK SC", fontsize=20,
+         labelloc=t, label="模块开发流程：用边界拆分设计，以模型规划参数，用局部验证推进迭代"];
+  node [shape=box, style="rounded,filled", fillcolor="#e5eefb", color="#527ba0", fontname="Noto Sans CJK SC", fontsize=12, margin="0.15,0.12"];
+  edge [color="#526474", arrowsize=0.7, fontname="Noto Sans CJK SC", fontsize=10];
+  W0 [label="1  模块与边界\n输入 / 输出 / 源负载 / 控制时序\n共模、幅度、斜率、相位与测量判据"];
+  W1 [label="2  行为 / 理论规划\n比较结构，求可行区，分析动态与噪声\n先找到主约束和有判别力的测试", fillcolor="#fff0d5", color="#ae7d28"];
+  W2 [label="3  参数 / 电路改进\n约束求解尺寸、电流与RC\n记录模型预测和修改依据"];
+  W3 [label="4  局部仿真与模型校准\n小单元、压力角优先\n核对偏差，再扩模块PVT / 失配 / 噪声"];
+  W4 [label="5  迭代结论与采用\n模型、参数、电路、证据挂在模块下\n采用后更新工作修订与受影响边界"];
+  W5 [label="6  下一轮局部回归\n边界发生变化时，复验相关上下游\n保留已有模块集成与历史验证依据"];
+  JOINT [shape=note, label="需要时选择短联合仿真\n例如实际负载反馈或相位关系\n已有PLL完整顶层可用于这种验证", fillcolor="#f7faf8", color="#799a87", fontsize=11];
+  W0 -> W1 -> W2 -> W3 -> W4 -> W5;
+  W3 -> W1 [style=dashed, label="校准模型", constraint=false];
+  W5 -> W0 [style=dashed, label="新的问题 / 边界", constraint=false];
+  W3 -> JOINT [style=dashed];
+}

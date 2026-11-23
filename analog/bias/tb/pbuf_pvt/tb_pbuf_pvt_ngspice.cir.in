@@ -1,0 +1,26 @@
+LF precharge buffer (B2) charging the PLL loop filter from 0 V, over PVT x resistor corner
+* Bandgap reference -> 10 uA copy into the tap string, 10 uA copy for the buffer tail bias; en (= the
+* loop filter's pre_en) rises at 10 ns; both LF state nodes start at 0 V (.ic: held during the
+* operating point, released in the transient).
+.lib "@MODEL_LIBRARY@" @SECTION@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bandgap.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bias_dist.spice"
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc_precharge.spice"
+Vdd vdd 0 @SUPPLY@
+Xref vbg i0 i1 i2 i3 vgi vdd 0 serdes_bias_ref
+Vi0 i0 0 0.7
+Vi1 i1 0 0.7
+Vi2 i2 0 0.7
+Vi3 i3 0 0.7
+Xcin pin vgi vdd serdes_bias_pcopy n=4
+Xcb pib vgi vdd serdes_bias_pcopy n=4
+Ben en 0 V=v(vdd)*min(max((time-10n)/100p,0),1)
+Xpb pin pib pref en vdd 0 serdes_ref_pbuf code=@CODE@
+Xlf cpi ctrl z pref en vdd 0 pll_loop_filter_precharge
+.ic v(ctrl)=0 v(z)=0
+.nodeset v(vbg)=1.23 v(xref.xbg.s)=1.23 v(xref.vg)=0.9 v(vgi)=0.9 v(xref.xbg.ta)=0.95 v(xref.xbg.tb)=0.95
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu

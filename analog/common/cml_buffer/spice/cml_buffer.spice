@@ -1,0 +1,10 @@
+* Optional single-stage differential CML isolation/fanout buffer.
+* Load resistors are ideal nominal elements in this prototype.
+* Output labels are exchanged relative to the inverting delay primitive,
+* so V(outp)-V(outn) has the same logical polarity as V(inp)-V(inn).
+* Dependency: cml_delay_resistive.spice.
+.subckt serdes_cml_buffer inp inn outp outn vbias vdd vss
++ params: wn=12 nfin=4 wt=12 rload=600
+Xgain inp inn outn outp vbias vdd vss serdes_cml_delay
++ wn={wn} nfin={nfin} wt={wt} lt=0.5 rload={rload}
+.ends serdes_cml_buffer

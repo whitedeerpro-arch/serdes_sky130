@@ -1,0 +1,68 @@
+* Official layout reference (Claude, 2026-11-12, VCO r6; docs/layout/tasks.md T3).  Device values from
+* analog/pll/vco/spice/vco_ring4_r6.spice, vco_delay_r6.spice, cap_bank_5b.spice.  Resistors are fixed-width high_po
+* (3 terminals, body vss).
+* 31 half units 1:2:4:8:16 on b0..b4; MIM top plate (first pin) on 'node' in every unit.
+.subckt pll_vco_cap_bank node b0 b1 b2 b3 b4 vss
+Xc00 node p00 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs00 p00 b0 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc01 node p01 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs01 p01 b1 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc02 node p02 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs02 p02 b1 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc03 node p03 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs03 p03 b2 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc04 node p04 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs04 p04 b2 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc05 node p05 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs05 p05 b2 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc06 node p06 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs06 p06 b2 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc07 node p07 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs07 p07 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc08 node p08 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs08 p08 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc09 node p09 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs09 p09 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc10 node p10 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs10 p10 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc11 node p11 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs11 p11 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc12 node p12 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs12 p12 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc13 node p13 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs13 p13 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc14 node p14 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs14 p14 b3 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc15 node p15 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs15 p15 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc16 node p16 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs16 p16 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc17 node p17 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs17 p17 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc18 node p18 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs18 p18 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc19 node p19 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs19 p19 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc20 node p20 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs20 p20 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc21 node p21 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs21 p21 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc22 node p22 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs22 p22 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc23 node p23 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs23 p23 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc24 node p24 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs24 p24 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc25 node p25 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs25 p25 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc26 node p26 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs26 p26 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc27 node p27 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs27 p27 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc28 node p28 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs28 p28 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc29 node p29 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs29 p29 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+Xc30 node p30 sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xs30 p30 b4 vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+.ends pll_vco_cap_bank

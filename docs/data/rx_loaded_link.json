@@ -1,0 +1,349 @@
+{
+  "status": "TT_nominal_reduced_driver_PCB_RX_cosimulation_no_sampler_or_BER",
+  "ui_s": 2.5e-10,
+  "payload_bits_per_case": 256,
+  "cases": [
+    {
+      "case": "proxy100f_boundary",
+      "run": "results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_proxy100f_boundary",
+      "eq_code": null,
+      "ui_s": 2.5e-10,
+      "nodes": {
+        "driver_input": {
+          "trained_delay_ui": 1.3052577677014936,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.14070251587634666,
+          "sampled_eye_opening_v": 0.2815504625085803,
+          "differential_pp_v": 0.406678197,
+          "crossing_spread_ui": 0.04185812909328291,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.0831564754572936e-08,
+            9.483156475457295e-08
+          ]
+        },
+        "tx_diff": {
+          "trained_delay_ui": 1.6311952820149624,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.18360208427579863,
+          "sampled_eye_opening_v": 0.37041490812737377,
+          "differential_pp_v": 0.421107226,
+          "crossing_spread_ui": 0.07334438231989518,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.091304913315131e-08,
+            9.491304913315132e-08
+          ]
+        },
+        "rx_diff": {
+          "trained_delay_ui": 7.3939949439439125,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.07665380613169437,
+          "sampled_eye_opening_v": 0.15520258088767042,
+          "differential_pp_v": 0.366331011,
+          "crossing_spread_ui": 0.21152112503732118,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.2353749048633544e-08,
+            9.635374904863355e-08
+          ]
+        }
+      },
+      "source_run": "results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6",
+      "source_waveform_sha256": "b6ed87656f8f7fe388de4ea8731980ce20eb95689f285499b9e0e2e0cbf107be",
+      "scope": "TT nominal reduced-boundary TX-driver/PCB/RX; ideal independent supply/bias references; no physical sampler/CDR/noise/PVT.",
+      "waveform_sha256": "ba1d426dae4c24da3df5341d9984b03035c3ac039e8edfa57d7f3fcd51dcb3a0",
+      "power_w": {
+        "tx_pre": 0.004819667508931203,
+        "tx_line": 0.007513581850502536,
+        "tx_bias": 0.0015299999999999995,
+        "rx_core_including_reference": null
+      },
+      "common_mode_ranges_v": {
+        "tx_pad": [
+          1.68670872,
+          1.71100847
+        ],
+        "rx_pins": [
+          0.803290279,
+          0.814690178
+        ],
+        "ctle_output": null
+      },
+      "power_scope": "Early AC-coupled startup window, not steady state; independent ideal rails/bias references."
+    },
+    {
+      "case": "real_rx_eq00",
+      "run": "results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_real_rx_eq00",
+      "eq_code": 0,
+      "ui_s": 2.5e-10,
+      "nodes": {
+        "driver_input": {
+          "trained_delay_ui": 1.3052662158173556,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.1407057774179128,
+          "sampled_eye_opening_v": 0.28155141902003744,
+          "differential_pp_v": 0.40666466300000004,
+          "crossing_spread_ui": 0.04187993903605707,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.0831566866601905e-08,
+            9.483156686660191e-08
+          ]
+        },
+        "tx_diff": {
+          "trained_delay_ui": 1.6308415892530697,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.1830129023292019,
+          "sampled_eye_opening_v": 0.3699077417632166,
+          "differential_pp_v": 0.420473479,
+          "crossing_spread_ui": 0.07341790599420328,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.0912960709960835e-08,
+            9.491296070996083e-08
+          ]
+        },
+        "rx_diff": {
+          "trained_delay_ui": 7.386513169928396,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.07671396115977641,
+          "sampled_eye_opening_v": 0.15530319879115628,
+          "differential_pp_v": 0.36635076,
+          "crossing_spread_ui": 0.21118313972113179,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.2351878605129666e-08,
+            9.635187860512966e-08
+          ]
+        },
+        "ctle_diff": {
+          "trained_delay_ui": 7.433688309671293,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.08116464161502539,
+          "sampled_eye_opening_v": 0.1640728669600229,
+          "differential_pp_v": 0.377150172,
+          "crossing_spread_ui": 0.21299449492795003,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.2363672390065395e-08,
+            9.63636723900654e-08
+          ]
+        }
+      },
+      "source_run": "results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6",
+      "source_waveform_sha256": "b6ed87656f8f7fe388de4ea8731980ce20eb95689f285499b9e0e2e0cbf107be",
+      "scope": "TT nominal reduced-boundary TX-driver/PCB/RX; ideal independent supply/bias references; no physical sampler/CDR/noise/PVT.",
+      "waveform_sha256": "1325b4794232e69fc44e2c3469633939b91ab92637b7cf8bc2555027d0ab47eb",
+      "power_w": {
+        "tx_pre": 0.00481966589928311,
+        "tx_line": 0.007513556422372289,
+        "tx_bias": 0.00153,
+        "rx_core_including_reference": 0.0011642663207153325
+      },
+      "common_mode_ranges_v": {
+        "tx_pad": [
+          1.68670541,
+          1.7110103
+        ],
+        "rx_pins": [
+          0.803303477,
+          0.8146772
+        ],
+        "ctle_output": [
+          1.6180998,
+          1.62278346
+        ]
+      },
+      "power_scope": "Early AC-coupled startup window, not steady state; independent ideal rails/bias references."
+    },
+    {
+      "case": "real_rx_eq11",
+      "run": "results/analog/rx/top/loaded_link/20261028T160209Z_ngspice_tt_real_rx_eq11",
+      "eq_code": 3,
+      "ui_s": 2.5e-10,
+      "nodes": {
+        "driver_input": {
+          "trained_delay_ui": 1.3052620466882612,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.140706421359947,
+          "sampled_eye_opening_v": 0.28155210103672496,
+          "differential_pp_v": 0.406690279,
+          "crossing_spread_ui": 0.04188036881242181,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.083156582431963e-08,
+            9.483156582431964e-08
+          ]
+        },
+        "tx_diff": {
+          "trained_delay_ui": 1.6308651231709534,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.18298783906985416,
+          "sampled_eye_opening_v": 0.369898725171781,
+          "differential_pp_v": 0.420567546,
+          "crossing_spread_ui": 0.07338175825146259,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.0912966593440305e-08,
+            9.491296659344032e-08
+          ]
+        },
+        "rx_diff": {
+          "trained_delay_ui": 7.387495121699686,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.07684513704117191,
+          "sampled_eye_opening_v": 0.1555702739252436,
+          "differential_pp_v": 0.36635622,
+          "crossing_spread_ui": 0.21093777601226288,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.2352124093072494e-08,
+            9.635212409307248e-08
+          ]
+        },
+        "ctle_diff": {
+          "trained_delay_ui": 7.417660367213287,
+          "marker_errors": 0,
+          "training_alignment_valid": true,
+          "payload_bits": 256,
+          "sample_errors": 0,
+          "minimum_signed_margin_v": 0.17534907017303528,
+          "sampled_eye_opening_v": 0.3517760721826303,
+          "differential_pp_v": 0.443151698,
+          "crossing_spread_ui": 0.07703208071431704,
+          "expected_transitions": 130,
+          "matched_transitions": 130,
+          "missing_transitions": 0,
+          "extra_crossings": 0,
+          "physical_measurement_window_s": [
+            3.235966540445089e-08,
+            9.635966540445089e-08
+          ]
+        }
+      },
+      "source_run": "results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6",
+      "source_waveform_sha256": "b6ed87656f8f7fe388de4ea8731980ce20eb95689f285499b9e0e2e0cbf107be",
+      "scope": "TT nominal reduced-boundary TX-driver/PCB/RX; ideal independent supply/bias references; no physical sampler/CDR/noise/PVT.",
+      "waveform_sha256": "7d9bcca161b02af19f38a734c585bd164d7d0c11c3cb9153c3fdf6c27b1bb044",
+      "power_w": {
+        "tx_pre": 0.004819666161151205,
+        "tx_line": 0.00751355699235028,
+        "tx_bias": 0.0015299999999999997,
+        "rx_core_including_reference": 0.0011726335667475165
+      },
+      "common_mode_ranges_v": {
+        "tx_pad": [
+          1.68670485,
+          1.7110297
+        ],
+        "rx_pins": [
+          0.803308447,
+          0.814681134
+        ],
+        "ctle_output": [
+          1.61380049,
+          1.62580711
+        ]
+      },
+      "power_scope": "Early AC-coupled startup window, not steady state; independent ideal rails/bias references."
+    }
+  ],
+  "boundary_validation": {
+    "reference_run": "results/analog/tx/output_driver/pcb_channel/20261028T140212Z_ngspice_tt_C2_loss6",
+    "all_checks_pass": true,
+    "criteria": "sample change<5mV, crossing spread change<0.01UI, same bit errors, marker correct/no extra or missing crossings; engineering exploration only",
+    "node_comparisons": {
+      "driver_input": {
+        "same_physical_time_waveform_rms_difference_v": 3.947036909728604e-05,
+        "same_physical_time_waveform_max_difference_v": 0.00022608347861934053,
+        "fixed_parent_training_phase_max_sample_difference_v": 7.729106066764468e-05,
+        "training_delay_change_ui": -1.47537527208641e-05,
+        "crossing_spread_change_ui": 1.1100140748322718e-05,
+        "exploratory_boundary_check_pass": true
+      },
+      "tx_diff": {
+        "same_physical_time_waveform_rms_difference_v": 0.00020819811969659176,
+        "same_physical_time_waveform_max_difference_v": 0.001306352157601512,
+        "fixed_parent_training_phase_max_sample_difference_v": 9.084936779032993e-05,
+        "training_delay_change_ui": 0.00042456120883471726,
+        "crossing_spread_change_ui": 9.968525461918898e-05,
+        "exploratory_boundary_check_pass": true
+      },
+      "rx_diff": {
+        "same_physical_time_waveform_rms_difference_v": 0.00012822116482630842,
+        "same_physical_time_waveform_max_difference_v": 0.0006684377242248268,
+        "fixed_parent_training_phase_max_sample_difference_v": 9.291980562425861e-05,
+        "training_delay_change_ui": 0.0006450166344400543,
+        "crossing_spread_change_ui": -0.0003981876014009511,
+        "exploratory_boundary_check_pass": true
+      }
+    }
+  },
+  "cut": "saved serializer voltages drive real TX input isolation buffer; source impedance zero at cut",
+  "reverse_loading_inside_tx_driver_channel_rx_included": true,
+  "feedback_to_removed_serializer_or_PLL_included": false,
+  "original_100ff_replaced_by_actual_rx_gates_plus_2ff_wire": true,
+  "termination_duplicated": false,
+  "physical_sampler_cdr_noise_pvt_present": false
+}

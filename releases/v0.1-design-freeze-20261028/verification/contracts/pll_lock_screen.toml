@@ -1,0 +1,10 @@
+status = "engineering_screen_not_final_specification"
+reference_window_cycles = 32
+window_stride_cycles = 8
+maximum_relative_frequency_error = 0.0001
+maximum_unwrapped_phase_span_s = 2e-11
+required_hold_time_s = 3.2e-7
+minimum_reference_edges_per_window = 24
+ignore_before_s = 2e-8
+definition = "Bounded unwrapped edge error AND mean frequency error, sustained through the end of the record. Vctrl flatness alone is insufficient."
+noise_or_jitter_signoff = false

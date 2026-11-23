@@ -1,0 +1,127 @@
+{
+  "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b",
+  "method": "Static source inspection only; no simulation",
+  "files": {
+    "/home/host/.volare/sky130A/libs.tech/ngspice/sky130.lib.spice": {
+      "sha256": "17c208a699228f5acb87bf59c09c22a4c4d3937b6766b4957737d34e8e075f64"
+    },
+    "/home/host/.volare/sky130A/libs.tech/ngspice/corners/tt.spice": {
+      "sha256": "961b2e4f381bb8a6306a16840afacd8772b400b42cd4dee6c284d58e03983d9d"
+    },
+    "/home/host/.volare/sky130A/libs.tech/ngspice/all.spice": {
+      "sha256": "ada86dba53017af314dfa04dac253c8424e0941158cf476a7ca191c55aea3bbb"
+    },
+    "/home/host/.volare/sky130A/libs.tech/ngspice/capacitors/sky130_fd_pr__model__cap_mim.model.spice": {
+      "sha256": "7e4802d7047f0f116a3e4c7e49118962cfe248dc9cbb6d626d49196d30cb273a"
+    },
+    "/home/host/.volare/sky130A/libs.tech/ngspice/sky130_fd_pr__model__linear.model.spice": {
+      "sha256": "881a81256ed63b136e126ccf25fa1aeb5829ed4f5de50835fed2315c7ab55da7"
+    },
+    "/home/host/.volare/sky130A/libs.tech/ngspice/parasitics/sky130_fd_pr__model__parasitic__res_po.model.spice": {
+      "sha256": "5e65d93416a1bdf22ac2b876d43c03de9ced5f0f7bd7686afeb132cc78e429e4"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__cap_mim_m3_1.model.spice": {
+      "sha256": "5cb086313d55341351305d30500ca39571d689b692d2be525c4b3b8b4db86e6f"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__res_high_po.model.spice": {
+      "sha256": "dfe6e94934301aab023df90baeed14b0ee0e43689e2ad3475bf5963b59cdad4c"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_05v0_nvt__tt.corner.spice": {
+      "sha256": "ad6f98b01ba312f9817a9154d12bb73bcf1e323c2a8a599fd26bafda54397b28"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_05v0_nvt__mismatch.corner.spice": {
+      "sha256": "4c1ce4d79656afd5087dc73417740c506c8465bb361ece5db8835ad3d9b362df"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_05v0_nvt.pm3.spice": {
+      "sha256": "03c6de985d6ad50aada78ac92fded0912a552ebc3fbdf65d667f842e437c480e"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_g5v0d10v5__tt.corner.spice": {
+      "sha256": "c6220fd1b3ed009078cc3bfe66f6fabccddd5b33653c8efd8c9c4b344253cd25"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_g5v0d10v5__mismatch.corner.spice": {
+      "sha256": "e4124d91feee11f97c53b40752c711bb4293d94cd22c2778291a163c8abf3e9c"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__nfet_g5v0d10v5__tt.pm3.spice": {
+      "sha256": "9a848a7f7d1e6d1cbf1992662b8f3b8123f4ba4eb60892784add24b7869fd966"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__pfet_g5v0d10v5__tt.corner.spice": {
+      "sha256": "52707b93246551402e9467132ce3d9cb4939d810cd910aa9968dbd534e3f7907"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__pfet_g5v0d10v5__mismatch.corner.spice": {
+      "sha256": "7564bd6e8ba2e7a19d594970b1db2b37202a8117cb49fc22861d2579d77d0339"
+    },
+    "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__pfet_g5v0d10v5__tt.pm3.spice": {
+      "sha256": "d3d1497098047ad3de2e778c5eb72f6e535a3d09900fa93c2e27d2452173e549"
+    },
+    "config/pdk.toml": {
+      "sha256": "2694ed33d49f877af4eefaffa8d3d158c4c5bda867674618d3e8bc9fb008c3c9"
+    },
+    "src/serdes_flow/mc.py": {
+      "sha256": "4fdf7f31d1b94e793265e0020cfcae6774247ded55acbf620b38a34006517394"
+    },
+    "analog/common/ldo/spice/ldo_hv18_core.spice": {
+      "sha256": "8ac1dd7473ba3fc36bda36f2332e82dc6ad04c550ae11a04215366ff89cb8c17"
+    }
+  },
+  "key_lines": {
+    "library": "sky130.lib.spice:17-27,342-353,665-678",
+    "inclusion": "corners/tt.spice:10-11,19-23,29; all.spice:58,70",
+    "mismatch_coefficients": "each device __mismatch.corner.spice:16-24",
+    "mos_random_expressions": "device pm3:30-33,86-96,139-141",
+    "mim": "cap_mim_m3_1.model.spice:16-29",
+    "poly_noise": "res_high_po.model.spice:42-50; parasitic res_po:24-28",
+    "sampler": "src/serdes_flow/mc.py:4-16,45-73"
+  },
+  "findings": {
+    "nfet_05v0_nvt": "nonzero vth0, toxe, voff, nfactor coefficients",
+    "nfet_g5v0d10v5": "vth0 coefficient zero; toxe, voff, nfactor nonzero",
+    "pfet_g5v0d10v5": "vth0 coefficient zero; toxe, voff, nfactor nonzero",
+    "mim": "MC_MM_SWITCH-controlled nonzero random term, mf only in mismatch denominator",
+    "res_high_po_noise": "Static isnoisy=0 inference superseded: ngspice47 logs unrecognized parameter; thermal noise measured (1k high_po equivalent 1012.68 ohm).",
+    "runtime_independence_and_bin": "unknown; no simulation"
+  },
+  "resistor_noise_check": {
+    "source": "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/summary.json",
+    "files_sha256": {
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/summary.json": "3b98468fb6afbadaaf37b79d030e3718b6796fffc82c95685782ebe444a97120",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/runner.py": "56c220da8deea4e1d1f48cea5861d3cc6b1f1aa73a60937419e146686a313df8",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/passives.spice": "ce346db2131ef071140282017eb142cba678f71b6ee9c495835faa2109c3cd27",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/tb.cir": "18cc2eaf851a21cf03eebfd2b16b19094e5562b6303e0e901889a9514b2d7b33",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/execution.json": "6c93330f79981369a58861a44c5626d29d835d9a68b5f535ecf9c06eaeba4d41",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/simulator.log": "2ec170d075887815df9427864038a525c62282678dd3119376608d5f635cb060",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/ideal.raw": "da84960a55ac07f86086a1ff626359465951e2c29b4eb6efc87de2a502953bd2",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/high.raw": "517eab6e47bbdbb878af8958110542b0cdcee05fbaadd7234bf9622af9370994",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/xhigh.raw": "953a4c93001a33a6e17a72f5bfa6cc0307d4e92e276122105054982c9e119e5a",
+      "results/analog/common/ldo/resistor_noise_check/20261110T111240.488278Z/run/actual.raw": "babbe0a57128e77aa3d7ab9a7b689628837e6e5d2ffff9b6e14812a22e9c6b86",
+      "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__res_xhigh_po.model.spice": "cc1ded14e18d11570d32f9106a862ebd777cd198e848a219df7eaec58c4bc1d9"
+    },
+    "measurements": {
+      "ideal": {
+        "density_v_rthz": 4.071371529487329e-09,
+        "equivalent_thermal_resistance_ohm": 999.9996523374149,
+        "raw_sha256": "da84960a55ac07f86086a1ff626359465951e2c29b4eb6efc87de2a502953bd2"
+      },
+      "high": {
+        "density_v_rthz": 4.097111501484561e-09,
+        "equivalent_thermal_resistance_ohm": 1012.6839918975725,
+        "raw_sha256": "517eab6e47bbdbb878af8958110542b0cdcee05fbaadd7234bf9622af9370994"
+      },
+      "xhigh": {
+        "density_v_rthz": 1.6272870338467107e-09,
+        "equivalent_thermal_resistance_ohm": 159.75214800342044,
+        "raw_sha256": "953a4c93001a33a6e17a72f5bfa6cc0307d4e92e276122105054982c9e119e5a"
+      },
+      "actual": {
+        "density_v_rthz": 1.2879250774961343e-07,
+        "equivalent_thermal_resistance_ohm": 1000690.0403489668,
+        "raw_sha256": "babbe0a57128e77aa3d7ab9a7b689628837e6e5d2ffff9b6e14812a22e9c6b86"
+      }
+    },
+    "model_sha256": {
+      "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__res_high_po.model.spice": "dfe6e94934301aab023df90baeed14b0ee0e43689e2ad3475bf5963b59cdad4c",
+      "/home/host/.volare/sky130A/libs.ref/sky130_fd_pr/spice/sky130_fd_pr__res_xhigh_po.model.spice": "cc1ded14e18d11570d32f9106a862ebd777cd198e848a219df7eaec58c4bc1d9"
+    },
+    "scope": "ngspice47 thermal-noise interpretation, not complete LDO noise/PDK matching validation",
+    "correction": "ngspice47 ignores resistor model isnoisy=0; high_po measured thermal noise exists; xhigh_po behavior resistor lacks body noise"
+  }
+}

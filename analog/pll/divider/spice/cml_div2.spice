@@ -1,0 +1,41 @@
+* Low-overdrive divider revision, 2026-10-29.
+* Dependencies: sky130_primitives.spice and cml_latch.spice.
+* The original bias still drives the input followers. Wide latch tails use
+* a separate bias derived by real MOS mirrors; no ideal local I/V source.
+
+.subckt pll_cml_tail_bias vbias_sf vbias_logic vdd vss
++ params: ref_sink_w=3.333333333 ref_p_w=60 ref_p_nf=12
+* Approximately 1/6 of the W20/L0.5 reference current is copied through a
+* PMOS mirror into an identical W20/L0.5 NMOS diode. This is not a precision reference.
+Xsink pdiode vbias_sf vss vss serdes_nfet w={ref_sink_w} l=.5 nf=1
+Xpd pdiode pdiode vdd vdd serdes_pfet w={ref_p_w} l=.5 nf={ref_p_nf}
+Xpm vbias_logic pdiode vdd vdd serdes_pfet w={ref_p_w} l=.5 nf={ref_p_nf}
+Xref vbias_logic vbias_logic vss vss serdes_nfet w=20 l=.5 nf=4
+.ends pll_cml_tail_bias
+
+* Core for a prescaler sharing one local reference across its three /2 cells.
+.subckt pll_cml_div2_biased clkp clkn qp qn mp mn vbias vbias_logic vdd vss
++ params: wsf=80 wsf_sink=4 wdata=20 whold=80 wclock=64 wtail=72 nftail=24 rload=600
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xmaster qn qp mp mn ckp ckn vbias_logic vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xslave mp mn qp qn ckn ckp vbias_logic vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+.ends pll_cml_div2_biased
+
+* Pin-compatible standalone cell. Preserve internal probe node names used by TBs.
+.subckt pll_cml_div2 clkp clkn qp qn mp mn vbias vdd vss
++ params: wsf=80 wsf_sink=4 wdata=20 whold=80 wclock=64 wtail=72 nftail=24 rload=600 ref_sink_w=3.333333333
+Xbias vbias vbias_logic vdd vss pll_cml_tail_bias ref_sink_w={ref_sink_w}
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xmaster qn qp mp mn ckp ckn vbias_logic vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xslave mp mn qp qn ckn ckp vbias_logic vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+.ends pll_cml_div2

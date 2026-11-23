@@ -1,0 +1,19 @@
+id = "input_range"
+dut = "analog/pll/divider"
+level = "block"
+status = "prototype"
+purpose = "扫描输入速率和电平，排除启动暂态后检查漏计数。"
+analyses = ["tran","parameter_sweep"]
+measurements = ["maximum_verified_input_frequency","minimum_input_swing","input_common_mode_range"]
+shared_stimuli = ["verification/stimuli/spice/clock_cmos.spice","verification/stimuli/spice/cml_diff_clock.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "../functional/tb_cml_chain_ngspice.cir.in"
+
+[sweep]
+parameters = ["input_frequency", "differential_swing", "common_mode", "corner", "temperature", "supply"]
+
+[requirements]
+status = "unspecified"

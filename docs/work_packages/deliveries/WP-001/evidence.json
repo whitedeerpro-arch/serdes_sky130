@@ -1,0 +1,3321 @@
+{
+  "schema_version": 1,
+  "package_id": "WP-001",
+  "execution_status": "complete",
+  "inputs": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "0909ad838218fd2661e81393dd04b393b7885f150314fd609cd36d1de0f7ae23"
+    },
+    {
+      "path": "README.md",
+      "sha256": "28bf0a1fe919c1e4d5b6d62b8ec5b5b28f5bf6bb1d69557566bc3d4d7fcbedeb"
+    },
+    {
+      "path": "docs/work_packages/README.md",
+      "sha256": "f5a2722f43ed7f20b359ea9efe4b3ea1df444041219a92b38698c204d7614dd4"
+    },
+    {
+      "path": "docs/work_packages/WP-001-pll-waveform-audit.md",
+      "sha256": "72b9e94db184ccee828737fde4e5bef0545e2f70e5245c69bda1e141d18ffd10"
+    },
+    {
+      "path": "src/serdes_flow/clock.py",
+      "sha256": "5b23a947c3dcd7a76f41ed25901c02cc3e12ac1a42d9e6b38aa7ad8b0b326673"
+    },
+    {
+      "path": "src/serdes_flow/spice.py",
+      "sha256": "1ca9376c06a368890787da86d336dcc47960700971e7d19214cc19e8de94691b"
+    },
+    {
+      "path": "src/serdes_flow/waves.py",
+      "sha256": "352066bde208e9735c124f486d212e560f1e0249e19f36d5a901de3df0727eea"
+    },
+    {
+      "path": "config/boundary_conditions.json",
+      "sha256": "cd57ebd8e6bc74c99f9b24af099e421fd577c375c15e0376e666845a54469de2"
+    },
+    {
+      "path": "verification/work_packages/wp001_pll_waveforms.py",
+      "sha256": "dd865e09015d3ea32fdb469ab0a9d034faa2487a3a47d868cc36c09f73b6fd20"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/tb.cir",
+      "sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/execution.json",
+      "sha256": "c9ad9a18387fc1f042723f25e2ec53ea4679ae424806df6a26b7989323d58bf8"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/simulator.log",
+      "sha256": "bf5e7df279ec2a3eae06dc582f3c5ec65d814c3cc3aafe9d3285af0381363a1a"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/waveforms.raw",
+      "sha256": "b6e5229182c9f7ab8b2bc8d3e3e2f95c1045ca2b63a4b1b1001a47d23b692925"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/tb.cir",
+      "sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/execution.json",
+      "sha256": "1e9c115e47fdc9c8731073f13f60b2b3d4076bd04f5e25eb607784605ce2c049"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/simulator.log",
+      "sha256": "bbde39d402d295333a2c53c1dd8fd5e050145503fa91254bf396f5ed256574ac"
+    },
+    {
+      "path": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/waveforms.raw",
+      "sha256": "cfb03a4e8163be136c0a6ccfad5226ce24eaba51405fdc80ed29eca9c37cd065"
+    }
+  ],
+  "observations": {
+    "cases": {
+      "ll": {
+        "directory": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native",
+        "execution": {
+          "exit_code": 0,
+          "elapsed_s": 195.5234661102295,
+          "log_failures": [],
+          "timed_out": false,
+          "ngspice": "/opt/ngspice47/bin/ngspice",
+          "model_library": "/home/host/.volare/sky130A/libs.tech/ngspice/sky130.lib.spice",
+          "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b",
+          "git_revision": "546f7c2-dirty",
+          "deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf",
+          "inputs_sha256": {},
+          "stage": "full",
+          "condition": "ff_v1950_t-40",
+          "passive": "ll",
+          "level": "frontend",
+          "solver": "sparse",
+          "seed": "prebiased",
+          "varactor": "native",
+          "smoke": {
+            "directory": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native.smoke",
+            "elapsed_s": 50.402915477752686,
+            "exit_code": 0
+          }
+        },
+        "deck": {
+          "model_lib_lines": [
+            {
+              "line": 2,
+              "text": ".lib \"/home/host/.volare/sky130A/libs.tech/ngspice/sky130.lib.spice\" ff_ll"
+            }
+          ],
+          "tran_lines": [
+            {
+              "line": 987,
+              "text": "tran 4p 2.40000000e-08 4.00000000e-09 4p uic"
+            }
+          ],
+          "has_uic": true,
+          "ic_count": 941,
+          "ic_line_range": [
+            40,
+            980
+          ],
+          "selected_initial_voltages": [
+            {
+              "line": 42,
+              "text": ".ic v(vdd)=1.95",
+              "node": "vdd",
+              "voltage_v": 1.95
+            },
+            {
+              "line": 44,
+              "text": ".ic v(bias_vbg)=1.23966",
+              "node": "bias_vbg",
+              "voltage_v": 1.23966
+            },
+            {
+              "line": 64,
+              "text": ".ic v(vgi_bias)=1.20399",
+              "node": "vgi_bias",
+              "voltage_v": 1.20399
+            },
+            {
+              "line": 86,
+              "text": ".ic v(vbias)=1.01932",
+              "node": "vbias",
+              "voltage_v": 1.01932
+            },
+            {
+              "line": 87,
+              "text": ".ic v(ctrl)=1.25",
+              "node": "ctrl",
+              "voltage_v": 1.25
+            },
+            {
+              "line": 88,
+              "text": ".ic v(rst_b)=0",
+              "node": "rst_b",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 89,
+              "text": ".ic v(cfg0)=0",
+              "node": "cfg0",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 90,
+              "text": ".ic v(cfg1)=0",
+              "node": "cfg1",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 91,
+              "text": ".ic v(cfg2)=1.95",
+              "node": "cfg2",
+              "voltage_v": 1.95
+            },
+            {
+              "line": 92,
+              "text": ".ic v(cfg3)=1.95",
+              "node": "cfg3",
+              "voltage_v": 1.95
+            },
+            {
+              "line": 94,
+              "text": ".ic v(xpll.v0p)=1.77021",
+              "node": "xpll.v0p",
+              "voltage_v": 1.77021
+            },
+            {
+              "line": 96,
+              "text": ".ic v(xpll.v0n)=1.77023",
+              "node": "xpll.v0n",
+              "voltage_v": 1.77023
+            },
+            {
+              "line": 528,
+              "text": ".ic v(c0p)=3.23655e-08",
+              "node": "c0p",
+              "voltage_v": 3.23655e-08
+            },
+            {
+              "line": 773,
+              "text": ".ic v(p02n)=1.81769",
+              "node": "p02n",
+              "voltage_v": 1.81769
+            },
+            {
+              "line": 781,
+              "text": ".ic v(p02p)=1.81769",
+              "node": "p02p",
+              "voltage_v": 1.81769
+            },
+            {
+              "line": 857,
+              "text": ".ic v(p04n)=1.81769",
+              "node": "p04n",
+              "voltage_v": 1.81769
+            },
+            {
+              "line": 865,
+              "text": ".ic v(p04p)=1.81769",
+              "node": "p04p",
+              "voltage_v": 1.81769
+            },
+            {
+              "line": 941,
+              "text": ".ic v(p08n)=1.81769",
+              "node": "p08n",
+              "voltage_v": 1.81769
+            },
+            {
+              "line": 949,
+              "text": ".ic v(p08p)=1.81769",
+              "node": "p08p",
+              "voltage_v": 1.81769
+            }
+          ],
+          "supply_control_bias_lines": [
+            {
+              "line": 21,
+              "text": "Xbias_ref bias_vbg bias_i0 bias_i1 bias_i2 bias_i3 vgi_bias vdd 0 serdes_bias_ref trim=15"
+            },
+            {
+              "line": 22,
+              "text": "Vbias_i0 bias_i0 0 0.7"
+            },
+            {
+              "line": 23,
+              "text": "Vbias_i1 bias_i1 0 0.7"
+            },
+            {
+              "line": 24,
+              "text": "Vbias_i2 bias_i2 0 0.7"
+            },
+            {
+              "line": 25,
+              "text": "Vbias_i3 bias_i3 0 0.7"
+            },
+            {
+              "line": 26,
+              "text": ".param supply=1.95"
+            },
+            {
+              "line": 27,
+              "text": "Vdd vdd 0 {supply}"
+            },
+            {
+              "line": 29,
+              "text": "XIref vbias vgi_bias vdd serdes_bias_pcopy n=85"
+            },
+            {
+              "line": 30,
+              "text": "Xref vbias 0 serdes_bias_cml"
+            },
+            {
+              "line": 31,
+              "text": "Vctrl ctrl 0 1.25"
+            },
+            {
+              "line": 32,
+              "text": "Vreset rst_b 0 PWL(0 0 1n 0 1.02n {supply})"
+            },
+            {
+              "line": 33,
+              "text": "Vcode0 cfg0 0 0.0"
+            },
+            {
+              "line": 34,
+              "text": "Vcode1 cfg1 0 0.0"
+            },
+            {
+              "line": 35,
+              "text": "Vcode2 cfg2 0 1.95"
+            },
+            {
+              "line": 36,
+              "text": "Vcode3 cfg3 0 1.95"
+            },
+            {
+              "line": 37,
+              "text": "Xpll ctrl cfg0 cfg1 cfg2 cfg3 vbias rst_b fb0 c0p c0n c1p c1n c2p c2n c3p c3n vdd vdum 0"
+            },
+            {
+              "line": 39,
+              "text": "Ikick xpll.v0p xpll.v0n PWL(0 1u 20p 1u 21p 0)"
+            },
+            {
+              "line": 981,
+              "text": ".temp -40"
+            }
+          ],
+          "include_lines": [
+            {
+              "line": 3,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/sky130_primitives.spice\""
+            },
+            {
+              "line": 4,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/cmos_logic.spice\""
+            },
+            {
+              "line": 5,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/cmos_dff_reset.spice\""
+            },
+            {
+              "line": 6,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_buffer/spice/cml_delay_resistive.spice\""
+            },
+            {
+              "line": 7,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_buffer/spice/cml_buffer.spice\""
+            },
+            {
+              "line": 8,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_to_cmos/spice/cml_to_cmos.spice\""
+            },
+            {
+              "line": 9,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice\""
+            },
+            {
+              "line": 10,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice\""
+            },
+            {
+              "line": 11,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/vco/spice/cap_bank_3b.spice\""
+            },
+            {
+              "line": 12,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/vco/spice/cap_bank_4b.spice\""
+            },
+            {
+              "line": 13,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/vco/spice/vco_ring4_4b.spice\""
+            },
+            {
+              "line": 14,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/divider/spice/cml_latch.spice\""
+            },
+            {
+              "line": 15,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/divider/spice/cml_div2.spice\""
+            },
+            {
+              "line": 16,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/divider/spice/cml_prescaler8.spice\""
+            },
+            {
+              "line": 17,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/top/spice/clock_frontend_r5.spice\""
+            },
+            {
+              "line": 18,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/sky130_pfet_lvt.spice\""
+            },
+            {
+              "line": 19,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/bias/spice/bandgap.spice\""
+            },
+            {
+              "line": 20,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/pdk_resistors/analog/common/bias/spice/bias_dist.spice\""
+            }
+          ],
+          "source_snapshot_scope": "Include paths are preserved from the deck; included source files are not re-opened or compared to current DUTs."
+        },
+        "registered_boundary_point": {
+          "run": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native",
+          "condition": "ff_v1950_t-40",
+          "passive": "ll",
+          "code": 12,
+          "vctrl_v": 1.25,
+          "git_revision": "546f7c2-dirty",
+          "deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf",
+          "initial_state_file": "results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/operating_guesses.json",
+          "initial_state_sha256": "18f470c04275403b3a2c83b563f32c6b56083a0bde3c9c2c5e965b014d63946c",
+          "validated_until_s": 2.4e-08
+        },
+        "simulator_log": {
+          "tail_lines": [
+            "  .model xpll.xpre3.x8.xslave.xrp:rhead_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "",
+            "Warning: Model issue on line 90270 :",
+            "  .model xpll.xpre3.x8.xslave.xrp:rbody_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "unrecognized parameter (p3) - ignored",
+            "unrecognized parameter (q3) - ignored",
+            "",
+            "Warning: Model issue on line 90269 :",
+            "  .model xpll.xpre3.x8.xslave.xrn:rhead_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "",
+            "Warning: Model issue on line 90270 :",
+            "  .model xpll.xpre3.x8.xslave.xrn:rbody_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "unrecognized parameter (p3) - ignored",
+            "unrecognized parameter (q3) - ignored",
+            "",
+            "Doing analysis at TEMP = -40.000000 and TNOM = 27.000000",
+            "",
+            "Using SPARSE 1.3 as Direct Linear Solver",
+            "Operating point simulation skipped by 'uic',",
+            "  now using transient initial conditions.",
+            "",
+            "No. of Data Rows : 6133",
+            "binary raw file \"waveforms.raw\"",
+            "ngspice-47 done"
+          ],
+          "tail_line_count": 40,
+          "total_line_count": 1474,
+          "warning_count": 183,
+          "ignored_parameters": [
+            "isnoisy",
+            "p2",
+            "p3",
+            "q2",
+            "q3",
+            "sw_et"
+          ],
+          "completion_lines": [
+            {
+              "line": 1466,
+              "text": "Doing analysis at TEMP = -40.000000 and TNOM = 27.000000"
+            },
+            {
+              "line": 1468,
+              "text": "Using SPARSE 1.3 as Direct Linear Solver"
+            },
+            {
+              "line": 1469,
+              "text": "Operating point simulation skipped by 'uic',"
+            },
+            {
+              "line": 1472,
+              "text": "No. of Data Rows : 6133"
+            },
+            {
+              "line": 1474,
+              "text": "ngspice-47 done"
+            }
+          ]
+        },
+        "raw": {
+          "shape": [
+            6133,
+            46
+          ],
+          "names": [
+            "time",
+            "v(vbias)",
+            "v(bias_vbg)",
+            "v(ctrl)",
+            "v(xpll.v0p)",
+            "v(xpll.v0n)",
+            "v(xpll.v1p)",
+            "v(xpll.v1n)",
+            "v(xpll.v2p)",
+            "v(xpll.v2n)",
+            "v(xpll.v3p)",
+            "v(xpll.v3n)",
+            "v(xpll.xvco.xv0p.p2)",
+            "v(xpll.xvco.xv0n.p2)",
+            "v(xpll.xvco.xv1p.p2)",
+            "v(xpll.xvco.xv1n.p2)",
+            "v(xpll.xvco.xv2p.p2)",
+            "v(xpll.xvco.xv2n.p2)",
+            "v(xpll.xvco.xv3p.p2)",
+            "v(xpll.xvco.xv3n.p2)",
+            "v(pb0p)",
+            "v(pb0n)",
+            "v(xpll.b1p)",
+            "v(xpll.b1n)",
+            "v(xpll.b2p)",
+            "v(xpll.b2n)",
+            "v(xpll.b3p)",
+            "v(xpll.b3n)",
+            "v(p02p)",
+            "v(p02n)",
+            "v(p04p)",
+            "v(p04n)",
+            "v(p08p)",
+            "v(p08n)",
+            "v(c0p)",
+            "v(c0n)",
+            "v(c1p)",
+            "v(c1n)",
+            "v(c2p)",
+            "v(c2n)",
+            "v(c3p)",
+            "v(c3n)",
+            "v(fb0)",
+            "v(xpll.fb1)",
+            "v(xpll.fb2)",
+            "v(xpll.fb3)"
+          ],
+          "first_time_s": 4.0024921642385806e-09,
+          "last_time_s": 2.4e-08,
+          "all_values_finite": true,
+          "time_strictly_increasing": true,
+          "reached_24ns": true,
+          "covers_measurement_start": true
+        },
+        "signals": {
+          "vco": {
+            "nodes": [
+              "xpll.v0p",
+              "xpll.v0n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989751366.2362084,
+              "period_mean_s": 5.025753553779882e-10,
+              "period_pp_s": 6.244334617608204e-13,
+              "period_rms_s": 1.8167800223443124e-13,
+              "duty": 0.49999732441124417,
+              "amplitude_pp_v": 0.5010265231379083
+            },
+            "window_min_v": -0.2506199090499097,
+            "window_max_v": 0.2505593578489369,
+            "window_amplitude_pp_v": 0.5011792668988466,
+            "positive_edges_s": [
+              8.322151168402983e-09,
+              8.82430656894188e-09,
+              9.326493531058981e-09,
+              9.828733506984479e-09,
+              1.033103559365433e-08,
+              1.0833388995962091e-08,
+              1.1335758266315777e-08,
+              1.1838160496972628e-08,
+              1.234061635443193e-08,
+              1.2843111366200102e-08,
+              1.3345609774268844e-08,
+              1.3848132233067091e-08,
+              1.4350696703098858e-08,
+              1.4853291908197564e-08,
+              1.5355882407253164e-08,
+              1.5858489972982825e-08,
+              1.6361132631096594e-08,
+              1.686379927896323e-08,
+              1.736645543443845e-08,
+              1.786912307986763e-08,
+              1.83718205630349e-08,
+              1.887453813206221e-08,
+              1.9377241089157083e-08,
+              1.9879950847942082e-08,
+              2.0382687827712232e-08,
+              2.0885442413241196e-08,
+              2.138817872893197e-08,
+              2.189092017071016e-08,
+              2.2393684987860907e-08,
+              2.2896464821861564e-08,
+              2.3399224909794206e-08,
+              2.3901987185120616e-08
+            ]
+          },
+          "div2": {
+            "nodes": [
+              "p02p",
+              "p02n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 15,
+              "frequency_hz": 994850739.7639847,
+              "period_mean_s": 1.0051759123556936e-09,
+              "period_pp_s": 1.1445242318185133e-12,
+              "period_rms_s": 3.367015815111654e-13,
+              "duty": 0.5001220313072149,
+              "amplitude_pp_v": 0.5110346129984773
+            },
+            "window_min_v": -0.25464002053741597,
+            "window_max_v": 0.2571255824550296,
+            "window_amplitude_pp_v": 0.5117656029924456,
+            "positive_edges_s": [
+              8.697502545261642e-09,
+              9.701913614610726e-09,
+              1.0706572960246002e-08,
+              1.1711327548991577e-08,
+              1.271628979317604e-08,
+              1.3721297210379209e-08,
+              1.4726466472828567e-08,
+              1.5731655936781624e-08,
+              1.673697108955484e-08,
+              1.7742282224753074e-08,
+              1.8747707994766805e-08,
+              1.9753105299274133e-08,
+              2.0758610888188153e-08,
+              2.1764076709996056e-08,
+              2.276963230357696e-08,
+              2.3775141230597045e-08
+            ]
+          },
+          "div4": {
+            "nodes": [
+              "p04p",
+              "p04n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 7,
+              "frequency_hz": 497447139.6745556,
+              "period_mean_s": 2.01026384563037e-09,
+              "period_pp_s": 2.026696064521998e-12,
+              "period_rms_s": 6.775640853388456e-13,
+              "duty": 0.49998364484165947,
+              "amplitude_pp_v": 0.5484649464694402
+            },
+            "window_min_v": -0.2740800792830427,
+            "window_max_v": 0.27438486718639754,
+            "window_amplitude_pp_v": 0.5484649464694402,
+            "positive_edges_s": [
+              8.345503780444663e-09,
+              1.0354490379892242e-08,
+              1.2364141404607083e-08,
+              1.4374270962679792e-08,
+              1.638474234503268e-08,
+              1.8395455236344384e-08,
+              2.0406337404345153e-08,
+              2.2417350699857254e-08
+            ]
+          },
+          "div8": {
+            "nodes": [
+              "p08p",
+              "p08n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248710113.81704208,
+              "period_mean_s": 4.0207452147910125e-09,
+              "period_pp_s": 2.3793925372285857e-12,
+              "period_rms_s": 9.884769915928431e-13,
+              "duty": 0.49996062002740865,
+              "amplitude_pp_v": 0.5542492839163
+            },
+            "window_min_v": -0.2780122441938109,
+            "window_max_v": 0.27736111733522173,
+            "window_amplitude_pp_v": 0.5553733615290326,
+            "positive_edges_s": [
+              9.499538851695055e-09,
+              1.3518964944649645e-08,
+              1.7539969010576275e-08,
+              2.1561774496068094e-08
+            ]
+          },
+          "c0p": {
+            "nodes": [
+              "c0p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989814687.0085971,
+              "period_mean_s": 5.025593622003853e-10,
+              "period_pp_s": 6.876564974474635e-13,
+              "period_rms_s": 1.9412862806807104e-13,
+              "duty": 0.49988633075951056,
+              "amplitude_pp_v": 2.0536099604867872
+            },
+            "window_min_v": -0.03207920938568143,
+            "window_max_v": 2.021530751101106,
+            "window_amplitude_pp_v": 2.0536099604867877,
+            "positive_edges_s": [
+              8.06483518783739e-09,
+              8.566928470737244e-09,
+              9.069110941408346e-09,
+              9.571270844564015e-09,
+              1.0073573625499711e-08,
+              1.0575877082175818e-08,
+              1.1078242648987669e-08,
+              1.158058100767401e-08,
+              1.2083051269744221e-08,
+              1.258550075527586e-08,
+              1.3088002644856655e-08,
+              1.3590506874580924e-08,
+              1.4093047728036623e-08,
+              1.459561032620693e-08,
+              1.509820997869995e-08,
+              1.5600782856151745e-08,
+              1.6103437631185625e-08,
+              1.6606066886529797e-08,
+              1.7108736385575287e-08,
+              1.7611403537864986e-08,
+              1.8114077773609508e-08,
+              1.861676978165295e-08,
+              1.9119488890729786e-08,
+              1.962217471345468e-08,
+              2.0124927333514402e-08,
+              2.062764501793817e-08,
+              2.1130402892151226e-08,
+              2.1633149821875768e-08,
+              2.2135898685379268e-08,
+              2.2638651328218722e-08,
+              2.3141432267616024e-08,
+              2.364417541604933e-08
+            ]
+          },
+          "c1p": {
+            "nodes": [
+              "c1p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989760129.3519812,
+              "period_mean_s": 5.025731419825348e-10,
+              "period_pp_s": 6.698984334193138e-13,
+              "period_rms_s": 1.8869811414394764e-13,
+              "duty": 0.49990203938423144,
+              "amplitude_pp_v": 2.053604538292463
+            },
+            "window_min_v": -0.03207419021362404,
+            "window_max_v": 2.021530348078839,
+            "window_amplitude_pp_v": 2.053604538292463,
+            "positive_edges_s": [
+              8.378631146759824e-09,
+              8.880769526339187e-09,
+              9.382969966710211e-09,
+              9.885127937793295e-09,
+              1.038751509205127e-08,
+              1.0889848942372969e-08,
+              1.1392233513220712e-08,
+              1.18945978432612e-08,
+              1.2397077549229475e-08,
+              1.2899559177121215e-08,
+              1.340207376812677e-08,
+              1.390454034418348e-08,
+              1.440714869871743e-08,
+              1.4909730868824993e-08,
+              1.541233827882328e-08,
+              1.5914876826474284e-08,
+              1.641757748053068e-08,
+              1.6920232008721577e-08,
+              1.742290554564956e-08,
+              1.7925494424761713e-08,
+              1.8428261120078972e-08,
+              1.893096641749534e-08,
+              1.943368713816191e-08,
+              1.993636809929922e-08,
+              2.043912322877456e-08,
+              2.0941867524685083e-08,
+              2.144462187656684e-08,
+              2.194728391676072e-08,
+              2.245007942463184e-08,
+              2.295288770264462e-08,
+              2.3455665990890215e-08,
+              2.39583985482184e-08
+            ]
+          },
+          "c2p": {
+            "nodes": [
+              "c2p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989795488.4656951,
+              "period_mean_s": 5.025642111446774e-10,
+              "period_pp_s": 6.991078352296386e-13,
+              "period_rms_s": 1.9451119030225232e-13,
+              "duty": 0.4999296456084444,
+              "amplitude_pp_v": 2.053522330920079
+            },
+            "window_min_v": -0.03207283885001258,
+            "window_max_v": 2.021817217582062,
+            "window_amplitude_pp_v": 2.0538900564320746,
+            "positive_edges_s": [
+              8.19033723531309e-09,
+              8.692469622188455e-09,
+              9.194661683063668e-09,
+              9.696766961064173e-09,
+              1.0199132238310167e-08,
+              1.0701459693222139e-08,
+              1.1203837125006969e-08,
+              1.1706170644769166e-08,
+              1.2208644294416201e-08,
+              1.2711118329664216e-08,
+              1.3213629762908294e-08,
+              1.3716068626791782e-08,
+              1.4218688451589797e-08,
+              1.4721253231938808e-08,
+              1.5223860448233388e-08,
+              1.5726399683949028e-08,
+              1.6229077072688408e-08,
+              1.6731728076145436e-08,
+              1.7234403602335766e-08,
+              1.7736997375475704e-08,
+              1.8239756054245573e-08,
+              1.8742443791549774e-08,
+              1.9245167980192424e-08,
+              1.9747817189753724e-08,
+              2.025059607405852e-08,
+              2.0753331075204942e-08,
+              2.125609046866507e-08,
+              2.1758765977221476e-08,
+              2.226157036305721e-08,
+              2.276434209543466e-08,
+              2.326712586178194e-08,
+              2.3769827780798086e-08
+            ]
+          },
+          "c3p": {
+            "nodes": [
+              "c3p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989816658.0926886,
+              "period_mean_s": 5.025588643722262e-10,
+              "period_pp_s": 6.707499356813203e-13,
+              "period_rms_s": 1.9336174144200495e-13,
+              "duty": 0.49988763241409406,
+              "amplitude_pp_v": 2.0537617496505414
+            },
+            "window_min_v": -0.03207278809815173,
+            "window_max_v": 2.02168896155239,
+            "window_amplitude_pp_v": 2.0537617496505414,
+            "positive_edges_s": [
+              8.002010204352422e-09,
+              8.504122835968259e-09,
+              9.006302078415691e-09,
+              9.508483402827987e-09,
+              1.0010757058469008e-08,
+              1.0513082933546165e-08,
+              1.101544504214295e-08,
+              1.1517805254230034e-08,
+              1.2020175731235539e-08,
+              1.252268937784863e-08,
+              1.3025189538356784e-08,
+              1.3527680507882913e-08,
+              1.4030204567644433e-08,
+              1.453278644696367e-08,
+              1.5035385252656007e-08,
+              1.5537968138418805e-08,
+              1.6040539266766843e-08,
+              1.6543233967796085e-08,
+              1.704590342206083e-08,
+              1.754855054647075e-08,
+              1.8051231885572703e-08,
+              1.8553930525388265e-08,
+              1.905665003854276e-08,
+              1.9559342902904514e-08,
+              2.0062055377152814e-08,
+              2.0564795684080514e-08,
+              2.106755979257461e-08,
+              2.157028537395053e-08,
+              2.207303310054134e-08,
+              2.2575802807191316e-08,
+              2.3078586188742834e-08,
+              2.3581334999891433e-08
+            ]
+          },
+          "fb0": {
+            "nodes": [
+              "fb0"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248707049.81752926,
+              "period_mean_s": 4.020794749218719e-09,
+              "period_pp_s": 2.337042378299628e-12,
+              "period_rms_s": 9.714677760245923e-13,
+              "duty": 0.49994906610473566,
+              "amplitude_pp_v": 2.053965045540097
+            },
+            "window_min_v": -0.032101528471850105,
+            "window_max_v": 2.021863517068247,
+            "window_amplitude_pp_v": 2.0539650455400973,
+            "positive_edges_s": [
+              9.740739175042881e-09,
+              1.3760236067990474e-08,
+              1.7781289487373144e-08,
+              2.1803123422699037e-08
+            ]
+          },
+          "fb1": {
+            "nodes": [
+              "xpll.fb1"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248677180.87006137,
+              "period_mean_s": 4.021277692232322e-09,
+              "period_pp_s": 1.706138585357947e-12,
+              "period_rms_s": 7.088413474369267e-13,
+              "duty": 0.49963610629690897,
+              "amplitude_pp_v": 2.0462088251413073
+            },
+            "window_min_v": -0.03042576929530945,
+            "window_max_v": 2.015783055845998,
+            "window_amplitude_pp_v": 2.0462088251413073,
+            "positive_edges_s": [
+              1.1566202714050195e-08,
+              1.5586534319311155e-08,
+              1.960799804690084e-08,
+              2.363003579074716e-08
+            ]
+          },
+          "fb2": {
+            "nodes": [
+              "xpll.fb2"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248705273.9885588,
+              "period_mean_s": 4.020823458878492e-09,
+              "period_pp_s": 2.2924162353165973e-12,
+              "period_rms_s": 9.525541331736743e-13,
+              "duty": 0.4996080568641724,
+              "amplitude_pp_v": 2.0461515482453327
+            },
+            "window_min_v": -0.030247529095841,
+            "window_max_v": 2.0159040191494917,
+            "window_amplitude_pp_v": 2.0461515482453327,
+            "positive_edges_s": [
+              9.870750765412025e-09,
+              1.389030252245993e-08,
+              1.791137696876428e-08,
+              2.19332211420475e-08
+            ]
+          },
+          "fb3": {
+            "nodes": [
+              "xpll.fb3"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248675229.4404699,
+              "period_mean_s": 4.021309248412251e-09,
+              "period_pp_s": 1.6810768315212574e-12,
+              "period_rms_s": 6.982414476496663e-13,
+              "duty": 0.4996375934416334,
+              "amplitude_pp_v": 2.0455193834617105
+            },
+            "window_min_v": -0.030416978926777194,
+            "window_max_v": 2.015702169955985,
+            "window_amplitude_pp_v": 2.046119148882762,
+            "positive_edges_s": [
+              1.1691796895867053e-08,
+              1.5712174672095604e-08,
+              1.9733665788043732e-08,
+              2.3755724641103805e-08
+            ]
+          }
+        },
+        "edge_diagnostics": {
+          "div2": {
+            "divisor": 2,
+            "tolerance_reference_cycles": 0.25,
+            "all_divider_edges_s": [
+              8.697502545261642e-09,
+              9.701913614610726e-09,
+              1.0706572960246002e-08,
+              1.1711327548991577e-08,
+              1.271628979317604e-08,
+              1.3721297210379209e-08,
+              1.4726466472828567e-08,
+              1.5731655936781624e-08,
+              1.673697108955484e-08,
+              1.7742282224753074e-08,
+              1.8747707994766805e-08,
+              1.9753105299274133e-08,
+              2.0758610888188153e-08,
+              2.1764076709996056e-08,
+              2.276963230357696e-08,
+              2.3775141230597045e-08
+            ],
+            "retained_edge_indices_in_window": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "retained_divider_edges_s": [
+              8.697502545261642e-09,
+              9.701913614610726e-09,
+              1.0706572960246002e-08,
+              1.1711327548991577e-08,
+              1.271628979317604e-08,
+              1.3721297210379209e-08,
+              1.4726466472828567e-08,
+              1.5731655936781624e-08,
+              1.673697108955484e-08,
+              1.7742282224753074e-08,
+              1.8747707994766805e-08,
+              1.9753105299274133e-08,
+              2.0758610888188153e-08,
+              2.1764076709996056e-08,
+              2.276963230357696e-08,
+              2.3775141230597045e-08
+            ],
+            "excluded_unbracketed_edge_indices_in_window": [],
+            "excluded_unbracketed_edges_s": [],
+            "reference_cycle_indices": [
+              0.7474805139123155,
+              2.747491441436822,
+              4.747556132528396,
+              6.747547004687405,
+              8.747616254780713,
+              10.747603275301962,
+              12.747658883168036,
+              14.747647976573793,
+              16.747689268928703,
+              18.747664572669564,
+              20.747710951218984,
+              22.747676374983207,
+              24.74772676629175,
+              26.747696429668775,
+              28.747737459405663,
+              30.747701924450837
+            ],
+            "reference_cycle_differences": [
+              2.0000109275245066,
+              2.000064691091574,
+              1.9999908721590094,
+              2.0000692500933077,
+              1.9999870205212495,
+              2.0000556078660736,
+              1.9999890934057571,
+              2.0000412923549096,
+              1.999975303740861,
+              2.0000463785494205,
+              1.9999654237642233,
+              2.000050391308541,
+              1.9999696633770263,
+              2.000041029736888,
+              1.9999644650451742
+            ],
+            "anomaly_interval_indices": [],
+            "anomalies": [],
+            "interval_count": 15,
+            "max_absolute_error_reference_cycles": 6.925009330771559e-05
+          },
+          "div4": {
+            "divisor": 4,
+            "tolerance_reference_cycles": 0.25,
+            "all_divider_edges_s": [
+              8.345503780444663e-09,
+              1.0354490379892242e-08,
+              1.2364141404607083e-08,
+              1.4374270962679792e-08,
+              1.638474234503268e-08,
+              1.8395455236344384e-08,
+              2.0406337404345153e-08,
+              2.2417350699857254e-08
+            ],
+            "retained_edge_indices_in_window": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "retained_divider_edges_s": [
+              8.345503780444663e-09,
+              1.0354490379892242e-08,
+              1.2364141404607083e-08,
+              1.4374270962679792e-08,
+              1.638474234503268e-08,
+              1.8395455236344384e-08,
+              2.0406337404345153e-08,
+              2.2417350699857254e-08
+            ],
+            "excluded_unbracketed_edge_indices_in_window": [],
+            "excluded_unbracketed_edges_s": [],
+            "reference_cycle_indices": [
+              0.046504751351112365,
+              4.046689812650145,
+              8.046816484988325,
+              12.046905062646397,
+              16.046968928685217,
+              20.0470138200167,
+              24.047040001849087,
+              28.047069731910362
+            ],
+            "reference_cycle_differences": [
+              4.000185061299033,
+              4.00012667233818,
+              4.000088577658072,
+              4.00006386603882,
+              4.000044891331484,
+              4.000026181832386,
+              4.000029730061275
+            ],
+            "anomaly_interval_indices": [],
+            "anomalies": [],
+            "interval_count": 7,
+            "max_absolute_error_reference_cycles": 0.00018506129903261836
+          },
+          "div8": {
+            "divisor": 8,
+            "tolerance_reference_cycles": 0.25,
+            "all_divider_edges_s": [
+              9.499538851695055e-09,
+              1.3518964944649645e-08,
+              1.7539969010576275e-08,
+              2.1561774496068094e-08
+            ],
+            "retained_edge_indices_in_window": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "retained_divider_edges_s": [
+              9.499538851695055e-09,
+              1.3518964944649645e-08,
+              1.7539969010576275e-08,
+              2.1561774496068094e-08
+            ],
+            "excluded_unbracketed_edge_indices_in_window": [],
+            "excluded_unbracketed_edges_s": [],
+            "reference_cycle_indices": [
+              2.34454708691238,
+              10.344969995560735,
+              18.345185487300814,
+              26.345298303879858
+            ],
+            "reference_cycle_differences": [
+              8.000422908648355,
+              8.000215491740079,
+              8.000112816579044
+            ],
+            "anomaly_interval_indices": [],
+            "anomalies": [],
+            "interval_count": 3,
+            "max_absolute_error_reference_cycles": 0.00042290864835514697
+          }
+        }
+      },
+      "hh": {
+        "directory": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native",
+        "execution": {
+          "exit_code": 0,
+          "elapsed_s": 209.900395154953,
+          "log_failures": [],
+          "timed_out": false,
+          "ngspice": "/opt/ngspice47/bin/ngspice",
+          "model_library": "/home/host/.volare/sky130A/libs.tech/ngspice/sky130.lib.spice",
+          "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b",
+          "git_revision": "546f7c2-dirty",
+          "deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333",
+          "inputs_sha256": {},
+          "stage": "full",
+          "condition": "ff_v1950_t-40",
+          "passive": "hh",
+          "level": "frontend",
+          "solver": "sparse",
+          "seed": "prebiased",
+          "varactor": "native",
+          "smoke": {
+            "directory": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native.smoke",
+            "elapsed_s": 48.75570201873779,
+            "exit_code": 0
+          }
+        },
+        "deck": {
+          "model_lib_lines": [
+            {
+              "line": 2,
+              "text": ".lib \"/home/host/.volare/sky130A/libs.tech/ngspice/sky130.lib.spice\" ff_hh"
+            }
+          ],
+          "tran_lines": [
+            {
+              "line": 987,
+              "text": "tran 4p 2.40000000e-08 4.00000000e-09 4p uic"
+            }
+          ],
+          "has_uic": true,
+          "ic_count": 941,
+          "ic_line_range": [
+            40,
+            980
+          ],
+          "selected_initial_voltages": [
+            {
+              "line": 42,
+              "text": ".ic v(vdd)=1.95",
+              "node": "vdd",
+              "voltage_v": 1.95
+            },
+            {
+              "line": 44,
+              "text": ".ic v(bias_vbg)=1.23674",
+              "node": "bias_vbg",
+              "voltage_v": 1.23674
+            },
+            {
+              "line": 64,
+              "text": ".ic v(vgi_bias)=1.23627",
+              "node": "vgi_bias",
+              "voltage_v": 1.23627
+            },
+            {
+              "line": 86,
+              "text": ".ic v(vbias)=0.971272",
+              "node": "vbias",
+              "voltage_v": 0.971272
+            },
+            {
+              "line": 87,
+              "text": ".ic v(ctrl)=1.205",
+              "node": "ctrl",
+              "voltage_v": 1.205
+            },
+            {
+              "line": 88,
+              "text": ".ic v(rst_b)=0",
+              "node": "rst_b",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 89,
+              "text": ".ic v(cfg0)=0",
+              "node": "cfg0",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 90,
+              "text": ".ic v(cfg1)=0",
+              "node": "cfg1",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 91,
+              "text": ".ic v(cfg2)=1.95",
+              "node": "cfg2",
+              "voltage_v": 1.95
+            },
+            {
+              "line": 92,
+              "text": ".ic v(cfg3)=0",
+              "node": "cfg3",
+              "voltage_v": 0.0
+            },
+            {
+              "line": 94,
+              "text": ".ic v(xpll.v0p)=1.76952",
+              "node": "xpll.v0p",
+              "voltage_v": 1.76952
+            },
+            {
+              "line": 96,
+              "text": ".ic v(xpll.v0n)=1.76954",
+              "node": "xpll.v0n",
+              "voltage_v": 1.76954
+            },
+            {
+              "line": 528,
+              "text": ".ic v(c0p)=3.23655e-08",
+              "node": "c0p",
+              "voltage_v": 3.23655e-08
+            },
+            {
+              "line": 773,
+              "text": ".ic v(p02n)=1.81729",
+              "node": "p02n",
+              "voltage_v": 1.81729
+            },
+            {
+              "line": 781,
+              "text": ".ic v(p02p)=1.81729",
+              "node": "p02p",
+              "voltage_v": 1.81729
+            },
+            {
+              "line": 857,
+              "text": ".ic v(p04n)=1.81728",
+              "node": "p04n",
+              "voltage_v": 1.81728
+            },
+            {
+              "line": 865,
+              "text": ".ic v(p04p)=1.81728",
+              "node": "p04p",
+              "voltage_v": 1.81728
+            },
+            {
+              "line": 941,
+              "text": ".ic v(p08n)=1.81728",
+              "node": "p08n",
+              "voltage_v": 1.81728
+            },
+            {
+              "line": 949,
+              "text": ".ic v(p08p)=1.81728",
+              "node": "p08p",
+              "voltage_v": 1.81728
+            }
+          ],
+          "supply_control_bias_lines": [
+            {
+              "line": 21,
+              "text": "Xbias_ref bias_vbg bias_i0 bias_i1 bias_i2 bias_i3 vgi_bias vdd 0 serdes_bias_ref trim=15"
+            },
+            {
+              "line": 22,
+              "text": "Vbias_i0 bias_i0 0 0.7"
+            },
+            {
+              "line": 23,
+              "text": "Vbias_i1 bias_i1 0 0.7"
+            },
+            {
+              "line": 24,
+              "text": "Vbias_i2 bias_i2 0 0.7"
+            },
+            {
+              "line": 25,
+              "text": "Vbias_i3 bias_i3 0 0.7"
+            },
+            {
+              "line": 26,
+              "text": ".param supply=1.95"
+            },
+            {
+              "line": 27,
+              "text": "Vdd vdd 0 {supply}"
+            },
+            {
+              "line": 29,
+              "text": "XIref vbias vgi_bias vdd serdes_bias_pcopy n=85"
+            },
+            {
+              "line": 30,
+              "text": "Xref vbias 0 serdes_bias_cml"
+            },
+            {
+              "line": 31,
+              "text": "Vctrl ctrl 0 1.205"
+            },
+            {
+              "line": 32,
+              "text": "Vreset rst_b 0 PWL(0 0 1n 0 1.02n {supply})"
+            },
+            {
+              "line": 33,
+              "text": "Vcode0 cfg0 0 0.0"
+            },
+            {
+              "line": 34,
+              "text": "Vcode1 cfg1 0 0.0"
+            },
+            {
+              "line": 35,
+              "text": "Vcode2 cfg2 0 1.95"
+            },
+            {
+              "line": 36,
+              "text": "Vcode3 cfg3 0 0.0"
+            },
+            {
+              "line": 37,
+              "text": "Xpll ctrl cfg0 cfg1 cfg2 cfg3 vbias rst_b fb0 c0p c0n c1p c1n c2p c2n c3p c3n vdd vdum 0"
+            },
+            {
+              "line": 39,
+              "text": "Ikick xpll.v0p xpll.v0n PWL(0 1u 20p 1u 21p 0)"
+            },
+            {
+              "line": 981,
+              "text": ".temp -40"
+            }
+          ],
+          "include_lines": [
+            {
+              "line": 3,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/sky130_primitives.spice\""
+            },
+            {
+              "line": 4,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/cmos_logic.spice\""
+            },
+            {
+              "line": 5,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/cmos_dff_reset.spice\""
+            },
+            {
+              "line": 6,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_buffer/spice/cml_delay_resistive.spice\""
+            },
+            {
+              "line": 7,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_buffer/spice/cml_buffer.spice\""
+            },
+            {
+              "line": 8,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_to_cmos/spice/cml_to_cmos.spice\""
+            },
+            {
+              "line": 9,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice\""
+            },
+            {
+              "line": 10,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice\""
+            },
+            {
+              "line": 11,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/vco/spice/cap_bank_3b.spice\""
+            },
+            {
+              "line": 12,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/vco/spice/cap_bank_4b.spice\""
+            },
+            {
+              "line": 13,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/vco/spice/vco_ring4_4b.spice\""
+            },
+            {
+              "line": 14,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/divider/spice/cml_latch.spice\""
+            },
+            {
+              "line": 15,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/divider/spice/cml_div2.spice\""
+            },
+            {
+              "line": 16,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/divider/spice/cml_prescaler8.spice\""
+            },
+            {
+              "line": 17,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/pll/top/spice/clock_frontend_r5.spice\""
+            },
+            {
+              "line": 18,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/devices/spice/sky130_pfet_lvt.spice\""
+            },
+            {
+              "line": 19,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/bias/spice/bandgap.spice\""
+            },
+            {
+              "line": 20,
+              "text": ".include \"/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/pdk_resistors/analog/common/bias/spice/bias_dist.spice\""
+            }
+          ],
+          "source_snapshot_scope": "Include paths are preserved from the deck; included source files are not re-opened or compared to current DUTs."
+        },
+        "registered_boundary_point": {
+          "run": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native",
+          "condition": "ff_v1950_t-40",
+          "passive": "hh",
+          "code": 4,
+          "vctrl_v": 1.205,
+          "git_revision": "546f7c2-dirty",
+          "deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333",
+          "initial_state_file": "results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/operating_guesses.json",
+          "initial_state_sha256": "d8f20c6fea1bc0e4c509a9d38122e48ccfd0c35753afdbbcb47e8674a45316b0",
+          "validated_until_s": 2.4e-08
+        },
+        "simulator_log": {
+          "tail_lines": [
+            "  .model xpll.xpre3.x8.xslave.xrp:rhead_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "",
+            "Warning: Model issue on line 96838 :",
+            "  .model xpll.xpre3.x8.xslave.xrp:rbody_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "unrecognized parameter (p3) - ignored",
+            "unrecognized parameter (q3) - ignored",
+            "",
+            "Warning: Model issue on line 96837 :",
+            "  .model xpll.xpre3.x8.xslave.xrn:rhead_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "",
+            "Warning: Model issue on line 96838 :",
+            "  .model xpll.xpre3.x8.xslave.xrn:rbody_model r sw_et=0 isnoisy=0 rsh=     ...",
+            "unrecognized parameter (sw_et) - ignored",
+            "unrecognized parameter (isnoisy) - ignored",
+            "unrecognized parameter (p2) - ignored",
+            "unrecognized parameter (q2) - ignored",
+            "unrecognized parameter (p3) - ignored",
+            "unrecognized parameter (q3) - ignored",
+            "",
+            "Doing analysis at TEMP = -40.000000 and TNOM = 27.000000",
+            "",
+            "Using SPARSE 1.3 as Direct Linear Solver",
+            "Operating point simulation skipped by 'uic',",
+            "  now using transient initial conditions.",
+            "",
+            "No. of Data Rows : 6125",
+            "binary raw file \"waveforms.raw\"",
+            "ngspice-47 done"
+          ],
+          "tail_line_count": 40,
+          "total_line_count": 1474,
+          "warning_count": 183,
+          "ignored_parameters": [
+            "isnoisy",
+            "p2",
+            "p3",
+            "q2",
+            "q3",
+            "sw_et"
+          ],
+          "completion_lines": [
+            {
+              "line": 1466,
+              "text": "Doing analysis at TEMP = -40.000000 and TNOM = 27.000000"
+            },
+            {
+              "line": 1468,
+              "text": "Using SPARSE 1.3 as Direct Linear Solver"
+            },
+            {
+              "line": 1469,
+              "text": "Operating point simulation skipped by 'uic',"
+            },
+            {
+              "line": 1472,
+              "text": "No. of Data Rows : 6125"
+            },
+            {
+              "line": 1474,
+              "text": "ngspice-47 done"
+            }
+          ]
+        },
+        "raw": {
+          "shape": [
+            6125,
+            46
+          ],
+          "names": [
+            "time",
+            "v(vbias)",
+            "v(bias_vbg)",
+            "v(ctrl)",
+            "v(xpll.v0p)",
+            "v(xpll.v0n)",
+            "v(xpll.v1p)",
+            "v(xpll.v1n)",
+            "v(xpll.v2p)",
+            "v(xpll.v2n)",
+            "v(xpll.v3p)",
+            "v(xpll.v3n)",
+            "v(xpll.xvco.xv0p.p2)",
+            "v(xpll.xvco.xv0n.p2)",
+            "v(xpll.xvco.xv1p.p2)",
+            "v(xpll.xvco.xv1n.p2)",
+            "v(xpll.xvco.xv2p.p2)",
+            "v(xpll.xvco.xv2n.p2)",
+            "v(xpll.xvco.xv3p.p2)",
+            "v(xpll.xvco.xv3n.p2)",
+            "v(pb0p)",
+            "v(pb0n)",
+            "v(xpll.b1p)",
+            "v(xpll.b1n)",
+            "v(xpll.b2p)",
+            "v(xpll.b2n)",
+            "v(xpll.b3p)",
+            "v(xpll.b3n)",
+            "v(p02p)",
+            "v(p02n)",
+            "v(p04p)",
+            "v(p04n)",
+            "v(p08p)",
+            "v(p08n)",
+            "v(c0p)",
+            "v(c0n)",
+            "v(c1p)",
+            "v(c1n)",
+            "v(c2p)",
+            "v(c2n)",
+            "v(c3p)",
+            "v(c3n)",
+            "v(fb0)",
+            "v(xpll.fb1)",
+            "v(xpll.fb2)",
+            "v(xpll.fb3)"
+          ],
+          "first_time_s": 4.002244095362607e-09,
+          "last_time_s": 2.4e-08,
+          "all_values_finite": true,
+          "time_strictly_increasing": true,
+          "reached_24ns": true,
+          "covers_measurement_start": true
+        },
+        "signals": {
+          "vco": {
+            "nodes": [
+              "xpll.v0p",
+              "xpll.v0n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989602187.202181,
+              "period_mean_s": 5.026130381401622e-10,
+              "period_pp_s": 9.789513770292865e-13,
+              "period_rms_s": 2.8091281073367896e-13,
+              "duty": 0.4999992154442285,
+              "amplitude_pp_v": 0.48306442153848805
+            },
+            "window_min_v": -0.24165837197629436,
+            "window_max_v": 0.24159273280393734,
+            "window_amplitude_pp_v": 0.4832511047802317,
+            "positive_edges_s": [
+              8.246262453344165e-09,
+              8.748221306756017e-09,
+              9.250280505780782e-09,
+              9.752399853128117e-09,
+              1.0254543706634554e-08,
+              1.0756802035937699e-08,
+              1.1259128444729164e-08,
+              1.1761496461655925e-08,
+              1.2263873044171409e-08,
+              1.2766345046100905e-08,
+              1.326885844586895e-08,
+              1.3771406250025905e-08,
+              1.4273953021834594e-08,
+              1.4776574461424805e-08,
+              1.527923153847042e-08,
+              1.5781910891631574e-08,
+              1.628457525185018e-08,
+              1.6787313998728343e-08,
+              1.7290075274938804e-08,
+              1.779285156855493e-08,
+              1.829561012085224e-08,
+              1.879842234109537e-08,
+              1.9301257515138576e-08,
+              1.9804107213211194e-08,
+              2.030693363233135e-08,
+              2.08098101016697e-08,
+              2.1312703311684902e-08,
+              2.1815601279069255e-08,
+              2.231847114458554e-08,
+              2.2821391449525046e-08,
+              2.3324328830900314e-08,
+              2.3827266635689195e-08
+            ]
+          },
+          "div2": {
+            "nodes": [
+              "p02p",
+              "p02n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 15,
+              "frequency_hz": 994824179.4116338,
+              "period_mean_s": 1.0052027490841922e-09,
+              "period_pp_s": 1.8315638768256528e-12,
+              "period_rms_s": 5.567624458841512e-13,
+              "duty": 0.5004155305577261,
+              "amplitude_pp_v": 0.5146195408452485
+            },
+            "window_min_v": -0.2559300753114051,
+            "window_max_v": 0.2586894655338434,
+            "window_amplitude_pp_v": 0.5146195408452485,
+            "positive_edges_s": [
+              8.14945137739781e-09,
+              9.153465704171836e-09,
+              1.0157739583605724e-08,
+              1.116230319413006e-08,
+              1.2167057593341114e-08,
+              1.3172031231620793e-08,
+              1.4177131292741575e-08,
+              1.5182400538493393e-08,
+              1.6187755680259387e-08,
+              1.7193242989433193e-08,
+              1.8198784951175457e-08,
+              1.920442249779261e-08,
+              2.0210105240933682e-08,
+              2.1215869712006523e-08,
+              2.2221646723009842e-08,
+              2.3227492613660694e-08
+            ]
+          },
+          "div4": {
+            "nodes": [
+              "p04p",
+              "p04n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 7,
+              "frequency_hz": 497383909.62541515,
+              "period_mean_s": 2.0105194009052487e-09,
+              "period_pp_s": 2.8876782709569616e-12,
+              "period_rms_s": 9.654599858393301e-13,
+              "duty": 0.49998374550565106,
+              "amplitude_pp_v": 0.5236924146643414
+            },
+            "window_min_v": -0.2623887547067054,
+            "window_max_v": 0.26199913624948623,
+            "window_amplitude_pp_v": 0.5243878909561916,
+            "positive_edges_s": [
+              8.839186463944635e-09,
+              1.0847904721710533e-08,
+              1.2857546704373366e-08,
+              1.4867850769771793e-08,
+              1.687864641226962e-08,
+              1.8889798313796412e-08,
+              2.090121633424452e-08,
+              2.2912822270281375e-08
+            ]
+          },
+          "div8": {
+            "nodes": [
+              "p08p",
+              "p08n"
+            ],
+            "crossing_level_v": 0.0,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248673098.2661736,
+              "period_mean_s": 4.0213437117738585e-09,
+              "period_pp_s": 3.428962176419908e-12,
+              "period_rms_s": 1.4214182946235854e-12,
+              "duty": 0.49994339372689717,
+              "amplitude_pp_v": 0.563847428079775
+            },
+            "window_min_v": -0.2829318601004094,
+            "window_max_v": 0.28219366458838957,
+            "window_amplitude_pp_v": 0.565125524688799,
+            "positive_edges_s": [
+              1.0029499407051689e-08,
+              1.404895428220917e-08,
+              1.807064670503936e-08,
+              2.2093530542373263e-08
+            ]
+          },
+          "c0p": {
+            "nodes": [
+              "c0p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989710250.8628519,
+              "period_mean_s": 5.025857405953168e-10,
+              "period_pp_s": 1.1387201832589112e-12,
+              "period_rms_s": 3.063065919485082e-13,
+              "duty": 0.4998580867197229,
+              "amplitude_pp_v": 2.0541238114534828
+            },
+            "window_min_v": -0.0320010244153274,
+            "window_max_v": 2.0221227870381555,
+            "window_amplitude_pp_v": 2.0541238114534828,
+            "positive_edges_s": [
+              8.006105135984391e-09,
+              8.507933813398163e-09,
+              9.00993734599935e-09,
+              9.511989572662262e-09,
+              1.0014162441423554e-08,
+              1.051629349424025e-08,
+              1.1018594961626973e-08,
+              1.1520904531065728e-08,
+              1.2023311598597447e-08,
+              1.252562088270593e-08,
+              1.3028157837567754e-08,
+              1.353066669875004e-08,
+              1.4033267757080599e-08,
+              1.453581721527195e-08,
+              1.5038453241852336e-08,
+              1.5541093295414635e-08,
+              1.6043798836420587e-08,
+              1.654638909137749e-08,
+              1.704922326373678e-08,
+              1.7551932388333844e-08,
+              1.805477039687464e-08,
+              1.8557498652084534e-08,
+              1.906035703445987e-08,
+              1.9563148759960143e-08,
+              2.0066049751629375e-08,
+              2.0568813727379654e-08,
+              2.1071718040345544e-08,
+              2.1574589356257542e-08,
+              2.2077556753854573e-08,
+              2.2580431459943287e-08,
+              2.308336378661486e-08,
+              2.358626309443921e-08
+            ]
+          },
+          "c1p": {
+            "nodes": [
+              "c1p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989613598.2916002,
+              "period_mean_s": 5.026101554888141e-10,
+              "period_pp_s": 9.373517768618988e-13,
+              "period_rms_s": 2.8140124331647355e-13,
+              "duty": 0.49989120106582724,
+              "amplitude_pp_v": 2.053619102698296
+            },
+            "window_min_v": -0.03214302048016848,
+            "window_max_v": 2.0214760822181277,
+            "window_amplitude_pp_v": 2.0536191026982964,
+            "positive_edges_s": [
+              8.319672074214187e-09,
+              8.8216969048337e-09,
+              9.323705265820462e-09,
+              9.825819229534118e-09,
+              1.0327984810641808e-08,
+              1.083024226282e-08,
+              1.1332537016101075e-08,
+              1.1834879683919236e-08,
+              1.2337318915666078e-08,
+              1.2839691196689743e-08,
+              1.3342247588645175e-08,
+              1.384475864934816e-08,
+              1.4347325189364809e-08,
+              1.4849915908681798e-08,
+              1.5352580075237192e-08,
+              1.5855262930286025e-08,
+              1.635791024427472e-08,
+              1.6860654736961036e-08,
+              1.7363440652477254e-08,
+              1.7866212102368184e-08,
+              1.8368962926474994e-08,
+              1.8871779727733456e-08,
+              1.9374610731314623e-08,
+              1.9877459725087977e-08,
+              2.0380232687294844e-08,
+              2.088311507052891e-08,
+              2.138601875924995e-08,
+              2.188894866769604e-08,
+              2.239177532410941e-08,
+              2.2894719556381556e-08,
+              2.339766526914518e-08,
+              2.3900586894367422e-08
+            ]
+          },
+          "c2p": {
+            "nodes": [
+              "c2p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 31,
+              "frequency_hz": 1989676261.9635618,
+              "period_mean_s": 5.025943260805278e-10,
+              "period_pp_s": 1.141318118822072e-12,
+              "period_rms_s": 2.9987443090270107e-13,
+              "duty": 0.4998803830273399,
+              "amplitude_pp_v": 2.0536421836066054
+            },
+            "window_min_v": -0.03215624457296601,
+            "window_max_v": 2.0214859390336395,
+            "window_amplitude_pp_v": 2.0536421836066054,
+            "positive_edges_s": [
+              8.131559815414315e-09,
+              8.633368958026686e-09,
+              9.135458705354437e-09,
+              9.63756448218581e-09,
+              1.0139698718974546e-08,
+              1.0641781540646216e-08,
+              1.114415945990282e-08,
+              1.1646499879389663e-08,
+              1.2148869776167224e-08,
+              1.2651267396519839e-08,
+              1.3153787744019935e-08,
+              1.3656324722306387e-08,
+              1.4158893419925544e-08,
+              1.46614152444889e-08,
+              1.516411391698728e-08,
+              1.566677088978699e-08,
+              1.6169458329080533e-08,
+              1.667211011924188e-08,
+              1.717490809576213e-08,
+              1.7677654284294026e-08,
+              1.818043699442624e-08,
+              1.8683166119492496e-08,
+              1.9186059580444077e-08,
+              1.968887816798049e-08,
+              2.019174024460135e-08,
+              2.069456066869841e-08,
+              2.1197433762093718e-08,
+              2.170031541982433e-08,
+              2.22032590780848e-08,
+              2.27061210398937e-08,
+              2.3209071500624893e-08,
+              2.371198392391068e-08
+            ]
+          },
+          "c3p": {
+            "nodes": [
+              "c3p"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 30,
+              "frequency_hz": 1989616194.898298,
+              "period_mean_s": 5.02609499542758e-10,
+              "period_pp_s": 1.010395084680528e-12,
+              "period_rms_s": 2.801471043995415e-13,
+              "duty": 0.499903225398526,
+              "amplitude_pp_v": 2.0536312753857913
+            },
+            "window_min_v": -0.032154259188432927,
+            "window_max_v": 2.0214770161973585,
+            "window_amplitude_pp_v": 2.0536312753857913,
+            "positive_edges_s": [
+              8.445117149536521e-09,
+              8.947194405166765e-09,
+              9.449239181830185e-09,
+              9.951421449557982e-09,
+              1.0453453800203673e-08,
+              1.0955802487473685e-08,
+              1.1458097542206137e-08,
+              1.1960510290465913e-08,
+              1.2462826513921522e-08,
+              1.2965337430134702e-08,
+              1.346783926873727e-08,
+              1.397043614229314e-08,
+              1.4472940839683354e-08,
+              1.497561234099424e-08,
+              1.5478253012347404e-08,
+              1.598094648502597e-08,
+              1.6483557297193985e-08,
+              1.6986371453113747e-08,
+              1.7489103567395745e-08,
+              1.799192309597185e-08,
+              1.849460947907207e-08,
+              1.8997496126726817e-08,
+              1.9500308220348674e-08,
+              2.0003187335096895e-08,
+              2.0505961058787103e-08,
+              2.1008853942414028e-08,
+              2.1511726751355718e-08,
+              2.2014688521122296e-08,
+              2.2517444208680253e-08,
+              2.3020486954410626e-08,
+              2.352340213581926e-08
+            ]
+          },
+          "fb0": {
+            "nodes": [
+              "fb0"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248669591.23184875,
+              "period_mean_s": 4.021400425545572e-09,
+              "period_pp_s": 3.3606381183248215e-12,
+              "period_rms_s": 1.3935235003234544e-12,
+              "duty": 0.4999126194968123,
+              "amplitude_pp_v": 2.053589906195918
+            },
+            "window_min_v": -0.031988556824370684,
+            "window_max_v": 2.0216013493715472,
+            "window_amplitude_pp_v": 2.053589906195918,
+            "positive_edges_s": [
+              1.0277918982676884e-08,
+              1.429746647255696e-08,
+              1.83192121313152e-08,
+              2.23421202593136e-08
+            ]
+          },
+          "fb1": {
+            "nodes": [
+              "xpll.fb1"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248658468.88239923,
+              "period_mean_s": 4.021580300459989e-09,
+              "period_pp_s": 3.181622987921711e-12,
+              "period_rms_s": 1.3141570924915952e-12,
+              "duty": 0.49956900547119587,
+              "amplitude_pp_v": 2.044550767997478
+            },
+            "window_min_v": -0.030297054759157768,
+            "window_max_v": 2.0154922049624955,
+            "window_amplitude_pp_v": 2.045789259721653,
+            "positive_edges_s": [
+              1.0596183689587927e-08,
+              1.4616031955224555e-08,
+              1.8637894702343345e-08,
+              2.2660924590967895e-08
+            ]
+          },
+          "fb2": {
+            "nodes": [
+              "xpll.fb2"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248728938.18125832,
+              "period_mean_s": 4.020440915770169e-09,
+              "period_pp_s": 4.5158164510873495e-12,
+              "period_rms_s": 1.871317622681332e-12,
+              "duty": 0.4995482015710152,
+              "amplitude_pp_v": 2.045624128318111
+            },
+            "window_min_v": -0.03030069603472006,
+            "window_max_v": 2.015512224286986,
+            "window_amplitude_pp_v": 2.045812920321706,
+            "positive_edges_s": [
+              8.399402767407796e-09,
+              1.2417358769143054e-08,
+              1.6438253696531957e-08,
+              2.0460725514718303e-08
+            ]
+          },
+          "fb3": {
+            "nodes": [
+              "xpll.fb3"
+            ],
+            "crossing_level_v": 0.975,
+            "period_stats": {
+              "cycles": 3,
+              "frequency_hz": 248671523.6507609,
+              "period_mean_s": 4.0213691753641215e-09,
+              "period_pp_s": 3.422404155507982e-12,
+              "period_rms_s": 1.4202985720616326e-12,
+              "duty": 0.4995729002308196,
+              "amplitude_pp_v": 2.0451798907118786
+            },
+            "window_min_v": -0.030308531474009148,
+            "window_max_v": 2.0152912986749767,
+            "window_amplitude_pp_v": 2.0455998301489857,
+            "positive_edges_s": [
+              1.0219566802057068e-08,
+              1.423904435038231e-08,
+              1.8260774375668682e-08,
+              2.2283674328149433e-08
+            ]
+          }
+        },
+        "edge_diagnostics": {
+          "div2": {
+            "divisor": 2,
+            "tolerance_reference_cycles": 0.25,
+            "all_divider_edges_s": [
+              8.14945137739781e-09,
+              9.153465704171836e-09,
+              1.0157739583605724e-08,
+              1.116230319413006e-08,
+              1.2167057593341114e-08,
+              1.3172031231620793e-08,
+              1.4177131292741575e-08,
+              1.5182400538493393e-08,
+              1.6187755680259387e-08,
+              1.7193242989433193e-08,
+              1.8198784951175457e-08,
+              1.920442249779261e-08,
+              2.0210105240933682e-08,
+              2.1215869712006523e-08,
+              2.2221646723009842e-08,
+              2.3227492613660694e-08
+            ],
+            "retained_edge_indices_in_window": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "retained_divider_edges_s": [
+              9.153465704171836e-09,
+              1.0157739583605724e-08,
+              1.116230319413006e-08,
+              1.2167057593341114e-08,
+              1.3172031231620793e-08,
+              1.4177131292741575e-08,
+              1.5182400538493393e-08,
+              1.6187755680259387e-08,
+              1.7193242989433193e-08,
+              1.8198784951175457e-08,
+              1.920442249779261e-08,
+              2.0210105240933682e-08,
+              2.1215869712006523e-08,
+              2.2221646723009842e-08,
+              2.3227492613660694e-08
+            ],
+            "excluded_unbracketed_edge_indices_in_window": [
+              0
+            ],
+            "excluded_unbracketed_edges_s": [
+              8.14945137739781e-09
+            ],
+            "reference_cycle_indices": [
+              1.807164569841554,
+              3.807218345195598,
+              5.80724634639048,
+              7.807285104043816,
+              9.807314164571824,
+              11.807337874752328,
+              13.807361709604976,
+              15.80738723638834,
+              17.807399077678618,
+              19.807412187750263,
+              21.807421949886017,
+              23.807431774235138,
+              25.807446993218594,
+              27.807456305864957,
+              29.807458699978067
+            ],
+            "reference_cycle_differences": [
+              2.0000537753540444,
+              2.000028001194882,
+              2.0000387576533356,
+              2.000029060528009,
+              2.0000237101805034,
+              2.000023834852648,
+              2.0000255267833644,
+              2.000011841290277,
+              2.000013110071645,
+              2.000009762135754,
+              2.000009824349121,
+              2.0000152189834566,
+              2.0000093126463625,
+              2.0000023941131104
+            ],
+            "anomaly_interval_indices": [],
+            "anomalies": [],
+            "interval_count": 14,
+            "max_absolute_error_reference_cycles": 5.377535404438305e-05
+          },
+          "div4": {
+            "divisor": 4,
+            "tolerance_reference_cycles": 0.25,
+            "all_divider_edges_s": [
+              8.839186463944635e-09,
+              1.0847904721710533e-08,
+              1.2857546704373366e-08,
+              1.4867850769771793e-08,
+              1.687864641226962e-08,
+              1.8889798313796412e-08,
+              2.090121633424452e-08,
+              2.2912822270281375e-08
+            ],
+            "retained_edge_indices_in_window": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "retained_divider_edges_s": [
+              8.839186463944635e-09,
+              1.0847904721710533e-08,
+              1.2857546704373366e-08,
+              1.4867850769771793e-08,
+              1.687864641226962e-08,
+              1.8889798313796412e-08,
+              2.090121633424452e-08,
+              2.2912822270281375e-08
+            ],
+            "excluded_unbracketed_edge_indices_in_window": [],
+            "excluded_unbracketed_edges_s": [],
+            "reference_cycle_indices": [
+              1.1811841260260054,
+              5.181361529432658,
+              9.18149099768197,
+              13.181587632036274,
+              17.181661591421065,
+              21.18172152112253,
+              25.181760721271335,
+              29.181793646967172
+            ],
+            "reference_cycle_differences": [
+              4.000177403406652,
+              4.000129468249312,
+              4.000096634354305,
+              4.000073959384791,
+              4.0000599297014645,
+              4.000039200148805,
+              4.000032925695837
+            ],
+            "anomaly_interval_indices": [],
+            "anomalies": [],
+            "interval_count": 7,
+            "max_absolute_error_reference_cycles": 0.00017740340665195475
+          },
+          "div8": {
+            "divisor": 8,
+            "tolerance_reference_cycles": 0.25,
+            "all_divider_edges_s": [
+              1.0029499407051689e-08,
+              1.404895428220917e-08,
+              1.807064670503936e-08,
+              2.2093530542373263e-08
+            ],
+            "retained_edge_indices_in_window": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "retained_divider_edges_s": [
+              1.0029499407051689e-08,
+              1.404895428220917e-08,
+              1.807064670503936e-08,
+              2.2093530542373263e-08
+            ],
+            "excluded_unbracketed_edge_indices_in_window": [],
+            "excluded_unbracketed_edges_s": [],
+            "reference_cycle_indices": [
+              3.5518330095820225,
+              11.552282986883704,
+              19.552541841834557,
+              27.552686256152306
+            ],
+            "reference_cycle_differences": [
+              8.000449977301681,
+              8.000258854950854,
+              8.000144414317749
+            ],
+            "anomaly_interval_indices": [],
+            "anomalies": [],
+            "interval_count": 3,
+            "max_absolute_error_reference_cycles": 0.0004499773016810593
+          }
+        }
+      }
+    },
+    "scope": {
+      "root": "/home/host/Desktop/workspace/simple_serdes_fork1",
+      "condition": "ff_v1950_t-40",
+      "supply_v": 1.95,
+      "temperature_c": -40,
+      "window_s": [
+        8e-09,
+        2.4e-08
+      ],
+      "window_endpoint_inclusion": "inclusive",
+      "boundary_id": "pll_r5_cold_prebiased_state_v1",
+      "analysis": "Isolated four-branch r5 frontend, fixed code and Vctrl, real bias / native PDK resistors, prebiased .ic/uic working-state transient.",
+      "not_qualified": [
+        "physical power-up",
+        "closed-loop PLL capture or lock",
+        "noise/jitter acceptance",
+        "mismatch",
+        "current DUT revision",
+        "TX/RX loaded fixture"
+      ],
+      "edge_indexing": "All stored edge and anomaly indices are zero-based; VCO edge indices refer to each case's signals.vco.positive_edges_s.",
+      "frequency_algorithm": "clock.period_stats(t, y, start=8e-9, stop=24e-9), default min_cycles=3; CMOS y=node-1.95/2 V.",
+      "edge_algorithm": "clock.edges within 8-24 ns; retain divider edges strictly bracketed by in-window VCO rising edges; np.interp(edge, vco_edges, np.arange(len(vco_edges))); diff versus k +/- 0.25.",
+      "amplitude_algorithm": "Window extrema/ptp use all stored samples with 8 ns <= t <= 24 ns; period_stats amplitude uses first-to-last complete rising-edge extent as defined in the shared function."
+    },
+    "registered_boundary": {
+      "id": "pll_r5_cold_prebiased_state_v1",
+      "kind": "initial_state_estimate",
+      "description": "FF cold r5 frontend working-state initial voltages from same-condition receiver and prescaler OP; not physical startup",
+      "upstream": {
+        "module": "pll",
+        "revision": "r5_candidate_20261105",
+        "report": "docs/history/pll_cold_convergence.md"
+      },
+      "nodes": "Approximate initial node voltages of the frontend and real bias; .ic with uic, no persistent forcing",
+      "load": null,
+      "consumer_sources": {
+        "analog/common/bias/spice/bandgap.spice": "ad2d731c92767461d69f59adbb9913abc9e62242c040c4fe650d3837251f57ba",
+        "analog/common/bias/spice/bias_dist.spice": "722d10730b79f848e77e1bb56ca7abb92428a62c3f9afa1feada364a93cdf012",
+        "analog/common/cml_buffer/spice/cml_buffer.spice": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9",
+        "analog/common/cml_buffer/spice/cml_delay_resistive.spice": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9",
+        "analog/common/cml_to_cmos/spice/cml_to_cmos.spice": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294",
+        "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice": "3cb5ce6acc83169cdff0e9eb796389144355295e51bbce22d81f235bed6fbaba",
+        "analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice": "7350cd73834f9adc29890520f2f14a74fb981024d0002e6424d208ea0c8531a9",
+        "analog/common/devices/spice/cmos_dff_reset.spice": "2f4b6cb4497236e2c3687d5546b53e8bfced7f6226c6203827bb2beac4cba124",
+        "analog/common/devices/spice/cmos_logic.spice": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517",
+        "analog/common/devices/spice/sky130_pfet_lvt.spice": "6678aabcd6f5ad26bedf23d7d306e20d65c534c279f0734c167effc866837157",
+        "analog/common/devices/spice/sky130_primitives.spice": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02",
+        "analog/pll/divider/spice/cml_div2.spice": "0235580e436ebb90efdda9cd08cd326b956eda873761b342920c880940e18a9b",
+        "analog/pll/divider/spice/cml_latch.spice": "4122b2bf55da3aa42250f26c1771e4988ad9cccf1630816d7df3b66d4143c833",
+        "analog/pll/divider/spice/cml_prescaler8.spice": "4d53a4afb30a346e1172e6489b0cb4e1801931144cadb506a26da4c418e5e839",
+        "analog/pll/top/spice/clock_frontend_r5.spice": "104ced34d95ce5dbf624553eb8e2fefcbf3accdedc3a77482bae5d1c0c0bd49a",
+        "analog/pll/vco/spice/cap_bank_3b.spice": "3939c05be2e6105318b77a76267cbfc0f836abee12226c0cd9c0350ec2bb476d",
+        "analog/pll/vco/spice/cap_bank_4b.spice": "387f1163de4e6b154c72cbcb2fa8b5224cf29d9e3706992c76db4fc3c09881e8",
+        "analog/pll/vco/spice/vco_ring4_4b.spice": "ddb1acb24a541cba270f1be723283cbf5bd6bec093f6bbfaf672722535d751b5"
+      },
+      "points": {
+        "ff_v1950_t-40:ll": {
+          "run": "results/analog/pll/convergence/20261106T151716Z/ff_v1950_t-40_ll_frontend_sparse_prebiased_native",
+          "condition": "ff_v1950_t-40",
+          "passive": "ll",
+          "code": 12,
+          "vctrl_v": 1.25,
+          "git_revision": "546f7c2-dirty",
+          "deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf",
+          "initial_state_file": "results/analog/pll/convergence/20261106T151716Z/snap/ff_v1950_t-40_ll_frontend_sparse_prebiased_native/operating_guesses.json",
+          "initial_state_sha256": "18f470c04275403b3a2c83b563f32c6b56083a0bde3c9c2c5e965b014d63946c",
+          "validated_until_s": 2.4e-08
+        },
+        "ff_v1950_t-40:hh": {
+          "run": "results/analog/pll/convergence/20261106T152241Z/ff_v1950_t-40_hh_frontend_sparse_prebiased_native",
+          "condition": "ff_v1950_t-40",
+          "passive": "hh",
+          "code": 4,
+          "vctrl_v": 1.205,
+          "git_revision": "546f7c2-dirty",
+          "deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333",
+          "initial_state_file": "results/analog/pll/convergence/20261106T152241Z/snap/ff_v1950_t-40_hh_frontend_sparse_prebiased_native/operating_guesses.json",
+          "initial_state_sha256": "d8f20c6fea1bc0e4c509a9d38122e48ccfd0c35753afdbbcb47e8674a45316b0",
+          "validated_until_s": 2.4e-08
+        }
+      },
+      "processing": "Compose same-PVT receiver/VCO/bias OP and four mapped copies of a prescaler OP; reuse identical restorer helper state only for feedback; see probe.py assembled_seed",
+      "validation": "Native PDK SPARSE, 1 ns smoke and 24 ns complete at both passive corners; divider and four full-rate/feedback functional checks",
+      "valid_while": [
+        "Exact consumer_sources hashes and unchanged code/control per point",
+        "Only the isolated four-branch r5 clock frontend boundary, not a TX or RX complete fixture",
+        "Prebiased working-state analysis only; no power-up, capture, noise or mismatch qualification"
+      ]
+    },
+    "hh_minus_ll": {
+      "vco": {
+        "frequency_hz_hh_minus_ll": -149179.03402733803,
+        "amplitude_pp_v_hh_minus_ll": -0.01792816211861492,
+        "window_min_v_hh_minus_ll": 0.008961537073615355,
+        "window_max_v_hh_minus_ll": -0.008966625044999565
+      },
+      "div2": {
+        "frequency_hz_hh_minus_ll": -26560.35235083103,
+        "amplitude_pp_v_hh_minus_ll": 0.002853937852802968,
+        "window_min_v_hh_minus_ll": -0.0012900547739891355,
+        "window_max_v_hh_minus_ll": 0.0015638830788138325
+      },
+      "div4": {
+        "frequency_hz_hh_minus_ll": -63230.04914045334,
+        "amplitude_pp_v_hh_minus_ll": -0.02407705551324857,
+        "window_min_v_hh_minus_ll": 0.011691324576337259,
+        "window_max_v_hh_minus_ll": -0.01238573093691131
+      },
+      "div8": {
+        "frequency_hz_hh_minus_ll": -37015.5508684814,
+        "amplitude_pp_v_hh_minus_ll": 0.009752163159766347,
+        "window_min_v_hh_minus_ll": -0.004919615906598507,
+        "window_max_v_hh_minus_ll": 0.00483254725316784
+      },
+      "c0p": {
+        "frequency_hz_hh_minus_ll": -104436.1457452774,
+        "amplitude_pp_v_hh_minus_ll": 0.0005138509666950952,
+        "window_min_v_hh_minus_ll": 7.818497035402827e-05,
+        "window_max_v_hh_minus_ll": 0.0005920359370494843
+      },
+      "c1p": {
+        "frequency_hz_hh_minus_ll": -146531.06038093567,
+        "amplitude_pp_v_hh_minus_ll": 1.4564405833361604e-05,
+        "window_min_v_hh_minus_ll": -6.883026654444513e-05,
+        "window_max_v_hh_minus_ll": -5.42658607112223e-05
+      },
+      "c2p": {
+        "frequency_hz_hh_minus_ll": -119226.50213336945,
+        "amplitude_pp_v_hh_minus_ll": -0.0002478728254691198,
+        "window_min_v_hh_minus_ll": -8.340572295342796e-05,
+        "window_max_v_hh_minus_ll": -0.00033127854842263105
+      },
+      "c3p": {
+        "frequency_hz_hh_minus_ll": -200463.19439053535,
+        "amplitude_pp_v_hh_minus_ll": -0.00013047426475010226,
+        "window_min_v_hh_minus_ll": -8.147109028119881e-05,
+        "window_max_v_hh_minus_ll": -0.00021194535503132883
+      },
+      "fb0": {
+        "frequency_hz_hh_minus_ll": -37458.585680514574,
+        "amplitude_pp_v_hh_minus_ll": -0.0003751393441793205,
+        "window_min_v_hh_minus_ll": 0.00011297164747942068,
+        "window_max_v_hh_minus_ll": -0.0002621676966998443
+      },
+      "fb1": {
+        "frequency_hz_hh_minus_ll": -18711.987662136555,
+        "amplitude_pp_v_hh_minus_ll": -0.0004195654196541554,
+        "window_min_v_hh_minus_ll": 0.0001287145361516806,
+        "window_max_v_hh_minus_ll": -0.00029085088350244703
+      },
+      "fb2": {
+        "frequency_hz_hh_minus_ll": 23664.19269952178,
+        "amplitude_pp_v_hh_minus_ll": -0.0003386279236265999,
+        "window_min_v_hh_minus_ll": -5.3166938879058157e-05,
+        "window_max_v_hh_minus_ll": -0.00039179486250562334
+      },
+      "fb3": {
+        "frequency_hz_hh_minus_ll": -3705.7897090017796,
+        "amplitude_pp_v_hh_minus_ll": -0.0005193187337764194,
+        "window_min_v_hh_minus_ll": 0.00010844745276804638,
+        "window_max_v_hh_minus_ll": -0.00041087128100825154
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "ll.execution",
+      "status": "pass",
+      "detail": {
+        "exit_code": 0,
+        "timed_out": false,
+        "log_failures": []
+      }
+    },
+    {
+      "id": "ll.deck_identity",
+      "status": "pass",
+      "detail": {
+        "actual_deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf",
+        "execution_deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf"
+      }
+    },
+    {
+      "id": "ll.prebiased_state",
+      "status": "pass",
+      "detail": {
+        "has_uic": true,
+        "ic_count": 941,
+        "criterion": "Deck explicitly supplies .ic voltages and uses uic."
+      }
+    },
+    {
+      "id": "ll.registered_deck_identity",
+      "status": "pass",
+      "detail": {
+        "boundary_id": "pll_r5_cold_prebiased_state_v1",
+        "registered_deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf",
+        "actual_deck_sha256": "d60bcd2b63b3e3551d34391859337967d6ee11fac47fc8f0aaee3885443075cf"
+      }
+    },
+    {
+      "id": "ll.simulator_log_present",
+      "status": "pass",
+      "detail": {
+        "detail": "Original final 40 lines and model warnings are retained, without assigning a new warning acceptance gate."
+      }
+    },
+    {
+      "id": "ll.raw_integrity",
+      "status": "pass",
+      "detail": {
+        "shape": [
+          6133,
+          46
+        ],
+        "names": [
+          "time",
+          "v(vbias)",
+          "v(bias_vbg)",
+          "v(ctrl)",
+          "v(xpll.v0p)",
+          "v(xpll.v0n)",
+          "v(xpll.v1p)",
+          "v(xpll.v1n)",
+          "v(xpll.v2p)",
+          "v(xpll.v2n)",
+          "v(xpll.v3p)",
+          "v(xpll.v3n)",
+          "v(xpll.xvco.xv0p.p2)",
+          "v(xpll.xvco.xv0n.p2)",
+          "v(xpll.xvco.xv1p.p2)",
+          "v(xpll.xvco.xv1n.p2)",
+          "v(xpll.xvco.xv2p.p2)",
+          "v(xpll.xvco.xv2n.p2)",
+          "v(xpll.xvco.xv3p.p2)",
+          "v(xpll.xvco.xv3n.p2)",
+          "v(pb0p)",
+          "v(pb0n)",
+          "v(xpll.b1p)",
+          "v(xpll.b1n)",
+          "v(xpll.b2p)",
+          "v(xpll.b2n)",
+          "v(xpll.b3p)",
+          "v(xpll.b3n)",
+          "v(p02p)",
+          "v(p02n)",
+          "v(p04p)",
+          "v(p04n)",
+          "v(p08p)",
+          "v(p08n)",
+          "v(c0p)",
+          "v(c0n)",
+          "v(c1p)",
+          "v(c1n)",
+          "v(c2p)",
+          "v(c2n)",
+          "v(c3p)",
+          "v(c3n)",
+          "v(fb0)",
+          "v(xpll.fb1)",
+          "v(xpll.fb2)",
+          "v(xpll.fb3)"
+        ],
+        "first_time_s": 4.0024921642385806e-09,
+        "last_time_s": 2.4e-08,
+        "all_values_finite": true,
+        "time_strictly_increasing": true,
+        "reached_24ns": true,
+        "covers_measurement_start": true,
+        "required_stop_s": 2.4e-08,
+        "relative_stop_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "ll.vco_reference",
+      "status": "pass",
+      "detail": {
+        "reason": null,
+        "period_stats": {
+          "cycles": 31,
+          "frequency_hz": 1989751366.2362084,
+          "period_mean_s": 5.025753553779882e-10,
+          "period_pp_s": 6.244334617608204e-13,
+          "period_rms_s": 1.8167800223443124e-13,
+          "duty": 0.49999732441124417,
+          "amplitude_pp_v": 0.5010265231379083
+        },
+        "criterion": "Reference is measurable by clock.period_stats; no absolute 2 GHz accuracy gate is assigned here."
+      }
+    },
+    {
+      "id": "ll.functional.div2",
+      "status": "pass",
+      "detail": {
+        "period_stats": {
+          "cycles": 15,
+          "frequency_hz": 994850739.7639847,
+          "period_mean_s": 1.0051759123556936e-09,
+          "period_pp_s": 1.1445242318185133e-12,
+          "period_rms_s": 3.367015815111654e-13,
+          "duty": 0.5001220313072149,
+          "amplitude_pp_v": 0.5110346129984773
+        },
+        "target_frequency_hz": 994875683.1181042,
+        "relative_frequency_error": 2.5071830121903282e-05,
+        "maximum_relative_error": 0.01,
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.edge.div2",
+      "status": "pass",
+      "detail": {
+        "interval_count": 15,
+        "anomaly_interval_indices": [],
+        "diagnostic_path": "observations.cases.ll.edge_diagnostics.div2",
+        "criterion": "Adjacent interpolated VCO cycle differences must be 2 +/- 0.25; at least 2 intervals.",
+        "interpretation": "Loose missing/extra-edge diagnostic; not a phase-noise or jitter acceptance metric."
+      }
+    },
+    {
+      "id": "ll.functional.div4",
+      "status": "pass",
+      "detail": {
+        "period_stats": {
+          "cycles": 7,
+          "frequency_hz": 497447139.6745556,
+          "period_mean_s": 2.01026384563037e-09,
+          "period_pp_s": 2.026696064521998e-12,
+          "period_rms_s": 6.775640853388456e-13,
+          "duty": 0.49998364484165947,
+          "amplitude_pp_v": 0.5484649464694402
+        },
+        "target_frequency_hz": 497437841.5590521,
+        "relative_frequency_error": 1.8692014813970204e-05,
+        "maximum_relative_error": 0.01,
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.edge.div4",
+      "status": "pass",
+      "detail": {
+        "interval_count": 7,
+        "anomaly_interval_indices": [],
+        "diagnostic_path": "observations.cases.ll.edge_diagnostics.div4",
+        "criterion": "Adjacent interpolated VCO cycle differences must be 4 +/- 0.25; at least 2 intervals.",
+        "interpretation": "Loose missing/extra-edge diagnostic; not a phase-noise or jitter acceptance metric."
+      }
+    },
+    {
+      "id": "ll.functional.div8",
+      "status": "pass",
+      "detail": {
+        "period_stats": {
+          "cycles": 3,
+          "frequency_hz": 248710113.81704208,
+          "period_mean_s": 4.0207452147910125e-09,
+          "period_pp_s": 2.3793925372285857e-12,
+          "period_rms_s": 9.884769915928431e-13,
+          "duty": 0.49996062002740865,
+          "amplitude_pp_v": 0.5542492839163
+        },
+        "target_frequency_hz": 248718920.77952605,
+        "relative_frequency_error": 3.540929840151197e-05,
+        "maximum_relative_error": 0.01,
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.edge.div8",
+      "status": "pass",
+      "detail": {
+        "interval_count": 3,
+        "anomaly_interval_indices": [],
+        "diagnostic_path": "observations.cases.ll.edge_diagnostics.div8",
+        "criterion": "Adjacent interpolated VCO cycle differences must be 8 +/- 0.25; at least 2 intervals.",
+        "interpretation": "Loose missing/extra-edge diagnostic; not a phase-noise or jitter acceptance metric."
+      }
+    },
+    {
+      "id": "ll.functional.c0p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989814687.0085971,
+        "target_frequency_hz": 1989751366.2362084,
+        "relative_frequency_error": 3.182345968610889e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49988633075951056,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.03207920938568143,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.021530751101106,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.c1p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989760129.3519812,
+        "target_frequency_hz": 1989751366.2362084,
+        "relative_frequency_error": 4.4041260236493684e-06,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49990203938423144,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.03207419021362404,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.021530348078839,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.c2p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989795488.4656951,
+        "target_frequency_hz": 1989751366.2362084,
+        "relative_frequency_error": 2.2174745164305065e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4999296456084444,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.03207283885001258,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.021817217582062,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.c3p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989816658.0926886,
+        "target_frequency_hz": 1989751366.2362084,
+        "relative_frequency_error": 3.2814077973730704e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49988763241409406,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.03207278809815173,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.02168896155239,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.fb0",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248707049.81752926,
+        "target_frequency_hz": 248718920.77952605,
+        "relative_frequency_error": 4.772842355371676e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49994906610473566,
+        "duty_gate": null,
+        "low_level_v": -0.032101528471850105,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.021863517068247,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.fb1",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248677180.87006137,
+        "target_frequency_hz": 248718920.77952605,
+        "relative_frequency_error": 0.0001678195986613007,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49963610629690897,
+        "duty_gate": null,
+        "low_level_v": -0.03042576929530945,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.015783055845998,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.fb2",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248705273.9885588,
+        "target_frequency_hz": 248718920.77952605,
+        "relative_frequency_error": 5.486832656109719e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4996080568641724,
+        "duty_gate": null,
+        "low_level_v": -0.030247529095841,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0159040191494917,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.functional.fb3",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248675229.4404699,
+        "target_frequency_hz": 248718920.77952605,
+        "relative_frequency_error": 0.00017566552202474828,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4996375934416334,
+        "duty_gate": null,
+        "low_level_v": -0.030416978926777194,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.015702169955985,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "ll.amplitudes_and_cmos_peaks",
+      "status": "ungraded",
+      "detail": {
+        "detail": "Reported in signals.*.window_min_v/window_max_v/window_amplitude_pp_v; no additional amplitude or overshoot specification is assigned."
+      }
+    },
+    {
+      "id": "hh.execution",
+      "status": "pass",
+      "detail": {
+        "exit_code": 0,
+        "timed_out": false,
+        "log_failures": []
+      }
+    },
+    {
+      "id": "hh.deck_identity",
+      "status": "pass",
+      "detail": {
+        "actual_deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333",
+        "execution_deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333"
+      }
+    },
+    {
+      "id": "hh.prebiased_state",
+      "status": "pass",
+      "detail": {
+        "has_uic": true,
+        "ic_count": 941,
+        "criterion": "Deck explicitly supplies .ic voltages and uses uic."
+      }
+    },
+    {
+      "id": "hh.registered_deck_identity",
+      "status": "pass",
+      "detail": {
+        "boundary_id": "pll_r5_cold_prebiased_state_v1",
+        "registered_deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333",
+        "actual_deck_sha256": "7de057b2bec764f44056dbaf737639a553276855a40a8e2d1ebc80ded6d12333"
+      }
+    },
+    {
+      "id": "hh.simulator_log_present",
+      "status": "pass",
+      "detail": {
+        "detail": "Original final 40 lines and model warnings are retained, without assigning a new warning acceptance gate."
+      }
+    },
+    {
+      "id": "hh.raw_integrity",
+      "status": "pass",
+      "detail": {
+        "shape": [
+          6125,
+          46
+        ],
+        "names": [
+          "time",
+          "v(vbias)",
+          "v(bias_vbg)",
+          "v(ctrl)",
+          "v(xpll.v0p)",
+          "v(xpll.v0n)",
+          "v(xpll.v1p)",
+          "v(xpll.v1n)",
+          "v(xpll.v2p)",
+          "v(xpll.v2n)",
+          "v(xpll.v3p)",
+          "v(xpll.v3n)",
+          "v(xpll.xvco.xv0p.p2)",
+          "v(xpll.xvco.xv0n.p2)",
+          "v(xpll.xvco.xv1p.p2)",
+          "v(xpll.xvco.xv1n.p2)",
+          "v(xpll.xvco.xv2p.p2)",
+          "v(xpll.xvco.xv2n.p2)",
+          "v(xpll.xvco.xv3p.p2)",
+          "v(xpll.xvco.xv3n.p2)",
+          "v(pb0p)",
+          "v(pb0n)",
+          "v(xpll.b1p)",
+          "v(xpll.b1n)",
+          "v(xpll.b2p)",
+          "v(xpll.b2n)",
+          "v(xpll.b3p)",
+          "v(xpll.b3n)",
+          "v(p02p)",
+          "v(p02n)",
+          "v(p04p)",
+          "v(p04n)",
+          "v(p08p)",
+          "v(p08n)",
+          "v(c0p)",
+          "v(c0n)",
+          "v(c1p)",
+          "v(c1n)",
+          "v(c2p)",
+          "v(c2n)",
+          "v(c3p)",
+          "v(c3n)",
+          "v(fb0)",
+          "v(xpll.fb1)",
+          "v(xpll.fb2)",
+          "v(xpll.fb3)"
+        ],
+        "first_time_s": 4.002244095362607e-09,
+        "last_time_s": 2.4e-08,
+        "all_values_finite": true,
+        "time_strictly_increasing": true,
+        "reached_24ns": true,
+        "covers_measurement_start": true,
+        "required_stop_s": 2.4e-08,
+        "relative_stop_tolerance": 1e-07
+      }
+    },
+    {
+      "id": "hh.vco_reference",
+      "status": "pass",
+      "detail": {
+        "reason": null,
+        "period_stats": {
+          "cycles": 31,
+          "frequency_hz": 1989602187.202181,
+          "period_mean_s": 5.026130381401622e-10,
+          "period_pp_s": 9.789513770292865e-13,
+          "period_rms_s": 2.8091281073367896e-13,
+          "duty": 0.4999992154442285,
+          "amplitude_pp_v": 0.48306442153848805
+        },
+        "criterion": "Reference is measurable by clock.period_stats; no absolute 2 GHz accuracy gate is assigned here."
+      }
+    },
+    {
+      "id": "hh.functional.div2",
+      "status": "pass",
+      "detail": {
+        "period_stats": {
+          "cycles": 15,
+          "frequency_hz": 994824179.4116338,
+          "period_mean_s": 1.0052027490841922e-09,
+          "period_pp_s": 1.8315638768256528e-12,
+          "period_rms_s": 5.567624458841512e-13,
+          "duty": 0.5004155305577261,
+          "amplitude_pp_v": 0.5146195408452485
+        },
+        "target_frequency_hz": 994801093.6010906,
+        "relative_frequency_error": 2.320645875020233e-05,
+        "maximum_relative_error": 0.01,
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.edge.div2",
+      "status": "pass",
+      "detail": {
+        "interval_count": 14,
+        "anomaly_interval_indices": [],
+        "diagnostic_path": "observations.cases.hh.edge_diagnostics.div2",
+        "criterion": "Adjacent interpolated VCO cycle differences must be 2 +/- 0.25; at least 2 intervals.",
+        "interpretation": "Loose missing/extra-edge diagnostic; not a phase-noise or jitter acceptance metric."
+      }
+    },
+    {
+      "id": "hh.functional.div4",
+      "status": "pass",
+      "detail": {
+        "period_stats": {
+          "cycles": 7,
+          "frequency_hz": 497383909.62541515,
+          "period_mean_s": 2.0105194009052487e-09,
+          "period_pp_s": 2.8876782709569616e-12,
+          "period_rms_s": 9.654599858393301e-13,
+          "duty": 0.49998374550565106,
+          "amplitude_pp_v": 0.5236924146643414
+        },
+        "target_frequency_hz": 497400546.8005453,
+        "relative_frequency_error": 3.344824455286943e-05,
+        "maximum_relative_error": 0.01,
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.edge.div4",
+      "status": "pass",
+      "detail": {
+        "interval_count": 7,
+        "anomaly_interval_indices": [],
+        "diagnostic_path": "observations.cases.hh.edge_diagnostics.div4",
+        "criterion": "Adjacent interpolated VCO cycle differences must be 4 +/- 0.25; at least 2 intervals.",
+        "interpretation": "Loose missing/extra-edge diagnostic; not a phase-noise or jitter acceptance metric."
+      }
+    },
+    {
+      "id": "hh.functional.div8",
+      "status": "pass",
+      "detail": {
+        "period_stats": {
+          "cycles": 3,
+          "frequency_hz": 248673098.2661736,
+          "period_mean_s": 4.0213437117738585e-09,
+          "period_pp_s": 3.428962176419908e-12,
+          "period_rms_s": 1.4214182946235854e-12,
+          "duty": 0.49994339372689717,
+          "amplitude_pp_v": 0.563847428079775
+        },
+        "target_frequency_hz": 248700273.40027264,
+        "relative_frequency_error": 0.00010926861369109364,
+        "maximum_relative_error": 0.01,
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.edge.div8",
+      "status": "pass",
+      "detail": {
+        "interval_count": 3,
+        "anomaly_interval_indices": [],
+        "diagnostic_path": "observations.cases.hh.edge_diagnostics.div8",
+        "criterion": "Adjacent interpolated VCO cycle differences must be 8 +/- 0.25; at least 2 intervals.",
+        "interpretation": "Loose missing/extra-edge diagnostic; not a phase-noise or jitter acceptance metric."
+      }
+    },
+    {
+      "id": "hh.functional.c0p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989710250.8628519,
+        "target_frequency_hz": 1989602187.202181,
+        "relative_frequency_error": 5.431420480217497e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4998580867197229,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.0320010244153274,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0221227870381555,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.c1p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989613598.2916002,
+        "target_frequency_hz": 1989602187.202181,
+        "relative_frequency_error": 5.735362321512838e-06,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49989120106582724,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.03214302048016848,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0214760822181277,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.c2p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989676261.9635618,
+        "target_frequency_hz": 1989602187.202181,
+        "relative_frequency_error": 3.723094086693912e-05,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4998803830273399,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.03215624457296601,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0214859390336395,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.c3p",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true,
+          "duty": true
+        },
+        "frequency_hz": 1989616194.898298,
+        "target_frequency_hz": 1989602187.202181,
+        "relative_frequency_error": 7.040450702655576e-06,
+        "maximum_relative_error": 0.01,
+        "duty": 0.499903225398526,
+        "duty_gate": [
+          0.45,
+          0.55
+        ],
+        "low_level_v": -0.032154259188432927,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0214770161973585,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.fb0",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248669591.23184875,
+        "target_frequency_hz": 248700273.40027264,
+        "relative_frequency_error": 0.00012337006310603194,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4999126194968123,
+        "duty_gate": null,
+        "low_level_v": -0.031988556824370684,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0216013493715472,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.fb1",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248658468.88239923,
+        "target_frequency_hz": 248700273.40027264,
+        "relative_frequency_error": 0.0001680919658907376,
+        "maximum_relative_error": 0.01,
+        "duty": 0.49956900547119587,
+        "duty_gate": null,
+        "low_level_v": -0.030297054759157768,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0154922049624955,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.fb2",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248728938.18125832,
+        "target_frequency_hz": 248700273.40027264,
+        "relative_frequency_error": 0.00011525834127068535,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4995482015710152,
+        "duty_gate": null,
+        "low_level_v": -0.03030069603472006,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.015512224286986,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.functional.fb3",
+      "status": "pass",
+      "detail": {
+        "gates": {
+          "frequency": true,
+          "low_level": true,
+          "high_level": true
+        },
+        "frequency_hz": 248671523.6507609,
+        "target_frequency_hz": 248700273.40027264,
+        "relative_frequency_error": 0.00011559999158294865,
+        "maximum_relative_error": 0.01,
+        "duty": 0.4995729002308196,
+        "duty_gate": null,
+        "low_level_v": -0.030308531474009148,
+        "low_level_must_be_below_v": 0.39,
+        "high_level_v": 2.0152912986749767,
+        "high_level_must_be_above_v": 1.56,
+        "level_definition": "Minimum/maximum stored samples in 8-24 ns; no overshoot gate.",
+        "reason": null
+      }
+    },
+    {
+      "id": "hh.amplitudes_and_cmos_peaks",
+      "status": "ungraded",
+      "detail": {
+        "detail": "Reported in signals.*.window_min_v/window_max_v/window_amplitude_pp_v; no additional amplitude or overshoot specification is assigned."
+      }
+    },
+    {
+      "id": "both.differences",
+      "status": "ungraded",
+      "detail": {
+        "detail": "Differences are descriptive: passive corner, code, Vctrl and initial state differ; no isolated causal attribution or acceptance gate."
+      }
+    }
+  ],
+  "unresolved": [],
+  "check_counts": {
+    "pass": 42,
+    "ungraded": 3
+  },
+  "process_exit_code": 0
+}

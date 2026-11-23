@@ -1,0 +1,33 @@
+* Full 16:1 All-CMOS + N-over-N SST 4 Gb/s SerDes TX Top-Level Netlist
+* Combines:
+*   1. serdes_tx_sst_serializer16 (pure static CMOS 16:4 serializer + /2, /4 dividers + 4-phase stagger)
+*   2. serdes_tx_sst_driver       (quarter-rate 4:1 fused N-over-N SST + built-in 2-tap FFE + ZQ + V_drv LDO)
+*
+* Zero CML! Zero 2 GHz clock tree! SKY130A 1.8 V, 4 Gb/s (250 ps UI), 400 mVpp diff into 100 ohm load.
+* Requires: sky130_primitives.spice, tx_sst_driver.spice, tx_sst_serializer16.spice.
+
+.subckt serdes_tx_sst_top
++ din0 din1 din2 din3 din4 din5 din6 din7
++ din8 din9 din10 din11 din12 din13 din14 din15
++ phi0 phi90 phi180 phi270 rst_n
++ m0 m1 m2 m3 m4 f0 f1 f2 ffe_en
++ vbg pad_p pad_n vdrv clk500_out clk250_out vdd vss
++ params: wpu=3.8 wpd=2.6 lres=3.75 ltop=63.0 lbot=37.0
+
+Xser
++ din0 din1 din2 din3 din4 din5 din6 din7
++ din8 din9 din10 din11 din12 din13 din14 din15
++ phi0 phi90 phi180 phi270 rst_n
++ d0 d1 d2 d3 db0 db1 db2 db3
++ clk500_out clk250_out
++ vdd vss
++ serdes_tx_sst_serializer16
+
+Xdrv
++ d0 d1 d2 d3 db0 db1 db2 db3
++ phi0 phi90 phi180 phi270
++ m0 m1 m2 m3 m4 f0 f1 f2 ffe_en
++ vbg pad_p pad_n vdrv vdd vss
++ serdes_tx_sst_driver wpu={wpu} wpd={wpd} lres={lres} ltop={ltop} lbot={lbot}
+
+.ends serdes_tx_sst_top

@@ -1,0 +1,21 @@
+* PLL Vctrl window detector for coarse re-coding (I-18), built from the monitor toolkit (analog/common/monitor).
+* Senses the integrating-capacitor node z of the loop filter (pll_loop_filter_k4): same DC as ctrl in lock, no CP
+* ripple, and the comparator gates' kickback goes into Ci (18 pF).  Thresholds:
+*   vlo = I x (r0 + code_lo * rstep) to vss      code_lo 0..15 -> 0.800 .. 1.100 V (20 mV), 5 = 0.900 V
+*   vhi = vdd - I x (r0 + code_hi * rstep)       code_hi 0..15 -> vdd - 0.320 .. 0.770 V (30 mV), 3 = vdd - 0.410 V
+* Run-time window: codes 5 / 3.  The power-up search of pll_coarse_ctrl moves one ladder to a per-temperature-class
+* stop threshold (the hi ladder's wide range is for that).  The lo ladder tops out at 1.10 V: its PMOS copy keeps
+* >= 0.55 V at 1.65 V (a 1.30 V top left 0.35 V and cost ~1.5 % of current at 1.65 V, window_dc 20261109T052006Z).
+* with I = 2 bandgap-copy fingers (~5 uA) into each ladder (vbg x R / r_ref: flat over resistor corners).
+* Outputs (CMOS, asynchronous): hi = z above vhi (VCO too slow at this code: go one code faster), lo = z below vlo.
+* Current inputs: ilo, ihi (~5 uA each, ladders), ibh, ibl (~2.5 uA each, comparator bias), all sourced by
+* serdes_bias_pcopy copies.  The codes are static parameters here (behavioural decode in serdes_tap_mux16).
+.subckt pll_vctrl_window z hi lo ilo ihi ibh ibl vdd vss params: code_lo=5 code_hi=3
+Xlo ilo vlo vdd vss serdes_vref_gnd code={code_lo} r0=160k rstep=4k
+Xhi ihi vhi vdd vss serdes_vref_vdd code={code_hi} r0=64k rstep=6k
+* both comparators are the high-common-mode variant: the upper threshold's +k sigma tail reaches VDD - 0.36 V, where
+* the LVT-pair serdes_cmp degrades at SF 1.65 V -40 C (MC sigma 12.6 mV, one non-trip); serdes_cmp_hv keeps sigma
+* 1.7-2.0 mV from 0.9 V to VDD - 0.35 V (cmp_mc 20261109T154004Z)
+Xh z vhi hi ibh vdd vss serdes_cmp_hv
+Xl vlo z lo ibl vdd vss serdes_cmp_hv
+.ends pll_vctrl_window

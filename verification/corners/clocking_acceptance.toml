@@ -1,0 +1,30 @@
+status = "provisional_engineering_review; not_product_specification"
+report = "docs/history/pll_buffered_pvt.md"
+environment_source = "verification/corners/pvt_plan.toml"
+SS_minus40_policy = "required_function_if_in_declared_product_envelope; never_silently_relax_to_bad_data_or_lost_clock"
+quality_policy = "grade_remaining_margin_after_all_minimum_requirements_are_met"
+explicit_derating_allowed = "only_as_a_separate_declared_rate_or_environment_profile"
+frozen_release_qualification_changed = false
+
+[exploratory_clock_screen]
+input_clock_hz = 2000000000
+feedback_divide = 8
+expected_feedback_hz = 250000000
+minimum_CML_diff_pp_v = 0.15
+nominal_CML_diff_pp_v = 0.4
+internal_400mV_ceiling_status = "applicability_under_review; historical_scores_retained; no_replacement_limit_adopted"
+swing_basis_report = "docs/design/cml_swing_target.md"
+period_relative_error_limit = 0.01
+CMOS_low_fraction = 0.2
+CMOS_high_fraction = 0.8
+CMOS_duty_min = 0.45
+CMOS_duty_max = 0.55
+startup_excluded_from_steady_period_metrics = true
+limits_are_product_signoff = false
+
+[remaining_product_limits]
+receiver_valid_CML_minimum_including_noise = "pending"
+phase_noise_and_jitter_budget = "pending_independent_verification"
+maximum_lock_and_restart_time = "pending"
+VCO_tuning_margin_all_environments = "selected_native_points_only; full_mapping_pending"
+device_terminal_voltage_limits = "must_review; not_a_quality_grade_exception"

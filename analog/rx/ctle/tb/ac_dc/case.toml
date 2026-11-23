@@ -1,0 +1,14 @@
+id = "rx_ctle_ac_dc"
+status = "TT_16_cases_completed_nominal_not_signoff"
+corner = "tt"
+temperature_c = 27
+input_common_mode_v = [0.75, 0.8, 0.9, 1.0]
+eq_codes = [0, 1, 2, 3]
+output_capacitance_per_leg_f = 2e-14
+ac_frequency_range_hz = [1000000, 20000000000]
+dc_differential_input_range_v = [-0.2, 0.2]
+dc_differential_input_step_v = 0.002
+measurements = ["operating_point", "polarity", "differential_gain", "relative_peaking_at2GHz", "input_capacitance", "DC_transfer", "output_common_mode", "supply_power"]
+noise_or_pvt_qualified = false
+template = "analog/rx/ctle/tb/ac_dc/tb_rx_ctle_ac_dc_ngspice.cir.in"
+results = "docs/data/rx_ctle_ac_dc.json"

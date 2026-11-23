@@ -1,0 +1,105 @@
+{
+  "run_directory": "results/verification/channel/pcb_family/20261028T135303Z_ngspice_passive_ac",
+  "checks": [
+    {
+      "case": "C0_debug",
+      "touchstone_roundtrip_max_complex_error": 7.034014214903312e-14,
+      "ngspice_completed_frequency_points_hz": [
+        1000000.0,
+        2000500000.0,
+        4000000000.0
+      ],
+      "max_magnitude_error_db_vs_exact": 0.00021130536876062873,
+      "max_phase_error_deg_vs_exact": 0.015229606637624866,
+      "exit_code": 0
+    },
+    {
+      "case": "C1_loss3",
+      "touchstone_roundtrip_max_complex_error": 6.904616592270928e-14,
+      "ngspice_completed_frequency_points_hz": [
+        1000000.0,
+        2000500000.0,
+        4000000000.0
+      ],
+      "max_magnitude_error_db_vs_exact": 0.003343331546173032,
+      "max_phase_error_deg_vs_exact": 0.25250525289725284,
+      "exit_code": 0
+    },
+    {
+      "case": "C2_loss6",
+      "touchstone_roundtrip_max_complex_error": 7.03599024303893e-14,
+      "ngspice_completed_frequency_points_hz": [
+        1000000.0,
+        2000500000.0,
+        4000000000.0
+      ],
+      "max_magnitude_error_db_vs_exact": 0.006715015015744666,
+      "max_phase_error_deg_vs_exact": 0.5051740929962495,
+      "exit_code": 0
+    },
+    {
+      "case": "C3_loss10",
+      "touchstone_roundtrip_max_complex_error": 6.729499434424964e-14,
+      "ngspice_completed_frequency_points_hz": [
+        1000000.0,
+        2000500000.0,
+        4000000000.0
+      ],
+      "max_magnitude_error_db_vs_exact": 0.011210229825049964,
+      "max_phase_error_deg_vs_exact": 0.8434767271824827,
+      "exit_code": 0
+    },
+    {
+      "case": "C4_stub",
+      "touchstone_roundtrip_max_complex_error": 6.973551227806239e-14,
+      "ngspice_completed_frequency_points_hz": [
+        1000000.0,
+        2000500000.0,
+        4000000000.0
+      ],
+      "max_magnitude_error_db_vs_exact": 0.00440714832969815,
+      "max_phase_error_deg_vs_exact": 0.5161206301724519,
+      "exit_code": 0
+    },
+    {
+      "case": "C5_skew",
+      "touchstone_roundtrip_max_complex_error": 6.961410994943693e-14,
+      "ngspice_completed_frequency_points_hz": [
+        1000000.0,
+        2000500000.0,
+        4000000000.0
+      ],
+      "max_magnitude_error_db_vs_exact": 0.006929042981447717,
+      "max_phase_error_deg_vs_exact": 0.5050101995535311,
+      "exit_code": 0
+    }
+  ],
+  "scope": "generated netlist syntax and AC agreement at1MHz,2.0005GHz,4GHz; not wideband transient validation",
+  "sha256": {
+    "C2_loss6.cir": "2ef60ad009069d703159f7f8267bbd9d3e9049c98bb4dfa67c0253b46b2c9422",
+    "C5_skew.dat": "6bf9666c05139117420f5957242e6c8c47ffd7817fc0af25d806301594000ea4",
+    "C1_loss3.log": "239c5e01a7879153dd50b64e1c7d10904d1ab89b7641545215c92020c75d9519",
+    "C5_skew.log": "0e65fc9fd371769701571a8f7e63e7c5d6076039d3cefc22a3f8fd71e3cf1a33",
+    "C4_stub.cir": "1c6f0447c5fb00d21aa9830e11ab02fe8f46ecf95ee365bbb58ab24e1eb683e9",
+    "C0_debug.cir": "dd522a989fdcb46728a65ec3b8b29649201b7b6cf064802f6882c0e2a5b0c2fe",
+    "C0_debug.dat": "76b9722838e256890746eece8328e11c23e2f4b23d8744b730572664cc4e0144",
+    "C3_loss10.cir": "fbfe66ccb0e83221ebcc7c485229f89c92d9d65becf1b208952c016a4d0e78d3",
+    "C2_loss6.dat": "729ec4214d9acc3273cbbdf0224260a81625e6982bff4be386db14758a2d2781",
+    "C3_loss10.log": "0e65fc9fd371769701571a8f7e63e7c5d6076039d3cefc22a3f8fd71e3cf1a33",
+    "C4_stub.dat": "8d5e41ee1014d083b4f54e0c74d030bf43c8814aef8da79bb1955f3e865a7941",
+    "C5_skew.cir": "4d2c375e0ca060aa2e86127a10b37cc67a4d2d6347694a8931612fdb82bcba25",
+    "C1_loss3.cir": "ff2fe3b82f6386e01159f1a1c582eb080ce582d631d1c36ad3240b206a76a9df",
+    "C2_loss6.log": "0e65fc9fd371769701571a8f7e63e7c5d6076039d3cefc22a3f8fd71e3cf1a33",
+    "C3_loss10.dat": "9ed3b34f724c793b3d3a00d9312def5770708427f24d08c77e5160ff61784311",
+    "C1_loss3.dat": "58768ee4fa8b1a6826a31c12b3521be6da341f0f28fbb3301525b5e96ea99d80",
+    "C4_stub.log": "22a76b59482d296bb3f1dddb5fee68b99eb7769a4fdeff5d31f250a3069fa078",
+    "C0_debug.log": "239c5e01a7879153dd50b64e1c7d10904d1ab89b7641545215c92020c75d9519",
+    "models/C0_debug.spice": "14cf8643abc9e5ed8e07120d7b87f01a4e7ebee31673cd238463bb080926489e",
+    "models/C3_loss10.spice": "549e04c272a744e15f561d5be55370b7bb290a64dc342d1075d5bed7e3990c94",
+    "models/C5_skew.spice": "0a92103f472e02a8d61341ac357da6e1cd4968ca43c3988ab0707040c45ca3dd",
+    "models/pcb_foster_cells.spice": "d6295e21f5abf411970a3111c4a34ab54d0bbc8c1ab54169892f37be89f84936",
+    "models/C1_loss3.spice": "69175d027e35a454e95d75a7f2c3e821a2dcb11e319cbd3001d5c31e71b5f5ac",
+    "models/C2_loss6.spice": "118e373dc3f4c32557cb8f9fda34036fbc0701dd22c89fada9773d4f62aaa85c",
+    "models/C4_stub.spice": "cade5a611fe3edcce72f01b2d0ce119e6a6a4fb5221873bd58b4837d639ca8c9"
+  }
+}

@@ -1,0 +1,187 @@
+TX r2 driven by single-chain retimed clocks; parent stimuli.inc holds data only
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_mux2.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_data_latch.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_latched_mux2.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_lowov_cells.spice"
+.include "@PROJECT_ROOT@/analog/tx/serializer/spice/serializer16_retimed_lowov.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_latch.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_div2.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_prescaler8.spice"
+.include "@PROJECT_ROOT@/analog/tx/clock_distribution/spice/tx_clock_retime.spice"
+.include "@PROJECT_ROOT@/analog/tx/output_driver/spice/@DRIVER_FILE@"
+.include "@PROJECT_ROOT@/verification/models/channel/diff_rlc16.spice"
+.param trim250=@TRIM250@ trim500=@TRIM500@ trim1g=@TRIM1G@ trim2g=@TRIM2G@ input_pp=.3
+.param supply=@SUPPLY@ iref=0.85m cload=2f wdata=40 wselect=@WSELECT@ wsf=@WSF@ lowov_scale=@TAIL_SCALE@ wtail=12 rload=500 rout=400
+Vdata vdata 0 {supply}
+Vmux vmux 0 {supply}
+Vbias vb 0 {supply}
+Vclock vclock 0 {supply}
+Vlogic vlogic 0 {supply}
+Iref vb vbias {iref}
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=0.5 nf=4
+.include "stimuli.inc"
+* Clock generation. Ideal 2 GHz sines 45 deg apart stand in for the VCO and
+* drive real extraction buffers; every phase carries a prescaler as in the r3
+* frontend (b0 active). The /2, /4, /8 taps of the b0 chain are retimed on
+* chosen phases, so their relation is fixed by construction.
+Vgen vgen 0 {supply}
+Vp0 sp0 0 SIN({supply-.15} {input_pp/4} 2e9 0 0 0)
+Vn0 sn0 0 SIN({supply-.15} {-input_pp/4} 2e9 0 0 0)
+Vp1 sp1 0 SIN({supply-.15} {input_pp/4} 2e9 0 0 -45)
+Vn1 sn1 0 SIN({supply-.15} {-input_pp/4} 2e9 0 0 -45)
+Vp2 sp2 0 SIN({supply-.15} {input_pp/4} 2e9 0 0 -90)
+Vn2 sn2 0 SIN({supply-.15} {-input_pp/4} 2e9 0 0 -90)
+Vp3 sp3 0 SIN({supply-.15} {input_pp/4} 2e9 0 0 -135)
+Vn3 sn3 0 SIN({supply-.15} {-input_pp/4} 2e9 0 0 -135)
+Xb0 sp0 sn0 b0p b0n vbias vgen 0 serdes_cml_buffer
+Xb1 sp1 sn1 b1p b1n vbias vgen 0 serdes_cml_buffer
+Xb2 sp2 sn2 b2p b2n vbias vgen 0 serdes_cml_buffer
+Xb3 sp3 sn3 b3p b3n vbias vgen 0 serdes_cml_buffer
+Xpre0 b0p b0n d02p d02n d04p d04n d08p d08n vbias vgen 0 pll_cml_prescaler8
+Xpre1 b1p b1n x12p x12n x14p x14n x18p x18n vbias vgen 0 pll_cml_prescaler8
+Xpre2 b2p b2n x22p x22n x24p x24n x28p x28n vbias vgen 0 pll_cml_prescaler8
+Xpre3 b3p b3n x32p x32n x34p x34n x38p x38n vbias vgen 0 pll_cml_prescaler8
+* Per-branch phase fanout buffers isolate the extraction buffers from retimer
+* clock loads (identical on all four branches).
+Xf0 b0p b0n f0p f0n vbias vgen 0 serdes_cml_buffer wn=40 wt=32 rload=200
+Xf1 b1p b1n f1p f1n vbias vgen 0 serdes_cml_buffer wn=40 wt=32 rload=200
+Xf2 b2p b2n f2p f2n vbias vgen 0 serdes_cml_buffer wn=40 wt=32 rload=200
+Xf3 b3p b3n f3p f3n vbias vgen 0 serdes_cml_buffer wn=40 wt=32 rload=200
+Xrbias vbias vbias_rt vgen 0 pll_cml_tail_bias
+@RETIMERS@
+* 2 GHz through a clock-to-q replica so it tracks the retimers over PVT.
+Vhi rhi 0 {supply-.05}
+Vlo rlo 0 {supply-.35}
+Xr2g @CK2G@ r2gp r2gn rhi rlo vbias vbias_rt vgen 0 serdes_cml_clk_replica_lowov @RP_PARAMS@
+@INITIAL_STATE@
+Xconv0 d0 d0p d0n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv1 d1 d1p d1n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv2 d2 d2p d2n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv3 d3 d3p d3n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv4 d4 d4p d4n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv5 d5 d5p d5n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv6 d6 d6p d6n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv7 d7 d7p d7n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv8 d8 d8p d8n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv9 d9 d9p d9n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv10 d10 d10p d10n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv11 d11 d11p d11n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv12 d12 d12p d12n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv13 d13 d13p d13n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv14 d14 d14p d14n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv15 d15 d15p d15n vbias vdata 0 serdes_cmos_to_cml_data
+Xclocks @S250@ @S500@ @S1G@ @S2G@ c250p c250n c500p c500n c1gp c1gn c2gp c2gn vbias vclock 0 serdes_cml_clock_distribution_tx_lowov
++ trim250={trim250} trim500={trim500} trim1g={trim1g} trim2g={trim2g}
+Xtree d0p d0n d1p d1n d2p d2n d3p d3n d4p d4n d5p d5n d6p d6n d7p d7n d8p d8n d9p d9n d10p d10n d11p d11n d12p d12n d13p d13n d14p d14n d15p d15n c250p c250n c500p c500n c1gp c1gn c2gp c2gn qp qn vbias vlogic vmux 0 serdes16_cml_tree_retimed_lowov
++ wdata={wdata} wselect={wselect} wtail={wtail} rload={rload} rout={rout} tail_scale={lowov_scale} wsf={wsf}
+Cqp qp 0 {cload}
+Cqn qn 0 {cload}
+
+* Actual data-port loading, not a voltage-source replay. 2fF remaining wire/pad
+* budget replaces the old total20fF proxy; driver gate charge is now explicit.
+Vslinep qp tip 0
+Vslinen qn tin 0
+Vlinepre linepre 0 {supply}
+Vlineout lineout 0 {supply}
+Vtxen tx_en 0 PWL(0 0 4n 0 4.1n {supply})
+Xline_driver tip tin tx_en lqp lqn vbias linepre lineout 0 @DRIVER_CELL@ @DRIVER_PARAMS@
+Clpp lqp 0 200f
+Clpn lqn 0 200f
+Rlpp lqp llp 0.3
+Rlpn lqn lln 0.3
+Llpp llp lap 0.5n
+Llpn lln lan 0.5n
+Clacp lap ltp 10n
+Clacn lan ltn 10n
+Xchannel ltp ltn lxp lxn 0 serdes_diff_rlc16
+Rlc0 lxp lrp .01
+Rlc1 lxn lrn .01
+Clc0 lrp 0 100f
+Clc1 lrn 0 100f
+Vlcm lcm 0 .9
+Rlterm0 lrp lcm 50
+Rlterm1 lrn lcm 50
+
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(r2gp) v(r2gn) v(xr2g.ckp) v(xr2g.ckn) v(xr250.ckp) v(xr250.ckn) v(xr500.ckp) v(xr500.ckn) v(xr1g.ckp) v(xr1g.ckn) v(r250p) v(r250n) v(r500p) v(r500n) v(r1gp) v(r1gn) v(b0p) v(b0n) v(b1p) v(b1n) v(b2p) v(b2n) v(b3p) v(b3n) v(d02p) v(d02n) v(d04p) v(d04n) v(d08p) v(d08n) v(vgen) i(Vgen) v(xclocks.a250p) v(xclocks.a250n) v(xclocks.a500p) v(xclocks.a500n) v(xclocks.a1gp) v(xclocks.a1gn) v(xclocks.a2gp) v(xclocks.a2gn) v(vclock) i(Vclock) v(c250p) v(c250n) v(c500p) v(c500n) v(c1gp) v(c1gn) v(qp) v(qn) v(c2gp) v(c2gn) v(vdata) i(Vdata) v(vmux) i(Vmux) v(vb) i(Vbias) v(xtree.g1_0p) v(xtree.g1_0n) v(xtree.g2_0p) v(xtree.g2_0n) v(xtree.g3_0p) v(xtree.g3_0n) v(xtree.g3_1p) v(xtree.g3_1n) v(d0p) v(d0n)
+.save v(lqp) v(lqn) v(lrp) v(lrn) v(xline_driver.ip) v(xline_driver.in) v(xline_driver.gp) v(xline_driver.gn) i(Vslinep) i(Vslinen) v(linepre) i(Vlinepre) v(lineout) i(Vlineout) v(tx_en)
+.save v(vbias) v(xtree.xr4_0.ahp) v(xtree.xr4_0.ahn) v(xtree.xr4_0.bhp) v(xtree.xr4_0.bhn) v(xtree.xr4_0.sap) v(xtree.xr4_0.san) v(xtree.xr4_0.xla.tail) v(xtree.xr4_0.xlb.tail) v(xtree.xr4_0.xm.tail) v(xline_driver.tail)
+.save v(vlogic) i(Vlogic) v(xtree.vbias_logic) v(xline_driver.vbtail)
++ @m.xtree.xr4_0.xla.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat] @m.xtree.xr4_0.xlb.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat] @m.xtree.xr4_0.xm.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat]
+.control
+set num_threads=1
+set wr_singlescale
+set wr_vecnames
+tran @MAX_STEP@ @STOP@ 0 @MAX_STEP@
+let dout=v(qp)-v(qn)
+let ds=v(c2gp)-v(c2gn)
+let cmout=(v(qp)+v(qn))/2
+let pdata=-v(vdata)*i(Vdata)
+let pmux=-v(vmux)*i(Vmux)
+let pbias=-v(vb)*i(Vbias)
+let g1=v(xtree.g1_0p)-v(xtree.g1_0n)
+let g2=v(xtree.g2_0p)-v(xtree.g2_0n)
+let g3a=v(xtree.g3_0p)-v(xtree.g3_0n)
+let g3b=v(xtree.g3_1p)-v(xtree.g3_1n)
+let din0=v(d0p)-v(d0n)
+let d250=v(c250p)-v(c250n)
+let d500=v(c500p)-v(c500n)
+let d1g=v(c1gp)-v(c1gn)
+let cm250=(v(c250p)+v(c250n))/2
+let cm500=(v(c500p)+v(c500n))/2
+let cm1g=(v(c1gp)+v(c1gn))/2
+let cm2g=(v(c2gp)+v(c2gn))/2
+let src250=v(@S250_P@)-v(@S250_N@)
+let src500=v(@S500_P@)-v(@S500_N@)
+let src1g=v(@S1G_P@)-v(@S1G_N@)
+let src2g=v(@S2G_P@)-v(@S2G_N@)
+let pclock=-v(vclock)*i(Vclock)
+let pgen=-v(vgen)*i(Vgen)
+let pre250=v(xclocks.a250p)-v(xclocks.a250n)
+let pre500=v(xclocks.a500p)-v(xclocks.a500n)
+let pre1g=v(xclocks.a1gp)-v(xclocks.a1gn)
+let pre2g=v(xclocks.a2gp)-v(xclocks.a2gn)
+let line_tx=v(lqp)-v(lqn)
+let line_rx=v(lrp)-v(lrn)
+let line_iso=v(xline_driver.ip)-v(xline_driver.in)
+let line_pre=v(xline_driver.gp)-v(xline_driver.gn)
+let line_cmtx=(v(lqp)+v(lqn))/2
+let line_cmrx=(v(lrp)+v(lrn))/2
+let line_ppre=-v(linepre)*i(Vlinepre)
+let line_pout=-v(lineout)*i(Vlineout)
+
+let latchA=v(xtree.xr4_0.ahp)-v(xtree.xr4_0.ahn)
+let latchB=v(xtree.xr4_0.bhp)-v(xtree.xr4_0.bhn)
+let latchclk=v(xtree.xr4_0.sap)-v(xtree.xr4_0.san)
+let plogic=-v(vlogic)*i(Vlogic)
+let cmlocal=(v(xtree.xr4_0.sap)+v(xtree.xr4_0.san))/2
+let ila=(2*v(vmux)-v(xtree.xr4_0.ahp)-v(xtree.xr4_0.ahn))/300
+let ilb=(2*v(vmux)-v(xtree.xr4_0.bhp)-v(xtree.xr4_0.bhn))/300
+let imu=(2*v(vmux)-v(qp)-v(qn))/400
+let gb0=v(b0p)-v(b0n)
+let gb1=v(b1p)-v(b1n)
+let gb2=v(b2p)-v(b2n)
+let gb3=v(b3p)-v(b3n)
+let gd2=v(d02p)-v(d02n)
+let gd4=v(d04p)-v(d04n)
+let gd8=v(d08p)-v(d08n)
+let gr250=v(r250p)-v(r250n)
+let gr500=v(r500p)-v(r500n)
+let gr1g=v(r1gp)-v(r1gn)
+let gk250=v(xr250.ckp)-v(xr250.ckn)
+let gk500=v(xr500.ckp)-v(xr500.ckn)
+let gk1g=v(xr1g.ckp)-v(xr1g.ckn)
+@EXTRA_LETS@
+wrdata waveforms.tsv dout ds cmout pdata pmux pbias g1 g2 g3a g3b din0 d250 d500 d1g cm250 cm500 cm1g cm2g src250 src500 src1g src2g pclock pre250 pre500 pre1g pre2g line_tx line_rx line_iso line_pre line_cmtx line_cmrx line_ppre line_pout i(Vslinep) i(Vslinen) v(tx_en) v(vbias) latchA latchB latchclk v(xtree.xr4_0.xla.tail) v(xtree.xr4_0.xlb.tail) v(xtree.xr4_0.xm.tail) v(xline_driver.tail) plogic v(xtree.vbias_logic) @m.xtree.xr4_0.xla.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat] @m.xtree.xr4_0.xlb.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat] @m.xtree.xr4_0.xm.xtail.xmos.msky130_fd_pr__nfet_01v8[vdsat] v(xline_driver.vbtail) cmlocal ila ilb imu pgen gb0 gb1 gb2 gb3 gd2 gd4 gd8 gr250 gr500 gr1g gk250 gk500 gk1g @EXTRA_WR@
+quit
+.endc
+.end

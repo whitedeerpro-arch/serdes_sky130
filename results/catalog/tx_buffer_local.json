@@ -1,0 +1,23 @@
+{
+  "data": "docs/data/tx_buffer_local.json",
+  "data_sha256": "45742c329bb4528009e9dda302001ae37e6e6238a97448817d6d927608ef846d",
+  "campaign": "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60",
+  "summary": "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60/analysis/20261110T162413Z_71bd670e/summary.json",
+  "summary_sha256": "3b3b340fe55a845dc4d378b42c0b55649e4bfa7ce0df288400c5f6fb070234cd",
+  "runner_sha256": "0e70cb872ae29073d419592b4ac15f910e8263492b922a1b4c420fd46b5ed2c0",
+  "evidence": {
+    "tt_v1800_t27": {
+      "tt_v1800_t27.raw": "337f46681258795da87c69ecf74ff7fe3196857d1b1fb86b6edf065fb64d9c12",
+      "execution.json": "cae7d6a757a006756c90e6b909613e89c4fd4a4b480298501670c456638dc2f1",
+      "tb.cir": "c66773559006bb23fb4324584eda7acb6a370ed1353fd9a1e4965ab9ce32849b",
+      "simulator.log": "340abdc96d2974d5c7f7468a0f61d00ef2b277d2909092a00eb78730faee6afd"
+    },
+    "fs_v1650_t85": {
+      "fs_v1650_t85.raw": "240ddeb8c2d02f99e4c621f060e5b760cb5a801fae45c381c83ea0b4328cae9a",
+      "execution.json": "a4815c497e0091489aa41b9fce19f443ebf5cd8cdeccd200f5052baad71c30cf",
+      "tb.cir": "bb634d7a0fdd006a18afe93b0494fb3fa709dc2d63d1de61f665eb6483436dc3",
+      "simulator.log": "f3e26f3f36559eaaf1db8da1a6a8bc607e812e829f1291c37b6dba757f1d8dd9"
+    }
+  },
+  "scope": "TT and FS low-voltage hot, physical archived extra5 clock/slice/driver/channel cut, fixed ideal recorded input/bias/supplies. Only Xe2 changes. Local8bit window, no upstream impedance or full TX/PVT/noise/I17 qualification."
+}

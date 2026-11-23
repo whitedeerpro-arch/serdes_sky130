@@ -1,0 +1,26 @@
+PLL Vctrl window detector (pll_vctrl_window): DC trip points of hi and lo
+* Real bandgap reference and serdes_bias_pcopy copies (ladders 2 fingers, comparators 1 finger); z swept.
+.lib "@MODEL_LIBRARY@" @SECTION@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bandgap.spice"
+.include "@PROJECT_ROOT@/analog/bias/spice/bias_dist.spice"
+.include "@PROJECT_ROOT@/analog/common/monitor/spice/monitor.spice"
+.include "@PROJECT_ROOT@/analog/pll/coarse/spice/vctrl_window.spice"
+Vdd vdd 0 @SUPPLY@
+Xref vbg i0 i1 i2 i3 vgi vdd 0 serdes_bias_ref
+Vi0 i0 0 0.7
+Vi1 i1 0 0.7
+Vi2 i2 0 0.7
+Vi3 i3 0 0.7
+Xc1 ilo vgi vdd serdes_bias_pcopy n=2
+Xc2 ihi vgi vdd serdes_bias_pcopy n=2
+Xc3 ibh vgi vdd serdes_bias_pcopy n=1
+Xc4 ibl vgi vdd serdes_bias_pcopy n=1
+Vmeas vdd vddw 0
+Xw z hi lo ilo ihi ibh ibl vddw 0 pll_vctrl_window code_lo=@CODE_LO@ code_hi=@CODE_HI@
+Vz z 0 1.0
+.nodeset v(vbg)=1.23 v(xref.xbg.s)=1.23 v(xref.vg)=0.9 v(vgi)=0.9 v(xref.xbg.ta)=0.95 v(xref.xbg.tb)=0.95
+.temp 27
+.options reltol=1e-5 abstol=1p vntol=1u

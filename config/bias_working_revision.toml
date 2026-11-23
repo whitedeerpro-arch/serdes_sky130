@@ -1,0 +1,48 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
+revision = "bandgap_constant_IR_dist_decoupled_B2_working"
+status = "module_topologies_characterized; real_bias_in_RX_TX_and_native_PLL_benches; simultaneous_loading_ready_and_startup_handoff_open"
+report = "docs/design/bias.md"
+integration_map = "docs/overview/development_map.md"
+bandgap = "analog/bias/spice/bandgap.spice"
+distribution_and_B2 = "analog/bias/spice/bias_dist.spice"
+bench_replacement = "src/serdes_flow/bias.py"
+reference_policy = "constant_I_times_R; high_po_reference_and_internal_loads; does_not_guarantee_constant_speed"
+bandgap_ratio_n = 8
+rref_trim_bits = 5
+nominal_trim_code = 15
+vgi_external_compensation_f = 2e-12
+vbg_decoupling_f = 5e-12
+cml_bias_decoupling_f = 5e-12
+cml_copy_a = 0.0002125
+ctle_copy_a = 0.00005
+cp_copy_a = 0.00005
+vcm_target_v = 1.05
+B2_nominal_target_range_v = [0.95, 1.35]
+B2_target_codes = 16
+B2_tail_a = 0.0003
+pvt_scope = "135_MOS_V_T_x_tt_hh_ll; DC_and_startup_with_1us_supply_ramp"
+distribution_mismatch_scope = "200_samples_tt_mm_at_3_temperatures; shared_reference_and_local_copy_components"
+pnp_mismatch_in_model = false
+B2_pvt_scope = "405_conditions; codes0_7_15; within512ns_to10mV; 44_final_errors_exceed10mV_but_within40mV"
+noise_psrr_scope = "90_conditions_bias_PSRR_characterization; VCO_bias_noise_in_7_corner_model; no_full_system_budget_closure"
+system_ready_detector_implemented = false
+full_system_startup_qualified = false
+
+[physical_reference_candidate]
+report = "docs/design/physical_reference_card.md"
+data = "docs/data/physical_reference_card.json"
+scope = "TT1.8V x three temperatures x five sampled trim codes x generic/fixed_s1/fixed_s8 = 45 OP; not MOS45, all32codes or startup"
+production_adopted = false
+
+[capacitor_review_candidate]
+report = "docs/design/bias_cap_review.md"
+evidence_manifest = "config/bias_cap_review_evidence.json"
+current_shared_total_pf = 13
+candidate_shared_total_pf = 11
+candidate_cc_pf = 4
+candidate_cvbg_pf = 5
+candidate_cvgi_pf = 2
+candidate_rz_ohm = 30000
+candidate_rz_physical_segments = 4
+production_adopted = false
+scope = "five boundary profiles x two loads; three-profile startup/DC-noise comparison; no new full-PVT, MC, layout area or PEX qualification"

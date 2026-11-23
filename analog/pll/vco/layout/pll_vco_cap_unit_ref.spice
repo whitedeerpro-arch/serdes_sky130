@@ -1,0 +1,10 @@
+* Official layout reference (Claude, 2026-11-12, VCO r6; docs/layout/tasks.md T3).  Device values from
+* analog/pll/vco/spice/vco_ring4_r6.spice, vco_delay_r6.spice, cap_bank_5b.spice.  Resistors are fixed-width high_po
+* (3 terminals, body vss).
+* Half unit of the 5-bit bank.  MIM: the FIRST pin is the top plate (capm) and must be 'node'; the bottom plate (met3)
+* goes to the switch drain 'plate' (LVS does not check this: read it in *_lvs.spice).  Switch: two fingers of 0.75 um
+* sharing the drain.
+.subckt pll_vco_cap_unit node en vss
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w=2.0 l=2.0
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w=1.5 l=0.15 nf=2
+.ends pll_vco_cap_unit

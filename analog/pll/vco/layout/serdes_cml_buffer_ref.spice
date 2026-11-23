@@ -1,0 +1,11 @@
+* Draft reference for the hand-placed first-stage CML buffer.
+* Loads are 2.85 um wide high-po, l=4.22 (611 ohm, Claude's device table).
+* serdes_cml_buffer = serdes_cml_delay with wn=12 nfin=4 wt=12 lt=0.5 rload=600,
+* outputs exchanged (inp branch drives outn).
+.subckt serdes_cml_buffer inp inn outp outn vbias vdd vss
+Xmp outn inp tail vss sky130_fd_pr__nfet_01v8_lvt w=12 l=0.15
+Xmn outp inn tail vss sky130_fd_pr__nfet_01v8_lvt w=12 l=0.15
+Xtail tail vbias vss vss sky130_fd_pr__nfet_01v8 w=12 l=0.5
+Xrp vdd outn vss sky130_fd_pr__res_high_po_2p85 l=4.22
+Xrn vdd outp vss sky130_fd_pr__res_high_po_2p85 l=4.22
+.ends serdes_cml_buffer

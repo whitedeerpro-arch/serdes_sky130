@@ -1,0 +1,65 @@
+16:1 retimed CML serializer with frozen measured PLL-derived CML clock bank
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_mux2.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_data_latch.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_latched_mux2.spice"
+.include "@PROJECT_ROOT@/analog/tx/serializer/spice/serializer16_retimed.spice"
+.param supply=1.8 iref=0.85m cload=20f wdata=40 wselect=64 wtail=12 rload=500 rout=400
+Vdata vdata 0 {supply}
+Vmux vmux 0 {supply}
+Vbias vb 0 {supply}
+Iref vb vbias {iref}
+Xbias vbias vbias 0 0 serdes_nfet w=20 l=0.5 nf=4
+.include "stimuli.inc"
+Xconv0 d0 d0p d0n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv1 d1 d1p d1n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv2 d2 d2p d2n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv3 d3 d3p d3n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv4 d4 d4p d4n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv5 d5 d5p d5n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv6 d6 d6p d6n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv7 d7 d7p d7n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv8 d8 d8p d8n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv9 d9 d9p d9n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv10 d10 d10p d10n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv11 d11 d11p d11n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv12 d12 d12p d12n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv13 d13 d13p d13n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv14 d14 d14p d14n vbias vdata 0 serdes_cmos_to_cml_data
+Xconv15 d15 d15p d15n vbias vdata 0 serdes_cmos_to_cml_data
+Xtree d0p d0n d1p d1n d2p d2n d3p d3n d4p d4n d5p d5n d6p d6n d7p d7n d8p d8n d9p d9n d10p d10n d11p d11n d12p d12n d13p d13n d14p d14n d15p d15n c250p c250n c500p c500n c1gp c1gn c2gp c2gn qp qn vbias vmux 0 serdes16_cml_tree_retimed
++ wdata={wdata} wselect={wselect} wtail={wtail} rload={rload} rout={rout}
+Cqp qp 0 {cload}
+Cqn qn 0 {cload}
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(c250p) v(c250n) v(c500p) v(c500n) v(c1gp) v(c1gn) v(qp) v(qn) v(c2gp) v(c2gn) v(vdata) i(Vdata) v(vmux) i(Vmux) v(vb) i(Vbias) v(xtree.g1_0p) v(xtree.g1_0n) v(xtree.g2_0p) v(xtree.g2_0n) v(xtree.g3_0p) v(xtree.g3_0n) v(xtree.g3_1p) v(xtree.g3_1n) v(d0p) v(d0n)
+.control
+set wr_singlescale
+set wr_vecnames
+tran 2p 66n 0 2p
+let dout=v(qp)-v(qn)
+let ds=v(c2gp)-v(c2gn)
+let cmout=(v(qp)+v(qn))/2
+let pdata=-v(vdata)*i(Vdata)
+let pmux=-v(vmux)*i(Vmux)
+let pbias=-v(vb)*i(Vbias)
+let g1=v(xtree.g1_0p)-v(xtree.g1_0n)
+let g2=v(xtree.g2_0p)-v(xtree.g2_0n)
+let g3a=v(xtree.g3_0p)-v(xtree.g3_0n)
+let g3b=v(xtree.g3_1p)-v(xtree.g3_1n)
+let din0=v(d0p)-v(d0n)
+let d250=v(c250p)-v(c250n)
+let d500=v(c500p)-v(c500n)
+let d1g=v(c1gp)-v(c1gn)
+let cm250=(v(c250p)+v(c250n))/2
+let cm500=(v(c500p)+v(c500n))/2
+let cm1g=(v(c1gp)+v(c1gn))/2
+let cm2g=(v(c2gp)+v(c2gn))/2
+wrdata waveforms.tsv dout ds cmout pdata pmux pbias g1 g2 g3a g3b din0 d250 d500 d1g cm250 cm500 cm1g cm2g
+quit
+.endc
+.end

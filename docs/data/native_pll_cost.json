@@ -1,0 +1,173 @@
+{
+  "kind": "offline cropped analysis; not new simulation",
+  "source": "results/analog/pll/top/native_k4_supply/20261110T133803Z",
+  "analysis_sha256": {
+    "analog/pll/top/tb/native_k4/run.py": "e1f1645fe74fd7835880890ac2c92972161278854274e83b6ef8dc9e3ed07b84",
+    "analog/pll/top/tb/native_k4_supply/run.py": "37854c6517dc3e8424b51cabd8287500ba86c597fa4bec06bcdd193dc7b2b744",
+    "verification/analysis/native_pll_cost.py": "5eac555a8d31135bc1a50e5db9e4a31e4b6d8ed03e7d7131f84103c4b2d37eec"
+  },
+  "scope": "TT 1.8 V 27 C precharged, hv and ext only; not evidence for stress corners",
+  "timing_note": "Elapsed includes whole ngspice execution; logs show gmin stepping but contain no phase timing, so OP time cannot be apportioned.",
+  "cases": {
+    "hv": {
+      "elapsed_s": 7586.905315160751,
+      "points": 378088,
+      "raw_t_start_s": 4e-08,
+      "raw_t_end_s": 1.5e-06,
+      "tran_maxstep_s": 4e-12,
+      "tran_stop_s": 1.5e-06,
+      "sha256": {
+        "tb.cir": "323bf543ab18e04267ddbbb5ed8e61c23b3477db094d39628a38bce5e16bbcfe",
+        "loop.raw": "246f449a3d1ec14c3589d4a3f6ece4eca9272cd663c5d4a4481864077b2de579",
+        "simulator.log": "d30b150c7ea0307477275dc4e8b198f632b9e44bcc9a7404d9ab110b032e6619",
+        "execution.json": "187df10d592f8b628efb4922246dcb155cb4d16009871ff13a4c5eb89e1a5fe5"
+      },
+      "prefixes": {
+        "600": {
+          "end_s": 6.000000000000001e-07,
+          "points": 144988,
+          "raw_sha256": "4ad40f6af29dce7ce2e263227324a75b9d4a5ecc6df0da56291f6219a61f2e76",
+          "capture_s": 3.1001500000000004e-07,
+          "locked_at_end": false,
+          "offset_s": 3.276837450838131e-11,
+          "vctrl_final": 1.2069230555857773,
+          "f_out": 1999981967.6236207,
+          "e_pp_last_s": 8.373392791715592e-13,
+          "vq_mean": 1.8010905730834874,
+          "vq_pp": 0.0015287675888253638,
+          "vq_min": 1.8004428304883315,
+          "vbias_q_mean": 1.0389535690936353,
+          "vbias_q_pp": 1.6436002033826114e-05
+        },
+        "800": {
+          "end_s": 7.999972253825334e-07,
+          "points": 196787,
+          "raw_sha256": "b43673583fe090bb4b13c3c77062ae2e6352a1f46f3792a61c08afb8e0e7d230",
+          "capture_s": 3.1001500000000004e-07,
+          "locked_at_end": true,
+          "offset_s": 3.303366032525818e-11,
+          "vctrl_final": 1.206930963367434,
+          "f_out": 1999999045.8287163,
+          "e_pp_last_s": 2.7483983712575123e-14,
+          "vq_mean": 1.8010906903732966,
+          "vq_pp": 0.001527386102963213,
+          "vq_min": 1.800444077920779,
+          "vbias_q_mean": 1.0389530581961035,
+          "vbias_q_pp": 1.6478610537884464e-05
+        },
+        "1000": {
+          "end_s": 1e-06,
+          "points": 248588,
+          "raw_sha256": "968d67653edd1285f65dd2c51a1eca545940ec50251503f465e43d26a6a87c4e",
+          "capture_s": 3.1001500000000004e-07,
+          "locked_at_end": true,
+          "offset_s": 3.304153925219766e-11,
+          "vctrl_final": 1.2069322132097937,
+          "f_out": 1999999612.3302698,
+          "e_pp_last_s": 1.0577679682675922e-15,
+          "vq_mean": 1.8010906886643892,
+          "vq_pp": 0.0015273323405959882,
+          "vq_min": 1.8004441321260256,
+          "vbias_q_mean": 1.0389525530595218,
+          "vbias_q_pp": 1.6474318333292715e-05
+        },
+        "1500": {
+          "end_s": 1.5e-06,
+          "points": 378088,
+          "raw_sha256": "246f449a3d1ec14c3589d4a3f6ece4eca9272cd663c5d4a4481864077b2de579",
+          "capture_s": 3.1001500000000004e-07,
+          "locked_at_end": true,
+          "offset_s": 3.304213018007463e-11,
+          "vctrl_final": 1.2069347699888944,
+          "f_out": 1999999632.4155936,
+          "e_pp_last_s": 9.509765953766118e-17,
+          "vq_mean": 1.801090691247048,
+          "vq_pp": 0.0015273327408573678,
+          "vq_min": 1.8004441296203075,
+          "vbias_q_mean": 1.0389513164192936,
+          "vbias_q_pp": 1.645979934106201e-05
+        }
+      }
+    },
+    "ext": {
+      "elapsed_s": 7608.754589557648,
+      "points": 378084,
+      "raw_t_start_s": 4e-08,
+      "raw_t_end_s": 1.5e-06,
+      "tran_maxstep_s": 4e-12,
+      "tran_stop_s": 1.5e-06,
+      "sha256": {
+        "tb.cir": "d902eb2646a34d97749904715cd3feba2b677156bc8969659028f8a22ae41d4a",
+        "loop.raw": "5634387495874876a1eb01a9456b3665595b2dedc200e9c58fa624ac27539bab",
+        "simulator.log": "fc88b668e78104d8ee01faa29936b76902524d8fabec4247884a847fd27a5669",
+        "execution.json": "e7554cdb6f613725f0a4992cbb32cca136e166a0a30e6b1bc262b78f3e3c8316"
+      },
+      "prefixes": {
+        "600": {
+          "end_s": 6.000000000000001e-07,
+          "points": 144984,
+          "raw_sha256": "4587ff7bf0d582fa1dfc8a34c8f0859cb7cb3adf0ac97c0c5771fdaec1eecdae",
+          "capture_s": 1.18015e-07,
+          "locked_at_end": true,
+          "offset_s": 3.3034610679469626e-11,
+          "vctrl_final": 1.2059567462740581,
+          "f_out": 1999999589.8481722,
+          "e_pp_last_s": 9.183355243036332e-15,
+          "vq_mean": 1.8000000000000005,
+          "vq_pp": 0.0,
+          "vq_min": 1.8,
+          "vbias_q_mean": 1.0389536023308994,
+          "vbias_q_pp": 1.6805432517363883e-05
+        },
+        "800": {
+          "end_s": 7.999972209034007e-07,
+          "points": 196783,
+          "raw_sha256": "8ce18d6d7c33bd0f3072972376c451dde9eb0e895b9c4d517aa52bfbaca80598",
+          "capture_s": 1.18015e-07,
+          "locked_at_end": true,
+          "offset_s": 3.303912600085613e-11,
+          "vctrl_final": 1.2059579468673742,
+          "f_out": 1999999657.2896848,
+          "e_pp_last_s": 7.432905753360802e-16,
+          "vq_mean": 1.8000000000000005,
+          "vq_pp": 0.0,
+          "vq_min": 1.8,
+          "vbias_q_mean": 1.0389530909376978,
+          "vbias_q_pp": 1.679861696923801e-05
+        },
+        "1000": {
+          "end_s": 1e-06,
+          "points": 248584,
+          "raw_sha256": "8ebd59bd5d3c964c6d2c423d84a92a2809070a8bcbd4a73c32b9239ff33e4a71",
+          "capture_s": 1.18015e-07,
+          "locked_at_end": true,
+          "offset_s": 3.30394360467315e-11,
+          "vctrl_final": 1.2059590148121329,
+          "f_out": 1999999670.2424605,
+          "e_pp_last_s": 1.2240028428474586e-16,
+          "vq_mean": 1.8000000000000007,
+          "vq_pp": 0.0,
+          "vq_min": 1.8,
+          "vbias_q_mean": 1.038952585906849,
+          "vbias_q_pp": 1.679265927756468e-05
+        },
+        "1500": {
+          "end_s": 1.5e-06,
+          "points": 378084,
+          "raw_sha256": "5634387495874876a1eb01a9456b3665595b2dedc200e9c58fa624ac27539bab",
+          "capture_s": 1.18015e-07,
+          "locked_at_end": true,
+          "offset_s": 3.303975667114841e-11,
+          "vctrl_final": 1.2059615589491646,
+          "f_out": 1999999670.855016,
+          "e_pp_last_s": 9.571345249031506e-17,
+          "vq_mean": 1.8000000000000005,
+          "vq_pp": 0.0,
+          "vq_min": 1.8,
+          "vbias_q_mean": 1.038951349499037,
+          "vbias_q_pp": 1.677808252598112e-05
+        }
+      }
+    }
+  }
+}

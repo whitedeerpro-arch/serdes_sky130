@@ -1,0 +1,31 @@
+{
+  "id": "20261107T043005Z_5677444ca3",
+  "module": "tx.capture",
+  "date": "2026-11-07",
+  "timestamp": "2026-11-07T04:30:05.038917+00:00",
+  "title": "B关闭12组边界与字入口保护RTL",
+  "phase": "validation",
+  "problem": "正常关闭→数据交越间隔不能直接当作保持裕量；首字预热需要控制实现，并区分A/B在飞字标签。",
+  "model": "完整bank实际CLK/CLK_b与伙伴/选择切片，保留一周期历史，先原样校准再平移数据；A正沿/B负沿标签独立流水。",
+  "changes": "新增加载B切片及登记边界v3；PWL有界简化/长向量和逐路比对；下降沿预热guard RTL，组合idle数据，A/B标签；主16位DUT尺寸未改。",
+  "validation": "六压力两方向14原样校准＋164平移点，12组夹住边界；完整所选窗口独立复测无分歧。最小正常到达距已测保持点70.45ps，仅固定电压回放。控制RTL149项断言、lint/结构通过；软件73测试通过。",
+  "conclusion": "继续完整树动态接入。源阻抗/其他形状/失配/噪声、45角、输入建立保持、标签与driver blank、CDC/STA仍未闭合。",
+  "attachments": [
+    {
+      "title": "保持边界与证据",
+      "path": "docs/design/tx_launch_hold.md"
+    },
+    {
+      "title": "六角关闭竞争图",
+      "path": "docs/figures/tx/ingress/tx_launch_hold_aperture.png"
+    },
+    {
+      "title": "小数据与哈希",
+      "path": "docs/data/tx_launch_hold_aperture.json"
+    },
+    {
+      "title": "控制器review",
+      "path": "docs/work_packages/reviews/tx-ingress-control.md"
+    }
+  ]
+}

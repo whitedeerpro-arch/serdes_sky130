@@ -1,0 +1,63 @@
+* NGSPICE file created from pll_loop_filter_k4_fused_pdk.ext - technology: sky130A
+
+.subckt pll_loop_filter_k4_fused_pdk ctrl z pre_ref pre_en vdd vss
+X0 vdd z sky130_fd_pr__cap_mim_m3_2 l=27.22 w=27.22
+X1 pre_ref pre_en ctrl vss sky130_fd_pr__nfet_01v8 ad=0.62 pd=4.62 as=0.33 ps=2.33 w=2 l=0.15
+X2 vss pre_en a_n2029_n3650# vss sky130_fd_pr__nfet_01v8 ad=0.62 pd=4.62 as=0.33 ps=2.33 w=2 l=0.15
+X3 z pre_en pre_ref vss sky130_fd_pr__nfet_01v8 ad=0.33 pd=2.33 as=0.62 ps=4.62 w=2 l=0.15
+X4 z vdd sky130_fd_pr__cap_mim_m3_1 l=27.22 w=27.22
+X5 z vdd sky130_fd_pr__cap_mim_m3_1 l=27.22 w=27.22
+X6 a_n2029_n3650# pre_en vss vss sky130_fd_pr__nfet_01v8 ad=0.33 pd=2.33 as=0.62 ps=4.62 w=2 l=0.15
+X7 a_n2029_n3650# pre_en vdd vdd sky130_fd_pr__pfet_01v8 ad=0.33 pd=2.33 as=0.33 ps=2.33 w=2 l=0.15
+X8 pre_ref a_n2029_n3650# z vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X9 pre_ref pre_en z vss sky130_fd_pr__nfet_01v8 ad=0.62 pd=4.62 as=0.33 ps=2.33 w=2 l=0.15
+X10 vdd z sky130_fd_pr__cap_mim_m3_2 l=27.22 w=27.22
+X11 vdd pre_en a_n2029_n3650# vdd sky130_fd_pr__pfet_01v8 ad=0.33 pd=2.33 as=0.33 ps=2.33 w=2 l=0.15
+X12 z a_n2029_n3650# pre_ref vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X13 vss z sky130_fd_pr__cap_mim_m3_2 l=27.22 w=27.22
+X14 z a_n2029_n3650# pre_ref vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.58 ps=4.58 w=2 l=0.35
+X15 z vdd sky130_fd_pr__cap_mim_m3_1 l=27.22 w=27.22
+X16 pre_ref a_n2029_n3650# ctrl vdd sky130_fd_pr__pfet_01v8_lvt ad=0.58 pd=4.58 as=0.29 ps=2.29 w=2 l=0.35
+X17 z a_n2029_n3650# pre_ref vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X18 z ctrl vss sky130_fd_pr__res_high_po_0p69 l=7.59
+X19 z vss sky130_fd_pr__cap_mim_m3_1 l=27.22 w=27.22
+X20 pre_ref a_n2029_n3650# z vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X21 a_n2029_n3650# pre_en vdd vdd sky130_fd_pr__pfet_01v8 ad=0.33 pd=2.33 as=0.62 ps=4.62 w=2 l=0.15
+X22 pre_ref a_n2029_n3650# ctrl vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X23 z pre_en pre_ref vss sky130_fd_pr__nfet_01v8 ad=0.33 pd=2.33 as=0.33 ps=2.33 w=2 l=0.15
+X24 ctrl a_n2029_n3650# pre_ref vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X25 pre_ref a_n2029_n3650# z vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X26 vss z sky130_fd_pr__cap_mim_m3_2 l=27.22 w=27.22
+X27 pre_ref pre_en z vss sky130_fd_pr__nfet_01v8 ad=0.33 pd=2.33 as=0.33 ps=2.33 w=2 l=0.15
+X28 z a_n2029_n3650# pre_ref vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.29 ps=2.29 w=2 l=0.35
+X29 vdd z sky130_fd_pr__cap_mim_m3_2 l=27.22 w=27.22
+X30 z vss sky130_fd_pr__cap_mim_m3_1 l=27.22 w=27.22
+X31 ctrl a_n2029_n3650# pre_ref vdd sky130_fd_pr__pfet_01v8_lvt ad=0.29 pd=2.29 as=0.58 ps=4.58 w=2 l=0.35
+X32 z vdd sky130_fd_pr__cap_mim_m3_1 l=27.22 w=27.22
+X33 vdd pre_en a_n2029_n3650# vdd sky130_fd_pr__pfet_01v8 ad=0.62 pd=4.62 as=0.33 ps=2.33 w=2 l=0.15
+X34 ctrl pre_en pre_ref vss sky130_fd_pr__nfet_01v8 ad=0.33 pd=2.33 as=0.62 ps=4.62 w=2 l=0.15
+X35 vdd z sky130_fd_pr__cap_mim_m3_2 l=27.22 w=27.22
+X36 pre_ref a_n2029_n3650# z vdd sky130_fd_pr__pfet_01v8_lvt ad=0.58 pd=4.58 as=0.29 ps=2.29 w=2 l=0.35
+C0 z a_n2029_n3650# 1.26273f
+C1 ctrl z 0.27591f
+C2 pre_ref a_n2029_n3650# 1.97818f
+C3 pre_ref ctrl 1.4423f
+C4 pre_en a_n2029_n3650# 1.10084f
+C5 pre_en ctrl 0.19643f
+C6 ctrl a_n2029_n3650# 0.44062f
+C7 vdd z 0.50496p
+C8 vdd pre_ref 2.4475f
+C9 vdd pre_en 2.39023f
+C10 vdd a_n2029_n3650# 3.2544f
+C11 vdd ctrl 0.17748f
+C12 pre_ref z 2.95903f
+C13 pre_en z 0.61527f
+C14 pre_en pre_ref 1.66044f
+C15 ctrl vss 4.45102f
+C16 z vss 0.29108p
+C17 pre_ref vss 7.98548f
+C18 pre_en vss 6.94906f
+C19 vdd vss 81.96761f
+C20 a_n2029_n3650# vss 3.33667f
+.ends
+

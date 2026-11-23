@@ -1,0 +1,25 @@
+* Fully static positive-edge DFF; asynchronous active-low reset clears BOTH latches.
+* Clearing master as well as slave prevents re-setting after internal PFD reset
+* releases while CLK is still high. No dynamic charge-storage logic or ideal DFF.
+.subckt serdes_cmos_latch_reset d en rst_b q vdd vss
+Xeb en en_b vdd vss serdes_cmos_inv
+Xpn en rst_b pass_b vdd vss serdes_cmos_nand2
+Xpi pass_b pass vdd vss serdes_cmos_inv
+Xhn en_b rst_b hold_b vdd vss serdes_cmos_nand2
+Xhi hold_b hold vdd vss serdes_cmos_inv
+Xr rst_b rst vdd vss serdes_cmos_inv
+Xpass d x pass pass_b vdd vss serdes_cmos_tgate
+Xhold q x hold hold_b vdd vss serdes_cmos_tgate
+Xreset x rst vss vss serdes_nfet w=4
+Xi x q_b vdd vss serdes_cmos_inv
+Xo q_b q vdd vss serdes_cmos_inv
+.ends serdes_cmos_latch_reset
+
+.subckt serdes_cmos_dff_reset d clk rst_b q vdd vss
+* Interlocked enables provide a finite interval with both latches closed.
+Xcb clk clk_b vdd vss serdes_cmos_inv
+Xme clk slave_en master_en vdd vss serdes_cmos_nor2
+Xse clk_b master_en slave_en vdd vss serdes_cmos_nor2
+Xm d master_en rst_b m vdd vss serdes_cmos_latch_reset
+Xs m slave_en rst_b q vdd vss serdes_cmos_latch_reset
+.ends serdes_cmos_dff_reset

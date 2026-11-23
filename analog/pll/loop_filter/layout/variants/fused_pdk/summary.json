@@ -1,0 +1,44 @@
+[
+  {
+    "cell": "pll_loop_filter_k4_fused_pdk",
+    "checker_exit": 0,
+    "drc_boxes": 0,
+    "lvs_match": true,
+    "lvs_property_errors": false,
+    "exported_ports": [
+      "ctrl",
+      "z",
+      "pre_ref",
+      "pre_en",
+      "vdd",
+      "vss"
+    ],
+    "mim_sites": {
+      "sites": 6,
+      "mim_side_um": 27.22,
+      "mim1_z_vss": 2,
+      "mim1_z_vdd": 4,
+      "mim2_z_vss": 2,
+      "mim2_z_vdd": 4
+    },
+    "bbox_um": [
+      -50.4,
+      -32.45,
+      47.94,
+      32.45
+    ],
+    "size_um": [
+      98.34,
+      64.9
+    ],
+    "area_um2": 6382.27,
+    "extracted_models": {
+      "sky130_fd_pr__cap_mim_m3_2": 6,
+      "sky130_fd_pr__nfet_01v8": 8,
+      "sky130_fd_pr__cap_mim_m3_1": 6,
+      "sky130_fd_pr__pfet_01v8": 4,
+      "sky130_fd_pr__pfet_01v8_lvt": 12,
+      "sky130_fd_pr__res_high_po_0p69": 1
+    }
+  }
+]

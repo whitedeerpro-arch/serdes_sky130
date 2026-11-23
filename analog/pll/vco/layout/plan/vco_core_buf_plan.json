@@ -1,0 +1,132 @@
+{
+  "cell": "pll_vco_core_sym9_s32p5",
+  "bbox_um": [
+    -52.4,
+    -39.6,
+    52.4,
+    39.6
+  ],
+  "width_um": 104.8,
+  "height_um": 79.2,
+  "area_um2": 8300.16,
+  "quadrant_centers_um": {
+    "Q0_top_left": [
+      -26.05,
+      19.35
+    ],
+    "Q1_top_right": [
+      26.05,
+      19.35
+    ],
+    "Q2_bot_right": [
+      26.05,
+      -19.35
+    ],
+    "Q3_bot_left": [
+      -26.05,
+      -19.35
+    ]
+  },
+  "per_quadrant_stage_coords_um": {
+    "resistor_array_8col": {
+      "delay_loads_Xrp12_Xrn12": [
+        -7.2,
+        -2.4,
+        2.4,
+        7.2
+      ],
+      "buffer_loads_Xbrp_Xbrn": [
+        -12.0,
+        12.0
+      ],
+      "dummy_loads_Xrdum": [
+        -16.65,
+        16.65
+      ],
+      "y_span": [
+        5.735,
+        15.96
+      ]
+    },
+    "middle_row": {
+      "delay_diff_pair_Xp_Xn": {
+        "x_span": [
+          -5.07,
+          5.07
+        ],
+        "y_span": [
+          -3.37,
+          3.37
+        ]
+      },
+      "varactors": {
+        "x_span_each": [
+          10.55,
+          18.65
+        ],
+        "y_span": [
+          -3.76,
+          3.76
+        ]
+      }
+    },
+    "lower_abutted_5block_row": {
+      "delay_tail_Xt": {
+        "center": [
+          0.0,
+          -9.8
+        ],
+        "x_span": [
+          -2.635,
+          2.635
+        ],
+        "y_span": [
+          -13.82,
+          -5.78
+        ]
+      },
+      "buffer_split_tail_XbtailL_R": {
+        "centers": [
+          [
+            -4.31,
+            -9.8
+          ],
+          [
+            4.31,
+            -9.8
+          ]
+        ],
+        "x_span_each": [
+          2.465,
+          6.155
+        ],
+        "y_span": [
+          -12.17,
+          -7.43
+        ],
+        "note": "Directly abuts Delay_Xt on the inside ([+-2.465, +-2.635] um); shares straight M1 vbias bar"
+      },
+      "buffer_diff_pair_Xbmp_Xbmn": {
+        "centers": [
+          [
+            -7.6,
+            -9.8
+          ],
+          [
+            7.6,
+            -9.8
+          ]
+        ],
+        "x_span_each": [
+          5.985,
+          9.215
+        ],
+        "y_span": [
+          -12.17,
+          -7.43
+        ],
+        "note": "Directly abuts Xbtail_L/R ([+-5.985, +-6.155] um); shares straight M2 tail_buf bar [-8.56, +8.56]"
+      }
+    }
+  }
+}

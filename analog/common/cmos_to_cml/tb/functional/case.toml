@@ -1,0 +1,19 @@
+id = "functional"
+dut = "analog/common/cmos_to_cml"
+level = "block"
+status = "planned"
+purpose = "验证极性、差分幅度、共模和负载下波形。"
+analyses = ["tran"]
+measurements = ["differential_swing","output_common_mode","propagation_delay","duty_cycle","power"]
+shared_stimuli = ["verification/stimuli/spice/clock_cmos.spice"]
+
+[implementation]
+view = "to_be_defined"
+simulator = "to_be_defined"
+testbench = ""
+
+[sweep]
+parameters = []
+
+[requirements]
+status = "unspecified"

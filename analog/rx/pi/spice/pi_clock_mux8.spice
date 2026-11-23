@@ -1,0 +1,31 @@
+* Differential8:1 clock selector. Exactly one select must be high in steady state.
+* TG switches are real MOS; scheduling/onehot register is external.
+.subckt serdes_pi_clock_mux8 c0p c0n c1p c1n c2p c2n c3p c3n c4p c4n c5p c5n c6p c6n c7p c7n
++ s0 s1 s2 s3 s4 s5 s6 s7 op on vdd vss params: wn=2 wp=4
+Xi0 s0 sb0 vdd vss serdes_cmos_inv wn=2 wp=4
+X0p c0p op s0 sb0 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X0n c0n on s0 sb0 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi1 s1 sb1 vdd vss serdes_cmos_inv wn=2 wp=4
+X1p c1p op s1 sb1 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X1n c1n on s1 sb1 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi2 s2 sb2 vdd vss serdes_cmos_inv wn=2 wp=4
+X2p c2p op s2 sb2 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X2n c2n on s2 sb2 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi3 s3 sb3 vdd vss serdes_cmos_inv wn=2 wp=4
+X3p c3p op s3 sb3 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X3n c3n on s3 sb3 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi4 s4 sb4 vdd vss serdes_cmos_inv wn=2 wp=4
+X4p c4p op s4 sb4 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X4n c4n on s4 sb4 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi5 s5 sb5 vdd vss serdes_cmos_inv wn=2 wp=4
+X5p c5p op s5 sb5 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X5n c5n on s5 sb5 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi6 s6 sb6 vdd vss serdes_cmos_inv wn=2 wp=4
+X6p c6p op s6 sb6 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X6n c6n on s6 sb6 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Xi7 s7 sb7 vdd vss serdes_cmos_inv wn=2 wp=4
+X7p c7p op s7 sb7 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+X7n c7n on s7 sb7 vdd vss serdes_cmos_tgate wn={wn} wp={wp}
+Rbleedp op vss 1G
+Rbleedn on vss 1G
+.ends serdes_pi_clock_mux8

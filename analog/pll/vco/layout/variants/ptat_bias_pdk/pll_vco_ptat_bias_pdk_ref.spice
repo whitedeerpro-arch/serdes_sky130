@@ -1,0 +1,8 @@
+* LVS reference netlist for pll_vco_ptat_bias_pdk
+* Exact device-for-device match to serdes_bias_cml_blend_v2 in analog/pll/vco/spice/vco_ptat_bias.spice:
+*   Xconst : 28 fingers of 8/4 um pfet_01v8_lvt (W=224, L=4) driven by vgi
+*   Xptat  : 66 fingers of 14/6 um pfet_01v8_lvt (W=924, L=6) driven by vg
+.subckt pll_vco_ptat_bias_pdk out vgi vg vdd
+Xconst out vgi vdd vdd sky130_fd_pr__pfet_01v8_lvt w=224 l=4
+Xptat  out vg  vdd vdd sky130_fd_pr__pfet_01v8_lvt w=924 l=6
+.ends pll_vco_ptat_bias_pdk

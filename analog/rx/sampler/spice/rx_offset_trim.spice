@@ -1,0 +1,73 @@
+* Sampler offset trim, voltage mode (2026-11-03): auxiliary input pair in the master latch.
+* Why: the current DAC on the latch nodes (rx_offset_dac.spice) shifts the threshold by dI / gm_eff,
+* and with a tail-tracking unit current that step grows ~1.8x from -40 to 85 C while the mismatch
+* offset of the same die grows only ~1.16x (paired MC, tb/offset_dac/drift.py); a code set at one
+* temperature is then wrong at another (99.7 % residual 10.8 mV for -40 -> 85 C, 3.8 mV for a
+* trim with a temperature-independent step).
+* Here an auxiliary pair (two 4 um fingers, the input pair has four) shares the input pair's source
+* node and tail: the latch threshold moves by -(gm_aux / gm_in) (vtp - vtn) = -(vtp - vtn) / 2 at any
+* PVT and in both clock phases (same device, same finger, same Vgs when the gate common modes match).
+* Referred to the sampler-block input (before the shared input buffer, where the offsets of
+* tb/offset_mc are referred) it is divided again by the buffer gain (~1.76 at TT): one finger
+* (N = 4) gave only +-24 mV at TT for 165 mV of vtp - vtn.
+* vtp / vtn come from the 6-bit current-steering DAC of rx_offset_dac.spice into a resistor tee from
+* VDD (rc common, rt per side), a scaled replica of the input buffer load: the DAC unit current is a
+* fixed fraction of one buffer tail finger, so the tee's common-mode drop equals the buffer's
+* (I R / 2 = 153 mV nominal) and the trim step is a fixed fraction of the buffer I R, which the
+* constant-swing reference keeps constant (docs/design/bias.md).
+* Code c (0..63): DAC sinks c units from vtp, 63 - c from vtn -> vtp - vtn = -rt (2c - 63) Iu ->
+* latch threshold + rt (2c - 63) Iu / 2: a larger code raises the threshold (rx_offset_cal convention).
+* Full scale at the latch +-rt 63 Iu / 2; defaults rt 2.45 k, rc 1.21 k (tee CM drop = buffer I R / 2),
+* Iu = I(finger) / 128: vtp - vtn up to +-154 mV, ~+-40 mV at the block input (TT).
+* Cost: in the track phase the aux pair takes ~1/3 of the tail current from the input pair.
+
+* Master latch with the auxiliary pair (otherwise pll_cml_latch).
+.subckt serdes_rx_cml_latch_trim dp dn tp tn qp qn clk_track clk_hold vbias vdd vss
++ params: wdata=16 waux=8 nfaux=2 whold=48 wclock=32 wtail=12 nftail=4 rload=600
+Rp vdd qp {rload}
+Rn vdd qn {rload}
+Xdp qn dp track vss serdes_nfet_lvt w={wdata} nf=4
+Xdn qp dn track vss serdes_nfet_lvt w={wdata} nf=4
+Xap qn tp track vss serdes_nfet_lvt w={waux} nf={nfaux}
+Xan qp tn track vss serdes_nfet_lvt w={waux} nf={nfaux}
+Xhp qn qp hold vss serdes_nfet_lvt w={whold} nf=4
+Xhn qp qn hold vss serdes_nfet_lvt w={whold} nf=4
+Xct track clk_track tail vss serdes_nfet_lvt w={wclock} nf=4
+Xch hold clk_hold tail vss serdes_nfet_lvt w={wclock} nf=4
+Xtail tail vbias vss vss serdes_nfet w={wtail} l=0.5 nf={nftail}
+.ends serdes_rx_cml_latch_trim
+
+* Trim voltages of one lane: DAC (rx_offset_dac.spice) into the resistor tee, decoupled.
+.subckt serdes_rx_trim_vgen tp tn b0 b1 b2 b3 b4 b5 vbd vdd vss params: rt=2.45k rc=1.21k cdec=0.2p wu=1 lu=2
+Rc vdd tc {rc}
+Rtp tc tp {rt}
+Rtn tc tn {rt}
+Ctp tp vss {cdec}
+Ctn tn vss {cdec}
+Xdac tp tn b0 b1 b2 b3 b4 b5 vbd vdd vss serdes_rx_offset_dac wu={wu} lu={lu}
+.ends serdes_rx_trim_vgen
+
+* Unit-current reference for the trim DACs of one sampler block: one finger of the input buffer
+* tail (W3 L0.5 on the buffer bias) -> PMOS 8:1 (same fingers) -> diode of k DAC units:
+* Iu = I(finger) / (8 k), k = 16 -> 1/128.
+.subckt serdes_rx_offset_trim_bias vbias vbd vdd vss params: wu=1 lu=2 k=16 wf=3 lf=0.5 wpf=4 lp=0.5
+Xc pd vbias vss vss serdes_nfet w={wf} l={lf} nf=1
+Xpd pd pd vdd vdd serdes_pfet w={8*wpf} l={lp} nf=8
+Xpm vbd pd vdd vdd serdes_pfet w={wpf} l={lp} nf=1
+Xnd vbd vbd vss vss serdes_nfet w={k*wu} l={lu} nf={k}
+Cvbd vbd vss 0.2p
+.ends serdes_rx_offset_trim_bias
+
+* Sample DFF with the trimmed master latch.  dtail: extra master tail fingers (same finger width) to
+* give the input pair back the current the auxiliary pair takes in the track phase.  In the sampler
+* block (24 tail fingers) dtail 8 is the default: the C2 window edge at TT / FS 1.65 V 85 / -40 C is
+* then as for the untrimmed block (1/16 UI edge sweep; dtail 0 loses ~1/16 UI at FS 85 C), +0.9 mW.
+.subckt serdes_rx_sample_dff_trim dp dn cp cn qp qn b0 b1 b2 b3 b4 b5 vbd vbias vdd vss
++ params: wdata=16 waux=8 nfaux=2 whold=48 wclock=32 wtail=12 nftail=4 rload=600 rt=2.45k rc=1.21k dtail=0
+Xm dp dn tp tn mp mn cn cp vbias vdd vss serdes_rx_cml_latch_trim
++ wdata={wdata} waux={waux} nfaux={nfaux} whold={whold} wclock={wclock} wtail={wtail*(nftail+dtail)/nftail}
++ nftail={nftail+dtail} rload={rload}
+Xs mp mn qp qn cp cn vbias vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xv tp tn b0 b1 b2 b3 b4 b5 vbd vdd vss serdes_rx_trim_vgen rt={rt} rc={rc}
+.ends serdes_rx_sample_dff_trim

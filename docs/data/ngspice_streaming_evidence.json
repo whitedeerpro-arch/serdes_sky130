@@ -1,0 +1,36 @@
+{
+  "status": "small_RC_streaming_capture_verified; CML_word_bank_is_proposal",
+  "run": "results/verification/streaming/20261029T041225Z",
+  "not_executed": [
+    "new_CML_shift_or_word_bank_simulation",
+    "SerDes_long_simulation",
+    "loopback",
+    "interactive_CDR_cosimulation"
+  ],
+  "sha256": {
+    "config/tools.toml": "58a4ba3ba4f7ba1f23d8286c10809a3e40a82019945552cddd9ca13acf05bc3e",
+    "verification/streaming/README.md": "ecd37a433766f13989c7d3cd77c6c779530a87c18df7b1d38f1bf672bde5ba56",
+    "verification/streaming/case.toml": "707b403e1ee8a72fa82bc8f9c7d9e9a274d3d3c02478b95e2326ffaaf28bc3ee",
+    "verification/streaming/tb/rc_state.cir": "da402f583ca94fecc933b6c5fa8dc3ccd29dd89c0b1fcd21b7763fc8d68f33ee",
+    "docs/rx_cml_word_capture_plan.md": "2e5164308a85f55595025fb54c7a09852fb1b5b0033d12b6e8f8bad6a74349bf",
+    "docs/data/ngspice_streaming_capture.json": "d8469f8f194f6f6a92f4b9788e1d67e71a59878351ba1f39d540f563b61d878c",
+    "results/verification/streaming/20261029T041225Z/summary.json": "cfbc289a43414d163af95d3a1df9bdc0c3133b4688f4d98b1f1365e04ef6a5c1",
+    "results/verification/streaming/20261029T041225Z/progress.jsonl": "6cc9dbaf8041ffab3cb95ee73cbc3f9fbf9df6036de5386faad4868f3bc97e9b",
+    "results/verification/streaming/20261029T041225Z/windows/at500ns.tsv": "f0a0c0406cb32646f4b61f1558976c542fa7ecbb4570f33349df78cf673abb54",
+    "results/verification/streaming/20261029T041225Z/windows/at1000ns.tsv": "1a2d99f0db3cb4404fe31b4c5e439ed85610c032892daa060d516ad3a32374c5",
+    "results/verification/streaming/20261029T041225Z/windows/slow_cross_0p5.tsv": "af0ea23209895af4e11d46a4e21a64d4f70c74ff125dc9f2ced581e87398759d"
+  },
+  "live_documentation_revisions": [
+    {
+      "date_local": "2026-10-29",
+      "reason": "Add independently installed shared ngspice47 / Verilator live-flow configuration. Prior RC_FIFO input and measurements are unchanged.",
+      "files": [
+        {
+          "path": "config/tools.toml",
+          "previous_sha256": "c4bd0b74a59b409d79ea472535acef878eabe12a1e9277c511cc6e7a2a9b76fa",
+          "current_sha256": "58a4ba3ba4f7ba1f23d8286c10809a3e40a82019945552cddd9ca13acf05bc3e"
+        }
+      ]
+    }
+  ]
+}

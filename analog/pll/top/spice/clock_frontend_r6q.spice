@@ -1,0 +1,45 @@
+* PLL clock frontend r6q (2026-11-12): VCO r6 and the four extraction buffers on the quiet rail, one real feedback
+* branch, light dummies on the other three buffer outputs.  Against pll_clock_frontend_r5q:
+*   - pll_vco_ring4_r6 (5-bit bank cfg0..4, layout parasitics and the phase-node wiring allowance inside the ring);
+*   - the four full-rate CML->CMOS receivers (cm0..3) are gone: nothing consumed them;
+*   - branches 1..3 no longer carry a whole biased /8 prescaler + feedback receiver + DFF (11.5-17 mA in total, only
+*     there to load the buffers like branch 0).  The buffers isolate the VCO, so each of those outputs gets the input
+*     stage of the prescaler only (pll_frontend_dummy_load, about 0.34 mA);
+*   - all four buffer outputs are ports (CML, 2 GHz, phases 0 / 45 / 90 / 135 deg with the polarities of
+*     docs/overview/architecture.md); the TX clock tap stays on b0 as verified so far.
+* quiet (vdd_q): VCO, buffers, tails on vbias_q.  host (vdd): prescaler, feedback receiver, dummies, on vbias.
+* cdiv / cfb are wiring allowances on the divider taps and the feedback output.
+
+* Input stage of pll_cml_div2_biased as a load: the two source followers with their sinks; each follower output
+* carries what the two latches hang on it (two wclock = 64 um lvt clock gates, half the time conducting) as one
+* 64 um inversion capacitor.
+.subckt pll_frontend_dummy_load clkp clkn vbias vdd vss params: wsf=80 wsf_sink=4 wck=64
+Xfp vdd clkp ckp vss serdes_nfet_lvt w={wsf} nf=4
+Xfn vdd clkn ckn vss serdes_nfet_lvt w={wsf} nf=4
+Xsp ckp vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xsn ckn vbias vss vss serdes_nfet w={wsf_sink} l=.5
+Xcp vss ckp vss vss serdes_nfet_lvt w={wck} nf=4
+Xcn vss ckn vss vss serdes_nfet_lvt w={wck} nf=4
+.ends pll_frontend_dummy_load
+
+.subckt pll_clock_frontend_r6q ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias_q fb0 vdd vdd_q vss
++ b0p b0n b1p b1n b2p b2n b3p b3n d02p d02n d04p d04n d08p d08n params: cdiv=5f cfb=20f wck=64
+Xvco v0p v0n v1p v1n v2p v2n v3p v3n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias_q vdd_q vss pll_vco_ring4_r6
+Xbuf0 v0p v0n b0p b0n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf1 v1p v1n b1p b1n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf2 v2p v2n b2p b2n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf3 v3p v3n b3p b3n vbias_q vdd_q vss serdes_cml_buffer
+Xpre0 b0p b0n d02p d02n d04p d04n d08p d08n vbias vdd vss pll_cml_prescaler8
+Xfb0 d08p d08n fb0 fb0n vbias vdd vss serdes_cml_to_cmos_pvt_candidate
+Cfb0 fb0 vss {cfb}
+Cfb0n fb0n vss {cfb}
+Cdiv02p d02p vss {cdiv}
+Cdiv02n d02n vss {cdiv}
+Cdiv04p d04p vss {cdiv}
+Cdiv04n d04n vss {cdiv}
+Cdiv08p d08p vss {cdiv}
+Cdiv08n d08n vss {cdiv}
+Xdum1 b1p b1n vbias vdd vss pll_frontend_dummy_load wck={wck}
+Xdum2 b2p b2n vbias vdd vss pll_frontend_dummy_load wck={wck}
+Xdum3 b3p b3n vbias vdd vss pll_frontend_dummy_load wck={wck}
+.ends pll_clock_frontend_r6q

@@ -1,0 +1,609 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
+revision = "tx_v3_extra5_WT16_R240_driver120_60_192_working"
+baseline_revision = "tx_lowov_retimed_r2_20261030"
+status = "latest_working_combination_full_TX_MOS45_pass; native_r5_TX_joint_static_evidence_retained_separately; r6_interface_and_physical_poly_changes_need_targeted_checks; guard_SS_open"
+v3_candidate_native_static_report = "docs/history/clocking_progress_20261106.md"
+v3_candidate_native_static_scope = "r5 4-bit frontend, real bias/PDK R; 8 complete count correctly, 2 FF cold missing; static data, no joint eye/bit-map acceptance"
+report = "docs/design/tx_parallel_serializer.md"
+results = "docs/data/tx_full_pvt45.json"
+campaign = "results/analog/tx/full_pvt45/20261107T200334Z"
+baseline_report = "docs/history/tx_optimization.md"
+baseline_results = "docs/data/tx_optimization.json"
+baseline_campaign = "results/analog/tx/optimization/20261030T100258Z"
+frozen_release = "releases/v0.1-design-freeze-20261028"
+serializer = "analog/tx/serializer/spice/serializer16_retimed_lowov.spice"
+logic_cells = "analog/common/cml_mux/spice/cml_lowov_cells.spice"
+clock_distribution = "analog/tx/clock_distribution/spice/tx_clock_dist_v3.py" # canonical generator (shim at tb/clock_replay/variants/dist_v3.py)
+baseline_clock_distribution = "analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice"
+output_driver = "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice"
+optional_P_lvt_adapter = "analog/common/devices/spice/sky130_pfet_lvt.spice"
+nominal_serial_rate_bps = 4000000000
+logic_tail_width_scale = 6
+logic_bias_reference_current_scale = 0.16666666666666666
+logic_tail_length_um = 0.5
+MUX_tail_width_um = 72
+MUX_tail_fingers = 24
+final_latch_tail_width_um = 144
+final_latch_tail_fingers = 24
+final_latch_hold_width_um = 40
+final_latch_load_per_leg_ohm = 300
+clock_select_width_um = 96
+local_clock_follower_width_um = 80
+local_clock_follower_sink_width_um = 4
+extra_common_2GHz_clock_buffer_stages = 5
+extra_buffer_input_width_um = 24
+extra_buffer_tail_width_um = 16
+extra_buffer_load_per_leg_ohm = 400
+final_clock_output_tail_width_um = 16
+final_clock_output_load_ohm = 240
+nominal_trim_cap_f = [0.0, 0.0, 0.0, 0.0] # v3 has no r2 RC trim bank
+baseline_nominal_trim_cap_f = [1e-13, 5e-13, 1.6e-13, 2.7e-13]
+source_fixture = "MOS45 dynamic: ideal2GHz into real v3/capture/tree/driver; native r5 open-loop joint deck: 8 complete static pressure points; scopes kept separate"
+baseline_source_fixture = "frozen_v0p1_TT_PLL_edges; source_idealized_before_real_buffers"
+r3_prescaler_phase_reintegration_completed = false
+output_transmission_gate = "N_lvt_W2_L0.15_P_lvt_W32_L0.35"
+output_core_width_um = 192
+predriver_load_ohm = 120
+predriver_tail_width_um = 60
+output_tail_width_um = 172
+output_reference_current_a = 0.0002125 # current real-bias CML copy into local W5/L0.5 diode
+baseline_output_reference_current_a = 0.00085
+reference_generator_qualified = false
+passive_extremes_noise_mismatch_or_layout_qualified = false
+
+# Historical r2 characterization below; current combined gates are in output_driver_iteration.pvt45.
+loaded_grid_functional = 45
+serializer_draft_pass_cells = 45
+standalone_enabled_from_off_functional = 45
+selected_C2_functional = 4
+long1024_functional = 2
+
+# Divider start-state handling (I-01), 2026-10-31: verified standalone, not yet
+# integrated with the r3 native frontend or the start-up supervisor.
+start_states = 8
+start_state_scope = "legacy r2 independent prescaler permutations; current v3 uses one counter epoch and has separate input/word alignment evidence"
+start_state_effect = "fixed in-word bit-pair permutation; eye unchanged"
+start_state_evidence = "analog/tx/serializer/tb/clock_states/run.py"
+start_state_detector = "analog/tx/clock_distribution/spice/tx_clock_state_detector.spice"
+input_remap_rtl = "digital/tx/rtl/tx_word_remap.sv"
+remapped_FS_1v65_85C_1024bit_worst_spread_ui = 0.127
+
+[ingress_candidate]
+status = "historical_extra3_three_pressure_eye_pass_reduced_swing_FS_fail; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
+preferred_data_cell = "analog/common/devices/spice/cmos_dff.spice:serdes_cmos_dff"
+comparison_cell = "analog/common/devices/spice/cmos_dff_reset.spice:serdes_cmos_dff_reset"
+report = "docs/design/tx_ingress.md"
+bench = "analog/tx/serializer/tb/ingress_card/run.py"
+evidence = "docs/data/tx_ingress_card.json"
+scope = "6 STRESS conditions x 2 static mux input loading states; real bias; PDK R tt; ideal 30ps clock ports; 5fF downstream mux output proxy"
+preferred_clock_to_loaded_cml_range_ps = [91.09, 280.79]
+comparison_clock_to_loaded_cml_range_ps = [216.31, 787.95]
+physical_word_clock_fanout_qualified = false
+setup_hold_aperture_qualified = false
+actual_word_update_window_measured = false
+dynamic_16bit_word_capture_implemented = true
+
+[ingress_candidate.staggered]
+dut = "analog/tx/input_register/spice/word_capture16_staggered.spice"
+clock_receiver = "analog/tx/input_register/spice/word_clock_receiver.spice"
+bench = "analog/tx/input_register/tb/staggered/run.py"
+report = "docs/design/tx_word_capture.md"
+evidence = "docs/data/tx_staggered_ingress.json"
+ideal_clock_campaign = "results/analog/tx/staggered_ingress/20261106T200647Z"
+receiver_no_warmup_failed_TT = "results/analog/tx/staggered_ingress/20261106T202119Z"
+receiver_campaign = "results/analog/tx/staggered_ingress/20261106T202607Z"
+input_clock_domain = "TX_PHY_word_clock; upstream_FIFO_or_CDC_not_implemented_here"
+output_contract = "A_lanes0_7_valid_when_CML_select_low; B_lanes8_15_valid_when_high; not_a_continuously_coherent_16bit_bus"
+scope = "actual_16_DFFs_plus_launch_bank; actual_converters_and_eight_first_muxes; real_bias_PDK_R_tt; ideal_CML_clock_source; 2fF_Q_wire_and_5fF_per_mux_output_proxy"
+warmup_word_cycles = 1
+valid_control_implemented = false
+adopted_in_full_serializer = false
+adoption_scope = "experimental_full_TX_candidate_connected; baseline_revision_not_replaced; physical_control_unimplemented"
+integrated_in_full_serializer_testbench = true
+ideal_clock_stress_passed = 6
+receiver_validation_state = "six_stress_conditions_passed_with_one_word_warmup"
+receiver_stress_passed = 6
+receiver_checked_words = 48
+receiver_checked_bits = 768
+minimum_b_close_to_data_crossing_ps = 55.6183
+receiver_45pvt_qualified = false
+hold_aperture_qualified = false
+crossing_separation_is_hold_margin = false
+mismatch_noise_qualified = false
+
+[ingress_candidate.staggered.control]
+rtl = "digital/tx/rtl/tx_ingress_control.sv"
+report = "digital/tx/README.md"
+evidence = "results/catalog/tx_ingress_control.json"
+review = "docs/work_packages/reviews/tx-ingress-control.md"
+rtl_implemented = true
+behavioral_assertions = 149
+warmup_falls_default = 1
+analog_integrated = false
+valid_to_driver_blank_implemented = false
+standard_cell_mapping_and_STA_completed = false
+standard_cell_feasibility_report = "docs/work_packages/deliveries/tx-ingress-timing.md"
+standard_cell_feasibility_state = "baseline_SS_setup_violations; load_and_interface_assumptions_ungraded"
+
+[ingress_candidate.staggered.hold_characterization]
+report = "docs/design/tx_launch_hold.md"
+evidence = "docs/data/tx_launch_hold_aperture.json"
+bench = "analog/tx/input_register/tb/hold_aperture/run.py"
+boundary_id = "tx_staggered_b_launch_cut_v3"
+coarse_campaign = "results/analog/tx/hold_aperture/20261106T210129Z"
+refinement_campaign = "results/analog/tx/hold_aperture/20261106T211416Z"
+calibration_cases = 14
+shifted_cases = 164
+bracketed_condition_direction_groups = 12
+minimum_distance_to_sampled_pass_ps = 70.4467
+model = "fixed_recorded_clock_partner_and_select_voltages; shifted_recorded_data; ideal_source_impedance"
+all_patterns_45pvt_mismatch_noise_qualified = false
+
+[ingress_candidate.staggered.full_serializer]
+dut = "analog/tx/input_register/spice/capture_serializer16.spice"
+bench = "analog/tx/input_register/tb/full_serializer/run.py"
+report = "docs/design/tx_parallel_serializer.md"
+evidence = "docs/data/tx_parallel_serializer.json"
+TT_dynamic_campaign = "results/analog/tx/parallel_serializer/20261107T044921Z"
+TT_payload_bits = 256
+TT_payload_bit_errors = 0
+TT_mapping_identity = true
+TT_serializer_min_signed_margin_mv = 153.709997
+TT_serializer_edge_spread_ui = 0.02929805
+SS_cold_clock_probe = "results/analog/tx/parallel_serializer/20261107T051615Z"
+SS_cold_clock_probe_complete = true
+SS_cold_dynamic_qualified = false
+source = "ideal_2GHz_400mVpp_30ps; actual_v3_counter_replica_distribution; real_bias_PDK_R_tt"
+control_source = "Icarus_tx_ingress_control_PWL_output_replay; no_library_delay_in_SPICE"
+counter_initialized = true
+PLL_startup_qualified = false
+all_45pvt_qualified = false
+mismatch_noise_qualified = false
+
+FS_hot_dynamic_campaign = "results/analog/tx/parallel_serializer/20261107T051545Z"
+FS_hot_state = "complete_but_failed_specs_and_serializer_function; capture_hold_counter_ok"
+FS_hot_payload_bit_errors = 0
+FS_hot_serializer_extra_crossings = 2
+FS_hot_remote_marker_errors = 1
+FS_hot_serializer_min_signed_margin_mv = 0.517105
+FS_hot_serializer_edge_spread_ui = 0.33257812
+FS_hot_low_margin_payload_slot = 8
+FS_hot_diagnostic = "docs/work_packages/deliveries/tx-parallel-diagnostic.md"
+
+[retime_clock_iteration]
+module = "tx.clocking"
+status = "calibrated_local_improvement; full_TX_count3_TT_FS_SS_cold_eye_pass; other_PVT_and_swing_open"
+report = "docs/design/tx_final_retime.md"
+baseline_extra_2g = 1
+candidate_extra_2g = 3
+other_extra_stages = { c250 = 0, c500 = 2, c1g = 4 }
+retimed_mux_sizes_unchanged = true
+voltage_replay_boundary = "tx_final_retime_recorded_v1"
+physical_clock_chain_boundary = "tx_final_clock_chain_recorded_v1"
+voltage_replay_campaign = "results/analog/tx/final_retime/20261107T094213Z"
+physical_clock_chain_campaign = "results/analog/tx/final_clock_chain/20261107T094939Z"
+TT_trace = "results/analog/tx/parallel_trace/20261107T054616Z"
+FS_trace = "results/analog/tx/parallel_trace/20261107T054507Z"
+TT_count3_probe = "results/analog/tx/parallel_serializer/20261107T095618Z"
+FS_count3_probe = "results/analog/tx/parallel_serializer/20261107T095655Z"
+local_conditions = ["tt_v1800_t27", "fs_v1650_t85"]
+local_bits = [48, 104]
+local_full_payload_qualified = false
+all_45pvt_qualified = false
+internal_clock_swing_policy_closed = false
+
+[retime_clock_iteration.native_confirmation]
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T100515.229352Z_d90f2835"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T100515.224129Z_ed0ba659"
+TT_serializer_margin_mv = 155.675418
+TT_serializer_spread_ui = 0.031372295
+FS_serializer_margin_mv = 128.292776
+FS_serializer_spread_ui = 0.089605560
+payload_bits_each = 256
+payload_errors_each = 0
+all_three_outputs_natural_mapping = true
+training_marker_extra_crossing_errors_each = 0
+counter_input_hold_RTL_tag_checks = true
+SS_cold_probe = "results/analog/tx/parallel_serializer/20261107T102256.665455Z_13ffdb28"
+SS_cold_probe_status = "complete; counter_and_word_clock_stability_pass"
+scope = "ideal_2GHz_real_bias_PDK_R_tt_initialized_counter_RTL_control_replay; serializer_eye_only"
+
+SS_cold_dynamic_campaign = "results/analog/tx/parallel_serializer/20261107T103131.308549Z_aaefb4bc"
+SS_cold_dynamic_status = "complete; 256bit_training_mapping_capture_hold_counter_eye_pass; swing_open"
+
+[retime_clock_iteration.output_sizing]
+module = "tx.clocking.output2g"
+status = "historical_extra3_W16_R240_full_TX_TT_eye_pass_FS_spread_fail; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
+boundary = "tx_final_clock_output_sizing_v1"
+campaign = "results/analog/tx/final_clock_swing/20261107T103804.761471Z"
+evidence = "docs/data/tx_final_clock_swing.json"
+extra_2g = 3
+input_pair_w_um = 32
+baseline_tail_w_um = 24
+baseline_load_ohm = 300
+candidate_tail_w_um = 16
+candidate_load_ohm = 240
+actual_resistors = "PDK_high_po_tt; nominal_geometry_parameter"
+maximum_baseline_error_uv = 5.554
+local_c2g_range_mvpp = [344.077, 369.105]
+I17_closed = false
+
+[retime_clock_iteration.SS_cold_confirmation]
+campaign = "results/analog/tx/parallel_serializer/20261107T103131.308549Z_aaefb4bc"
+serializer_margin_mv = 137.611829
+serializer_spread_ui = 0.036070535
+payload_bits = 256
+bit_errors = 0
+pad_peak_to_peak_mv = 480.931
+remote_peak_to_peak_mv = 468.491
+all_specs_qualified = false
+
+[retime_clock_iteration.output_sizing.first_full_attempt]
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T150730.302536Z_c065b1b2"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T150730.281401Z_1033558a"
+status = "complete_waveforms_but_rejected_producer_capture_phase; not_qualified"
+observed_word_clock_epoch_difference_ns = 1.0
+short_diagnostic = "results/analog/tx/clock_epoch/20261107T153055.310765Z"
+short_repeat_common_voltage_error_v = 0.0
+metadata_topology_match_counts_and_phase = true
+force_all_master_zero_adopted = false
+
+[retime_clock_iteration.output_sizing.full_confirmation]
+evidence = "docs/data/tx_clock_output_confirmation.json"
+index = "results/catalog/tx_clock_output_confirmation.json"
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T155507.514155Z_71459865"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T155507.523830Z_505b46a3"
+source_graph_sha256 = "29f4e71489c902dd15d0a2e9452faa330dec3812d7d53c65a3d390831285efce"
+TT_c2g_payload_pp_mv = 369.312
+FS_c2g_payload_pp_mv = 349.271
+TT_c2g_weakest_cycle_pp_mv = 365.769
+FS_c2g_weakest_cycle_pp_mv = 342.782
+TT_serializer_margin_mv = 132.383692
+TT_serializer_spread_ui = 0.050470600
+FS_serializer_margin_mv = 106.345083
+FS_serializer_spread_ui = 0.180251911
+TT_serializer_eye_pass = true
+FS_serializer_eye_pass = false
+counter_capture_hold_tag_mapping_ok_each = true
+payload_bits_each = 256
+payload_errors_each = 0
+c2g_observed_amplitude_period_edge_screens_pass_each = true
+status = "FS_failed_0.15UI_spread; no_full_PVT_or_noise_qualification; not_adopted"
+
+[internal_cml_amplitude]
+evidence = "docs/data/tx_cml_envelope.json"
+report = "docs/design/tx_cml_amplitude.md"
+window_s = [4e-8, 1e-7]
+baseline_pressure_conditions = 3
+reduced_output_conditions = 2
+I17_closed = false
+status = "observed_over_400mV_in_counter_clocks_converters_tree_and_held; data_lower_bound_ungraded"
+
+[retime_clock_iteration.output_sizing.local_phase_recovery]
+boundary_id = "tx_reduced_final_word18_phase_v1"
+campaign = "results/analog/tx/reduced_phase_window/20261107T163519.276862Z_6d47b1a8"
+evidence = "docs/data/tx_reduced_phase_window.json"
+offsets_ps = [-20, 0, 10, 20, 40, 60]
+first_bit = 296
+end_bit_exclusive = 304
+baseline_max_voltage_error_mv = 0.055873
+baseline_max_edge_error_ps = 0.009337
+FS_plus20_margin_mv = 108.934
+FS_plus20_spread_ui = 0.134138
+FS_plus40_margin_mv = 104.714
+FS_plus40_spread_ui = 0.104541
+phase_fitted_to_payload = false
+physical_clock_implemented = false
+full_TX_qualified = false
+status = "local_8bit_recovery_at_plus20_to_plus60ps; physical_clock_chain_confirmation_next"
+
+[retime_clock_iteration.output_sizing.physical_phase_recovery]
+boundary_id = "tx_reduced_final_word18_clock_stages_v1"
+campaign = "results/analog/tx/native_reduced_clock/20261107T164517.822006Z_16514531"
+evidence = "docs/data/tx_native_reduced_clock.json"
+extra_stages_compared = [3, 4, 5]
+candidate_extra_2g = 5
+tail_w_um = 16
+load_ohm = 240
+baseline_voltage_error_mv_upper = 0.104
+baseline_absolute_edge_error_ps_upper = 0.029
+TT_extra5_clock_shift_ps = 30.822916
+FS_extra5_clock_shift_ps = 38.555771
+TT_extra5_local_margin_mv = 140.054245
+TT_extra5_local_spread_ui = 0.031658148
+FS_extra5_local_margin_mv = 105.921068
+FS_extra5_local_spread_ui = 0.105218198
+TT_extra5_c2g_pp_mv = 368.935286
+FS_extra5_c2g_pp_mv = 351.087594
+first_bit = 296
+end_bit_exclusive = 304
+full_TX_qualified = false
+adopted = false
+
+status = "historical_actual_loaded_chain_local_TT_FS_recovery; subsequent_extra5_full_TX_45of45_see_output_driver_iteration.pvt45"
+
+[retime_clock_iteration.output_sizing.extra5_full_confirmation]
+status = "45of45_with_output_driver_candidate (see output_driver_iteration.pvt45); working_candidate; I17_open"
+SS_probe = "results/analog/tx/parallel_serializer/20261107T181342.431277Z_826110f5"
+SS_campaign = "results/analog/tx/parallel_serializer/20261107T182054.943768Z_e576538e"
+serializer_margin_mv = { TT = 135.75, FS = 102.73, SS = 124.08 }
+serializer_spread_ui = { TT = 0.0600, FS = 0.1151, SS = 0.0437 }
+c2g_payload_pp_mv = { TT = 369.9, FS = 351.4, SS = 391.8 }
+index = "results/catalog/tx_reduced_clock_full_confirmation.json"
+TT_probe = "results/analog/tx/parallel_serializer/20261107T165725.817031Z_575dba1f"
+FS_probe = "results/analog/tx/parallel_serializer/20261107T165727.025236Z_73f1c87d"
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T170534.584797Z_533f8f18"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T170534.588144Z_51e1e33e"
+extra_2g = 5
+tail_w_um = 16
+load_ohm = 240
+full_TX_qualified = false
+
+[output_driver_iteration]
+status = "pre120_out192_working_candidate; full_TX_45of45_serializer_and_pad_gates; netlist_defaults_still_r2"
+cause = "serializer-output amplitude ISI accumulated by the near-linear isolation buffer and predriver; stage own DDJ with clean input 0.010 UI (FS hot)"
+report = "docs/design/tx_output_driver.md"
+bench = "analog/tx/output_driver/tb/ddj/run.py"
+boundary = "tx_extra5_serializer_output_v1"
+index = "results/catalog/tx_output_driver_ddj.json"
+data = "docs/data/tx_output_driver_ddj.json"
+overrides = "rpre=120 wtpre=60 wout=192"  # instance parameters (full_serializer/run.py --driver-params); isolation buffer and serializer load unchanged
+pad_spread_ui = { TT = 0.0763, FS = 0.1379, SS = 0.0545 }  # r2: 0.0776 / 0.1584 / 0.0562
+pad_margin_mv = { TT = 192.4, FS = 136.0, SS = 205.9 }
+pad_pp_mv = { TT = 428, FS = 376, SS = 482 }  # r2 FS 385
+remote_spread_ui = { TT = 0.0705, FS = 0.1601, SS = 0.0493 }  # comparison only (channel)
+stage_power_mw_FS_replay = { r2 = 16.6, candidate = 17.4 }
+TT_campaign = "results/analog/tx/parallel_serializer/20261107T191815.971080Z_4478c5e0"
+FS_campaign = "results/analog/tx/parallel_serializer/20261107T191812.302165Z_70bed8e9"
+SS_campaign = "results/analog/tx/parallel_serializer/20261107T191809.308741Z_fc64e6a1"
+TT_probe = "results/analog/tx/parallel_serializer/20261107T190834.490889Z_6f3a9e94"
+FS_probe = "results/analog/tx/parallel_serializer/20261107T190832.443952Z_50390fa5"
+SS_probe = "results/analog/tx/parallel_serializer/20261107T190836.513627Z_d12721c4"
+
+[output_driver_iteration.pvt45]
+status = "45of45_pass; serializer_and_pad_gates; 0_errors; in_order; capture_hold_tags_counting_ok"
+campaign = "results/analog/tx/full_pvt45/20261107T200334Z"
+orchestrator = "analog/tx/input_register/tb/full_serializer/pvt45.py"
+data = "docs/data/tx_full_pvt45.json"
+index = "results/catalog/tx_full_pvt45.json"
+worst_condition = "fs_v1650_t85"
+serializer_min_margin_mv = 103.1
+serializer_max_spread_ui = 0.1152
+pad_min_margin_mv = 136.0
+pad_max_spread_ui = 0.1379
+pad_pp_mv_range = [376, 494]
+remote_max_spread_ui = 0.1601  # comparison only; the only condition above 0.15
+scope = "ideal 2 GHz source, real bias, PDK R tt, initialized counter, RTL guard replay; not PLL-native, resistor corners, mismatch, noise or startup"
+
+[retime_clock_iteration.buffer_local_card]
+status = "single_axis_measured_TT_FS; TT_Xe2_and_next_Xe3_still_over_400mVpp; I17_open"
+report = "docs/design/tx_buffer_local.md"
+data = "docs/data/tx_buffer_local.json"
+index = "results/catalog/tx_buffer_local.json"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_local_card.py"
+campaign = "results/analog/tx/buffer_local_card/20261110T162412Z_17c84a60"
+boundary_id = "tx_i17_extra5_xe2_local_proposal"
+changed_instance = "Xe2_only; WN24; baseline_WT16_R400; tail_only_WT12.8_R400; R_only_WT16_R320"
+baseline_max_voltage_error_nv_upper = 35
+baseline_max_serial_edge_error_ps_upper = 0.00002
+TT_xe2_pp_mv = [535.940, 420.693, 430.372]
+FS_xe2_pp_mv = [500.844, 393.034, 402.712]
+bit_errors_each_8bit_window = 0
+scope = "two archived actual-loaded extra5 cuts, fixed ideal PWL input/bias/supplies; eight bits; no upstream impedance or new real-bias validation"
+ungraded = "physical R, tail Id/Vdsat, current/power, noise, other PVT/passive corners and full TX"
+adopted = false
+
+[retime_clock_iteration.buffer_joint_card]
+status = "joint_measured_TT_FS; Xe2_within_200to400mVpp; next_Xe3_over_400mVpp; I17_open"
+report = "docs/design/tx_buffer_local.md"
+data = "docs/data/tx_buffer_joint.json"
+index = "results/catalog/tx_buffer_joint.json"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_joint_card.py"
+campaign = "results/analog/tx/buffer_joint_card/20261110T163621Z_5e8b82b2"
+boundary_id = "tx_i17_extra5_xe2_joint_proposal"
+changed_instance = "Xe2_only; WN24; joint_a_WT12.8_R320; joint_b_WT12_R320"
+joint_a_TT_FS_xe2_pp_mv = [337.629, 315.791]
+joint_a_TT_FS_next_xe3_pp_mv = [472.722, 414.479]
+joint_a_TT_FS_c2g_shift_ps = [-0.569, -0.442]
+joint_a_amplitude_prediction_error_mv_upper = 0.235
+bit_errors_each_8bit_window = 0
+scope = "same calibrated actual-loaded TT/FS extra5 ideal-PWL cuts; no full TX/PVT or upstream impedance qualification"
+adopted = false
+
+[retime_clock_iteration.buffer_cascade_card]
+status = "WT12.8_R320_all_extra5_rejected_FS_local_69.75mV_0.212UI; I17_open"
+report = "docs/design/tx_buffer_cascade.md"
+data = "docs/data/tx_buffer_cascade.json"
+model = "docs/data/tx_buffer_cascade_plan.json"
+index = "results/catalog/tx_buffer_cascade.json"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_cascade_card.py"
+campaign = "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f"
+boundary_id = "tx_i17_extra5_xe2_xe3_cascade_proposal"
+changed_instances = "baseline; Xe2_Xe3; Xe0_to_Xe4; all changed stages WN24_WT12.8_R320; Xiso_Xout unchanged"
+FS_five_stage_margin_mv = 69.746999
+FS_five_stage_spread_ui = 0.212036
+FS_two_stage_margin_mv = 96.289491
+FS_two_stage_spread_ui = 0.126711
+TT_FS_two_stage_model_error_percent_upper = 3.493
+scope = "TT/FS archived loaded cuts; fixed ideal PWL; eight-bit contract only; not full TX or independent 16bit mapping"
+adopted = false
+
+[retime_clock_iteration.buffer_sizing_audit]
+status = "graded_tail_not_adopted; full_FS_pad_DDJ_fail; SS_cold_over_old_400mV_target_under_review; joint_model_incomplete"
+report = "docs/design/tx_buffer_sizing.md"
+data = "docs/data/tx_buffer_sizing_gap.json"
+index = "results/catalog/tx_buffer_sizing_gap.json"
+analysis = "verification/analysis/tx_buffer_sizing_gap.py"
+amplitude_model = "analog/tx/clock_distribution/theory/buffer_gain_plan.py"
+pre_run_prediction = "docs/data/tx_buffer_gain_plan.json"
+local_campaign = "results/analog/tx/buffer_matrix_card/20261110T172325Z_dda392af"
+full_campaign = "results/analog/tx/full_pvt45/20261110T173418Z"
+candidate_extra_profile = [[24, 14.4, 320], [24, 15.6, 320], [24, 15.6, 320], [24, 15.6, 320], [24, 15.6, 320]]
+FS_local_8bit_margin_mv = 95.291688
+FS_local_8bit_spread_ui = 0.14597372
+FS_full_same8_spread_ui = 0.14897490
+FS_full_serializer_spread_ui = 0.15005134
+FS_full_pad_spread_ui = 0.17985714
+SS_full_serializer_spread_ui = 0.04023048
+SS_full_pad_spread_ui = 0.05188186
+SS_full_max_extra_pp_mv = 435.89
+internal_400mV_ceiling_status = "applicability_under_review; historical_scores_retained; no_new_limit_adopted"
+missing_models = "clock slew/phase, data setup/hold, pattern-dependent pad response, PVT/actual bias/passive corners, branch currents/cost"
+next_step = "complete joint constraints and measured model validity before choosing next sizing candidate"
+scope = "ideal2GHz, real bias/PDK R tt, initialized counter and RTL replay, two full stress points only"
+adopted = false
+
+[retime_clock_iteration.buffer_dynamic_model]
+status = "TT_FS_light_load_e0_to_e3_fit_and_heldout_verified; incomplete_for_sizing"
+report = "docs/design/tx_retime_demand.md"
+source = "analog/tx/clock_distribution/theory/buffer_dynamic_model.py"
+data = "docs/data/tx_buffer_dynamic_model.json"
+index = "results/catalog/tx_buffer_dynamic_model.json"
+training = "baseline16_R400; uniform12.8_14_14.4_R320; separate_TT_FS_fits"
+heldout = "uniform15_R320_and15.6_R300; graded_first14_or14.4_then15.6_R320"
+TT_FS_one_stage_max_amplitude_error_mv = [12.1515, 12.0857]
+TT_FS_four_stage_max_amplitude_error_mv = [18.9842, 24.2605]
+TT_FS_four_stage_max_crossing_error_ps = [1.7019, 1.6900]
+missing = "e4_WN32_load, Xout, common_mode, remaining_PVT, upstream_impedance, bias_feedback, branch_power, noise_mismatch"
+scope = "WN24_driving_WN24_only; recorded_PWL; empirical_holdout_error_not_guaranteed_bound"
+
+[retime_clock_iteration.consumer_demand]
+status = "FS_SS_whole_payload_8point_demand_measured; FS_one_narrow_input_point; SS_all_eye_and_mapping_pass; internal_400mV_ceiling_under_review; no_physical_dimensions_selected"
+report = "docs/design/tx_retime_demand.md"
+runner = "analog/tx/input_register/tb/retime_demand/run.py"
+series_renderer = "analog/tx/input_register/tb/retime_demand/series_pwl.py"
+baseline_campaign = "results/analog/tx/retime_demand/20261111T065010.025374Z_05fb2e30"
+baseline_data = "docs/data/tx_retime_demand_baseline.json"
+FS_surface_data = "docs/data/tx_retime_demand_fs_surface.json"
+SS_surface_data = "docs/data/tx_retime_demand_ss_surface.json"
+series_FS_campaign = "results/analog/tx/retime_demand/20261111T071341.192430Z_78244032"
+series_SS_campaign = "results/analog/tx/retime_demand/20261111T072051.838757Z_46c5f09d"
+FS_SS_max_single_ended_baseline_error_mv = [0.515771, 0.932453]
+FS_SS_max_baseline_absolute_edge_error_ps = [0.187549, 0.132681]
+per_point_payload_bits = 256
+FS_observed_input_point_delay_ps = 20
+FS_observed_input_point_differential_scale = 1.1
+FS_input_point_serializer_margin_mv = 94.937
+FS_input_point_serializer_spread_ui = 0.11507729
+FS_input_point_pad_margin_mv = 130.638
+FS_input_point_pad_spread_ui = 0.14703195
+FS_input_point_pad_spread_headroom_ps = 0.742
+FS_input_point_status = "observed_prescribed_voltage_point_only; insufficient_model_guard_for_physical_selection"
+SS_scale1p1_c2g_pp_mv = 424.451
+SS_input_clock_screen_failures = "historical_200to400_screen_only: scale110_and_late20_scale110; eye_and_mapping_pass; upper_limit_under_review"
+amplitude_basis_report = "docs/design/cml_swing_target.md"
+new_amplitude_upper_limit_adopted = false
+scope = "prescribed_g3_clock_bias_supply_ports; current_final_rank_driver_package_RLC16; training_only_phase; independent_mapping"
+physical_dimensions_selected = false
+
+[retime_clock_iteration.supply_delay_screen]
+status = "45_existing_full_TX_records_remeasured; joint_DC_screen_only; not_independent_rail_Kd_or_AC_PSRR"
+report = "docs/design/tx_relative_timing_screen.md"
+analysis = "verification/analysis/tx_relative_timing_screen.py"
+data = "docs/data/tx_relative_timing_screen.json"
+index = "results/catalog/tx_relative_timing_screen.json"
+source_campaign = "results/analog/tx/full_pvt45/20261107T200334Z"
+same_process_temperature_voltage_triplets = 15
+common_new_input_events_per_triplet = 64
+largest_adjacent_close_minus_g3_ps_per_mv = 0.11082192
+largest_adjacent_condition = "FS_minus40; bit296_even_new0; 1.65_to_1.80V"
+largest_adjacent_clock_interval_abs_ps_per_mv = 0.01491370
+next_local_card_conditions = ["fs_v1650_t-40", "fs_v1650_t85", "ss_v1650_t-40"]
+scope = "VDD_bias_input_levels_common_mode_load_co_vary; relative_clock_phase_modulo500ps_not_absolute_latency; no_new_dimensions"
+
+[retime_clock_iteration.heavy_width_card]
+status = "TT_FS_strong_input_WN24_32_40_measured_and_raw_recomputed; no_dimensions_adopted"
+report = "docs/design/tx_buffer_heavy.md"
+runner = "analog/tx/input_register/tb/final_clock_chain/buffer_heavy_card.py"
+measurement_library = "src/serdes_flow/stage_metrics.py"
+data = "docs/data/tx_buffer_heavy.json"
+index = "results/catalog/tx_buffer_heavy.json"
+campaign = "results/analog/tx/buffer_heavy_card/20261111T130949Z_13eba6a8"
+boundary_id = "tx_extra5_heavy_wn24_32_40_v1"
+changed_instance = "Xe4_WN24_32_40_per_input_MOS_NF4; WT16_R400_fixed; uniform_extra5; Xiso_and_Xout_fixed"
+legacy_driver = "pre150_WT48_out256; not_current_full_TX_driver"
+resistance = "frozen_generic_high_po_tt; fixed_width_cards_not_validated_here"
+TT_FS_WN24_to_40_c2g_fall_shift_ps = [8.09172, 10.31085]
+TT_FS_WN24_to_40_chain_rail_power_increase_uw = [3.71323, 4.58578]
+TT_FS_WN24_chain_rail_power_mw = [8.31107, 7.19552]
+TT_FS_WN24_Xe4_min_tail_VDS_minus_VDSAT_mv = [601.64374, 338.65140]
+FS_local_8bit_spread_WN24_32_40_ui = [0.10522258, 0.09905274, 0.09373087]
+missing = "weak_input_and_independent_common_mode_transfer; physical_fixed_resistor_corners; current_full_TX_load_and_payload; bias_source_impedance; PVT_noise_mismatch"
+scope = "recorded_ideal_PWL; strong_input_legacy_local_8bit; branch_rail_power_only; not_an_I17_closure"
+adopted = false
+
+[retime_clock_iteration.physical_resistor_transition]
+status = "legal_parallel_geometry_and_passive_cards_measured; signed_cube_overlay_numerically_verified; no_production_adoption"
+report = "docs/design/fixed_load_resistors.md"
+overlay_report = "docs/design/fixed_poly_ac_overlay.md"
+overlay_data = "docs/data/fixed_load_overlay.json"
+overlay_index = "results/catalog/fixed_load_overlay.json"
+passive_campaign = "results/analog/common/devices/fixed_load_card/20261111T133044.144773Z_20c38295"
+overlay_campaign = "results/analog/common/devices/fixed_load_overlay/20261111T164932.207264Z_a0c98cb1"
+model_overlay_id = "fixed_high_po_signed_contact_cube_v1"
+model_overlay_scope = "independent_copy_of_1p41_and_2p85_contact_dynamic_cube_only; source_PDK_and_default_library_unchanged"
+verified_passive_points = 1080
+verified_TT_tiny_transient_networks = 10
+max_AC_vs_DC_differential_relative_error = 1.58141e-9
+original_max_AC_vs_DC_differential_relative_error = 0.22811191
+next_step = "current_load_weak_input_common_mode_card_measured; actual_bias_tracking_fixed_R_corners_and_full_TX_confirmation_required"
+adopted = false
+
+[retime_clock_iteration.loaded_clock_card]
+status = "FS_SS_four_input_three_R_modes_measured_and_reviewed; combined_model_holdout_discrepancy_exceeds_design_margin; no_dimensions_adopted"
+report = "docs/design/tx_loaded_clock.md"
+runner = "analog/tx/input_register/tb/loaded_clock_card/run.py"
+reviewer = "verification/analysis/loaded_clock_review.py"
+baseline_data = "docs/data/tx_loaded_clock_baseline.json"
+data = "docs/data/tx_loaded_clock.json"
+model_data = "docs/data/tx_loaded_clock_model.json"
+model = "analog/tx/clock_distribution/theory/loaded_buffer_model.py"
+model_library = "src/serdes_flow/cml_dynamic.py"
+campaign = "results/analog/tx/loaded_clock_card/20261111T171205.027336Z_8881ed25"
+boundary_id = "tx_loaded_clock_20261111T171205_027336Z_8881ed25"
+FS_SS_max_baseline_voltage_error_mv = [0.045152, 0.32717]
+FS_SS_max_baseline_e3_e4_c2g_edge_error_ps = [0.013705, 0.023005]
+measured_clock_branches = 24
+clock_floor_and_complete_event_passes = 24
+FS_SS_combined_holdout_cascade_max_crossing_error_ps = [3.131063, 0.909776]
+FS_SS_combined_holdout_cascade_max_differential_error_mv = [14.833782, 36.126896]
+FS_SS_combined_holdout_cascade_max_common_mode_error_mv = [5.555806, 16.682079]
+model_fits = 18
+model_parameter_bound_active_fits = 12
+model_optimizer_failed_fits = 0
+next_step = "separate_CM_and_loaded_response_mechanisms; new_holdout_for_new_model; actual_reference_tracking_and_WN_WT_R_feasibility_before_adoption"
+scope = "e2g_2_prescribed_voltage_cut; Xe3_Xe4_Xout; current_pre120_WT60_out192_load; fixed_R_only_in_clock; tt_RC; rejected_source_clock_iteration"
+adopted = false
+
+[retime_clock_iteration.direct_stage_CM]
+status = "FS_SS_zero_shift_calibrated_and_direct_Xe4_Xout_CM_measured; 18of18_local_clocks; no_size_adoption"
+report = "docs/design/tx_loaded_clock.md"
+runner = "analog/tx/input_register/tb/loaded_stage_cm/run.py"
+campaign = "results/analog/tx/loaded_stage_cm/20261111T175916.434499Z_a555bbcc"
+data = "docs/data/tx_direct_stage_cm.json"
+diagnostic_data = "docs/data/tx_loaded_cm.json"
+independent_CM_shift_mv = -25
+local_clock_branches = 18
+local_clock_passes = 18
+maximum_c2g_cycle_pp_change_mv = 0.716230
+maximum_mean_absolute_edge_change_ps = 0.0076
+scope = "ideal_equal_series_DC_sources_retain_adjacent_gate_loading; prescribed_external_sources; two_MOS_conditions_RCtt; training_only_not_physical_shifter_or_AC_PSRR"
+adopted = false
+
+[output_driver_iteration.coupling_state]
+status = "historical_45_finite_charge_state_reaudited; paired_clean_input_DC_initialization_measured; actual_serializer_settled_state_open"
+report = "docs/design/tx_coupling_state.md"
+runner = "analog/tx/output_driver/tb/coupling_state/run.py"
+campaign = "results/analog/tx/output_driver/coupling_state/20261112T043742.580713Z_66e65343"
+data = "docs/data/tx_coupling_state.json"
+index = "results/catalog/tx_coupling_state.json"
+source_full_TX_conditions = 45
+source_full_TX_capture_s = [8e-9, 120e-9]
+AC_capacitance_per_leg_f = 10e-9
+local_clean_input_conditions = ["fs_v1650_t85", "ff_v1950_t-40"]
+local_clean_input_states = ["enable_4ns", "enabled_DC"]
+old_finite_record_peak_estimate_ma = 4.690257
+new_local_DC_initialized_peak_measured_ma = 6.618873
+hypothetical_equal_share_2p85_count_at_preferred_100uA_per_um = 24
+physical_resistor_count_adopted = false
+scope = "two_clean_input_conditions_shared_real_bias; DC_solution_is_initial_state_not_physical_startup_or_full_TX_steady_validation; native_resistor_and_tail_currents"

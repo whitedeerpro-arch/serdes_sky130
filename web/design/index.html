@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8fb">
+  <title>Simple SerDes · 设计工作台</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="catalog.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="#serdes" class="brand"><span class="brand-mark">S<span></span></span><span>Simple SerDes<small>DESIGN WORKSPACE</small></span></a>
+    <div class="top-divider"></div><span class="project-spec">SKY130 <span>·</span> 1.8 V <span>·</span> 4 Gb/s</span>
+    <div class="search-wrap"><span class="search-symbol">⌕</span><input id="search" type="search" placeholder="搜索模块、迭代或图表…" aria-label="搜索设计资料"><kbd>/</kbd><div id="search-results" class="search-results" hidden></div></div>
+    <span id="connection" class="connection"><i></i>本地浏览</span>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-heading"><span>设计目录</span><span id="module-count"></span></div>
+      <nav id="module-tree" aria-label="设计模块层级"></nav>
+      <div class="sidebar-footer"><button class="text-button" id="method-link">验证与尺寸设计方法 ↗</button></div>
+    </aside>
+    <main class="main-area">
+      <div class="location-bar"><div id="breadcrumbs" class="breadcrumbs"></div><button id="open-source" class="quiet-button">当前状态 ↗</button></div>
+      <div class="work-area">
+        <section class="graph-panel" aria-label="模块结构视图">
+          <div class="graph-heading"><div><span class="small-overline">DESIGN HIERARCHY</span><h1 id="graph-title">SerDes</h1><p id="graph-subtitle"></p></div><button id="graph-up" class="quiet-button">↑ 上层</button></div>
+          <div class="view-toolbar"><span class="view-label"><i></i>模块结构</span><div class="toolbar-buttons"><button id="focus-selected" title="查看选中模块的下一级">下钻选中模块 ↘</button><button id="reset-view">总览</button></div></div>
+          <div class="graph-viewport" id="graph-viewport"><div id="graph-world" class="graph-world"><svg id="graph-lines" aria-hidden="true"></svg><div id="graph-nodes"></div></div><div class="canvas-hint">单击查看 · 双击下钻 · 拖动画布</div><div class="zoom-tools"><button id="zoom-out" aria-label="缩小">−</button><span id="zoom-level">100%</span><button id="zoom-in" aria-label="放大">+</button><button id="zoom-fit" aria-label="适合窗口">适合</button></div></div>
+          <div class="graph-footer"><span><i class="legend-dot"></i>实线表示模块归属</span><span>信号与负载关系见「边界」</span></div>
+          <div class="method-strip"><span>开发路径</span><button data-method="boundary">边界定义</button><b>→</b><button data-method="model">模型规划</button><b>→</b><button data-method="circuit">参数 / 电路</button><b>→</b><button data-method="validation">局部仿真</button><b>→</b><button data-method="conclusion">迭代结论</button></div>
+        </section>
+        <aside class="inspector" aria-label="选中模块的设计资料">
+          <div id="inspector-heading" class="inspector-heading"></div>
+          <div class="inspector-tabs" role="tablist"><button role="tab" data-tab="overview" aria-selected="true">概览</button><button role="tab" data-tab="boundary" aria-selected="false">边界</button><button role="tab" data-tab="model" aria-selected="false">模型与参数</button><button role="tab" data-tab="iterations" aria-selected="false">迭代 <span id="iteration-count"></span></button><button role="tab" data-tab="evidence" aria-selected="false">证据</button></div>
+          <div id="inspector-body" class="inspector-body" role="tabpanel"></div>
+          <div class="inspector-footer"><span>记录归属当前模块</span><button id="add-iteration" class="primary-button">＋ 添加迭代</button></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <dialog id="iteration-dialog" class="iteration-dialog"><form id="iteration-form"><div class="dialog-heading"><div><span class="small-overline">NEW ITERATION</span><h2>给模块添加迭代</h2><p id="iteration-module-label"></p></div><button type="button" class="close-button" data-close="iteration-dialog" aria-label="关闭">×</button></div><div class="form-grid"><label class="full-width">迭代标题<input name="title" required minlength="2" maxlength="160" placeholder="例如：低压热角时钟 buffer 第二轮尺寸调整"></label><label class="full-width">当前阶段<select name="phase"><option value="planning">问题与规划</option><option value="model">模型规划 / 推导</option><option value="circuit">参数 / 电路改进</option><option value="validation">仿真验证</option><option value="conclusion">结论与采用</option></select></label><label class="full-width">要解决的问题<textarea name="problem" required rows="2" placeholder="现象、约束与这次工作的目标"></textarea></label><label>模型与规划<textarea name="model" rows="3" placeholder="行为模型、粗模型或约束推导"></textarea></label><label>参数 / 电路修改<textarea name="changes" rows="3" placeholder="修改了什么，参数依据是什么"></textarea></label><label>验证与边界<textarea name="validation" rows="3" placeholder="激励 / 负载、角点、测量与结果"></textarea></label><label>结论 / 下一步<textarea name="conclusion" rows="3" placeholder="得到什么结论，下一步查什么"></textarea></label><label class="full-width">附加已有资料<textarea name="attachments" rows="2" placeholder="每行一个仓库相对路径，例如 docs/design/pll_vco.md"></textarea></label></div><p id="form-error" class="form-error" role="alert"></p><div class="dialog-footer"><span id="save-hint"></span><button type="button" class="quiet-button" data-close="iteration-dialog">取消</button><button type="submit" class="primary-button">保存迭代记录</button></div></form></dialog>
+  <dialog id="artifact-dialog" class="artifact-dialog"><div class="artifact-header"><div><span class="small-overline">DESIGN ARTIFACT</span><h2 id="artifact-title"></h2><p id="artifact-path"></p></div><a id="artifact-external" target="_blank" rel="noopener">打开原文件 ↗</a><button class="close-button" data-close="artifact-dialog" aria-label="关闭资料">×</button></div><div id="artifact-content" class="artifact-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

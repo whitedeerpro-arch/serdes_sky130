@@ -1,0 +1,22 @@
+G {type=subcircuit
+format="@name @pinlist @symname rz=@rz cint=@cint cfast=@cfast"
+template="name=X1 rz=6.5k cint=40p cfast=2p"}
+V {}
+S {}
+E {}
+L 4 -170 -110 170 -110 {}
+L 4 170 -110 170 110 {}
+L 4 170 110 -170 110 {}
+L 4 -170 110 -170 -110 {}
+L 4 -200 0 -170 0 {}
+T {cp_in} -160 -7 0 0 0.19 0.19 {}
+L 4 200 0 170 0 {}
+T {vctrl} 160 -7 0 1 0.19 0.19 {}
+L 4 0 140 0 110 {}
+T {vss} 10 115 0 0 0.18 0.18 {}
+T {loop filter} 0 -85 0 1 0.28 0.28 {}
+T {@name} -170 -144 0 0 0.24 0.24 {}
+T {rz=@rz  cint=@cint  cfast=@cfast} -170 165 0 0 0.18 0.18 {}
+B 5 -202.5 -2.5 -197.5 2.5 {name=cp_in dir=inout}
+B 5 197.5 -2.5 202.5 2.5 {name=vctrl dir=inout}
+B 5 -2.5 137.5 2.5 142.5 {name=vss dir=inout}

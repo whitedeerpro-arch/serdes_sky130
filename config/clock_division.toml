@@ -1,0 +1,20 @@
+status = "architecture_corrected_timing_pending"
+# Two separate clock functions; CMOS free division is not tied to the /8 output.
+feedback_baseline_cml_divide = 8
+feedback_cml_stages = 3
+feedback_cml_taps = [2, 4, 8]
+reference_default_hz = 250000000
+vco_maximum_target_hz = 2000000000
+free_cmos_clock_source = "multiphase_CML_clocks_converted_to_CMOS"
+free_cmos_clock_input_target_hz = 2000000000
+free_cmos_clock_input_multiphase = true
+free_cmos_divide_min_prototype = 1
+free_cmos_divide_max_prototype = 16
+prototype_configuration_encoding = "M_minus_1"
+prototype_verified_input_hz = 250000000
+prototype_2ghz_division_verified = false
+multiphase_cross_domain_alignment_verified = false
+architecture_correction_simulated = false
+feedback_reference_500mhz_with_divide8 = false
+feedback_reference_500mhz_alternative = "separate_divide4_path_or_reference_prescaling_pending"
+full_rate_programmable_cml_counter_active = false

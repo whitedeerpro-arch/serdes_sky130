@@ -1,0 +1,9 @@
+* Rising-edge CML DFF; clocks already shifted into the lower common-mode domain.
+* Separate RX wrapper; frozen divider latch source is reused without modification.
+.subckt serdes_rx_sample_dff dp dn cp cn qp qn vbias vdd vss
++ params: wdata=16 whold=48 wclock=32 wtail=12 nftail=4 rload=600
+Xm dp dn mp mn cn cp vbias vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+Xs mp mn qp qn cp cn vbias vdd vss pll_cml_latch
++ wdata={wdata} whold={whold} wclock={wclock} wtail={wtail} nftail={nftail} rload={rload}
+.ends serdes_rx_sample_dff

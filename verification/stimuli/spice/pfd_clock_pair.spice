@@ -1,0 +1,7 @@
+* Independent reference/feedback phase and frequency.
+* fb_delay > ref_delay: feedback edge arrives later.
+* Delays must be nonnegative; phase offset is specified in seconds.
+.subckt stim_pfd_clock_pair ref fb vss params: vlo=0 vhi=1.8 ref_period=10n fb_period=10n ref_delay=1n fb_delay=2n trise=100p tfall=100p duty=0.5
+Vref ref vss PULSE({vlo} {vhi} {ref_delay} {trise} {tfall} {duty*ref_period-(trise+tfall)/2} {ref_period})
+Vfb fb vss PULSE({vlo} {vhi} {fb_delay} {trise} {tfall} {duty*fb_period-(trise+tfall)/2} {fb_period})
+.ends stim_pfd_clock_pair

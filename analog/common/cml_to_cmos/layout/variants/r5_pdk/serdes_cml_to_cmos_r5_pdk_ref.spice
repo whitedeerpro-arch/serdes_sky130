@@ -1,0 +1,49 @@
+* Physical LVS reference for serdes_cml_to_cmos_r5_pdk
+.subckt serdes_cml_to_cmos_r5_pdk inp inn outp outn vbias vdd vss
+Xfp vdd inp fp vss sky130_fd_pr__nfet_01v8_lvt w=32 l=0.15
+Xfn vdd inn fn vss sky130_fd_pr__nfet_01v8_lvt w=32 l=0.15
+Xsp fp vbias vss vss sky130_fd_pr__nfet_01v8 w=3 l=0.5
+Xsn fn vbias vss vss sky130_fd_pr__nfet_01v8 w=3 l=0.5
+Xap_ip ap_mir fp ap_tail vss sky130_fd_pr__nfet_01v8_lvt w=16 l=0.15
+Xap_in ap fn ap_tail vss sky130_fd_pr__nfet_01v8_lvt w=16 l=0.15
+Xap_lp ap_mir ap_mir vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.15
+Xap_ln ap ap_mir vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.15
+Xap_t ap_tail vbias vss vss sky130_fd_pr__nfet_01v8 w=32 l=0.5
+Xan_ip an_mir fn an_tail vss sky130_fd_pr__nfet_01v8_lvt w=16 l=0.15
+Xan_in an fp an_tail vss sky130_fd_pr__nfet_01v8_lvt w=16 l=0.15
+Xan_lp an_mir an_mir vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.15
+Xan_ln an an_mir vdd vdd sky130_fd_pr__pfet_01v8 w=32 l=0.15
+Xan_t an_tail vbias vss vss sky130_fd_pr__nfet_01v8 w=32 l=0.5
+XCac_p ap_ac ap sky130_fd_pr__cap_mim_m3_1 w=5 l=9.9
+XCac_n an_ac an sky130_fd_pr__cap_mim_m3_1 w=5 l=9.9
+XRfb_p0 ap_ac rfp1 vss sky130_fd_pr__res_high_po_0p35 l=6
+XRfb_p1 rfp1  rfp2 vss sky130_fd_pr__res_high_po_0p35 l=6
+XRfb_p2 rfp2  bp   vss sky130_fd_pr__res_high_po_0p35 l=6
+XRfb_n0 an_ac rfn1 vss sky130_fd_pr__res_high_po_0p35 l=6
+XRfb_n1 rfn1  rfn2 vss sky130_fd_pr__res_high_po_0p35 l=6
+XRfb_n2 rfn2  bn   vss sky130_fd_pr__res_high_po_0p35 l=6
+Xbp_n bp ap_ac vss vss sky130_fd_pr__nfet_01v8_lvt w=4.5 l=0.15
+Xbp_p bp ap_ac vdd vdd sky130_fd_pr__pfet_01v8 w=10.0 l=0.15
+Xbn_n bn an_ac vss vss sky130_fd_pr__nfet_01v8_lvt w=4.5 l=0.15
+Xbn_p bn an_ac vdd vdd sky130_fd_pr__pfet_01v8 w=10.0 l=0.15
+Xkbp_n bp bn vss vss sky130_fd_pr__nfet_01v8 w=0.6 l=0.15
+Xkbp_p bp bn vdd vdd sky130_fd_pr__pfet_01v8 w=1.2 l=0.15
+Xkbn_n bn bp vss vss sky130_fd_pr__nfet_01v8 w=0.6 l=0.15
+Xkbn_p bn bp vdd vdd sky130_fd_pr__pfet_01v8 w=1.2 l=0.15
+Xop_n rawp bp vss vss sky130_fd_pr__nfet_01v8 w=3.6 l=0.15
+Xop_p rawp bp vdd vdd sky130_fd_pr__pfet_01v8 w=6.4 l=0.15
+Xon_n rawn bn vss vss sky130_fd_pr__nfet_01v8 w=3.6 l=0.15
+Xon_p rawn bn vdd vdd sky130_fd_pr__pfet_01v8 w=6.4 l=0.15
+Xm1p_n midp rawp vss vss sky130_fd_pr__nfet_01v8 w=1.8 l=0.15
+Xm1p_p midp rawp vdd vdd sky130_fd_pr__pfet_01v8 w=6.0 l=0.15
+Xm1n_n midn rawn vss vss sky130_fd_pr__nfet_01v8 w=1.8 l=0.15
+Xm1n_p midn rawn vdd vdd sky130_fd_pr__pfet_01v8 w=6.0 l=0.15
+Xkcp_n midp midn vss vss sky130_fd_pr__nfet_01v8 w=0.42 l=0.15
+Xkcp_p midp midn vdd vdd sky130_fd_pr__pfet_01v8 w=1.0 l=0.15
+Xkcn_n midn midp vss vss sky130_fd_pr__nfet_01v8 w=0.42 l=0.15
+Xkcn_p midn midp vdd vdd sky130_fd_pr__pfet_01v8 w=1.0 l=0.15
+Xo1p_n outp midp vss vss sky130_fd_pr__nfet_01v8 w=3.2 l=0.15
+Xo1p_p outp midp vdd vdd sky130_fd_pr__pfet_01v8 w=8.0 l=0.15
+Xo1n_n outn midn vss vss sky130_fd_pr__nfet_01v8 w=3.2 l=0.15
+Xo1n_p outn midn vdd vdd sky130_fd_pr__pfet_01v8 w=8.0 l=0.15
+.ends serdes_cml_to_cmos_r5_pdk

@@ -1,0 +1,69 @@
+Retiming sweep: chain taps (/2, /4, /8 of phase 0) retimed on one chosen phase
+* Four ideal differential sines 45 deg apart (the VCO's eight phases incl.
+* inversion) drive real CML extraction buffers. One r3 prescaler hangs on b0.
+* Standardized input as in the prescaler PVT bench: 300 mVpp, CM = VDD-0.15 V.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_latch.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_div2.spice"
+.include "@PROJECT_ROOT@/analog/pll/divider/spice/cml_prescaler8.spice"
+.include "@PROJECT_ROOT@/analog/tx/clock_distribution/spice/tx_clock_retime.spice"
+.param supply=@SUPPLY@ freq=2e9 input_pp=.3
+Vdd vdd 0 {supply}
+Vreference vref 0 {supply}
+Iref vref vbias .85m
+Xref vbias vbias 0 0 serdes_nfet w=20 l=.5 nf=4
+Vp0 sp0 0 SIN({supply-.15} {input_pp/4} {freq} 0 0 0)
+Vn0 sn0 0 SIN({supply-.15} {-input_pp/4} {freq} 0 0 0)
+Vp1 sp1 0 SIN({supply-.15} {input_pp/4} {freq} 0 0 -45)
+Vn1 sn1 0 SIN({supply-.15} {-input_pp/4} {freq} 0 0 -45)
+Vp2 sp2 0 SIN({supply-.15} {input_pp/4} {freq} 0 0 -90)
+Vn2 sn2 0 SIN({supply-.15} {-input_pp/4} {freq} 0 0 -90)
+Vp3 sp3 0 SIN({supply-.15} {input_pp/4} {freq} 0 0 -135)
+Vn3 sn3 0 SIN({supply-.15} {-input_pp/4} {freq} 0 0 -135)
+Xb0 sp0 sn0 b0p b0n vbias vdd 0 serdes_cml_buffer
+Xb1 sp1 sn1 b1p b1n vbias vdd 0 serdes_cml_buffer
+Xb2 sp2 sn2 b2p b2n vbias vdd 0 serdes_cml_buffer
+Xb3 sp3 sn3 b3p b3n vbias vdd 0 serdes_cml_buffer
+* Real frontend has a prescaler on every phase (one active, three dummies).
+Xpre1 b1p b1n x12p x12n x14p x14n x18p x18n vbias vdd 0 pll_cml_prescaler8
+Xpre2 b2p b2n x22p x22n x24p x24n x28p x28n vbias vdd 0 pll_cml_prescaler8
+Xpre3 b3p b3n x32p x32n x34p x34n x38p x38n vbias vdd 0 pll_cml_prescaler8
+Xpre b0p b0n d02p d02n d04p d04n d08p d08n vbias vdd 0 pll_cml_prescaler8
+* One retimer per tap, all clocked by the phase under test (@PHASE_P@/@PHASE_N@).
+Xrbias vbias vbias_logic vdd 0 pll_cml_tail_bias
+Xr2 d02p d02n @PHASE_P@ @PHASE_N@ r2p r2n vbias vbias_logic vdd 0 serdes_cml_dff_lowov
+Xr4 d04p d04n @PHASE_P@ @PHASE_N@ r4p r4n vbias vbias_logic vdd 0 serdes_cml_dff_lowov
+Xr8 d08p d08n @PHASE_P@ @PHASE_N@ r8p r8n vbias vbias_logic vdd 0 serdes_cml_dff_lowov
+* Distribution trim-stage input (W20 diff pair) as load on each output.
+Cr2p r2p 0 20f
+Cr2n r2n 0 20f
+Cr4p r4p 0 20f
+Cr4n r4n 0 20f
+Cr8p r8p 0 20f
+Cr8n r8n 0 20f
+@INITIAL_STATE@
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set num_threads=1
+set wr_singlescale
+set wr_vecnames
+tran 2p @STOP@ 0 2p
+let b0=v(b0p)-v(b0n)
+let b1=v(b1p)-v(b1n)
+let b2=v(b2p)-v(b2n)
+let b3=v(b3p)-v(b3n)
+let d2=v(d02p)-v(d02n)
+let d4=v(d04p)-v(d04n)
+let d8=v(d08p)-v(d08n)
+let ck=v(xr2.ckp)-v(xr2.ckn)
+let r2=v(r2p)-v(r2n)
+let r4=v(r4p)-v(r4n)
+let r8=v(r8p)-v(r8n)
+wrdata waveforms.tsv b0 b1 b2 b3 d2 d4 d8 ck r2 r4 r8
+quit
+.endc
+.end

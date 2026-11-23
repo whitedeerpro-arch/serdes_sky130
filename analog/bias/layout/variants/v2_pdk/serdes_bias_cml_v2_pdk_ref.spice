@@ -1,0 +1,8 @@
+* BIAS v2 serdes_bias_cml_v2_pdk (5/0.5 diode under 2x1 stacked MIM1+MIM2 5.0 pF)
+.subckt serdes_bias_cml_v2_pdk iin vss
+Xd iin iin vss vss sky130_fd_pr__nfet_01v8 w=5 l=0.5
+Xm1_0 iin vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xm1_1 iin vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xm2_0 vss iin sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xm2_1 vss iin sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+.ends serdes_bias_cml_v2_pdk

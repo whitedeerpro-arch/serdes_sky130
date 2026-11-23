@@ -1,0 +1,53 @@
+* PLL VCO r6 capacitor bank (2026-11-12): 31 identical MIM half units grouped 1:2:4:8:16, layout parasitics in the schematic.
+* Unit: MIM top plate (capm) on the phase node, bottom plate (met3) to the switch drain; switch = two fingers sharing the
+* drain.  The off-state residual (31 units per phase node at code 0) is set by the drain junction and the bottom plate, so
+* both are modelled from the first extraction (analog/pll/vco/layout pll_vco_cap_unit, 2026-11-12) instead of the
+* w x 0.29 um heuristic:
+*   drain   two fingers of sw/2 sharing a 0.5 um drain: ad = sw/2 x 0.5, pd = 2 (sw/2 + 0.5)
+*   Cbp     bottom plate to substrate: met3 = MIM + 0.14 um enclosure, 0.0124 fF/um2 + 0.041 fF/um of perimeter (these two
+*           numbers reproduce the extracted 1.77 fF of a 16.84 um2 / 37.8 um plate), + 0.12 fF for the via and drain strap
+*   Cfr     node to bottom-plate fringe in parallel with the MIM, 0.081 fF per um of MIM perimeter (0.845 fF extracted
+*           on 2.52 x 2.68)
+* Rdc only defines a DC reference for the otherwise floating off plate.
+.subckt pll_vco_cap_unit6 node en vss params: capw=2.0 capl=2.0 sw=1.5
+Xcap node plate sky130_fd_pr__cap_mim_m3_1 w={capw} l={capl}
+Xsw plate en vss vss sky130_fd_pr__nfet_01v8 w={sw} l=0.15 nf=2
++ ad={sw/2*0.5} pd={2*(sw/2+0.5)} as={sw*0.5} ps={4*(sw/2+0.5)}
+Cfr node plate {0.081e-15*2*(capw+capl)}
+Cbp plate vss {0.0124e-15*(capw+0.28)*(capl+0.28)+0.041e-15*2*(capw+capl+0.56)+0.12e-15}
+Rdc plate vss 1T
+.ends pll_vco_cap_unit6
+
+.subckt pll_vco_cap_bank5 node b0 b1 b2 b3 b4 vss params: capw=2.0 capl=2.0 sw=1.5
+X0_0 node b0 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X1_0 node b1 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X1_1 node b1 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X2_0 node b2 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X2_1 node b2 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X2_2 node b2 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X2_3 node b2 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_0 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_1 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_2 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_3 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_4 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_5 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_6 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X3_7 node b3 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_0 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_1 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_2 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_3 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_4 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_5 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_6 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_7 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_8 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_9 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_10 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_11 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_12 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_13 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_14 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+X4_15 node b4 vss pll_vco_cap_unit6 capw={capw} capl={capl} sw={sw}
+.ends pll_vco_cap_bank5

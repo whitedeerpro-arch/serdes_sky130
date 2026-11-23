@@ -1,0 +1,31 @@
+PFD + k = 4 steering CP: net charge per reference period versus phase offset, output held at a fixed voltage
+* Real PFD (pll_pfd, 20 fF proxy beyond the CP inputs), the CP of pll_core_r5k4, real bias (bias.real converts the 50 uA
+* references; the follower's 10 uA becomes a bandgap copy in run.py).  ref: 250 MHz square; fb: same edges shifted per
+* period by the phase list (PWL from run.py).  Vout holds the CP output; i(Vout) > 0 = net UP charge.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/cmos_dff_reset.spice"
+.include "@PROJECT_ROOT@/analog/pll/pfd/spice/pfd_cmos.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump.spice"
+.include "@PROJECT_ROOT@/analog/pll/cp/spice/charge_pump_steer.spice"
+.param supply=@SUPPLY@ irefn=50u irefp=50u
+Vdd vdd 0 {supply}
+Vbias vb 0 {supply}
+In vb vbn {irefn}
+Ip vbp 0 {irefp}
+Xbn vbn vbn 0 0 serdes_nfet w=5 l=1
+Xbp vbp vbp vb vb serdes_pfet w=20 l=1 nf=4
+Vref ref 0 PWL(@REF_PWL@)
+Vfb fb 0 PWL(@FB_PWL@)
+Vrst rst_b 0 {supply}
+Xpfd ref fb rst_b up dn vdd 0 pll_pfd
+Cup up 0 20f
+Cdn dn 0 20f
+Xcp up dn out vbn vbp ibuf vdd 0 pll_cp_steer @CP_PARAMS@
+Ibuf vdd ibuf 10u
+Vout out 0 @VOUT@
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u

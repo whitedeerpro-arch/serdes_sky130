@@ -1,0 +1,13 @@
+* TEMPLATE ONLY: replace all @...@ tokens.
+* Validate Xyce compatibility of the selected PDK entry independently.
+.lib "@XYCE_COMPATIBLE_PDK_MODEL_LIB@" @CORNER@
+.include "@DUT_NETLIST@"
+.include "@STIMULUS_NETLIST@"
+
+@FIXTURE_AND_DUT_INSTANCES@
+
+.temp @TEMPERATURE_C@
+.tran @OUTPUT_STEP@ @STOP_TIME@ 0 @MAX_STEP@
+.PRINT TRAN FORMAT=STD @OUTPUT_VECTORS@
+@MEASURE_STATEMENTS@
+.end

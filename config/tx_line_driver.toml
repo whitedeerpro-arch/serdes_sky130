@@ -1,0 +1,39 @@
+status = "first_output_stage_prototype"
+interface_user_confirmed = true
+line_rate_bps = 4000000000
+nominal_ui_s = 2.5e-10
+target_receiver_differential_pp_v = 0.4
+supply_v = 1.8
+source_termination_per_leg_ohm = 50
+receiver_termination_per_leg_ohm = 50
+receiver_bias_v = 0.9
+coupling = "AC"
+coupling_cap_per_leg_f = 1e-8
+isolation_input_width_um = 12
+predriver_input_width_um = 48
+output_pair_width_um = 256
+output_tail_width_um = 172
+electrical_idle = "tx_en=0 gates line-tail bias off; predriver remains biased"
+ffe = "main_cursor_only; FFE delay/current-tap hardware not implemented"
+channel_model = "verification/models/channel/diff_rlc16.spice"
+real_board_channel_or_sparameters_present = false
+pad_cap_per_leg_f = 2e-13
+package_inductance_per_leg_h = 5e-10
+esd_or_extracted_pad_present = false
+preliminary_input_cap_per_leg_at_2ghz_f = 1.74914463e-14
+remaining_serializer_wire_cap_per_leg_f = 2e-15
+separate_power_ports_implemented = true
+supply_return_or_bias_isolation_qualified = false
+pcie_compliance_claimed = false
+
+nominal_direct_loading_observed = true
+nominal_direct_payload_bits = 256
+nominal_direct_far_end_voltage_sample_errors = 0
+nominal_far_end_pp_v = 0.398388317
+nominal_far_end_transition_spread_ui = 0.06850436710947871
+
+PVT_report = "docs/history/tx_pvt.md"
+PVT_results = "docs/data/tx_pvt.json"
+PVT_independent_functional_cells = 45
+PVT_enable_startup_cold_gap = true
+PVT_candidates_promoted = false

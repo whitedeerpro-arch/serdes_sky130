@@ -1,0 +1,109 @@
+{
+  "date": "2026-11-13",
+  "goal": "physical layout of pll_core_r6k4q; in progress",
+  "source_variants": "analog/pll/vco/layout/variants/r6_pdk",
+  "qualification": "shared-bank candidate: physical checks + TT all-code AC + two accounted endpoints + six additional-12fF stress endpoints; full PLL / all-PVT code windows / switching dynamics / mismatch not qualified",
+  "extraction": {
+    "current": "flat EXT matrix plus independently checked LVS devices; *_cap.spice",
+    "tool_patch": "verification/layout/patches/magic-8.3.685-capacitance-net.patch",
+    "installed_batch": "config/tools.toml:layout.magic_batch",
+    "regression": "tests/test_flat_cap_export.py (both hierarchy paths)",
+    "mapping_probe": "results/layout/pll_r6/ext_cap_mapping_probe",
+    "patched_comparison": "results/layout/pll_r6/patched_magic_both_paths",
+    "patched_comparison_note": "Ground-net assignments preserved; max difference 0.000186643fF is tiny coupling printed as 0 by Magic; audited matrix retains it"
+  },
+  "geometry": {
+    "run": "results/layout/pll_r6/shared_bank_audited",
+    "summary": "results/layout/pll_r6/shared_bank_audited/summary.json",
+    "mag": "analog/pll/vco/layout/variants/r6_pdk/pll_vco_cap_bank5_shared.mag",
+    "iteration": "one shared floating plate per bit; same 31 2x2 MIMs / 62 0.75/0.15 MOS fingers / 1:2:4:8:16 weights",
+    "bbox_size_um": [
+      51.07,
+      18.61
+    ],
+    "full_rule_drc": 0,
+    "lvs": true,
+    "exported_ports": 7,
+    "independent_count_checks": true,
+    "regeneration_matches_first_geometry_and_cap_matrix": true
+  },
+  "electrical": {
+    "unit_ac": "results/layout/pll_r6/corrected_units_ac/summary.json",
+    "bank_ac": "results/layout/pll_r6/corrected_bank_ac/summary.json",
+    "full_library_comparison": "results/layout/pll_r6/corrected_bank_ac_full/summary.json",
+    "full_reduced_all32_equal": true,
+    "ac_scope": "TT/27C phaseDC1.5V cfg0/1.8V, 2GHz small-signal",
+    "bank_off_on_fF": [
+      51.4564324171,
+      311.87369667
+    ],
+    "planning_off_on_fF": [
+      47.68427097477,
+      307.0361055312
+    ],
+    "monotone_codes": 32,
+    "code_step_fF": [
+      7.9556158,
+      9.9063331769
+    ],
+    "accounted_endpoints": "results/layout/pll_r6/corrected_bank_ends/summary.json",
+    "accounted_scope": "r6 open-loop ring + four 30fF buffers, real bias, fixed resistor cards; cwire residual7.19995448fF",
+    "stress_endpoints": "results/layout/pll_r6/corrected_bank_stress_6/summary.json",
+    "stress_scope": "FS hot hh code0 and SF cold ll code31 at 1.65/1.8/1.95V; full extra12fF per phase",
+    "stress_min_range_margin": 0.0696263304082183,
+    "drift_warnings": []
+  },
+  "clean_varactor": {
+    "run": "results/layout/pll_r6/varactor_clean_20261113T084500Z",
+    "summary": {
+      "cell": "pll_vco_varactor_clean",
+      "checker_exit": 0,
+      "removed_dummy_shapes": {
+        "poly": 2,
+        "polycont": 4,
+        "locali": 4
+      },
+      "bbox_um": [
+        0.0,
+        0.0,
+        7.7,
+        8.4
+      ],
+      "retained": "four real varactor fingers, matching core placement, gate/cathode straps and body guard"
+    }
+  },
+  "legacy": {
+    "status": "WITHDRAWN electrical numbers: old ext2spice moved MIM top / MOS gate ground caps to source/drain; device-only DRC/LVS still valid; original files retained",
+    "evidence": [
+      {
+        "id": "first_stacked_unit",
+        "run": "results/layout/pll_r6/cap_unit_20261113T083410Z"
+      },
+      {
+        "id": "compact_unit",
+        "run": "results/layout/pll_r6/cap_compact_x0_20261113T085600Z"
+      },
+      {
+        "id": "local_ac_comparison",
+        "run": "results/layout/pll_r6/cap_unit_ac_20261113T084600Z"
+      },
+      {
+        "id": "first_unit_endpoints",
+        "run": "results/layout/pll_r6/cap_unit_ends_20261113T084700Z"
+      },
+      {
+        "id": "compact_unit_endpoints",
+        "run": "results/layout/pll_r6/cap_compact_ends_20261113T090500Z"
+      },
+      {
+        "id": "source_decomposition",
+        "run": "results/layout/pll_r6/cap_decomposition_20261113T085911Z"
+      },
+      {
+        "id": "published_compact_unit",
+        "run": "results/layout/pll_r6/cap_compact_verified_final"
+      }
+    ]
+  },
+  "next": "Review shared-plate electrical iteration with Fable; code windows and switching/mismatch before adoption; continue delay/buffer/PFD and complete phase layout. No adopted schematic changes."
+}

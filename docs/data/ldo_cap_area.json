@@ -1,0 +1,1415 @@
+{
+  "report": "docs/design/ldo_cap_area.md",
+  "scope": "local cap-area iteration; core-only PEX; global r4/PLL adoption unchanged",
+  "inputs": {
+    "screen": {
+      "path": "results/analog/ldo/cap_sizing/20261113T175958.073594Z_peripheral/analysis/20261113T180245.552586Z/summary.json",
+      "sha256": "af8a46e63dcbe5cc1357017dfacebb42781c2f0ee17b006a290aa3a3dbab0a2b"
+    },
+    "noise": {
+      "path": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/analysis/20261113T180453.263861Z/summary.json",
+      "sha256": "48a31d6dde78b4deebac36a2a42a86af019b21a4e1f27c5587b743143ad69777"
+    },
+    "noise_rc": {
+      "path": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/analysis/20261113T180749.996218Z/summary.json",
+      "sha256": "9b96b5dfa00e8827837b34bd694732cc5bb12f643e98aa5283fba86d0e7bbc8d"
+    },
+    "inventory": {
+      "path": "results/analog/ldo/cap_sizing/20261113T175958.073594Z_peripheral/inventory_v2.json",
+      "sha256": "03c3bad263c0b61f5550e975e987cac602b66cd342ba859faacb7e77686bcadd"
+    },
+    "core16": {
+      "path": "results/layout/ldo_smallcap/20261114_b32_h2_macro_v2/summary.json",
+      "sha256": "37c39fe71bf978c78cdebd9e03d45efeb906cb2b4add17a6d43edd456f505e27"
+    },
+    "core12": {
+      "path": "results/layout/ldo_smallcap/20261114_cas12_compact/summary.json",
+      "sha256": "9997ab68b1b469a6754b232a479a84464adfd9bf9b37f8bad893775294392269"
+    },
+    "core8": {
+      "path": "results/layout/ldo_smallcap/20261114_cas8_compact/summary.json",
+      "sha256": "2747fd5c30d66ba649b824252dce450a8020314c8fb09bc831b97bd5a9ad4dd7"
+    },
+    "corestack": {
+      "path": "results/layout/ldo_stacked/20261114_core70/summary.json",
+      "sha256": "476331d1264c645167bb0fd6d38ef5ed76c0f269b928f1f6097c3f07261b0015"
+    },
+    "pex16": {
+      "path": "results/analog/ldo/cap_sizing/20261114T064811.987187Z_worst/analysis/20261114T064911.161519Z/summary.json",
+      "sha256": "e80ad0b03b9ccc406c73b7799e48e3bffa4f0edfe6e2c26cbcaba8632245bb3a"
+    },
+    "pex12": {
+      "path": "results/analog/ldo/cap_sizing/20261114T070004.264858Z_worst/analysis/20261114T070217.565368Z/summary.json",
+      "sha256": "46d222a67193933c1468261708b4f4050f2517b4deb575e5668125e009142a53"
+    },
+    "pex8": {
+      "path": "results/analog/ldo/cap_sizing/20261114T065105.653887Z_worst/analysis/20261114T065200.262607Z/summary.json",
+      "sha256": "00c314b125127dfe2daf09576ef54f94bc85c440a1d6e9c89c5e8d8895f731f4"
+    },
+    "pexstack": {
+      "path": "results/analog/ldo/cap_sizing/20261114T070347.072332Z_worst/analysis/20261114T070613.173320Z/summary.json",
+      "sha256": "e7c7bbd3080f70b33cc8fb66875a2aa39e786c8d79eae9464e87ce1aadceac30"
+    },
+    "full_screen": {
+      "path": "results/analog/ldo/cap_sizing/20261114T070254.616083Z_peripheral/analysis/20261114T070657.676460Z/summary.json",
+      "sha256": "c751cea4896f51478ad7ccc2861df0aa60d27d12be73843503e1afd5d71424e9"
+    },
+    "reduced_screen": {
+      "path": "results/analog/ldo/cap_sizing/20261114T070550.797002Z_peripheral/analysis/20261114T070659.634154Z/summary.json",
+      "sha256": "90aced291f02bf73201ca57b6960d69e7501d7d8f4fbfa7de1a19a2b4bb51dd3"
+    },
+    "stack_pvt": {
+      "path": "results/analog/ldo/cap_sizing/20261114T070543.827161Z_pvt/analysis/20261114T071819.837750Z/summary.json",
+      "sha256": "b144d61edfc71a7e8d9cfb7117727195b2781f0c06e255f9a4378f071138317f"
+    },
+    "stack_dynamic": {
+      "path": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/analysis/20261114T072050.110311Z/summary.json",
+      "sha256": "6f7109d15af3f01e2c8e069a170e6b796fb5ec11ce8f64665b7e15677dc7c107"
+    },
+    "stack_mc": {
+      "path": "results/analog/ldo/candidate_mismatch/20261114T070744.907393Z/analysis/20261114T071540.405792Z/summary.json",
+      "sha256": "ad1d28b3f6f5d5a611f51b55626bcf2f3b8cb011da1e41adb85022d27167dd25"
+    },
+    "stack_pex_screen": {
+      "path": "results/analog/ldo/cap_sizing/20261114T071004.168143Z_screen/analysis/20261114T072143.245983Z/summary.json",
+      "sha256": "068f8167adc6686c4c9f9b78b16d664cbb17efa3c83929872443db1622715878"
+    },
+    "filter16": {
+      "path": "results/layout/ldo_stacked/20261114_filter16_v2/summary.json",
+      "sha256": "127e0211efc496072224101191af960a5763f2474388442a9417d299903ef208"
+    },
+    "filter_card": {
+      "path": "results/analog/ldo/stacked_peripheral/20261114T072634.752165Z/analysis/20261114T073147.907774Z/summary.json",
+      "sha256": "2dd76f10bd135d3c18b4fa31101cdbd00670643e8766acaa18777b95e95ebf91"
+    }
+  },
+  "inventory": [
+    {
+      "top": "serdes_pll_supply_hv18_smallcap",
+      "scope": "LDO70pF candidate, excludes shared BG and tail filter",
+      "nominal_pf": 70.0,
+      "branches": [
+        {
+          "instance": "xcore.xchv",
+          "nominal_pf": 32.0
+        },
+        {
+          "instance": "xrefcap",
+          "nominal_pf": 16.0
+        },
+        {
+          "instance": "xcore.xccas",
+          "nominal_pf": 16.0
+        },
+        {
+          "instance": "xcout",
+          "nominal_pf": 4.0
+        },
+        {
+          "instance": "xcore.xccomp",
+          "nominal_pf": 2.0
+        }
+      ],
+      "unknown_subcircuits": []
+    },
+    {
+      "top": "serdes_pll_bias_lowpass_slow_r4",
+      "scope": "one PLL tail filter, separate from LDO",
+      "nominal_pf": 16.0,
+      "branches": [
+        {
+          "instance": "xc",
+          "nominal_pf": 16.0
+        }
+      ],
+      "unknown_subcircuits": []
+    },
+    {
+      "top": "pll_loop_filter_k4",
+      "scope": "PLL loop integrator, not supply decoupling",
+      "nominal_pf": 18.0,
+      "branches": [
+        {
+          "instance": "xcg00",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcg01",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcg02",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcg03",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcg04",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcg05",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv00",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv01",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv02",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv03",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv04",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv05",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv06",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv07",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv08",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv09",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv10",
+          "nominal_pf": 1.0
+        },
+        {
+          "instance": "xcv11",
+          "nominal_pf": 1.0
+        }
+      ],
+      "unknown_subcircuits": []
+    },
+    {
+      "top": "serdes_bias_ref",
+      "scope": "one shared reference, not counted per LDO",
+      "nominal_pf": 13.0,
+      "branches": [
+        {
+          "instance": "xbg.xamp",
+          "nominal_pf": 6.0
+        },
+        {
+          "instance": "cvbg",
+          "nominal_pf": 5.0
+        },
+        {
+          "instance": "xbg.cvgi",
+          "nominal_pf": 2.0
+        }
+      ],
+      "unknown_subcircuits": []
+    },
+    {
+      "top": "serdes_bias_cml",
+      "scope": "one local CML diode, multiple modules may instantiate it",
+      "nominal_pf": 5.0,
+      "branches": [
+        {
+          "instance": "cdec",
+          "nominal_pf": 5.0
+        }
+      ],
+      "unknown_subcircuits": []
+    }
+  ],
+  "screen": [
+    {
+      "name": "b32_h2",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 16,
+      "ref_series": 1,
+      "total_pf": 70,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250755004,
+      "vout_max": 1.812629862433169,
+      "psrr20_min_db": 36.77451121498555,
+      "pm_min_deg": 76.71616424123049,
+      "host1_max_v_v": 0.006731750979192123
+    },
+    {
+      "name": "ref8",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 8,
+      "ref_series": 1,
+      "total_pf": 62,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250822587,
+      "vout_max": 1.8126298624371526,
+      "psrr20_min_db": 36.792232237628696,
+      "pm_min_deg": 76.7264557410971,
+      "host1_max_v_v": 0.013928955116998173
+    },
+    {
+      "name": "ref4",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 4,
+      "ref_series": 1,
+      "total_pf": 58,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.775953225081257,
+      "vout_max": 1.8126298624334285,
+      "psrr20_min_db": 36.82733291345131,
+      "pm_min_deg": 76.74504520310329,
+      "host1_max_v_v": 0.027715618855694717
+    },
+    {
+      "name": "ref2",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 2,
+      "ref_series": 1,
+      "total_pf": 56,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.775953225072029,
+      "vout_max": 1.8126298624452548,
+      "psrr20_min_db": 36.896171177009954,
+      "pm_min_deg": 76.77492756482171,
+      "host1_max_v_v": 0.052979194496804924
+    },
+    {
+      "name": "ref8_r2",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 8,
+      "ref_series": 2,
+      "total_pf": 62,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759512801591493,
+      "vout_max": 1.8126258055601796,
+      "psrr20_min_db": 36.79242148706075,
+      "pm_min_deg": 76.72646389223138,
+      "host1_max_v_v": 0.003775648311766096
+    },
+    {
+      "name": "ref4_r2",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 4,
+      "ref_series": 2,
+      "total_pf": 58,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759512801528072,
+      "vout_max": 1.8126258055569358,
+      "psrr20_min_db": 36.827522657283346,
+      "pm_min_deg": 76.74506605879868,
+      "host1_max_v_v": 0.007621422492022874
+    },
+    {
+      "name": "cas8_only",
+      "chv_pf": 32,
+      "ccas_pf": 8,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 62500.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 16,
+      "ref_series": 1,
+      "total_pf": 62,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.775953225082258,
+      "vout_max": 1.8126298624420518,
+      "psrr20_min_db": 34.58671259889109,
+      "pm_min_deg": 76.71568627567093,
+      "host1_max_v_v": 0.006731752506413647
+    },
+    {
+      "name": "cas12_only",
+      "chv_pf": 32,
+      "ccas_pf": 12,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 41666.666666666664,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 16,
+      "ref_series": 1,
+      "total_pf": 66,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250817318,
+      "vout_max": 1.8126298624494235,
+      "psrr20_min_db": 35.977451590039784,
+      "pm_min_deg": 76.71599425387946,
+      "host1_max_v_v": 0.006731751533601529
+    },
+    {
+      "name": "cas8_ref8",
+      "chv_pf": 32,
+      "ccas_pf": 8,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 62500.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 8,
+      "ref_series": 1,
+      "total_pf": 54,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250826118,
+      "vout_max": 1.8126298624373844,
+      "psrr20_min_db": 34.59932613245614,
+      "pm_min_deg": 76.72597802685206,
+      "host1_max_v_v": 0.013928958308024661
+    },
+    {
+      "name": "cas12_ref8",
+      "chv_pf": 32,
+      "ccas_pf": 12,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 41666.666666666664,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 8,
+      "ref_series": 1,
+      "total_pf": 58,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250812635,
+      "vout_max": 1.812629862441894,
+      "psrr20_min_db": 35.99311479258071,
+      "pm_min_deg": 76.72628581901438,
+      "host1_max_v_v": 0.013928956246509121
+    },
+    {
+      "name": "cas12_ref4",
+      "chv_pf": 32,
+      "ccas_pf": 12,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 41666.666666666664,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 4,
+      "ref_series": 1,
+      "total_pf": 54,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250826118,
+      "vout_max": 1.812629862440749,
+      "psrr20_min_db": 36.024152094330205,
+      "pm_min_deg": 76.74487544250287,
+      "host1_max_v_v": 0.027715621094007093
+    },
+    {
+      "name": "cas8_ref4",
+      "chv_pf": 32,
+      "ccas_pf": 8,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 62500.0,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 4,
+      "ref_series": 1,
+      "total_pf": 50,
+      "complete": true,
+      "dc_cases": 10,
+      "ac_cases": 10,
+      "passed": true,
+      "vout_min": 1.7759532250783532,
+      "vout_max": 1.8126298624442736,
+      "psrr20_min_db": 34.62433503803766,
+      "pm_min_deg": 76.74456806727748,
+      "host1_max_v_v": 0.027715625176423453
+    }
+  ],
+  "noise_screen": [
+    {
+      "name": "b32_h2_tt_tt_noise_2",
+      "variant": "b32_h2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/b32_h2_tt_tt_noise_2",
+      "noise_uv": 239.09945763371647,
+      "vout_v": 1.8011078547748116,
+      "bias_verified": true
+    },
+    {
+      "name": "b32_h2_tt_tt_noise_10",
+      "variant": "b32_h2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/b32_h2_tt_tt_noise_10",
+      "noise_uv": 238.47921177480964,
+      "vout_v": 1.8010628441681094,
+      "bias_verified": true
+    },
+    {
+      "name": "ref8_tt_tt_noise_2",
+      "variant": "ref8",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/ref8_tt_tt_noise_2",
+      "noise_uv": 279.17356510477674,
+      "vout_v": 1.8011078547835644,
+      "bias_verified": true
+    },
+    {
+      "name": "ref8_tt_tt_noise_10",
+      "variant": "ref8",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/ref8_tt_tt_noise_10",
+      "noise_uv": 278.6432319085271,
+      "vout_v": 1.801062844160137,
+      "bias_verified": true
+    },
+    {
+      "name": "ref4_tt_tt_noise_2",
+      "variant": "ref4",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/ref4_tt_tt_noise_2",
+      "noise_uv": 332.1821978507973,
+      "vout_v": 1.8011078547846535,
+      "bias_verified": true
+    },
+    {
+      "name": "ref4_tt_tt_noise_10",
+      "variant": "ref4",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/ref4_tt_tt_noise_10",
+      "noise_uv": 331.73753261826124,
+      "vout_v": 1.8010628441610108,
+      "bias_verified": true
+    },
+    {
+      "name": "ref2_tt_tt_noise_2",
+      "variant": "ref2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/ref2_tt_tt_noise_2",
+      "noise_uv": 395.8564176671151,
+      "vout_v": 1.8011078547830612,
+      "bias_verified": true
+    },
+    {
+      "name": "ref2_tt_tt_noise_10",
+      "variant": "ref2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180107.514492Z_dynamic/ref2_tt_tt_noise_10",
+      "noise_uv": 395.4843109550097,
+      "vout_v": 1.8010628441645857,
+      "bias_verified": true
+    }
+  ],
+  "rc_noise_screen": [
+    {
+      "name": "ref8_r2_tt_tt_noise_2",
+      "variant": "ref8_r2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/ref8_r2_tt_tt_noise_2",
+      "noise_uv": 240.40709600678068,
+      "vout_v": 1.8011056340627103,
+      "bias_verified": true
+    },
+    {
+      "name": "ref8_r2_tt_tt_noise_10",
+      "variant": "ref8_r2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/ref8_r2_tt_tt_noise_10",
+      "noise_uv": 239.79046390168182,
+      "vout_v": 1.8010606233699191,
+      "bias_verified": true
+    },
+    {
+      "name": "ref4_r2_tt_tt_noise_2",
+      "variant": "ref4_r2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/ref4_r2_tt_tt_noise_2",
+      "noise_uv": 278.340463686074,
+      "vout_v": 1.8011056340659282,
+      "bias_verified": true
+    },
+    {
+      "name": "ref4_r2_tt_tt_noise_10",
+      "variant": "ref4_r2",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/ref4_r2_tt_tt_noise_10",
+      "noise_uv": 277.8087734709701,
+      "vout_v": 1.801060623368221,
+      "bias_verified": true
+    },
+    {
+      "name": "cas12_only_tt_tt_noise_2",
+      "variant": "cas12_only",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/cas12_only_tt_tt_noise_2",
+      "noise_uv": 239.10505776874174,
+      "vout_v": 1.8011078547824457,
+      "bias_verified": true
+    },
+    {
+      "name": "cas12_only_tt_tt_noise_10",
+      "variant": "cas12_only",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261113T180639.797264Z_dynamic/cas12_only_tt_tt_noise_10",
+      "noise_uv": 238.48314347049268,
+      "vout_v": 1.801062844166567,
+      "bias_verified": true
+    }
+  ],
+  "physical_trials": [
+    {
+      "label": "8pF",
+      "area_um2": 55456.9,
+      "psrr20_db": 33.54871367953047,
+      "pm_deg": 75.11156780887849,
+      "point_pass": false
+    },
+    {
+      "label": "12pF",
+      "area_um2": 52956.92,
+      "psrr20_db": 35.0551970568943,
+      "pm_deg": 75.11163003536885,
+      "point_pass": true
+    },
+    {
+      "label": "16pF",
+      "area_um2": 52395.57,
+      "psrr20_db": 35.94280590167443,
+      "pm_deg": 75.11157670154817,
+      "point_pass": true
+    },
+    {
+      "label": "16pF stacked",
+      "area_um2": 39774.73,
+      "psrr20_db": 35.93160281088794,
+      "pm_deg": 75.11163851912588,
+      "point_pass": true
+    }
+  ],
+  "area_reduction_vs_compact70": 0.24087608933350657,
+  "full_reduced_comparison": {
+    "tables": 40,
+    "max_abs_delta": 0.0
+  },
+  "stacked_pvt": [
+    {
+      "name": "stack_core70",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 16,
+      "ref_series": 1,
+      "total_pf": 70,
+      "mim2_core": true,
+      "complete": true,
+      "dc_cases": 1215,
+      "ac_cases": 255,
+      "passed": true,
+      "vout_min": 1.7759532250700563,
+      "vout_max": 1.8148007286785761,
+      "psrr20_min_db": 36.774513086327374,
+      "pm_min_deg": 76.7161638545703,
+      "host1_max_v_v": 0.008691047823079223
+    }
+  ],
+  "stacked_dynamic": [
+    {
+      "name": "stack_core70_tt_tt_startup_2",
+      "variant": "stack_core70",
+      "mode": "startup",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "t_end_s": 0.00018,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_tt_tt_startup_2",
+      "v_min": -2.4406805688454185e-05,
+      "v_max": 1.8010140926693206,
+      "v_final": 1.800986604337336,
+      "last_pp_mv": 0.05996561301024883,
+      "settle_10mv_us": 94.9129173974731
+    },
+    {
+      "name": "stack_core70_tt_tt_startup_10",
+      "variant": "stack_core70",
+      "mode": "startup",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "t_end_s": 0.00018,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_tt_tt_startup_10",
+      "v_min": -2.1452660558830942e-05,
+      "v_max": 1.800969054018867,
+      "v_final": 1.8009416036628407,
+      "last_pp_mv": 0.059919875802671996,
+      "settle_10mv_us": 94.91906784848952
+    },
+    {
+      "name": "stack_core70_tt_tt_step_6",
+      "variant": "stack_core70",
+      "mode": "step",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 6,
+      "trim": 42,
+      "t_end_s": 3e-06,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_tt_tt_step_6",
+      "v_min": 1.6484790051692704,
+      "v_max": 1.9355418772524922,
+      "v_final": 1.8010613940338651,
+      "last_pp_mv": 0.1707179179275542,
+      "baseline_v": 1.801083180872569,
+      "steps": [
+        {
+          "delta_ma": 0.1,
+          "droop_mv": 3.310127487697878,
+          "overshoot_mv": 3.3012425555429825
+        },
+        {
+          "delta_ma": 1,
+          "droop_mv": 33.47412943681061,
+          "overshoot_mv": 32.62947813420225
+        },
+        {
+          "delta_ma": 4,
+          "droop_mv": 138.36760805280358,
+          "overshoot_mv": 124.54902133491186
+        }
+      ]
+    },
+    {
+      "name": "stack_core70_tt_tt_noise_2",
+      "variant": "stack_core70",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_tt_tt_noise_2",
+      "noise_uv": 239.09944480321914,
+      "vout_v": 1.8011078547754813,
+      "bias_verified": true
+    },
+    {
+      "name": "stack_core70_tt_tt_noise_10",
+      "variant": "stack_core70",
+      "mode": "noise",
+      "mos": "tt",
+      "rc": "tt",
+      "hv_v": 3.3,
+      "host_v": 1.8,
+      "temp_c": 27,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_tt_tt_noise_10",
+      "noise_uv": 238.4792182025532,
+      "vout_v": 1.8010628441564815,
+      "bias_verified": true
+    },
+    {
+      "name": "stack_core70_fs_ll_startup_2",
+      "variant": "stack_core70",
+      "mode": "startup",
+      "mos": "fs",
+      "rc": "ll",
+      "hv_v": 3.0,
+      "host_v": 1.95,
+      "temp_c": 85,
+      "load_ma": 2,
+      "trim": 41,
+      "t_end_s": 0.00018,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_fs_ll_startup_2",
+      "v_min": -1.161423131244759e-05,
+      "v_max": 1.8125954020173025,
+      "v_final": 1.8125925414627766,
+      "last_pp_mv": 0.006379031144421177,
+      "settle_10mv_us": 75.70521207847382
+    },
+    {
+      "name": "stack_core70_fs_ll_startup_10",
+      "variant": "stack_core70",
+      "mode": "startup",
+      "mos": "fs",
+      "rc": "ll",
+      "hv_v": 3.0,
+      "host_v": 1.95,
+      "temp_c": 85,
+      "load_ma": 10,
+      "trim": 41,
+      "t_end_s": 0.00018,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_fs_ll_startup_10",
+      "v_min": -1.0235615886843575e-05,
+      "v_max": 1.8125151479682386,
+      "v_final": 1.8125122886606952,
+      "last_pp_mv": 0.006376124564777541,
+      "settle_10mv_us": 75.70521065217044
+    },
+    {
+      "name": "stack_core70_fs_ll_step_6",
+      "variant": "stack_core70",
+      "mode": "step",
+      "mos": "fs",
+      "rc": "ll",
+      "hv_v": 3.0,
+      "host_v": 1.95,
+      "temp_c": 85,
+      "load_ma": 6,
+      "trim": 41,
+      "t_end_s": 3e-06,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_fs_ll_step_6",
+      "v_min": 1.6200946225217727,
+      "v_max": 1.9837816174062721,
+      "v_final": 1.8125705091391795,
+      "last_pp_mv": 0.00875568342073585,
+      "baseline_v": 1.8125639599581471,
+      "steps": [
+        {
+          "delta_ma": 0.1,
+          "droop_mv": 4.086138454096,
+          "overshoot_mv": 4.0773458807850105
+        },
+        {
+          "delta_ma": 1,
+          "droop_mv": 41.5057921896973,
+          "overshoot_mv": 40.317537492493116
+        },
+        {
+          "delta_ma": 4,
+          "droop_mv": 167.90233248666908,
+          "overshoot_mv": 148.37435366884665
+        }
+      ]
+    },
+    {
+      "name": "stack_core70_fs_ll_noise_2",
+      "variant": "stack_core70",
+      "mode": "noise",
+      "mos": "fs",
+      "rc": "ll",
+      "hv_v": 3.0,
+      "host_v": 1.95,
+      "temp_c": 85,
+      "load_ma": 2,
+      "trim": 41,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_fs_ll_noise_2",
+      "noise_uv": 262.2117966742364,
+      "vout_v": 1.8126029680163491,
+      "bias_verified": true
+    },
+    {
+      "name": "stack_core70_fs_ll_noise_10",
+      "variant": "stack_core70",
+      "mode": "noise",
+      "mos": "fs",
+      "rc": "ll",
+      "hv_v": 3.0,
+      "host_v": 1.95,
+      "temp_c": 85,
+      "load_ma": 10,
+      "trim": 41,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_fs_ll_noise_10",
+      "noise_uv": 256.4965821328884,
+      "vout_v": 1.8125234431774473,
+      "bias_verified": true
+    },
+    {
+      "name": "stack_core70_ss_hh_startup_2",
+      "variant": "stack_core70",
+      "mode": "startup",
+      "mos": "ss",
+      "rc": "hh",
+      "hv_v": 3.0,
+      "host_v": 1.65,
+      "temp_c": -40,
+      "load_ma": 2,
+      "trim": 42,
+      "t_end_s": 0.00018,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_ss_hh_startup_2",
+      "v_min": -0.002789995283598292,
+      "v_max": 1.775364917305196,
+      "v_final": 1.7752222769564678,
+      "last_pp_mv": 0.30592673914942026,
+      "settle_10mv_us": 116.04907315807802
+    },
+    {
+      "name": "stack_core70_ss_hh_startup_10",
+      "variant": "stack_core70",
+      "mode": "startup",
+      "mos": "ss",
+      "rc": "hh",
+      "hv_v": 3.0,
+      "host_v": 1.65,
+      "temp_c": -40,
+      "load_ma": 10,
+      "trim": 42,
+      "t_end_s": 0.00018,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_ss_hh_startup_10",
+      "v_min": -0.0012302925595517418,
+      "v_max": 1.7753340511291855,
+      "v_final": 1.7751914696523474,
+      "last_pp_mv": 0.3058634566319718,
+      "settle_10mv_us": 116.05107433183753
+    },
+    {
+      "name": "stack_core70_ss_hh_step_6",
+      "variant": "stack_core70",
+      "mode": "step",
+      "mos": "ss",
+      "rc": "hh",
+      "hv_v": 3.0,
+      "host_v": 1.65,
+      "temp_c": -40,
+      "load_ma": 6,
+      "trim": 42,
+      "t_end_s": 3e-06,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_ss_hh_step_6",
+      "v_min": 1.650609785540956,
+      "v_max": 1.8901174027882583,
+      "v_final": 1.7758952427411476,
+      "last_pp_mv": 0.41996826817025656,
+      "baseline_v": 1.7759679566014897,
+      "steps": [
+        {
+          "delta_ma": 0.1,
+          "droop_mv": 2.831251796002743,
+          "overshoot_mv": 2.824542993330237
+        },
+        {
+          "delta_ma": 1,
+          "droop_mv": 28.683763328150036,
+          "overshoot_mv": 28.005422083916763
+        },
+        {
+          "delta_ma": 4,
+          "droop_mv": 118.45764661832669,
+          "overshoot_mv": 108.50649409378232
+        }
+      ]
+    },
+    {
+      "name": "stack_core70_ss_hh_noise_2",
+      "variant": "stack_core70",
+      "mode": "noise",
+      "mos": "ss",
+      "rc": "hh",
+      "hv_v": 3.0,
+      "host_v": 1.65,
+      "temp_c": -40,
+      "load_ma": 2,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_ss_hh_noise_2",
+      "noise_uv": 225.90787918858834,
+      "vout_v": 1.775984407111128,
+      "bias_verified": true
+    },
+    {
+      "name": "stack_core70_ss_hh_noise_10",
+      "variant": "stack_core70",
+      "mode": "noise",
+      "mos": "ss",
+      "rc": "hh",
+      "hv_v": 3.0,
+      "host_v": 1.65,
+      "temp_c": -40,
+      "load_ma": 10,
+      "trim": 42,
+      "run": "results/analog/ldo/cap_sizing/20261114T070615.871897Z_dynamic/stack_core70_ss_hh_noise_10",
+      "noise_uv": 224.97206460737775,
+      "vout_v": 1.7759532250738481,
+      "bias_verified": true
+    }
+  ],
+  "stacked_mc": {
+    "fs": {
+      "samples": 8,
+      "passed": 8,
+      "yield95": [
+        0.6305833524471808,
+        1.0
+      ],
+      "seed_replay_pass": true,
+      "metrics": {
+        "fixed_v": {
+          "n": 8,
+          "mean": 1.8166764488518676,
+          "std": 0.03564400750130521,
+          "min": 1.751943436758821,
+          "max": 1.860026096310254,
+          "skew": -0.5093692069798549,
+          "excess_kurtosis": -0.641180754620283
+        },
+        "cal_v": {
+          "n": 8,
+          "mean": 1.799562870883225,
+          "std": 0.0020506642469511486,
+          "min": 1.797285213710104,
+          "max": 1.802225689253938,
+          "skew": -0.08434688001069816,
+          "excess_kurtosis": -1.6630362546002475
+        },
+        "best_code": {
+          "n": 8,
+          "mean": 38.125,
+          "std": 5.566160513059505,
+          "min": 31.0,
+          "max": 48.0,
+          "skew": 0.4230057004918644,
+          "excess_kurtosis": -0.7273256982451479
+        },
+        "out2_v": {
+          "n": 8,
+          "mean": 1.8108710951363352,
+          "std": 0.0029787636125887472,
+          "min": 1.807297796688751,
+          "max": 1.81573342330945,
+          "skew": 0.5687466471411194,
+          "excess_kurtosis": -1.0456746070401943
+        },
+        "out6_v": {
+          "n": 8,
+          "mean": 1.810833300311702,
+          "std": 0.0029796906332328925,
+          "min": 1.807259590021909,
+          "max": 1.815696297627784,
+          "skew": 0.5687247764055473,
+          "excess_kurtosis": -1.0464160868850607
+        },
+        "out10_v": {
+          "n": 8,
+          "mean": 1.8107949443447935,
+          "std": 0.002980380518061157,
+          "min": 1.807220704862935,
+          "max": 1.815657371292736,
+          "skew": 0.5684221378825237,
+          "excess_kurtosis": -1.0477381158417562
+        },
+        "psrr20_db": {
+          "n": 8,
+          "mean": 36.87003425285206,
+          "std": 0.14611754481966716,
+          "min": 36.585895928863486,
+          "max": 37.093278111632976,
+          "skew": -0.5880461499296156,
+          "excess_kurtosis": 0.2724546960681131
+        },
+        "pm_deg": {
+          "n": 8,
+          "mean": 76.56852102479388,
+          "std": 0.2733399637586424,
+          "min": 76.17235633597492,
+          "max": 76.95862439308928,
+          "skew": -0.25376808408591794,
+          "excess_kurtosis": -1.1147004705164438
+        }
+      }
+    },
+    "tt": {
+      "samples": 8,
+      "passed": 8,
+      "yield95": [
+        0.6305833524471808,
+        1.0
+      ],
+      "seed_replay_pass": true,
+      "metrics": {
+        "fixed_v": {
+          "n": 8,
+          "mean": 1.8175686667618272,
+          "std": 0.04271285455625692,
+          "min": 1.741485459120088,
+          "max": 1.868738746670339,
+          "skew": -0.4503670216665629,
+          "excess_kurtosis": -0.7383612812336282
+        },
+        "cal_v": {
+          "n": 8,
+          "mean": 1.8005026357080933,
+          "std": 0.0017097679099573005,
+          "min": 1.797264361095515,
+          "max": 1.802710033158936,
+          "skew": -0.74537791948731,
+          "excess_kurtosis": -0.25781313960247054
+        },
+        "best_code": {
+          "n": 8,
+          "mean": 39.125,
+          "std": 6.468329437674439,
+          "min": 31.0,
+          "max": 50.0,
+          "skew": 0.2771668052200578,
+          "excess_kurtosis": -0.947768791775212
+        },
+        "out2_v": {
+          "n": 8,
+          "mean": 1.8005266877686497,
+          "std": 0.001709357285478775,
+          "min": 1.797288626209242,
+          "max": 1.802733307897407,
+          "skew": -0.7455609442528125,
+          "excess_kurtosis": -0.2568770462297212
+        },
+        "out6_v": {
+          "n": 8,
+          "mean": 1.8005026357080933,
+          "std": 0.0017097679099573005,
+          "min": 1.797264361095515,
+          "max": 1.802710033158936,
+          "skew": -0.74537791948731,
+          "excess_kurtosis": -0.25781313960247054
+        },
+        "out10_v": {
+          "n": 8,
+          "mean": 1.8004828289348553,
+          "std": 0.0017101191420037043,
+          "min": 1.79724437252412,
+          "max": 1.802690906333937,
+          "skew": -0.7452097673602935,
+          "excess_kurtosis": -0.2586064483703523
+        },
+        "psrr20_db": {
+          "n": 8,
+          "mean": 45.59471894297908,
+          "std": 0.23601639035162492,
+          "min": 45.24304729527497,
+          "max": 45.927015438853296,
+          "skew": -0.15275766760031792,
+          "excess_kurtosis": -1.2641948454437935
+        },
+        "pm_deg": {
+          "n": 8,
+          "mean": 80.36371728180794,
+          "std": 0.2782317573626999,
+          "min": 79.88736390612598,
+          "max": 80.74472245608776,
+          "skew": -0.3841515153083326,
+          "excess_kurtosis": -0.7733379280898975
+        }
+      }
+    }
+  },
+  "stacked_pex_screen": [
+    {
+      "name": "b32_h2_pex",
+      "chv_pf": 32,
+      "ccas_pf": 16,
+      "cout_pf": 4,
+      "rhv_ohm": 2000,
+      "rcas_ohm": 31250,
+      "cc_pf": 2,
+      "single_pass": false,
+      "cref_pf": 16,
+      "ref_series": 1,
+      "total_pf": 70,
+      "pex_file": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_core70/serdes_ldo_hv18_smallcap_pdk/serdes_ldo_hv18_smallcap_pdk_pex.spice",
+      "pex_sha256": "feaf79ce4d40f15cfa5a7d6ca10beb1dbc68dfb7411791720db977ecbf2b707d",
+      "probe_map": {
+        "v(xdut.xcore.gate)": "v(xdut.xcore.xpex.a_n8609_14110#)",
+        "v(xdut.xcore.casg)": "v(xdut.xcore.xpex.a_n8581_n15597#)",
+        "v(xdut.xcore.va)": "v(xdut.xcore.xpex.w_n8809_8685#)",
+        "v(xdut.xcore.mid)": "v(xdut.xcore.xpex.a_n8639_n20509#)"
+      },
+      "complete": true,
+      "dc_cases": 5,
+      "ac_cases": 5,
+      "passed": true,
+      "vout_min": 1.7901644476924745,
+      "vout_max": 1.8126297838756533,
+      "psrr20_min_db": 36.55745487838483,
+      "pm_min_deg": 75.0337392254333,
+      "host1_max_v_v": 0.006815857107389778
+    }
+  ],
+  "peripheral_layout": {
+    "cell": "serdes_pll_bias_lowpass_stacked_pdk",
+    "width_um": 58.85,
+    "height_um": 105.805,
+    "area_um2": 6226.62,
+    "drc_total": 0,
+    "lvs_match": true,
+    "lvs_property_errors": false,
+    "exported_ports": [
+      "original",
+      "filtered",
+      "vss"
+    ],
+    "check_stdout": "DRC_TOTAL 0\nWarning: netgen command 'global' use fully-qualified name '::netgen::global'\nReading netlist file /home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_filter16_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_stacked_pdk_lvs.spice\nReading netlist file /home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_filter16_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_stacked_pdk_ref.spice\nComparison output logged to file /home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_filter16_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_stacked_pdk_lvs.log\nLogging to file \"/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_filter16_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_stacked_pdk_lvs.log\" enabled\nCircuit 1 contains 3 devices, Circuit 2 contains 3 devices.\nCircuit 1 contains 3 nets,    Circuit 2 contains 3 nets.\nNetlists match uniquely.\nResult: Circuits match uniquely.\nLogging to file \"/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_filter16_v2/serdes_pll_bias_lowpass_slow_r4_pdk/serdes_pll_bias_lowpass_stacked_pdk_lvs.log\" disabled\nLVS_MATCH True  LVS_PROPERTY_ERRORS False  (see serdes_pll_bias_lowpass_stacked_pdk_lvs.log)\nLVS_DISCONNECTED none\nLVS_EXPORTED_PORTS original filtered vss",
+    "r_ohm": 1000000.0,
+    "c_pf": 16,
+    "source_cap": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/ldo_stacked/20261114_array16_compact/serdes_ldo_stack16_pdk/serdes_ldo_stack16_pdk.mag",
+    "source_cap_sha256": "7a5c529f2cc9ce777de51849a5a854fa1a60d78c1edc5a9604d7540bd2658336",
+    "scope": "Peripheral filter physical candidate; source loading/noise/actual PLL integration separate"
+  },
+  "peripheral_card": {
+    "campaign": "results/analog/ldo/stacked_peripheral/20261114T072634.752165Z",
+    "rows": [
+      {
+        "section": "tt",
+        "temp_c": 27,
+        "deck": "tt.cir",
+        "run": "results/analog/ldo/stacked_peripheral/20261114T072634.752165Z/tt",
+        "ac": [
+          {
+            "load_pf": 1,
+            "old_fc_hz": 8864.52416368926,
+            "new_fc_hz": 8872.67135063317,
+            "relative_fc": 1.000919077752338
+          },
+          {
+            "load_pf": 5,
+            "old_fc_hz": 7247.535202738593,
+            "new_fc_hz": 7252.900374616711,
+            "relative_fc": 1.0007402753802548
+          }
+        ],
+        "noise_uv": {
+          "old": 15.234691906816987,
+          "new": 15.241757023792625
+        }
+      },
+      {
+        "section": "fs_ll",
+        "temp_c": 85,
+        "deck": "fs_ll.cir",
+        "run": "results/analog/ldo/stacked_peripheral/20261114T072634.752165Z/fs_ll",
+        "ac": [
+          {
+            "load_pf": 1,
+            "old_fc_hz": 10993.92051353723,
+            "new_fc_hz": 11005.120705761754,
+            "relative_fc": 1.0010187623433089
+          },
+          {
+            "load_pf": 5,
+            "old_fc_hz": 8795.199190740483,
+            "new_fc_hz": 8802.387940399274,
+            "relative_fc": 1.0008173492723575
+          }
+        ],
+        "noise_uv": {
+          "old": 17.633131797800797,
+          "new": 17.64225800110263
+        }
+      },
+      {
+        "section": "ss_hh",
+        "temp_c": -40,
+        "deck": "ss_hh.cir",
+        "run": "results/analog/ldo/stacked_peripheral/20261114T072634.752165Z/ss_hh",
+        "ac": [
+          {
+            "load_pf": 1,
+            "old_fc_hz": 7280.857393167307,
+            "new_fc_hz": 7286.789261189286,
+            "relative_fc": 1.000814721083199
+          },
+          {
+            "load_pf": 5,
+            "old_fc_hz": 6065.577188002956,
+            "new_fc_hz": 6069.673652482194,
+            "relative_fc": 1.0006753626822753
+          }
+        ],
+        "noise_uv": {
+          "old": 12.727358317286262,
+          "new": 12.73267127014879
+        }
+      }
+    ],
+    "scope": "Compare physical1Mohm/16pF filters, with declared1/5pF gate surrogates.\n\nFull PDK, pure DC source, AC and resistor noise. This is a passive interface\ncard, not an oscillator/PLL jitter or startup qualification.\n",
+    "dc_numeric_tolerance_v": 1e-05,
+    "analyzer_sha256": "3fdd2d10339eec791627ee04c8b2a581dfa2323cba90bfacd032fea812223a72",
+    "grade": "ungraded passive comparison, no system jitter allocation"
+  }
+}

@@ -1,0 +1,8 @@
+* Ideal differential clock; not a physical CML driver.
+* vdiff_pp = max(V(inp)-V(inn)) - min(V(inp)-V(inn)).
+* Each leg swings vcm +/- vdiff_pp/4; differential levels +/- vdiff_pp/2.
+* Identical edge timing maintains constant ideal common mode.
+.subckt stim_cml_diff_clock inp inn vss params: vcm=1.2 vdiff_pp=0.8 period=10n delay=1n trise=100p tfall=100p duty=0.5
+Vp inp vss PULSE({vcm-vdiff_pp/4} {vcm+vdiff_pp/4} {delay} {trise} {tfall} {duty*period-(trise+tfall)/2} {period})
+Vn inn vss PULSE({vcm+vdiff_pp/4} {vcm-vdiff_pp/4} {delay} {trise} {tfall} {duty*period-(trise+tfall)/2} {period})
+.ends stim_cml_diff_clock

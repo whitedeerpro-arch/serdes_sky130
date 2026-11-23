@@ -1,0 +1,186 @@
+{
+  "date": "2026-11-17",
+  "status": "retired_obsolete_generation_chain",
+  "source_commit": "9ff142a1797936950ab19354c848b6cdb0bec52b",
+  "scope": "Seven unqualified historical suite builders and six previews; retained geometry, live layout_core, current candidates and circuit qualifications unchanged.",
+  "reason": "Generic MOS drawing and asserted production/HV/native labels are not a checked physical implementation; pack chain can resurrect the rejected PLL top.",
+  "files": [
+    {
+      "former_path": "analog/layout/scripts/build_vco_blocks.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/scripts/build_vco_blocks.py",
+      "sha256": "5b61479ebe9b79aa2b7b9d5ef2d7a8c8ae873a74330ca9364e777701f2f95d51",
+      "bytes": 30020
+    },
+    {
+      "former_path": "analog/layout/scripts/build_vco_lf_v2_compact.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/scripts/build_vco_lf_v2_compact.py",
+      "sha256": "871e66a9f1f23aa9ce67eb6ed9bbb31e945d194eb6c42e6c93e3b0cf7609b655",
+      "bytes": 38052
+    },
+    {
+      "former_path": "analog/layout/scripts/build_cp_and_divider.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/scripts/build_cp_and_divider.py",
+      "sha256": "700b4edc86626ac27edaaee1302c61d6c94b40d18e87681c263af239f8a3ad86",
+      "bytes": 30981
+    },
+    {
+      "former_path": "analog/layout/scripts/build_pfd_and_pll_top.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/scripts/build_pfd_and_pll_top.py",
+      "sha256": "f46e44424a5d94f5b1e8cd577423fabbce5abc2c2cfbdff7f68e31c786672fa9",
+      "bytes": 41687
+    },
+    {
+      "former_path": "analog/layout/scripts/build_ldo_bias_tx.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/scripts/build_ldo_bias_tx.py",
+      "sha256": "3f5e423aaee3239dc43c598737ce32c4897a6ebc5db1b5addd0bf7a11c402715",
+      "bytes": 26751
+    },
+    {
+      "former_path": "analog/common/ldo/layout/build_ldo_suite.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/common/ldo/layout/build_ldo_suite.py",
+      "sha256": "dd27f7141f42a161a0e30f2e6f039e59ad86f16772055b927648bd46199bc5da",
+      "bytes": 26844
+    },
+    {
+      "former_path": "analog/common/bias/layout/build_bandgap_suite.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/common/bias/layout/build_bandgap_suite.py",
+      "sha256": "d7d46d36848815ca315d104fbe83d807bfc6d2d1e588b1d9c684f5a1011c52d7",
+      "bytes": 49946
+    },
+    {
+      "former_path": "analog/layout/overviews/ldo_bias_tx_wired_overview.png",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/overviews/ldo_bias_tx_wired_overview.png",
+      "sha256": "802111ad0ac7448d4501a73ac05a737a4391053c9de18a6d4858c8679afe6b6c",
+      "bytes": 731817
+    },
+    {
+      "former_path": "analog/layout/overviews/pll_final_pfd_gilbert_cp_top.png",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/overviews/pll_final_pfd_gilbert_cp_top.png",
+      "sha256": "2bb7507e51095e3d39d6ab443e7d410729ba9bb0810284fd7976c086297ee9e7",
+      "bytes": 661663
+    },
+    {
+      "former_path": "analog/layout/overviews/vco_lf_v2_shrink_overview.png",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/overviews/vco_lf_v2_shrink_overview.png",
+      "sha256": "767152e486572d16bb6405f639b7590bbf058cf9b8195ef4eff6a989541aa778",
+      "bytes": 670714
+    },
+    {
+      "former_path": "analog/layout/overviews/ldo_bias_tx_master_overview.png",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/layout/overviews/ldo_bias_tx_master_overview.png",
+      "sha256": "3c920c6bd2d0bc22aba73a0dcbcdcec6d728efebed22a4e3d7032e726a64a217",
+      "bytes": 727843
+    },
+    {
+      "former_path": "analog/common/ldo/layout/ldo_layout_suite_overview.png",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/common/ldo/layout/ldo_layout_suite_overview.png",
+      "sha256": "c1c4e02de0bdaf4ebbcce78df2dd32428e6788e92b986bc2c68efd11676a0525",
+      "bytes": 534732
+    },
+    {
+      "former_path": "analog/common/bias/layout/bias_layout_suite_overview.png",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/files/analog/common/bias/layout/bias_layout_suite_overview.png",
+      "sha256": "3e73d9880eee79afab7862b43eda74ea12b3917e442708e098afa02da1c3f2e2",
+      "bytes": 484616
+    }
+  ],
+  "context_snapshots": [
+    {
+      "source_path": "analog/layout/scripts/layout_core.py",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/context/analog/layout/scripts/layout_core.py",
+      "sha256": "23c9f8c0904e339531161d564e81f453b1656d108c1909e40025c6594fe2bbc9",
+      "bytes": 11134
+    },
+    {
+      "source_path": "analog/common/ldo/layout/README.md",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/context/analog/common/ldo/layout/README.md",
+      "sha256": "990ef0e101aa9bf72abf7b57a5da3ff97a5f5087a355866d00aba8e815d98c9b",
+      "bytes": 4176
+    },
+    {
+      "source_path": "analog/common/bias/layout/README.md",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/context/analog/common/bias/layout/README.md",
+      "sha256": "0216a0029f9ef31468e10d3e3f0c5d185c70f48d210f317f62938e9b41cc34be",
+      "bytes": 4627
+    },
+    {
+      "source_path": "analog/common/bias/README.md",
+      "archive": "results/maintenance/legacy_layout_retirement/20261117/context/analog/common/bias/README.md",
+      "sha256": "cc18c89fae2f19c9b64aedcfa44470bb04cc0b8b0eddc87f814e97b8e5c328f5",
+      "bytes": 794
+    }
+  ],
+  "dependency_audit": {
+    "python_files_parsed": 3900,
+    "imports_of_retired_modules": [
+      {
+        "consumer": "analog/layout/scripts/build_pfd_and_pll_top.py",
+        "module": "build_vco_blocks",
+        "line": 30
+      },
+      {
+        "consumer": "analog/layout/scripts/build_pfd_and_pll_top.py",
+        "module": "build_vco_lf_v2_compact",
+        "line": 31
+      },
+      {
+        "consumer": "analog/layout/scripts/build_cp_and_divider.py",
+        "module": "build_vco_blocks",
+        "line": 22
+      },
+      {
+        "consumer": "analog/layout/scripts/build_cp_and_divider.py",
+        "module": "build_vco_lf_v2_compact",
+        "line": 23
+      },
+      {
+        "consumer": "analog/layout/scripts/build_vco_lf_v2_compact.py",
+        "module": "build_vco_blocks",
+        "line": 29
+      },
+      {
+        "consumer": "analog/layout/scripts/build_ldo_bias_tx.py",
+        "module": "build_vco_blocks",
+        "line": 22
+      },
+      {
+        "consumer": "analog/layout/scripts/build_ldo_bias_tx.py",
+        "module": "build_vco_lf_v2_compact",
+        "line": 23
+      },
+      {
+        "consumer": "analog/layout/scripts/build_ldo_bias_tx.py",
+        "module": "build_pfd_and_pll_top",
+        "line": 24
+      },
+      {
+        "consumer": "analog/common/ldo/layout/build_ldo_suite.py",
+        "module": "build_bandgap_suite",
+        "line": 34
+      }
+    ],
+    "external_consumers": []
+  },
+  "historical_import_manifest": "analog/layout/import.json",
+  "physical_review_catalog": "results/catalog/layout_gemini_review.json",
+  "review": "docs/history/legacy_layout_retirement_20261117.md",
+  "archive_policy": "Local results are not in Git; exact published source bytes remain recoverable from source_commit and former_path.",
+  "validation": {
+    "full_workspace_pytest": "350 passed",
+    "preserved_preexisting_dirty_files": 347,
+    "preexisting_dirty_files_changed": 0,
+    "retired_archives_and_git_bytes_verified": 13,
+    "context_snapshots_verified": 4,
+    "historical_imported_mags_readable": 40,
+    "pll_evidence_sha256_verified": 570,
+    "active_python_files_parsed_after_retirement": 517,
+    "external_retired_module_imports": 0,
+    "live_module_imports": 4,
+    "live_renderer_preview": "results/maintenance/legacy_layout_retirement/20261117/live_renderer_preview.png",
+    "recurrence_check": "clean, regenerated file, broken symlink, traversal rejection passed",
+    "simulations_started": 0,
+    "final_navigation_pytest": "18 passed",
+    "runtime_artifacts": 0,
+    "restored_retired_artifacts": 0
+  }
+}

@@ -1,0 +1,34 @@
+16-bit ingress with complementary launch groups and eight actual first-rank muxes
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_dff.spice"
+.include "@PROJECT_ROOT@/analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice"
+.include "@PROJECT_ROOT@/analog/common/cml_mux/spice/cml_lowov_cells.spice"
+.include "@PROJECT_ROOT@/analog/tx/input_register/spice/word_capture16_staggered.spice"
+@CLOCK_INCLUDES@
+Vdd vdd 0 @SUPPLY@
+Iref vdd vbias .85m
+Xref vbias vbias 0 0 serdes_nfet w=20 l=.5 nf=4
+Vclock ck_u 0 PULSE(0 1 1n 30p 30p 1.97n 4n)
+@CLOCK_SOURCE@
+Vclock_sense clk_driver clk 0
+Bsp sp 0 V=v(vdd)-.35+.2*v(ck_u)
+Bsn sn 0 V=v(vdd)-.15-.2*v(ck_u)
+@DATA@
+Xcap d0 d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15 clk
++ q0 q1 q2 q3 q4 q5 q6 q7 q8 q9 q10 q11 q12 q13 q14 q15 vdd 0 serdes_tx_word_capture16_staggered @PARAMS@
+Xlogic vbias vbias_logic vdd 0 serdes_tx_logic_bias ref_scale=6
+@LOADS@
+* A Newton guess only; not a physical data-reset implementation.
+@GUESSES@
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u @SOLVER@
+.save @VECTORS@
+.control
+set num_threads=1
+set filetype=binary
+@CASES@
+quit
+.endc
+.end

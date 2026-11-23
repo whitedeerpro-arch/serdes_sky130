@@ -1,0 +1,136 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
+module = "pll_supply_hv18"
+working_revision = "hv18_r4_static_pins_ref_rc_voltage_trim"
+status = "r4_local_screen_and_four_conditions_x_hv_ext_native_r5_precharged_capture_complete; r6_load_and_startup_handoff_open"
+design_document = "docs/design/ldo_r4.md"
+history_document = "docs/design/ldo.md"
+power_document = "docs/design/power_audit.md"
+handoff = "docs/work_packages/WP-LDO-002-r4-handoff.md"
+core = "analog/ldo/spice/ldo_hv18_core_r4.spice"
+macro = "analog/ldo/spice/pll_supply_hv18_r4.spice"
+passives = "analog/ldo/spice/ldo_passives.spice"
+tail_filter_candidate = "analog/ldo/spice/pll_bias_filter_r4.spice"
+future_low_voltage = "VCO1.5V remains future work; low-headroom pass path needs redesign"
+
+[parameters]
+vin_v = [3.0, 3.3, 3.6]
+host_v = [1.65, 1.8, 1.95]
+target_vout_v = 1.8
+screen_load_ma = [2.0, 6.0, 10.0]
+nominal_planned_load_ma = 5.74 # Sizing estimate, not an actual PLL load bound.
+rhv_ohm = 1000
+chv_pf = 50
+rcas_ohm = 10000
+ccas_pf = 50
+cout_pf = 100
+cc_pf = 2
+rz_ohm = 2000
+reference_resistance_ohm = 1000000 # 32 physical high_po units in series.
+reference_capacitance_pf = 16
+feedback_top_ohm = 38000
+feedback_bottom_fixed_ohm = 62000
+feedback_bottom_binary_ohm = [1000, 2000, 4000, 8000, 16000, 32000]
+voltage_trim_bits = 6
+nominal_calibrated_code = 42 # Calibration at3.3/1.8V,27C,6mA; not a universal die code.
+factory_search_start_code = 0 # All-code scanning can overvolt a connected load.
+tail_filter_resistance_ohm = 1000000
+tail_filter_capacitance_pf = 16
+ldo_mim_total_pf = 218 # Does not include the optional16pF tail filter.
+
+[verification]
+passive_card_points = 27
+calibration_points = 1088
+dc_points = 1215 # 5MOS x 3RC x 3HV x 3host x 3T x 3load.
+ac_points = 255 # 16 boundaries + nominal, per MOS/RC; not all1215points.
+rc_sections = ["ll", "tt", "hh"]
+calibration_policy = "once per MOS/RC at nominal voltage/temp/load, retain code across grid"
+output_v = [1.7759504184435657, 1.8148047287400095]
+worst_20mhz_psrr_db = 38.43644757039258
+middlebrook_pm_deg = [71.278416791295, 81.4279932495088]
+startup_profiles = 6
+startup_records = 18
+startup_t_end_us = 360
+startup_status = "resistive loads and stated bias/gate surrogates; not full PVT or actual PLL"
+noise_spectra = 18
+noise_band_hz = [1000, 199526231.4968879]
+noise_status = "pure DC,300us OP fallback; both pass currents rechecked after each spectrum; not all slow nodes or PLL jitter"
+tail_filter_ac_boundaries = 3
+tail_filter_fc_hz = [7312, 9529]
+extra_capacitance_boundaries = 2
+extra_capacitance_endpoint_pf = 100
+extra_capacitance_endpoint_ac_points = 425
+extra_capacitance_endpoint_rc = ["ll", "tt", "hh", "hl", "lh"]
+extra_capacitance_endpoint_pm_deg = [65.06629794669055, 79.15714970390086]
+extra_capacitance_status = "100pF ideal endpoint screened at425 boundary/nominal points; interval, pad/ESD/PEX, ESR and startup open;1nF minimum35.85deg in original two-boundary study"
+local_mismatch = "not qualified; HV direct Vth and PNP model gaps; deterministic +/-90mV stress is not MC"
+uvlo_quiet_bias_ready = "not implemented"
+real_pll_load_and_jitter = "four conditions x hv/ext = eight native r5 precharged captures locked; full cold-start, r6 load and native noise open"
+native_precharged_conditions = 4
+native_precharged_records = 8
+native_precharged_vco_revision = "r5_4bit; these results do not qualify the r6 PLL loop"
+
+[interface_constraints]
+configuration = "static at initialization; no runtime HV/external switching"
+high_voltage = "Vin3.0..3.6V, quiet OUTPUT, enable host-high"
+external_bypass = "board straps Vin AND quiet to SAME qualified1.65..1.95V supply; enable0"
+unsupported = "Vin0 with quiet powered; arbitrary external output capacitor; hot mode changes"
+off = "disables regulation, not hard power isolation; native pass leakage can leave quiet nonzero"
+trim = "set before enable; use independent absolute-voltage measurement and stored per-die code"
+reset = "hold PLL reset until quiet and local tail bias settled; no guaranteed timer yet"
+extra_pin_capacitance_planning_pf = 100 # 425-point endpoint screen; no interval/PEX guarantee.
+lf_bias_code_precharge = "audit every return/driver and monitor threshold for independent host/quiet domains"
+
+[evidence]
+manifest = "config/ldo_r4_evidence.json"
+published = "docs/data/ldo_r4.json"
+catalog = "results/catalog/ldo_r4.json"
+pin_capacitance_data = "docs/data/ldo_r4_pin_cap.json"
+pin_capacitance_catalog = "results/catalog/ldo_r4_pin_cap.json"
+grid_campaign = "results/analog/ldo/r4/20261110T112415.433032Z_31c78a41"
+calibration_campaign = "results/analog/ldo/r4/20261110T111227.910607Z_2c6e23d2"
+startup_campaign = "results/analog/ldo/r4_startup/20261110T113541.207446Z_8767c44a"
+noise_campaign = "results/analog/ldo/r4_dc_noise/20261110T120141.651192Z_9a75685f"
+cap_load_campaign = "results/analog/ldo/r4_cap_load/20261110T120319.075181Z_64e49ca1"
+
+[smallcap_candidate]
+revision = "b32_h2_20261114"
+report = "docs/design/ldo_smallcap.md"
+core = "analog/ldo/spice/ldo_hv18_core_smallcap.spice"
+macro = "analog/ldo/spice/pll_supply_hv18_smallcap.spice"
+core_subcircuit = "serdes_ldo_hv18_core_smallcap"
+supply_subcircuit = "serdes_pll_supply_hv18_smallcap"
+physical = "analog/ldo/layout/variants/smallcap_pdk"
+evidence = "config/ldo_smallcap_evidence.json"
+preferred_for_next_layout = true
+integrated_into_PLL = false
+rhv_ohm = 2000
+chv_pf = 32
+rcas_ohm = 31250
+ccas_pf = 16
+cout_pf = 4
+reference_capacitance_pf = 16
+compensation_pf = 2
+ldo_mim_total_pf = 70
+tail_filter_capacitance_pf = 16 # Separate unchanged branch.
+
+[stacked_mim_candidate]
+revision = "stack_core70_20261114"
+selection_scope = "preferred next physical core candidate; r4/PLL adoption unchanged"
+report = "docs/design/ldo_cap_area.md"
+core = "analog/ldo/spice/ldo_hv18_core_stacked.spice"
+macro = "analog/ldo/spice/pll_supply_hv18_stacked.spice"
+passives = "analog/ldo/spice/ldo_stacked_passives.spice"
+physical_run = "results/layout/ldo_stacked/20261114_core70"
+peripheral_physical_run = "results/layout/ldo_stacked/20261114_filter16_v2"
+evidence = "config/ldo_cap_area_evidence.json"
+preferred_for_next_core_layout = true
+integrated_into_PLL = false
+complete_stacked_macro_drawn = false
+peripheral_replacement_installed = false
+ldo_mim_total_pf = 70
+chv_pf = 32
+ccas_pf = 16
+core_first_layer_units = 26 #24 filter units plus unchanged2pF Miller.
+core_second_layer_units = 24
+physical_core_area_um2 = 39774.73
+nominal_compact_first_layer_core_area_um2 = 52395.57

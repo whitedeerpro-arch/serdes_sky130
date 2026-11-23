@@ -1,0 +1,332 @@
+{
+  "block": "serdes_digital_top_v3",
+  "variant": "hd_pnr_v3_unified",
+  "params": {
+    "PLL_CODE_BITS": 5
+  },
+  "rtl_files": [
+    "digital/pnr/rtl_v3/mon_sync.sv",
+    "digital/pnr/rtl_v3/mon_persist.sv",
+    "digital/pnr/rtl_v3/pll_startup_supervisor.sv",
+    "digital/pnr/rtl_v3/pll_coarse_ctrl.sv",
+    "digital/pnr/rtl_v3/pll_lock_detect.sv",
+    "digital/pnr/rtl_v3/pll_control_top.sv",
+    "digital/pnr/rtl_v3/tx_ingress_control.sv",
+    "digital/pnr/rtl_v3/rx_word_map.sv",
+    "digital/pnr/rtl_v3/rx_word_align16.sv",
+    "digital/pnr/rtl_v3/rx_async_word_fifo.sv",
+    "digital/pnr/rtl_v3/bbpd_window_vote.sv",
+    "digital/pnr/rtl_v3/cdr_phase_frequency.sv",
+    "digital/pnr/rtl_v3/pi_step_commutator.sv",
+    "digital/pnr/rtl_v3/rx_cdr_loop.sv",
+    "digital/pnr/rtl_v3/serdes_digital_top_v3.sv"
+  ],
+  "clocks_mhz": {
+    "ref_clk": 250.0,
+    "pll_clk_div4": 62.5,
+    "tx_word_clk": 250.0,
+    "rx_word_clk": 250.0,
+    "cdr_clk_div2": 125.0,
+    "host_clk": 250.0
+  },
+  "synthesis": {
+    "synth_cells": 4522,
+    "synth_area_um2": 63717.36,
+    "per_subsystem": {
+      "pll_control_top": {
+        "cells": 686,
+        "area_um2": 8100.3
+      },
+      "tx_ingress_control": {
+        "cells": 47,
+        "area_um2": 783.3
+      },
+      "rx_word_map": {
+        "cells": 37,
+        "area_um2": 797.0
+      },
+      "rx_word_host_shared": {
+        "cells": 1859,
+        "area_um2": 29574.6
+      },
+      "rx_cdr_loop": {
+        "cells": 1774,
+        "area_um2": 22530.4
+      }
+    }
+  },
+  "pnr": {
+    "die_w_um": 338.1,
+    "die_h_um": 307.4,
+    "die_area_um2": 103931.94,
+    "core_w_um": 330.28,
+    "core_h_um": 293.76,
+    "core_area_um2": 97023.053,
+    "design_area_um2": 73125.0,
+    "utilization_pct": 75.0,
+    "openroad_drt_drvs": 0,
+    "antenna_violations": 0,
+    "wirelength": {
+      "li1": 0,
+      "met1": 41192,
+      "met2": 54292,
+      "met3": 21016,
+      "met4": 10315,
+      "met5": 1787,
+      "total_um": 128602
+    },
+    "cell_stats": {
+      "std_cells": 4932,
+      "diode_cells": 33,
+      "tap_cells": 1265,
+      "decap_cells_total": 2606,
+      "decap_breakdown": {
+        "decap_3": 580,
+        "decap_4": 665,
+        "decap_6": 392,
+        "decap_8": 408,
+        "decap_12": 561
+      },
+      "decap_cap_pf": 65.942,
+      "decap_cap_ff": 65942.4,
+      "fill_cells_total": 1756,
+      "fill_breakdown": {
+        "fill_1": 1160,
+        "fill_2": 596,
+        "fill_4": 0,
+        "fill_8": 0
+      },
+      "phys_cells": 5627,
+      "total_cells": 10592
+    },
+    "netlist_audit": {
+      "hold_buffers_total": 140,
+      "hold_clkbuf_16": 0,
+      "hold_breakdown": {
+        "dlygate4sd3_1": 98,
+        "buf_6": 10,
+        "dlymetal6s4s_1": 9,
+        "buf_2": 7,
+        "buf_4": 6,
+        "dlymetal6s2s_1": 5,
+        "buf_1": 3,
+        "buf_8": 2
+      },
+      "clkbuf_total_breakdown": {
+        "clkbuf_16": 131,
+        "clkbuf_4": 18
+      },
+      "dly_total": 115,
+      "dly_breakdown": {
+        "dlygate4sd3_1": 98,
+        "dlymetal6s4s_1": 9,
+        "dlymetal6s2s_1": 5,
+        "dlygate4sd1_1": 3
+      },
+      "compound_cells": {
+        "mux4_2": 88
+      }
+    },
+    "pin_check": {
+      "total_signal_pins_checked": 249,
+      "group_pin_counts": {
+        "south_pll": 22,
+        "south_tx": 21,
+        "south_rx": 63,
+        "west_pll_host": 29,
+        "north_pll_status": 21,
+        "north_tx_host": 19,
+        "north_rx_host": 29,
+        "east_rx_cdr": 45
+      },
+      "region_violations": 0,
+      "violation_samples": []
+    }
+  },
+  "sta_3corner": {
+    "tt_025C_1v80": {
+      "setup_wns_ns": 1.7151,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.2184,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true,
+      "per_clock": {
+        "ref_clk": {
+          "setup_wns_ns": 2.6931,
+          "hold_wns_ns": 0.3647
+        },
+        "pll_clk_div4": {
+          "setup_wns_ns": 2.4779,
+          "hold_wns_ns": 0.2868
+        },
+        "tx_word_clk": {
+          "setup_wns_ns": 1.8843,
+          "hold_wns_ns": 0.289
+        },
+        "rx_word_clk": {
+          "setup_wns_ns": 1.7151,
+          "hold_wns_ns": 0.28
+        },
+        "cdr_clk_div2": {
+          "setup_wns_ns": 2.5714,
+          "hold_wns_ns": 0.4353
+        },
+        "host_clk": {
+          "setup_wns_ns": 1.9358,
+          "hold_wns_ns": 0.3241
+        }
+      }
+    },
+    "ss_100C_1v60": {
+      "setup_wns_ns": 0.074,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.1105,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true,
+      "per_clock": {
+        "ref_clk": {
+          "setup_wns_ns": 1.5991,
+          "hold_wns_ns": 0.3209
+        },
+        "pll_clk_div4": {
+          "setup_wns_ns": 0.8707,
+          "hold_wns_ns": 0.1105
+        },
+        "tx_word_clk": {
+          "setup_wns_ns": 0.2418,
+          "hold_wns_ns": 0.1382
+        },
+        "rx_word_clk": {
+          "setup_wns_ns": 0.074,
+          "hold_wns_ns": 0.2893
+        },
+        "cdr_clk_div2": {
+          "setup_wns_ns": 0.1448,
+          "hold_wns_ns": 1.0016
+        },
+        "host_clk": {
+          "setup_wns_ns": 0.1553,
+          "hold_wns_ns": 0.5204
+        }
+      }
+    },
+    "ff_n40C_1v95": {
+      "setup_wns_ns": 2.0432,
+      "setup_tns_ns": 0.0,
+      "hold_wns_ns": 0.1249,
+      "hold_tns_ns": 0.0,
+      "setup_met": true,
+      "hold_met": true,
+      "per_clock": {
+        "ref_clk": {
+          "setup_wns_ns": 2.8505,
+          "hold_wns_ns": 0.2631
+        },
+        "pll_clk_div4": {
+          "setup_wns_ns": 3.0138,
+          "hold_wns_ns": 0.1736
+        },
+        "tx_word_clk": {
+          "setup_wns_ns": 2.1094,
+          "hold_wns_ns": 0.2637
+        },
+        "rx_word_clk": {
+          "setup_wns_ns": 2.0432,
+          "hold_wns_ns": 0.1622
+        },
+        "cdr_clk_div2": {
+          "setup_wns_ns": 3.1122,
+          "hold_wns_ns": 0.27
+        },
+        "host_clk": {
+          "setup_wns_ns": 2.2163,
+          "hold_wns_ns": 0.1948
+        }
+      }
+    }
+  },
+  "magic_drc_total": 0,
+  "netgen_lvs": "MATCH",
+  "lvs_match": true,
+  "v2_separate_baseline": {
+    "per_block": [
+      {
+        "block": "tx_ingress_control",
+        "die_w_um": 72.0,
+        "die_h_um": 48.0,
+        "die_area_um2": 3456.0,
+        "std_cells": 81,
+        "utilization_pct": 41.0,
+        "wirelength_um": 2061,
+        "decap_cells": 131,
+        "decap_cap_pf": 4.159,
+        "diode_cells": 0,
+        "ss_setup_wns_ns": 1.2365,
+        "ff_hold_wns_ns": 0.1038
+      },
+      {
+        "block": "pll_control_top",
+        "die_w_um": 210.51,
+        "die_h_um": 170.41,
+        "die_area_um2": 35873.009,
+        "std_cells": 1311,
+        "utilization_pct": 64.0,
+        "wirelength_um": 33360,
+        "decap_cells": 1089,
+        "decap_cap_pf": 34.763,
+        "diode_cells": 0,
+        "ss_setup_wns_ns": 0.0794,
+        "ff_hold_wns_ns": 0.0256
+      },
+      {
+        "block": "rx_cdr_loop",
+        "die_w_um": 304.47,
+        "die_h_um": 245.575,
+        "die_area_um2": 74770.22,
+        "std_cells": 2517,
+        "utilization_pct": 64.0,
+        "wirelength_um": 67383,
+        "decap_cells": 2260,
+        "decap_cap_pf": 78.339,
+        "diode_cells": 0,
+        "ss_setup_wns_ns": 0.0252,
+        "ff_hold_wns_ns": 0.1145
+      },
+      {
+        "block": "rx_word_host_path",
+        "die_w_um": 297.205,
+        "die_h_um": 239.765,
+        "die_area_um2": 71259.357,
+        "std_cells": 2332,
+        "utilization_pct": 61.0,
+        "wirelength_um": 72298,
+        "decap_cells": 2362,
+        "decap_cap_pf": 81.584,
+        "diode_cells": 0,
+        "ss_setup_wns_ns": 0.0338,
+        "ff_hold_wns_ns": 0.0738
+      }
+    ],
+    "sum_die_area_um2": 185358.586,
+    "sum_core_area_um2": 168228.845,
+    "sum_design_area_um2": 105475.0,
+    "weighted_utilization_pct": 62.7,
+    "sum_std_cells": 6241,
+    "sum_wirelength_um": 175102,
+    "sum_decap_cells": 5842,
+    "sum_decap_cap_pf": 198.845,
+    "sum_diode_cells": 0
+  },
+  "artifacts": {
+    "variant_dir": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3",
+    "results_dir": "results/digital/pnr_v3_unified/serdes_digital_top_v3",
+    "png": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.png",
+    "gds": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.gds",
+    "def": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.def",
+    "verilog": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.v",
+    "pg_verilog": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3_pg.v"
+  },
+  "elapsed_s": 724.6
+}

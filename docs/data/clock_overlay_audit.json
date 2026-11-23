@@ -1,0 +1,314 @@
+{
+  "run_id": "20261028T090856Z_ngspice_tt_native_buffered_clock_64words",
+  "analysis_window_from_word_origin_ui": [
+    64,
+    1088
+  ],
+  "nominal_ui_s": 2.5e-10,
+  "methods": {
+    "nominal_fold": "One initial rising-edge alignment per node; subsequent epochs use fixed nominal T. No period fit and no per-cycle output alignment.",
+    "source_triggered": "Trigger each overlay on independently observed idealized input-clock edge; retain output variations, removing only one constant propagation delay.",
+    "thresholds": "10/90% of median per-cycle extrema; includes rounded/sinusoidal clocks, not a rail-to-rail edge standard.",
+    "scope": "Deterministic noiseless transient, not statistical phase noise or jitter qualification."
+  },
+  "clocks": {
+    "250": {
+      "native": {
+        "cycles": 63,
+        "nominal_period_ui": 16,
+        "mean_frequency_hz": 250001385.99568945,
+        "rising_TIE_pp_ui": 0.005588303638546677,
+        "falling_TIE_pp_ui": 0.005472701497396315,
+        "combined_TIE_pp_ui": 0.005798815039597116,
+        "high_duty_mean": 0.500016876513798,
+        "rise_10_90_ui": 1.1604548249174438,
+        "fall_90_10_ui": 1.160455588283944,
+        "median_rising_zero_slew_v_per_ui": 0.4804058368021521,
+        "low_level_for_slew_v": -0.2720726900000001,
+        "high_level_for_slew_v": 0.27207201999999997
+      },
+      "ideal_source": {
+        "cycles": 63,
+        "nominal_period_ui": 16,
+        "mean_frequency_hz": 250001386.17350927,
+        "rising_TIE_pp_ui": 0.0055890206000412945,
+        "falling_TIE_pp_ui": 0.0054722011600070175,
+        "combined_TIE_pp_ui": 0.0057994572600428285,
+        "high_duty_mean": 0.5000168608544784,
+        "rise_10_90_ui": 0.06399994243881044,
+        "fall_90_10_ui": 0.0640001714260018,
+        "median_rising_zero_slew_v_per_ui": 5.000000001251102,
+        "low_level_for_slew_v": -0.2,
+        "high_level_for_slew_v": 0.2
+      },
+      "predriver": {
+        "cycles": 63,
+        "nominal_period_ui": 16,
+        "mean_frequency_hz": 250001386.04691434,
+        "rising_TIE_pp_ui": 0.005588510174789008,
+        "falling_TIE_pp_ui": 0.00547070080718548,
+        "combined_TIE_pp_ui": 0.005796042502387522,
+        "high_duty_mean": 0.5000168032760872,
+        "rise_10_90_ui": 0.7521780239348246,
+        "fall_90_10_ui": 0.7565768600750132,
+        "median_rising_zero_slew_v_per_ui": 0.5213059846623027,
+        "low_level_for_slew_v": -0.1809743165,
+        "high_level_for_slew_v": 0.18096124000000002
+      },
+      "loaded_output": {
+        "cycles": 63,
+        "nominal_period_ui": 16,
+        "mean_frequency_hz": 250001383.6080421,
+        "rising_TIE_pp_ui": 0.005578676751042622,
+        "falling_TIE_pp_ui": 0.005410223864117825,
+        "combined_TIE_pp_ui": 0.006072924131871105,
+        "high_duty_mean": 0.5000325961561649,
+        "rise_10_90_ui": 0.5807134065202959,
+        "fall_90_10_ui": 0.5877609842811446,
+        "median_rising_zero_slew_v_per_ui": 0.9463909937064457,
+        "low_level_for_slew_v": -0.249072686,
+        "high_level_for_slew_v": 0.2490495805
+      },
+      "input_edge_referenced_buffer_variation": {
+        "rising": {
+          "matched_edges": 64,
+          "source_to_output_median_ui": 0.3136288235651178,
+          "source_to_output_delay_pp_ui": 2.0267920034844344e-05
+        },
+        "falling": {
+          "matched_edges": 64,
+          "source_to_output_median_ui": 0.3138906456667691,
+          "source_to_output_delay_pp_ui": 0.001380369830178585
+        }
+      }
+    },
+    "500": {
+      "native": {
+        "cycles": 127,
+        "nominal_period_ui": 8,
+        "mean_frequency_hz": 500002857.48052335,
+        "rising_TIE_pp_ui": 0.005806367240325017,
+        "falling_TIE_pp_ui": 0.0057958272372200526,
+        "combined_TIE_pp_ui": 0.006002468306546049,
+        "high_duty_mean": 0.5000290603686323,
+        "rise_10_90_ui": 1.1448894684001627,
+        "fall_90_10_ui": 1.14408637168856,
+        "median_rising_zero_slew_v_per_ui": 0.44441409091530143,
+        "low_level_for_slew_v": -0.25961917,
+        "high_level_for_slew_v": 0.25934028
+      },
+      "ideal_source": {
+        "cycles": 127,
+        "nominal_period_ui": 8,
+        "mean_frequency_hz": 500002856.9060875,
+        "rising_TIE_pp_ui": 0.0058052000002817294,
+        "falling_TIE_pp_ui": 0.005797200000339231,
+        "combined_TIE_pp_ui": 0.006001200000278928,
+        "high_duty_mean": 0.5000290617837267,
+        "rise_10_90_ui": 0.06400000000001962,
+        "fall_90_10_ui": 0.06400000000001962,
+        "median_rising_zero_slew_v_per_ui": 5.0,
+        "low_level_for_slew_v": -0.2,
+        "high_level_for_slew_v": 0.2
+      },
+      "predriver": {
+        "cycles": 127,
+        "nominal_period_ui": 8,
+        "mean_frequency_hz": 500002867.6989884,
+        "rising_TIE_pp_ui": 0.005827130923421464,
+        "falling_TIE_pp_ui": 0.006611924815420167,
+        "combined_TIE_pp_ui": 0.007186740308984696,
+        "high_duty_mean": 0.5000968572880374,
+        "rise_10_90_ui": 1.9030876595179698,
+        "fall_90_10_ui": 1.9052250516956764,
+        "median_rising_zero_slew_v_per_ui": 0.19698124571832645,
+        "low_level_for_slew_v": -0.1755942245,
+        "high_level_for_slew_v": 0.17556349100000002
+      },
+      "loaded_output": {
+        "cycles": 127,
+        "nominal_period_ui": 8,
+        "mean_frequency_hz": 500002876.6020388,
+        "rising_TIE_pp_ui": 0.00584522171413937,
+        "falling_TIE_pp_ui": 0.011298839214916256,
+        "combined_TIE_pp_ui": 0.011298839214916256,
+        "high_duty_mean": 0.5001344900224718,
+        "rise_10_90_ui": 1.5074684335721626,
+        "fall_90_10_ui": 1.5096896348188364,
+        "median_rising_zero_slew_v_per_ui": 0.3525036791878773,
+        "low_level_for_slew_v": -0.2452310125,
+        "high_level_for_slew_v": 0.245173061
+      },
+      "input_edge_referenced_buffer_variation": {
+        "rising": {
+          "matched_edges": 128,
+          "source_to_output_median_ui": 0.6910394303147587,
+          "source_to_output_delay_pp_ui": 0.00013848446374764567
+        },
+        "falling": {
+          "matched_edges": 127,
+          "source_to_output_median_ui": 0.6915219836439033,
+          "source_to_output_delay_pp_ui": 0.006600839214660592
+        }
+      }
+    },
+    "1g": {
+      "native": {
+        "cycles": 255,
+        "nominal_period_ui": 4,
+        "mean_frequency_hz": 1000004840.2530708,
+        "rising_TIE_pp_ui": 0.006475298240879113,
+        "falling_TIE_pp_ui": 0.005866229904139875,
+        "combined_TIE_pp_ui": 0.006475298240879113,
+        "high_duty_mean": 0.5000524577127269,
+        "rise_10_90_ui": 1.2174881350721884,
+        "fall_90_10_ui": 1.2166647626799825,
+        "median_rising_zero_slew_v_per_ui": 0.5059360138699982,
+        "low_level_for_slew_v": -0.23086805,
+        "high_level_for_slew_v": 0.2307480099999999
+      },
+      "ideal_source": {
+        "cycles": 255,
+        "nominal_period_ui": 4,
+        "mean_frequency_hz": 1000004840.4155865,
+        "rising_TIE_pp_ui": 0.006474800000072278,
+        "falling_TIE_pp_ui": 0.005867199999762374,
+        "combined_TIE_pp_ui": 0.006474800000072278,
+        "high_duty_mean": 0.5000524442833771,
+        "rise_10_90_ui": 0.06400000000001962,
+        "fall_90_10_ui": 0.06400000000001962,
+        "median_rising_zero_slew_v_per_ui": 5.0,
+        "low_level_for_slew_v": -0.2,
+        "high_level_for_slew_v": 0.2
+      },
+      "predriver": {
+        "cycles": 255,
+        "nominal_period_ui": 4,
+        "mean_frequency_hz": 1000004838.3751204,
+        "rising_TIE_pp_ui": 0.006481047470501267,
+        "falling_TIE_pp_ui": 0.0095736070603607,
+        "combined_TIE_pp_ui": 0.010408995689772382,
+        "high_duty_mean": 0.5002801287404297,
+        "rise_10_90_ui": 0.7236921325266903,
+        "fall_90_10_ui": 0.7271890979793991,
+        "median_rising_zero_slew_v_per_ui": 0.54229041892744,
+        "low_level_for_slew_v": -0.180030994,
+        "high_level_for_slew_v": 0.17997434699999998
+      },
+      "loaded_output": {
+        "cycles": 255,
+        "nominal_period_ui": 4,
+        "mean_frequency_hz": 1000004822.6021508,
+        "rising_TIE_pp_ui": 0.006493380604025489,
+        "falling_TIE_pp_ui": 0.008230336085166101,
+        "combined_TIE_pp_ui": 0.009166899703490827,
+        "high_duty_mean": 0.500241614716889,
+        "rise_10_90_ui": 0.5153840937999173,
+        "fall_90_10_ui": 0.5194706981944788,
+        "median_rising_zero_slew_v_per_ui": 0.9808918224437179,
+        "low_level_for_slew_v": -0.237127928,
+        "high_level_for_slew_v": 0.23682805499999998
+      },
+      "input_edge_referenced_buffer_variation": {
+        "rising": {
+          "matched_edges": 256,
+          "source_to_output_median_ui": 0.32304787717175004,
+          "source_to_output_delay_pp_ui": 7.007991757429499e-05
+        },
+        "falling": {
+          "matched_edges": 255,
+          "source_to_output_median_ui": 0.32339253635212956,
+          "source_to_output_delay_pp_ui": 0.003615000647435196
+        }
+      }
+    },
+    "2g": {
+      "native": {
+        "cycles": 511,
+        "nominal_period_ui": 2,
+        "mean_frequency_hz": 2000009882.623533,
+        "rising_TIE_pp_ui": 0.006472458219969113,
+        "falling_TIE_pp_ui": 0.006283537626915248,
+        "combined_TIE_pp_ui": 0.0067255462465585225,
+        "high_duty_mean": 0.5001294623682733,
+        "rise_10_90_ui": 0.5285911165889927,
+        "fall_90_10_ui": 0.5280426222249072,
+        "median_rising_zero_slew_v_per_ui": 1.0215288245366116,
+        "low_level_for_slew_v": -0.2692622350000001,
+        "high_level_for_slew_v": 0.26911757999999997
+      },
+      "ideal_source": {
+        "cycles": 511,
+        "nominal_period_ui": 2,
+        "mean_frequency_hz": 2000009880.2836435,
+        "rising_TIE_pp_ui": 0.006473600000276747,
+        "falling_TIE_pp_ui": 0.006282400000083399,
+        "combined_TIE_pp_ui": 0.006726400000326649,
+        "high_duty_mean": 0.5001294910969227,
+        "rise_10_90_ui": 0.06400000000001962,
+        "fall_90_10_ui": 0.06400000000001962,
+        "median_rising_zero_slew_v_per_ui": 5.0,
+        "low_level_for_slew_v": -0.2,
+        "high_level_for_slew_v": 0.2
+      },
+      "predriver": {
+        "cycles": 511,
+        "nominal_period_ui": 2,
+        "mean_frequency_hz": 2000009790.7679937,
+        "rising_TIE_pp_ui": 0.006487535542525791,
+        "falling_TIE_pp_ui": 0.007463170378260386,
+        "combined_TIE_pp_ui": 0.007463170378260386,
+        "high_duty_mean": 0.5000110669967275,
+        "rise_10_90_ui": 0.7064519929464439,
+        "fall_90_10_ui": 0.7064828714755731,
+        "median_rising_zero_slew_v_per_ui": 0.3383763625617051,
+        "low_level_for_slew_v": -0.131722998,
+        "high_level_for_slew_v": 0.13163911849999999
+      },
+      "loaded_output": {
+        "cycles": 511,
+        "nominal_period_ui": 2,
+        "mean_frequency_hz": 2000010366.3635945,
+        "rising_TIE_pp_ui": 0.0067408329422917745,
+        "falling_TIE_pp_ui": 0.007431792485995459,
+        "combined_TIE_pp_ui": 0.007431792485995459,
+        "high_duty_mean": 0.5000697294177332,
+        "rise_10_90_ui": 0.6192042993703346,
+        "fall_90_10_ui": 0.6185727145682138,
+        "median_rising_zero_slew_v_per_ui": 0.7351342149682406,
+        "low_level_for_slew_v": -0.22776355850000002,
+        "high_level_for_slew_v": 0.227383609
+      },
+      "input_edge_referenced_buffer_variation": {
+        "rising": {
+          "matched_edges": 512,
+          "source_to_output_median_ui": 0.39051789456678343,
+          "source_to_output_delay_pp_ui": 0.0008617395694535124
+        },
+        "falling": {
+          "matched_edges": 512,
+          "source_to_output_median_ui": 0.39040287920354444,
+          "source_to_output_delay_pp_ui": 0.0024339888354059647
+        }
+      }
+    }
+  },
+  "data_comparison": {
+    "nominal_reference_transition_spread_ui": 0.1624760780610257,
+    "loaded_clock_to_data_delay_pp_ui": 0.16208230645144278
+  },
+  "input_sha256": [
+    {
+      "path": "results/analog/tx/serializer/physical_clock/20261028T090856Z_ngspice_tt_native_buffered_clock_64words/raw/waveforms.tsv",
+      "sha256": "280704349f2bae91599fc3cab5fa4eed808d22750b0d685585dad421d2832f3c"
+    },
+    {
+      "path": "results/analog/pll/top/clock_harvest/20261028T084345Z_ngspice_tt_native_closed_phase_harvest/raw/checkpoint_002048UI.tsv",
+      "sha256": "f69880ab41bfed1e49c44a66addcdb9753a0e043100f7d85ffdb2ba723fa40c2"
+    },
+    {
+      "path": "results/analog/tx/serializer/physical_clock/20261028T090856Z_ngspice_tt_native_buffered_clock_64words/raw/edge_phase_ui.tsv",
+      "sha256": "a544ab13b27108eb85d9d13347a0d7da1ecdb91151366143bdf001fb92c363a1"
+    }
+  ]
+}

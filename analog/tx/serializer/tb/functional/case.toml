@@ -1,0 +1,23 @@
+id = "functional"
+dut = "analog/tx/serializer"
+level = "integration"
+status = "prototype"
+purpose = "真实16路CMOS转CML加15个差分电流舵选择器，在理想相关时钟下检查d0先出的多字串化和2UI眼图。"
+analyses = ["tran", "phase_comparison"]
+measurements = ["sampled_bit_errors", "extra_zero_crossings", "edge_spread_ui", "fixed_phase_eye_margin", "common_mode", "power"]
+[implementation]
+view = "native_MOS_ideal_R_external_bias_ideal_correlated_clocks"
+simulator = "ngspice47"
+testbench = "analog/tx/serializer/tb/functional/tb_serializer16_ngspice.cir.in"
+retimed_testbench = "analog/tx/serializer/tb/functional/tb_serializer16_retimed_ngspice.cir.in"
+eye_contract = "verification/contracts/eye_fold.toml"
+[requirements]
+status = "engineering_comparison_not_final_transmitter_signoff"
+parallel_bits = 16
+serial_rate_bps = 4000000000
+input_word_rate_hz = 250000000
+nominal_ui_s = 2.5e-10
+output_load_per_leg_f = 2e-14
+physical_clock_distribution_verified = false
+word_capture_register_present = false
+pad_and_channel_present = false

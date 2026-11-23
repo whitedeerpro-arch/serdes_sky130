@@ -1,0 +1,90 @@
+{
+  "run": "results/verification/streaming/20261029T041225Z",
+  "status": "passed_small_RC_only; bounded_stream_capture_not_interactive_CDR_cosim",
+  "date_local": "2026-10-29",
+  "ngspice": "/opt/ngspice47/bin/ngspice",
+  "stop_s": 2e-06,
+  "stop_ui": 7999.999999999999,
+  "continuous_single_process": true,
+  "source_or_solver_state_restarted": false,
+  "points_processed": 1000023,
+  "variables": [
+    "time",
+    "v(in)",
+    "v(fast)",
+    "v(slow)"
+  ],
+  "pretrigger_horizon_s": 2e-09,
+  "ring_point_cap": 8192,
+  "ring_max_points": 1022,
+  "ring_numeric_payload_peak_bytes": 32704,
+  "ngspice_steady_rss_min_bytes": 10985472,
+  "ngspice_steady_rss_max_bytes": 10985472,
+  "stream_wall_s": 1.8232329500024207,
+  "reference_wall_s": 1.6477682270051446,
+  "retained_windows": [
+    {
+      "name": "at500ns",
+      "range_s": [
+        4.979999999999999e-07,
+        5.02e-07
+      ],
+      "points": 2000,
+      "max_abs_difference_vs_reference": 0.0,
+      "file": "windows/at500ns.tsv"
+    },
+    {
+      "name": "at1000ns",
+      "range_s": [
+        9.98e-07,
+        1.0019999999999999e-06
+      ],
+      "points": 2000,
+      "max_abs_difference_vs_reference": 0.0,
+      "file": "windows/at1000ns.tsv"
+    },
+    {
+      "name": "slow_cross_0p5",
+      "range_s": [
+        6.911486801968447e-07,
+        6.951486801968447e-07
+      ],
+      "points": 2000,
+      "max_abs_difference_vs_reference": 0.0,
+      "file": "windows/slow_cross_0p5.tsv"
+    }
+  ],
+  "slow_state_at1us_v": 0.6321202299321764,
+  "slow_state_analytic_v": 0.6321202297946266,
+  "unknown_trigger_time_s": 6.931486801968447e-07,
+  "reference_points": 1000023,
+  "reference_bytes_not_retained": 32001063,
+  "reference_sha256": "c4b6a63ad5702088ef335f25c2de39d86048e83fd6ee6627ba9157088f928068",
+  "reference_deleted_after_validation": true,
+  "nonseekable_raw_format_note": "header point count remains0; ngspice appends ASCII final point count; collector verified footer and frame count, then discards transport",
+  "progress_estimator": "EWMA of observed simulated-time/wall-time throughput; UI progress and RSS; ETA is nonbinding",
+  "commands": [
+    [
+      "/opt/ngspice47/bin/ngspice",
+      "-b",
+      "-r",
+      "results/verification/streaming/20261029T041225Z/raw/reference.raw",
+      "-o",
+      "results/verification/streaming/20261029T041225Z/logs/reference.log",
+      "results/verification/streaming/20261029T041225Z/netlist/tb.cir"
+    ],
+    [
+      "/opt/ngspice47/bin/ngspice",
+      "-b",
+      "-r",
+      "results/verification/streaming/20261029T041225Z/raw/stream.fifo",
+      "-o",
+      "results/verification/streaming/20261029T041225Z/logs/stream.log",
+      "results/verification/streaming/20261029T041225Z/netlist/tb.cir"
+    ]
+  ],
+  "input_sha256": {
+    "netlist/tb.cir": "da402f583ca94fecc933b6c5fa8dc3ccd29dd89c0b1fcd21b7763fc8d68f33ee",
+    "raw/.spiceinit": "66b5b5e573d38767f3dd2aa5d90feffc0a4d07e3664179905f83fbdf4b3c35e3"
+  }
+}

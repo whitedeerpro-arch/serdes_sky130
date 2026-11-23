@@ -1,0 +1,203 @@
+# Project-level adoption/verification summary: docs/status/current.md; legacy fields retain their stated revision scopes.
+revision = "r6_candidate_20261112"
+status = "r6 5-bit layout-aware VCO and k4 quiet core; 135-condition map table generated; frontend partial measurements and existing r5 native integration retained; current loop/interface qualification open"
+r5_change = "VCO only: legacy 3-bit switch W 1 -> 5; current 4-bit half-unit switch W 2.5 and MIM 2.35x2.5; varactor W 18 single finger -> 4.5 x vm 4, fixed MIM removed"
+r5_report = "docs/design/pll_vco.md"
+r5_open = "I-32"
+r5_native_static_bench = "analog/tx/serializer/tb/native_clock/r5_v3.py"
+r5_native_static_report = "docs/history/clocking_progress_20261106.md"
+r5_code_table = "config/pll_code_table.json"  # open-loop bench points, not closed-loop lock qualification
+r5_cold_frontend_report = "docs/history/pll_cold_convergence.md"
+r5_cold_frontend_initial_state_bc = "pll_r5_cold_prebiased_state_v1"
+r5_cold_frontend_scope = "FF/1.95V/-40C ll and hh; 24ns native four-branch frontend; prebiased .ic/uic, fixed code/control; dividers and 4 fullrate/feedback functional checks; DC OP and power-up still open"
+prescaler_first_stage_whold_um = 40.0  # others 80; docs/design/pll_divider.md
+last_closed_revision = "lowov_buffered_r4_20261031"
+r4_change = "full-rate CML-to-CMOS receivers on all four branches -> serdes_cml_to_cmos_r4 (feedback receivers unchanged)"
+r4_report = "docs/design/clock_receiver.md"
+r4_native_check = "analog/pll/top/tb/pvt_r4/run.py"
+r4_fullrate_boundary = "analog/common/cml_to_cmos/tb/fullrate_pvt/run.py"
+r4_fullrate_45 = "45/45; duty 0.477-0.511"
+r4_native_points = "TT, SS 85 C, FS 85 C, SS -40 C code 5 and 6: dividers, feedback 4/4, full-rate 4/4"
+r4_core_power_increase_TT_mw = 4.2
+previous_revision = "lowov_buffered_r3_20261029"
+report = "docs/design/pll_loop.md"
+results = "results/analog/pll/vco/r6/map_20261112T062237Z/table.json"
+historical_r3_report = "docs/history/pll_buffered_pvt.md"
+historical_r3_results = "docs/data/pll_buffered_pvt.json"
+previous_revision_report = "docs/history/pll_lowov_pvt.md"
+frozen_release = "releases/v0.1-design-freeze-20261028"
+native_clock_frontend = "analog/pll/top/spice/clock_frontend_r6q.spice"
+VCO = "analog/pll/vco/spice/vco_ring4_r6.spice"
+active_vco_bank_bits = 5
+legacy_3bit_status = "historical_reference_only; no_further_parallel_design; noise_evidence_not_transferable"
+clock_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice"
+clock_receiver_scope = "external or historical fullrate path; not instantiated by the current lean r6 frontend"
+feedback_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice"
+divider = "analog/pll/divider/spice/cml_prescaler8.spice"
+external_reference_current_a = 0.00085  # historical ideal-bias benches; current r6 bench uses real bias distribution
+current_bias = "real host serdes_bias_ref and module copies; quiet tail filter and CP PMOS bias as r6 native bench; reference startup qualification remains open"
+reference_generator_qualified = false
+internal_logic_bias = "real_NMOS_PMOS_mirror; one_per_prescaler"
+divider_tail_w_um = 72.0
+divider_tail_nf = 24
+divider_follower_w_um = 80.0
+divider_follower_nf = 4
+divider_follower_sink_w_um = 4.0
+interstage_CML_buffers_per_prescaler = 2
+interstage_buffer_input_w_um = 24.0
+interstage_buffer_tail_w_um = 12.0
+interstage_buffer_bias = "existing_global_vbias; no_new_voltage_reference"
+nominal_CML_load_ohm = 600
+schematic_status = "divider_internal_circuit_requires_sync_to_working_netlist"
+current_circuit_reading_view = "docs/schematics/lowov_review/cml_latch_review.pdf"
+topology_review = "docs/history/cml_latch_topology_review.md"
+native_FS_2GHz_qualified = false
+native_qualification_scope = "r6 current implementation pending; r3/r4/r5 measured operating points retained only in named historical records"
+native_SS_minus40_clock_feedback_functional = false
+native_SS_minus40_fullrate_cmos_functional = false
+VCO_full45_tuning_mapping_completed = true  # r6 table covers MOS45 x tt/hh/ll; independent model/low-frequency checks are separate
+VCO_map_independent_model_validation_completed = false
+next_stage = "validate r6 map lock points and frontend load/feedback boundaries; carry existing integration forward to native loop, coarse search/startup and noise/supply budgets"
+native_closed_loop_PLL_PVT_completed = false
+
+loop_PVT_evidence_scope = "historical r3/r5 measurements only; not current r6 qualification"
+loop_PVT_report = "docs/history/pll_loop_pvt.md"
+loop_PVT_results = "docs/data/pll_loop_pvt.json"
+selected_same_corner_hierarchical_loop_scenarios = 12
+native_r3_short_handoff_observed = true
+native_r3_sustained_lock_qualified = false
+fullrate_CMOS_priority = "PLL uses feedback receiver; fullrate receiver separate; RX deser16 uses divided clock and static data converters"
+divider_size_review = "docs/history/divider_size_and_clock_priority.md"
+
+[r5_k4_loop]
+report = "docs/design/pll_loop.md"
+core = "analog/pll/top/spice/pll_core_r5k4.spice"
+behavioural_vco_scope = "transistor PFD/steering CP/PDK LF with calibrated behavioural VCO/divide-by-8; 45 MOS/supply/temperature x tt/hh/ll; precharged"
+behavioural_vco_locked = "135/135; capture <= 322 ns; overshoot <= 27.2%"
+native_scope = "transistor VCO/divider closed loop, precharged; TT, FS 1.65 V 85 C hh, SS 1.65 V -40 C hh"
+native_locked = "3 points; capture 118/418/254 ns; 2.00000 GHz"
+native_campaigns = "results/analog/pll/top/native_k4/20261108T200611Z; results/analog/pll/top/native_k4/20261108T221446Z"
+coarse_monitor = "coarse RTL behavioural-loop tests and monitor components available; not integrated into physical closed-loop startup"
+remaining = "native full PVT and startup; CP-window joint mismatch/dynamic margin and switching; LF supply split; new-loop noise and supply rejection"
+
+[r5_fixed_code_temperature]
+status = "45_of_45_MOS_supply_RC_groups_have_static_three_temperature_code; not_lock_or_startup"
+original_groups = 42
+filled_groups = 3
+campaign = "results/analog/pll/vco/cp_edge_fill/20261107T102145236159Z"
+evidence = "docs/data/vco_cp_edge_fill.json"
+report = "docs/design/pll_vco.md"
+FF_1V95_Rtt_code = 7
+FF_1V95_Rll_code = 12
+FS_1V95_Rll_code = 7
+added_points = 12
+new_stop_ns = 24
+window = "0.85V_to_measured_CP_DC_5percent_upper_edge"
+fixed_across_supply = false
+physical_CP_LF_handoff_qualified = false
+native_lock_startup_mismatch_noise_qualified = false
+
+[r5_cp_window]
+report = "docs/design/pll_cp_window.md"
+evidence = "docs/data/pll_cp_steer_window.json"
+conditions_complete = 135
+minimum_nominal_upper_gap_mv = 24.37264
+worst_condition = "sf_v1650_t85:ll"
+criterion = "each branch within 5 percent of its own VDD/2 current; 10mV sweep grid"
+qualified = false
+remaining = "joint CP/monitor mismatch, ctrl-z ripple and decision delay; static diagnostic only"
+
+[r5_cp_window.joint_mc_pilot]
+evidence = "docs/data/pll_cp_handoff_mc.json"
+condition = "sf_v1650_t85:ll"
+samples_per_code = 32
+seed = 1
+chunk = 4
+current_code_hi = 3
+comparison_code_hi = 4
+comparison_adopted = false
+static_headroom_assumption_mv = 20
+above_5percent_at_assumed_headroom = "code3 5/32; code4 0/32; not yield"
+remaining = "VCO-range tradeoff, actual ctrl-z/comparator/decision budget, population tail; pilot only"
+
+[r5_coarse_control_windows]
+report = "docs/design/pll_coarse_windows.md"
+evidence = "docs/data/vco_control_windows.json"
+fill_complete_curves = 228
+historical_partial_curves_excluded = 3
+resumed_points = 20
+ideal_low_v = 0.90
+upper_codes_compared = "3: VDD-0.41V; 4: VDD-0.44V; 5: VDD-0.47V"
+code_names = "K=VCO bank value 0..15; H=upper threshold tap value 0..15; H=3/4 are values, not bit widths"
+conditions_with_interpolated_choice = "135/135 for each upper code in original static interpolation analysis"
+same_code_at_three_temperatures = "27/45; 23/45; 19/45 interpolation predictions only; narrower than r5_fixed_code_temperature"
+default_changed = false
+qualified = false
+remaining = "adjacent-code landing; actual threshold and dynamic/MC budgets; startup and noise"
+
+[r5_coarse_control_windows.h4_boundary_confirmation]
+supply_scope = "legacy r5 single-supply static; not current r5k4q host/quiet qualification"
+evidence = "docs/data/vco_window_boundaries.json"
+conditions_with_in_window_measured_bracket = 135
+prior_conditions = 95
+new_boundary_points = 40
+new_low_points = 31
+new_high_points = 9
+minimum_new_boundary_frequency_gap_mhz = 16.806578
+minimum_new_boundary_condition = "sf_v1650_t-40:ll K15 at Vctrl0.90V"
+three_temperature_common_codes_qualified = false
+actual_threshold_mismatch_dynamic_noise_qualified = false
+default_H_changed = false
+
+[r6_vco]
+report = "docs/design/pll_vco.md"
+delay = "analog/pll/vco/spice/vco_delay_r6.spice"
+capacitor_bank = "analog/pll/vco/spice/cap_bank_5b.spice"
+bank_units = 31
+mim_side_um = 2.0
+switch_total_w_um = 1.5
+switch_nf = 2
+varactor_finger_w_um = 5.2
+varactor_vm = 4
+tail_total_w_um = 25.2
+tail_nf = 4
+load_width_card = "2p85"
+load_parallel_per_side = 2
+load_unit_length_um = 4.77
+phase_wire_budget_f = 12e-15
+map_campaign = "results/analog/pll/vco/r6/map_20261112T062237Z"
+map_full135_completed = true
+map_model_independently_validated = false
+map_table_scope = "135 models from 1620 simulated points; 35d9dda low-frequency fallback; not noise/mismatch or closed-loop qualification"
+frontend_campaign = "results/analog/pll/top/frontend_r6/20261112T084139Z"
+frontend_scope = "9 complete 21ns records of 10; FF cold full variant DC timeout; FS hot code0 range-end feedback flat in 9..21ns at about2.18GHz, not a2GHz lock test"
+noise_mismatch_current_implementation_qualified = false
+historical_r5_code_table_applies = false
+
+[r6_k4_loop]
+core = "analog/pll/top/spice/pll_core_r6k4q.spice"
+native_bench = "analog/pll/top/tb/native_r6/run.py"
+pfd = "pll_pfd_sc_dly"
+pfd_source = "analog/pll/pfd/spice/pfd_sc.spice"
+clock_outputs = "four 2GHz CML buffer pairs and branch0 divider taps; no fullrate CMOS receivers in lean frontend"
+cfg_level_assumption = "native static bench drives cfg at quiet-rail levels; actual driver and cross-bit transients unqualified"
+rtl_control_code_bits_override = 5
+rtl_control_default_bits = 4
+physical_automatic_coarse_search_integrated = false
+native_precharged_lock_qualified = false  # full required r6 pressure set remains open; TT point below is qualified
+native_full_PVT_completed = false
+from_zero_startup_qualified = false
+old_r5_lock_noise_results_transferable = false
+
+[r6_tt_precharged_lock_20261114]
+report = "docs/design/r6_lock_confirmation.md"
+evidence = "docs/data/r6_lock_confirmation.json"
+campaign = "results/analog/pll/top/native_r6/20261114T123336.086796Z"
+point = "tt_v1800_t27:tt"
+supply_variant = "ext"
+code = 9
+actual_stop_s = 8e-7
+engineering_lock_qualified = true
+hold_s = 4.8e-7
+output_frequency_last200ns_hz = 1999999142.6018455
+scope = "r6 schematic; fixed PDK R, real shared BG/slow tail; ideal250MHz PFD reference and host/quiet rails; map precharge+40mV and explicit kicks; not from-zero startup, loaded lock, PVT, PEX, dynamic TX or stochastic-noise qualification"

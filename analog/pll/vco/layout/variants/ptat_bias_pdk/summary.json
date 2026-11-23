@@ -1,0 +1,111 @@
+{
+  "cell": "pll_vco_ptat_bias_pdk",
+  "bbox_um": [
+    -74.2,
+    -1.0,
+    74.6,
+    60.6
+  ],
+  "width_um": 148.8,
+  "height_um": 61.6,
+  "area_um2": 9166.08,
+  "aspect_ratio": 2.42,
+  "drc_total": 0,
+  "drc_rules": [],
+  "lvs_match": true,
+  "lvs_property_errors": false,
+  "lvs_disconnected": [],
+  "exported_ports": [
+    "out",
+    "vgi",
+    "vg",
+    "vdd"
+  ],
+  "expected_ports": [
+    "out",
+    "vgi",
+    "vg",
+    "vdd"
+  ],
+  "ports_exact_match": true,
+  "floating_poly": 0,
+  "m5_rects": 0,
+  "m5_usage_pct": 0.0,
+  "extracted_models": {
+    "sky130_fd_pr__pfet_01v8_lvt": 94
+  },
+  "parasitics": {
+    "extracted_mos_segments": 94,
+    "ad_um2": 173.71,
+    "as_um2": 173.71,
+    "pd_um": 1226.42,
+    "ps_um": 1226.42,
+    "pex_cap_elements": 10,
+    "total_substrate_cap_fF": 0,
+    "total_coupling_cap_fF": 1655.681,
+    "port_caps_fF": {
+      "out": {
+        "to_substrate_fF": 0.0,
+        "coupling_sum_fF": 290.61,
+        "total_node_fF": 290.61
+      },
+      "vgi": {
+        "to_substrate_fF": 0.0,
+        "coupling_sum_fF": 111.547,
+        "total_node_fF": 111.547
+      },
+      "vg": {
+        "to_substrate_fF": 0.0,
+        "coupling_sum_fF": 458.166,
+        "total_node_fF": 458.166
+      },
+      "vdd": {
+        "to_substrate_fF": 0.0,
+        "coupling_sum_fF": 1467.718,
+        "total_node_fF": 1467.718
+      }
+    },
+    "top_coupling_fF": [
+      {
+        "node_a": "VSUBS",
+        "node_b": "vdd",
+        "cap_fF": 972.28
+      },
+      {
+        "node_a": "vdd",
+        "node_b": "vg",
+        "cap_fF": 303.05
+      },
+      {
+        "node_a": "out",
+        "node_b": "vg",
+        "cap_fF": 148.89
+      },
+      {
+        "node_a": "out",
+        "node_b": "vdd",
+        "cap_fF": 110.54
+      },
+      {
+        "node_a": "vdd",
+        "node_b": "vgi",
+        "cap_fF": 81.848
+      },
+      {
+        "node_a": "out",
+        "node_b": "vgi",
+        "cap_fF": 26.805
+      },
+      {
+        "node_a": "VSUBS",
+        "node_b": "vg",
+        "cap_fF": 4.999
+      },
+      {
+        "node_a": "VSUBS",
+        "node_b": "out",
+        "cap_fF": 4.375
+      }
+    ]
+  }
+}

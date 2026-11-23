@@ -1,0 +1,4854 @@
+{
+  "status": "calibrated_wide_poly_planning_no_adoption",
+  "adopted": false,
+  "campaign": "results/analog/common/devices/wide_load_card/20261112T050902.564688Z_ea0db703",
+  "summary": "results/analog/common/devices/wide_load_card/20261112T050902.564688Z_ea0db703/analysis/measurement/summary.json",
+  "summary_sha256": "344fd56afbfcb8124a220a1baa319546cc17f17cc51bd7a73905de7a52d64721",
+  "plan_sha256": "851426b753bebb9ce0e657924c8a3c2e77a42f19d5a9c4c58d38a82cdb648316",
+  "networks_sha256": "e2ea3fcf34f20462289c84884b5a673054734b8d54b84f163fed958dd1614069",
+  "curves": {
+    "1p41": {
+      "coefficients_ohm": [
+        254.7700000000105,
+        230.04633357812494,
+        39.24926493097774
+      ],
+      "domain_um": [
+        0.5,
+        512.0
+      ],
+      "max_error_ohm": 7.275957614183426e-11
+    },
+    "2p85": {
+      "coefficients_ohm": [
+        130.36000000000135,
+        113.56946451624977,
+        18.689448975762453
+      ],
+      "domain_um": [
+        0.5,
+        32.0
+      ],
+      "max_error_ohm": 5.002220859751105e-12
+    },
+    "5p73": {
+      "coefficients_ohm": [
+        68.0499999999991,
+        56.459709583875075,
+        -0.06347172389082267
+      ],
+      "domain_um": [
+        0.5,
+        32.0
+      ],
+      "max_error_ohm": 2.7284841053187847e-12
+    }
+  },
+  "parts": [
+    {
+      "id": "generic50",
+      "kind": "legacy_generic",
+      "nominal_ohm": 50,
+      "w_um": 21,
+      "length_um": 2.1198738170347005,
+      "TT27C_load250mV_resistance_ohm": 52.0897446479539,
+      "TT27C_load250mV_node_capacitance_f": 8.364405198732703e-15,
+      "max_LF_AC_vs_FD_relative_error": 2.7848834349697427e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9933203431348736,
+          "normalized_max": 1.0368961933821272,
+          "max_abs_percent": 3.689619338212724
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9708619977400004,
+          "normalized_max": 1.0692677408980602,
+          "max_abs_percent": 6.92677408980602
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.973113643749796,
+          "normalized_max": 1.0664735040870243,
+          "max_abs_percent": 6.647350408702435
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "generic50",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.08974464795504,
+          "FD_resistance_ohm": 52.0897446479588,
+          "LF_incremental_resistance_ohm": 52.089744647953815,
+          "RF_real_admittance_inverse_ohm": 52.089744647953815,
+          "RF_effective_node_capacitance_f": 8.364405198732703e-15,
+          "LF_AC_vs_FD_relative_error": 9.581224702515101e-14
+        },
+        {
+          "id": "generic50",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.08974464795391,
+          "FD_resistance_ohm": 52.0897446479588,
+          "LF_incremental_resistance_ohm": 52.089744647953815,
+          "RF_real_admittance_inverse_ohm": 52.089744647953815,
+          "RF_effective_node_capacitance_f": 8.364405198732703e-15,
+          "LF_AC_vs_FD_relative_error": 9.581224702515101e-14
+        },
+        {
+          "id": "generic50",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.0897446479539,
+          "FD_resistance_ohm": 52.0897446479588,
+          "LF_incremental_resistance_ohm": 52.089744647953815,
+          "RF_real_admittance_inverse_ohm": 52.089744647953815,
+          "RF_effective_node_capacitance_f": 8.364405198732703e-15,
+          "LF_AC_vs_FD_relative_error": 9.581224702515101e-14
+        },
+        {
+          "id": "generic50",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.089744647953864,
+          "FD_resistance_ohm": 52.089744648052935,
+          "LF_incremental_resistance_ohm": 52.089744647953815,
+          "RF_real_admittance_inverse_ohm": 52.089744647953815,
+          "RF_effective_node_capacitance_f": 8.364405198732703e-15,
+          "LF_AC_vs_FD_relative_error": 1.9029222642075183e-12
+        }
+      ]
+    },
+    {
+      "id": "r50_2p85_n5",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "2p85",
+      "parallel_count": 5,
+      "length_um": 0.98,
+      "continuous_length_um": 0.9770205408721593,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.14578830554491,
+      "relative_error": 0.0010759057847153919,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 13.965,
+      "hypothetical_peak_uA_per_um": 464.48227077433415,
+      "TT27C_load250mV_resistance_ohm": 52.1457883055447,
+      "TT27C_load250mV_node_capacitance_f": 6.422805000000001e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.506810676232817e-09,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.8281135656644507,
+          "normalized_max": 1.2035944145099393,
+          "max_abs_percent": 20.35944145099393
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.852837128073596,
+          "normalized_max": 1.1777662285020167,
+          "max_abs_percent": 17.776622850201672
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.8511373035004354,
+          "normalized_max": 1.1791386771357688,
+          "max_abs_percent": 17.91386771357688
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_2p85_n5",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.53166997671292,
+          "FD_resistance_ohm": 52.52528395305956,
+          "LF_incremental_resistance_ohm": 52.525283998471096,
+          "RF_real_admittance_inverse_ohm": 52.525283998471096,
+          "RF_effective_node_capacitance_f": 6.422805000000001e-15,
+          "LF_AC_vs_FD_relative_error": 8.645653082339777e-10
+        },
+        {
+          "id": "r50_2p85_n5",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.438974789549924,
+          "FD_resistance_ohm": 52.29889822648324,
+          "LF_incremental_resistance_ohm": 52.29889826473398,
+          "RF_real_admittance_inverse_ohm": 52.29889826473398,
+          "RF_effective_node_capacitance_f": 6.422805000000001e-15,
+          "LF_AC_vs_FD_relative_error": 7.313871730474375e-10
+        },
+        {
+          "id": "r50_2p85_n5",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.1457883055447,
+          "FD_resistance_ohm": 51.538385375414585,
+          "LF_incremental_resistance_ohm": 51.538385402170384,
+          "RF_real_admittance_inverse_ohm": 51.538385402170384,
+          "RF_effective_node_capacitance_f": 6.422805000000001e-15,
+          "LF_AC_vs_FD_relative_error": 5.191431728945872e-10
+        },
+        {
+          "id": "r50_2p85_n5",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 51.37290966057462,
+          "FD_resistance_ohm": 49.63574665787232,
+          "LF_incremental_resistance_ohm": 49.635746665731986,
+          "RF_real_admittance_inverse_ohm": 49.635746665731986,
+          "RF_effective_node_capacitance_f": 6.422805000000001e-15,
+          "LF_AC_vs_FD_relative_error": 1.583468911547925e-10
+        }
+      ]
+    },
+    {
+      "id": "r50_2p85_n8",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "2p85",
+      "parallel_count": 8,
+      "length_um": 2.45,
+      "continuous_length_um": 2.4543854461687236,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.02919182319159,
+      "relative_error": -0.0011624711384454756,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 55.86000000000001,
+      "hypothetical_peak_uA_per_um": 290.3014192339588,
+      "TT27C_load250mV_resistance_ohm": 52.029191823191546,
+      "TT27C_load250mV_node_capacitance_f": 1.2800772000000001e-14,
+      "max_LF_AC_vs_FD_relative_error": 4.3151993089907137e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9323875454947051,
+          "normalized_max": 1.073738483486126,
+          "max_abs_percent": 7.3738483486126105
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.960224236772733,
+          "normalized_max": 1.0506969032486204,
+          "max_abs_percent": 5.069690324862042
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9583103745595606,
+          "normalized_max": 1.0519212782514469,
+          "max_abs_percent": 5.192127825144688
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_2p85_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.12332141350919,
+          "FD_resistance_ohm": 52.121818820897836,
+          "LF_incremental_resistance_ohm": 52.12181883210203,
+          "RF_real_admittance_inverse_ohm": 52.12181883210203,
+          "RF_effective_node_capacitance_f": 1.2800772000000001e-14,
+          "LF_AC_vs_FD_relative_error": 2.1496160407252773e-10
+        },
+        {
+          "id": "r50_2p85_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.10100590522722,
+          "FD_resistance_ohm": 52.06688200249949,
+          "LF_incremental_resistance_ohm": 52.0668820120889,
+          "RF_real_admittance_inverse_ohm": 52.0668820120889,
+          "RF_effective_node_capacitance_f": 1.2800772000000001e-14,
+          "LF_AC_vs_FD_relative_error": 1.841746755104623e-10
+        },
+        {
+          "id": "r50_2p85_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.029191823191546,
+          "FD_resistance_ohm": 51.878514220697646,
+          "LF_incremental_resistance_ohm": 51.87851422694062,
+          "RF_real_admittance_inverse_ohm": 51.87851422694062,
+          "RF_effective_node_capacitance_f": 1.2800772000000001e-14,
+          "LF_AC_vs_FD_relative_error": 1.2033818386214534e-10
+        },
+        {
+          "id": "r50_2p85_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 51.838587666109966,
+          "FD_resistance_ohm": 51.39828118877043,
+          "LF_incremental_resistance_ohm": 51.39828119003018,
+          "RF_real_admittance_inverse_ohm": 51.39828119003018,
+          "RF_effective_node_capacitance_f": 1.2800772000000001e-14,
+          "LF_AC_vs_FD_relative_error": 2.450950553622988e-11
+        }
+      ]
+    },
+    {
+      "id": "r50_2p85_n17",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "2p85",
+      "parallel_count": 17,
+      "length_um": 6.62,
+      "continuous_length_um": 6.624530752958201,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.059590276539076,
+      "relative_error": -0.000578892671072806,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 320.73900000000003,
+      "hypothetical_peak_uA_per_um": 136.6124325806865,
+      "TT27C_load250mV_resistance_ohm": 52.05959027653904,
+      "TT27C_load250mV_node_capacitance_f": 4.2418179000000016e-14,
+      "max_LF_AC_vs_FD_relative_error": 6.948286390695557e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9790547155482815,
+          "normalized_max": 1.021464225419149,
+          "max_abs_percent": 2.1464225419149052
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9853930847940441,
+          "normalized_max": 1.0156115059109623,
+          "max_abs_percent": 1.5611505910962276
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.987678431643155,
+          "normalized_max": 1.0129574848954732,
+          "max_abs_percent": 1.2957484895473215
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_2p85_n17",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.072925822748665,
+          "FD_resistance_ohm": 52.07278701012442,
+          "LF_incremental_resistance_ohm": 52.07278701205145,
+          "RF_real_admittance_inverse_ohm": 52.07278701205145,
+          "RF_effective_node_capacitance_f": 4.2418179000000016e-14,
+          "LF_AC_vs_FD_relative_error": 3.700639794601557e-11
+        },
+        {
+          "id": "r50_2p85_n17",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.070160627856815,
+          "FD_resistance_ohm": 52.06547699485502,
+          "LF_incremental_resistance_ohm": 52.06547699660068,
+          "RF_real_admittance_inverse_ohm": 52.06547699660068,
+          "RF_effective_node_capacitance_f": 4.2418179000000016e-14,
+          "LF_AC_vs_FD_relative_error": 3.352829125446988e-11
+        },
+        {
+          "id": "r50_2p85_n17",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.05959027653904,
+          "FD_resistance_ohm": 52.036581036839706,
+          "LF_incremental_resistance_ohm": 52.036581038198,
+          "RF_real_admittance_inverse_ohm": 52.036581038198,
+          "RF_effective_node_capacitance_f": 4.2418179000000016e-14,
+          "LF_AC_vs_FD_relative_error": 2.610267557656698e-11
+        },
+        {
+          "id": "r50_2p85_n17",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.029811532634284,
+          "FD_resistance_ohm": 51.95963549696912,
+          "LF_incremental_resistance_ohm": 51.95963549692249,
+          "RF_real_admittance_inverse_ohm": 51.95963549692249,
+          "RF_effective_node_capacitance_f": 4.2418179000000016e-14,
+          "LF_AC_vs_FD_relative_error": 8.975042931069765e-13
+        }
+      ]
+    },
+    {
+      "id": "r50_2p85_n24",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "2p85",
+      "parallel_count": 24,
+      "length_um": 9.84,
+      "continuous_length_um": 9.843272339883919,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.074286045225136,
+      "relative_error": -0.00029676864099004163,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 673.056,
+      "hypothetical_peak_uA_per_um": 96.76713974465294,
+      "TT27C_load250mV_resistance_ohm": 52.07428604522559,
+      "TT27C_load250mV_node_capacitance_f": 7.647264000000002e-14,
+      "max_LF_AC_vs_FD_relative_error": 3.8155478776502605e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9830135722856144,
+          "normalized_max": 1.0160731501358256,
+          "max_abs_percent": 1.6986427714385632
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9850071261814967,
+          "normalized_max": 1.0171522722744508,
+          "max_abs_percent": 1.715227227445082
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9872915779063038,
+          "normalized_max": 1.0144942248903306,
+          "max_abs_percent": 1.4494224890330587
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_2p85_n24",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.07859880710141,
+          "FD_resistance_ohm": 52.07861472019762,
+          "LF_incremental_resistance_ohm": 52.078614720848854,
+          "RF_real_admittance_inverse_ohm": 52.078614720848854,
+          "RF_effective_node_capacitance_f": 7.647264000000002e-14,
+          "LF_AC_vs_FD_relative_error": 1.2504886015562988e-11
+        },
+        {
+          "id": "r50_2p85_n24",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.07802986270011,
+          "FD_resistance_ohm": 52.07664109162181,
+          "LF_incremental_resistance_ohm": 52.07664109279649,
+          "RF_real_admittance_inverse_ohm": 52.07664109279649,
+          "RF_effective_node_capacitance_f": 7.647264000000002e-14,
+          "LF_AC_vs_FD_relative_error": 2.2556845280519155e-11
+        },
+        {
+          "id": "r50_2p85_n24",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.07428604522559,
+          "FD_resistance_ohm": 52.065520781361236,
+          "LF_incremental_resistance_ohm": 52.0655207811784,
+          "RF_real_admittance_inverse_ohm": 52.0655207811784,
+          "RF_effective_node_capacitance_f": 7.647264000000002e-14,
+          "LF_AC_vs_FD_relative_error": 3.51163542688937e-12
+        },
+        {
+          "id": "r50_2p85_n24",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.062377052615616,
+          "FD_resistance_ohm": 52.033627305326526,
+          "LF_incremental_resistance_ohm": 52.033627305045734,
+          "RF_real_admittance_inverse_ohm": 52.033627305045734,
+          "RF_effective_node_capacitance_f": 7.647264000000002e-14,
+          "LF_AC_vs_FD_relative_error": 5.396350033493036e-12
+        }
+      ]
+    },
+    {
+      "id": "r50_2p85_n32",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "2p85",
+      "parallel_count": 32,
+      "length_um": 13.52,
+      "continuous_length_um": 13.517094427054593,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.10004737353661,
+      "relative_error": 0.0001977879840342478,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 1233.024,
+      "hypothetical_peak_uA_per_um": 72.5753548084897,
+      "TT27C_load250mV_resistance_ohm": 52.10004737353688,
+      "TT27C_load250mV_node_capacitance_f": 1.2724070400000005e-13,
+      "max_LF_AC_vs_FD_relative_error": 1.8426815628913573e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9836382978808803,
+          "normalized_max": 1.014445170924136,
+          "max_abs_percent": 1.6361702119119692
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9860925379420802,
+          "normalized_max": 1.016406755251841,
+          "max_abs_percent": 1.6406755251840988
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9883795069794049,
+          "normalized_max": 1.0137506560711764,
+          "max_abs_percent": 1.3750656071176426
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_2p85_n32",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.100593489157816,
+          "FD_resistance_ohm": 52.10067483002977,
+          "LF_incremental_resistance_ohm": 52.10067483030232,
+          "RF_real_admittance_inverse_ohm": 52.10067483030232,
+          "RF_effective_node_capacitance_f": 1.2724070400000005e-13,
+          "LF_AC_vs_FD_relative_error": 5.2311488474288126e-12
+        },
+        {
+          "id": "r50_2p85_n32",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.10094586276955,
+          "FD_resistance_ohm": 52.10093441966939,
+          "LF_incremental_resistance_ohm": 52.10093441980817,
+          "RF_real_admittance_inverse_ohm": 52.10093441980817,
+          "RF_effective_node_capacitance_f": 1.2724070400000005e-13,
+          "LF_AC_vs_FD_relative_error": 2.6636470806806756e-12
+        },
+        {
+          "id": "r50_2p85_n32",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.10004737353688,
+          "FD_resistance_ohm": 52.09721252332686,
+          "LF_incremental_resistance_ohm": 52.09721252338726,
+          "RF_real_admittance_inverse_ohm": 52.09721252338726,
+          "RF_effective_node_capacitance_f": 1.2724070400000005e-13,
+          "LF_AC_vs_FD_relative_error": 1.1595169269185135e-12
+        },
+        {
+          "id": "r50_2p85_n32",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.09556695317208,
+          "FD_resistance_ohm": 52.08404756338268,
+          "LF_incremental_resistance_ohm": 52.08404756321821,
+          "RF_real_admittance_inverse_ohm": 52.08404756321821,
+          "RF_effective_node_capacitance_f": 1.2724070400000005e-13,
+          "LF_AC_vs_FD_relative_error": 3.1578073489413327e-12
+        }
+      ]
+    },
+    {
+      "id": "r50_5p73_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "5p73",
+      "parallel_count": 2,
+      "length_um": 0.64,
+      "continuous_length_um": 0.6416683026363051,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.04251978254987,
+      "relative_error": -0.0009066058150818401,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 7.3344000000000005,
+      "hypothetical_peak_uA_per_um": 577.5630330309128,
+      "TT27C_load250mV_resistance_ohm": 52.04251978254987,
+      "TT27C_load250mV_node_capacitance_f": 4.3833060000000005e-15,
+      "max_LF_AC_vs_FD_relative_error": 6.835684240869e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.7923130841687076,
+          "normalized_max": 1.1771769152062481,
+          "max_abs_percent": 20.76869158312924
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.8159678131771739,
+          "normalized_max": 1.1519156278791887,
+          "max_abs_percent": 18.403218682282606
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.8143414743440142,
+          "normalized_max": 1.1532579528596658,
+          "max_abs_percent": 18.565852565598583
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.0932454107029,
+          "FD_resistance_ohm": 52.09410601576037,
+          "LF_incremental_resistance_ohm": 52.09410603356032,
+          "RF_real_admittance_inverse_ohm": 52.09410603356032,
+          "RF_effective_node_capacitance_f": 4.3833060000000005e-15,
+          "LF_AC_vs_FD_relative_error": 3.416884553075761e-10
+        },
+        {
+          "id": "r50_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.087994370288634,
+          "FD_resistance_ohm": 52.06969817299033,
+          "LF_incremental_resistance_ohm": 52.06969818244117,
+          "RF_real_admittance_inverse_ohm": 52.06969818244117,
+          "RF_effective_node_capacitance_f": 4.3833060000000005e-15,
+          "LF_AC_vs_FD_relative_error": 1.815037009578191e-10
+        },
+        {
+          "id": "r50_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.04251978254987,
+          "FD_resistance_ohm": 51.9505547292907,
+          "LF_incremental_resistance_ohm": 51.95055472387485,
+          "RF_real_admittance_inverse_ohm": 51.95055472387485,
+          "RF_effective_node_capacitance_f": 4.3833060000000005e-15,
+          "LF_AC_vs_FD_relative_error": 1.0425005303460466e-10
+        },
+        {
+          "id": "r50_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 51.98404182729896,
+          "FD_resistance_ohm": 52.010496756000634,
+          "LF_incremental_resistance_ohm": 52.0104967261283,
+          "RF_real_admittance_inverse_ohm": 52.0104967261283,
+          "RF_effective_node_capacitance_f": 4.3833060000000005e-15,
+          "LF_AC_vs_FD_relative_error": 5.743520103962396e-10
+        }
+      ]
+    },
+    {
+      "id": "r50_5p73_n4",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "5p73",
+      "parallel_count": 4,
+      "length_um": 2.49,
+      "continuous_length_um": 2.485569191167318,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.15229655292077,
+      "relative_error": 0.0012008487541970148,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 57.07080000000001,
+      "hypothetical_peak_uA_per_um": 288.7815165154564,
+      "TT27C_load250mV_resistance_ohm": 52.15229655292088,
+      "TT27C_load250mV_node_capacitance_f": 1.1529698e-14,
+      "max_LF_AC_vs_FD_relative_error": 9.182343774227775e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9377575539587888,
+          "normalized_max": 1.0551564333957153,
+          "max_abs_percent": 6.224244604121121
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9657545683433374,
+          "normalized_max": 1.0325136092843246,
+          "max_abs_percent": 3.4245431656662606
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9638296834000422,
+          "normalized_max": 1.0337167953310116,
+          "max_abs_percent": 3.617031659995784
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_5p73_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.15897582381444,
+          "FD_resistance_ohm": 52.15907796963034,
+          "LF_incremental_resistance_ohm": 52.159077972024605,
+          "RF_real_admittance_inverse_ohm": 52.159077972024605,
+          "RF_effective_node_capacitance_f": 1.1529698e-14,
+          "LF_AC_vs_FD_relative_error": 4.59030591315468e-11
+        },
+        {
+          "id": "r50_5p73_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.15823090288317,
+          "FD_resistance_ohm": 52.15580764166487,
+          "LF_incremental_resistance_ohm": 52.15580764287566,
+          "RF_real_admittance_inverse_ohm": 52.15580764287566,
+          "RF_effective_node_capacitance_f": 1.1529698e-14,
+          "LF_AC_vs_FD_relative_error": 2.3214763444912023e-11
+        },
+        {
+          "id": "r50_5p73_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.15229655292088,
+          "FD_resistance_ohm": 52.14033689064694,
+          "LF_incremental_resistance_ohm": 52.1403368898767,
+          "RF_real_admittance_inverse_ohm": 52.1403368898767,
+          "RF_effective_node_capacitance_f": 1.1529698e-14,
+          "LF_AC_vs_FD_relative_error": 1.477251654335987e-11
+        },
+        {
+          "id": "r50_5p73_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.1447047916675,
+          "FD_resistance_ohm": 52.14804238097354,
+          "LF_incremental_resistance_ohm": 52.14804237707711,
+          "RF_real_admittance_inverse_ohm": 52.14804237707711,
+          "RF_effective_node_capacitance_f": 1.1529698e-14,
+          "LF_AC_vs_FD_relative_error": 7.471867569108781e-11
+        }
+      ]
+    },
+    {
+      "id": "r50_5p73_n8",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "5p73",
+      "parallel_count": 8,
+      "length_um": 6.18,
+      "continuous_length_um": 6.175700112698308,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.12009184035789,
+      "relative_error": 0.0005825943783974719,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 283.2912,
+      "hypothetical_peak_uA_per_um": 144.3907582577282,
+      "TT27C_load250mV_resistance_ohm": 52.12009184035787,
+      "TT27C_load250mV_node_capacitance_f": 3.4081868799999996e-14,
+      "max_LF_AC_vs_FD_relative_error": 2.035349666584807e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9809486303490663,
+          "normalized_max": 1.0177910391485292,
+          "max_abs_percent": 1.905136965093368
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9833728789834425,
+          "normalized_max": 1.016755725586768,
+          "max_abs_percent": 1.6755725586768078
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.98565354052366,
+          "normalized_max": 1.0140987144682245,
+          "max_abs_percent": 1.4346459476339946
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_5p73_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.12161585806229,
+          "FD_resistance_ohm": 52.12162702856327,
+          "LF_incremental_resistance_ohm": 52.12162702869013,
+          "RF_real_admittance_inverse_ohm": 52.12162702869013,
+          "RF_effective_node_capacitance_f": 3.4081868799999996e-14,
+          "LF_AC_vs_FD_relative_error": 2.433830914583268e-12
+        },
+        {
+          "id": "r50_5p73_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.121387777903564,
+          "FD_resistance_ohm": 52.12082029958825,
+          "LF_incremental_resistance_ohm": 52.120820299654426,
+          "RF_real_admittance_inverse_ohm": 52.120820299654426,
+          "RF_effective_node_capacitance_f": 3.4081868799999996e-14,
+          "LF_AC_vs_FD_relative_error": 1.269651050961329e-12
+        },
+        {
+          "id": "r50_5p73_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.12009184035787,
+          "FD_resistance_ohm": 52.11754551341042,
+          "LF_incremental_resistance_ohm": 52.117545513353846,
+          "RF_real_admittance_inverse_ohm": 52.117545513353846,
+          "RF_effective_node_capacitance_f": 3.4081868799999996e-14,
+          "LF_AC_vs_FD_relative_error": 1.0854650511760155e-12
+        },
+        {
+          "id": "r50_5p73_n8",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.11847726016796,
+          "FD_resistance_ohm": 52.11908201318123,
+          "LF_incremental_resistance_ohm": 52.119082012237136,
+          "RF_real_admittance_inverse_ohm": 52.119082012237136,
+          "RF_effective_node_capacitance_f": 3.4081868799999996e-14,
+          "LF_AC_vs_FD_relative_error": 1.8114065802876667e-11
+        }
+      ]
+    },
+    {
+      "id": "r50_5p73_n12",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "5p73",
+      "parallel_count": 12,
+      "length_um": 9.870000000000001,
+      "continuous_length_um": 9.86603319852296,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.108408568367956,
+      "relative_error": 0.00035830316582008415,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 678.6612000000001,
+      "hypothetical_peak_uA_per_um": 96.26050550515214,
+      "TT27C_load250mV_resistance_ohm": 52.10840856836792,
+      "TT27C_load250mV_node_capacitance_f": 6.765651240000001e-14,
+      "max_LF_AC_vs_FD_relative_error": 1.690103612617122e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9864618397235543,
+          "normalized_max": 1.0122738838239638,
+          "max_abs_percent": 1.353816027644572
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9822836681840887,
+          "normalized_max": 1.0201939652474163,
+          "max_abs_percent": 2.0193965247416346
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9845618036009687,
+          "normalized_max": 1.0175279692362613,
+          "max_abs_percent": 1.752796923626132
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_5p73_n12",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.10918261961688,
+          "FD_resistance_ohm": 52.109180012190585,
+          "LF_incremental_resistance_ohm": 52.10918001274814,
+          "RF_real_admittance_inverse_ohm": 52.10918001274814,
+          "RF_effective_node_capacitance_f": 6.765651240000001e-14,
+          "LF_AC_vs_FD_relative_error": 1.0699663377522484e-11
+        },
+        {
+          "id": "r50_5p73_n12",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.10902713020884,
+          "FD_resistance_ohm": 52.10872898479713,
+          "LF_incremental_resistance_ohm": 52.108728985096114,
+          "RF_real_admittance_inverse_ohm": 52.108728985096114,
+          "RF_effective_node_capacitance_f": 6.765651240000001e-14,
+          "LF_AC_vs_FD_relative_error": 5.737632591262809e-12
+        },
+        {
+          "id": "r50_5p73_n12",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.10840856836792,
+          "FD_resistance_ohm": 52.10724012077518,
+          "LF_incremental_resistance_ohm": 52.107240120512,
+          "RF_real_admittance_inverse_ohm": 52.107240120512,
+          "RF_effective_node_capacitance_f": 6.765651240000001e-14,
+          "LF_AC_vs_FD_relative_error": 5.050737605927225e-12
+        },
+        {
+          "id": "r50_5p73_n12",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.10766878354917,
+          "FD_resistance_ohm": 52.107868991777536,
+          "LF_incremental_resistance_ohm": 52.10786899148758,
+          "RF_real_admittance_inverse_ohm": 52.10786899148758,
+          "RF_effective_node_capacitance_f": 6.765651240000001e-14,
+          "LF_AC_vs_FD_relative_error": 5.564548821723747e-12
+        }
+      ]
+    },
+    {
+      "id": "r50_5p73_n16",
+      "kind": "fixed_load",
+      "nominal_ohm": 50,
+      "card": "5p73",
+      "parallel_count": 16,
+      "length_um": 13.56,
+      "continuous_length_um": 13.556403354814952,
+      "target_resistance_ohm": 52.08974464795383,
+      "predicted_resistance_ohm": 52.10243632198428,
+      "relative_error": 0.00024365014872351765,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 1243.1808,
+      "hypothetical_peak_uA_per_um": 72.1953791288641,
+      "TT27C_load250mV_resistance_ohm": 52.10243632198399,
+      "TT27C_load250mV_node_capacitance_f": 1.1225362879999997e-13,
+      "max_LF_AC_vs_FD_relative_error": 1.0869749544895058e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9872000606819706,
+          "normalized_max": 1.0110880731905763,
+          "max_abs_percent": 1.2799939318029363
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9832737566520005,
+          "normalized_max": 1.0198373089977757,
+          "max_abs_percent": 1.9837308997775693
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9855541883053726,
+          "normalized_max": 1.0171722450095215,
+          "max_abs_percent": 1.7172245009521525
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r50_5p73_n16",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 52.102968766301665,
+          "FD_resistance_ohm": 52.10296154960088,
+          "LF_incremental_resistance_ohm": 52.10296154975228,
+          "RF_real_admittance_inverse_ohm": 52.10296154975228,
+          "RF_effective_node_capacitance_f": 1.1225362879999997e-13,
+          "LF_AC_vs_FD_relative_error": 2.9058977446538847e-12
+        },
+        {
+          "id": "r50_5p73_n16",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 52.10283584292081,
+          "FD_resistance_ohm": 52.102624261064975,
+          "LF_incremental_resistance_ohm": 52.10262426086816,
+          "RF_real_admittance_inverse_ohm": 52.10262426086816,
+          "RF_effective_node_capacitance_f": 1.1225362879999997e-13,
+          "LF_AC_vs_FD_relative_error": 3.777422818984633e-12
+        },
+        {
+          "id": "r50_5p73_n16",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 52.10243632198399,
+          "FD_resistance_ohm": 52.10171436434523,
+          "LF_incremental_resistance_ohm": 52.101714364365996,
+          "RF_real_admittance_inverse_ohm": 52.101714364365996,
+          "RF_effective_node_capacitance_f": 1.1225362879999997e-13,
+          "LF_AC_vs_FD_relative_error": 3.985700658404312e-13
+        },
+        {
+          "id": "r50_5p73_n16",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 52.101980017826214,
+          "FD_resistance_ohm": 52.10204769001257,
+          "LF_incremental_resistance_ohm": 52.102047689597214,
+          "RF_real_admittance_inverse_ohm": 52.102047689597214,
+          "RF_effective_node_capacitance_f": 1.1225362879999997e-13,
+          "LF_AC_vs_FD_relative_error": 7.971956428320937e-12
+        }
+      ]
+    },
+    {
+      "id": "generic120",
+      "kind": "legacy_generic",
+      "nominal_ohm": 120,
+      "w_um": 9,
+      "length_um": 2.2145110410094637,
+      "TT27C_load250mV_resistance_ohm": 124.51162704588842,
+      "TT27C_load250mV_node_capacitance_f": 3.815517123028674e-15,
+      "max_LF_AC_vs_FD_relative_error": 3.0671021278294575e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9935460755648925,
+          "normalized_max": 1.035649322837921,
+          "max_abs_percent": 3.5649322837921105
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9710826265023874,
+          "normalized_max": 1.0679819434783167,
+          "max_abs_percent": 6.798194347831665
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.973334784199605,
+          "normalized_max": 1.0651910667447846,
+          "max_abs_percent": 6.519106674478459
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "generic120",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 124.51162704588755,
+          "FD_resistance_ohm": 124.51162704619952,
+          "LF_incremental_resistance_ohm": 124.51162704588842,
+          "RF_real_admittance_inverse_ohm": 124.51162704588842,
+          "RF_effective_node_capacitance_f": 3.815517123028674e-15,
+          "LF_AC_vs_FD_relative_error": 2.4985569169189148e-12
+        },
+        {
+          "id": "generic120",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 124.51162704588917,
+          "FD_resistance_ohm": 124.51162704619952,
+          "LF_incremental_resistance_ohm": 124.51162704588842,
+          "RF_real_admittance_inverse_ohm": 124.51162704588842,
+          "RF_effective_node_capacitance_f": 3.815517123028674e-15,
+          "LF_AC_vs_FD_relative_error": 2.4985569169189148e-12
+        },
+        {
+          "id": "generic120",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.51162704588842,
+          "FD_resistance_ohm": 124.5116270459306,
+          "LF_incremental_resistance_ohm": 124.51162704588842,
+          "RF_real_admittance_inverse_ohm": 124.51162704588842,
+          "RF_effective_node_capacitance_f": 3.815517123028674e-15,
+          "LF_AC_vs_FD_relative_error": 3.3872904481313526e-13
+        },
+        {
+          "id": "generic120",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 124.51162704588847,
+          "FD_resistance_ohm": 124.51162704566165,
+          "LF_incremental_resistance_ohm": 124.51162704588842,
+          "RF_real_admittance_inverse_ohm": 124.51162704588842,
+          "RF_effective_node_capacitance_f": 3.815517123028674e-15,
+          "LF_AC_vs_FD_relative_error": 1.8212098495951068e-12
+        }
+      ]
+    },
+    {
+      "id": "r120_2p85_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 120,
+      "card": "2p85",
+      "parallel_count": 2,
+      "length_um": 0.85,
+      "continuous_length_um": 0.8516139148955385,
+      "target_resistance_ohm": 124.51162704588863,
+      "predicted_resistance_ohm": 124.4408159345612,
+      "relative_error": -0.0005687108345417968,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 4.845,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 124.44081593456126,
+      "TT27C_load250mV_node_capacitance_f": 2.513313e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.7879022706779324e-09,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.8091445628632317,
+          "normalized_max": 1.2312583524775944,
+          "max_abs_percent": 23.12583524775944
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.8333018003816368,
+          "normalized_max": 1.2048365201990288,
+          "max_abs_percent": 20.483652019902877
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.8316409124693726,
+          "normalized_max": 1.2062405137896288,
+          "max_abs_percent": 20.624051378962882
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r120_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 125.55433648884042,
+          "FD_resistance_ohm": 125.53587902138355,
+          "LF_incremental_resistance_ohm": 125.5358791518239,
+          "RF_real_admittance_inverse_ohm": 125.5358791518239,
+          "RF_effective_node_capacitance_f": 2.513313e-15,
+          "LF_AC_vs_FD_relative_error": 1.0390683868877204e-09
+        },
+        {
+          "id": "r120_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 125.28668934397207,
+          "FD_resistance_ohm": 124.8826392743489,
+          "LF_incremental_resistance_ohm": 124.88263938456802,
+          "RF_real_admittance_inverse_ohm": 124.88263938456802,
+          "RF_effective_node_capacitance_f": 2.513313e-15,
+          "LF_AC_vs_FD_relative_error": 8.825815633883849e-10
+        },
+        {
+          "id": "r120_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.44081593456126,
+          "FD_resistance_ohm": 122.69295889212142,
+          "LF_incremental_resistance_ohm": 122.69295896992791,
+          "RF_real_admittance_inverse_ohm": 122.69295896992791,
+          "RF_effective_node_capacitance_f": 2.513313e-15,
+          "LF_AC_vs_FD_relative_error": 6.341560609968155e-10
+        },
+        {
+          "id": "r120_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 122.21168409350268,
+          "FD_resistance_ohm": 117.2374347318383,
+          "LF_incremental_resistance_ohm": 117.23743475633853,
+          "RF_real_admittance_inverse_ohm": 117.23743475633853,
+          "RF_effective_node_capacitance_f": 2.513313e-15,
+          "LF_AC_vs_FD_relative_error": 2.0897950037124247e-10
+        }
+      ]
+    },
+    {
+      "id": "r120_2p85_n4",
+      "kind": "fixed_load",
+      "nominal_ohm": 120,
+      "card": "2p85",
+      "parallel_count": 4,
+      "length_um": 3.19,
+      "continuous_length_um": 3.185893287157462,
+      "target_resistance_ohm": 124.51162704588863,
+      "predicted_resistance_ohm": 124.62633831031158,
+      "relative_error": 0.0009212895786887554,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 36.366,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 124.62633831031175,
+      "TT27C_load250mV_node_capacitance_f": 7.035750000000001e-15,
+      "max_LF_AC_vs_FD_relative_error": 2.8360758186352086e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9517860943624205,
+          "normalized_max": 1.052161936359893,
+          "max_abs_percent": 5.216193635989308
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9802019347492943,
+          "normalized_max": 1.0295833717910103,
+          "max_abs_percent": 2.9583371791010338
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.978248254168912,
+          "normalized_max": 1.0307831432377987,
+          "max_abs_percent": 3.078314323779874
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r120_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 124.76794979962776,
+          "FD_resistance_ohm": 124.76576131268433,
+          "LF_incremental_resistance_ohm": 124.76576133017318,
+          "RF_real_admittance_inverse_ohm": 124.76576133017318,
+          "RF_effective_node_capacitance_f": 7.035750000000001e-15,
+          "LF_AC_vs_FD_relative_error": 1.401734284200984e-10
+        },
+        {
+          "id": "r120_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 124.73476334432584,
+          "FD_resistance_ohm": 124.68356307719216,
+          "LF_incremental_resistance_ohm": 124.68356309124765,
+          "RF_real_admittance_inverse_ohm": 124.68356309124765,
+          "RF_effective_node_capacitance_f": 7.035750000000001e-15,
+          "LF_AC_vs_FD_relative_error": 1.127293813851793e-10
+        },
+        {
+          "id": "r120_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.62633831031175,
+          "FD_resistance_ohm": 124.397848024723,
+          "LF_incremental_resistance_ohm": 124.39784803454782,
+          "RF_real_admittance_inverse_ohm": 124.39784803454782,
+          "RF_effective_node_capacitance_f": 7.035750000000001e-15,
+          "LF_AC_vs_FD_relative_error": 7.897904552578439e-11
+        },
+        {
+          "id": "r120_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 124.33688628967631,
+          "FD_resistance_ohm": 123.6652877878341,
+          "LF_incremental_resistance_ohm": 123.66528778951594,
+          "RF_real_admittance_inverse_ohm": 123.66528778951594,
+          "RF_effective_node_capacitance_f": 7.035750000000001e-15,
+          "LF_AC_vs_FD_relative_error": 1.3600010007053243e-11
+        }
+      ]
+    },
+    {
+      "id": "r120_2p85_n6",
+      "kind": "fixed_load",
+      "nominal_ohm": 120,
+      "card": "2p85",
+      "parallel_count": 6,
+      "length_um": 5.4,
+      "continuous_length_um": 5.399766620650637,
+      "target_resistance_ohm": 124.51162704588863,
+      "predicted_resistance_ohm": 124.51601957622263,
+      "relative_error": 3.527807352798895e-05,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 92.34000000000002,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 124.51601957622277,
+      "TT27C_load250mV_node_capacitance_f": 1.3399884e-14,
+      "max_LF_AC_vs_FD_relative_error": 1.2068923638253182e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9746955390824649,
+          "normalized_max": 1.02662998772464,
+          "max_abs_percent": 2.662998772464009
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9870077684420802,
+          "normalized_max": 1.0129072351064023,
+          "max_abs_percent": 1.2992231557919842
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9892968601035351,
+          "normalized_max": 1.0102602809580226,
+          "max_abs_percent": 1.0703139896464875
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r120_2p85_n6",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 124.56645846511339,
+          "FD_resistance_ohm": 124.5658108118772,
+          "LF_incremental_resistance_ohm": 124.56581081842909,
+          "RF_real_admittance_inverse_ohm": 124.56581081842909,
+          "RF_effective_node_capacitance_f": 1.3399884e-14,
+          "LF_AC_vs_FD_relative_error": 5.259770397003649e-11
+        },
+        {
+          "id": "r120_2p85_n6",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 124.55534360973635,
+          "FD_resistance_ohm": 124.53737558808247,
+          "LF_incremental_resistance_ohm": 124.53737559413172,
+          "RF_real_admittance_inverse_ohm": 124.53737559413172,
+          "RF_effective_node_capacitance_f": 1.3399884e-14,
+          "LF_AC_vs_FD_relative_error": 4.8573811639585074e-11
+        },
+        {
+          "id": "r120_2p85_n6",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.51601957622277,
+          "FD_resistance_ohm": 124.431677109066,
+          "LF_incremental_resistance_ohm": 124.43167711214188,
+          "RF_real_admittance_inverse_ohm": 124.43167711214188,
+          "RF_effective_node_capacitance_f": 1.3399884e-14,
+          "LF_AC_vs_FD_relative_error": 2.471955973248896e-11
+        },
+        {
+          "id": "r120_2p85_n6",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 124.4079826852205,
+          "FD_resistance_ohm": 124.15489451829566,
+          "LF_incremental_resistance_ohm": 124.15489451856848,
+          "RF_real_admittance_inverse_ohm": 124.15489451856848,
+          "RF_effective_node_capacitance_f": 1.3399884e-14,
+          "LF_AC_vs_FD_relative_error": 2.19735341033811e-12
+        }
+      ]
+    },
+    {
+      "id": "r120_5p73_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 120,
+      "card": "5p73",
+      "parallel_count": 1,
+      "length_um": 1.0,
+      "continuous_length_um": 1.0011568575801941,
+      "target_resistance_ohm": 124.51162704588863,
+      "predicted_resistance_ohm": 124.44623785998336,
+      "relative_error": -0.0005251652994717748,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 5.73,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 124.44623785998363,
+      "TT27C_load250mV_node_capacitance_f": 2.3260734e-15,
+      "max_LF_AC_vs_FD_relative_error": 3.7633252070179424e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.8440280658601893,
+          "normalized_max": 1.133679622021438,
+          "max_abs_percent": 15.59719341398107
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.8692267601294001,
+          "normalized_max": 1.1093517522689986,
+          "max_abs_percent": 13.077323987059986
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.8674942687100196,
+          "normalized_max": 1.1106444776502389,
+          "max_abs_percent": 13.250573128998045
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r120_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 124.51132946718224,
+          "FD_resistance_ohm": 124.51242244878436,
+          "LF_incremental_resistance_ohm": 124.51242247234973,
+          "RF_real_admittance_inverse_ohm": 124.51242247234973,
+          "RF_effective_node_capacitance_f": 2.3260734e-15,
+          "LF_AC_vs_FD_relative_error": 1.8926105127547999e-10
+        },
+        {
+          "id": "r120_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 124.5045369590784,
+          "FD_resistance_ohm": 124.4810416979375,
+          "LF_incremental_resistance_ohm": 124.48104170953052,
+          "RF_real_admittance_inverse_ohm": 124.48104170953052,
+          "RF_effective_node_capacitance_f": 2.3260734e-15,
+          "LF_AC_vs_FD_relative_error": 9.313083637607633e-11
+        },
+        {
+          "id": "r120_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.44623785998363,
+          "FD_resistance_ohm": 124.32830149470902,
+          "LF_incremental_resistance_ohm": 124.32830148764269,
+          "RF_real_admittance_inverse_ohm": 124.32830148764269,
+          "RF_effective_node_capacitance_f": 2.3260734e-15,
+          "LF_AC_vs_FD_relative_error": 5.683609138884549e-11
+        },
+        {
+          "id": "r120_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 124.37130836741244,
+          "FD_resistance_ohm": 124.40510096279493,
+          "LF_incremental_resistance_ohm": 124.40510092533728,
+          "RF_real_admittance_inverse_ohm": 124.40510092533728,
+          "RF_effective_node_capacitance_f": 2.3260734e-15,
+          "LF_AC_vs_FD_relative_error": 3.010941496128794e-10
+        }
+      ]
+    },
+    {
+      "id": "r120_5p73_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 120,
+      "card": "5p73",
+      "parallel_count": 2,
+      "length_um": 3.21,
+      "continuous_length_um": 3.2057028818172624,
+      "target_resistance_ohm": 124.51162704588863,
+      "predicted_resistance_ohm": 124.63294732076534,
+      "relative_error": 0.0009743690429167007,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 36.7866,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 124.63294732076564,
+      "TT27C_load250mV_node_capacitance_f": 6.3025306e-15,
+      "max_LF_AC_vs_FD_relative_error": 6.196398949498416e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.955440837356408,
+          "normalized_max": 1.0401515625767241,
+          "max_abs_percent": 4.455916264359205
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.983965791118847,
+          "normalized_max": 1.017830731148139,
+          "max_abs_percent": 1.7830731148138934
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9820046086423393,
+          "normalized_max": 1.0190168072662595,
+          "max_abs_percent": 1.9016807266259539
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r120_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 124.64348582835645,
+          "FD_resistance_ohm": 124.6436350038741,
+          "LF_incremental_resistance_ohm": 124.64363500740963,
+          "RF_real_admittance_inverse_ohm": 124.64363500740963,
+          "RF_effective_node_capacitance_f": 6.3025306e-15,
+          "LF_AC_vs_FD_relative_error": 2.8365088056148124e-11
+        },
+        {
+          "id": "r120_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 124.64225309078844,
+          "FD_resistance_ohm": 124.6384152622258,
+          "LF_incremental_resistance_ohm": 124.63841526413917,
+          "RF_real_admittance_inverse_ohm": 124.63841526413917,
+          "RF_effective_node_capacitance_f": 6.3025306e-15,
+          "LF_AC_vs_FD_relative_error": 1.5351275806096965e-11
+        },
+        {
+          "id": "r120_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.63294732076564,
+          "FD_resistance_ohm": 124.61425673142773,
+          "LF_incremental_resistance_ohm": 124.61425673010208,
+          "RF_real_admittance_inverse_ohm": 124.61425673010208,
+          "RF_effective_node_capacitance_f": 6.3025306e-15,
+          "LF_AC_vs_FD_relative_error": 1.0638045999655787e-11
+        },
+        {
+          "id": "r120_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 124.62108530825617,
+          "FD_resistance_ohm": 124.62619635867816,
+          "LF_incremental_resistance_ohm": 124.62619635216335,
+          "RF_real_admittance_inverse_ohm": 124.62619635216335,
+          "RF_effective_node_capacitance_f": 6.3025306e-15,
+          "LF_AC_vs_FD_relative_error": 5.2274851114475496e-11
+        }
+      ]
+    },
+    {
+      "id": "r120_5p73_n3",
+      "kind": "fixed_load",
+      "nominal_ohm": 120,
+      "card": "5p73",
+      "parallel_count": 3,
+      "length_um": 5.41,
+      "continuous_length_um": 5.410878195824352,
+      "target_resistance_ohm": 124.51162704588863,
+      "predicted_resistance_ohm": 124.49509885076515,
+      "relative_error": -0.0001327441903670179,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 92.99790000000002,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 124.49509885076543,
+      "TT27C_load250mV_node_capacitance_f": 1.1918169900000003e-14,
+      "max_LF_AC_vs_FD_relative_error": 2.4957702571271057e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9778145946542341,
+          "normalized_max": 1.02066048561201,
+          "max_abs_percent": 2.218540534576585
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9846715155771759,
+          "normalized_max": 1.0143128053406163,
+          "max_abs_percent": 1.5328484422824085
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9869551889459659,
+          "normalized_max": 1.0116621781214623,
+          "max_abs_percent": 1.30448110540341
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r120_5p73_n3",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 124.49958970435542,
+          "FD_resistance_ohm": 124.499631725585,
+          "LF_incremental_resistance_ohm": 124.49963172663152,
+          "RF_real_admittance_inverse_ohm": 124.49963172663152,
+          "RF_effective_node_capacitance_f": 1.1918169900000003e-14,
+          "LF_AC_vs_FD_relative_error": 8.405720564041985e-12
+        },
+        {
+          "id": "r120_5p73_n3",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 124.49896121371195,
+          "FD_resistance_ohm": 124.49729992613204,
+          "LF_incremental_resistance_ohm": 124.49729992713662,
+          "RF_real_admittance_inverse_ohm": 124.49729992713662,
+          "RF_effective_node_capacitance_f": 1.1918169900000003e-14,
+          "LF_AC_vs_FD_relative_error": 8.069100942975638e-12
+        },
+        {
+          "id": "r120_5p73_n3",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 124.49509885076543,
+          "FD_resistance_ohm": 124.48745832400094,
+          "LF_incremental_resistance_ohm": 124.48745832410457,
+          "RF_real_admittance_inverse_ohm": 124.48745832410457,
+          "RF_effective_node_capacitance_f": 1.1918169900000003e-14,
+          "LF_AC_vs_FD_relative_error": 8.324452238639424e-13
+        },
+        {
+          "id": "r120_5p73_n3",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 124.49025287374563,
+          "FD_resistance_ohm": 124.49215251971447,
+          "LF_incremental_resistance_ohm": 124.49215251748481,
+          "RF_real_admittance_inverse_ohm": 124.49215251748481,
+          "RF_effective_node_capacitance_f": 1.1918169900000003e-14,
+          "LF_AC_vs_FD_relative_error": 1.7910006810950563e-11
+        }
+      ]
+    },
+    {
+      "id": "generic240",
+      "kind": "legacy_generic",
+      "nominal_ohm": 240,
+      "w_um": 5,
+      "length_um": 2.593059936908517,
+      "TT27C_load250mV_resistance_ohm": 247.2234180048586,
+      "TT27C_load250mV_node_capacitance_f": 2.381915104101414e-15,
+      "max_LF_AC_vs_FD_relative_error": 3.977596030324548e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9942382399479567,
+          "normalized_max": 1.0318260379827877,
+          "max_abs_percent": 3.1826037982787714
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9717591414860528,
+          "normalized_max": 1.0640392969665944,
+          "max_abs_percent": 6.403929696659438
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9740128681727528,
+          "normalized_max": 1.061258723254087,
+          "max_abs_percent": 6.12587232540871
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "generic240",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 247.22341800486157,
+          "FD_resistance_ohm": 247.22341800431025,
+          "LF_incremental_resistance_ohm": 247.2234180048588,
+          "RF_real_admittance_inverse_ohm": 247.2234180048588,
+          "RF_effective_node_capacitance_f": 2.381915104101414e-15,
+          "LF_AC_vs_FD_relative_error": 2.218891737015838e-12
+        },
+        {
+          "id": "generic240",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 247.22341800485944,
+          "FD_resistance_ohm": 247.22341800431025,
+          "LF_incremental_resistance_ohm": 247.2234180048588,
+          "RF_real_admittance_inverse_ohm": 247.2234180048588,
+          "RF_effective_node_capacitance_f": 2.381915104101414e-15,
+          "LF_AC_vs_FD_relative_error": 2.218891737015838e-12
+        },
+        {
+          "id": "generic240",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 247.2234180048586,
+          "FD_resistance_ohm": 247.2234180053705,
+          "LF_incremental_resistance_ohm": 247.2234180048588,
+          "RF_real_admittance_inverse_ohm": 247.2234180048588,
+          "RF_effective_node_capacitance_f": 2.381915104101414e-15,
+          "LF_AC_vs_FD_relative_error": 2.0697887848086793e-12
+        },
+        {
+          "id": "generic240",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 247.2234180048588,
+          "FD_resistance_ohm": 247.2234180045753,
+          "LF_incremental_resistance_ohm": 247.2234180048588,
+          "RF_real_admittance_inverse_ohm": 247.2234180048588,
+          "RF_effective_node_capacitance_f": 2.381915104101414e-15,
+          "LF_AC_vs_FD_relative_error": 1.1466383398328617e-12
+        }
+      ]
+    },
+    {
+      "id": "r240_2p85_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 240,
+      "card": "2p85",
+      "parallel_count": 1,
+      "length_um": 0.8300000000000001,
+      "continuous_length_um": 0.8309639479476325,
+      "target_resistance_ohm": 247.223418004859,
+      "predicted_resistance_ohm": 247.14006395302175,
+      "relative_error": -0.0003371608260654968,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 2.3655000000000004,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 247.14006395302061,
+      "TT27C_load250mV_node_capacitance_f": 1.2523634999999999e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.8415409197558574e-09,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.8059662302331566,
+          "normalized_max": 1.2360659742129163,
+          "max_abs_percent": 23.60659742129163
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.8300285777408258,
+          "normalized_max": 1.2095409741670877,
+          "max_abs_percent": 20.954097416708773
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.8283742138225284,
+          "normalized_max": 1.2109504498485002,
+          "max_abs_percent": 21.09504498485002
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r240_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 249.42113706510628,
+          "FD_resistance_ohm": 249.3833179886135,
+          "LF_incremental_resistance_ohm": 249.38331825544358,
+          "RF_real_admittance_inverse_ohm": 249.38331825544358,
+          "RF_effective_node_capacitance_f": 1.2523634999999999e-15,
+          "LF_AC_vs_FD_relative_error": 1.0699596764141006e-09
+        },
+        {
+          "id": "r240_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 248.87280905391637,
+          "FD_resistance_ohm": 248.04516849253068,
+          "LF_incremental_resistance_ohm": 248.0451687184391,
+          "RF_real_admittance_inverse_ohm": 248.0451687184391,
+          "RF_effective_node_capacitance_f": 1.2523634999999999e-15,
+          "LF_AC_vs_FD_relative_error": 9.107552489950876e-10
+        },
+        {
+          "id": "r240_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 247.14006395302061,
+          "FD_resistance_ohm": 243.5613036747155,
+          "LF_incremental_resistance_ohm": 243.56130383129815,
+          "RF_real_admittance_inverse_ohm": 243.56130383129815,
+          "RF_effective_node_capacitance_f": 1.2523634999999999e-15,
+          "LF_AC_vs_FD_relative_error": 6.428879650854924e-10
+        },
+        {
+          "id": "r240_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 242.57396064378096,
+          "FD_resistance_ohm": 232.3981702666228,
+          "LF_incremental_resistance_ohm": 232.39817031788832,
+          "RF_real_admittance_inverse_ohm": 232.39817031788832,
+          "RF_effective_node_capacitance_f": 1.2523634999999999e-15,
+          "LF_AC_vs_FD_relative_error": 2.2059354343184623e-10
+        }
+      ]
+    },
+    {
+      "id": "r240_2p85_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 240,
+      "card": "2p85",
+      "parallel_count": 2,
+      "length_um": 3.15,
+      "continuous_length_um": 3.1536697224452244,
+      "target_resistance_ohm": 247.223418004859,
+      "predicted_resistance_ohm": 247.01848581559602,
+      "relative_error": -0.0008289351830698122,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 17.955,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 247.01848581559548,
+      "TT27C_load250mV_node_capacitance_f": 3.5007029999999997e-15,
+      "max_LF_AC_vs_FD_relative_error": 2.8806423912897117e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.950986963272486,
+          "normalized_max": 1.0530446414752532,
+          "max_abs_percent": 5.304464147525323
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9793789453768798,
+          "normalized_max": 1.0304471347514095,
+          "max_abs_percent": 3.0447134751409477
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9774269051302878,
+          "normalized_max": 1.0316479127394507,
+          "max_abs_percent": 3.1647912739450668
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r240_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 247.30567156452062,
+          "FD_resistance_ohm": 247.30122429319866,
+          "LF_incremental_resistance_ohm": 247.3012243287256,
+          "RF_real_admittance_inverse_ohm": 247.3012243287256,
+          "RF_effective_node_capacitance_f": 3.5007029999999997e-15,
+          "LF_AC_vs_FD_relative_error": 1.4365864053900168e-10
+        },
+        {
+          "id": "r240_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 247.2383215200294,
+          "FD_resistance_ohm": 247.1344704546525,
+          "LF_incremental_resistance_ohm": 247.13447048412434,
+          "RF_real_admittance_inverse_ohm": 247.13447048412434,
+          "RF_effective_node_capacitance_f": 3.5007029999999997e-15,
+          "LF_AC_vs_FD_relative_error": 1.1925416210090134e-10
+        },
+        {
+          "id": "r240_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 247.01848581559548,
+          "FD_resistance_ohm": 246.5553272152742,
+          "LF_incremental_resistance_ohm": 246.5553272345143,
+          "RF_real_admittance_inverse_ohm": 246.5553272345143,
+          "RF_effective_node_capacitance_f": 3.5007029999999997e-15,
+          "LF_AC_vs_FD_relative_error": 7.803557799945793e-11
+        },
+        {
+          "id": "r240_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 246.43182134300872,
+          "FD_resistance_ohm": 245.07089134390367,
+          "LF_incremental_resistance_ohm": 245.07089134770146,
+          "RF_real_admittance_inverse_ohm": 245.07089134770146,
+          "RF_effective_node_capacitance_f": 3.5007029999999997e-15,
+          "LF_AC_vs_FD_relative_error": 1.549671502232286e-11
+        }
+      ]
+    },
+    {
+      "id": "r240_2p85_n4",
+      "kind": "fixed_load",
+      "nominal_ohm": 240,
+      "card": "2p85",
+      "parallel_count": 4,
+      "length_um": 7.54,
+      "continuous_length_um": 7.537714625856884,
+      "target_resistance_ohm": 247.223418004859,
+      "predicted_resistance_ohm": 247.28811730330898,
+      "relative_error": 0.0002617037616099438,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 85.956,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 247.2881173033095,
+      "TT27C_load250mV_node_capacitance_f": 1.0770660000000002e-14,
+      "max_LF_AC_vs_FD_relative_error": 6.115219441937825e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9809018476796864,
+          "normalized_max": 1.0191274962695804,
+          "max_abs_percent": 1.9127496269580435
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.98494366570042,
+          "normalized_max": 1.0165606796165743,
+          "max_abs_percent": 1.6560679616574259
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9872279702461849,
+          "normalized_max": 1.0139041781969669,
+          "max_abs_percent": 1.3904178196966877
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r240_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 247.3339476189933,
+          "FD_resistance_ohm": 247.33358758640625,
+          "LF_incremental_resistance_ohm": 247.33358759373206,
+          "RF_real_admittance_inverse_ohm": 247.33358759373206,
+          "RF_effective_node_capacitance_f": 1.0770660000000002e-14,
+          "LF_AC_vs_FD_relative_error": 2.96191959847647e-11
+        },
+        {
+          "id": "r240_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 247.32507059303995,
+          "FD_resistance_ohm": 247.3092164651652,
+          "LF_incremental_resistance_ohm": 247.30921647137288,
+          "RF_real_admittance_inverse_ohm": 247.30921647137288,
+          "RF_effective_node_capacitance_f": 1.0770660000000002e-14,
+          "LF_AC_vs_FD_relative_error": 2.510081031914524e-11
+        },
+        {
+          "id": "r240_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 247.2881173033095,
+          "FD_resistance_ohm": 247.20648869151236,
+          "LF_incremental_resistance_ohm": 247.20648869600794,
+          "RF_real_admittance_inverse_ohm": 247.20648869600794,
+          "RF_effective_node_capacitance_f": 1.0770660000000002e-14,
+          "LF_AC_vs_FD_relative_error": 1.8185453143360064e-11
+        },
+        {
+          "id": "r240_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 247.18139150429306,
+          "FD_resistance_ohm": 246.92852629760748,
+          "LF_incremental_resistance_ohm": 246.92852629778704,
+          "RF_real_admittance_inverse_ohm": 246.92852629778704,
+          "RF_effective_node_capacitance_f": 1.0770660000000002e-14,
+          "LF_AC_vs_FD_relative_error": 7.271960811294775e-13
+        }
+      ]
+    },
+    {
+      "id": "r240_5p73_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 240,
+      "card": "5p73",
+      "parallel_count": 1,
+      "length_um": 3.17,
+      "continuous_length_um": 3.173828165266869,
+      "target_resistance_ohm": 247.223418004859,
+      "predicted_resistance_ohm": 247.00725675505,
+      "relative_error": -0.0008743558824381159,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 18.1641,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 247.0072567550504,
+      "TT27C_load250mV_node_capacitance_f": 3.1363297000000003e-15,
+      "max_LF_AC_vs_FD_relative_error": 6.626010851107367e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9546763079038187,
+          "normalized_max": 1.0408043747561846,
+          "max_abs_percent": 4.532369209618126
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.983178436425351,
+          "normalized_max": 1.0184695344935637,
+          "max_abs_percent": 1.84695344935637
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9812188232576968,
+          "normalized_max": 1.0196563550079467,
+          "max_abs_percent": 1.9656355007946713
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r240_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 247.02857752703412,
+          "FD_resistance_ohm": 247.0288808131886,
+          "LF_incremental_resistance_ohm": 247.02888082033058,
+          "RF_real_admittance_inverse_ohm": 247.02888082033058,
+          "RF_effective_node_capacitance_f": 3.1363297000000003e-15,
+          "LF_AC_vs_FD_relative_error": 2.8911539828868627e-11
+        },
+        {
+          "id": "r240_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 247.02609064714161,
+          "FD_resistance_ohm": 247.01832800352935,
+          "LF_incremental_resistance_ohm": 247.01832800808396,
+          "RF_real_admittance_inverse_ohm": 247.01832800808396,
+          "RF_effective_node_capacitance_f": 3.1363297000000003e-15,
+          "LF_AC_vs_FD_relative_error": 1.8438361948369675e-11
+        },
+        {
+          "id": "r240_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 247.0072567550504,
+          "FD_resistance_ohm": 246.96942099517423,
+          "LF_incremental_resistance_ohm": 246.9694209939266,
+          "RF_real_admittance_inverse_ohm": 246.9694209939266,
+          "RF_effective_node_capacitance_f": 3.1363297000000003e-15,
+          "LF_AC_vs_FD_relative_error": 5.051736806649387e-12
+        },
+        {
+          "id": "r240_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 246.98324396947314,
+          "FD_resistance_ohm": 246.9936034740154,
+          "LF_incremental_resistance_ohm": 246.99360346141611,
+          "RF_real_admittance_inverse_ohm": 246.99360346141611,
+          "RF_effective_node_capacitance_f": 3.1363297000000003e-15,
+          "LF_AC_vs_FD_relative_error": 5.101052913403237e-11
+        }
+      ]
+    },
+    {
+      "id": "r240_5p73_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 240,
+      "card": "5p73",
+      "parallel_count": 2,
+      "length_um": 7.55,
+      "continuous_length_um": 7.552381040442318,
+      "target_resistance_ohm": 247.223418004859,
+      "predicted_resistance_ohm": 247.15620025370472,
+      "relative_error": -0.0002718907120399239,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 86.52300000000001,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 247.15620025370472,
+      "TT27C_load250mV_node_capacitance_f": 9.543555800000002e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.6273205005745695e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9841946319455896,
+          "normalized_max": 1.0146879417046082,
+          "max_abs_percent": 1.5805368054410351
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9823621908671755,
+          "normalized_max": 1.0190456669465393,
+          "max_abs_percent": 1.9045666946539308
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9846405083957113,
+          "normalized_max": 1.016382671696802,
+          "max_abs_percent": 1.6382671696802076
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r240_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 247.16153365320926,
+          "FD_resistance_ohm": 247.16155211546769,
+          "LF_incremental_resistance_ohm": 247.16155211717918,
+          "RF_real_admittance_inverse_ohm": 247.16155211717918,
+          "RF_effective_node_capacitance_f": 9.543555800000002e-15,
+          "LF_AC_vs_FD_relative_error": 6.924683049192026e-12
+        },
+        {
+          "id": "r240_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 247.16063670237403,
+          "FD_resistance_ohm": 247.15862605489355,
+          "LF_incremental_resistance_ohm": 247.15862605583723,
+          "RF_real_admittance_inverse_ohm": 247.15862605583723,
+          "RF_effective_node_capacitance_f": 9.543555800000002e-15,
+          "LF_AC_vs_FD_relative_error": 3.818056981685913e-12
+        },
+        {
+          "id": "r240_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 247.15620025370472,
+          "FD_resistance_ohm": 247.14760016579515,
+          "LF_incremental_resistance_ohm": 247.1476001654851,
+          "RF_real_admittance_inverse_ohm": 247.1476001654851,
+          "RF_effective_node_capacitance_f": 9.543555800000002e-15,
+          "LF_AC_vs_FD_relative_error": 1.2545520178264269e-12
+        },
+        {
+          "id": "r240_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 247.1507498779018,
+          "FD_resistance_ohm": 247.15259981917026,
+          "LF_incremental_resistance_ohm": 247.1525998163589,
+          "RF_real_admittance_inverse_ohm": 247.1525998163589,
+          "RF_effective_node_capacitance_f": 9.543555800000002e-15,
+          "LF_AC_vs_FD_relative_error": 1.1375012043401966e-11
+        }
+      ]
+    },
+    {
+      "id": "generic300",
+      "kind": "legacy_generic",
+      "nominal_ohm": 300,
+      "w_um": 4,
+      "length_um": 2.593059936908517,
+      "TT27C_load250mV_resistance_ohm": 308.41475039290174,
+      "TT27C_load250mV_node_capacitance_f": 1.9736029274451843e-15,
+      "max_LF_AC_vs_FD_relative_error": 3.2733815658048115e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9942703484519633,
+          "normalized_max": 1.0316486813315504,
+          "max_abs_percent": 3.164868133155041
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9717905240370653,
+          "normalized_max": 1.0638564033008477,
+          "max_abs_percent": 6.385640330084774
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9740443235069168,
+          "normalized_max": 1.0610763075305754,
+          "max_abs_percent": 6.107630753057536
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "generic300",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 308.4147503929021,
+          "FD_resistance_ohm": 308.4147503930506,
+          "LF_incremental_resistance_ohm": 308.41475039290157,
+          "RF_real_admittance_inverse_ohm": 308.41475039290157,
+          "RF_effective_node_capacitance_f": 1.9736029274451843e-15,
+          "LF_AC_vs_FD_relative_error": 4.832800826193306e-13
+        },
+        {
+          "id": "generic300",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 308.41475039290293,
+          "FD_resistance_ohm": 308.4147503922256,
+          "LF_incremental_resistance_ohm": 308.41475039290157,
+          "RF_real_admittance_inverse_ohm": 308.41475039290157,
+          "RF_effective_node_capacitance_f": 1.9736029274451843e-15,
+          "LF_AC_vs_FD_relative_error": 2.191802295214984e-12
+        },
+        {
+          "id": "generic300",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 308.41475039290174,
+          "FD_resistance_ohm": 308.4147503926381,
+          "LF_incremental_resistance_ohm": 308.41475039290157,
+          "RF_real_admittance_inverse_ohm": 308.41475039290157,
+          "RF_effective_node_capacitance_f": 1.9736029274451843e-15,
+          "LF_AC_vs_FD_relative_error": 8.542055951465954e-13
+        },
+        {
+          "id": "generic300",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 308.41475039290174,
+          "FD_resistance_ohm": 308.4147503926381,
+          "LF_incremental_resistance_ohm": 308.41475039290157,
+          "RF_real_admittance_inverse_ohm": 308.41475039290157,
+          "RF_effective_node_capacitance_f": 1.9736029274451843e-15,
+          "LF_AC_vs_FD_relative_error": 8.542055951465954e-13
+        }
+      ]
+    },
+    {
+      "id": "r300_2p85_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 300,
+      "card": "2p85",
+      "parallel_count": 1,
+      "length_um": 1.45,
+      "continuous_length_um": 1.4546772693782188,
+      "target_resistance_ohm": 308.41475039290174,
+      "predicted_resistance_ohm": 307.9249987042617,
+      "relative_error": -0.0015879645445494583,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 4.1325,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 307.9249987042621,
+      "TT27C_load250mV_node_capacitance_f": 1.3854465e-15,
+      "max_LF_AC_vs_FD_relative_error": 9.21446474677623e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.8781259631077677,
+          "normalized_max": 1.137524356013117,
+          "max_abs_percent": 13.752435601311696
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9043426596481341,
+          "normalized_max": 1.1131139813042816,
+          "max_abs_percent": 11.311398130428163
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9025401772926819,
+          "normalized_max": 1.1144110908035025,
+          "max_abs_percent": 11.441109080350254
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r300_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 309.2218454171485,
+          "FD_resistance_ohm": 309.2005519118267,
+          "LF_incremental_resistance_ohm": 309.200552065062,
+          "RF_real_admittance_inverse_ohm": 309.200552065062,
+          "RF_effective_node_capacitance_f": 1.3854465e-15,
+          "LF_AC_vs_FD_relative_error": 4.95585572579671e-10
+        },
+        {
+          "id": "r300_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 308.9112275437723,
+          "FD_resistance_ohm": 308.4402763786491,
+          "LF_incremental_resistance_ohm": 308.4402765066125,
+          "RF_real_admittance_inverse_ohm": 308.4402765066125,
+          "RF_effective_node_capacitance_f": 1.3854465e-15,
+          "LF_AC_vs_FD_relative_error": 4.14872580734027e-10
+        },
+        {
+          "id": "r300_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 307.9249987042621,
+          "FD_resistance_ohm": 305.8697463608562,
+          "LF_incremental_resistance_ohm": 305.8697464479975,
+          "RF_real_admittance_inverse_ohm": 305.8697464479975,
+          "RF_effective_node_capacitance_f": 1.3854465e-15,
+          "LF_AC_vs_FD_relative_error": 2.848967728397156e-10
+        },
+        {
+          "id": "r300_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 305.32121012707165,
+          "FD_resistance_ohm": 299.3798237517066,
+          "LF_incremental_resistance_ohm": 299.3798237726195,
+          "RF_real_admittance_inverse_ohm": 299.3798237726195,
+          "RF_effective_node_capacitance_f": 1.3854465e-15,
+          "LF_AC_vs_FD_relative_error": 6.98539004417853e-11
+        }
+      ]
+    },
+    {
+      "id": "r300_2p85_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 300,
+      "card": "2p85",
+      "parallel_count": 2,
+      "length_um": 4.24,
+      "continuous_length_um": 4.244683884939652,
+      "target_resistance_ohm": 308.41475039290174,
+      "predicted_resistance_ohm": 308.15120922913917,
+      "relative_error": -0.0008545024627610864,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 24.168000000000003,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 308.1512092291392,
+      "TT27C_load250mV_node_capacitance_f": 3.9686400000000005e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.7352341785681347e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9665478994892037,
+          "normalized_max": 1.0358349411986076,
+          "max_abs_percent": 3.583494119860764
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9908304787753317,
+          "normalized_max": 1.01360674105722,
+          "max_abs_percent": 1.360674105722004
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9931284361566197,
+          "normalized_max": 1.0147878949681244,
+          "max_abs_percent": 1.4787894968124382
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r300_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 308.35592307672107,
+          "FD_resistance_ohm": 308.35296639070214,
+          "LF_incremental_resistance_ohm": 308.35296641555743,
+          "RF_real_admittance_inverse_ohm": 308.35296641555743,
+          "RF_effective_node_capacitance_f": 3.9686400000000005e-15,
+          "LF_AC_vs_FD_relative_error": 8.060663247988487e-11
+        },
+        {
+          "id": "r300_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 308.30905630115643,
+          "FD_resistance_ohm": 308.23545736593775,
+          "LF_incremental_resistance_ohm": 308.2354573879415,
+          "RF_real_admittance_inverse_ohm": 308.2354573879415,
+          "RF_effective_node_capacitance_f": 3.9686400000000005e-15,
+          "LF_AC_vs_FD_relative_error": 7.138623026037294e-11
+        },
+        {
+          "id": "r300_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 308.1512092291392,
+          "FD_resistance_ohm": 307.81615966360687,
+          "LF_incremental_resistance_ohm": 307.81615967700395,
+          "RF_real_admittance_inverse_ohm": 307.81615967700395,
+          "RF_effective_node_capacitance_f": 3.9686400000000005e-15,
+          "LF_AC_vs_FD_relative_error": 4.3522963011355387e-11
+        },
+        {
+          "id": "r300_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 307.7250195338202,
+          "FD_resistance_ohm": 306.73153731026173,
+          "LF_incremental_resistance_ohm": 306.7315373130398,
+          "RF_real_admittance_inverse_ohm": 306.7315373130398,
+          "RF_effective_node_capacitance_f": 3.9686400000000005e-15,
+          "LF_AC_vs_FD_relative_error": 9.056977390287102e-12
+        }
+      ]
+    },
+    {
+      "id": "r300_2p85_n4",
+      "kind": "fixed_load",
+      "nominal_ohm": 300,
+      "card": "2p85",
+      "parallel_count": 4,
+      "length_um": 9.700000000000001,
+      "continuous_length_um": 9.69778116070725,
+      "target_resistance_ohm": 308.41475039290174,
+      "predicted_resistance_ohm": 308.47763828117826,
+      "relative_error": 0.00020390687603755175,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 110.58000000000001,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 308.47763828117854,
+      "TT27C_load250mV_node_capacitance_f": 1.2625236000000002e-14,
+      "max_LF_AC_vs_FD_relative_error": 4.356737193234039e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9829451439417245,
+          "normalized_max": 1.0161901357185439,
+          "max_abs_percent": 1.7054856058275503
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.984978332401169,
+          "normalized_max": 1.0171561032838696,
+          "max_abs_percent": 1.7156103283869628
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9872627173467629,
+          "normalized_max": 1.0144980458884614,
+          "max_abs_percent": 1.4498045888461375
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r300_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 308.5045298851905,
+          "FD_resistance_ohm": 308.5046009592905,
+          "LF_incremental_resistance_ohm": 308.50460096542577,
+          "RF_real_admittance_inverse_ohm": 308.50460096542577,
+          "RF_effective_node_capacitance_f": 1.2625236000000002e-14,
+          "LF_AC_vs_FD_relative_error": 1.9887202995505504e-11
+        },
+        {
+          "id": "r300_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 308.5008317160897,
+          "FD_resistance_ohm": 308.4921139108021,
+          "LF_incremental_resistance_ohm": 308.49211391574636,
+          "RF_real_admittance_inverse_ohm": 308.49211391574636,
+          "RF_effective_node_capacitance_f": 1.2625236000000002e-14,
+          "LF_AC_vs_FD_relative_error": 1.602717958348876e-11
+        },
+        {
+          "id": "r300_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 308.47763828117854,
+          "FD_resistance_ohm": 308.42359606008085,
+          "LF_incremental_resistance_ohm": 308.42359606331564,
+          "RF_real_admittance_inverse_ohm": 308.42359606331564,
+          "RF_effective_node_capacitance_f": 1.2625236000000002e-14,
+          "LF_AC_vs_FD_relative_error": 1.0488054869028929e-11
+        },
+        {
+          "id": "r300_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 308.40443619351,
+          "FD_resistance_ohm": 308.2279691683986,
+          "LF_incremental_resistance_ohm": 308.22796916921124,
+          "RF_real_admittance_inverse_ohm": 308.22796916921124,
+          "RF_effective_node_capacitance_f": 1.2625236000000002e-14,
+          "LF_AC_vs_FD_relative_error": 2.6365576388798218e-12
+        }
+      ]
+    },
+    {
+      "id": "r300_5p73_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 300,
+      "card": "5p73",
+      "parallel_count": 1,
+      "length_um": 4.26,
+      "continuous_length_um": 4.257543303492063,
+      "target_resistance_ohm": 308.41475039290174,
+      "predicted_resistance_ohm": 308.5534633616049,
+      "relative_error": 0.00044976113667205553,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 24.4098,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 308.5534633616058,
+      "TT27C_load250mV_node_capacitance_f": 3.543324800000001e-15,
+      "max_LF_AC_vs_FD_relative_error": 3.710709517434907e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9697573775275389,
+          "normalized_max": 1.0278037626747536,
+          "max_abs_percent": 3.0242622472461123
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9886088620428107,
+          "normalized_max": 1.00760270140521,
+          "max_abs_percent": 1.1391137957189268
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9909016669982518,
+          "normalized_max": 1.0069199013098833,
+          "max_abs_percent": 0.9098333001748227
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r300_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 308.5698530491443,
+          "FD_resistance_ohm": 308.5700510942078,
+          "LF_incremental_resistance_ohm": 308.57005109997664,
+          "RF_real_admittance_inverse_ohm": 308.57005109997664,
+          "RF_effective_node_capacitance_f": 3.543324800000001e-15,
+          "LF_AC_vs_FD_relative_error": 1.8695267556267936e-11
+        },
+        {
+          "id": "r300_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 308.56777329376973,
+          "FD_resistance_ohm": 308.56176388334313,
+          "LF_incremental_resistance_ohm": 308.56176388562716,
+          "RF_real_admittance_inverse_ohm": 308.56176388562716,
+          "RF_effective_node_capacitance_f": 3.543324800000001e-15,
+          "LF_AC_vs_FD_relative_error": 7.402078949780844e-12
+        },
+        {
+          "id": "r300_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 308.5534633616058,
+          "FD_resistance_ohm": 308.5249057438975,
+          "LF_incremental_resistance_ohm": 308.5249057422514,
+          "RF_real_admittance_inverse_ohm": 308.5249057422514,
+          "RF_effective_node_capacitance_f": 3.543324800000001e-15,
+          "LF_AC_vs_FD_relative_error": 5.335287767138652e-12
+        },
+        {
+          "id": "r300_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 308.5353444647956,
+          "FD_resistance_ohm": 308.5428545850615,
+          "LF_incremental_resistance_ohm": 308.54285457594733,
+          "RF_real_admittance_inverse_ohm": 308.54285457594733,
+          "RF_effective_node_capacitance_f": 3.543324800000001e-15,
+          "LF_AC_vs_FD_relative_error": 2.953937094929415e-11
+        }
+      ]
+    },
+    {
+      "id": "r300_5p73_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 300,
+      "card": "5p73",
+      "parallel_count": 2,
+      "length_um": 9.72,
+      "continuous_length_um": 9.719958442421808,
+      "target_resistance_ohm": 308.41475039290174,
+      "predicted_resistance_ohm": 308.41592357125944,
+      "relative_error": 3.803898342091827e-06,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 111.39120000000001,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 308.4159235712599,
+      "TT27C_load250mV_node_capacitance_f": 1.1164068400000003e-14,
+      "max_LF_AC_vs_FD_relative_error": 1.211530875622202e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9863816717340901,
+          "normalized_max": 1.0123698925069176,
+          "max_abs_percent": 1.3618328265909918
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9822593830211147,
+          "normalized_max": 1.0201728249993378,
+          "max_abs_percent": 2.0172824999337813
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9845374621152726,
+          "normalized_max": 1.0175068842324,
+          "max_abs_percent": 1.7506884232399988
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r300_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 308.42059786836325,
+          "FD_resistance_ohm": 308.4205841837154,
+          "LF_incremental_resistance_ohm": 308.4205841834182,
+          "RF_real_admittance_inverse_ohm": 308.4205841834182,
+          "RF_effective_node_capacitance_f": 1.1164068400000003e-14,
+          "LF_AC_vs_FD_relative_error": 9.635625630721734e-13
+        },
+        {
+          "id": "r300_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 308.4196687577648,
+          "FD_resistance_ohm": 308.4178707994378,
+          "LF_incremental_resistance_ohm": 308.4178708006787,
+          "RF_real_admittance_inverse_ohm": 308.4178708006787,
+          "RF_effective_node_capacitance_f": 1.1164068400000003e-14,
+          "LF_AC_vs_FD_relative_error": 4.023448241241567e-12
+        },
+        {
+          "id": "r300_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 308.4159235712599,
+          "FD_resistance_ohm": 308.4088365947026,
+          "LF_incremental_resistance_ohm": 308.4088365948497,
+          "RF_real_admittance_inverse_ohm": 308.4088365948497,
+          "RF_effective_node_capacitance_f": 1.1164068400000003e-14,
+          "LF_AC_vs_FD_relative_error": 4.767297667740422e-13
+        },
+        {
+          "id": "r300_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 308.4114362594495,
+          "FD_resistance_ohm": 308.41267183584546,
+          "LF_incremental_resistance_ohm": 308.4126718336577,
+          "RF_real_admittance_inverse_ohm": 308.4126718336577,
+          "RF_effective_node_capacitance_f": 1.1164068400000003e-14,
+          "LF_AC_vs_FD_relative_error": 7.093547971237513e-12
+        }
+      ]
+    },
+    {
+      "id": "generic400",
+      "kind": "legacy_generic",
+      "nominal_ohm": 400,
+      "w_um": 3,
+      "length_um": 2.593059936908517,
+      "TT27C_load250mV_resistance_ohm": 409.88135978839773,
+      "TT27C_load250mV_node_capacitance_f": 1.565290750788954e-15,
+      "max_LF_AC_vs_FD_relative_error": 2.631006523756696e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9943230955010653,
+          "normalized_max": 1.0313573242509042,
+          "max_abs_percent": 3.1357324250904206
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9718420785087117,
+          "normalized_max": 1.063555950150952,
+          "max_abs_percent": 6.3555950150951945
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.974095997544908,
+          "normalized_max": 1.060776639532255,
+          "max_abs_percent": 6.0776639532255095
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "generic400",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 409.881359788389,
+          "FD_resistance_ohm": 409.88135978866586,
+          "LF_incremental_resistance_ohm": 409.88135978839824,
+          "RF_real_admittance_inverse_ohm": 409.88135978839824,
+          "RF_effective_node_capacitance_f": 1.565290750788954e-15,
+          "LF_AC_vs_FD_relative_error": 6.529221607820546e-13
+        },
+        {
+          "id": "generic400",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 409.88135978839773,
+          "FD_resistance_ohm": 409.88135978793724,
+          "LF_incremental_resistance_ohm": 409.88135978839824,
+          "RF_real_admittance_inverse_ohm": 409.88135978839824,
+          "RF_effective_node_capacitance_f": 1.565290750788954e-15,
+          "LF_AC_vs_FD_relative_error": 1.1246559239452836e-12
+        },
+        {
+          "id": "generic400",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 409.88135978839773,
+          "FD_resistance_ohm": 409.88135978866586,
+          "LF_incremental_resistance_ohm": 409.88135978839824,
+          "RF_real_admittance_inverse_ohm": 409.88135978839824,
+          "RF_effective_node_capacitance_f": 1.565290750788954e-15,
+          "LF_AC_vs_FD_relative_error": 6.529221607820546e-13
+        },
+        {
+          "id": "generic400",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 409.88135978839773,
+          "FD_resistance_ohm": 409.88135978866586,
+          "LF_incremental_resistance_ohm": 409.88135978839824,
+          "RF_real_admittance_inverse_ohm": 409.88135978839824,
+          "RF_effective_node_capacitance_f": 1.565290750788954e-15,
+          "LF_AC_vs_FD_relative_error": 6.529221607820546e-13
+        }
+      ]
+    },
+    {
+      "id": "r400_2p85_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 400,
+      "card": "2p85",
+      "parallel_count": 1,
+      "length_um": 2.39,
+      "continuous_length_um": 2.392452259540994,
+      "target_resistance_ohm": 409.88135978839773,
+      "predicted_resistance_ohm": 409.61087332177243,
+      "relative_error": -0.0006599140462618669,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 6.8115000000000006,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 409.61087332177135,
+      "TT27C_load250mV_node_capacitance_f": 1.5872175e-15,
+      "max_LF_AC_vs_FD_relative_error": 4.4996273373953954e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9302755197788165,
+          "normalized_max": 1.0761143466036769,
+          "max_abs_percent": 7.611434660367689
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9580491559376416,
+          "normalized_max": 1.0530217822191947,
+          "max_abs_percent": 5.3021782219194735
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9561396289670732,
+          "normalized_max": 1.054248866398842,
+          "max_abs_percent": 5.424886639884208
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r400_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 410.3839203693447,
+          "FD_resistance_ohm": 410.3715534407032,
+          "LF_incremental_resistance_ohm": 410.3715535328671,
+          "RF_real_admittance_inverse_ohm": 410.3715535328671,
+          "RF_effective_node_capacitance_f": 1.5872175e-15,
+          "LF_AC_vs_FD_relative_error": 2.2458634951760814e-10
+        },
+        {
+          "id": "r400_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 410.2005091340098,
+          "FD_resistance_ohm": 409.9202162438996,
+          "LF_incremental_resistance_ohm": 409.920216321401,
+          "RF_real_admittance_inverse_ohm": 409.920216321401,
+          "RF_effective_node_capacitance_f": 1.5872175e-15,
+          "LF_AC_vs_FD_relative_error": 1.8906476384472626e-10
+        },
+        {
+          "id": "r400_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 409.61087332177135,
+          "FD_resistance_ohm": 408.37415452194017,
+          "LF_incremental_resistance_ohm": 408.3741545754293,
+          "RF_real_admittance_inverse_ohm": 408.3741545754293,
+          "RF_effective_node_capacitance_f": 1.5872175e-15,
+          "LF_AC_vs_FD_relative_error": 1.309807817762021e-10
+        },
+        {
+          "id": "r400_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 408.0465243575022,
+          "FD_resistance_ohm": 404.43441452338226,
+          "LF_incremental_resistance_ohm": 404.4344145354561,
+          "RF_real_admittance_inverse_ohm": 404.4344145354561,
+          "RF_effective_node_capacitance_f": 1.5872175e-15,
+          "LF_AC_vs_FD_relative_error": 2.9853675087565534e-11
+        }
+      ]
+    },
+    {
+      "id": "r400_2p85_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 400,
+      "card": "2p85",
+      "parallel_count": 2,
+      "length_um": 6.04,
+      "continuous_length_um": 6.043085814639249,
+      "target_resistance_ohm": 409.88135978839773,
+      "predicted_resistance_ohm": 409.7069226549494,
+      "relative_error": -0.0004255795714603883,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 34.428000000000004,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 409.7069226549491,
+      "TT27C_load250mV_node_capacitance_f": 4.7413800000000005e-15,
+      "max_LF_AC_vs_FD_relative_error": 8.789169392287022e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9773377064398023,
+          "normalized_max": 1.0235376151391113,
+          "max_abs_percent": 2.3537615139111345
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9859655450307313,
+          "normalized_max": 1.0145989028474136,
+          "max_abs_percent": 1.4598902847413608
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9882522195431054,
+          "normalized_max": 1.0119475279912042,
+          "max_abs_percent": 1.1947527991204243
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r400_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 409.83669067142915,
+          "FD_resistance_ohm": 409.8351752028184,
+          "LF_incremental_resistance_ohm": 409.83517522128716,
+          "RF_real_admittance_inverse_ohm": 409.83517522128716,
+          "RF_effective_node_capacitance_f": 4.7413800000000005e-15,
+          "LF_AC_vs_FD_relative_error": 4.5063952569535104e-11
+        },
+        {
+          "id": "r400_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 409.80890147114786,
+          "FD_resistance_ohm": 409.76298480332366,
+          "LF_incremental_resistance_ohm": 409.76298481841474,
+          "RF_real_admittance_inverse_ohm": 409.76298481841474,
+          "RF_effective_node_capacitance_f": 4.7413800000000005e-15,
+          "LF_AC_vs_FD_relative_error": 3.682876226207554e-11
+        },
+        {
+          "id": "r400_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 409.7069226549491,
+          "FD_resistance_ohm": 409.4866205984842,
+          "LF_incremental_resistance_ohm": 409.48662060997157,
+          "RF_real_admittance_inverse_ohm": 409.48662060997157,
+          "RF_effective_node_capacitance_f": 4.7413800000000005e-15,
+          "LF_AC_vs_FD_relative_error": 2.8053115386228455e-11
+        },
+        {
+          "id": "r400_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 409.4233170816256,
+          "FD_resistance_ohm": 408.7569573713368,
+          "LF_incremental_resistance_ohm": 408.7569573710381,
+          "RF_real_admittance_inverse_ohm": 408.7569573710381,
+          "RF_effective_node_capacitance_f": 4.7413800000000005e-15,
+          "LF_AC_vs_FD_relative_error": 7.30748794808278e-13
+        }
+      ]
+    },
+    {
+      "id": "r400_2p85_n4",
+      "kind": "fixed_load",
+      "nominal_ohm": 400,
+      "card": "2p85",
+      "parallel_count": 4,
+      "length_um": 13.280000000000001,
+      "continuous_length_um": 13.27608342940192,
+      "target_resistance_ohm": 409.88135978839773,
+      "predicted_resistance_ohm": 409.9924567002704,
+      "relative_error": 0.00027104650948261977,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 151.39200000000002,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 409.99245670027125,
+      "TT27C_load250mV_node_capacitance_f": 1.5699023999999998e-14,
+      "max_LF_AC_vs_FD_relative_error": 2.0794477251229182e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9836388773091901,
+          "normalized_max": 1.0144971864358452,
+          "max_abs_percent": 1.6361122690809915
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9860150724087496,
+          "normalized_max": 1.0164739048678584,
+          "max_abs_percent": 1.647390486785838
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.988301861786185,
+          "normalized_max": 1.0138176302101627,
+          "max_abs_percent": 1.381763021016269
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r400_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 409.99800637977194,
+          "FD_resistance_ohm": 409.9986245894983,
+          "LF_incremental_resistance_ohm": 409.99862459425555,
+          "RF_real_admittance_inverse_ohm": 409.99862459425555,
+          "RF_effective_node_capacitance_f": 1.5699023999999998e-14,
+          "LF_AC_vs_FD_relative_error": 1.1602940830357511e-11
+        },
+        {
+          "id": "r400_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 410.00047232861726,
+          "FD_resistance_ohm": 409.99992413010847,
+          "LF_incremental_resistance_ohm": 409.99992413257826,
+          "RF_real_admittance_inverse_ohm": 409.99992413257826,
+          "RF_effective_node_capacitance_f": 1.5699023999999998e-14,
+          "LF_AC_vs_FD_relative_error": 6.023848087011174e-12
+        },
+        {
+          "id": "r400_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 409.99245670027125,
+          "FD_resistance_ohm": 409.9681796742582,
+          "LF_incremental_resistance_ohm": 409.9681796776853,
+          "RF_real_admittance_inverse_ohm": 409.9681796776853,
+          "RF_effective_node_capacitance_f": 1.5699023999999998e-14,
+          "LF_AC_vs_FD_relative_error": 8.359535286217579e-12
+        },
+        {
+          "id": "r400_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 409.9547344808444,
+          "FD_resistance_ohm": 409.85836856470047,
+          "LF_incremental_resistance_ohm": 409.8583685645819,
+          "RF_real_admittance_inverse_ohm": 409.8583685645819,
+          "RF_effective_node_capacitance_f": 1.5699023999999998e-14,
+          "LF_AC_vs_FD_relative_error": 2.893241202173158e-13
+        }
+      ]
+    },
+    {
+      "id": "r400_5p73_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 400,
+      "card": "5p73",
+      "parallel_count": 1,
+      "length_um": 6.05,
+      "continuous_length_um": 6.054615680881887,
+      "target_resistance_ohm": 409.88135978839773,
+      "predicted_resistance_ohm": 409.6207517884117,
+      "relative_error": -0.0006358132512308545,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 34.6665,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 409.6207517884129,
+      "TT27C_load250mV_node_capacitance_f": 4.2116929000000015e-15,
+      "max_LF_AC_vs_FD_relative_error": 2.191358206005134e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9805052486147698,
+          "normalized_max": 1.0182022777619024,
+          "max_abs_percent": 1.9494751385230158
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9835430969531677,
+          "normalized_max": 1.0164198181628563,
+          "max_abs_percent": 1.6456903046832339
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9858241532669093,
+          "normalized_max": 1.0137636848458709,
+          "max_abs_percent": 1.4175846733090691
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r400_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 409.6331334445101,
+          "FD_resistance_ohm": 409.63322854672896,
+          "LF_incremental_resistance_ohm": 409.633228550379,
+          "RF_real_admittance_inverse_ohm": 409.633228550379,
+          "RF_effective_node_capacitance_f": 4.2116929000000015e-15,
+          "LF_AC_vs_FD_relative_error": 8.910427951036581e-12
+        },
+        {
+          "id": "r400_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 409.6313012774388,
+          "FD_resistance_ohm": 409.62669609713396,
+          "LF_incremental_resistance_ohm": 409.62669609972613,
+          "RF_real_admittance_inverse_ohm": 409.62669609972613,
+          "RF_effective_node_capacitance_f": 4.2116929000000015e-15,
+          "LF_AC_vs_FD_relative_error": 6.328049195758467e-12
+        },
+        {
+          "id": "r400_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 409.6207517884129,
+          "FD_resistance_ohm": 409.599998947396,
+          "LF_incremental_resistance_ohm": 409.5999989459521,
+          "RF_real_admittance_inverse_ohm": 409.5999989459521,
+          "RF_effective_node_capacitance_f": 4.2116929000000015e-15,
+          "LF_AC_vs_FD_relative_error": 3.5250691254873345e-12
+        },
+        {
+          "id": "r400_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 409.60759218871317,
+          "FD_resistance_ohm": 409.6125616215997,
+          "LF_incremental_resistance_ohm": 409.61256161462506,
+          "RF_real_admittance_inverse_ohm": 409.61256161462506,
+          "RF_effective_node_capacitance_f": 4.2116929000000015e-15,
+          "LF_AC_vs_FD_relative_error": 1.7027379506373563e-11
+        }
+      ]
+    },
+    {
+      "id": "r400_5p73_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 400,
+      "card": "5p73",
+      "parallel_count": 2,
+      "length_um": 13.31,
+      "continuous_length_um": 13.314228718623403,
+      "target_resistance_ohm": 409.88135978839773,
+      "predicted_resistance_ohm": 409.76198291840825,
+      "relative_error": -0.00029124737473085194,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 152.53260000000003,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 409.76198291840825,
+      "TT27C_load250mV_node_capacitance_f": 1.38450086e-14,
+      "max_LF_AC_vs_FD_relative_error": 7.92443888286698e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.987195450067338,
+          "normalized_max": 1.011123234810272,
+          "max_abs_percent": 1.2804549932662002
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9831970724522462,
+          "normalized_max": 1.0198902497578606,
+          "max_abs_percent": 1.9890249757860579
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9854773262578163,
+          "normalized_max": 1.0172250474235074,
+          "max_abs_percent": 1.722504742350739
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r400_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 409.7662528945576,
+          "FD_resistance_ohm": 409.7661977459553,
+          "LF_incremental_resistance_ohm": 409.76619774649356,
+          "RF_real_admittance_inverse_ohm": 409.76619774649356,
+          "RF_effective_node_capacitance_f": 1.38450086e-14,
+          "LF_AC_vs_FD_relative_error": 1.3136158827364852e-12
+        },
+        {
+          "id": "r400_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 409.76519995611557,
+          "FD_resistance_ohm": 409.76350642334995,
+          "LF_incremental_resistance_ohm": 409.763506423953,
+          "RF_real_admittance_inverse_ohm": 409.763506423953,
+          "RF_effective_node_capacitance_f": 1.38450086e-14,
+          "LF_AC_vs_FD_relative_error": 1.4717116414431075e-12
+        },
+        {
+          "id": "r400_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 409.76198291840825,
+          "FD_resistance_ohm": 409.75615202678057,
+          "LF_incremental_resistance_ohm": 409.7561520256687,
+          "RF_real_admittance_inverse_ohm": 409.7561520256687,
+          "RF_effective_node_capacitance_f": 1.38450086e-14,
+          "LF_AC_vs_FD_relative_error": 2.713496094486345e-12
+        },
+        {
+          "id": "r400_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 409.75829713415493,
+          "FD_resistance_ohm": 409.7588750362461,
+          "LF_incremental_resistance_ohm": 409.75887503496773,
+          "RF_real_admittance_inverse_ohm": 409.75887503496773,
+          "RF_effective_node_capacitance_f": 1.38450086e-14,
+          "LF_AC_vs_FD_relative_error": 3.11972669919669e-12
+        }
+      ]
+    },
+    {
+      "id": "generic600",
+      "kind": "legacy_generic",
+      "nominal_ohm": 600,
+      "w_um": 2,
+      "length_um": 2.593059936908517,
+      "TT27C_load250mV_resistance_ohm": 610.9540471020124,
+      "TT27C_load250mV_node_capacitance_f": 1.1569785741327241e-15,
+      "max_LF_AC_vs_FD_relative_error": 2.374989094278135e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9944258040347436,
+          "normalized_max": 1.0307899966175804,
+          "max_abs_percent": 3.0789996617580417
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9719424648673338,
+          "normalized_max": 1.0629709107413126,
+          "max_abs_percent": 6.297091074131256
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9741966167219371,
+          "normalized_max": 1.0601931289620183,
+          "max_abs_percent": 6.019312896201834
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "generic600",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 610.9540471020052,
+          "FD_resistance_ohm": 610.954047101811,
+          "LF_incremental_resistance_ohm": 610.9540471020117,
+          "RF_real_admittance_inverse_ohm": 610.9540471020117,
+          "RF_effective_node_capacitance_f": 1.1569785741327241e-15,
+          "LF_AC_vs_FD_relative_error": 3.284039706841213e-13
+        },
+        {
+          "id": "generic600",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 610.954047102015,
+          "FD_resistance_ohm": 610.9540471010016,
+          "LF_incremental_resistance_ohm": 610.9540471020117,
+          "RF_real_admittance_inverse_ohm": 610.9540471020117,
+          "RF_effective_node_capacitance_f": 1.1569785741327241e-15,
+          "LF_AC_vs_FD_relative_error": 1.6533441282717831e-12
+        },
+        {
+          "id": "generic600",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 610.9540471020124,
+          "FD_resistance_ohm": 610.9540471010016,
+          "LF_incremental_resistance_ohm": 610.9540471020117,
+          "RF_real_admittance_inverse_ohm": 610.9540471020117,
+          "RF_effective_node_capacitance_f": 1.1569785741327241e-15,
+          "LF_AC_vs_FD_relative_error": 1.6533441282717831e-12
+        },
+        {
+          "id": "generic600",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 610.954047102012,
+          "FD_resistance_ohm": 610.9540471026204,
+          "LF_incremental_resistance_ohm": 610.9540471020117,
+          "RF_real_admittance_inverse_ohm": 610.9540471020117,
+          "RF_effective_node_capacitance_f": 1.1569785741327241e-15,
+          "LF_AC_vs_FD_relative_error": 9.963141422986155e-13
+        }
+      ]
+    },
+    {
+      "id": "r600_2p85_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 600,
+      "card": "2p85",
+      "parallel_count": 1,
+      "length_um": 4.19,
+      "continuous_length_um": 4.192466560985517,
+      "target_resistance_ohm": 610.9540471020124,
+      "predicted_resistance_ohm": 610.6765453387831,
+      "relative_error": -0.0004542105327652868,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 11.941500000000001,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 610.6765453387821,
+      "TT27C_load250mV_node_capacitance_f": 1.9735875000000002e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.7968404542045846e-10,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9660512305018465,
+          "normalized_max": 1.0363879387254415,
+          "max_abs_percent": 3.638793872544155
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9910812710660518,
+          "normalized_max": 1.0141478716936692,
+          "max_abs_percent": 1.4147871693669156
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9929099986580698,
+          "normalized_max": 1.015329656183023,
+          "max_abs_percent": 1.5329656183022955
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r600_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 611.0917741778902,
+          "FD_resistance_ohm": 611.0857534562513,
+          "LF_incremental_resistance_ohm": 611.0857535094248,
+          "RF_real_admittance_inverse_ohm": 611.0857535094248,
+          "RF_effective_node_capacitance_f": 1.9735875000000002e-15,
+          "LF_AC_vs_FD_relative_error": 8.701483977802127e-11
+        },
+        {
+          "id": "r600_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 610.9965864574044,
+          "FD_resistance_ohm": 610.8472549781809,
+          "LF_incremental_resistance_ohm": 610.8472550214599,
+          "RF_real_admittance_inverse_ohm": 610.8472550214599,
+          "RF_effective_node_capacitance_f": 1.9735875000000002e-15,
+          "LF_AC_vs_FD_relative_error": 7.085065867329376e-11
+        },
+        {
+          "id": "r600_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 610.6765453387821,
+          "FD_resistance_ohm": 609.9974802188497,
+          "LF_incremental_resistance_ohm": 609.9974802485497,
+          "RF_real_admittance_inverse_ohm": 609.9974802485497,
+          "RF_effective_node_capacitance_f": 1.9735875000000002e-15,
+          "LF_AC_vs_FD_relative_error": 4.868883074493624e-11
+        },
+        {
+          "id": "r600_2p85_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 609.8129715731668,
+          "FD_resistance_ohm": 607.8003321948793,
+          "LF_incremental_resistance_ohm": 607.8003322024375,
+          "RF_real_admittance_inverse_ohm": 607.8003322024375,
+          "RF_effective_node_capacitance_f": 1.9735875000000002e-15,
+          "LF_AC_vs_FD_relative_error": 1.2435386054221453e-11
+        }
+      ]
+    },
+    {
+      "id": "r600_2p85_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 600,
+      "card": "2p85",
+      "parallel_count": 2,
+      "length_um": 9.59,
+      "continuous_length_um": 9.594128931578691,
+      "target_resistance_ohm": 610.9540471020124,
+      "predicted_resistance_ohm": 610.7200061810576,
+      "relative_error": -0.00038307450791918995,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 54.663000000000004,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 610.7200061810576,
+      "TT27C_load250mV_node_capacitance_f": 6.2653950000000005e-15,
+      "max_LF_AC_vs_FD_relative_error": 4.4267034482459167e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9828875516961304,
+          "normalized_max": 1.0162865626045656,
+          "max_abs_percent": 1.7112448303869598
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9849571002026571,
+          "normalized_max": 1.0171567397029178,
+          "max_abs_percent": 1.7156739702917756
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9872414359060361,
+          "normalized_max": 1.0144986806444036,
+          "max_abs_percent": 1.4498680644403628
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r600_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 610.775412975089,
+          "FD_resistance_ohm": 610.775516303125,
+          "LF_incremental_resistance_ohm": 610.7755163137482,
+          "RF_real_admittance_inverse_ohm": 610.7755163137482,
+          "RF_effective_node_capacitance_f": 6.2653950000000005e-15,
+          "LF_AC_vs_FD_relative_error": 1.7392975948382627e-11
+        },
+        {
+          "id": "r600_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 610.7675626901171,
+          "FD_resistance_ohm": 610.7495114072352,
+          "LF_incremental_resistance_ohm": 610.7495114156866,
+          "RF_real_admittance_inverse_ohm": 610.7495114156866,
+          "RF_effective_node_capacitance_f": 6.2653950000000005e-15,
+          "LF_AC_vs_FD_relative_error": 1.3837597734323026e-11
+        },
+        {
+          "id": "r600_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 610.7200061810576,
+          "FD_resistance_ohm": 610.6095968544331,
+          "LF_incremental_resistance_ohm": 610.6095968594179,
+          "RF_real_admittance_inverse_ohm": 610.6095968594179,
+          "RF_effective_node_capacitance_f": 6.2653950000000005e-15,
+          "LF_AC_vs_FD_relative_error": 8.163691944673701e-12
+        },
+        {
+          "id": "r600_2p85_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 610.5707979059324,
+          "FD_resistance_ohm": 610.211495443756,
+          "LF_incremental_resistance_ohm": 610.2114954472457,
+          "RF_real_admittance_inverse_ohm": 610.2114954472457,
+          "RF_effective_node_capacitance_f": 6.2653950000000005e-15,
+          "LF_AC_vs_FD_relative_error": 5.718980844449106e-12
+        }
+      ]
+    },
+    {
+      "id": "r600_2p85_n4",
+      "kind": "fixed_load",
+      "nominal_ohm": 600,
+      "card": "2p85",
+      "parallel_count": 4,
+      "length_um": 20.36,
+      "continuous_length_um": 20.36232497625795,
+      "target_resistance_ohm": 610.9540471020124,
+      "predicted_resistance_ohm": 610.8880617277874,
+      "relative_error": -0.00010800382539077891,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 232.104,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 610.8880617277866,
+      "TT27C_load250mV_node_capacitance_f": 2.1777912e-14,
+      "max_LF_AC_vs_FD_relative_error": 1.180544551004914e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9829990431342995,
+          "normalized_max": 1.0140205263107829,
+          "max_abs_percent": 1.7000956865700467
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9880418237731513,
+          "normalized_max": 1.014522537008958,
+          "max_abs_percent": 1.4522537008957892
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9903333136400827,
+          "normalized_max": 1.0118713617138395,
+          "max_abs_percent": 1.1871361713839512
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r600_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 610.8650702940744,
+          "FD_resistance_ohm": 610.8665428776129,
+          "LF_incremental_resistance_ohm": 610.8665428816565,
+          "RF_real_admittance_inverse_ohm": 610.8665428816565,
+          "RF_effective_node_capacitance_f": 2.1777912e-14,
+          "LF_AC_vs_FD_relative_error": 6.619371717420108e-12
+        },
+        {
+          "id": "r600_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 610.8764360263076,
+          "FD_resistance_ohm": 610.8870680326991,
+          "LF_incremental_resistance_ohm": 610.887068036018,
+          "RF_real_admittance_inverse_ohm": 610.887068036018,
+          "RF_effective_node_capacitance_f": 2.1777912e-14,
+          "LF_AC_vs_FD_relative_error": 5.432987393305666e-12
+        },
+        {
+          "id": "r600_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 610.8880617277866,
+          "FD_resistance_ohm": 610.9009325699215,
+          "LF_incremental_resistance_ohm": 610.9009325684791,
+          "RF_real_admittance_inverse_ohm": 610.9009325684791,
+          "RF_effective_node_capacitance_f": 2.1777912e-14,
+          "LF_AC_vs_FD_relative_error": 2.361000284167858e-12
+        },
+        {
+          "id": "r600_2p85_n4",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 610.893190933164,
+          "FD_resistance_ohm": 610.8918432434073,
+          "LF_incremental_resistance_ohm": 610.8918432459528,
+          "RF_real_admittance_inverse_ohm": 610.8918432459528,
+          "RF_effective_node_capacitance_f": 2.1777912e-14,
+          "LF_AC_vs_FD_relative_error": 4.1668890560231375e-12
+        }
+      ]
+    },
+    {
+      "id": "r600_5p73_n1",
+      "kind": "fixed_load",
+      "nominal_ohm": 600,
+      "card": "5p73",
+      "parallel_count": 1,
+      "length_um": 9.620000000000001,
+      "continuous_length_um": 9.615895154478133,
+      "target_resistance_ohm": 610.9540471020124,
+      "predicted_resistance_ohm": 611.185808304581,
+      "relative_error": 0.00037934310062737175,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 55.12260000000001,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 611.1858083045814,
+      "TT27C_load250mV_node_capacitance_f": 5.5446952000000004e-15,
+      "max_LF_AC_vs_FD_relative_error": 1.5600964964335162e-11,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9863246349646401,
+          "normalized_max": 1.0124372132151698,
+          "max_abs_percent": 1.3675365035359932
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9822446106763372,
+          "normalized_max": 1.0201559821590012,
+          "max_abs_percent": 2.0155982159001162
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.9845226555101252,
+          "normalized_max": 1.0174900854061888,
+          "max_abs_percent": 1.7490085406188793
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r600_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 611.1951986407632,
+          "FD_resistance_ohm": 611.1951739057108,
+          "LF_incremental_resistance_ohm": 611.1951739091535,
+          "RF_real_admittance_inverse_ohm": 611.1951739091535,
+          "RF_effective_node_capacitance_f": 5.5446952000000004e-15,
+          "LF_AC_vs_FD_relative_error": 5.632605493133269e-12
+        },
+        {
+          "id": "r600_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 611.1933453398807,
+          "FD_resistance_ohm": 611.1897366758934,
+          "LF_incremental_resistance_ohm": 611.1897366772738,
+          "RF_real_admittance_inverse_ohm": 611.1897366772738,
+          "RF_effective_node_capacitance_f": 5.5446952000000004e-15,
+          "LF_AC_vs_FD_relative_error": 2.2584156766924934e-12
+        },
+        {
+          "id": "r600_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 611.1858083045814,
+          "FD_resistance_ohm": 611.1715294423716,
+          "LF_incremental_resistance_ohm": 611.1715294410868,
+          "RF_real_admittance_inverse_ohm": 611.1715294410868,
+          "RF_effective_node_capacitance_f": 5.5446952000000004e-15,
+          "LF_AC_vs_FD_relative_error": 2.1020962748252714e-12
+        },
+        {
+          "id": "r600_5p73_n1",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 611.1767668509509,
+          "FD_resistance_ohm": 611.179284691952,
+          "LF_incremental_resistance_ohm": 611.1792846861284,
+          "RF_real_admittance_inverse_ohm": 611.1792846861284,
+          "RF_effective_node_capacitance_f": 5.5446952000000004e-15,
+          "LF_AC_vs_FD_relative_error": 9.528489108845406e-12
+        }
+      ]
+    },
+    {
+      "id": "r600_5p73_n2",
+      "kind": "fixed_load",
+      "nominal_ohm": 600,
+      "card": "5p73",
+      "parallel_count": 2,
+      "length_um": 20.44,
+      "continuous_length_um": 20.436895769571734,
+      "target_resistance_ohm": 610.9540471020124,
+      "predicted_resistance_ohm": 611.0416793120783,
+      "relative_error": 0.00014343502671199104,
+      "calibrated_domain_um": [
+        0.5,
+        32.0
+      ],
+      "minimum_length_um": 0.5,
+      "length_grid_um": 0.01,
+      "poly_body_area_um2": 234.24240000000003,
+      "hypothetical_peak_uA_per_um": null,
+      "TT27C_load250mV_resistance_ohm": 611.0416793120787,
+      "TT27C_load250mV_node_capacitance_f": 1.9169550000000007e-14,
+      "max_LF_AC_vs_FD_relative_error": 4.693800903510237e-12,
+      "tracking_proxies": {
+        "reference_generic": {
+          "normalized_min": 0.9866324127620492,
+          "normalized_max": 1.0109476032546818,
+          "max_abs_percent": 1.336758723795084
+        },
+        "reference_fixed_s1": {
+          "normalized_min": 0.9851851010941879,
+          "normalized_max": 1.018188985601472,
+          "max_abs_percent": 1.8188985601472085
+        },
+        "reference_fixed_s8": {
+          "normalized_min": 0.987469965582604,
+          "normalized_max": 1.0155282290525376,
+          "max_abs_percent": 1.552822905253759
+        }
+      },
+      "voltage_dependence_TT27C": [
+        {
+          "id": "r600_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.01,
+          "load_drop_grid_v": 0.01,
+          "resistance_ohm": 611.0460829987065,
+          "FD_resistance_ohm": 611.0459615087823,
+          "LF_incremental_resistance_ohm": 611.0459615080855,
+          "RF_real_admittance_inverse_ohm": 611.0459615080855,
+          "RF_effective_node_capacitance_f": 1.9169550000000007e-14,
+          "LF_AC_vs_FD_relative_error": 1.1403100685924983e-12
+        },
+        {
+          "id": "r600_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.1,
+          "load_drop_grid_v": 0.1,
+          "resistance_ohm": 611.0446877059667,
+          "FD_resistance_ohm": 611.0428637273909,
+          "LF_incremental_resistance_ohm": 611.042863726925,
+          "RF_real_admittance_inverse_ohm": 611.042863726925,
+          "RF_effective_node_capacitance_f": 1.9169550000000007e-14,
+          "LF_AC_vs_FD_relative_error": 7.625011733125575e-13
+        },
+        {
+          "id": "r600_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.25,
+          "load_drop_grid_v": 0.25,
+          "resistance_ohm": 611.0416793120787,
+          "FD_resistance_ohm": 611.0366402213,
+          "LF_incremental_resistance_ohm": 611.0366402215824,
+          "RF_real_admittance_inverse_ohm": 611.0366402215824,
+          "RF_effective_node_capacitance_f": 1.9169550000000007e-14,
+          "LF_AC_vs_FD_relative_error": 4.620748228489902e-13
+        },
+        {
+          "id": "r600_5p73_n2",
+          "corner": "tt",
+          "temp_c": 27,
+          "drop_v": 0.5,
+          "load_drop_grid_v": 0.5,
+          "resistance_ohm": 611.0385044379069,
+          "FD_resistance_ohm": 611.0382659087142,
+          "LF_incremental_resistance_ohm": 611.0382659074338,
+          "RF_real_admittance_inverse_ohm": 611.0382659074338,
+          "RF_effective_node_capacitance_f": 1.9169550000000007e-14,
+          "LF_AC_vs_FD_relative_error": 2.095323914375058e-12
+        }
+      ]
+    },
+    {
+      "id": "reference_generic",
+      "kind": "reference_string_surrogate",
+      "TT27C_load250mV_resistance_ohm": 124566.27343977927,
+      "TT27C_load250mV_node_capacitance_f": 5.3826471863849145e-15,
+      "max_LF_AC_vs_FD_relative_error": 8.126721517953683e-12
+    },
+    {
+      "id": "reference_fixed_s1",
+      "kind": "reference_string_surrogate",
+      "card": "1p41",
+      "elements": [
+        {
+          "parallel_count": 1,
+          "length_um": 486.09000000000003,
+          "continuous_length_um": 486.0881079233314,
+          "target_resistance_ohm": 112077.63776885624,
+          "predicted_resistance_ohm": 112078.07303384239,
+          "relative_error": 3.883602427867672e-06,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 53.18,
+          "continuous_length_um": 53.1767987371161,
+          "target_resistance_ohm": 12488.635670924603,
+          "predicted_resistance_ohm": 12489.372065283247,
+          "relative_error": 5.896515664716162e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        }
+      ],
+      "TT27C_load250mV_resistance_ohm": 124586.94752083806,
+      "TT27C_load250mV_node_capacitance_f": 8.26101575240668e-15,
+      "max_LF_AC_vs_FD_relative_error": 7.35310035082648e-10
+    },
+    {
+      "id": "reference_fixed_s8",
+      "kind": "reference_string_surrogate",
+      "card": "1p41",
+      "elements": [
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 59.79,
+          "continuous_length_um": 59.78916527819254,
+          "target_resistance_ohm": 14009.70472110703,
+          "predicted_resistance_ohm": 14009.89673663361,
+          "relative_error": 1.3705893907367539e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        },
+        {
+          "parallel_count": 1,
+          "length_um": 53.18,
+          "continuous_length_um": 53.1767987371161,
+          "target_resistance_ohm": 12488.635670924603,
+          "predicted_resistance_ohm": 12489.372065283247,
+          "relative_error": 5.896515664716162e-05,
+          "calibrated_domain_um": [
+            0.5,
+            512.0
+          ],
+          "minimum_length_um": 0.5,
+          "length_grid_um": 0.01
+        }
+      ],
+      "TT27C_load250mV_resistance_ohm": 124569.5051854719,
+      "TT27C_load250mV_node_capacitance_f": 9.343147242537735e-15,
+      "max_LF_AC_vs_FD_relative_error": 3.9013370312090956e-09
+    }
+  ],
+  "choices": [
+    {
+      "id": "r50_2p85_n5",
+      "geometry": {
+        "parallel_count": 5,
+        "length_um": 0.98,
+        "continuous_length_um": 0.9770205408721593,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.14578830554491,
+        "relative_error": 0.0010759057847153919,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_2p85_n8",
+      "geometry": {
+        "parallel_count": 8,
+        "length_um": 2.45,
+        "continuous_length_um": 2.4543854461687236,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.02919182319159,
+        "relative_error": -0.0011624711384454756,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_2p85_n17",
+      "geometry": {
+        "parallel_count": 17,
+        "length_um": 6.62,
+        "continuous_length_um": 6.624530752958201,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.059590276539076,
+        "relative_error": -0.000578892671072806,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_2p85_n24",
+      "geometry": {
+        "parallel_count": 24,
+        "length_um": 9.84,
+        "continuous_length_um": 9.843272339883919,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.074286045225136,
+        "relative_error": -0.00029676864099004163,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_2p85_n32",
+      "geometry": {
+        "parallel_count": 32,
+        "length_um": 13.52,
+        "continuous_length_um": 13.517094427054593,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.10004737353661,
+        "relative_error": 0.0001977879840342478,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_5p73_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 0.64,
+        "continuous_length_um": 0.6416683026363051,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.04251978254987,
+        "relative_error": -0.0009066058150818401,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_5p73_n4",
+      "geometry": {
+        "parallel_count": 4,
+        "length_um": 2.49,
+        "continuous_length_um": 2.485569191167318,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.15229655292077,
+        "relative_error": 0.0012008487541970148,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_5p73_n8",
+      "geometry": {
+        "parallel_count": 8,
+        "length_um": 6.18,
+        "continuous_length_um": 6.175700112698308,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.12009184035789,
+        "relative_error": 0.0005825943783974719,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_5p73_n12",
+      "geometry": {
+        "parallel_count": 12,
+        "length_um": 9.870000000000001,
+        "continuous_length_um": 9.86603319852296,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.108408568367956,
+        "relative_error": 0.00035830316582008415,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r50_5p73_n16",
+      "geometry": {
+        "parallel_count": 16,
+        "length_um": 13.56,
+        "continuous_length_um": 13.556403354814952,
+        "target_resistance_ohm": 52.08974464795383,
+        "predicted_resistance_ohm": 52.10243632198428,
+        "relative_error": 0.00024365014872351765,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r120_2p85_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 0.85,
+        "continuous_length_um": 0.8516139148955385,
+        "target_resistance_ohm": 124.51162704588863,
+        "predicted_resistance_ohm": 124.4408159345612,
+        "relative_error": -0.0005687108345417968,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r120_2p85_n4",
+      "geometry": {
+        "parallel_count": 4,
+        "length_um": 3.19,
+        "continuous_length_um": 3.185893287157462,
+        "target_resistance_ohm": 124.51162704588863,
+        "predicted_resistance_ohm": 124.62633831031158,
+        "relative_error": 0.0009212895786887554,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r120_2p85_n6",
+      "geometry": {
+        "parallel_count": 6,
+        "length_um": 5.4,
+        "continuous_length_um": 5.399766620650637,
+        "target_resistance_ohm": 124.51162704588863,
+        "predicted_resistance_ohm": 124.51601957622263,
+        "relative_error": 3.527807352798895e-05,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r120_5p73_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 1.0,
+        "continuous_length_um": 1.0011568575801941,
+        "target_resistance_ohm": 124.51162704588863,
+        "predicted_resistance_ohm": 124.44623785998336,
+        "relative_error": -0.0005251652994717748,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r120_5p73_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 3.21,
+        "continuous_length_um": 3.2057028818172624,
+        "target_resistance_ohm": 124.51162704588863,
+        "predicted_resistance_ohm": 124.63294732076534,
+        "relative_error": 0.0009743690429167007,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r120_5p73_n3",
+      "geometry": {
+        "parallel_count": 3,
+        "length_um": 5.41,
+        "continuous_length_um": 5.410878195824352,
+        "target_resistance_ohm": 124.51162704588863,
+        "predicted_resistance_ohm": 124.49509885076515,
+        "relative_error": -0.0001327441903670179,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r240_2p85_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 0.8300000000000001,
+        "continuous_length_um": 0.8309639479476325,
+        "target_resistance_ohm": 247.223418004859,
+        "predicted_resistance_ohm": 247.14006395302175,
+        "relative_error": -0.0003371608260654968,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r240_2p85_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 3.15,
+        "continuous_length_um": 3.1536697224452244,
+        "target_resistance_ohm": 247.223418004859,
+        "predicted_resistance_ohm": 247.01848581559602,
+        "relative_error": -0.0008289351830698122,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r240_2p85_n4",
+      "geometry": {
+        "parallel_count": 4,
+        "length_um": 7.54,
+        "continuous_length_um": 7.537714625856884,
+        "target_resistance_ohm": 247.223418004859,
+        "predicted_resistance_ohm": 247.28811730330898,
+        "relative_error": 0.0002617037616099438,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r240_5p73_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 3.17,
+        "continuous_length_um": 3.173828165266869,
+        "target_resistance_ohm": 247.223418004859,
+        "predicted_resistance_ohm": 247.00725675505,
+        "relative_error": -0.0008743558824381159,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r240_5p73_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 7.55,
+        "continuous_length_um": 7.552381040442318,
+        "target_resistance_ohm": 247.223418004859,
+        "predicted_resistance_ohm": 247.15620025370472,
+        "relative_error": -0.0002718907120399239,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r300_2p85_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 1.45,
+        "continuous_length_um": 1.4546772693782188,
+        "target_resistance_ohm": 308.41475039290174,
+        "predicted_resistance_ohm": 307.9249987042617,
+        "relative_error": -0.0015879645445494583,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r300_2p85_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 4.24,
+        "continuous_length_um": 4.244683884939652,
+        "target_resistance_ohm": 308.41475039290174,
+        "predicted_resistance_ohm": 308.15120922913917,
+        "relative_error": -0.0008545024627610864,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r300_2p85_n4",
+      "geometry": {
+        "parallel_count": 4,
+        "length_um": 9.700000000000001,
+        "continuous_length_um": 9.69778116070725,
+        "target_resistance_ohm": 308.41475039290174,
+        "predicted_resistance_ohm": 308.47763828117826,
+        "relative_error": 0.00020390687603755175,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r300_5p73_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 4.26,
+        "continuous_length_um": 4.257543303492063,
+        "target_resistance_ohm": 308.41475039290174,
+        "predicted_resistance_ohm": 308.5534633616049,
+        "relative_error": 0.00044976113667205553,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r300_5p73_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 9.72,
+        "continuous_length_um": 9.719958442421808,
+        "target_resistance_ohm": 308.41475039290174,
+        "predicted_resistance_ohm": 308.41592357125944,
+        "relative_error": 3.803898342091827e-06,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r400_2p85_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 2.39,
+        "continuous_length_um": 2.392452259540994,
+        "target_resistance_ohm": 409.88135978839773,
+        "predicted_resistance_ohm": 409.61087332177243,
+        "relative_error": -0.0006599140462618669,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r400_2p85_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 6.04,
+        "continuous_length_um": 6.043085814639249,
+        "target_resistance_ohm": 409.88135978839773,
+        "predicted_resistance_ohm": 409.7069226549494,
+        "relative_error": -0.0004255795714603883,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r400_2p85_n4",
+      "geometry": {
+        "parallel_count": 4,
+        "length_um": 13.280000000000001,
+        "continuous_length_um": 13.27608342940192,
+        "target_resistance_ohm": 409.88135978839773,
+        "predicted_resistance_ohm": 409.9924567002704,
+        "relative_error": 0.00027104650948261977,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r400_5p73_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 6.05,
+        "continuous_length_um": 6.054615680881887,
+        "target_resistance_ohm": 409.88135978839773,
+        "predicted_resistance_ohm": 409.6207517884117,
+        "relative_error": -0.0006358132512308545,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r400_5p73_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 13.31,
+        "continuous_length_um": 13.314228718623403,
+        "target_resistance_ohm": 409.88135978839773,
+        "predicted_resistance_ohm": 409.76198291840825,
+        "relative_error": -0.00029124737473085194,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r600_2p85_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 4.19,
+        "continuous_length_um": 4.192466560985517,
+        "target_resistance_ohm": 610.9540471020124,
+        "predicted_resistance_ohm": 610.6765453387831,
+        "relative_error": -0.0004542105327652868,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r600_2p85_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 9.59,
+        "continuous_length_um": 9.594128931578691,
+        "target_resistance_ohm": 610.9540471020124,
+        "predicted_resistance_ohm": 610.7200061810576,
+        "relative_error": -0.00038307450791918995,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r600_2p85_n4",
+      "geometry": {
+        "parallel_count": 4,
+        "length_um": 20.36,
+        "continuous_length_um": 20.36232497625795,
+        "target_resistance_ohm": 610.9540471020124,
+        "predicted_resistance_ohm": 610.8880617277874,
+        "relative_error": -0.00010800382539077891,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r600_5p73_n1",
+      "geometry": {
+        "parallel_count": 1,
+        "length_um": 9.620000000000001,
+        "continuous_length_um": 9.615895154478133,
+        "target_resistance_ohm": 610.9540471020124,
+        "predicted_resistance_ohm": 611.185808304581,
+        "relative_error": 0.00037934310062737175,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    },
+    {
+      "id": "r600_5p73_n2",
+      "geometry": {
+        "parallel_count": 2,
+        "length_um": 20.44,
+        "continuous_length_um": 20.436895769571734,
+        "target_resistance_ohm": 610.9540471020124,
+        "predicted_resistance_ohm": 611.0416793120783,
+        "relative_error": 0.00014343502671199104,
+        "calibrated_domain_um": [
+          0.5,
+          32.0
+        ],
+        "minimum_length_um": 0.5,
+        "length_grid_um": 0.01
+      }
+    }
+  ],
+  "measured_rows": 2700,
+  "current_boundary": {
+    "peak_a": 0.006618872358534262,
+    "source": "docs/data/tx_coupling_state.json",
+    "source_sha256": "0d2888d9cba2d13a5e207b68a98b50ec1b53a8b1424efb05aa9117404cfdad35",
+    "scope": "Two clean-input states; not the full-PVT fixed-network current bound."
+  },
+  "overlay": {
+    "manifest": "results/analog/common/devices/fixed_load_overlay/20261111T164932.207264Z_a0c98cb1/models/overlay.json",
+    "manifest_sha256": "288c6a20f0d20ac25e13d0adf7aa0beb5e472afcf9f4d02793d44786ffbdfcd1",
+    "library": "/home/host/Desktop/workspace/simple_serdes_fork1/results/analog/common/devices/fixed_load_overlay/20261111T164932.207264Z_a0c98cb1/models/libs.tech/ngspice/sky130.lib.spice",
+    "native_5p73_sha256": "6f255b1ba5a50a8ba84d90518bd4cfc382ec566aa432c01572b701cf888684e8",
+    "id": "fixed_high_po_signed_contact_cube_v1"
+  },
+  "max_LF_AC_vs_FD_relative_error": 3.9013370312090956e-09,
+  "passive_physical_minima": {
+    "resistance_ohm": {
+      "id": "r50_5p73_n2",
+      "corner": "ll",
+      "temp_c": -40,
+      "load_drop_grid_v": 0.01,
+      "resistance_ohm": 36.1927877195301
+    },
+    "FD_resistance_ohm": {
+      "id": "r50_5p73_n2",
+      "corner": "ll",
+      "temp_c": -40,
+      "load_drop_grid_v": 0.01,
+      "FD_resistance_ohm": 36.19245049538202
+    },
+    "LF_incremental_resistance_ohm": {
+      "id": "r50_5p73_n2",
+      "corner": "ll",
+      "temp_c": -40,
+      "load_drop_grid_v": 0.01,
+      "LF_incremental_resistance_ohm": 36.192450488278304
+    },
+    "RF_real_admittance_inverse_ohm": {
+      "id": "r50_5p73_n2",
+      "corner": "ll",
+      "temp_c": -40,
+      "load_drop_grid_v": 0.01,
+      "RF_real_admittance_inverse_ohm": 36.192450488278304
+    },
+    "RF_effective_node_capacitance_f": {
+      "id": "generic600",
+      "corner": "hl",
+      "temp_c": -40,
+      "load_drop_grid_v": 0.01,
+      "RF_effective_node_capacitance_f": 9.4108555205066e-16
+    }
+  },
+  "reference_scope": "Controlled 1.23V across only the code15 112k+16*780 resistor string; ideal bypass of other trim segments. No switch MOS, Vbg loop, current mirrors or actual swing qualification.",
+  "geometry_scope": "Calibrated signed A+B*L+C/L on the measured increasing branch, 0.01um grid; body-only film area excludes contacts/guards/routes.",
+  "ungraded": [
+    "actual bandgap/trim-switch/current-loop tracking",
+    "full circuit source/load/coupling state",
+    "other MOS corners/noise/mismatch",
+    "network layout/EM/self-heating",
+    "new implementation adoption"
+  ],
+  "current_density_scope": "Prescribed 6.619mA local two-condition clean-input peak, assumed equal sharing; no fixed-network full-PVT current prediction or EM.",
+  "capacitance_scope": "Port-effective PDK admittance at 2GHz with rail/body AC-grounded, not routed PEX. Reference series networks have distributed RC; RF inverse conductance need not equal DC slope.",
+  "primitive_layout_review": {
+    "delivery": "results/layout_review/fixed_resistors/20261112T045504.981782Z_107af92d/summary.json",
+    "delivery_sha256": "55a2f62601313ca432dbe7fc998054eaf1ba139541b4843db961a9185900d06c",
+    "repeated": "results/layout_review/fixed_resistors/20261112T050006.409424Z_77137c67/summary.json",
+    "repeated_sha256": "11225098fb4d8acf3651c361cd7b9e216328016b14e117fa7d3ae110e984f0dd",
+    "cells": [
+      {
+        "cell": "fixed_2p85_l10",
+        "device": "sky130_fd_pr__res_high_po_2p85",
+        "parameters": {
+          "l_um": 10,
+          "guard": 1,
+          "doports": 1
+        },
+        "check_returncode": 0,
+        "drc_total": 0,
+        "subckt_ports": [
+          "B",
+          "R1",
+          "R2"
+        ],
+        "extracted_devices": [
+          [
+            "X0",
+            "R1",
+            "R2",
+            "B",
+            "sky130_fd_pr__res_high_po_2p85",
+            "l=10"
+          ]
+        ],
+        "ports_used_by_device": true,
+        "extracted_l_um": 10.0,
+        "guard_contact_label_on_psub": true,
+        "pass_review": true
+      },
+      {
+        "cell": "fixed_5p73_l10",
+        "device": "sky130_fd_pr__res_high_po_5p73",
+        "parameters": {
+          "l_um": 10,
+          "guard": 1,
+          "doports": 1
+        },
+        "check_returncode": 0,
+        "drc_total": 0,
+        "subckt_ports": [
+          "B",
+          "R1",
+          "R2"
+        ],
+        "extracted_devices": [
+          [
+            "X0",
+            "R1",
+            "R2",
+            "B",
+            "sky130_fd_pr__res_high_po_5p73",
+            "l=10"
+          ]
+        ],
+        "ports_used_by_device": true,
+        "extracted_l_um": 10.0,
+        "guard_contact_label_on_psub": true,
+        "pass_review": true
+      }
+    ],
+    "scope": "Isolated generated 2p85 and 5p73 devices, nominal l=10um, 3-port guard; no network, PEX electrical qualification, EM or current capacity signoff."
+  },
+  "sources": {
+    "verification/plotting/wide_load_card.py": "9b222ef80e6b1b5d38bc33b4a8035062f0b3911e9e7d1d38b18a446e4053f33b",
+    "analog/common/devices/tb/passive_card/wide_load_card.py": "e6bb7383bc82f862eb7a29988df2addc9b9bcd014ec26f7dbf3b9a5da08437bc"
+  },
+  "figures": {
+    "docs/figures/common/wide_termination_card.png": "b2b566f9eabe6abed20dc5943fc2adeec84b538768897be9975f05dbe0e1106b",
+    "docs/figures/common/wide_load_tracking.png": "c31f72067d1a3b7181aad2cd623683448e9cf0843198dff17e5b831c4c4e9f62"
+  }
+}

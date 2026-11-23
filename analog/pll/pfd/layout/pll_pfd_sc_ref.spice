@@ -1,0 +1,18 @@
+* Official layout reference (Claude, 2026-11-12; docs/layout/tasks.md T4): pll_pfd_sc_dly of
+* analog/pll/pfd/spice/pfd_sc.spice (the 2026-11-11 pll_pfd_sc plus one dlygate4sd1_1 in the reset loop).
+* Hierarchical, library cells by their sky130_fd_sc_hd SPICE subcircuits (pin order A.. VGND VNB VPB VPWR Y as Magic
+* extracts them).  Taps (tapvpwrvgnd_1), decap and fill cells are not in the reference.
+.include "/home/host/.volare/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice"
+.subckt pll_pfd_sc_dly ref fb rst_b up dn vdd vss
+Xup ref vdd clear_b vss vss vdd vdd qu sky130_fd_sc_hd__dfrtp_1
+Xdn fb vdd clear_b vss vss vdd vdd qd sky130_fd_sc_hd__dfrtp_1
+Xdetect qu qd vss vss vdd vdd request_b sky130_fd_sc_hd__nand2_1
+Xd1 request_b vss vss vdd vdd rd1 sky130_fd_sc_hd__inv_1
+Xd2 rd1 vss vss vdd vdd rd2 sky130_fd_sc_hd__inv_1
+Xd3 rd2 vss vss vdd vdd rd3 sky130_fd_sc_hd__dlygate4sd1_1
+Xclear rst_b rd3 vss vss vdd vdd clear_b sky130_fd_sc_hd__and2_1
+Xub1 qu vss vss vdd vdd ub sky130_fd_sc_hd__inv_4
+Xub2 ub vss vss vdd vdd up sky130_fd_sc_hd__inv_8
+Xdb1 qd vss vss vdd vdd db sky130_fd_sc_hd__inv_4
+Xdb2 db vss vss vdd vdd dn sky130_fd_sc_hd__inv_8
+.ends pll_pfd_sc_dly

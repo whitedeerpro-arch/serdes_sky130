@@ -1,0 +1,104 @@
+{
+  "native_source_run": "20261028T084345Z_ngspice_tt_native_closed_phase_harvest",
+  "calibration_checkpoint": "checkpoint_000128UI.tsv",
+  "native_anchor_s": 1.8407255752603973e-08,
+  "anchor_output_delay_ui": 0.31366476897492784,
+  "routes": {
+    "250": {
+      "p": "d08p",
+      "n": "d08n",
+      "polarity": 1,
+      "trim_ff": 100.0,
+      "predicted_phase_ui": 0.0,
+      "source_phase_ui": 0.0
+    },
+    "500": {
+      "p": "d24p",
+      "n": "d24n",
+      "polarity": 1,
+      "trim_ff": 500.0,
+      "predicted_phase_ui": 0.16,
+      "source_phase_ui": 7.783649546973912,
+      "predicted_added_delay_ui": 0.5181399571545064
+    },
+    "1g": {
+      "p": "d32p",
+      "n": "d32n",
+      "polarity": 1,
+      "trim_ff": 160.0,
+      "predicted_phase_ui": 0.32,
+      "source_phase_ui": 0.30873482617441106,
+      "predicted_added_delay_ui": 0.17626789847552918
+    },
+    "2g": {
+      "p": "b0p",
+      "n": "b0n",
+      "polarity": -1,
+      "trim_ff": 270.0,
+      "predicted_phase_ui": 1.0,
+      "source_phase_ui": 0.906127325208684,
+      "predicted_added_delay_ui": 0.23946343193172553
+    }
+  },
+  "targets_ui": {
+    "250": 0.0,
+    "500": 0.16,
+    "1g": 0.32,
+    "2g": 1.0
+  },
+  "method": "Select saved native slave/master/phase polarity, then a real capacitor trim; no per-channel source time translation.",
+  "automatic_phase_selection_hardware": false,
+  "loaded_calibration_pass_1": {
+    "run_id": "20261028T085250Z_ngspice_tt_native_route_loaded_phase_calibration",
+    "phases": {
+      "250": {
+        "measured_phase_ui": 0.0,
+        "phase_error_ui": 0.0,
+        "diff_peak_to_peak_v": 0.498121964
+      },
+      "500": {
+        "measured_phase_ui": 0.1351252801929816,
+        "phase_error_ui": -0.024874719807018424,
+        "diff_peak_to_peak_v": 0.491591273
+      },
+      "1g": {
+        "measured_phase_ui": 0.31508472455794007,
+        "phase_error_ui": -0.0049152754420599635,
+        "diff_peak_to_peak_v": 0.47404053
+      },
+      "2g": {
+        "measured_phase_ui": 0.9573493998502668,
+        "phase_error_ui": -0.04265060014973317,
+        "diff_peak_to_peak_v": 0.487793088
+      }
+    }
+  },
+  "trim_rounding": "Fixed TT prototype capacitor values; nominal fF, not a mapped extracted layout.",
+  "loaded_calibration_refined": {
+    "run_id": "20261028T085754Z_ngspice_tt_native_route_loaded_phase_calibration_refined",
+    "phases": {
+      "250": {
+        "phase_ui": 0.0,
+        "phase_error_ui": 0.0,
+        "diff_pp_v": 0.498109474
+      },
+      "500": {
+        "phase_ui": 0.1614962795937708,
+        "phase_error_ui": 0.0014962795937707926,
+        "diff_pp_v": 0.49038962799999997
+      },
+      "1g": {
+        "phase_ui": 0.31867930562209273,
+        "phase_error_ui": -0.0013206943779072871,
+        "diff_pp_v": 0.47397650999999996
+      },
+      "2g": {
+        "phase_ui": 0.982698076646076,
+        "phase_error_ui": -0.017301923353923946,
+        "diff_pp_v": 0.455793733
+      }
+    },
+    "phase_tolerance_ui": 0.02,
+    "all_phases_within_tolerance": true
+  }
+}

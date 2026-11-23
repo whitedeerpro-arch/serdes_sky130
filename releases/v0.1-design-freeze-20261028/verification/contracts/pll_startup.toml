@@ -1,0 +1,27 @@
+status = "design_handoff_contract_not_final_signoff"
+nominal_reference_hz = 250000000
+nominal_ui_s = 2.5e-10
+precharge_voltage_error_both_states_v = 0.001
+precharge_state_must_start_cold = true
+precharge_and_cp_overlap_allowed = false
+precharge_end_s = 5.12e-7
+pfd_release_s = 5.20e-7
+cp_enable_s = 5.28e-7
+release_kick_is_separate_from_precharge_error = true
+lock_requires_frequency_and_phase = true
+quality_flags_synchronous_to_reference = true
+quality_valid_must_represent_a_new_measurement = true
+quality_timeout_cycles = 128
+coarse_code_frozen_after_handoff = true
+quality_frontend_remains_external = true
+reference_watchdog_clock_must_be_independent = true
+abort_must_remain_asserted_until_observed = true
+reset_deassertion_must_be_synchronous = true
+native_lock_screen = "verification/contracts/pll_lock_screen.toml"
+
+[handoff_tests]
+filter = ["cold_two_state_settle", "finite_reference_impedance", "peak_current", "source_droop", "release_injection", "off_leakage", "normal_filter_poles_with_switch_parasitics"]
+charge_pump = ["disabled_leakage", "enable_kick", "net_charge_vs_phase_after_gating", "no_precharge_overlap"]
+supervisor = ["missing_readiness", "frequency_only_false_lock", "consecutive_good_windows", "stale_quality", "lock_loss", "acquire_timeout", "range_fault", "reference_stop_abort", "restart", "disable"]
+native_loop = ["cold_start_arbitrary_phase", "native_vco_load_on_control", "feedback_state_ambiguity", "sustained_lock", "supply_ramp", "coarse_code_edges"]
+assigned_to_other_models = ["pvt", "phase_noise", "reference_spurs", "mismatch", "layout_parasitics"]

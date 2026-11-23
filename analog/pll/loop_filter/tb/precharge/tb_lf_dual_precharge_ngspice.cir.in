@@ -1,0 +1,31 @@
+Cold LF comparison: same 500 ohm reference source impedance, old single gate versus dual-node precharge
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc.spice"
+.include "@PROJECT_ROOT@/analog/pll/loop_filter/spice/passive_rc_precharge.spice"
+.param supply=1.8 vtarget=1.40 rsource=500 release=5u
+Vdd vdd 0 {supply}
+Vtarget0 target0 0 {vtarget}
+Vtarget1 target1 0 {vtarget}
+Rsrc0 target0 pre0 {rsource}
+Rsrc1 target1 pre1 {rsource}
+Ven en 0 PWL(0 {supply} {release} {supply} {release+100p} 0)
+Xinv en en_b vdd 0 serdes_cmos_inv
+Xold pre0 ctrl0 en en_b vdd 0 serdes_cmos_tgate
+Xlf0 port0 ctrl0 0 pll_loop_filter
+Rport0 port0 0 1T
+Xlf1 port1 ctrl1 z1 pre1 en vdd 0 pll_loop_filter_precharge
+Rport1 port1 0 1T
+.ic v(ctrl0)=0 v(xlf0.z)=0 v(ctrl1)=0 v(z1)=0
+.temp 27
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.control
+set wr_singlescale
+set wr_vecnames
+tran 200p 4u 0 200p
+wrdata waveforms.tsv v(ctrl0) v(xlf0.z) v(ctrl1) v(z1) v(pre0) v(pre1) i(Vtarget0) i(Vtarget1) v(en)
+quit
+.endc
+.end

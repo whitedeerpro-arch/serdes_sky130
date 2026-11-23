@@ -1,0 +1,120 @@
+{
+  "scope": "Two calibrated ideal-PWL loaded TT/FS cuts, eight-bit contract. TT amplitude of five extra stages and FS serial gates only; iso/I-17, full TX/PVT, noise and mismatch remain open.",
+  "generator_sha256": "4b984fcb0e1c922744f41e190cc0ca5432b57be2c31ead45fecc6eff73d9f4ab",
+  "sources": {
+    "tx_buffer_cascade": {
+      "data": "docs/data/tx_buffer_cascade.json",
+      "sha256": "d691b2a8e782bc5c2c8e400c731aeebd05991d1528cc09b8b0681b9c832c8f8d",
+      "catalog_sha256": "d837df629abbc6a72bb8b5b9466922deb49be58a06d97e05b6f925daf244f929",
+      "campaign": "results/analog/tx/buffer_cascade_card/20261110T164906Z_4d3aeb7f"
+    },
+    "tx_buffer_sizing": {
+      "data": "docs/data/tx_buffer_sizing.json",
+      "sha256": "26e346f170776dbd89ee957853e33dc76e11f9eedfd1f602256eac7ca1969136",
+      "catalog_sha256": "a1f51e6782f0e824216fe014be5acc0f2d5612f72db0022c6ec32e9200814947",
+      "campaign": "results/analog/tx/buffer_sizing_card/20261110T170620Z_53de1f41"
+    },
+    "tx_buffer_gain_search": {
+      "data": "docs/data/tx_buffer_gain_search.json",
+      "sha256": "af8592b77d15253f8f3fa9aa123e39b86be266d4e14cbcb283657ee32b0e1012",
+      "catalog_sha256": "58e5627ae211a1103a59fd7856efd1f08ce4d2de828223988994a1d52143c927",
+      "campaign": "results/analog/tx/buffer_sizing_card/20261110T171515Z_55295785"
+    },
+    "tx_buffer_taper": {
+      "data": "docs/data/tx_buffer_taper.json",
+      "sha256": "71cebf78c3e10b9327eed5aa477a38501a2ea569d61fbe66c925ddfaf570290c",
+      "catalog_sha256": "984c76e2078872424c43c7de8f9b3b0b2bd514ae0df444ac2a9b2170a6a4b297",
+      "campaign": "results/analog/tx/buffer_matrix_card/20261110T172325Z_dda392af"
+    }
+  },
+  "rows": [
+    {
+      "label": "baseline",
+      "source": "tx_buffer_cascade",
+      "branch": "baseline",
+      "tt_max_extra_pp_v": 0.5408743299011158,
+      "fs_c2g_pp_v": 0.35108759896678743,
+      "fs_margin_v": 0.10592297098374269,
+      "fs_spread_ui": 0.10522257126700933,
+      "functional": true,
+      "local_combined_observation": false
+    },
+    {
+      "label": "12.8 / 320",
+      "source": "tx_buffer_cascade",
+      "branch": "extra5",
+      "tt_max_extra_pp_v": 0.33537399226782805,
+      "fs_c2g_pp_v": 0.23201867933321174,
+      "fs_margin_v": 0.0697469991723191,
+      "fs_spread_ui": 0.21203622236879063,
+      "functional": true,
+      "local_combined_observation": false
+    },
+    {
+      "label": "14 / 320",
+      "source": "tx_buffer_sizing",
+      "branch": "tail14",
+      "tt_max_extra_pp_v": 0.3703708745610059,
+      "fs_c2g_pp_v": 0.2714396062542139,
+      "fs_margin_v": 0.08370533334521874,
+      "fs_spread_ui": 0.1722487504864373,
+      "functional": true,
+      "local_combined_observation": false
+    },
+    {
+      "label": "14.4 / 320",
+      "source": "tx_buffer_sizing",
+      "branch": "tail14p4",
+      "tt_max_extra_pp_v": 0.38199042901616065,
+      "fs_c2g_pp_v": 0.2823447919240778,
+      "fs_margin_v": 0.0873442882650635,
+      "fs_spread_ui": 0.16345963426667534,
+      "functional": true,
+      "local_combined_observation": false
+    },
+    {
+      "label": "15 / 320",
+      "source": "tx_buffer_gain_search",
+      "branch": "tail15",
+      "tt_max_extra_pp_v": 0.39937292333717145,
+      "fs_c2g_pp_v": 0.29665639511207886,
+      "fs_margin_v": 0.09200338872680343,
+      "fs_spread_ui": 0.15317782156226778,
+      "functional": true,
+      "local_combined_observation": false
+    },
+    {
+      "label": "15.6 / 300",
+      "source": "tx_buffer_gain_search",
+      "branch": "tail15p6_r300",
+      "tt_max_extra_pp_v": 0.39151177773451185,
+      "fs_c2g_pp_v": 0.2881788528648015,
+      "fs_margin_v": 0.09065560524042392,
+      "fs_spread_ui": 0.16674078008098878,
+      "functional": true,
+      "local_combined_observation": false
+    },
+    {
+      "label": "14 \u2192 15.6",
+      "source": "tx_buffer_taper",
+      "branch": "first14",
+      "tt_max_extra_pp_v": 0.3943614144956178,
+      "fs_c2g_pp_v": 0.3069132812347728,
+      "fs_margin_v": 0.09507196940482662,
+      "fs_spread_ui": 0.14616312891278554,
+      "functional": true,
+      "local_combined_observation": true
+    },
+    {
+      "label": "14.4 \u2192 15.6",
+      "source": "tx_buffer_taper",
+      "branch": "first14p4",
+      "tt_max_extra_pp_v": 0.3946098450188771,
+      "fs_c2g_pp_v": 0.3074289111211279,
+      "fs_margin_v": 0.09529168794988181,
+      "fs_spread_ui": 0.14597372000652448,
+      "functional": true,
+      "local_combined_observation": true
+    }
+  ]
+}

@@ -1,0 +1,318 @@
+"""TX r2 clocked by the native PLL r4 frontend, with the start-state detector.
+
+    uv run python analog/tx/serializer/tb/native_clock/run.py probe [points...]
+    uv run python analog/tx/serializer/tb/native_clock/run.py data [points...]
+    uv run python analog/tx/serializer/tb/native_clock/run.py record [points...]
+
+The VCO runs open loop at a fixed Vctrl near 2 GHz (operating points of the
+r3/r4 native checks).  The four serializer clocks come straight from the
+frontend taps (250 MHz = branch-0 /8, 500 MHz = branch-2 /4, 1 GHz = branch-3
+/2, 2 GHz = inverted b0); no idealised edge record.
+
+probe: static data, 40 ns.  VCO frequency, 250 MHz falls at the distribution
+       input, detector code, and clock phases at the serializer inputs
+       relative to the 250 MHz fall (r2 targets 0 / 0.150 / 0.316 / 0.279 UI).
+data:  word k is applied 78.3 ps after the k-th 250 MHz fall after settling, as
+       in the r2 bench; the UI is the measured VCO half period.  With REMAP=s
+       the words are pre-permuted for state s of the measured r2 tables.
+       Checks the in-order contract and the order-free eye/mapping.
+record: as probe, plus the single-ended frontend taps feeding the TX
+       distribution (TAPS), for tb/clock_replay.  --dist/--trims select the
+       distribution present during recording; --bc registers the result as a
+       boundary condition (serdes_flow.boundary) keyed by its input stage.
+register: register existing recordings (--runs point=dir,...) under --bc.
+Environment: TRIMS="250,500,1g,2g" in fF (default r2: 100,500,160,270).
+"""
+import json
+import os
+import sys
+import time
+import tomllib
+from pathlib import Path
+
+import numpy as np
+
+from serdes_flow import boundary, clock, serial, spice
+from serdes_flow.corners import Condition
+from serdes_flow.project import ROOT
+from serdes_flow.waves import crossings
+
+HERE = Path(__file__).resolve().parent
+RESULTS = ROOT / "results/analog/tx/serializer/native_clock"
+EXPECTED = ROOT / "analog/tx/serializer/tb/clock_states/serializer_expected.json"
+PERMUTATIONS = ROOT / "digital/tx/tb/data/serializer_state_permutations.hex"
+POINTS = {  # name: (condition, coarse code, Vctrl) from the r3/r4 native operating points
+    "tt": ("tt_v1800_t27", 5, 1.1791930525417336),
+    "ss_cold": ("ss_v1650_t-40", 5, 1.112),
+    "ss_hot": ("ss_v1650_t85", 6, 1.32),
+    "fs_hot": ("fs_v1650_t85", 5, 1.10),
+    # FF 1.95 V -40 C: from the pll/top/tb/pvt_r4/tuning.py ramp (code 5, 2 GHz at 1.174 V).
+    "ff_cold": ("ff_v1950_t-40", 5, 1.174),
+}
+# V/T operating points keyed by condition tag (a chip has one process; supply and
+# temperature move).  Code / Vctrl for ~2 GHz from pll/top/tb/pvt_r4/tuning.py ramps
+# (results/analog/pll/top/tuning_r4/), the first five from the r3/r4 native checks.
+for _name in ("tt", "ss_cold", "ss_hot", "fs_hot", "ff_cold"):
+    POINTS[POINTS[_name][0]] = POINTS[_name]
+POINTS.update({
+    "tt_v1800_t-40": ("tt_v1800_t-40", 5, 1.265),
+    "tt_v1800_t85": ("tt_v1800_t85", 5, 1.038),
+    "tt_v1950_t-40": ("tt_v1950_t-40", 5, 1.422),
+    "fs_v1650_t-40": ("fs_v1650_t-40", 5, 1.433),
+    "fs_v1950_t-40": ("fs_v1950_t-40", 4, 1.463),
+    "ff_v1950_t85": ("ff_v1950_t85", 6, 1.404),
+    "ss_v1950_t-40": ("ss_v1950_t-40", 5, 1.465),
+    "sf_v1650_t85": ("sf_v1650_t85", 7, 1.083),
+    "sf_v1950_t-40": ("sf_v1950_t-40", 6, 1.179),
+    "ff_v1650_t85": ("ff_v1650_t85", 6, 1.030),
+    "tt_v1650_t85": ("tt_v1650_t85", 6, 1.373),
+})
+# The FS 1.65 V 85 C /8 settles late (r3: final /8 only after ~34-38 ns).
+SETTLE = {"fs_hot": 45e-9, "fs_v1650_t85": 45e-9, "fs_v1650_t-40": 45e-9}
+WORD_DELAY = 78.3e-12
+WORDS = 13                       # 4 training + 8 payload + 1 guard
+
+
+def trims(override=None):
+    v = override or [float(x) for x in os.environ.get("TRIMS", "100,500,160,270").split(",")]
+    return dict(TRIM250=v[0] * 1e-15, TRIM500=v[1] * 1e-15, TRIM1G=v[2] * 1e-15, TRIM2G=v[3] * 1e-15)
+
+
+TAPS = ("p08p", "p08n", "p24p", "p24n", "p32p", "p32n", "pb0p", "pb0n")   # frontend -> TX distribution
+R2_DIST = ROOT / "analog/tx/clock_distribution/spice/cml_clock_distribution_tx_lowov.spice"
+DIST_CELL = "serdes_cml_clock_distribution_tx_lowov"
+DIST_INPUTS = ("s250p", "s250n", "s500p", "s500n", "s1gp", "s1gn", "s2gp", "s2gn")
+
+
+def deck(name, stop, tstart, extra=(), dist=None, trim_ff=None):
+    """dist: file defining serdes_cml_clock_distribution_tx_lowov in place of r2's."""
+    tag, code, vctrl = POINTS[name]
+    c = Condition.parse(tag)
+    d = spice.render(HERE / "tb_native_tx_ngspice.cir.in", **spice.corner_values(c), CODE=code, VCTRL=vctrl,
+                     STOP=stop, MAX_STEP="4p", INITIAL_STATE="", TAIL_SCALE=6, WSF=80, WSELECT=96,
+                     DRIVER_FILE="cml_line_driver_lowvt_enable.spice",
+                     DRIVER_CELL="serdes_tx_cml_line_driver_lowvt_enable", DRIVER_PARAMS="wgatep=32",
+                     **trims(trim_ff))
+    if dist:
+        assert str(R2_DIST) in d
+        d = d.replace(str(R2_DIST), str(Path(dist).resolve()))
+    if extra:
+        d = d.replace("wrdata waveforms.tsv ", "wrdata waveforms.tsv " + " ".join(f"v({x})" for x in extra) + " ", 1)
+    return spice.skip_output_before(spice.binary_output(d), tstart), c
+
+
+def record(names, dist=None, trim_ff=None, bc_id=None):
+    """Static data; also writes the single-ended frontend taps (TAPS) for clock replay.
+
+    The taps depend on what the TX distribution input presents to them, so the
+    recording is registered as a boundary condition keyed by that input stage."""
+    camp = RESULTS / f"record_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    static = stimuli([0.0], json.loads(EXPECTED.read_text())["bits"])
+    jobs = []
+    for n in names:
+        d = camp / n
+        d.mkdir(parents=True)
+        (d / "stimuli.inc").write_text(static)
+        if dist:
+            (d / "dist.spice").write_text(Path(dist).read_text())
+        settle = SETTLE.get(n, 30e-9)
+        dk, _ = deck(n, f"{(settle + 12e-9) * 1e9:.0f}n", f"{(settle - 2e-9) * 1e9:.0f}n", TAPS,
+                     d / "dist.spice" if dist else None, trim_ff)
+        jobs.append((dk, d / "run", dict(files={"stimuli.inc": d / "stimuli.inc"},
+                                         meta=dict(point=n, trims=trims(trim_ff), settle_s=settle,
+                                                   dist=str(dist) if dist else "r2"))))
+    for ex in spice.run_many(jobs, workers=4):
+        assert ex.ok, (ex.run_dir, ex.log_failures)
+    print(camp.relative_to(ROOT))
+    if bc_id:
+        register_bc(bc_id, {n: camp / n / "run" for n in names}, dist)
+    return camp
+
+
+def register_bc(bc_id, runs, dist=None, validation=None):
+    """Register (or extend) the boundary condition for recorded taps."""
+    pll = tomllib.loads((ROOT / "config/pll_working_revision.toml").read_text())["revision"]
+    dist_text = Path(dist).read_text() if dist else R2_DIST.read_text()
+    load = boundary.input_stage_signature(dist_text, DIST_CELL, DIST_INPUTS)
+    points = {}
+    for n, run in runs.items():
+        tag, code, vctrl = POINTS[n]
+        ex = json.loads((Path(run) / "execution.json").read_text())
+        w = spice.Waves(Path(run) / "waveforms.raw")
+        f = clock.period_stats(w.t, w["pb0p"] - w["pb0n"], ex["settle_s"], w.t[-1])["frequency_hz"]
+        e8, p8 = crossings(w.t, w["p08p"] - w["p08n"])
+        rises = e8[(p8 > 0) & (e8 > ex["settle_s"])]
+        f250 = 1 / float(np.median(np.diff(rises))) if len(rises) >= 2 else 0.0
+        if abs(f / f250 / 8 - 1) > 0.005:          # divider not settled or not dividing by 8
+            raise RuntimeError(f"{n}: VCO {f/1e9:.4f} GHz vs 250 MHz tap {f250/1e6:.2f} MHz (ratio {f/f250:.3f})")
+        points[n] = boundary.run_record(run, condition=tag, code=code, vctrl_v=vctrl, settle_s=ex["settle_s"],
+                                        vco_hz=f, trims_f=ex["trims"])
+    entry = dict(
+        id=bc_id, kind="voltage_replay", points=points,
+        description="PLL r4 frontend taps feeding the TX clock distribution, VCO open loop at fixed Vctrl, "
+                    "static data; recorded with the TX r2 serializer/driver as the rest of the load",
+        upstream=dict(module="pll", revision=pll, netlist="analog/pll/top/spice/clock_frontend_r4.spice",
+                      bench="analog/tx/serializer/tb/native_clock/tb_native_tx_ngspice.cir.in"),
+        nodes=dict(p08="250 MHz (branch 0 /8) -> s250", p24="500 MHz (branch 2 /4) -> s500",
+                   p32="1 GHz (branch 3 /2) -> s1g", pb0="buffered VCO phase 0, inverted -> s2g"),
+        load=dict(cell=DIST_CELL, inputs=list(DIST_INPUTS), source=str(dist or R2_DIST.relative_to(ROOT)), **load),
+        processing="clock_replay/run.py: one steady-state 250 MHz period cut at a p08 falling crossing >= 3 ns "
+                   "after settle, time-scaled to exactly 4 ns, periodic PWL (r=0), Douglas-Peucker 0.3 mV",
+        validation=validation,
+        valid_while=[f"PLL working revision == {pll}",
+                     f"consumer {DIST_CELL} input-stage signature == load.sha",
+                     "open loop, fixed Vctrl: no loop dynamics, no noise; consumer must not change the frontend"],
+    )
+    boundary.register(entry, extend=True)
+    print(f"registered boundary condition {bc_id} ({sorted(boundary.get(bc_id)['points'])})")
+
+
+def stimuli(edges, bits, remap=None):
+    """PWL sources d0..d15: word k on input i is bits[16k + i], switching at edges[k].
+
+    remap: permutation m (slot j carries input m[j]); input m[j] then carries bit j.
+    """
+    m = remap or list(range(16))
+    lines = []
+    for j in range(16):
+        vals = [bits[16 * k + j] for k in range(len(edges))]
+        pts = [f"0 {'{supply}' if vals[0] else 0}"]
+        for k in range(1, len(edges)):
+            if vals[k] != vals[k - 1]:
+                a, b = ("{supply}", 0) if vals[k - 1] else (0, "{supply}")
+                pts.append(f"{edges[k] - 10e-12:.14e} {a} {edges[k] + 10e-12:.14e} {b}")
+        lines.append(f"Vd{m[j]} d{m[j]} 0 PWL({' '.join(pts)})")
+    return "\n".join(lines) + "\n"
+
+
+def _phases(w, t0, t1):
+    ref = clock.edges(w.t, w["d250"], -1, t0, t1)
+    ui = None
+    out = {}
+    for v in ("d250", "d500", "d1g", "latchclk"):
+        e = {q: clock.edges(w.t, w[v], q, t0, t1) for q in (1, -1)}
+        out[v] = {"rise" if q == 1 else "fall": e[q][np.searchsorted(e[q], ref[0])] - ref[0] for q in (1, -1)}
+    return ref, out
+
+
+def probe(names):
+    camp = RESULTS / f"probe_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    bits = json.loads(EXPECTED.read_text())["bits"]
+    static = stimuli([0.0], bits)          # word 0 held for the whole run
+    jobs = []
+    for n in names:
+        d = camp / n
+        d.mkdir(parents=True)
+        (d / "stimuli.inc").write_text(static)
+        settle = SETTLE.get(n, 30e-9)
+        dk, _ = deck(n, f"{(settle + 10e-9) * 1e9:.0f}n", f"{(settle - 10e-9) * 1e9:.0f}n")
+        jobs.append((dk, d / "run", dict(files={"stimuli.inc": d / "stimuli.inc"}, meta=dict(point=n, trims=trims()))))
+    for ex in spice.run_many(jobs, workers=4):
+        assert ex.ok, (ex.run_dir, ex.log_failures)
+    return analyse_probe(camp, names)
+
+
+def analyse_probe(camp, names):
+    rows = []
+    for n in names:
+        _, c = deck(n, "40n", "20n")
+        settle = SETTLE.get(n, 30e-9)
+        w = spice.Waves(camp / n / "run/waveforms.raw")
+        t0, t1 = settle - 2e-9, settle + 10e-9
+        f = clock.period_stats(w.t, w["pb0"], t0, t1)["frequency_hz"]
+        ui = 0.5 / f
+        falls = clock.edges(w.t, w["src250"], -1, t0)
+        ref, ph = _phases(w, t0, t1)
+        tail = w.t > settle + 2e-9
+        code = [int(np.mean(w["bit" + b][tail]) > c.supply / 2) for b in "abc"]
+        static_ok = all(np.ptp(w["bit" + b][tail]) < 0.2 * c.supply for b in "abc")
+        row = dict(point=n, condition=c.tag, vco_hz=f, ui_s=ui, src250_falls_s=falls.tolist(), code=code,
+                   code_static=static_ok, phase_ui={k: {e: x / ui for e, x in v.items()} for k, v in ph.items()},
+                   trims=trims())
+        rows.append(row)
+        print(f"{n:8s} VCO {f/1e9:.5f} GHz  code {''.join(map(str, code))} static {static_ok}  phases [UI, ref d250 fall]: "
+              + "  ".join(f"{k} r{v['rise']:.3f}/f{v['fall']:.3f}" for k, v in row["phase_ui"].items()), flush=True)
+    (camp / "summary.json").write_text(json.dumps(rows, indent=2, default=float))
+    return camp
+
+
+def _latest_probes():
+    """Most recent probe result per point."""
+    probes = {}
+    for pcamp in sorted(RESULTS.glob("probe_*")):
+        f = pcamp / "summary.json"
+        if f.exists():
+            for r in json.loads(f.read_text()):
+                probes[r["point"]] = dict(r, campaign=str(pcamp))
+    return probes
+
+
+def data(names, remap_state=None):
+    probes = _latest_probes()
+    camp = RESULTS / f"data_{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
+    exp = json.loads(EXPECTED.read_text())
+    remap = None
+    if remap_state is not None:
+        rows = [l.split() for l in PERMUTATIONS.read_text().splitlines() if not l.startswith("//")]
+        remap = [int(x, 16) for x in rows[remap_state]]
+    jobs, meta = [], {}
+    for n in names:
+        p = probes[n]
+        assert p["trims"] == trims(), "probe was run with other trims"
+        period = 16 * p["ui_s"]
+        first = [x for x in p["src250_falls_s"] if x > SETTLE.get(n, 30e-9)][0]
+        edges = [first + WORD_DELAY + k * period for k in range(WORDS)]
+        stop = edges[-1] + period
+        d = camp / n
+        d.mkdir(parents=True)
+        (d / "stimuli.inc").write_text(stimuli(edges, exp["bits"], remap))
+        dk, _ = deck(n, f"{stop * 1e9:.3f}n", f"{(edges[0] - 4e-9) * 1e9:.3f}n")
+        jobs.append((dk, d / "run", dict(files={"stimuli.inc": d / "stimuli.inc"},
+                                         meta=dict(point=n, trims=trims(), remap_state=remap_state, probe=p["campaign"]))))
+        meta[n] = (edges[0], p["ui_s"])
+    for ex in spice.run_many(jobs, workers=4):
+        assert ex.ok, (ex.run_dir, ex.log_failures)
+    out = []
+    for n in names:
+        t0, ui = meta[n]
+        seq = serial.Sequence(np.asarray(exp["bits"][: 16 * WORDS], dtype=int), t0, ui)
+        w = spice.Waves(camp / n / "run/waveforms.raw")
+        r = dict(point=n, remap_state=remap_state, ui_s=ui, nodes={})
+        for node, vec in (("serializer", "dout"), ("pad", "line_tx"), ("far", "line_rx")):
+            r["nodes"][node] = dict(contract=serial.check(w.t, w[vec], seq, 128)[0],
+                                    order_free=serial.bit_mapping(w.t, w[vec], seq))
+        s = r["nodes"]["serializer"]
+        print(f"{n:8s} remap {remap_state}  eye {s['order_free']['eye_min_abs_v']*1e3:.1f} mV  spread "
+              f"{s['order_free']['edge_spread_ui']:.3f} UI  far eye {r['nodes']['far']['order_free']['eye_min_abs_v']*1e3:.1f} mV  "
+              f"{'IN ORDER' if s['order_free']['in_order'] else s['order_free']['mapping']}  "
+              f"contract draft {serial.meets_draft(s['contract'])}", flush=True)
+        out.append(r)
+    (camp / "summary.json").write_text(json.dumps(out, indent=2, default=float))
+
+
+if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("step", choices=("probe", "record", "register", "reanalyse_probe", "data"))
+    ap.add_argument("points", nargs="*")
+    ap.add_argument("--dist", help="record: file defining the TX distribution (default r2)")
+    ap.add_argument("--trims", help="record: fF 250,500,1g,2g (default TRIMS env or r2 100,500,160,270)")
+    ap.add_argument("--bc", help="record/register: boundary-condition id to register the taps under")
+    ap.add_argument("--runs", help="register: comma-separated point=run_dir of existing recordings")
+    ap.add_argument("--validation", help="register: JSON validation note")
+    a = ap.parse_args()
+    names = a.points or list(POINTS)
+    trim_ff = [float(x) for x in a.trims.split(",")] if a.trims else None
+    if a.step == "probe":
+        probe(names)
+    elif a.step == "record":
+        record(names, a.dist, trim_ff, a.bc)
+    elif a.step == "register":
+        runs = dict(x.split("=", 1) for x in a.runs.split(","))
+        register_bc(a.bc, {k: ROOT / v for k, v in runs.items()}, a.dist,
+                    json.loads(a.validation) if a.validation else None)
+    elif a.step == "reanalyse_probe":
+        analyse_probe(sorted(RESULTS.glob("probe_*"))[-1], names)
+    elif a.step == "data":
+        rs = os.environ.get("REMAP")
+        data(names, int(rs) if rs else None)

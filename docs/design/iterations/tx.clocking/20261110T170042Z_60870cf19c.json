@@ -1,0 +1,31 @@
+{
+  "id": "20261110T170042Z_60870cf19c",
+  "module": "tx.clocking",
+  "date": "2026-11-11",
+  "timestamp": "2026-11-10T17:00:42.186971+00:00",
+  "title": "五级统一减幅在FS失去眼图余量，不采用",
+  "phase": "conclusion",
+  "problem": "单级减幅有效，但相邻级增益与末级时钟驱动需要同时满足。",
+  "model": "仿真前拟合未改Xe3的五组幅度，预测两级输出298/262mV；实际误差约+3.5%。幅度模型没有关闭时序资格。",
+  "changes": "比较Xe2/Xe3两级及Xe0到Xe4五级WN24/WT12.8/R320；iso和输出不改。",
+  "validation": "TT/FS基线复现。五级FS e4最弱周期217.34mV、c2g230.56mV；八位零错，但裕量69.75mV/散布0.21204UI均失败。两级FS96.29mV/0.12671UI满足局部门槛，TT e4仍449mV超幅。",
+  "conclusion": "不采用五级12.8/320，不以零采样错或幅度达标关闭I17；下一轮保留更多增益，结合幅度上界与时序定心。",
+  "attachments": [
+    {
+      "title": "级联结论",
+      "path": "docs/design/tx_buffer_cascade.md"
+    },
+    {
+      "title": "实测及局部门槛",
+      "path": "docs/data/tx_buffer_cascade.json"
+    },
+    {
+      "title": "沿链幅度与时序",
+      "path": "docs/figures/tx/ingress/tx_buffer_cascade.png"
+    },
+    {
+      "title": "仿真前规划",
+      "path": "docs/data/tx_buffer_cascade_plan.json"
+    }
+  ]
+}

@@ -1,0 +1,244 @@
+{
+  "release": "v0.1-design-freeze-20261028",
+  "created_utc": "2026-10-28T12:27:51.891800+00:00",
+  "scope": "design_baseline_not_signoff",
+  "pdk_installation_id": "c6d73a35f524070e85faff4a6a9eef49553ebc2b",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "cff7e8c64d3bd268c738e540e17fa33a859f0589ceda8f583353343d253e5c53"
+    },
+    {
+      "path": "analog/common/cml_buffer/spice/cml_buffer.spice",
+      "sha256": "ed19598c56a902210ea0df4ed0ace36c5944cee674f2d19ad2481b7c5d30c2c9"
+    },
+    {
+      "path": "analog/common/cml_buffer/spice/cml_delay_resistive.spice",
+      "sha256": "f5e8c9f6506253c55483e182fe019972898b6e35d179855ff7def8ebbc9d5cf9"
+    },
+    {
+      "path": "analog/common/cml_mux/spice/cml_data_latch.spice",
+      "sha256": "86ee12a55783d1224a684cef3459839e37a18d4b63688b9997f26c45caa0fc7a"
+    },
+    {
+      "path": "analog/common/cml_mux/spice/cml_latched_mux2.spice",
+      "sha256": "1d1442c00a24cfb810882df5240e8ade3e284aabc1a46fc030eae2d710195979"
+    },
+    {
+      "path": "analog/common/cml_mux/spice/cml_mux2.spice",
+      "sha256": "abe9e919a050c6054b0fafbaea72748364767760c756b32797718af93437d3db"
+    },
+    {
+      "path": "analog/common/cml_mux/spice/cml_mux2_cmos_select.spice",
+      "sha256": "2b3f416e8df0bba3e5eb1cad317f4efa7966b59c6dcefcd5d46c09d0278d7a23"
+    },
+    {
+      "path": "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
+      "sha256": "842889a925f20b0e473da639c27cb263088848783f9f1ff3cc46c090014f7294"
+    },
+    {
+      "path": "analog/common/cmos_to_cml/spice/cmos_to_cml_data.spice",
+      "sha256": "53872fa74b1e5448cb57a00673afa5bc0e79f16ce6d2b69946dbf2e6209e27a6"
+    },
+    {
+      "path": "analog/common/devices/spice/cmos_dff_reset.spice",
+      "sha256": "2f4b6cb4497236e2c3687d5546b53e8bfced7f6226c6203827bb2beac4cba124"
+    },
+    {
+      "path": "analog/common/devices/spice/cmos_logic.spice",
+      "sha256": "a73121dddcc5cdbb3b24ab0706e69a83bfe01da04635c9a083da98ba95497517"
+    },
+    {
+      "path": "analog/common/devices/spice/sky130_primitives.spice",
+      "sha256": "b4f56540ccf4f7bd23303e908eab3a6239d607f7eb65688b63638a1349601e02"
+    },
+    {
+      "path": "analog/pll/cp/spice/charge_pump.spice",
+      "sha256": "36f2af1084592fc8c1dd0f61b2c794e67074a5e3af60d56419cab316c47780cc"
+    },
+    {
+      "path": "analog/pll/cp/spice/charge_pump_enabled.spice",
+      "sha256": "6e176d019338a0358be6790b20ad22e425204976d08ddf178de799fc55398bcb"
+    },
+    {
+      "path": "analog/pll/cp/spice/charge_pump_source_switched.spice",
+      "sha256": "879b321f0e573e8ffb83646be39c3304241ce6119f63b7c42e1415e0b6481983"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_binary_chain.spice",
+      "sha256": "5ec403b77b2ecd470586a95fcd5d82e7e04aa9c3a350f355f91a556919e8ea70"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_dff.spice",
+      "sha256": "e2111ab30f96f6afd55a0a1f82bc0754ffe12e231ca0251bdf4b133ea2665fe7"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_div2.spice",
+      "sha256": "ca287beb9cc79b1daca5936a4b3223080a0c97b6697e4c0462eedee4c4f27f77"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_divider_programmable.spice",
+      "sha256": "5bb07c577393c1f6a7e3714499a8da75237d56af037ae09d8b42df10db637f4e"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_latch.spice",
+      "sha256": "a81cd479ef12277601c1838efeaea8b6872e94af7ff1fc41fe1fe33266bb82a9"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_logic.spice",
+      "sha256": "37f3dbcd99f7f239a572fc39c34992a10157efd03ba0f5e3584398a760662afa"
+    },
+    {
+      "path": "analog/pll/divider/spice/cml_prescaler8.spice",
+      "sha256": "71f8939239cb661d7bf5c58828bfd1e5d7bf3e2c654e91d3d8011ba46d5819a5"
+    },
+    {
+      "path": "analog/pll/divider/spice/cmos_divider_programmable.spice",
+      "sha256": "a60b227d59f663048b43662218b0723410f1de57335eb8d0dbea705656809ea4"
+    },
+    {
+      "path": "analog/pll/divider/tb/logic_truth/stimuli/cmos_truth_vectors.spice",
+      "sha256": "03d69f0174451ad4e74e25c4e6ebd226b451c7d95eac351b7c9e1f2092d0483a"
+    },
+    {
+      "path": "analog/pll/loop_filter/spice/passive_rc.spice",
+      "sha256": "ceafdb707a601605cc66cc4fb78e0c152c3175808ca5662902725905ef4d38bc"
+    },
+    {
+      "path": "analog/pll/loop_filter/spice/passive_rc_precharge.spice",
+      "sha256": "9be852d7b1252d066315d8899167fc158c9e53a0e1af57e81d6e16ef3ed826f1"
+    },
+    {
+      "path": "analog/pll/pfd/spice/cmos_dff_reset.spice",
+      "sha256": "2c45c26d2a2b737ea2bb8fe4391f9d04a4c48d45302535074c521c265a0e9143"
+    },
+    {
+      "path": "analog/pll/pfd/spice/pfd_cmos.spice",
+      "sha256": "d7d68ed85f383ad1bc57634ba02fb87a6c082a0fbd68bb8fbf86d7b8eaa7f482"
+    },
+    {
+      "path": "analog/pll/top/spice/clock_frontend_balanced.spice",
+      "sha256": "62f4fe5873f4072baf0a443ba3ae194e770604555399fa17066e3f85dfac0b75"
+    },
+    {
+      "path": "analog/pll/top/spice/pll_balanced_core.spice",
+      "sha256": "dfeaee24b9b640b5d88b732c306a895f023dd7893e57151f211d4e3a1f5b3f3d"
+    },
+    {
+      "path": "analog/pll/top/spice/pll_balanced_startup_core.spice",
+      "sha256": "21121636b87c3c3264258c5523316e01f850017a1d20a291af9994b5b0b6d020"
+    },
+    {
+      "path": "analog/pll/vco/behavioral/vco_feedback_model.spice",
+      "sha256": "a9311d39d8e1b6ed0d6b02877a7c719df5dfc118c7558e9f141187cc4655751f"
+    },
+    {
+      "path": "analog/pll/vco/spice/cap_bank_3b.spice",
+      "sha256": "3939c05be2e6105318b77a76267cbfc0f836abee12226c0cd9c0350ec2bb476d"
+    },
+    {
+      "path": "analog/pll/vco/spice/vco_ring4.spice",
+      "sha256": "029440dc94a7855f8c75f88ff4d03b8b466978ae80c1b35fd69aa0b94937fa72"
+    },
+    {
+      "path": "analog/tx/clock_distribution/spice/cml_clock_distribution.spice",
+      "sha256": "865846257d56629fdad0d04900d7f69005466a196f305048f053647f8fe9459b"
+    },
+    {
+      "path": "analog/tx/serializer/spice/serializer16_retimed.spice",
+      "sha256": "4cc027be5a68efe895113a02b80944a7ce8dad5e0143d6bdb582c6c388d5755c"
+    },
+    {
+      "path": "analog/tx/serializer/spice/serializer16_tree.spice",
+      "sha256": "327b87c8a50b7bf16164be96160d0c4d5c969251297bb6ef6c1f704f902674d7"
+    },
+    {
+      "path": "analog/tx/serializer/spice/serializer16_tree_cmos_select.spice",
+      "sha256": "8bacfc0d6beb752875500c8f3b6d5d9bb29945e33c52a8e2b503ecab4619fa75"
+    },
+    {
+      "path": "config/clock_division.toml",
+      "sha256": "2af93215eb3cfaced47948ee1a2090fcf383b7e9dbf0e7109404e21ec74fdf4c"
+    },
+    {
+      "path": "config/clock_extraction.toml",
+      "sha256": "4a45d7cda81daee4c679757b555841ab33d3e49aeb28c7e0ca9eb69cd91523f2"
+    },
+    {
+      "path": "config/design_release.toml",
+      "sha256": "6b11d73dde3fa7582cb04cfbe9b60d24041479d29fd69c0326f9601ae00381ca"
+    },
+    {
+      "path": "config/pdk.toml",
+      "sha256": "2694ed33d49f877af4eefaffa8d3d158c4c5bda867674618d3e8bc9fb008c3c9"
+    },
+    {
+      "path": "config/pll_loop_prototype.toml",
+      "sha256": "1c8b5848aaeb55e3637ff262d801c877b16cd2bf8c5073502bfdd00cb86c6508"
+    },
+    {
+      "path": "config/pll_startup.toml",
+      "sha256": "d9f013c7fe7c401f9fc19b6da282f2fe2c445fd1bd4964f2ded670584625b957"
+    },
+    {
+      "path": "config/serializer16.toml",
+      "sha256": "57cc4cf1316a83e7a50856a1b0e972635f0bdd9e8d027645dac11029c073a562"
+    },
+    {
+      "path": "config/tools.toml",
+      "sha256": "bda1e107f7614ab42ccc37a1cd8e7340ba25e24bec11e0dae851e20e5d400ce2"
+    },
+    {
+      "path": "config/vco_coarse_calibration.toml",
+      "sha256": "92d275f7c734ba6f0620a0f01ede91334ce32855d9234deea16ef24e834280d6"
+    },
+    {
+      "path": "digital/pll/rtl/pll_startup_supervisor.sv",
+      "sha256": "c89768eecce56a363049537c51a480333b4bab3c4658734c1dcf4b9a299fd11b"
+    },
+    {
+      "path": "digital/pll/tb/tb_pll_startup_default_timing.sv",
+      "sha256": "9976ab9b74b20740bc48884cfe0000fd70ec060429a215acfb98988952844647"
+    },
+    {
+      "path": "digital/pll/tb/tb_pll_startup_supervisor.sv",
+      "sha256": "269954c00ff9cc561143254a267fb71244380dc5796c4ca9f1f6fc4899f1476a"
+    },
+    {
+      "path": "evidence/native_pll_physical_phase_source.json",
+      "sha256": "172345a268dfd0ccc8af857543b22c90389ae39ff7ba9ab951bfb7f89cba202c"
+    },
+    {
+      "path": "evidence/physical_clock_phase_route.json",
+      "sha256": "2ecc6114d4b400cea76d450e4186028560af0c9e1cfd599066fc0817d78659dd"
+    },
+    {
+      "path": "evidence/pll_dual_precharge_results.json",
+      "sha256": "b7d94a663b06f0fe5547d2cc695c78ebf875a0c5726353ad7435a2cec24c26da"
+    },
+    {
+      "path": "evidence/pll_startup_mixed_results.json",
+      "sha256": "e6bd31ffe202c55b66ce0c4c67c963b1ba542bb06d64bcd46974b2a2043ecd6d"
+    },
+    {
+      "path": "evidence/pll_tracking_assessment.json",
+      "sha256": "e9befa3833a6191434b5658e8d87975bd54080b75f395b61ab2cc12e8e3548a6"
+    },
+    {
+      "path": "evidence/serializer_timing_diagnosis.json",
+      "sha256": "5d01a028d7f814f545dae94797726dd0f515aea4c2257d6906b15709f6d4648d"
+    },
+    {
+      "path": "verification/contracts/eye_fold.toml",
+      "sha256": "5833f6a7435561d65cf6a8f67f4fe9176265716cf0a3e635cda280172f0ee407"
+    },
+    {
+      "path": "verification/contracts/pll_lock_screen.toml",
+      "sha256": "1165c79d77a2740fac2c16a02371e754d2c5f029ded951e4b8621caf17169b93"
+    },
+    {
+      "path": "verification/contracts/pll_startup.toml",
+      "sha256": "a204d80b56189acc8f39b13540fac765bc38976a8eb606f352eb20265c6513b8"
+    }
+  ]
+}

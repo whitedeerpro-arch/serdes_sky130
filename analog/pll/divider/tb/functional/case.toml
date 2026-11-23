@@ -1,0 +1,19 @@
+id = "functional"
+dut = "analog/pll/divider"
+level = "block"
+status = "prototype"
+purpose = "保留固定 CML ÷2 单元基础功能台（早期全 CML 可编程链与 250 MHz CMOS M=1–16 后级台已于 2026-11-20 归档退役）。"
+analyses = ["tran"]
+measurements = ["division_ratio","output_frequency","duty_cycle","power"]
+shared_stimuli = ["verification/stimuli/spice/cml_diff_clock.spice"]
+
+[implementation]
+view = "schematic"
+simulator = "ngspice47"
+testbench = "tb_cml_div2_ngspice.cir.in"
+
+[sweep]
+parameters = ["corner", "temperature", "maximum_step"]
+
+[requirements]
+status = "unspecified"

@@ -1,0 +1,17 @@
+id = "rx_real_PI_CTLE_samples"
+corner = "tt"
+temperature_c = 27
+static_codes = [0, 4, 8]
+anchor_hz = 2000000000
+ctle_code = 3
+ctle_input_common_mode_v = 0.9
+ctle_input_differential_vpp_v = 0.35
+reference_ctle_load_f_per_leg = 2e-14
+sampler_output_load_f_per_leg = 5e-15
+static_stop_s = 1.6e-8
+rtl_trace_wrap_stop_s = 4e-8
+rtl_control_clock_hz = 250000000
+rtl_control_slew_s = 2e-11
+physical_CDC_and_control_driver_implemented = false
+template = "analog/rx/sampler/tb/pi_loaded/tb_rx_sampler_pi_loaded_ngspice.cir.in"
+scope = "ideal_anchors_and_CTLE_input_source; actual_PI_and_sampler_clock_load; no_PCB_or_PLL"

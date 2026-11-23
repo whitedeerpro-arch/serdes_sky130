@@ -1,0 +1,2225 @@
+{
+  "checked_local_date": "2026-11-06",
+  "report": "docs/overview/development_map.md",
+  "sources": [
+    {
+      "path": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+      "sha256": "5a973c607ab337e5d84c665a45d2092f7e6cab9871c9281452679e0e1a17ad86"
+    },
+    {
+      "path": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+      "sha256": "6225038a1a2b676b15e4b92c264490b5162be075ef9f069aaa7d09e02d78fb8b"
+    },
+    {
+      "path": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T122937Z/summary.json",
+      "sha256": "e9755661cc9696cbbfe13e5a54b64fd1b92a4cf8fa1de1f64c225bfd58f5e877"
+    },
+    {
+      "path": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+      "sha256": "8f55e392d816c830a417a52f190afee9c83773de468f40bad00d395cb479b2a1"
+    },
+    {
+      "path": "results/analog/rx/sampler/readout_deser/20261103T124408Z_ac_trim32/summary.json",
+      "sha256": "e68450434a0336a55d4be0a28c120fdbc35e12859d6f23530efb975826c5f038"
+    },
+    {
+      "path": "results/analog/rx/pi/rotation_pvt/20261104T061420Z/summary.json",
+      "sha256": "692c2b81a3e6a590cce7367dc0c80aa9a0b69a4c0f077830928f856f7c8f40f0"
+    },
+    {
+      "path": "results/analog/rx/pi/rotation_pvt/20261104T062821Z/summary.json",
+      "sha256": "fbf295b98908222aba29b7ab4380fae22123324285251815b322caf0b6318271"
+    },
+    {
+      "path": "results/analog/rx/ctle/offset_mc/20261102T204241Z/summary.json",
+      "sha256": "a43e3d94e5ea53737c66d55d16f788cf6f58ca4db138dfbc4e7d80b0a00b9fdb"
+    },
+    {
+      "path": "results/analog/rx/sampler/offset_mc/20261103T082620Z_pdkr_ac_trim_cal/summary.json",
+      "sha256": "1691d1109bd29a589e5b8b4a9c250fd3efd53df938ee653a0a7f403b21eb3578"
+    },
+    {
+      "path": "results/analog/rx/sampler/offset_mc/20261103T083830Z_pdkr_ac_trim_cal/summary.json",
+      "sha256": "4d12691cbbc809e1f0a95e4555bab363e7810f7e9312100a1ad787fb23070fb9"
+    },
+    {
+      "path": "results/analog/rx/sampler/offset_mc/20261103T085053Z_pdkr_ac_trim_cal/summary.json",
+      "sha256": "9c885f7b7166d42986c94113a561b70aea8c3714d2b9576a06bb9dbca443800c"
+    },
+    {
+      "path": "results/analog/bias/dist_pvt/20261103T212249Z/summary.json",
+      "sha256": "1c8308b3ec62cb53660f7c79fe0cd85b3977bcd5c400030b11c582e61b2837a2"
+    },
+    {
+      "path": "results/analog/bias/dist_mc/20261103T212743Z/summary.json",
+      "sha256": "3bbcc437ce0df62135ad7d80f104dea62a71aea76c0f443b9da16684b7d52e27"
+    },
+    {
+      "path": "results/analog/bias/bandgap_startup/20261104T063625Z_ramp1u_dist/summary.json",
+      "sha256": "8437af3d1e744689cd9513dd8324d50c22c7e08e03eeb3c17c7ec9679780f1d8"
+    },
+    {
+      "path": "results/analog/bias/bandgap_startup/20261104T064156Z_ramp1u_dist/summary.json",
+      "sha256": "4e2130d32f7db9e32fc5ecf8385cdc30e5c720a86708ac6ab0d9a9cfd8c71283"
+    },
+    {
+      "path": "results/analog/bias/pbuf_pvt/20261104T061421Z/summary.json",
+      "sha256": "998acc78903fba61121dd7dc92ab9cc6097549522c78617d1395b6abfdac12cd"
+    },
+    {
+      "path": "results/analog/bias/pbuf_pvt/20261104T072912Z/summary.json",
+      "sha256": "80613c25c959158d3a29bf06e0ba7d3a0025b09d8b27c7f0e99eee39e81532b6"
+    },
+    {
+      "path": "docs/data/clocking_progress_20261106.json",
+      "sha256": "a291c6bb991a088de55396b085d2d60f9a6a902469a8f704e155317e36cd9c07"
+    }
+  ],
+  "scope": "Selected summary identity/cardinality checks; no raw-wave remeasurement or electrical signoff; historical variants kept distinct",
+  "rx_window": {
+    "tt": {
+      "conditions": 45,
+      "full": 6,
+      "gate": 39,
+      "full_scan_min_ui": 0.875,
+      "rows": {
+        "tt_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5717911943114493,
+          "ck_pp_min": 0.8765147121897159,
+          "power_mw": 19.101874755257686
+        },
+        "tt_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5489557499374114,
+          "ck_pp_min": 0.6782966738676269,
+          "power_mw": 19.22164828162229
+        },
+        "tt_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5282768294273288,
+          "ck_pp_min": 0.5170699124152652,
+          "power_mw": 19.033537642610558
+        },
+        "tt_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.580127926954837,
+          "ck_pp_min": 0.9156616486817207,
+          "power_mw": 21.454534499929583
+        },
+        "tt_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1800_t27",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 14,
+          "inbuf_pp_min": 0.555846721711738,
+          "ck_pp_min": 0.6878267443572048,
+          "power_mw": 21.52436563482734
+        },
+        "tt_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5346129858666893,
+          "ck_pp_min": 0.5523276399202808,
+          "power_mw": 21.288770020583303
+        },
+        "tt_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5884056871666112,
+          "ck_pp_min": 0.9480253024771639,
+          "power_mw": 23.836337013881934
+        },
+        "tt_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5629647256956849,
+          "ck_pp_min": 0.7514582047369482,
+          "power_mw": 23.88243596935368
+        },
+        "tt_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "tt_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5411067332040109,
+          "ck_pp_min": 0.5829555619840188,
+          "power_mw": 23.594726419791783
+        },
+        "ss_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1650_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.5542706318595858,
+          "ck_pp_min": 0.717952876135213,
+          "power_mw": 18.67380070582273
+        },
+        "ss_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5360490472294284,
+          "ck_pp_min": 0.5383256604705551,
+          "power_mw": 18.493386124961912
+        },
+        "ss_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1650_t85",
+          "mode": "full",
+          "window_codes": 14,
+          "width_ui": 0.875,
+          "centre_code": 18,
+          "inbuf_pp_min": 0.5171213341055656,
+          "ck_pp_min": 0.3734113946775732,
+          "power_mw": 18.293725822012256
+        },
+        "ss_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5637847710176629,
+          "ck_pp_min": 0.7988430139451744,
+          "power_mw": 20.698349040383086
+        },
+        "ss_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5439348559628974,
+          "ck_pp_min": 0.5871842486968577,
+          "power_mw": 20.759054931881213
+        },
+        "ss_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5259676062147391,
+          "ck_pp_min": 0.4344511464865459,
+          "power_mw": 20.510865073349112
+        },
+        "ss_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5717042501498546,
+          "ck_pp_min": 0.8427110318878632,
+          "power_mw": 23.005907011130308
+        },
+        "ss_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5515124076452109,
+          "ck_pp_min": 0.6277638204101128,
+          "power_mw": 23.037057110676983
+        },
+        "ss_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ss_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5333751412480388,
+          "ck_pp_min": 0.4677773531135343,
+          "power_mw": 22.744759457546735
+        },
+        "ff_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5859367125612716,
+          "ck_pp_min": 0.9395054976874667,
+          "power_mw": 19.81377976538546
+        },
+        "ff_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5563417053629227,
+          "ck_pp_min": 0.7587627661958167,
+          "power_mw": 19.96089140605594
+        },
+        "ff_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5277239506598774,
+          "ck_pp_min": 0.5964745201149991,
+          "power_mw": 19.790788157298195
+        },
+        "ff_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5934542394132829,
+          "ck_pp_min": 0.966825976749325,
+          "power_mw": 22.228223524117
+        },
+        "ff_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5622471093197667,
+          "ck_pp_min": 0.7871954608389887,
+          "power_mw": 22.32596184764655
+        },
+        "ff_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5330888952113806,
+          "ck_pp_min": 0.6235359164375205,
+          "power_mw": 22.109709739226002
+        },
+        "ff_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1950_t-40",
+          "mode": "full",
+          "window_codes": 16,
+          "width_ui": 1.0,
+          "centre_code": 0,
+          "inbuf_pp_min": 0.6002825392582676,
+          "ck_pp_min": 0.9687217464036286,
+          "power_mw": 24.70318799785823
+        },
+        "ff_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5686818198261765,
+          "ck_pp_min": 0.8120043606827696,
+          "power_mw": 24.76699922607358
+        },
+        "ff_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "ff_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5386950814743137,
+          "ck_pp_min": 0.647182344281658,
+          "power_mw": 24.505390435986012
+        },
+        "sf_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5818503138615034,
+          "ck_pp_min": 0.8670740505360881,
+          "power_mw": 19.78292833549179
+        },
+        "sf_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5458807952208877,
+          "ck_pp_min": 0.6677460919598054,
+          "power_mw": 19.943342122936897
+        },
+        "sf_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5128040534887877,
+          "ck_pp_min": 0.5079726170716873,
+          "power_mw": 19.782697563358266
+        },
+        "sf_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5898982622431892,
+          "ck_pp_min": 0.9090130791535196,
+          "power_mw": 22.272440076424264
+        },
+        "sf_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5518529056286883,
+          "ck_pp_min": 0.7081446655175854,
+          "power_mw": 22.364990652477292
+        },
+        "sf_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5178179955819355,
+          "ck_pp_min": 0.5415246120231547,
+          "power_mw": 22.137192771417855
+        },
+        "sf_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.597599883069573,
+          "ck_pp_min": 0.9391637987042121,
+          "power_mw": 24.764184825743854
+        },
+        "sf_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.557706689543132,
+          "ck_pp_min": 0.7390714134880148,
+          "power_mw": 24.815534664677884
+        },
+        "sf_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "sf_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5226452826628472,
+          "ck_pp_min": 0.5681768371780958,
+          "power_mw": 24.535046397832957
+        },
+        "fs_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1650_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 14,
+          "inbuf_pp_min": 0.554178607070154,
+          "ck_pp_min": 0.769402153589704,
+          "power_mw": 18.442559187464397
+        },
+        "fs_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5341777126039842,
+          "ck_pp_min": 0.5902782556108133,
+          "power_mw": 18.516565083295376
+        },
+        "fs_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1650_t85",
+          "mode": "full",
+          "window_codes": 14,
+          "width_ui": 0.875,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.51617829700084,
+          "ck_pp_min": 0.4100385619262926,
+          "power_mw": 18.297496396955545
+        },
+        "fs_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5623793911599442,
+          "ck_pp_min": 0.8310297003566108,
+          "power_mw": 20.69334365284836
+        },
+        "fs_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5413932728456483,
+          "ck_pp_min": 0.6270380185546396,
+          "power_mw": 20.734049571571916
+        },
+        "fs_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5234733227753938,
+          "ck_pp_min": 0.46880999901613407,
+          "power_mw": 20.490893622219076
+        },
+        "fs_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5704654080354172,
+          "ck_pp_min": 0.8645326528661335,
+          "power_mw": 22.98387561573865
+        },
+        "fs_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5487107231687038,
+          "ck_pp_min": 0.659844563552175,
+          "power_mw": 23.001207122048253
+        },
+        "fs_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rtt_20261104T154752Z/summary.json",
+          "condition": "fs_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5304377928685204,
+          "ck_pp_min": 0.4977964800268657,
+          "power_mw": 22.724901285156562
+        }
+      }
+    },
+    "hh": {
+      "conditions": 45,
+      "full": 6,
+      "gate": 39,
+      "full_scan_min_ui": 0.8125,
+      "rows": {
+        "tt_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.6191876508845473,
+          "ck_pp_min": 0.8864222170746986,
+          "power_mw": 18.364486496118264
+        },
+        "tt_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5532539429303516,
+          "ck_pp_min": 0.5831310426218175,
+          "power_mw": 17.1205015887061
+        },
+        "tt_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5363482252609837,
+          "ck_pp_min": 0.4324919441364221,
+          "power_mw": 16.964910265002448
+        },
+        "tt_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5795334787053019,
+          "ck_pp_min": 0.822667193646907,
+          "power_mw": 19.08093333831231
+        },
+        "tt_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1800_t27",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 14,
+          "inbuf_pp_min": 0.5592591538668426,
+          "ck_pp_min": 0.6196834087124086,
+          "power_mw": 19.192882639591026
+        },
+        "tt_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5430304764267888,
+          "ck_pp_min": 0.4625411469558278,
+          "power_mw": 18.966098529418677
+        },
+        "tt_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5878678167141429,
+          "ck_pp_min": 0.8564637496400149,
+          "power_mw": 21.199824871762456
+        },
+        "tt_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5675267775603992,
+          "ck_pp_min": 0.6513568118661677,
+          "power_mw": 21.258412111414362
+        },
+        "tt_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "tt_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5497304904396418,
+          "ck_pp_min": 0.48900981094400997,
+          "power_mw": 21.016448660209694
+        },
+        "ss_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1650_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.5531679651988377,
+          "ck_pp_min": 0.6426536788720347,
+          "power_mw": 16.412084601845848
+        },
+        "ss_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5376595315486847,
+          "ck_pp_min": 0.4538447654973129,
+          "power_mw": 16.472547381171598
+        },
+        "ss_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1650_t85",
+          "mode": "full",
+          "window_codes": 13,
+          "width_ui": 0.8125,
+          "centre_code": 18,
+          "inbuf_pp_min": 0.5235746555722403,
+          "ck_pp_min": 0.32559353124205004,
+          "power_mw": 16.31057407451765
+        },
+        "ss_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5618847705677115,
+          "ck_pp_min": 0.6968119462807587,
+          "power_mw": 18.404450034624904
+        },
+        "ss_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5453750735914435,
+          "ck_pp_min": 0.495659279131768,
+          "power_mw": 18.472446928412385
+        },
+        "ss_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5311441350933115,
+          "ck_pp_min": 0.3592194447070125,
+          "power_mw": 18.26342313724376
+        },
+        "ss_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5701899098059466,
+          "ck_pp_min": 0.7393473863158957,
+          "power_mw": 20.451141890519263
+        },
+        "ss_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5528840632241414,
+          "ck_pp_min": 0.5313308015990725,
+          "power_mw": 20.493459199057998
+        },
+        "ss_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ss_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5383750557206577,
+          "ck_pp_min": 0.3867071563855202,
+          "power_mw": 20.243494990983294
+        },
+        "ff_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T122937Z/summary.json",
+          "condition": "ff_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.586722275994539,
+          "ck_pp_min": 0.8837891720504708,
+          "power_mw": 17.649753482421676
+        },
+        "ff_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ff_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.561949858702024,
+          "ck_pp_min": 0.6658174747922979,
+          "power_mw": 17.782784745094464
+        },
+        "ff_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ff_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5382255481690903,
+          "ck_pp_min": 0.505297449303327,
+          "power_mw": 17.644536022048754
+        },
+        "ff_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T122937Z/summary.json",
+          "condition": "ff_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5944945455696145,
+          "ck_pp_min": 0.9126665125494318,
+          "power_mw": 19.80009964578552
+        },
+        "ff_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T122937Z/summary.json",
+          "condition": "ff_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5669604701889797,
+          "ck_pp_min": 0.7260565140507197,
+          "power_mw": 19.900266310322092
+        },
+        "ff_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ff_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.543711389741449,
+          "ck_pp_min": 0.5291204402756546,
+          "power_mw": 19.71103824338333
+        },
+        "ff_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ff_v1950_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 12,
+          "inbuf_pp_min": 0.6019940802442012,
+          "ck_pp_min": 0.9146001882810628,
+          "power_mw": 22.00611963417321
+        },
+        "ff_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T122937Z/summary.json",
+          "condition": "ff_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5735418261197986,
+          "ck_pp_min": 0.7509947717571994,
+          "power_mw": 22.079271644499613
+        },
+        "ff_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "ff_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5494910337889676,
+          "ck_pp_min": 0.5501996881585576,
+          "power_mw": 21.847722622699504
+        },
+        "sf_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5845308206404425,
+          "ck_pp_min": 0.7844972485458458,
+          "power_mw": 17.64010129113632
+        },
+        "sf_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.554278964151742,
+          "ck_pp_min": 0.5823252973546739,
+          "power_mw": 17.791132399640897
+        },
+        "sf_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5253003706724759,
+          "ck_pp_min": 0.42965580910024326,
+          "power_mw": 17.656513727312355
+        },
+        "sf_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5927083672997482,
+          "ck_pp_min": 0.828236897774718,
+          "power_mw": 19.847428869075813
+        },
+        "sf_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.560710458909333,
+          "ck_pp_min": 0.6195821320319961,
+          "power_mw": 19.940174674501332
+        },
+        "sf_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5307025511384169,
+          "ck_pp_min": 0.45781790510573206,
+          "power_mw": 19.747907988066512
+        },
+        "sf_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.6006693070539058,
+          "ck_pp_min": 0.8602313855525023,
+          "power_mw": 22.070250303974603
+        },
+        "sf_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.567003084890664,
+          "ck_pp_min": 0.6483671109188371,
+          "power_mw": 22.124412007521727
+        },
+        "sf_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "sf_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5359766500186778,
+          "ck_pp_min": 0.48016576258753885,
+          "power_mw": 21.883965215848065
+        },
+        "fs_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1650_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 14,
+          "inbuf_pp_min": 0.5526360589674462,
+          "ck_pp_min": 0.6908823971407626,
+          "power_mw": 16.39646402590473
+        },
+        "fs_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5367254708348541,
+          "ck_pp_min": 0.4958055949601724,
+          "power_mw": 16.477676165429873
+        },
+        "fs_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1650_t85",
+          "mode": "full",
+          "window_codes": 13,
+          "width_ui": 0.8125,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.5219822125913687,
+          "ck_pp_min": 0.35606190029201523,
+          "power_mw": 16.304816424370742
+        },
+        "fs_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5606764366932424,
+          "ck_pp_min": 0.7278491884676579,
+          "power_mw": 18.38709240857138
+        },
+        "fs_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5438421429313696,
+          "ck_pp_min": 0.5280189380597198,
+          "power_mw": 18.441878491438885
+        },
+        "fs_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.529614399540304,
+          "ck_pp_min": 0.38488517766573227,
+          "power_mw": 18.239530676469197
+        },
+        "fs_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5686527583487837,
+          "ck_pp_min": 0.7605799851239969,
+          "power_mw": 20.420415057967862
+        },
+        "fs_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5511509861142232,
+          "ck_pp_min": 0.5574291286846131,
+          "power_mw": 20.45447597306534
+        },
+        "fs_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rhh_20261104T084749Z/summary.json",
+          "condition": "fs_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            12,
+            20,
+            28
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5367507739143604,
+          "ck_pp_min": 0.40900864802629733,
+          "power_mw": 20.222002350056435
+        }
+      }
+    },
+    "ll": {
+      "conditions": 45,
+      "full": 6,
+      "gate": 39,
+      "full_scan_min_ui": 0.875,
+      "rows": {
+        "tt_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.571332756381737,
+          "ck_pp_min": 0.9363148442859818,
+          "power_mw": 21.782689780749966
+        },
+        "tt_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5435146577893566,
+          "ck_pp_min": 0.7412824247165255,
+          "power_mw": 21.902337642761623
+        },
+        "tt_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5174235988638516,
+          "ck_pp_min": 0.5757352963275264,
+          "power_mw": 21.665292371449482
+        },
+        "tt_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5795541947334042,
+          "ck_pp_min": 0.9730863882173839,
+          "power_mw": 24.481550228184812
+        },
+        "tt_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1800_t27",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 14,
+          "inbuf_pp_min": 0.5499646141606367,
+          "ck_pp_min": 0.7515283478263481,
+          "power_mw": 24.54182688324208
+        },
+        "tt_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5240723893008512,
+          "ck_pp_min": 0.6141206263932737,
+          "power_mw": 24.25681295492777
+        },
+        "tt_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5877610679720868,
+          "ck_pp_min": 1.0035597065194246,
+          "power_mw": 27.2013424328839
+        },
+        "tt_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5576842677023233,
+          "ck_pp_min": 0.8153694925935604,
+          "power_mw": 27.23593495526464
+        },
+        "tt_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "tt_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5307281662251142,
+          "ck_pp_min": 0.6469241724436958,
+          "power_mw": 26.894387495494684
+        },
+        "ss_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1650_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.5545754860960981,
+          "ck_pp_min": 0.789839248085761,
+          "power_mw": 21.05501117747201
+        },
+        "ss_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5307271027273086,
+          "ck_pp_min": 0.5997714034359345,
+          "power_mw": 21.057905718777324
+        },
+        "ss_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1650_t85",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.5065332828405602,
+          "ck_pp_min": 0.42241985448216446,
+          "power_mw": 20.807943889879834
+        },
+        "ss_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5644757669586946,
+          "ck_pp_min": 0.8702033531562695,
+          "power_mw": 23.75203748135313
+        },
+        "ss_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5383322198367912,
+          "ck_pp_min": 0.6529825227402302,
+          "power_mw": 23.682405883224202
+        },
+        "ss_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5161018806447519,
+          "ck_pp_min": 0.4906372004479622,
+          "power_mw": 23.37649859393913
+        },
+        "ss_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5721011835037906,
+          "ck_pp_min": 0.9137254184185499,
+          "power_mw": 26.295844529442462
+        },
+        "ss_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5447469307193848,
+          "ck_pp_min": 0.6963998730604326,
+          "power_mw": 26.29996095212445
+        },
+        "ss_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ss_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5228242203262554,
+          "ck_pp_min": 0.5279607456999431,
+          "power_mw": 25.94284416911407
+        },
+        "ff_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5842162269896258,
+          "ck_pp_min": 0.9842334386281707,
+          "power_mw": 22.58649558239982
+        },
+        "ff_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5483927261102677,
+          "ck_pp_min": 0.8123235376819397,
+          "power_mw": 22.731492277525714
+        },
+        "ff_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5153892589823779,
+          "ck_pp_min": 0.6522877322529053,
+          "power_mw": 22.519174597302225
+        },
+        "ff_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5914225631067676,
+          "ck_pp_min": 1.0085444677088713,
+          "power_mw": 25.34356773814031
+        },
+        "ff_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5538328977579832,
+          "ck_pp_min": 0.8399177984744582,
+          "power_mw": 25.42959668944141
+        },
+        "ff_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5203981847475343,
+          "ck_pp_min": 0.6804592217844668,
+          "power_mw": 25.16451788891889
+        },
+        "ff_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1950_t-40",
+          "mode": "full",
+          "window_codes": 16,
+          "width_ui": 1.0,
+          "centre_code": 0,
+          "inbuf_pp_min": 0.5976436826863498,
+          "ck_pp_min": 1.0115258142142853,
+          "power_mw": 28.158445276993476
+        },
+        "ff_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5599309059780646,
+          "ck_pp_min": 0.8642967216379507,
+          "power_mw": 28.210216387794446
+        },
+        "ff_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "ff_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5256971001083586,
+          "ck_pp_min": 0.7050942657408057,
+          "power_mw": 27.893002502395507
+        },
+        "sf_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1650_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5770129218068232,
+          "ck_pp_min": 0.9122421714612294,
+          "power_mw": 22.499586872933005
+        },
+        "sf_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.534845287426658,
+          "ck_pp_min": 0.7163202281483946,
+          "power_mw": 22.673016951922325
+        },
+        "sf_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1650_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.49802900739441136,
+          "ck_pp_min": 0.554482237294115,
+          "power_mw": 22.483734828265373
+        },
+        "sf_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5847543289249404,
+          "ck_pp_min": 0.9505356081590681,
+          "power_mw": 25.355731660808022
+        },
+        "sf_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5403709325770865,
+          "ck_pp_min": 0.7577680526084445,
+          "power_mw": 25.454096496947823
+        },
+        "sf_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5027483392490231,
+          "ck_pp_min": 0.5906508794811094,
+          "power_mw": 25.182100337101208
+        },
+        "sf_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5921055050020421,
+          "ck_pp_min": 0.9807540129367973,
+          "power_mw": 28.215483445978766
+        },
+        "sf_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5458070503144692,
+          "ck_pp_min": 0.7890860696122683,
+          "power_mw": 28.250563989344425
+        },
+        "sf_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "sf_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5072464181274452,
+          "ck_pp_min": 0.6192056338788532,
+          "power_mw": 27.917105666073827
+        },
+        "fs_v1650_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1650_t-40",
+          "mode": "full",
+          "window_codes": 15,
+          "width_ui": 0.9375,
+          "centre_code": 12,
+          "inbuf_pp_min": 0.5551063521188775,
+          "ck_pp_min": 0.8449076325096313,
+          "power_mw": 21.06149288343598
+        },
+        "fs_v1650_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1650_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5295959389962275,
+          "ck_pp_min": 0.6582104219761187,
+          "power_mw": 21.11553722451463
+        },
+        "fs_v1650_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1650_t85",
+          "mode": "full",
+          "window_codes": 14,
+          "width_ui": 0.875,
+          "centre_code": 16,
+          "inbuf_pp_min": 0.5060321020359231,
+          "ck_pp_min": 0.4671578680951096,
+          "power_mw": 20.82515349209559
+        },
+        "fs_v1800_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1800_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5637437984614,
+          "ck_pp_min": 0.9039095575626854,
+          "power_mw": 23.654854549340257
+        },
+        "fs_v1800_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1800_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5370745144582518,
+          "ck_pp_min": 0.6978361551621579,
+          "power_mw": 23.67154483995164
+        },
+        "fs_v1800_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1800_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5137938852049229,
+          "ck_pp_min": 0.5315782208379027,
+          "power_mw": 23.363025425513225
+        },
+        "fs_v1950_t-40": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1950_t-40",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5719232857132113,
+          "ck_pp_min": 0.9370849164383557,
+          "power_mw": 26.275497507867627
+        },
+        "fs_v1950_t27": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1950_t27",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5444976555407584,
+          "ck_pp_min": 0.7324967037511279,
+          "power_mw": 26.271411447441626
+        },
+        "fs_v1950_t85": {
+          "source": "results/analog/rx/sampler/link_pvt/rx_c2_far_nominal_ac_trim32_realbias_rll_20261104T124429Z/summary.json",
+          "condition": "fs_v1950_t85",
+          "mode": "gate",
+          "gate_codes": [
+            8,
+            16,
+            24
+          ],
+          "gate_span_ui": 0.5,
+          "gate_pass": true,
+          "inbuf_pp_min": 0.5210207980931558,
+          "ck_pp_min": 0.5637095386460711,
+          "power_mw": 25.92725818889269
+        }
+      }
+    }
+  },
+  "old_readout": {
+    "conditions": 45,
+    "data_bits": 4880,
+    "determinate_edges": 2433,
+    "scope": "Historical ideal-reference boundary, fixed PI20/trim32; old reports say W80/ideal R but included project circuits lack immutable snapshots; not current W40/real-bias RC qualification"
+  },
+  "pi_static": {
+    "hh": {
+      "conditions": [
+        "tt_v1800_t27",
+        "ss_v1650_t-40",
+        "ss_v1650_t85",
+        "fs_v1650_t-40",
+        "fs_v1650_t85",
+        "ff_v1950_t-40"
+      ],
+      "codes_per_condition": 64,
+      "scope": "Static pressure points, ideal anchors, real bias/PDK R; not transistor mismatch MC"
+    },
+    "ll": {
+      "conditions": [
+        "tt_v1800_t27",
+        "ss_v1650_t-40",
+        "ss_v1650_t85",
+        "fs_v1650_t-40",
+        "fs_v1650_t85",
+        "ff_v1950_t-40"
+      ],
+      "codes_per_condition": 64,
+      "scope": "Static pressure points, ideal anchors, real bias/PDK R; not transistor mismatch MC"
+    }
+  },
+  "ctle_mc": {
+    "condition": "tt_v1800_t27",
+    "eq": 3,
+    "pdk_resistors": true,
+    "samples": 200,
+    "input_offset_mv": {
+      "n": 200,
+      "mean": 0.16196099251674753,
+      "std": 6.097161710282483,
+      "min": -18.466613091109707,
+      "max": 16.496551811595577,
+      "skew": -0.024863684979123946,
+      "excess_kurtosis": 0.3544809299433558
+    }
+  },
+  "sampler_calibrated_mc": {
+    "scope": "Single-lane d0, other lanes held; ideal rising-ramp code selection; not actual two-edge SAR or chip yield",
+    "rows": [
+      {
+        "condition": "tt_v1800_t27",
+        "dut": "ac_trim",
+        "pdk_resistors": true,
+        "samples": 96,
+        "seed": 1,
+        "chunk": 16,
+        "hold": [
+          "d1",
+          "e0",
+          "e1"
+        ],
+        "lanes": {
+          "d0": {
+            "n": 96,
+            "mean": 0.38772994791666165,
+            "std": 0.7256052217044296,
+            "min": -2.175806250000006,
+            "max": 2.158756249999997,
+            "skew": -0.4084303977515178,
+            "excess_kurtosis": 0.7752335259718568,
+            "missing": 0,
+            "tol3_mv": [
+              -2.0995697338061,
+              2.8750296296394238
+            ]
+          }
+        }
+      },
+      {
+        "condition": "tt_v1800_t85",
+        "dut": "ac_trim",
+        "pdk_resistors": true,
+        "samples": 96,
+        "seed": 1,
+        "chunk": 16,
+        "hold": [
+          "d1",
+          "e0",
+          "e1"
+        ],
+        "lanes": {
+          "d0": {
+            "n": 96,
+            "mean": 0.6803389322916642,
+            "std": 0.8087569680938528,
+            "min": -1.3398625000000033,
+            "max": 2.426224999999997,
+            "skew": -0.30294405168080146,
+            "excess_kurtosis": -0.35175333912065154,
+            "missing": 0,
+            "tol3_mv": [
+              -2.0919963392291985,
+              3.452674203812527
+            ]
+          }
+        }
+      },
+      {
+        "condition": "tt_v1800_t-40",
+        "dut": "ac_trim",
+        "pdk_resistors": true,
+        "samples": 96,
+        "seed": 1,
+        "chunk": 16,
+        "hold": [
+          "d1",
+          "e0",
+          "e1"
+        ],
+        "lanes": {
+          "d0": {
+            "n": 96,
+            "mean": 0.36049895833333084,
+            "std": 0.9350392300359063,
+            "min": -2.2240124999999997,
+            "max": 2.2162499999999987,
+            "skew": -0.175647485335462,
+            "excess_kurtosis": -0.018193871549658347,
+            "missing": 0,
+            "tol3_mv": [
+              -2.844718851157535,
+              3.5657167678241963
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "bias": {
+    "dc_conditions": 135,
+    "distribution_mc_samples": 200,
+    "mc_temperatures": [
+      27,
+      -40,
+      85
+    ],
+    "startup_conditions": 135,
+    "startup_all_ok": true,
+    "startup_max_us": 16.287718209837013,
+    "pbuf_conditions": 405,
+    "pbuf_final_error_over10mv": 44,
+    "pbuf_final_max_abs_error_mv": 21.872975267857253,
+    "pbuf_max_t10_ns": 359.9790874978261
+  },
+  "native_static_states": {
+    "ff_v1950_t-40:hh": "incomplete",
+    "ff_v1950_t-40:ll": "timeout",
+    "fs_v1650_t85:hh": "measured",
+    "fs_v1650_t85:ll": "measured",
+    "ss_v1650_t-40:hh": "measured",
+    "ss_v1650_t85:hh": "measured",
+    "ss_v1650_t85:ll": "measured",
+    "tt_v1800_t27:hh": "measured",
+    "tt_v1800_t27:ll": "measured",
+    "tt_v1800_t27:tt": "measured"
+  }
+}

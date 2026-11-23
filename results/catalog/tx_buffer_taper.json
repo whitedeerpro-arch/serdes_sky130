@@ -1,0 +1,25 @@
+{
+  "data": "docs/data/tx_buffer_taper.json",
+  "data_sha256": "71cebf78c3e10b9327eed5aa477a38501a2ea569d61fbe66c925ddfaf570290c",
+  "figure": "docs/figures/tx/ingress/tx_buffer_taper.png",
+  "figure_sha256": "357cc18c8eec6aadb5d25304a0fadf419afed978f8d0640c80634387729d8d88",
+  "campaign": "results/analog/tx/buffer_matrix_card/20261110T172325Z_dda392af",
+  "summary": "results/analog/tx/buffer_matrix_card/20261110T172325Z_dda392af/analysis/20261110T172437Z_94b66353/summary.json",
+  "summary_sha256": "841a8c6ad6f22d3b3b948d76a14e29da8af9d1b7f92b38472642c50ed7ae45bb",
+  "evidence": {
+    "tt_v1800_t27": {
+      "tt_v1800_t27.raw": "0336089f972140c56ec7844534948c77e5b88ef32b1e31b6ff8f9a1fe10b1512",
+      "execution.json": "c802d2b1bd97abdaab86fcde348257748342294202fb203a7cea734bf4cfcbe0",
+      "tb.cir": "26fbee150b142bb301d6ae45316b1c6756eed8d6259752521b0c41b2b1bfb5aa",
+      "simulator.log": "1b87e463a10af59205a73b96d5e34a1eba87a4534eb91d9e08b748d0437df260"
+    },
+    "fs_v1650_t85": {
+      "fs_v1650_t85.raw": "dfdc36ceed15777758752fa69d585fa4a1da5d80ea8ce5db7ddf2a1de0ade348",
+      "execution.json": "9d565d0362606eea1163660858f0ec1ad5c953a55ffbb9d82dbe456c5b6c9ebe",
+      "tb.cir": "f08fea0c8728d59a2e008105a0b02d974f3b4e850cb646106012fb48fa9c2416",
+      "simulator.log": "7d5e7897c696b95b9177e9d472e5b7e1a14ab5ee62945b03b28aeb413c20c03f"
+    }
+  },
+  "scope": "TT and FS hot low voltage, ideal recorded PWL local loaded extra5 cut; eight-bit fixed contract only. Local screen is functional plus 75 mV and 0.15 UI; isolation amplitude and full TX/PVT/noise remain open; I-17 is not closed.",
+  "status": "measurement_complete"
+}

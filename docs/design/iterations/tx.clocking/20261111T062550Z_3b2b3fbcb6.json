@@ -1,0 +1,31 @@
+{
+  "id": "20261111T062550Z_3b2b3fbcb6",
+  "module": "tx.clocking",
+  "date": "2026-11-11",
+  "timestamp": "2026-11-11T06:25:50.745208+00:00",
+  "title": "分级尾宽回接失败：补齐联合尺寸模型",
+  "phase": "model",
+  "problem": "局部八位通过不能预测完整FS焊盘散布，TT幅度上界也未覆盖SS冷角。",
+  "model": "仿真前tanh幅度拟合比较分级尾宽；先复算局部与完整同位窗口和逐位serializer→pad传播，明确联合sizing缺口。",
+  "changes": "新增均匀/逐级profile局部卡和完整TX逐级参数身份；不改采用电路。",
+  "validation": "完整FS93.09mV/0.150051UI、焊盘127.25mV/0.179857UI；SS眼图满足但extra最高435.89mV。原deck/raw/BC复核，理想2GHz/真实偏置/PDK R tt。",
+  "conclusion": "分级候选不采用，I-17仍开。先补关闭/到达与输出模式相关响应及逐角幅度约束，再求参数；不是新增45点资格。",
+  "attachments": [
+    {
+      "title": "联合尺寸规划与模型缺口",
+      "path": "docs/design/tx_buffer_sizing.md"
+    },
+    {
+      "title": "局部幅度与时序约束交叠",
+      "path": "docs/figures/tx/ingress/tx_buffer_tradeoff.png"
+    },
+    {
+      "title": "局部与完整链路的差异",
+      "path": "docs/figures/tx/ingress/tx_buffer_sizing_gap.png"
+    },
+    {
+      "title": "完整压力点复算",
+      "path": "docs/data/tx_buffer_sizing_gap.json"
+    }
+  ]
+}

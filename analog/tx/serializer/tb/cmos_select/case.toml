@@ -1,0 +1,25 @@
+id = "cmos_select"
+dut = "analog/tx/serializer"
+level = "integration"
+status = "archived_experiment"
+purpose = "理想CMOS互补同相选择时钟驱动16:1树，与相同尺寸/负载/激励的CML选择树比较。"
+analyses = ["tran"]
+measurements = ["bit_errors", "minimum_signed_margin_v", "transition_spread_ui", "extra_zero_crossings", "common_mode", "power"]
+[implementation]
+bench = "analog/tx/serializer/tb/functional/tb_serializer16_cmos_select_ngspice.cir.in"
+subcircuit = "serdes16_cml_tree_cmos_select"
+eye_contract = "verification/contracts/eye_fold.toml"
+[conditions]
+parallel_width = 16
+serial_rate_bps = 4000000000
+nominal_ui_s = 2.5e-10
+rank_phase_offsets_ui = [0.0, 0.0, 0.0, 0.0]
+clock_levels_v = [0.0, 1.8]
+clock_edge_ui = 0.08
+rload_ohm = 500
+rout_ohm = 400
+output_load_per_leg_f = 2e-14
+[requirements]
+clock_fixture = "ideal complementary rail clocks; no PLL or physical driver"
+retiming_present = false
+pad_channel_present = false

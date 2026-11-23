@@ -1,0 +1,22 @@
+Synthetic PCB differential AC check; replace @MODEL_DIR@ and @CASE_ID@
+* e.g. CASE_ID=C2_loss6, SUBCKT_ID=c2_loss6 (SPICE is case insensitive).
+* All models are linear passives: no SKY130 device include required.
+.include @MODEL_DIR@/pcb_foster_cells.spice
+.include @MODEL_DIR@/@CASE_ID@.spice
+Vp sp 0 AC 1
+Vn sn 0 AC 1 180
+Rp sp ap 50
+Rn sn an 50
+Xch ap an bp bn 0 pcb_@CASE_ID@
+Rlp bp 0 50
+Rln bn 0 50
+* 2V open-circuit differential voltage => 1V incident differential wave.
+* Thus V(bp,bn) is Sdd21 for these reference impedances.
+.control
+set wr_singlescale
+set wr_vecnames
+ac lin 3 1e6 4e9
+wrdata passive_ac.dat v(bp,bn)
+quit
+.endc
+.end

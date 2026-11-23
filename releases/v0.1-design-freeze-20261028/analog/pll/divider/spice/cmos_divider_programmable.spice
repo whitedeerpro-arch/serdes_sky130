@@ -1,0 +1,67 @@
+* Combinational next-state/phase decode, separately testable at DC.
+.subckt pll_cmos_divider_next q0 q1 q2 q3 m0 m1 m2 m3 d0 d1 d2 d3 zero half vdd vss
+Xqb0 q0 qb0 vdd vss serdes_cmos_inv
+Xqb1 q1 qb1 vdd vss serdes_cmos_inv
+Xqb2 q2 qb2 vdd vss serdes_cmos_inv
+Xqb3 q3 qb3 vdd vss serdes_cmos_inv
+Xz01 qb0 qb1 z01 vdd vss serdes_cmos_and2
+Xz23 qb2 qb3 z23 vdd vss serdes_cmos_and2
+Xzero z01 z23 zero vdd vss serdes_cmos_and2
+Xborrow z01 qb2 borrow3 vdd vss serdes_cmos_and2
+Xsub1 q1 qb0 s1 vdd vss serdes_cmos_xor
+Xsub2 q2 z01 s2 vdd vss serdes_cmos_xor
+Xsub3 q3 borrow3 s3 vdd vss serdes_cmos_xor
+Xd0 qb0 m0 zero d0 vdd vss serdes_cmos_mux2
+Xd1 s1 m1 zero d1 vdd vss serdes_cmos_mux2
+Xd2 s2 m2 zero d2 vdd vss serdes_cmos_mux2
+Xd3 s3 m3 zero d3 vdd vss serdes_cmos_mux2
+* Static threshold K=ceil((M-1)/2)=(configuration>>1)+configuration[0].
+* clk_q samples (Q>=K), yielding ceil(M/2) high cycles for M>1.
+Xk0 m1 m0 k0 vdd vss serdes_cmos_xor
+Xkc1 m1 m0 kc1 vdd vss serdes_cmos_and2
+Xk1 m2 kc1 k1 vdd vss serdes_cmos_xor
+Xkc2 m2 kc1 kc2 vdd vss serdes_cmos_and2
+Xk2 m3 kc2 k2 vdd vss serdes_cmos_xor
+Xk3 m3 kc2 k3 vdd vss serdes_cmos_and2
+Xhalf q0 q1 q2 q3 k0 k1 k2 k3 half vdd vss serdes_cmos_ge4
+.ends pll_cmos_divider_next
+
+* CMOS backend, M=1..16. Static m3:m0 encodes M-1.
+* tick: one input-cycle pulse per M for M>1, intended for edge PFD.
+* clk_out: registered, ceil(M/2) cycles high and floor(M/2) low.
+* Even M gives 50% duty; odd M is NOT exactly 50%. Both outputs bypass for M=1.
+* Reset disables the input clock; release is latched during input LOW phase.
+* Assertion may truncate a pulse; clocks/data invalid during reset/reconfiguration.
+* Hold configuration static; update only with rst_b LOW and enough settling time.
+* M=1 shuts off the counter clock, reducing default bypass-mode dynamic power.
+.subckt pll_cmos_divider clk rst_b m0 m1 m2 m3 tick clk_out vdd vss
++ params: out_wn=4 out_wp=8
+Xc01 m0 m1 c01 vdd vss serdes_cmos_or2
+Xc23 m2 m3 c23 vdd vss serdes_cmos_or2
+Xis1 c01 c23 is1 vdd vss serdes_cmos_nor2
+Xnot1 is1 not1 vdd vss serdes_cmos_inv
+
+* Enable only on a low input phase following reset release.
+Xci clk clk_b vdd vss serdes_cmos_inv
+Xgate_state vdd clk_b rst_b enable vdd vss serdes_cmos_latch_reset
+Xgate clk enable valid_clk vdd vss serdes_cmos_and2
+Xcore_gate valid_clk not1 core_pre vdd vss serdes_cmos_and2
+Xclock1 core_pre core_b vdd vss serdes_cmos_inv wn=2 wp=4
+Xclock2 core_b core_clk vdd vss serdes_cmos_inv wn=4 wp=8
+
+Xnext q0 q1 q2 q3 m0 m1 m2 m3 d0 d1 d2 d3 zero half vdd vss pll_cmos_divider_next
+Xq0 d0 core_clk rst_b q0 vdd vss serdes_cmos_dff_reset
+Xq1 d1 core_clk rst_b q1 vdd vss serdes_cmos_dff_reset
+Xq2 d2 core_clk rst_b q2 vdd vss serdes_cmos_dff_reset
+Xq3 d3 core_clk rst_b q3 vdd vss serdes_cmos_dff_reset
+Xtick zero core_clk rst_b tick_q vdd vss serdes_cmos_dff_reset
+
+Xclock_out half core_clk rst_b clk_q vdd vss serdes_cmos_dff_reset
+
+Xtm tick_q valid_clk is1 tick_pre vdd vss serdes_cmos_mux2
+Xcm clk_q valid_clk is1 clk_pre vdd vss serdes_cmos_mux2
+Xtb1 tick_pre tick_b vdd vss serdes_cmos_inv wn=2 wp=4
+Xtb2 tick_b tick vdd vss serdes_cmos_inv wn={out_wn} wp={out_wp}
+Xcb1 clk_pre out_b vdd vss serdes_cmos_inv wn=2 wp=4
+Xcb2 out_b clk_out vdd vss serdes_cmos_inv wn={out_wn} wp={out_wp}
+.ends pll_cmos_divider

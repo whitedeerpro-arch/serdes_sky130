@@ -1,0 +1,688 @@
+{
+  "status": "prediction_only_ungraded",
+  "generator_sha256": "991b5f77b829411a699db80c98ee7597524638de702e1a993e07a35f1850a047",
+  "sources": {
+    "docs/data/tx_buffer_cascade.json": "d691b2a8e782bc5c2c8e400c731aeebd05991d1528cc09b8b0681b9c832c8f8d",
+    "docs/data/tx_buffer_sizing.json": "26e346f170776dbd89ee957853e33dc76e11f9eedfd1f602256eac7ca1969136"
+  },
+  "rows": [
+    {
+      "condition": "tt_v1800_t27",
+      "observations": [
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "iso",
+          "target_node": "e0",
+          "input_v": 0.5282747816630018,
+          "output_v": 0.33537399226782805
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "e0",
+          "target_node": "e1",
+          "input_v": 0.33537399226782805,
+          "output_v": 0.30474731185708226
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "e1",
+          "target_node": "e2",
+          "input_v": 0.30474731185708226,
+          "output_v": 0.29271546851132646
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "e2",
+          "target_node": "e3",
+          "input_v": 0.29271546851132646,
+          "output_v": 0.2871913622537523
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "iso",
+          "target_node": "e0",
+          "input_v": 0.5282174719235286,
+          "output_v": 0.3703708745610059
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "e0",
+          "target_node": "e1",
+          "input_v": 0.3703708745610059,
+          "output_v": 0.3458248802173669
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "e1",
+          "target_node": "e2",
+          "input_v": 0.3458248802173669,
+          "output_v": 0.3376062706605176
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "e2",
+          "target_node": "e3",
+          "input_v": 0.3376062706605176,
+          "output_v": 0.3346690745019101
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "iso",
+          "target_node": "e0",
+          "input_v": 0.5281981668741085,
+          "output_v": 0.38199042901616065
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "e0",
+          "target_node": "e1",
+          "input_v": 0.38199042901616065,
+          "output_v": 0.35940304436000003
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "e1",
+          "target_node": "e2",
+          "input_v": 0.35940304436000003,
+          "output_v": 0.3522798496813555
+        },
+        {
+          "condition": "tt_v1800_t27",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "e2",
+          "target_node": "e3",
+          "input_v": 0.3522798496813555,
+          "output_v": 0.3500022451790257
+        }
+      ],
+      "fit": {
+        "limit_v_at_wt14p4": 0.392675548577965,
+        "gain_at_wt14p4": 1.541700227866,
+        "max_abs_in_sample_residual_v": 0.0057780812433159134,
+        "rms_in_sample_residual_v": 0.0036403169806741124,
+        "residual_v": [
+          0.005202468121241088,
+          0.004022823313252211,
+          0.005209296941464547,
+          0.0057780812433159134,
+          0.00018908361672487217,
+          -0.0020502161717733114,
+          -0.0015429746515866483,
+          -0.001500451400565428,
+          -0.0015326184337712823,
+          -0.003991277487417122,
+          -0.003693662872608805,
+          -0.0038023004075067313
+        ]
+      },
+      "measured_iso_input_v": 0.5281981668741085,
+      "e4_load_factor": 1.0119287736277305,
+      "e4_calibration": {
+        "input_e3_v": 0.3500022451790257,
+        "observed_e4_v": 0.34953209024350285,
+        "predicted_unloaded_e4_v": 0.34541175164971555
+      },
+      "candidates": [
+        {
+          "candidate": "uniform15",
+          "wt_um": [
+            15.0,
+            15.0,
+            15.0,
+            15.0,
+            15.0
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.3952165752373172,
+            0.37171425266796765,
+            0.3647177208607513,
+            0.3624064004910177,
+            0.3659319330974383
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.3659319330974383,
+          "maximum_predicted_stage_pp_v": 0.3952165752373172
+        },
+        {
+          "candidate": "first14_then15.2",
+          "wt_um": [
+            14.0,
+            15.2,
+            15.2,
+            15.2,
+            15.2
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.37055826024680544,
+            0.3683888439259842,
+            0.36766161661590463,
+            0.3674154324844334,
+            0.3717136360531601
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.3717136360531601,
+          "maximum_predicted_stage_pp_v": 0.3717136360531601
+        },
+        {
+          "candidate": "first14_then15.6",
+          "wt_um": [
+            14.0,
+            15.6,
+            15.6,
+            15.6,
+            15.6
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.37055826024680544,
+            0.3764235425495379,
+            0.3784263557818373,
+            0.37909241716279024,
+            0.3838366717428019
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.3838366717428019,
+          "maximum_predicted_stage_pp_v": 0.3838366717428019
+        },
+        {
+          "candidate": "first14_then16",
+          "wt_um": [
+            14.0,
+            16.0,
+            16.0,
+            16.0,
+            16.0
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.37055826024680544,
+            0.3843845670280265,
+            0.38919177268620536,
+            0.3907626091148957,
+            0.3959324041225437
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.3959324041225437,
+          "maximum_predicted_stage_pp_v": 0.3959324041225437
+        },
+        {
+          "candidate": "first14.4_then15.2",
+          "wt_um": [
+            14.4,
+            15.2,
+            15.2,
+            15.2,
+            15.2
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.38045781058238937,
+            0.3715743508468191,
+            0.36872578935401684,
+            0.3677752700849695,
+            0.37183726240936843
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.37183726240936843,
+          "maximum_predicted_stage_pp_v": 0.38045781058238937
+        },
+        {
+          "candidate": "first14.4_then15.6",
+          "wt_um": [
+            14.4,
+            15.6,
+            15.6,
+            15.6,
+            15.6
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.38045781058238937,
+            0.37975890383491795,
+            0.379530631490425,
+            0.37945584169773233,
+            0.38395746325665947
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.38395746325665947,
+          "maximum_predicted_stage_pp_v": 0.38395746325665947
+        },
+        {
+          "candidate": "first14.4_then16",
+          "wt_um": [
+            14.4,
+            16.0,
+            16.0,
+            16.0,
+            16.0
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.38045781058238937,
+            0.38787086805498194,
+            0.3903359801128062,
+            0.3911291413474643,
+            0.39605028424867067
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.39605028424867067,
+          "maximum_predicted_stage_pp_v": 0.39605028424867067
+        }
+      ]
+    },
+    {
+      "condition": "fs_v1650_t85",
+      "observations": [
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "iso",
+          "target_node": "e0",
+          "input_v": 0.45505505506975874,
+          "output_v": 0.3110890732945599
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "e0",
+          "target_node": "e1",
+          "input_v": 0.3110890732945599,
+          "output_v": 0.26794118428601577
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "e1",
+          "target_node": "e2",
+          "input_v": 0.26794118428601577,
+          "output_v": 0.2449441050535941
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "extra5",
+          "wn_um": 24,
+          "wt_um": 12.8,
+          "r_nominal_ohm": 320,
+          "source_node": "e2",
+          "target_node": "e3",
+          "input_v": 0.2449441050535941,
+          "output_v": 0.2306196381597143
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "iso",
+          "target_node": "e0",
+          "input_v": 0.4547056755423262,
+          "output_v": 0.34237729068623146
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "e0",
+          "target_node": "e1",
+          "input_v": 0.34237729068623146,
+          "output_v": 0.30775676923370265
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "e1",
+          "target_node": "e2",
+          "input_v": 0.30775676923370265,
+          "output_v": 0.2905071982144467
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14",
+          "wn_um": 24,
+          "wt_um": 14,
+          "r_nominal_ohm": 320,
+          "source_node": "e2",
+          "target_node": "e3",
+          "input_v": 0.2905071982144467,
+          "output_v": 0.2807394140349133
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "iso",
+          "target_node": "e0",
+          "input_v": 0.45458879815703135,
+          "output_v": 0.35267960830812095
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "e0",
+          "target_node": "e1",
+          "input_v": 0.35267960830812095,
+          "output_v": 0.321020904508895
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "e1",
+          "target_node": "e2",
+          "input_v": 0.321020904508895,
+          "output_v": 0.3056514303706759
+        },
+        {
+          "condition": "fs_v1650_t85",
+          "branch": "tail14p4",
+          "wn_um": 24,
+          "wt_um": 14.4,
+          "r_nominal_ohm": 320,
+          "source_node": "e2",
+          "target_node": "e3",
+          "input_v": 0.3056514303706759,
+          "output_v": 0.2972701096831827
+        }
+      ],
+      "fit": {
+        "limit_v_at_wt14p4": 0.39106478289614977,
+        "gain_at_wt14p4": 1.2487360361712674,
+        "max_abs_in_sample_residual_v": 0.006046619685032617,
+        "rms_in_sample_residual_v": 0.0038336602469246734,
+        "residual_v": [
+          0.006046619685032617,
+          0.004312477197709053,
+          0.005309945756202361,
+          0.00584681476796689,
+          -0.00017186196786556085,
+          -0.0022153012743043043,
+          -0.0014824385941625273,
+          -0.0010673433960108336,
+          -0.0022837448887119693,
+          -0.004374620918916661,
+          -0.0037786788230570467,
+          -0.003452306428191221
+        ]
+      },
+      "measured_iso_input_v": 0.45458879815703135,
+      "e4_load_factor": 0.9998227031824828,
+      "e4_calibration": {
+        "input_e3_v": 0.2972701096831827,
+        "observed_e4_v": 0.2891160972334348,
+        "predicted_unloaded_e4_v": 0.28916736568710094
+      },
+      "candidates": [
+        {
+          "candidate": "uniform15",
+          "wt_um": [
+            15.0,
+            15.0,
+            15.0,
+            15.0,
+            15.0
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.3625771795651616,
+            0.33098440511938415,
+            0.3161591899381765,
+            0.30837121139390533,
+            0.30400077756090327
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.30400077756090327,
+          "maximum_predicted_stage_pp_v": 0.3625771795651616
+        },
+        {
+          "candidate": "first14_then15.2",
+          "wt_um": [
+            14.0,
+            15.2,
+            15.2,
+            15.2,
+            15.2
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.3421780931294242,
+            0.3248645976886774,
+            0.3160447267232936,
+            0.31126309186862366,
+            0.30853202113406014
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.30853202113406014,
+          "maximum_predicted_stage_pp_v": 0.3421780931294242
+        },
+        {
+          "candidate": "first14_then15.6",
+          "wt_um": [
+            14.0,
+            15.6,
+            15.6,
+            15.6,
+            15.6
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.3421780931294242,
+            0.33117669496528307,
+            0.3254671302338566,
+            0.32238482987346967,
+            0.3206294765078352
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.3206294765078352,
+          "maximum_predicted_stage_pp_v": 0.3421780931294242
+        },
+        {
+          "candidate": "first14_then16",
+          "wt_um": [
+            14.0,
+            16.0,
+            16.0,
+            16.0,
+            16.0
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.3421780931294242,
+            0.33741369427022155,
+            0.3348959079593036,
+            0.3335425401063313,
+            0.33274948878316996
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.33274948878316996,
+          "maximum_predicted_stage_pp_v": 0.3421780931294242
+        },
+        {
+          "candidate": "first14.4_then15.2",
+          "wt_um": [
+            14.4,
+            15.2,
+            15.2,
+            15.2,
+            15.2
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.350395863419409,
+            0.3287977503018287,
+            0.3181133769808854,
+            0.31240251972261585,
+            0.30917509036250307
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.30917509036250307,
+          "maximum_predicted_stage_pp_v": 0.350395863419409
+        },
+        {
+          "candidate": "first14.4_then15.6",
+          "wt_um": [
+            14.4,
+            15.6,
+            15.6,
+            15.6,
+            15.6
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.350395863419409,
+            0.33524956126527716,
+            0.3276157613094822,
+            0.3235544611242544,
+            0.32127675658295113
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.32127675658295113,
+          "maximum_predicted_stage_pp_v": 0.350395863419409
+        },
+        {
+          "candidate": "first14.4_then16",
+          "wt_um": [
+            14.4,
+            16.0,
+            16.0,
+            16.0,
+            16.0
+          ],
+          "r_nominal_ohm": 320,
+          "wn_um": 24,
+          "predicted_stage_pp_v": [
+            0.350395863419409,
+            0.34162578001461696,
+            0.33712469550314217,
+            0.33474137043562696,
+            0.3333998334545192
+          ],
+          "predicted_e4_v_unvalidated_proxy": 0.3333998334545192,
+          "maximum_predicted_stage_pp_v": 0.350395863419409
+        }
+      ]
+    }
+  ],
+  "candidate_comparison": [
+    {
+      "candidate": "uniform15",
+      "tt_maximum_predicted_stage_v": 0.3952165752373172,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.30400077756090327
+    },
+    {
+      "candidate": "first14_then15.2",
+      "tt_maximum_predicted_stage_v": 0.3717136360531601,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.30853202113406014
+    },
+    {
+      "candidate": "first14_then15.6",
+      "tt_maximum_predicted_stage_v": 0.3838366717428019,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.3206294765078352
+    },
+    {
+      "candidate": "first14_then16",
+      "tt_maximum_predicted_stage_v": 0.3959324041225437,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.33274948878316996
+    },
+    {
+      "candidate": "first14.4_then15.2",
+      "tt_maximum_predicted_stage_v": 0.38045781058238937,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.30917509036250307
+    },
+    {
+      "candidate": "first14.4_then15.6",
+      "tt_maximum_predicted_stage_v": 0.38395746325665947,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.32127675658295113
+    },
+    {
+      "candidate": "first14.4_then16",
+      "tt_maximum_predicted_stage_v": 0.39605028424867067,
+      "tt_predicted_within_400mv": true,
+      "fs_e4_v_unvalidated_proxy": 0.3333998334545192
+    }
+  ],
+  "assumptions": [
+    "R320 and WN24; fit iso\u2192e0\u2192e1\u2192e2\u2192e3 only",
+    "gm proportional to sqrt(I), amplitude saturation proportional to I, with I proportional to tail width",
+    "2 GHz waveforms approximated by differential peak-to-peak amplitudes; observations are correlated",
+    "e4 WN32 output load modeled by one factor calibrated at WT14.4; extrapolation is unvalidated",
+    "does not predict DDJ, function, pass, PVT, source impedance, noise or full TX"
+  ],
+  "selection_rule": "TT predicted max across e0..e4 <= 400 mV; compare FS e4 proxy, then verify by SPICE"
+}

@@ -1,0 +1,22 @@
+* Exact flattened LVS reference netlist for sst_slice_unit_pdk
+* Source subckt: sst_slice_unit (frozen analog/tx/sst/spice/*.spice)
+.subckt sst_slice_unit_pdk din_p din_n en pad_p pad_n vdrv vdd vss
+X1 t_gpb din_p t_Xgpb_mid vss sky130_fd_pr__nfet_01v8_lvt w=1 l=0.15
+X2 t_Xgpb_mid en vss vss sky130_fd_pr__nfet_01v8_lvt w=1 l=0.15
+X3 t_gpb din_p vdd vdd sky130_fd_pr__pfet_01v8 w=1.2 l=0.15
+X4 t_gpb en vdd vdd sky130_fd_pr__pfet_01v8 w=1.2 l=0.15
+X5 t_gnb din_n t_Xgnb_mid vss sky130_fd_pr__nfet_01v8_lvt w=1 l=0.15
+X6 t_Xgnb_mid en vss vss sky130_fd_pr__nfet_01v8_lvt w=1 l=0.15
+X7 t_gnb din_n vdd vdd sky130_fd_pr__pfet_01v8 w=1.2 l=0.15
+X8 t_gnb en vdd vdd sky130_fd_pr__pfet_01v8 w=1.2 l=0.15
+X9 t_gp t_gpb vss vss sky130_fd_pr__nfet_01v8_lvt w=1.1 l=0.15
+X10 t_gp t_gpb vdd vdd sky130_fd_pr__pfet_01v8 w=2.2 l=0.15
+X11 t_gn t_gnb vss vss sky130_fd_pr__nfet_01v8_lvt w=1.1 l=0.15
+X12 t_gn t_gnb vdd vdd sky130_fd_pr__pfet_01v8 w=2.2 l=0.15
+X13 vdrv t_gp t_swp vss sky130_fd_pr__nfet_01v8_lvt w=3.8 l=0.15
+X14 t_swp t_gn vss vss sky130_fd_pr__nfet_01v8_lvt w=2.6 l=0.15
+X15 t_swp pad_p vss sky130_fd_pr__res_high_po_2p85 l=3.75
+X16 vdrv t_gn t_swn vss sky130_fd_pr__nfet_01v8_lvt w=3.8 l=0.15
+X17 t_swn t_gp vss vss sky130_fd_pr__nfet_01v8_lvt w=2.6 l=0.15
+X18 t_swn pad_n vss sky130_fd_pr__res_high_po_2p85 l=3.75
+.ends sst_slice_unit_pdk

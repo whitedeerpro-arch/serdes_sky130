@@ -1,0 +1,16 @@
+id = "dc_transfer"
+dut = "analog/common/cml_to_cmos"
+level = "block"
+status = "prototype"
+purpose = "检查连续时间前端的直流极性与门限；时钟恢复输出具有记忆，不用于 DC 极性判定。"
+analyses = ["dc"]
+measurements = ["front_end_transfer_curve", "front_end_logic_polarity"]
+shared_stimuli = []
+
+[implementation]
+view = "schematic"
+simulator = "ngspice"
+testbench = "analog/common/cml_to_cmos/tb/dc_transfer/tb_dc_ngspice.cir.in"
+
+[requirements]
+status = "exploratory"

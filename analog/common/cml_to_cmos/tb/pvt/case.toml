@@ -1,0 +1,25 @@
+id = "cml_to_cmos_pvt_refinement"
+level = "block_and_buffer_interface"
+testbench = "analog/common/cml_to_cmos/tb/pvt/tb_cml_to_cmos_candidate_ngspice.cir.in"
+status = "candidate_characterization"
+baseline = "analog/common/cml_to_cmos/spice/cml_to_cmos.spice"
+candidate = "analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice"
+campaign = "results/analog/pll/pvt_refinement/20261029T100030Z"
+report = "docs/history/pll_pvt_refinement.md"
+analyses = ["tran"]
+input_stimulus = "2GHz differential sine; differential 400mVpp for direct receiver; 300mVpp into real CML buffer for buffer-interface temperature map"
+output_load_per_leg_f = 20e-15
+bias_reference_current_a = 0.00085
+temperature_boundary_is_conditional_on_voltage_common_mode_amplitude_frequency_load = true
+scope = "Deterministic process/voltage/temperature functionality; no mismatch/noise/extracted parasitics"
+
+[candidate_parameters]
+wtail_um = 8.0
+pre_wn_um = 1.8
+input_follower_and_output_driver_unchanged = true
+
+[measurements]
+outputs = ["edge_count", "period_error", "duty", "logic_levels", "internal_signal_ranges", "input_common_mode", "power"]
+minimum_output_high_fraction = 0.8
+maximum_output_low_fraction = 0.2
+maximum_period_error_cycles = 0.08

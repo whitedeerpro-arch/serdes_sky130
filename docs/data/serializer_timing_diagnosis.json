@@ -1,0 +1,446 @@
+{
+  "cases": [
+    {
+      "case": "baseline_probe",
+      "run": "results/analog/tx/serializer/timing_diagnosis/20261028T101045Z_ngspice_tt_baseline_probe",
+      "payload_bits": 256,
+      "bit_errors_fixed_original_latency": 0,
+      "minimum_signed_margin_fixed_original_latency_v": 0.10165805790418439,
+      "output_edge_pp_ui": 0.14310215239733282,
+      "matched_expected_transitions": 130,
+      "expected_transitions": 130,
+      "groups": [
+        {
+          "parity": 0,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": -0.006148534413227935,
+          "error_min_ui": -0.011551095446804993,
+          "error_max_ui": 0.004244300421675007,
+          "signed_g3_at_latch_clock_median_v": 0.24694299904954303,
+          "signed_held_at_mux_clock_median_v": 0.16550176698324734,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 0,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": 0.07836162929518764,
+          "error_min_ui": 0.03833743622922725,
+          "error_max_ui": 0.12297968397326997,
+          "signed_g3_at_latch_clock_median_v": 0.17389961999652837,
+          "signed_held_at_mux_clock_median_v": 0.014004959785561752,
+          "setup_from_input_zero_median_ui": 0.37204918088029615,
+          "g3_to_held_zero_median_ui": 0.3260972018811401
+        },
+        {
+          "parity": 1,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": -0.0014652800676344668,
+          "error_min_ui": -0.008057155191181664,
+          "error_max_ui": 0.0004036909770661623,
+          "signed_g3_at_latch_clock_median_v": 0.22466050064989157,
+          "signed_held_at_mux_clock_median_v": 0.17035879268173554,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 1,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": -0.009794400453806418,
+          "error_min_ui": -0.020122468424062845,
+          "error_max_ui": -0.007346123811899474,
+          "signed_g3_at_latch_clock_median_v": 0.20457982186028295,
+          "signed_held_at_mux_clock_median_v": 0.1325961155546024,
+          "setup_from_input_zero_median_ui": 1.3743358824564496,
+          "g3_to_held_zero_median_ui": 0.769733983363011
+        }
+      ],
+      "clock_stats": {
+        "d1g": {
+          "rise10_90_ui": 0.5154009516987372,
+          "fall90_10_ui": 0.5199546044977552,
+          "phase_from_loaded_250fall_ui": 0.3200453688812388,
+          "diff_pp_v": 0.47395661349999996,
+          "cm_mean_v": 1.6675681315181572
+        },
+        "ds": {
+          "rise10_90_ui": 0.6192414086548652,
+          "fall90_10_ui": 0.6185489815746763,
+          "phase_from_loaded_250fall_ui": 0.9815543853058557,
+          "diff_pp_v": 0.455134449,
+          "cm_mean_v": 1.6450666954292612
+        },
+        "sfA": {
+          "rise10_90_ui": 0.6338413174648423,
+          "fall90_10_ui": 0.6500126088345439,
+          "phase_from_loaded_250fall_ui": 1.0771713873952677,
+          "diff_pp_v": 0.371643995,
+          "cm_mean_v": 0.971355013247901
+        },
+        "sfM": {
+          "rise10_90_ui": 0.6441949819067219,
+          "fall90_10_ui": 0.6405384339336706,
+          "phase_from_loaded_250fall_ui": 1.079233588863076,
+          "diff_pp_v": 0.37425002,
+          "cm_mean_v": 0.9713879586048488
+        },
+        "sfR3a": {
+          "rise10_90_ui": 0.6306894269338272,
+          "fall90_10_ui": 0.6267746302094466,
+          "phase_from_loaded_250fall_ui": 0.4116263887742946,
+          "diff_pp_v": 0.41712384,
+          "cm_mean_v": 0.9894391756910684
+        }
+      },
+      "maximum_original_vs_probe_edge_error_difference_ui": 5.3611629025063223e-14,
+      "extra_zero_crossings": 0,
+      "missing_expected_transitions": 0,
+      "rail_power_w": {
+        "pdata": 0.013800128216030669,
+        "pmux": 0.023618581250831855,
+        "pbias": 0.0015299999999999997,
+        "pclock": 0.014422364347648159
+      },
+      "final_latch_resistor_mean_current_a": {
+        "ah": 0.0004401201602513649,
+        "bh": 0.0004385186752387693
+      }
+    },
+    {
+      "case": "advance_r3_clock",
+      "run": "results/analog/tx/serializer/timing_diagnosis/20261028T101045Z_ngspice_tt_advance_r3_clock",
+      "payload_bits": 256,
+      "bit_errors_fixed_original_latency": 0,
+      "minimum_signed_margin_fixed_original_latency_v": 0.10660064882550667,
+      "output_edge_pp_ui": 0.12834590087453535,
+      "matched_expected_transitions": 130,
+      "expected_transitions": 130,
+      "groups": [
+        {
+          "parity": 0,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": -0.005332797800676303,
+          "error_min_ui": -0.014532223234283492,
+          "error_max_ui": 0.005351211496588348,
+          "signed_g3_at_latch_clock_median_v": 0.24206655168264293,
+          "signed_held_at_mux_clock_median_v": 0.16684802054499812,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 0,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": 0.044338226122846436,
+          "error_min_ui": 0.020511724636776307,
+          "error_max_ui": 0.11060689159427284,
+          "signed_g3_at_latch_clock_median_v": 0.18666452284059198,
+          "signed_held_at_mux_clock_median_v": 0.047163199372395756,
+          "setup_from_input_zero_median_ui": 0.465202063114333,
+          "g3_to_held_zero_median_ui": 0.29838666787352963
+        },
+        {
+          "parity": 1,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": -0.0008019737098834412,
+          "error_min_ui": -0.00834946892410926,
+          "error_max_ui": 0.0017637662932372677,
+          "signed_g3_at_latch_clock_median_v": 0.2235527386992357,
+          "signed_held_at_mux_clock_median_v": 0.17008825630819857,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 1,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": -0.009843335896434269,
+          "error_min_ui": -0.017739009280262508,
+          "error_max_ui": -0.006438587577349608,
+          "signed_g3_at_latch_clock_median_v": 0.20520716319579818,
+          "signed_held_at_mux_clock_median_v": 0.13348043891402017,
+          "setup_from_input_zero_median_ui": 1.463478380659538,
+          "g3_to_held_zero_median_ui": 0.8505997245340637
+        }
+      ],
+      "clock_stats": {
+        "d1g": {
+          "rise10_90_ui": 0.37299164460361567,
+          "fall90_10_ui": 0.3744892003706042,
+          "phase_from_loaded_250fall_ui": 0.23673062265534384,
+          "diff_pp_v": 0.490484461,
+          "cm_mean_v": 1.667546190620277
+        },
+        "ds": {
+          "rise10_90_ui": 0.6195517721781982,
+          "fall90_10_ui": 0.6179821954780351,
+          "phase_from_loaded_250fall_ui": 0.9816418968186298,
+          "diff_pp_v": 0.455164601,
+          "cm_mean_v": 1.645051172624895
+        },
+        "sfA": {
+          "rise10_90_ui": 0.6323642182488953,
+          "fall90_10_ui": 0.6429172045775502,
+          "phase_from_loaded_250fall_ui": 1.0783611775729867,
+          "diff_pp_v": 0.371251965,
+          "cm_mean_v": 0.9713272213884342
+        },
+        "sfM": {
+          "rise10_90_ui": 0.6451157935373715,
+          "fall90_10_ui": 0.6395912765475771,
+          "phase_from_loaded_250fall_ui": 1.0795822582364138,
+          "diff_pp_v": 0.3744525465,
+          "cm_mean_v": 0.9713659908458755
+        },
+        "sfR3a": {
+          "rise10_90_ui": 0.5064619535135293,
+          "fall90_10_ui": 0.5056352535262363,
+          "phase_from_loaded_250fall_ui": 0.3253497421713121,
+          "diff_pp_v": 0.42184278249999996,
+          "cm_mean_v": 0.9904863358295025
+        }
+      },
+      "extra_zero_crossings": 0,
+      "missing_expected_transitions": 0,
+      "rail_power_w": {
+        "pdata": 0.013800130535482595,
+        "pmux": 0.02362178116132272,
+        "pbias": 0.0015299999999999997,
+        "pclock": 0.014422643502627652
+      },
+      "final_latch_resistor_mean_current_a": {
+        "ah": 0.0004401442021909108,
+        "bh": 0.00043875748387647075
+      }
+    },
+    {
+      "case": "local_clock_drive_2x",
+      "run": "results/analog/tx/serializer/timing_diagnosis/20261028T101045Z_ngspice_tt_local_clock_drive_2x",
+      "payload_bits": 256,
+      "bit_errors_fixed_original_latency": 0,
+      "minimum_signed_margin_fixed_original_latency_v": 0.10522525978009588,
+      "output_edge_pp_ui": 0.13192467857766133,
+      "matched_expected_transitions": 130,
+      "expected_transitions": 130,
+      "groups": [
+        {
+          "parity": 0,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": 0.004032673323379754,
+          "error_min_ui": -0.0010348287576391613,
+          "error_max_ui": 0.01401003663252709,
+          "signed_g3_at_latch_clock_median_v": 0.2465658830026134,
+          "signed_held_at_mux_clock_median_v": 0.16513904168652324,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 0,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": 0.0819784561028456,
+          "error_min_ui": 0.04514838984226799,
+          "error_max_ui": 0.12215053146863397,
+          "signed_g3_at_latch_clock_median_v": 0.1757854488243568,
+          "signed_held_at_mux_clock_median_v": 0.018712754324357997,
+          "setup_from_input_zero_median_ui": 0.38448873938085626,
+          "g3_to_held_zero_median_ui": 0.32098274359595536
+        },
+        {
+          "parity": 1,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": 0.007728751575740489,
+          "error_min_ui": 0.0011025050915804968,
+          "error_max_ui": 0.01003010552196315,
+          "signed_g3_at_latch_clock_median_v": 0.22438194330485473,
+          "signed_held_at_mux_clock_median_v": 0.16989634106809656,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 1,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": -3.2566981786885663e-06,
+          "error_min_ui": -0.009774147109027354,
+          "error_max_ui": 0.0021830599710881415,
+          "signed_g3_at_latch_clock_median_v": 0.20452211442413218,
+          "signed_held_at_mux_clock_median_v": 0.13225718600843872,
+          "setup_from_input_zero_median_ui": 1.3883771105008123,
+          "g3_to_held_zero_median_ui": 0.7795387102471238
+        }
+      ],
+      "clock_stats": {
+        "d1g": {
+          "rise10_90_ui": 0.5154984390761967,
+          "fall90_10_ui": 0.5199356394782768,
+          "phase_from_loaded_250fall_ui": 0.3199966012128215,
+          "diff_pp_v": 0.473972719,
+          "cm_mean_v": 1.6675685339504618
+        },
+        "ds": {
+          "rise10_90_ui": 0.6282451585401887,
+          "fall90_10_ui": 0.6274624345248867,
+          "phase_from_loaded_250fall_ui": 1.0376415901756957,
+          "diff_pp_v": 0.436145483,
+          "cm_mean_v": 1.6451106972496852
+        },
+        "sfA": {
+          "rise10_90_ui": 0.6260858389960262,
+          "fall90_10_ui": 0.6337148104008747,
+          "phase_from_loaded_250fall_ui": 1.0903972510827202,
+          "diff_pp_v": 0.3724815175,
+          "cm_mean_v": 0.9651956387415512
+        },
+        "sfM": {
+          "rise10_90_ui": 0.6325946399921989,
+          "fall90_10_ui": 0.6303305315093866,
+          "phase_from_loaded_250fall_ui": 1.0913692855182404,
+          "diff_pp_v": 0.3739431765,
+          "cm_mean_v": 0.9652055314653128
+        },
+        "sfR3a": {
+          "rise10_90_ui": 0.63074675177063,
+          "fall90_10_ui": 0.62669161518496,
+          "phase_from_loaded_250fall_ui": 0.41152166897974496,
+          "diff_pp_v": 0.417131675,
+          "cm_mean_v": 0.989439529348919
+        }
+      },
+      "extra_zero_crossings": 0,
+      "missing_expected_transitions": 0,
+      "rail_power_w": {
+        "pdata": 0.013800118882868787,
+        "pmux": 0.025662324762429717,
+        "pbias": 0.0015299999999999997,
+        "pclock": 0.014422395808492344
+      },
+      "final_latch_resistor_mean_current_a": {
+        "ah": 0.00043926778447732963,
+        "bh": 0.0004372977606842987
+      }
+    },
+    {
+      "case": "final_latch_current_2x",
+      "run": "results/analog/tx/serializer/timing_diagnosis/20261028T101536Z_ngspice_tt_final_latch_current_2x",
+      "payload_bits": 256,
+      "bit_errors_fixed_original_latency": 0,
+      "minimum_signed_margin_fixed_original_latency_v": 0.14138478508379623,
+      "output_edge_pp_ui": 0.041920412348787295,
+      "matched_expected_transitions": 130,
+      "expected_transitions": 130,
+      "groups": [
+        {
+          "parity": 0,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": -0.015922976720759152,
+          "error_min_ui": -0.037830379053303886,
+          "error_max_ui": -0.00753820585796916,
+          "signed_g3_at_latch_clock_median_v": 0.24755472377507606,
+          "signed_held_at_mux_clock_median_v": 0.15172996268293304,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 0,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": -0.006806341150607409,
+          "error_min_ui": -0.03811921849231226,
+          "error_max_ui": 0.003801193856475038,
+          "signed_g3_at_latch_clock_median_v": 0.1734691728118967,
+          "signed_held_at_mux_clock_median_v": 0.07959959634848729,
+          "setup_from_input_zero_median_ui": 0.3743081323199817,
+          "g3_to_held_zero_median_ui": 0.17036771819110186
+        },
+        {
+          "parity": 1,
+          "fresh": false,
+          "n": 33,
+          "error_median_ui": -0.00640626375326292,
+          "error_min_ui": -0.00856044209308493,
+          "error_max_ui": -0.003033933222823748,
+          "signed_g3_at_latch_clock_median_v": 0.22574455867464646,
+          "signed_held_at_mux_clock_median_v": 0.15313344925997666,
+          "setup_from_input_zero_median_ui": null,
+          "g3_to_held_zero_median_ui": null
+        },
+        {
+          "parity": 1,
+          "fresh": true,
+          "n": 32,
+          "error_median_ui": -0.015216636397340721,
+          "error_min_ui": -0.01665061403184609,
+          "error_max_ui": -0.01153541123214552,
+          "signed_g3_at_latch_clock_median_v": 0.20782799741276337,
+          "signed_held_at_mux_clock_median_v": 0.15315209565198729,
+          "setup_from_input_zero_median_ui": 1.3812257948538829,
+          "g3_to_held_zero_median_ui": 0.5840500873906151
+        }
+      ],
+      "clock_stats": {
+        "d1g": {
+          "rise10_90_ui": 0.5153293937542571,
+          "fall90_10_ui": 0.5197613547011457,
+          "phase_from_loaded_250fall_ui": 0.320098579789601,
+          "diff_pp_v": 0.47397386649999995,
+          "cm_mean_v": 1.6675625562494751
+        },
+        "ds": {
+          "rise10_90_ui": 0.6162226902253707,
+          "fall90_10_ui": 0.61571605747136,
+          "phase_from_loaded_250fall_ui": 0.9823277656182512,
+          "diff_pp_v": 0.454493191,
+          "cm_mean_v": 1.6450443943209487
+        },
+        "sfA": {
+          "rise10_90_ui": 0.630416340352383,
+          "fall90_10_ui": 0.6463141464690807,
+          "phase_from_loaded_250fall_ui": 1.0846543408564244,
+          "diff_pp_v": 0.36941626299999997,
+          "cm_mean_v": 0.9716212088173279
+        },
+        "sfM": {
+          "rise10_90_ui": 0.640342895791008,
+          "fall90_10_ui": 0.6340057951913067,
+          "phase_from_loaded_250fall_ui": 1.0782673076006688,
+          "diff_pp_v": 0.37295501899999994,
+          "cm_mean_v": 0.9712833527643786
+        },
+        "sfR3a": {
+          "rise10_90_ui": 0.6304681642459684,
+          "fall90_10_ui": 0.6264446396831431,
+          "phase_from_loaded_250fall_ui": 0.41183795667404866,
+          "diff_pp_v": 0.417140452,
+          "cm_mean_v": 0.9894348000060349
+        }
+      },
+      "extra_zero_crossings": 0,
+      "missing_expected_transitions": 0,
+      "rail_power_w": {
+        "pdata": 0.013800129517427859,
+        "pmux": 0.025318102700875346,
+        "pbias": 0.00153,
+        "pclock": 0.014422368107729077
+      },
+      "final_latch_resistor_mean_current_a": {
+        "ah": 0.0009112038015638113,
+        "bh": 0.0009133663028494964
+      }
+    }
+  ],
+  "same_frozen_waveforms_and_original_training_latency": true,
+  "window_bits": [
+    64,
+    320
+  ]
+}

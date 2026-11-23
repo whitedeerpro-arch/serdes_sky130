@@ -1,0 +1,15 @@
+status = "r3_phase_review_complete; route_and_trim_recalibration_pending"
+report = "docs/history/tx_clock_phase_audit.md"
+results = "docs/data/tx_clock_phase_audit.json"
+existing_TX_PVT_clock_boundary = "frozen_v0.1_TT_PLL_edge_record"
+existing_TX_PVT_includes_new_r3_prescaler_phase = false
+r3_capture = "native_fixed_Vctrl_clock_frontend_near2GHz; not_closed_PLL_lock"
+r3_loaded_clock_probe = "real_TX_buffers_and_static_word_serializer"
+one_startup_requires_1GHz_polarity_swap_to_match_coarse_phase = true
+polarity_valid_for_all_startups_verified = false
+r3_trim_recalibrated = false
+r3_streaming_data_verified = false
+default_route_or_circuit_changed = false
+eye_display = "config/eye_display.toml"
+
+campaign = "results/analog/tx/clock_distribution/buffered_phase_audit/20261030T091451Z"

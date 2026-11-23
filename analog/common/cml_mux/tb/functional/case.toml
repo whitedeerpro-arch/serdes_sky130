@@ -1,0 +1,16 @@
+id = "functional"
+dut = "analog/common/cml_mux"
+level = "block"
+status = "prototype"
+purpose = "先验证静态逻辑和2GHz选择下4Gb/s串行输出；再与真实下一级负载联调。"
+analyses = ["tran"]
+measurements = ["bit_errors", "eye_center_margin", "swing", "common_mode", "delay", "power"]
+[implementation]
+view = "transistor_ideal_R_external_bias"
+simulator = "ngspice47"
+testbench = "analog/common/cml_mux/tb/functional/tb_mux2_ngspice.cir.in"
+[requirements]
+status = "prototype_only_not_line_driver_signoff"
+output_data_rate_bps = 4000000000
+selector_clock_hz = 2000000000
+load_per_leg_f = 2e-14

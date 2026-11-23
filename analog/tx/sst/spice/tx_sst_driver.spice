@@ -1,0 +1,238 @@
+* Quarter-Rate 4-Phase 1 GHz Fused 4:1 MUX + Low-Vdd N-over-N SST Line Driver
+* with Built-In 2-Tap FFE, 5-Bit ZQ Impedance Control, and On-Chip V_drv LDO.
+* SKY130A 1.8 V, 4 Gb/s (250 ps UI), 400 mVpp diff into 100 ohm double-terminated load.
+* Requires: sky130_primitives.spice (serdes_nfet, serdes_nfet_lvt, serdes_pfet)
+
+* --- Fast LVT-NMOS + min-L PMOS static CMOS cells ---
+.subckt sst_inv a y vdd vss params: wn=1.5 wp=3.0 nfn=1 nfp=1
+Xn y a vss vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xp y a vdd vdd serdes_pfet w={wp} l=0.15 nf={nfp}
+.ends sst_inv
+
+.subckt sst_nand2 a b y vdd vss params: wn=3.0 wp=2.5 nfn=1 nfp=1
+Xna y a mid vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xnb mid b vss vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xpa y a vdd vdd serdes_pfet w={wp} l=0.15 nf={nfp}
+Xpb y b vdd vdd serdes_pfet w={wp} l=0.15 nf={nfp}
+.ends sst_nand2
+
+.subckt sst_nor2 a b y vdd vss params: wn=1.5 wp=5.0 nfn=1 nfp=2
+Xna y a vss vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xnb y b vss vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xpa y a mid vdd serdes_pfet w={wp} l=0.15 nf={nfp}
+Xpb mid b vdd vdd serdes_pfet w={wp} l=0.15 nf={nfp}
+.ends sst_nor2
+
+.subckt sst_tgate a b p pb vdd vss params: wn=2.5 wp=4.0 nfn=1 nfp=2
+Xn a p b vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xp a pb b vdd serdes_pfet w={wp} l=0.15 nf={nfp}
+.ends sst_tgate
+
+* Weak cross-coupled inverter pair for differential crossing alignment (zero DCD)
+.subckt sst_cc_align ap an vdd vss params: wn=0.7 wp=1.4
+X1 ap an vdd vss sst_inv wn={wn} wp={wp}
+X2 an ap vdd vss sst_inv wn={wn} wp={wp}
+.ends sst_cc_align
+
+* --- 4-Phase 1 GHz Clock Buffer + Symmetric 25%-Duty (250 ps) Pulse Generator ---
+* Input: phi0, phi90, phi180, phi270 (1 GHz, 50% duty, 0/90/180/270 deg).
+* Output: p0..p3 (active-high 250 ps pulses; v4.3 pure static CMOS MUX eliminates pb0..pb3!).
+* Slot 0 [0..250ps]:   phi0=1, phi90=0, phi180=0, phi270=1 -> p0=NOR2(c90,c180)
+* Slot 1 [250..500ps]: phi0=1, phi90=1, phi180=0, phi270=0 -> p1=NOR2(c180,c270)
+* Slot 2 [500..750ps]: phi0=0, phi90=1, phi180=1, phi270=0 -> p2=NOR2(c270,c0)
+* Slot 3 [750..1000ps]:phi0=0, phi90=0, phi180=1, phi270=1 -> p3=NOR2(c0,c90)
+.subckt sst_pulsegen_4ph phi0 phi90 phi180 phi270 p0 p1 p2 p3 vdd vss
+* Stage 1: input sharpening inverters + cross-coupled complementary alignment
+Xi0  phi0   b0   vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xi90 phi90  b90  vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xi18 phi180 b180 vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xi27 phi270 b270 vdd vss sst_inv wn=3.0 wp=6.0 nfn=1 nfp=2
+Xcc1a b0  b180 vdd vss sst_cc_align wn=0.6 wp=1.2
+Xcc1b b90 b270 vdd vss sst_cc_align wn=0.6 wp=1.2
+* Stage 2: restore polarity & drive pulse gates
+Xj0  b0   c0   vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xj90 b90  c90  vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xj18 b180 c180 vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xj27 b270 c270 vdd vss sst_inv wn=5.0 wp=12.0 nfn=2 nfp=4
+Xcc2a c0  c180 vdd vss sst_cc_align wn=0.8 wp=1.6
+Xcc2b c90 c270 vdd vss sst_cc_align wn=0.8 wp=1.6
+* Stage 3: 1-gate-delay 25%-duty active-HIGH pulse generators (wn=1.90 balances SS -40C RCX & SS +85C CPEX!)
+Xp0  c90  c180 p0  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+Xp1  c180 c270 p1  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+Xp2  c270 c0   p2  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+Xp3  c0   c90  p3  vdd vss sst_nor2  wn=1.90 wp=18.0 nfn=1 nfp=6
+.ends sst_pulsegen_4ph
+
+* --- Differential Quarter-Rate Pure Static CMOS 4:1 MUX + 3-Stage Tapered Pre-Driver (v4.3) ---
+* NAND2(p_k, db_k) -> swapped NAND2(e/o) -> swapped NOR2(e, o) -> Xmb INV -> Xmp2 INV (FO<=2.8 everywhere!).
+* Positive leg takes db0..db3 and inverts 5x -> out_p = d_k; Negative leg takes d0..d3 -> out_n = db_k.
+.subckt sst_mux4_predrv d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 out_p out_n vdd vss
++ params: scale=1.0
+* Positive leg (out_p = d_k via 5 inversions of db_k)
+Xg0p p0 db0 g0p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg1p p1 db1 g1p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg2p p2 db2 g2p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg3p p3 db3 g3p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xepa g0p g2p ep vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xepb g2p g0p ep vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xopa g1p g3p op vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xopb g3p g1p op vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xmp1a ep op pre1p vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmp1b op ep pre1p vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmbp pre1p midp  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=2 nfp=4
+Xmp2 midp  out_p vdd vss sst_inv   wn={10.0*scale} wp={26.1*scale} nfn=4 nfp=9
+* Negative leg (out_n = db_k via 5 inversions of d_k)
+Xg0n p0 d0 g0n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg1n p1 d1 g1n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg2n p2 d2 g2n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xg3n p3 d3 g3n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=2
+Xena g0n g2n en_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xenb g2n g0n en_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xona g1n g3n on_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xonb g3n g1n on_ vdd vss sst_nand2 wn={1.4*scale} wp={2.6*scale} nfn=1 nfp=1
+Xmn1a en_ on_ pre1n vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmn1b on_ en_ pre1n vdd vss sst_nor2 wn={1.8*scale} wp={9.6*scale} nfn=1 nfp=4
+Xmbn pre1n midn  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=2 nfp=4
+Xmn2 midn  out_n vdd vss sst_inv   wn={10.0*scale} wp={26.1*scale} nfn=4 nfp=9
+.ends sst_mux4_predrv
+
+* --- Enable-Gated Post-Cursor FFE Static CMOS 4:1 MUX + Pre-Driver (5-stage delay-matched; en=0 -> out_p=out_n=0) ---
+.subckt sst_mux4_predrv_en d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 en out_p out_n vdd vss
++ params: scale=0.35
+Xenb en enb vdd vss sst_inv wn=1.0 wp=2.0 nfn=1 nfp=1
+* Positive leg (out_p = ~midp & en = d_k & en)
+Xg0p p0 db0 g0p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg1p p1 db1 g1p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg2p p2 db2 g2p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg3p p3 db3 g3p vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xep  g0p g2p ep vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xop  g1p g3p op vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xmp1a ep op pre1p vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmp1b op ep pre1p vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmbp pre1p midp  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=1 nfp=2
+Xmp2 midp  enb out_p vdd vss sst_nor2 wn={7.6*scale} wp={30.0*scale} nfn=1 nfp=4
+* Negative leg (out_n = ~midn & en = db_k & en)
+Xg0n p0 d0 g0n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg1n p1 d1 g1n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg2n p2 d2 g2n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xg3n p3 d3 g3n vdd vss sst_nand2 wn={2.6*scale} wp={3.8*scale} nfn=1 nfp=1
+Xen  g0n g2n en_ vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xon  g1n g3n on_ vdd vss sst_nand2 wn={2.8*scale} wp={5.2*scale} nfn=1 nfp=1
+Xmn1a en_ on_ pre1n vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmn1b on_ en_ pre1n vdd vss sst_nor2 wn={1.6*scale} wp={8.4*scale} nfn=1 nfp=1
+Xmbn pre1n midn  vdd vss sst_inv   wn={3.6*scale} wp={9.6*scale} nfn=1 nfp=2
+Xmn2 midn  enb out_n vdd vss sst_nor2 wn={7.6*scale} wp={30.0*scale} nfn=1 nfp=4
+.ends sst_mux4_predrv_en
+
+* --- N-over-N Differential SST Unit Slice (nominal 800 ohm per side @ TT) ---
+* Both pull-up (to vdrv ~ 0.44 V) and pull-down (to vss = 0 V) are LVT NMOS driven by
+* a 2-stage zero-stacked-PMOS local driver (NAND2 -> INV, FO <= 2.5, active-HIGH en).
+* Input cap per slice on mp/mn is only 1.2 um (6.5x smaller than NOR2), and disabled
+* slices stop switching after the tiny NAND2 (ultra-low dynamic power).
+* Real PDK fixed-width high-poly resistor (sky130_fd_pr__res_high_po_2p85) provides ~70% of R_out.
+.subckt sst_slice_unit din_p din_n en pad_p pad_n vdrv vdd vss
++ params: wpu=3.8 wpd=2.6 lres=3.75
+* Local enable-gated drivers: when en=1, gp=din_p, gn=din_n; when en=0, gp=gn=0 (Hi-Z)
+* v4.3: strengthened PMOS on Xgpb/Xgnb (1.0/1.2) + Xgp/Xgn (1.1/2.2) eliminates SS -40C post-layout crowbar!
+Xgpb din_p en gpb vdd vss sst_nand2 wn=1.00 wp=1.20 nfn=1 nfp=1
+Xgnb din_n en gnb vdd vss sst_nand2 wn=1.00 wp=1.20 nfn=1 nfp=1
+Xgp  gpb   gp vdd vss sst_inv wn=1.10 wp=2.20 nfn=1 nfp=1
+Xgn  gnb   gn vdd vss sst_inv wn=1.10 wp=2.20 nfn=1 nfp=1
+* Positive leg (pad_p)
+Xpup vdrv gp swp vss serdes_nfet_lvt w={wpu} l=0.15 nf=2
+Xpdp swp  gn vss vss serdes_nfet_lvt w={wpd} l=0.15 nf=1
+Xrp  swp  pad_p vss sky130_fd_pr__res_high_po_2p85 l={lres}
+* Negative leg (pad_n)
+Xpun vdrv gn swn vss serdes_nfet_lvt w={wpu} l=0.15 nf=2
+Xpdn swn  gp vss vss serdes_nfet_lvt w={wpd} l=0.15 nf=1
+Xrn  swn  pad_n vss sky130_fd_pr__res_high_po_2p85 l={lres}
+.ends sst_slice_unit
+
+* Binary-weighted slice bank wrappers (exact unit-cell parallel copies, active-HIGH en)
+.subckt sst_bank_2x din_p din_n en pad_p pad_n vdrv vdd vss params: wpu=3.8 wpd=2.6 lres=3.75
+X0 din_p din_n en pad_p pad_n vdrv vdd vss sst_slice_unit wpu={wpu} wpd={wpd} lres={lres}
+X1 din_p din_n en pad_p pad_n vdrv vdd vss sst_slice_unit wpu={wpu} wpd={wpd} lres={lres}
+.ends sst_bank_2x
+
+.subckt sst_bank_4x din_p din_n en pad_p pad_n vdrv vdd vss params: wpu=3.8 wpd=2.6 lres=3.75
+X0 din_p din_n en pad_p pad_n vdrv vdd vss sst_bank_2x wpu={wpu} wpd={wpd} lres={lres}
+X1 din_p din_n en pad_p pad_n vdrv vdd vss sst_bank_2x wpu={wpu} wpd={wpd} lres={lres}
+.ends sst_bank_4x
+
+.subckt sst_bank_8x din_p din_n en pad_p pad_n vdrv vdd vss params: wpu=3.8 wpd=2.6 lres=3.75
+X0 din_p din_n en pad_p pad_n vdrv vdd vss sst_bank_4x wpu={wpu} wpd={wpd} lres={lres}
+X1 din_p din_n en pad_p pad_n vdrv vdd vss sst_bank_4x wpu={wpu} wpd={wpd} lres={lres}
+.ends sst_bank_8x
+
+* --- Compact On-Chip V_drv Sub-Regulator (1.8 V -> ~0.44 V, all-transistor SKY130) ---
+* PMOS-input 5T OTA + wide min-L LVT NMOS source-follower pass transistor + stacked MIM bypass (~15 pF).
+* Wide pass device (W=240u, L=0.15u) keeps vgate <= 1.05 V even at 6 mA, SS/FS 1.65 V 85 C (>0.6 V headroom!).
+* Reference divider from vbg (1.20 V) using matched res_high_po_1p41 (ratio-insensitive to R corner).
+.subckt sst_vdrv_ldo vbg vdrv vdd vss params: ltop=63.0 lbot=37.0
+* Matched high-poly voltage divider: vref = vbg * Rbot / (Rtop + Rbot) ~ 0.446 V from 1.20 V
+Xrtop vbg  vref vss sky130_fd_pr__res_high_po_1p41 l={ltop}
+Xrbot vref vss  vss sky130_fd_pr__res_high_po_1p41 l={lbot}
+* Self-bias current reference (~60 uA) using wide PMOS diode + high_po resistor (low Vsg overhead)
+Xbp_ref vbp vbp vdd vdd serdes_pfet w=20 l=0.35 nf=4
+Xrbias  vbp vss vss sky130_fd_pr__res_high_po_1p41 l=80.0
+* 5T PMOS-input OTA (tail ~120 uA, wide devices for high output swing up to Vdd - 0.2 V)
+Xtail tail vbp vdd vdd serdes_pfet w=40 l=0.35 nf=8
+Xref nd    vref tail vdd serdes_pfet w=48 l=0.35 nf=8
+Xfb  vgate vdrv tail vdd serdes_pfet w=48 l=0.35 nf=8
+Xm1  nd    nd   vss  vss serdes_nfet w=16 l=0.50 nf=4
+Xm2  vgate nd   vss  vss serdes_nfet w=16 l=0.50 nf=4
+* Dominant-pole compensation cap on vgate (~1.2 pF stacked MIM)
+Xcg1 vgate vss sky130_fd_pr__cap_mim_m3_1 w=17.0 l=17.0
+Xcg2 vss vgate sky130_fd_pr__cap_mim_m3_2 w=17.0 l=17.0
+* Wide LVT NMOS source-follower pass device (low Vgs -> huge 1.65V headroom, Rout_ol ~ 15 ohm)
+Xpass vdd vgate vdrv vss serdes_nfet_lvt w=240 l=0.15 nf=32
+* Small bleed resistor (~50 uA) ensures Mpass stays active even when TX disabled
+Xrbleed vdrv vss vss sky130_fd_pr__res_high_po_1p41 l=38.0
+* On-chip bypass cap on vdrv (~15.3 pF = 6x 24.8x24.8 um stacked MIM1+MIM2)
+Xcd0a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xcd0b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xcd1a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xcd1b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xcd2a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xcd2b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xcd3a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xcd3b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xcd4a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xcd4b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+Xcd5a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
+Xcd5b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8
+.ends sst_vdrv_ldo
+
+* --- Complete Quarter-Rate 4:1 Fused N-over-N SST Line Driver + 2-Tap FFE + ZQ + LDO ---
+* Data inputs: d0..d3 and db0..db3 (1 Gb/s phase-staggered: d_k launched 250 ps before slot k,
+*   so d_k is valid during slot k [Main] AND during slot (k+1)%4 [Post-Cursor]!).
+* Main cursor sends (d0, d1, d2, d3).
+* Post-1 cursor (inverted for de-emphasis) sends (db3, db0, db1, db2)!
+* ZQ / Main enable (active-HIGH, 5 bits: m0=1x, m1=2x, m2=4x, m3=8x, m4=8x -> 0..23 slices).
+* FFE / Post enable (active-HIGH, 3 bits: f0=1x, f1=2x, f2=2x -> 0..5 slices; ffe_en enables post MUX).
+* Total active slices N_zq = n_main + n_post -> constant 50 ohm R_out across PVT+RC and FFE!
+.subckt serdes_tx_sst_driver
++ d0 d1 d2 d3 db0 db1 db2 db3
++ phi0 phi90 phi180 phi270
++ m0 m1 m2 m3 m4 f0 f1 f2 ffe_en
++ vbg pad_p pad_n vdrv vdd vss
++ params: wpu=3.8 wpd=2.6 lres=3.75 ltop=63.0 lbot=37.0
+* On-chip V_drv sub-regulator
+Xldo vbg vdrv vdd vss sst_vdrv_ldo ltop={ltop} lbot={lbot}
+* Shared 4-phase 25%-duty active-HIGH pulse generator (1 GHz clocks only; zero pb0..pb3!)
+Xpg phi0 phi90 phi180 phi270 p0 p1 p2 p3 vdd vss sst_pulsegen_4ph
+* Main-cursor pure static CMOS 4:1 MUX + pre-driver (scale=1.0 drives 23x 1.2u slices)
+Xmux_m d0 d1 d2 d3 db0 db1 db2 db3 p0 p1 p2 p3 mp mn vdd vss sst_mux4_predrv scale=1.0
+* Post-cursor FFE pure static CMOS 4:1 MUX + pre-driver (rotated by 1 phase and inverted; scale=0.35 drives 5 slices)
+Xmux_f db3 db0 db1 db2 d3 d0 d1 d2 p0 p1 p2 p3 ffe_en fp fn vdd vss sst_mux4_predrv_en scale=0.35
+* Main SST slice banks (1 + 2 + 4 + 8 + 8 = 23 unit slices, active-HIGH enables)
+Xm_1x  mp mn m0 pad_p pad_n vdrv vdd vss sst_slice_unit wpu={wpu} wpd={wpd} lres={lres}
+Xm_2x  mp mn m1 pad_p pad_n vdrv vdd vss sst_bank_2x    wpu={wpu} wpd={wpd} lres={lres}
+Xm_4x  mp mn m2 pad_p pad_n vdrv vdd vss sst_bank_4x    wpu={wpu} wpd={wpd} lres={lres}
+Xm_8xa mp mn m3 pad_p pad_n vdrv vdd vss sst_bank_8x    wpu={wpu} wpd={wpd} lres={lres}
+Xm_8xb mp mn m4 pad_p pad_n vdrv vdd vss sst_bank_8x    wpu={wpu} wpd={wpd} lres={lres}
+* Post-cursor FFE SST slice banks (1 + 2 + 2 = 5 unit slices, active-HIGH enables)
+Xf_1x  fp fn f0 pad_p pad_n vdrv vdd vss sst_slice_unit wpu={wpu} wpd={wpd} lres={lres}
+Xf_2xa fp fn f1 pad_p pad_n vdrv vdd vss sst_bank_2x    wpu={wpu} wpd={wpd} lres={lres}
+Xf_2xb fp fn f2 pad_p pad_n vdrv vdd vss sst_bank_2x    wpu={wpu} wpd={wpd} lres={lres}
+.ends serdes_tx_sst_driver

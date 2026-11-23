@@ -1,0 +1,26 @@
+RX CTLE far-end replay: recorded C2 far-end voltage (boundary condition) -> CTLE -> sampler load
+* stimuli.inc drives rxp/rxn with the per-leg far-end voltages recorded in the full link
+* (ideal TX, C2, 2 x 50 ohm to vcm, real CTLE input).  The termination is part of the
+* recording, so it is not instantiated here.
+.lib "@MODEL_LIBRARY@" @CORNER@
+.include "@PROJECT_ROOT@/analog/common/devices/spice/sky130_primitives.spice"
+.include "@PROJECT_ROOT@/analog/common/devices/spice/cmos_logic.spice"
+.include "@PROJECT_ROOT@/analog/rx/ctle/spice/rx_ctle_rc.spice"
+.include "stimuli.inc"
+Vdd vdd 0 @SUPPLY@
+Iref vdd vbias 50u
+Xref vbias vbias 0 0 serdes_nfet_lvt w=8 l=0.5 nf=4
+Veq0 eq0 0 @EQ0_V@
+Veq1 eq1 0 @EQ1_V@
+Xeq rxp rxn op on eq0 eq1 vbias vdd 0 serdes_rx_ctle_rc
+Cop op 0 20f
+Con on 0 20f
+.temp @TEMP_C@
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(rxp) v(rxn) v(op) v(on) v(vdd) i(Vdd)
+.control
+set filetype=binary
+@CASES@
+quit
+.endc
+.end

@@ -1,1 +1,0 @@
-../../analog/common/devices/schematic/serdes_cmos_nand2.sch

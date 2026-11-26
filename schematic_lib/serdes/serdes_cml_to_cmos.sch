@@ -1,1 +1,0 @@
-../../analog/common/cml_to_cmos/schematic/serdes_cml_to_cmos.sch

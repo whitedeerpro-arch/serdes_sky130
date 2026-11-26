@@ -1,5 +1,0 @@
-* Dynamic control sweep, not a settled DC VCO tuning characterization.
-* Require 0 < hold_time < ramp_end.
-.subckt stim_vctrl_ramp vctrl vss params: vstart=0.5 vstop=1.0 hold_time=5n ramp_end=25n
-Vctrl vctrl vss PWL(0 {vstart} {hold_time} {vstart} {ramp_end} {vstop})
-.ends stim_vctrl_ramp

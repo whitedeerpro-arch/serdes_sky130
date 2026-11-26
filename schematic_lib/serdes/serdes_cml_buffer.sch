@@ -1,1 +1,0 @@
-../../analog/common/cml_buffer/schematic/serdes_cml_buffer.sch

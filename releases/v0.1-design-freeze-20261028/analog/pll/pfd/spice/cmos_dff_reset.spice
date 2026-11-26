@@ -1,5 +1,0 @@
-* Compatibility names for the PFD, sharing the static CMOS DFF with dividers.
-* Dependency: analog/common/devices/spice/cmos_dff_reset.spice.
-.subckt pll_cmos_dff_reset d clk rst_b q vdd vss
-Xcore d clk rst_b q vdd vss serdes_cmos_dff_reset
-.ends pll_cmos_dff_reset

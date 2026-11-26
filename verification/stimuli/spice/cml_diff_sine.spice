@@ -1,7 +1,0 @@
-* Deterministic sinusoidal differential VCO-like stimulus.
-* Each leg amplitude is vdiff_pp/4; differential peak-to-peak is vdiff_pp.
-.subckt stim_cml_diff_sine inp inn vss
-+ params: vcm=1.632 vdiff_pp=0.4 freq=2G
-Vp inp vss SIN({vcm} {vdiff_pp/4} {freq})
-Vn inn vss SIN({vcm} {-vdiff_pp/4} {freq})
-.ends stim_cml_diff_sine

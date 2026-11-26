@@ -1,8 +1,0 @@
-* Local 250 MHz CML word-clock receiver and two-stage bank driver.
-* Input loading is the existing pvt_candidate receiver, followed by real CMOS
-* buffers. Does not include native PLL/v3 routing or extracted interconnect.
-.subckt serdes_tx_word_clock clkp clkn clk vbias vdd vss
-Xrx clkp clkn n0 n0b vbias vdd vss serdes_cml_to_cmos_pvt_candidate
-Xb1 n0 n1 vdd vss serdes_cmos_inv wn=8 wp=16
-Xb2 n1 clk vdd vss serdes_cmos_inv wn=24 wp=48
-.ends serdes_tx_word_clock

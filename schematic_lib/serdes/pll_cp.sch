@@ -1,1 +1,0 @@
-../../analog/pll/cp/schematic/pll_cp.sch

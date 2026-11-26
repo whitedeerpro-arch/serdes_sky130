@@ -1,9 +1,0 @@
-* Matched source followers shift high-CM CML PI clocks down for stacked latches.
-* Clock isolation / level shift, not rail-to-rail conversion.
-.subckt serdes_rx_clock_shift cp cn lp ln vbias vdd vss
-+ params: wsf=40 wsink=8
-Xp vdd cp lp vss serdes_nfet_lvt w={wsf} nf=4
-Xn vdd cn ln vss serdes_nfet_lvt w={wsf} nf=4
-Xsp lp vbias vss vss serdes_nfet w={wsink} l=.5 nf=2
-Xsn ln vbias vss vss serdes_nfet w={wsink} l=.5 nf=2
-.ends serdes_rx_clock_shift

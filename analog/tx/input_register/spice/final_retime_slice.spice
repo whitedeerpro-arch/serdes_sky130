@@ -1,6 +1,0 @@
-* Direct cut of the final rank in serializer16_retimed_lowov.
-* Bias and supply are ports to retain their recorded time dependence.
-.subckt serdes_tx_final_retime_slice ap an bp bn sp sn qp qn vbias vbias_logic vdd vss
-Xfinal ap an bp bn sp sn qp qn vbias vbias_logic vdd vss serdes_cml_latched_mux2_lowov
-+ wdata=40 wselect=96 wtail=72 nftail=24 rload=400 whold=40 wsf=80 wsf_sink=4 latch_tail_scale=2 latch_load_scale=.75
-.ends serdes_tx_final_retime_slice

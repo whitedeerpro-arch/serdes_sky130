@@ -1,7 +1,0 @@
-* RX split termination only. vcm must be driven by an external bias network.
-* Replace the existing fixture's two50ohm resistors; do not add in parallel.
-* No pad/ESD/package or common-mode regulator is included.
-.subckt serdes_rx_input_termination inp inn vcm params: rterm=50
-Rp inp vcm {rterm}
-Rn inn vcm {rterm}
-.ends serdes_rx_input_termination

@@ -1,7 +1,0 @@
-* Independent active-high UP/DN pulses.
-* Widths specify flat tops, excluding rise/fall times.
-* Set widths/delays explicitly for overlap and non-overlap tests.
-.subckt stim_cp_pulse_pair up dn vss params: vlo=0 vhi=1.8 period=10n up_delay=1n dn_delay=6n up_width=500p dn_width=500p trise=50p tfall=50p
-Vup up vss PULSE({vlo} {vhi} {up_delay} {trise} {tfall} {up_width} {period})
-Vdn dn vss PULSE({vlo} {vhi} {dn_delay} {trise} {tfall} {dn_width} {period})
-.ends stim_cp_pulse_pair

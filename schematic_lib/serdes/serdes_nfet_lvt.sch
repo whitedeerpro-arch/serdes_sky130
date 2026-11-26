@@ -1,1 +1,0 @@
-../../analog/common/devices/schematic/serdes_nfet_lvt.sch

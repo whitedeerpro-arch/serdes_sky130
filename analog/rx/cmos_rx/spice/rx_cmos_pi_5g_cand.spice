@@ -1,0 +1,264 @@
+* 2.5 GHz (5 Gb/s Half-Rate) 64-Code Pure CMOS Resistor-Linearized Phase Interpolator + Deterministic 1.25 GHz Quadrature /2
+* SKY130A, 1.8 V, 100% real SKY130 transistors, high_po resistors, and MIM capacitors (zero B-sources, zero ideal passives).
+* Dependencies: sky130_primitives.spice, sky130_pfet_lvt.spice.
+*
+* Port-compatible with digital/rx/rtl/pi_step_commutator.sv and 4G rx_cmos_pi.spice:
+*   a0..a7 : one-hot coarse sector select A (even anchors a0,a2,a4,a6 per pi_step_commutator.sv)
+*   b0..b7 : one-hot coarse sector select B (odd anchors b1,b3,b5,b7 per pi_step_commutator.sv)
+*   f0..f7 : 8-bit thermometer fine weight for leg B (0..8 bits high)
+*   c0..c7 : 8 CMOS 2.5 GHz anchor clocks spaced 45 deg = 50.0 ps (0, 50, 100, 150, 200, 250, 300, 350 ps)
+*   ckd0..3, cke0..3 : 8 CMOS 1.25 GHz quarter-rate clocks spaced 100.0 ps (driving 40 fF real slicer+deser load each)
+
+* --- Local CMOS primitives ---
+* High-f_T LVT-NMOS + boosted-Wp SVT-PMOS inverter (l=0.15): fast 2.5 GHz switching & 50% cold/hot duty!
+.subckt pi_inv a y vdd vss params: wn=1.0 wp=4.2 nfn=1 nfp=2
+Xn y a vss vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xp y a vdd vdd serdes_pfet     w={wp} l=0.15 nf={nfp}
+.ends pi_inv
+
+* Balanced LVT-NMOS / LVT-PMOS inverter: strong saturation g_m at V_M = VDD/2 even at SS 1.65 V -40 C!
+.subckt pi_inv_lvt a y vdd vss params: wn=1.0 wp=4.0 nfn=1 nfp=2
+Xn y a vss vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xp y a vdd vdd serdes_pfet_lvt w={wp} l=0.35 nf={nfp}
+.ends pi_inv_lvt
+
+.subckt pi_inv_static a y vdd vss params: wn=0.45 wp=0.90
+Xn y a vss vss serdes_nfet w={wn} l=0.18 nf=1
+Xp y a vdd vdd serdes_pfet w={wp} l=0.18 nf=1
+.ends pi_inv_static
+
+* Static-DC-gated LVT transmission gate: pfet_lvt (l=0.35) conducts cleanly at VDD/2 even at SS 1.65V -40C!
+.subckt pi_tgate_lvt a b en enb vdd vss params: wn=1.00 wp=2.00 nfn=1 nfp=1
+Xn a en  b vss serdes_nfet_lvt w={wn} l=0.15 nf={nfn}
+Xp a enb b vdd serdes_pfet_lvt w={wp} l=0.35 nf={nfp}
+.ends pi_tgate_lvt
+
+* Cross-coupled differential aligner
+.subckt pi_cc_align ap an vdd vss params: wn=0.45 wp=1.80
+X1 ap an vdd vss pi_inv wn={wn} wp={wp} nfn=1 nfp=1
+X2 an ap vdd vss pi_inv wn={wn} wp={wp} nfn=1 nfp=1
+.ends pi_cc_align
+
+* 100% Symmetric TG-isolated resettable clock gate (high-f_T LVT-NMOS + boosted-Wp PMOS for 2.5 GHz SS -40 C!):
+*   rst_n=1 (run):  identical static-ON LVT TG + balanced inverter on BOTH p & n legs -> 0.00 ps skew, ~50% duty!
+*   rst_n=0 (rst):  TG isolates toggling 2.5 GHz clock (< 1 uA static!) while clamp sets ckb=1 (p) or ckb=0 (n).
+.subckt pi_clk_gate_lo ck_in rst_n rst ckb vdd vss params: wn=1.50 wp=6.30 nfn=1 nfp=3
+Xtg   ck_in ck_g rst_n rst vdd vss pi_tgate_lvt wn=2.60 wp=6.80 nfn=2 nfp=3
+Xclmp ck_g  rst  vss   vss serdes_nfet w=0.80 l=0.18 nf=1
+Xinv  ck_g  ckb  vdd   vss pi_inv wn={wn} wp={wp} nfn={nfn} nfp={nfp}
+.ends pi_clk_gate_lo
+
+.subckt pi_clk_gate_hi ck_in rst_n rst ckb vdd vss params: wn=1.50 wp=6.30 nfn=1 nfp=3
+Xtg   ck_in ck_g rst_n rst vdd vss pi_tgate_lvt wn=2.60 wp=6.80 nfn=2 nfp=3
+Xclmp ck_g  rst_n vdd  vdd serdes_pfet w=1.60 l=0.18 nf=1
+Xinv  ck_g  ckb  vdd   vss pi_inv wn={wn} wp={wp} nfn={nfn} nfp={nfp}
+.ends pi_clk_gate_hi
+
+* --- Compact 1-Stage 4:1 LVT-TGate One-Hot Clock Mux + Crisp 2.5 GHz Output Inverter ---
+.subckt pi_mux4_tg i0 i1 i2 i3 s0 s1 s2 s3 sb0 sb1 sb2 sb3 y vdd vss params: wn_drv=2.00 wp_drv=8.80 wn_tg=1.60 wp_tg=4.20
+Xt0 i0 m s0 sb0 vdd vss pi_tgate_lvt wn={wn_tg} wp={wp_tg} nfn=2 nfp=2
+Xt1 i1 m s1 sb1 vdd vss pi_tgate_lvt wn={wn_tg} wp={wp_tg} nfn=2 nfp=2
+Xt2 i2 m s2 sb2 vdd vss pi_tgate_lvt wn={wn_tg} wp={wp_tg} nfn=2 nfp=2
+Xt3 i3 m s3 sb3 vdd vss pi_tgate_lvt wn={wn_tg} wp={wp_tg} nfn=2 nfp=2
+Xout m y vdd vss pi_inv wn={wn_drv} wp={wp_drv} nfn=2 nfp=4
+.ends pi_mux4_tg
+
+* --- Constant-Load High-Impedance Resistor-Linearized 2.5 GHz Mixer Slice ---
+* Passive gate-cap dummy keeps capacitive load on ca & cb 100% code-independent (0.00 ps bow).
+.subckt pi_slice_r ca cb f fb mix vdd vss params: wn=0.55 wp=2.30 lres=7.2
+Xsa ca sel fb f  vdd vss pi_tgate_lvt wn=0.50 wp=0.90 nfn=1 nfp=1
+Xsb cb sel f  fb vdd vss pi_tgate_lvt wn=0.50 wp=0.90 nfn=1 nfp=1
+Xinv_n drv sel vss vss serdes_nfet_lvt w={wn} l=0.15 nf=1
+Xinv_p drv sel vdd vdd serdes_pfet     w={wp} l=0.15 nf=1
+Xres   drv mix vss sky130_fd_pr__res_high_po_0p69 l={lres}
+* Constant-load passive dummy on unselected leg (zero drv switching!)
+Xda ca dum f  fb vdd vss pi_tgate_lvt wn=0.50 wp=0.90 nfn=1 nfp=1
+Xdb cb dum fb f  vdd vss pi_tgate_lvt wn=0.50 wp=0.90 nfn=1 nfp=1
+Xdn vss dum vss vss serdes_nfet_lvt w={wn} l=0.15 nf=1
+Xdp vdd dum vdd vdd serdes_pfet     w={wp} l=0.15 nf=1
+.ends pi_slice_r
+
+* --- 8-Slice 2.5 GHz High-Impedance Resistor-Linearized CMOS Phase Mixer ---
+.subckt pi_mixer8 ca cb f0 f1 f2 f3 f4 f5 f6 f7 fb0 fb1 fb2 fb3 fb4 fb5 fb6 fb7 mix vdd vss
++ params: wn_u=0.55 wp_u=2.30 lres=7.2 cmix_w=3.1
+Xs0 ca cb f0 fb0 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs1 ca cb f1 fb1 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs2 ca cb f2 fb2 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs3 ca cb f3 fb3 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs4 ca cb f4 fb4 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs5 ca cb f5 fb5 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs6 ca cb f6 fb6 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+Xs7 ca cb f7 fb7 mix vdd vss pi_slice_r wn={wn_u} wp={wp_u} lres={lres}
+* Real PDK MIM slew-control capacitor (scaled for 2.5 GHz tau_mix ~ 28-32 ps!)
+Xcmix mix vss sky130_fd_pr__cap_mim_m3_1 w={cmix_w} l={cmix_w}
+.ends pi_mixer8
+
+* --- Zero-Static-DC AC-Coupled Self-Biased LVT CMOS Recovery Stage ---
+* High-gain 2.5 GHz recovery with matched V_M = VDD/2 across all PVT including SS 1.65 V -40 C & 85 C!
+.subckt pi_ac_rec mixp mixn r1p r1n vdd vss params: wn=1.85 wp=7.40 cac_w=4.1 lrfb=10.5
+Xcp acp mixp sky130_fd_pr__cap_mim_m3_1 w={cac_w} l={cac_w}
+Xcn acn mixn sky130_fd_pr__cap_mim_m3_1 w={cac_w} l={cac_w}
+Xrp acp r1p vss sky130_fd_pr__res_high_po_0p35 l={lrfb}
+Xrn acn r1n vss sky130_fd_pr__res_high_po_0p35 l={lrfb}
+Xip acp r1p vdd vss pi_inv_lvt wn={wn} wp={wp} nfn=1 nfp=4
+Xin acn r1n vdd vss pi_inv_lvt wn={wn} wp={wp} nfn=1 nfp=4
+.ends pi_ac_rec
+
+* --- Differential 2.5 GHz CMOS PI Channel (produces matched 0/180 deg pair op/on) ---
+.subckt pi_diff_chan e0 e1 e2 e3 o0 o1 o2 o3
++ sa0 sa1 sa2 sa3 sab0 sab1 sab2 sab3
++ sb0 sb1 sb2 sb3 sbb0 sbb1 sbb2 sbb3
++ f0 f1 f2 f3 f4 f5 f6 f7 fb0 fb1 fb2 fb3 fb4 fb5 fb6 fb7
++ op on vdd vss
++ params: wn_drv=2.00 wp_drv=8.80 wn_u=0.55 wp_u=2.30 lres=7.2 cmix_w=3.1 wn_rec=1.85 cac_w=4.1 lrfb=10.5 wn_r2=2.80
+Xmap e0 e1 e2 e3 sa0 sa1 sa2 sa3 sab0 sab1 sab2 sab3 cap vdd vss pi_mux4_tg wn_drv={wn_drv} wp_drv={wp_drv}
+Xman e2 e3 e0 e1 sa0 sa1 sa2 sa3 sab0 sab1 sab2 sab3 can vdd vss pi_mux4_tg wn_drv={wn_drv} wp_drv={wp_drv}
+Xmbp o0 o1 o2 o3 sb0 sb1 sb2 sb3 sbb0 sbb1 sbb2 sbb3 cbp vdd vss pi_mux4_tg wn_drv={wn_drv} wp_drv={wp_drv}
+Xmbn o2 o3 o0 o1 sb0 sb1 sb2 sb3 sbb0 sbb1 sbb2 sbb3 cbn vdd vss pi_mux4_tg wn_drv={wn_drv} wp_drv={wp_drv}
+* 8-slice High-Impedance Constant-Load Resistor-Linearized CMOS phase mixers
+Xmixp cap cbp f0 f1 f2 f3 f4 f5 f6 f7 fb0 fb1 fb2 fb3 fb4 fb5 fb6 fb7 mixp vdd vss pi_mixer8 wn_u={wn_u} wp_u={wp_u} lres={lres} cmix_w={cmix_w}
+Xmixn can cbn f0 f1 f2 f3 f4 f5 f6 f7 fb0 fb1 fb2 fb3 fb4 fb5 fb6 fb7 mixn vdd vss pi_mixer8 wn_u={wn_u} wp_u={wp_u} lres={lres} cmix_w={cmix_w}
+* High-gain AC-coupled LVT recovery driving matched V_M = VDD/2 LVT output buffer (exact Wp/Wn=4.00 match!)
+Xrec mixp mixn r1p r1n vdd vss pi_ac_rec wn={wn_rec} wp={4.0*wn_rec} cac_w={cac_w} lrfb={lrfb}
+Xr2p r1n  op   vdd vss pi_inv_lvt wn={wn_r2} wp={4.0*wn_r2} nfn=2 nfp=4
+Xr2n r1p  on   vdd vss pi_inv_lvt wn={wn_r2} wp={4.0*wn_r2} nfn=2 nfp=4
+.ends pi_diff_chan
+
+* --- Complete 2.5 GHz 64-Code CMOS Phase Interpolator Rotator (Data 0/180 + Edge 90/270) ---
+.subckt serdes_rx_pi_rotator_2g c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ dp dn ep en vdd vss
++ params: wn_drv=2.00 wp_drv=8.80 wn_u=0.55 wp_u=2.30 lres=7.2 cmix_w=3.1 wn_rec=1.85 cac_w=4.1 lrfb=10.5 wn_r2=2.80
+* Static DC control inversions (0 uW dynamic power, L=0.18)
+Xia0 a0 ab0 vdd vss pi_inv_static
+Xia1 a1 ab1 vdd vss pi_inv_static
+Xia2 a2 ab2 vdd vss pi_inv_static
+Xia3 a3 ab3 vdd vss pi_inv_static
+Xia4 a4 ab4 vdd vss pi_inv_static
+Xia5 a5 ab5 vdd vss pi_inv_static
+Xia6 a6 ab6 vdd vss pi_inv_static
+Xia7 a7 ab7 vdd vss pi_inv_static
+Xib0 b0 bb0 vdd vss pi_inv_static
+Xib1 b1 bb1 vdd vss pi_inv_static
+Xib2 b2 bb2 vdd vss pi_inv_static
+Xib3 b3 bb3 vdd vss pi_inv_static
+Xib4 b4 bb4 vdd vss pi_inv_static
+Xib5 b5 bb5 vdd vss pi_inv_static
+Xib6 b6 bb6 vdd vss pi_inv_static
+Xib7 b7 bb7 vdd vss pi_inv_static
+Xif0 f0 fb0 vdd vss pi_inv_static
+Xif1 f1 fb1 vdd vss pi_inv_static
+Xif2 f2 fb2 vdd vss pi_inv_static
+Xif3 f3 fb3 vdd vss pi_inv_static
+Xif4 f4 fb4 vdd vss pi_inv_static
+Xif5 f5 fb5 vdd vss pi_inv_static
+Xif6 f6 fb6 vdd vss pi_inv_static
+Xif7 f7 fb7 vdd vss pi_inv_static
+* Shared 2.5 GHz anchor clock input buffers (balanced LVT-PMOS for full SS 1.65 V -40 C swing & 50% duty!)
+Xin0 c0 cb0 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin1 c1 cb1 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin2 c2 cb2 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin3 c3 cb3 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin4 c4 cb4 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin5 c5 cb5 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin6 c6 cb6 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+Xin7 c7 cb7 vdd vss pi_inv_lvt wn=1.70 wp=6.80 nfn=1 nfp=4
+* Data channel (0 / 180 deg): even={cb0,cb2,cb4,cb6}, odd={cb1,cb3,cb5,cb7}
+Xch_d cb0 cb2 cb4 cb6 cb1 cb3 cb5 cb7
++ a0 a2 a4 a6 ab0 ab2 ab4 ab6
++ b1 b3 b5 b7 bb1 bb3 bb5 bb7
++ f0 f1 f2 f3 f4 f5 f6 f7 fb0 fb1 fb2 fb3 fb4 fb5 fb6 fb7
++ dp dn vdd vss pi_diff_chan wn_drv={wn_drv} wp_drv={wp_drv} wn_u={wn_u} wp_u={wp_u} lres={lres} cmix_w={cmix_w} wn_rec={wn_rec} cac_w={cac_w} lrfb={lrfb} wn_r2={wn_r2}
+* Edge channel (+90 / +270 deg): even={cb2,cb4,cb6,cb0}, odd={cb3,cb5,cb7,cb1}
+Xch_e cb2 cb4 cb6 cb0 cb3 cb5 cb7 cb1
++ a0 a2 a4 a6 ab0 ab2 ab4 ab6
++ b1 b3 b5 b7 bb1 bb3 bb5 bb7
++ f0 f1 f2 f3 f4 f5 f6 f7 fb0 fb1 fb2 fb3 fb4 fb5 fb6 fb7
++ ep en vdd vss pi_diff_chan wn_drv={wn_drv} wp_drv={wp_drv} wn_u={wn_u} wp_u={wp_u} lres={lres} cmix_w={cmix_w} wn_rec={wn_rec} cac_w={cac_w} lrfb={lrfb} wn_r2={wn_r2}
+.ends serdes_rx_pi_rotator_2g
+
+* --- High-Speed 2.5 GHz Zero-Stacked-PMOS Differential Resettable Transmission-Gate Latch ---
+* Parameterized output inverter allows exact D/E fanout matching (zero systematic D-E skew across PVT!).
+.subckt pi_diff_latch dp_in dn_in ck ckb rst_n rst qp qn vdd vss
++ params: wn_out=3.40 wp_out=14.28 nfn_out=2 nfp_out=4
+Xtgp_n dp_in ck  int_p vss serdes_nfet_lvt w=2.80 l=0.15 nf=2
+Xtgp_p dp_in ckb int_p vdd serdes_pfet     w=6.80 l=0.15 nf=3
+Xtgn_n dn_in ck  int_n vss serdes_nfet_lvt w=2.80 l=0.15 nf=2
+Xtgn_p dn_in ckb int_n vdd serdes_pfet     w=6.80 l=0.15 nf=3
+* Weak cross-coupled keeper (l=0.28 SVT for ultra-fast TG overwrite at 2.5 GHz SS -40 C!)
+Xkp1 int_p int_n vdd vdd serdes_pfet w=0.42 l=0.28 nf=1
+Xkn1 int_p int_n vss vss serdes_nfet w=0.42 l=0.28 nf=1
+Xkp2 int_n int_p vdd vdd serdes_pfet w=0.42 l=0.28 nf=1
+Xkn2 int_n int_p vss vss serdes_nfet w=0.42 l=0.28 nf=1
+* Reset switches (rst_n=0 -> int_p=0, int_n=1 -> qp=0, qn=1, 0 uA static!)
+Xrp int_p rst   vss vss serdes_nfet w=1.0 l=0.18 nf=1
+Xrn int_n rst_n vdd vdd serdes_pfet w=1.8 l=0.18 nf=1
+* High-f_T LVT-NMOS + boosted-Wp PMOS output inverters (zero stall at 2.5 GHz SS -40 C + balanced 50% duty!)
+Xop int_n qp vdd vss pi_inv wn={wn_out} wp={wp_out} nfn={nfn_out} nfp={nfp_out}
+Xon int_p qn vdd vss pi_inv wn={wn_out} wp={wp_out} nfn={nfn_out} nfp={nfp_out}
+Xcc qp    qn vdd vss pi_cc_align wn=0.42 wp=1.76
+.ends pi_diff_latch
+
+* --- Deterministic Quadrature CMOS /2 (8-Phase 1.25 GHz Clock Generator for 5 Gb/s) ---
+.subckt serdes_rx_qdiv2_8ph dp dn ep en rst_n ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3 vdd vss
++ params: wn_ld=3.40 wn_le=1.45 pn_div=4.20 pn_ck=4.20 wn_buf=2.40
+* Fast strong rst inverter (<12 ps skew on TG clock gates) + staged ~60 ps delayed latch reset release:
+*   Clock gates ungate FIRST so dp_ck/dn_ck are 100% complementary before latches exit reset (zero CM collapse!)
+Xrst    rst_n     rst       vdd vss pi_inv wn=2.0 wp=8.0 nfn=2 nfp=4
+Xrst_d1 rst       rst_n_lat vdd vss pi_inv_static wn=0.6 wp=1.5
+Xrst_d2 rst_n_lat rst_lat   vdd vss pi_inv_static wn=1.2 wp=3.0
+* Centered 2-stage 100%-symmetric TG-isolated complementary reset-gated 2.5 GHz clock buffers:
+Xg_dpb dp rst_n rst dp_ckb vdd vss pi_clk_gate_lo wn=1.50 wp={1.50*pn_ck} nfn=1 nfp=3
+Xg_dnb dn rst_n rst dn_ckb vdd vss pi_clk_gate_hi wn=1.50 wp={1.50*pn_ck} nfn=1 nfp=3
+Xg_epb ep rst_n rst ep_ckb vdd vss pi_clk_gate_lo wn=1.50 wp={1.50*pn_ck} nfn=1 nfp=3
+Xg_enb en rst_n rst en_ckb vdd vss pi_clk_gate_hi wn=1.50 wp={1.50*pn_ck} nfn=1 nfp=3
+Xcc_dckb dp_ckb dn_ckb vdd vss pi_cc_align wn=0.45 wp={0.45*pn_ck}
+Xcc_eckb ep_ckb en_ckb vdd vss pi_cc_align wn=0.45 wp={0.45*pn_ck}
+Xg_dp  dp_ckb dp_ck vdd vss pi_inv wn=2.10 wp={2.10*pn_ck} nfn=2 nfp=4
+Xg_dn  dn_ckb dn_ck vdd vss pi_inv wn=2.10 wp={2.10*pn_ck} nfn=2 nfp=4
+Xg_ep  ep_ckb ep_ck vdd vss pi_inv wn=2.10 wp={2.10*pn_ck} nfn=2 nfp=4
+Xg_en  en_ckb en_ck vdd vss pi_inv wn=2.10 wp={2.10*pn_ck} nfn=2 nfp=4
+Xcc_dck  dp_ck  dn_ck  vdd vss pi_cc_align wn=0.45 wp={0.45*pn_ck}
+Xcc_eck  ep_ck  en_ck  vdd vss pi_cc_align wn=0.45 wp={0.45*pn_ck}
+
+* Master 1.25 GHz Johnson /2 on D (dp/dn) — sized for 2*TG + Xbd fanout
+Xld0 d3 d1 dp_ck dn_ck rst_n_lat rst_lat d0 d2 vdd vss pi_diff_latch wn_out={wn_ld} wp_out={wn_ld*pn_div} nfn_out=2 nfp_out=4
+Xld1 d0 d2 dn_ck dp_ck rst_n_lat rst_lat d1 d3 vdd vss pi_diff_latch wn_out={wn_ld} wp_out={wn_ld*pn_div} nfn_out=2 nfp_out=4
+
+* Deterministic Resampling Latches on E (ep/en) — sized for Xbe fanout to match D clk-to-q across PVT!
+Xle0 d0 d2 ep_ck en_ck rst_n_lat rst_lat e0 e2 vdd vss pi_diff_latch wn_out={wn_le} wp_out={wn_le*pn_div} nfn_out=1 nfp_out=3
+Xle1 d1 d3 en_ck ep_ck rst_n_lat rst_lat e1 e3 vdd vss pi_diff_latch wn_out={wn_le} wp_out={wn_le*pn_div} nfn_out=1 nfp_out=3
+
+* 1.25 GHz Output Buffers driving 40 fF real Double-Tail slicer + deser16 loads (balanced 50% duty across PVT!)
+Xbd0 d2 ckd0 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbd2 d0 ckd2 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbd1 d3 ckd1 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbd3 d1 ckd3 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbe0 e2 cke0 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbe2 e0 cke2 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbe1 e3 cke1 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xbe3 e1 cke3 vdd vss pi_inv wn={wn_buf} wp={wn_buf*pn_div} nfn=2 nfp=4
+Xccd0 ckd0 ckd2 vdd vss pi_cc_align wn=0.45 wp={0.45*pn_div}
+Xccd1 ckd1 ckd3 vdd vss pi_cc_align wn=0.45 wp={0.45*pn_div}
+Xcce0 cke0 cke2 vdd vss pi_cc_align wn=0.45 wp={0.45*pn_div}
+Xcce1 cke1 cke3 vdd vss pi_cc_align wn=0.45 wp={0.45*pn_div}
+.ends serdes_rx_qdiv2_8ph
+
+* --- Integrated 2.5 GHz Pure CMOS PI + Deterministic 8-Phase 1.25 GHz Clock Generator ---
+.subckt serdes_rx_cmos_pi_8ph c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ rst_n dp dn ep en ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3 vdd vss
++ params: wn_drv=2.00 wp_drv=8.80 wn_u=0.55 wp_u=2.30 lres=7.2 cmix_w=3.1 wn_rec=1.85 cac_w=4.1 lrfb=10.5 wn_r2=2.80 wn_ld=3.40 wn_le=1.45 pn_div=4.20 pn_ck=4.20 wn_buf=2.40
+Xpi c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ dp dn ep en vdd vss serdes_rx_pi_rotator_2g
++ wn_drv={wn_drv} wp_drv={wp_drv} wn_u={wn_u} wp_u={wp_u} lres={lres} cmix_w={cmix_w} wn_rec={wn_rec} cac_w={cac_w} lrfb={lrfb} wn_r2={wn_r2}
+Xdiv dp dn ep en rst_n ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3 vdd vss serdes_rx_qdiv2_8ph
++ wn_ld={wn_ld} wn_le={wn_le} pn_div={pn_div} pn_ck={pn_ck} wn_buf={wn_buf}
+.ends serdes_rx_cmos_pi_8ph

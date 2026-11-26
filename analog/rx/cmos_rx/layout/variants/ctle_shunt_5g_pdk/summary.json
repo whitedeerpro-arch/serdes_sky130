@@ -1,0 +1,951 @@
+{
+  "variant": "ctle_shunt_5g_pdk",
+  "pdk": "sky130A",
+  "source_spice": "analog/rx/cmos_rx/spice/rx_ctle_shunt_5g_pdk.spice",
+  "source_subckt": "serdes_rx_ctle_shunt_5g_pdk",
+  "parameters": {
+    "win": 24,
+    "nfin": 8,
+    "wtail": 60,
+    "nftail": 10,
+    "l_rload": 3.2,
+    "l_rdeg": 4.14,
+    "c_w": 9.81,
+    "c_l": 9.81,
+    "wsw": 4,
+    "inductor": "rx_ctle_ind_6n5_pdk"
+  },
+  "active_submacro": {
+    "cell": "serdes_rx_ctle_active_5g_pdk",
+    "bbox_um": [
+      -20.7,
+      0.0,
+      20.7,
+      26.1
+    ],
+    "width_um": 41.4,
+    "height_um": 26.1,
+    "area_um2": 1080.54,
+    "aspect_ratio": 1.59,
+    "expected_port_count": 11,
+    "exported_port_count": 11,
+    "exported_ports": [
+      "inp",
+      "inn",
+      "outp",
+      "outn",
+      "lp_mid",
+      "ln_mid",
+      "eq0",
+      "eq1",
+      "vbias",
+      "vdd",
+      "vss"
+    ],
+    "ports": {
+      "inp": {
+        "layer": "metal3",
+        "x_um": 20.7,
+        "y_um": 6.45
+      },
+      "inn": {
+        "layer": "metal3",
+        "x_um": 20.7,
+        "y_um": 5.55
+      },
+      "outp": {
+        "layer": "metal4",
+        "x_um": -20.7,
+        "y_um": 7.3
+      },
+      "outn": {
+        "layer": "metal4",
+        "x_um": -20.7,
+        "y_um": 4.7
+      },
+      "lp_mid": {
+        "layer": "metal4",
+        "x_um": -4.6,
+        "y_um": 0.0
+      },
+      "ln_mid": {
+        "layer": "metal4",
+        "x_um": 4.6,
+        "y_um": 0.0
+      },
+      "eq0": {
+        "layer": "metal1",
+        "x_um": -20.7,
+        "y_um": 11.65
+      },
+      "eq1": {
+        "layer": "metal1",
+        "x_um": -20.7,
+        "y_um": 23.25
+      },
+      "vbias": {
+        "layer": "metal1",
+        "x_um": 20.7,
+        "y_um": 23.6
+      },
+      "vdd": {
+        "layer": "metal2",
+        "x_um": -20.1,
+        "y_um": 0.0
+      },
+      "vss": {
+        "layer": "metal2",
+        "x_um": -20.7,
+        "y_um": 25.7
+      }
+    },
+    "drc_total": 0,
+    "floating_poly": 0,
+    "lvs_match": true,
+    "lvs_property_errors": false,
+    "physical_passed": true,
+    "rc_devices_preserved": true,
+    "raw_device_count": 20,
+    "merged_device_count": 19,
+    "net_count": 17,
+    "metal_shares": {
+      "area_um2": {
+        "M1": 131.096,
+        "M2": 157.776,
+        "M3": 377.727,
+        "M4": 86.379,
+        "M5": 0.0
+      },
+      "total_metal_um2": 752.978,
+      "share_pct": {
+        "M1": 17.4,
+        "M2": 21.0,
+        "M3": 50.2,
+        "M4": 11.5,
+        "M5": 0.0
+      }
+    },
+    "port_caps_fF": {
+      "inp": {
+        "to_substrate_fF": 1.625,
+        "coupling_sum_fF": 2.956,
+        "total_node_fF": 4.582
+      },
+      "inn": {
+        "to_substrate_fF": 1.669,
+        "coupling_sum_fF": 2.971,
+        "total_node_fF": 4.64
+      },
+      "outp": {
+        "to_substrate_fF": 2.681,
+        "coupling_sum_fF": 5.487,
+        "total_node_fF": 8.168
+      },
+      "outn": {
+        "to_substrate_fF": 2.782,
+        "coupling_sum_fF": 5.721,
+        "total_node_fF": 8.504
+      },
+      "lp_mid": {
+        "to_substrate_fF": 1.962,
+        "coupling_sum_fF": 0.491,
+        "total_node_fF": 2.453
+      },
+      "ln_mid": {
+        "to_substrate_fF": 2.005,
+        "coupling_sum_fF": 0.451,
+        "total_node_fF": 2.456
+      },
+      "eq0": {
+        "to_substrate_fF": 1.225,
+        "coupling_sum_fF": 2.581,
+        "total_node_fF": 3.806
+      },
+      "eq1": {
+        "to_substrate_fF": 1.448,
+        "coupling_sum_fF": 1.834,
+        "total_node_fF": 3.282
+      },
+      "vbias": {
+        "to_substrate_fF": 11.321,
+        "coupling_sum_fF": 7.241,
+        "total_node_fF": 18.562
+      },
+      "vdd": {
+        "to_substrate_fF": 6.279,
+        "coupling_sum_fF": 3.456,
+        "total_node_fF": 9.735
+      }
+    },
+    "differential_balance_fF": {
+      "inp_inn_delta_fF": 0.058,
+      "outp_outn_delta_fF": 0.336,
+      "lp_ln_delta_fF": 0.003
+    }
+  },
+  "inductor_submacro": {
+    "cell": "rx_ctle_ind_6n5_pdk",
+    "source_mag": "analog/rx/cmos_rx/layout/variants/ctle_shunt_ind_5g_pdk/rx_ctle_ind_6n5_pdk.mag",
+    "width_um": 91.6,
+    "height_um": 91.6,
+    "drc_total": 0,
+    "l_stacked_diff_nh": 8.252,
+    "r_dc_per_half_ohm": 24.74,
+    "c_sub_total_fF": 104.71
+  },
+  "top_macro": {
+    "cell": "serdes_rx_ctle_shunt_5g_pdk",
+    "bbox_um": [
+      -45.8,
+      -97.8,
+      45.8,
+      27.5
+    ],
+    "width_um": 91.6,
+    "height_um": 125.3,
+    "area_um2": 11477.48,
+    "area_mm2": 0.01148,
+    "aspect_ratio": 0.73,
+    "inductor_clearance_um": 6.2,
+    "lp_ln_feed_len_um": 11.5,
+    "expected_port_count": 9,
+    "exported_port_count": 9,
+    "exported_ports": [
+      "inp",
+      "inn",
+      "outp",
+      "outn",
+      "eq0",
+      "eq1",
+      "vbias",
+      "vdd",
+      "vss"
+    ],
+    "ports": {
+      "inp": {
+        "layer": "metal3",
+        "x_um": 45.8,
+        "y_um": 6.45
+      },
+      "inn": {
+        "layer": "metal3",
+        "x_um": 45.8,
+        "y_um": 5.55
+      },
+      "outp": {
+        "layer": "metal4",
+        "x_um": -45.8,
+        "y_um": 7.3
+      },
+      "outn": {
+        "layer": "metal4",
+        "x_um": -45.8,
+        "y_um": 4.7
+      },
+      "eq0": {
+        "layer": "metal1",
+        "x_um": -45.8,
+        "y_um": 11.65
+      },
+      "eq1": {
+        "layer": "metal1",
+        "x_um": -45.8,
+        "y_um": 23.25
+      },
+      "vbias": {
+        "layer": "metal2",
+        "x_um": 45.8,
+        "y_um": 23.6
+      },
+      "vdd": {
+        "layer": "metal3",
+        "x_um": -45.8,
+        "y_um": -3.6
+      },
+      "vss": {
+        "layer": "metal3",
+        "x_um": -45.8,
+        "y_um": 26.6
+      }
+    },
+    "drc_total": 0,
+    "drc_rules": [],
+    "floating_poly": 0,
+    "dc_lvs_match": true,
+    "dc_lvs_property_errors": false,
+    "inductor_open_lvs_match": true,
+    "inductor_open_lvs_property_errors": false,
+    "metal_shares": {
+      "area_um2": {
+        "M1": 698.206,
+        "M2": 452.696,
+        "M3": 2820.075,
+        "M4": 372.139,
+        "M5": 2130.84
+      },
+      "total_metal_um2": 6473.956,
+      "share_pct": {
+        "M1": 10.8,
+        "M2": 7.0,
+        "M3": 43.6,
+        "M4": 5.7,
+        "M5": 32.9
+      }
+    },
+    "inductor_open_port_caps_fF": {
+      "inp": {
+        "to_substrate_fF": 2.861,
+        "coupling_sum_fF": 3.995,
+        "total_node_fF": 6.856
+      },
+      "inn": {
+        "to_substrate_fF": 2.899,
+        "coupling_sum_fF": 4.012,
+        "total_node_fF": 6.911
+      },
+      "outp": {
+        "to_substrate_fF": 3.826,
+        "coupling_sum_fF": 5.999,
+        "total_node_fF": 9.826
+      },
+      "outn": {
+        "to_substrate_fF": 3.312,
+        "coupling_sum_fF": 6.448,
+        "total_node_fF": 9.76
+      },
+      "lp_mid": {
+        "to_substrate_fF": 2.843,
+        "coupling_sum_fF": 1.092,
+        "total_node_fF": 3.935
+      },
+      "ln_mid": {
+        "to_substrate_fF": 2.887,
+        "coupling_sum_fF": 1.053,
+        "total_node_fF": 3.939
+      },
+      "eq0": {
+        "to_substrate_fF": 3.721,
+        "coupling_sum_fF": 2.637,
+        "total_node_fF": 6.358
+      },
+      "eq1": {
+        "to_substrate_fF": 4.075,
+        "coupling_sum_fF": 1.84,
+        "total_node_fF": 5.915
+      },
+      "vbias": {
+        "to_substrate_fF": 13.307,
+        "coupling_sum_fF": 7.241,
+        "total_node_fF": 20.548
+      },
+      "vdd": {
+        "to_substrate_fF": 21.971,
+        "coupling_sum_fF": 4.765,
+        "total_node_fF": 26.736
+      }
+    }
+  },
+  "postlayout_cpex_ac": {
+    "cload_fF": 30.0,
+    "top_wire_c_added_fF": 1.66,
+    "ibias_uA": 50.0,
+    "vcm_in_V": 1.05,
+    "eq11_gate_summary": {
+      "tt_v1800_t27": {
+        "boost_2p5g_pex_db": 5.392,
+        "f_3db_pex_ghz": 20.0,
+        "boost_2p5g_top_db": 5.365,
+        "f_3db_top_ghz": 19.432,
+        "pass_boost_ge_3db": true,
+        "pass_bw_ge_7p5ghz": true
+      },
+      "ss_v1650_t85": {
+        "boost_2p5g_pex_db": 4.74,
+        "f_3db_pex_ghz": 15.886,
+        "boost_2p5g_top_db": 4.697,
+        "f_3db_top_ghz": 14.997,
+        "pass_boost_ge_3db": true,
+        "pass_bw_ge_7p5ghz": true
+      },
+      "ss_v1650_t-40": {
+        "boost_2p5g_pex_db": 6.137,
+        "f_3db_pex_ghz": 18.881,
+        "boost_2p5g_top_db": 6.101,
+        "f_3db_top_ghz": 18.345,
+        "pass_boost_ge_3db": true,
+        "pass_bw_ge_7p5ghz": true
+      },
+      "ff_v1950_t-40": {
+        "boost_2p5g_pex_db": 5.663,
+        "f_3db_pex_ghz": 20.0,
+        "boost_2p5g_top_db": 5.649,
+        "f_3db_top_ghz": 20.0,
+        "pass_boost_ge_3db": true,
+        "pass_bw_ge_7p5ghz": true
+      }
+    },
+    "all_eq11_gates_passed": true,
+    "rows": [
+      {
+        "corner": "tt_v1800_t27",
+        "rc_corner": "tt",
+        "eq": "00",
+        "vbias_v": 0.6507,
+        "cm_out_pex_v": 1.6137,
+        "power_pex_mw": 1.278,
+        "schematic": {
+          "lf_db": -0.626,
+          "g_2p5g_db": -0.468,
+          "g_5p0g_db": 0.026,
+          "boost_2p5g_db": 0.158,
+          "max_peak_db": 0.985,
+          "f_peak_ghz": 7.095,
+          "f_3db_ghz": 16.35
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": -0.304,
+          "g_5p0g_db": 0.636,
+          "boost_2p5g_db": 0.491,
+          "max_peak_db": 1.818,
+          "f_peak_ghz": 7.095,
+          "f_3db_ghz": 17.825
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": -0.333,
+          "g_5p0g_db": 0.536,
+          "boost_2p5g_db": 0.462,
+          "max_peak_db": 1.648,
+          "f_peak_ghz": 6.893,
+          "f_3db_ghz": 16.827
+        }
+      },
+      {
+        "corner": "tt_v1800_t27",
+        "rc_corner": "tt",
+        "eq": "01",
+        "vbias_v": 0.6507,
+        "cm_out_pex_v": 1.6137,
+        "power_pex_mw": 1.278,
+        "schematic": {
+          "lf_db": -0.626,
+          "g_2p5g_db": 3.115,
+          "g_5p0g_db": 3.749,
+          "boost_2p5g_db": 3.742,
+          "max_peak_db": 4.487,
+          "f_peak_ghz": 6.323,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": 3.19,
+          "g_5p0g_db": 3.531,
+          "boost_2p5g_db": 3.985,
+          "max_peak_db": 4.327,
+          "f_peak_ghz": 4.88,
+          "f_3db_ghz": 18.881
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": 3.162,
+          "g_5p0g_db": 3.437,
+          "boost_2p5g_db": 3.957,
+          "max_peak_db": 4.244,
+          "f_peak_ghz": 4.476,
+          "f_3db_ghz": 17.825
+        }
+      },
+      {
+        "corner": "tt_v1800_t27",
+        "rc_corner": "tt",
+        "eq": "10",
+        "vbias_v": 0.6507,
+        "cm_out_pex_v": 1.6137,
+        "power_pex_mw": 1.278,
+        "schematic": {
+          "lf_db": -0.626,
+          "g_2p5g_db": 3.579,
+          "g_5p0g_db": 3.869,
+          "boost_2p5g_db": 4.206,
+          "max_peak_db": 4.557,
+          "f_peak_ghz": 6.143,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": 3.557,
+          "g_5p0g_db": 3.568,
+          "boost_2p5g_db": 4.352,
+          "max_peak_db": 4.402,
+          "f_peak_ghz": 3.659,
+          "f_3db_ghz": 18.881
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": 3.53,
+          "g_5p0g_db": 3.475,
+          "boost_2p5g_db": 4.325,
+          "max_peak_db": 4.354,
+          "f_peak_ghz": 3.261,
+          "f_3db_ghz": 17.825
+        }
+      },
+      {
+        "corner": "tt_v1800_t27",
+        "rc_corner": "tt",
+        "eq": "11",
+        "vbias_v": 0.6507,
+        "cm_out_pex_v": 1.6137,
+        "power_pex_mw": 1.278,
+        "schematic": {
+          "lf_db": -0.626,
+          "g_2p5g_db": 4.72,
+          "g_5p0g_db": 5.056,
+          "boost_2p5g_db": 5.346,
+          "max_peak_db": 5.752,
+          "f_peak_ghz": 6.323,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": 4.597,
+          "g_5p0g_db": 4.594,
+          "boost_2p5g_db": 5.392,
+          "max_peak_db": 5.445,
+          "f_peak_ghz": 3.555,
+          "f_3db_ghz": 20.0
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.795,
+          "g_2p5g_db": 4.571,
+          "g_5p0g_db": 4.504,
+          "boost_2p5g_db": 5.365,
+          "max_peak_db": 5.399,
+          "f_peak_ghz": 3.261,
+          "f_3db_ghz": 19.432
+        }
+      },
+      {
+        "corner": "ss_v1650_t85",
+        "rc_corner": "hh",
+        "eq": "00",
+        "vbias_v": 0.6567,
+        "cm_out_pex_v": 1.4235,
+        "power_pex_mw": 1.188,
+        "schematic": {
+          "lf_db": -0.297,
+          "g_2p5g_db": -0.231,
+          "g_5p0g_db": -0.095,
+          "boost_2p5g_db": 0.066,
+          "max_peak_db": 0.207,
+          "f_peak_ghz": 5.32,
+          "f_3db_ghz": 14.571
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 0.1,
+          "g_5p0g_db": 0.634,
+          "boost_2p5g_db": 0.51,
+          "max_peak_db": 1.061,
+          "f_peak_ghz": 5.475,
+          "f_3db_ghz": 14.571
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 0.053,
+          "g_5p0g_db": 0.498,
+          "boost_2p5g_db": 0.464,
+          "max_peak_db": 0.912,
+          "f_peak_ghz": 5.169,
+          "f_3db_ghz": 14.158
+        }
+      },
+      {
+        "corner": "ss_v1650_t85",
+        "rc_corner": "hh",
+        "eq": "01",
+        "vbias_v": 0.6567,
+        "cm_out_pex_v": 1.4235,
+        "power_pex_mw": 1.188,
+        "schematic": {
+          "lf_db": -0.297,
+          "g_2p5g_db": 3.025,
+          "g_5p0g_db": 2.775,
+          "boost_2p5g_db": 3.322,
+          "max_peak_db": 3.333,
+          "f_peak_ghz": 2.824,
+          "f_3db_ghz": 16.35
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 3.094,
+          "g_5p0g_db": 2.529,
+          "boost_2p5g_db": 3.504,
+          "max_peak_db": 3.505,
+          "f_peak_ghz": 2.445,
+          "f_3db_ghz": 14.997
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 3.049,
+          "g_5p0g_db": 2.397,
+          "boost_2p5g_db": 3.46,
+          "max_peak_db": 3.465,
+          "f_peak_ghz": 2.308,
+          "f_3db_ghz": 14.571
+        }
+      },
+      {
+        "corner": "ss_v1650_t85",
+        "rc_corner": "hh",
+        "eq": "10",
+        "vbias_v": 0.6567,
+        "cm_out_pex_v": 1.4235,
+        "power_pex_mw": 1.188,
+        "schematic": {
+          "lf_db": -0.297,
+          "g_2p5g_db": 3.184,
+          "g_5p0g_db": 2.787,
+          "boost_2p5g_db": 3.481,
+          "max_peak_db": 3.503,
+          "f_peak_ghz": 1.999,
+          "f_3db_ghz": 16.35
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 3.187,
+          "g_5p0g_db": 2.488,
+          "boost_2p5g_db": 3.597,
+          "max_peak_db": 3.673,
+          "f_peak_ghz": 1.731,
+          "f_3db_ghz": 14.997
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 3.143,
+          "g_5p0g_db": 2.356,
+          "boost_2p5g_db": 3.553,
+          "max_peak_db": 3.651,
+          "f_peak_ghz": 1.682,
+          "f_3db_ghz": 14.571
+        }
+      },
+      {
+        "corner": "ss_v1650_t85",
+        "rc_corner": "hh",
+        "eq": "11",
+        "vbias_v": 0.6567,
+        "cm_out_pex_v": 1.4235,
+        "power_pex_mw": 1.188,
+        "schematic": {
+          "lf_db": -0.297,
+          "g_2p5g_db": 4.422,
+          "g_5p0g_db": 4.02,
+          "boost_2p5g_db": 4.719,
+          "max_peak_db": 4.727,
+          "f_peak_ghz": 2.243,
+          "f_3db_ghz": 17.825
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 4.329,
+          "g_5p0g_db": 3.504,
+          "boost_2p5g_db": 4.74,
+          "max_peak_db": 4.812,
+          "f_peak_ghz": 1.834,
+          "f_3db_ghz": 15.886
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.41,
+          "g_2p5g_db": 4.286,
+          "g_5p0g_db": 3.375,
+          "boost_2p5g_db": 4.697,
+          "max_peak_db": 4.788,
+          "f_peak_ghz": 1.781,
+          "f_3db_ghz": 14.997
+        }
+      },
+      {
+        "corner": "ss_v1650_t-40",
+        "rc_corner": "hh",
+        "eq": "00",
+        "vbias_v": 0.6977,
+        "cm_out_pex_v": 1.4438,
+        "power_pex_mw": 1.136,
+        "schematic": {
+          "lf_db": 0.152,
+          "g_2p5g_db": 0.28,
+          "g_5p0g_db": 0.654,
+          "boost_2p5g_db": 0.128,
+          "max_peak_db": 0.669,
+          "f_peak_ghz": 6.698,
+          "f_3db_ghz": 15.886
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 0.536,
+          "g_5p0g_db": 1.434,
+          "boost_2p5g_db": 0.597,
+          "max_peak_db": 1.714,
+          "f_peak_ghz": 6.507,
+          "f_3db_ghz": 16.827
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 0.496,
+          "g_5p0g_db": 1.31,
+          "boost_2p5g_db": 0.557,
+          "max_peak_db": 1.538,
+          "f_peak_ghz": 6.323,
+          "f_3db_ghz": 16.35
+        }
+      },
+      {
+        "corner": "ss_v1650_t-40",
+        "rc_corner": "hh",
+        "eq": "01",
+        "vbias_v": 0.6977,
+        "cm_out_pex_v": 1.4438,
+        "power_pex_mw": 1.136,
+        "schematic": {
+          "lf_db": 0.152,
+          "g_2p5g_db": 4.408,
+          "g_5p0g_db": 4.581,
+          "boost_2p5g_db": 4.256,
+          "max_peak_db": 4.448,
+          "f_peak_ghz": 4.225,
+          "f_3db_ghz": 19.432
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 4.594,
+          "g_5p0g_db": 4.469,
+          "boost_2p5g_db": 4.656,
+          "max_peak_db": 4.741,
+          "f_peak_ghz": 3.261,
+          "f_3db_ghz": 17.825
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 4.556,
+          "g_5p0g_db": 4.352,
+          "boost_2p5g_db": 4.617,
+          "max_peak_db": 4.683,
+          "f_peak_ghz": 3.168,
+          "f_3db_ghz": 17.319
+        }
+      },
+      {
+        "corner": "ss_v1650_t-40",
+        "rc_corner": "hh",
+        "eq": "10",
+        "vbias_v": 0.6977,
+        "cm_out_pex_v": 1.4438,
+        "power_pex_mw": 1.136,
+        "schematic": {
+          "lf_db": 0.152,
+          "g_2p5g_db": 4.748,
+          "g_5p0g_db": 4.642,
+          "boost_2p5g_db": 4.596,
+          "max_peak_db": 4.603,
+          "f_peak_ghz": 2.824,
+          "f_3db_ghz": 19.432
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 4.905,
+          "g_5p0g_db": 4.47,
+          "boost_2p5g_db": 4.966,
+          "max_peak_db": 4.969,
+          "f_peak_ghz": 2.308,
+          "f_3db_ghz": 17.825
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 4.867,
+          "g_5p0g_db": 4.353,
+          "boost_2p5g_db": 4.928,
+          "max_peak_db": 4.937,
+          "f_peak_ghz": 2.243,
+          "f_3db_ghz": 17.319
+        }
+      },
+      {
+        "corner": "ss_v1650_t-40",
+        "rc_corner": "hh",
+        "eq": "11",
+        "vbias_v": 0.6977,
+        "cm_out_pex_v": 1.4438,
+        "power_pex_mw": 1.136,
+        "schematic": {
+          "lf_db": 0.152,
+          "g_2p5g_db": 6.097,
+          "g_5p0g_db": 6.029,
+          "boost_2p5g_db": 5.946,
+          "max_peak_db": 5.969,
+          "f_peak_ghz": 3.168,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 6.076,
+          "g_5p0g_db": 5.611,
+          "boost_2p5g_db": 6.137,
+          "max_peak_db": 6.14,
+          "f_peak_ghz": 2.376,
+          "f_3db_ghz": 18.881
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -0.061,
+          "g_2p5g_db": 6.039,
+          "g_5p0g_db": 5.496,
+          "boost_2p5g_db": 6.101,
+          "max_peak_db": 6.107,
+          "f_peak_ghz": 2.308,
+          "f_3db_ghz": 18.345
+        }
+      },
+      {
+        "corner": "ff_v1950_t-40",
+        "rc_corner": "ll",
+        "eq": "00",
+        "vbias_v": 0.655,
+        "cm_out_pex_v": 1.8003,
+        "power_pex_mw": 1.372,
+        "schematic": {
+          "lf_db": -1.148,
+          "g_2p5g_db": -0.886,
+          "g_5p0g_db": 0.012,
+          "boost_2p5g_db": 0.262,
+          "max_peak_db": 2.405,
+          "f_peak_ghz": 8.193,
+          "f_3db_ghz": 19.432
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": -0.862,
+          "g_5p0g_db": 0.453,
+          "boost_2p5g_db": 0.501,
+          "max_peak_db": 3.071,
+          "f_peak_ghz": 7.96,
+          "f_3db_ghz": 20.0
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": -0.877,
+          "g_5p0g_db": 0.396,
+          "boost_2p5g_db": 0.487,
+          "max_peak_db": 2.899,
+          "f_peak_ghz": 7.96,
+          "f_3db_ghz": 20.0
+        }
+      },
+      {
+        "corner": "ff_v1950_t-40",
+        "rc_corner": "ll",
+        "eq": "01",
+        "vbias_v": 0.655,
+        "cm_out_pex_v": 1.8003,
+        "power_pex_mw": 1.372,
+        "schematic": {
+          "lf_db": -1.148,
+          "g_2p5g_db": 2.404,
+          "g_5p0g_db": 4.034,
+          "boost_2p5g_db": 3.552,
+          "max_peak_db": 6.388,
+          "f_peak_ghz": 8.193,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": 2.541,
+          "g_5p0g_db": 4.001,
+          "boost_2p5g_db": 3.904,
+          "max_peak_db": 6.031,
+          "f_peak_ghz": 7.515,
+          "f_3db_ghz": 20.0
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": 2.525,
+          "g_5p0g_db": 3.95,
+          "boost_2p5g_db": 3.889,
+          "max_peak_db": 5.906,
+          "f_peak_ghz": 7.302,
+          "f_3db_ghz": 20.0
+        }
+      },
+      {
+        "corner": "ff_v1950_t-40",
+        "rc_corner": "ll",
+        "eq": "10",
+        "vbias_v": 0.655,
+        "cm_out_pex_v": 1.8003,
+        "power_pex_mw": 1.372,
+        "schematic": {
+          "lf_db": -1.148,
+          "g_2p5g_db": 3.348,
+          "g_5p0g_db": 4.374,
+          "boost_2p5g_db": 4.496,
+          "max_peak_db": 6.551,
+          "f_peak_ghz": 8.193,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": 3.372,
+          "g_5p0g_db": 4.239,
+          "boost_2p5g_db": 4.735,
+          "max_peak_db": 6.125,
+          "f_peak_ghz": 7.302,
+          "f_3db_ghz": 20.0
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": 3.358,
+          "g_5p0g_db": 4.191,
+          "boost_2p5g_db": 4.721,
+          "max_peak_db": 6.005,
+          "f_peak_ghz": 7.302,
+          "f_3db_ghz": 20.0
+        }
+      },
+      {
+        "corner": "ff_v1950_t-40",
+        "rc_corner": "ll",
+        "eq": "11",
+        "vbias_v": 0.655,
+        "cm_out_pex_v": 1.8003,
+        "power_pex_mw": 1.372,
+        "schematic": {
+          "lf_db": -1.148,
+          "g_2p5g_db": 4.39,
+          "g_5p0g_db": 5.408,
+          "boost_2p5g_db": 5.538,
+          "max_peak_db": 7.616,
+          "f_peak_ghz": 8.193,
+          "f_3db_ghz": 20.0
+        },
+        "pex_active_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": 4.299,
+          "g_5p0g_db": 5.121,
+          "boost_2p5g_db": 5.663,
+          "max_peak_db": 7.004,
+          "f_peak_ghz": 7.302,
+          "f_3db_ghz": 20.0
+        },
+        "pex_top_plus_ind": {
+          "lf_db": -1.363,
+          "g_2p5g_db": 4.285,
+          "g_5p0g_db": 5.075,
+          "boost_2p5g_db": 5.649,
+          "max_peak_db": 6.89,
+          "f_peak_ghz": 7.302,
+          "f_3db_ghz": 20.0
+        }
+      }
+    ]
+  }
+}

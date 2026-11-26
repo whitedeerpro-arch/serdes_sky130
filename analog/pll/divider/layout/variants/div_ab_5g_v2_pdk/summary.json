@@ -1,0 +1,369 @@
+{
+  "cell": "pll_div_ab_5g_v2_pdk",
+  "bbox_um": [
+    -1.1,
+    -11.5,
+    159.32,
+    11.5
+  ],
+  "width_um": 160.42,
+  "height_um": 23.0,
+  "area_um2": 3689.66,
+  "aspect_ratio": 6.97,
+  "drc_total": 0,
+  "drc_rules": [],
+  "lvs_match": true,
+  "lvs_property_errors": false,
+  "lvs_disconnected": [],
+  "exported_ports": [
+    "clkp",
+    "clkn",
+    "mode_5g",
+    "rst_n",
+    "fb250",
+    "fb250_b",
+    "vdd",
+    "vss"
+  ],
+  "expected_port_count": 8,
+  "port_count_match": true,
+  "floating_poly": 0,
+  "metal_shares": {
+    "area_um2": {
+      "M1": 277.765,
+      "M2": 454.675,
+      "M3": 545.146,
+      "M4": 515.733,
+      "M5": 0.0
+    },
+    "total_metal_um2": 1793.319,
+    "share_pct": {
+      "M1": 15.5,
+      "M2": 25.4,
+      "M3": 30.4,
+      "M4": 28.8,
+      "M5": 0.0
+    }
+  },
+  "parasitics": {
+    "extracted_mos_segments": 412,
+    "ad_um2": 162.731,
+    "as_um2": 162.731,
+    "pd_um": 1262.96,
+    "ps_um": 1262.96,
+    "pex_cap_elements": 1060,
+    "total_substrate_cap_fF": 443.022,
+    "total_coupling_cap_fF": 243.875,
+    "port_caps_fF": {
+      "clkp": {
+        "to_substrate_fF": 0.377,
+        "coupling_sum_fF": 0.921,
+        "total_node_fF": 1.298
+      },
+      "clkn": {
+        "to_substrate_fF": 0.377,
+        "coupling_sum_fF": 0.921,
+        "total_node_fF": 1.298
+      },
+      "mode_5g": {
+        "to_substrate_fF": 2.197,
+        "coupling_sum_fF": 16.711,
+        "total_node_fF": 18.908
+      },
+      "rst_n": {
+        "to_substrate_fF": 1.688,
+        "coupling_sum_fF": 24.362,
+        "total_node_fF": 26.051
+      },
+      "fb250": {
+        "to_substrate_fF": 1.255,
+        "coupling_sum_fF": 1.883,
+        "total_node_fF": 3.138
+      },
+      "fb250_b": {
+        "to_substrate_fF": 1.11,
+        "coupling_sum_fF": 1.923,
+        "total_node_fF": 3.033
+      },
+      "vdd": {
+        "to_substrate_fF": 344.98,
+        "coupling_sum_fF": 130.388,
+        "total_node_fF": 475.368
+      }
+    },
+    "top_coupling_fF": [
+      {
+        "node_a": "rst_n",
+        "node_b": "vdd",
+        "cap_fF": 11.679
+      },
+      {
+        "node_a": "a_4919_n1556#",
+        "node_b": "vdd",
+        "cap_fF": 11.669
+      },
+      {
+        "node_a": "a_458_484#",
+        "node_b": "vdd",
+        "cap_fF": 11.545
+      },
+      {
+        "node_a": "a_458_n1256#",
+        "node_b": "rst_n",
+        "cap_fF": 6.591
+      },
+      {
+        "node_a": "a_458_484#",
+        "node_b": "mode_5g",
+        "cap_fF": 6.516
+      },
+      {
+        "node_a": "mode_5g",
+        "node_b": "vdd",
+        "cap_fF": 4.322
+      },
+      {
+        "node_a": "a_10251_1016#",
+        "node_b": "vdd",
+        "cap_fF": 4.224
+      },
+      {
+        "node_a": "a_458_n1256#",
+        "node_b": "vdd",
+        "cap_fF": 3.808
+      }
+    ]
+  },
+  "work_dir": "/home/host/Desktop/workspace/simple_serdes_fork1/results/layout/pll_divider/div_ab_5g_v2_pdk/build",
+  "floorplan": {
+    "walls_x": [
+      0.5,
+      34.975,
+      55.59,
+      120.46,
+      140.5,
+      158.46
+    ],
+    "ports_xy": {
+      "clkp": [
+        3.8,
+        5.7
+      ],
+      "clkn": [
+        3.8,
+        -5.7
+      ],
+      "mode_5g": [
+        1.335,
+        8.31
+      ],
+      "rst_n": [
+        1.955,
+        -9.06
+      ],
+      "fb250": [
+        156.095,
+        5.7
+      ],
+      "fb250_b": [
+        156.095,
+        -5.7
+      ],
+      "vdd": [
+        0.5,
+        11.0
+      ],
+      "vss": [
+        0.5,
+        0.0
+      ]
+    }
+  },
+  "extracted_models": {
+    "sky130_fd_pr__pfet_01v8": 243,
+    "sky130_fd_pr__nfet_01v8_lvt": 128,
+    "sky130_fd_pr__pfet_01v8_lvt": 4,
+    "sky130_fd_pr__nfet_01v8": 37
+  },
+  "reference_models": {
+    "sky130_fd_pr__nfet_01v8": 37,
+    "sky130_fd_pr__pfet_01v8": 132,
+    "sky130_fd_pr__nfet_01v8_lvt": 93,
+    "sky130_fd_pr__pfet_01v8_lvt": 2
+  },
+  "independent_review": {
+    "cell": "pll_div_ab_5g_v2_pdk",
+    "inputs": {
+      "pll_div_ab_5g_v2_pdk.mag": {
+        "source": "results/layout/pll_divider/div_ab_5g_v2_pdk/build/pll_div_ab_5g_v2_pdk.mag",
+        "sha256": "da9a7db16b79debbcf6d132de689e9aad31457ac8ae1c7b49a110a62d7eea1a5"
+      },
+      "reference.spice": {
+        "source": "results/layout/pll_divider/div_ab_5g_v2_pdk/build/pll_div_ab_5g_v2_pdk_ref.spice",
+        "sha256": "3385e877eedc4f587afe98a7c3f527ffad42341c0b49c0dcce651522425f4cf0"
+      }
+    },
+    "checker_exit": 0,
+    "physical_passed": true,
+    "ports": [
+      "clkp",
+      "clkn",
+      "mode_5g",
+      "rst_n",
+      "fb250",
+      "fb250_b",
+      "vdd",
+      "vss"
+    ],
+    "bbox_um": [
+      -1.1,
+      -11.5,
+      159.32,
+      11.5
+    ],
+    "size_um": [
+      160.42,
+      23.0
+    ],
+    "magic": "/home/host/.local/opt/magic-8.3.685-capfix/bin/magic-capfix",
+    "extraction": "C + device AD/AS/PD/PS; wire R not extracted",
+    "parasitics": {
+      "extracted_mos_segments": 412,
+      "ad_um2": 162.731,
+      "as_um2": 162.731,
+      "pd_um": 1262.96,
+      "ps_um": 1262.96,
+      "pex_cap_elements": 1060,
+      "total_substrate_cap_fF": 443.022,
+      "total_coupling_cap_fF": 243.875,
+      "port_caps_fF": {
+        "clkp": {
+          "to_substrate_fF": 0.377,
+          "coupling_sum_fF": 0.921,
+          "total_node_fF": 1.298
+        },
+        "clkn": {
+          "to_substrate_fF": 0.377,
+          "coupling_sum_fF": 0.921,
+          "total_node_fF": 1.298
+        },
+        "mode_5g": {
+          "to_substrate_fF": 2.197,
+          "coupling_sum_fF": 16.711,
+          "total_node_fF": 18.908
+        },
+        "rst_n": {
+          "to_substrate_fF": 1.688,
+          "coupling_sum_fF": 24.362,
+          "total_node_fF": 26.051
+        },
+        "fb250": {
+          "to_substrate_fF": 1.255,
+          "coupling_sum_fF": 1.883,
+          "total_node_fF": 3.138
+        },
+        "fb250_b": {
+          "to_substrate_fF": 1.11,
+          "coupling_sum_fF": 1.923,
+          "total_node_fF": 3.033
+        },
+        "vdd": {
+          "to_substrate_fF": 344.98,
+          "coupling_sum_fF": 130.388,
+          "total_node_fF": 475.368
+        }
+      },
+      "top_coupling_fF": [
+        {
+          "node_a": "rst_n",
+          "node_b": "vdd",
+          "cap_fF": 11.679
+        },
+        {
+          "node_a": "a_4919_n1556#",
+          "node_b": "vdd",
+          "cap_fF": 11.669
+        },
+        {
+          "node_a": "a_458_484#",
+          "node_b": "vdd",
+          "cap_fF": 11.545
+        },
+        {
+          "node_a": "a_458_n1256#",
+          "node_b": "rst_n",
+          "cap_fF": 6.591
+        },
+        {
+          "node_a": "a_458_484#",
+          "node_b": "mode_5g",
+          "cap_fF": 6.516
+        },
+        {
+          "node_a": "mode_5g",
+          "node_b": "vdd",
+          "cap_fF": 4.322
+        },
+        {
+          "node_a": "a_10251_1016#",
+          "node_b": "vdd",
+          "cap_fF": 4.224
+        },
+        {
+          "node_a": "a_458_n1256#",
+          "node_b": "vdd",
+          "cap_fF": 3.808
+        }
+      ]
+    },
+    "rc": {
+      "method": "Magic native reduced RC",
+      "threshold_ohm": 1,
+      "minres_ohm": 1,
+      "resistor_count": 2681,
+      "resistor_nets": [
+        "a_10251_1016#",
+        "a_10251_n1496#",
+        "a_11292_622#",
+        "a_11292_n998#",
+        "a_11666_622#",
+        "a_11666_n998#",
+        "a_12650_n1416#",
+        "a_14545_1016#",
+        "a_14545_n1416#",
+        "a_15607_1016#",
+        "a_15607_n1656#",
+        "a_16536_n1316#",
+        "a_1653_1016#",
+        "a_1653_n1476#",
+        "a_18431_1016#",
+        "a_18431_n1316#",
+        "a_20422_n1316#",
+        "a_22317_1016#",
+        "a_22317_n1316#",
+        "a_24470_1016#",
+        "a_24470_n1456#",
+        "a_25532_1016#",
+        "a_25532_n1496#",
+        "a_26447_n1316#",
+        "a_26543_404#",
+        "a_28730_1016#",
+        "a_28730_n1356#",
+        "a_458_484#",
+        "a_458_n1256#",
+        "a_4919_n1556#",
+        "a_5513_n1556#",
+        "a_7535_622#",
+        "a_7535_n716#",
+        "a_7625_1016#",
+        "a_7625_n1396#",
+        "vdd",
+        "vss"
+      ],
+      "devices_preserved": true,
+      "cpex_sha256": "6b6e0d2b42b980554bd3c553bdf4ff9c7e80086dc6e4fb5014fa1e599e60e728",
+      "rcx_sha256": "18c82f09aafd422fd565ee1da17c170b77b7afe69a6159c33aef7fe9d7e8ad61",
+      "limits": "Native extresist redistributes/grounds C on extracted nets; use alongside coupled CPEX, not as exact coupled-RC signoff"
+    }
+  }
+}

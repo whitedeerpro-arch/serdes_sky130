@@ -1,0 +1,551 @@
+{
+  "variant": "v5_pdk",
+  "pdk": "sky130A",
+  "cells": {
+    "sst_slice_unit_pdk": {
+      "cell": "sst_slice_unit_pdk",
+      "source_subckt": "sst_slice_unit_5g",
+      "mag": "analog/tx/sst/layout/variants/v5_pdk/sst_slice_unit_pdk.mag",
+      "ref_spice": "analog/tx/sst/layout/variants/v5_pdk/sst_slice_unit_pdk_ref.spice",
+      "png": "analog/tx/sst/layout/variants/v5_pdk/sst_slice_unit_pdk.png",
+      "review_dir": "results/layout/tx_sst_v5_pdk/review/sst_slice_unit_pdk",
+      "pex_spice": "results/layout/tx_sst_v5_pdk/review/sst_slice_unit_pdk/sst_slice_unit_pdk_pex.spice",
+      "rcx_spice": "results/layout/tx_sst_v5_pdk/review/sst_slice_unit_pdk/sst_slice_unit_pdk_rcx.spice",
+      "bbox_um": [
+        -4.4,
+        -5.36,
+        4.4,
+        19.81
+      ],
+      "width_um": 8.8,
+      "height_um": 25.17,
+      "area_um2": 221.5,
+      "aspect_ratio": 0.35,
+      "expected_port_count": 8,
+      "exported_port_count": 8,
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 62,
+      "key_port_caps_fF": {
+        "pad_p": {
+          "to_substrate_fF": 1.123,
+          "coupling_sum_fF": 0.536,
+          "total_node_fF": 1.659
+        },
+        "pad_n": {
+          "to_substrate_fF": 1.39,
+          "coupling_sum_fF": 0.502,
+          "total_node_fF": 1.892
+        },
+        "vdrv": {
+          "to_substrate_fF": 1.751,
+          "coupling_sum_fF": 0.874,
+          "total_node_fF": 2.625
+        },
+        "din_p": {
+          "to_substrate_fF": 0.698,
+          "coupling_sum_fF": 0.939,
+          "total_node_fF": 1.637
+        },
+        "din_n": {
+          "to_substrate_fF": 0.419,
+          "coupling_sum_fF": 1.232,
+          "total_node_fF": 1.651
+        },
+        "vdd": {
+          "to_substrate_fF": 4.99,
+          "coupling_sum_fF": 2.903,
+          "total_node_fF": 7.893
+        }
+      },
+      "key_net_rcx_ohm": {
+        "pad_p": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "pad_n": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdrv": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "din_p": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "din_n": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdd": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vss": {
+          "r_elem_count": 62,
+          "r_sum_ohm": 45440.617,
+          "r_max_elem_ohm": 9374.88,
+          "r_min_elem_ohm": 1.069
+        }
+      },
+      "raw_device_count": 18,
+      "merged_device_count": 18,
+      "net_count": 16
+    },
+    "sst_vdrv_ldo_pdk": {
+      "cell": "sst_vdrv_ldo_pdk",
+      "source_subckt": "sst_vdrv_ldo",
+      "mag": "analog/tx/sst/layout/variants/v5_pdk/sst_vdrv_ldo_pdk.mag",
+      "ref_spice": "analog/tx/sst/layout/variants/v5_pdk/sst_vdrv_ldo_pdk_ref.spice",
+      "png": "analog/tx/sst/layout/variants/v5_pdk/sst_vdrv_ldo_pdk.png",
+      "review_dir": "results/layout/tx_sst_v5_pdk/review/sst_vdrv_ldo_pdk",
+      "pex_spice": "results/layout/tx_sst_v5_pdk/review/sst_vdrv_ldo_pdk/sst_vdrv_ldo_pdk_pex.spice",
+      "rcx_spice": "results/layout/tx_sst_v5_pdk/review/sst_vdrv_ldo_pdk/sst_vdrv_ldo_pdk_rcx.spice",
+      "bbox_um": [
+        -25.2,
+        0.2,
+        86.5,
+        90.2
+      ],
+      "width_um": 111.7,
+      "height_um": 90.0,
+      "area_um2": 10053.0,
+      "aspect_ratio": 1.24,
+      "expected_port_count": 4,
+      "exported_port_count": 4,
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 1036,
+      "key_port_caps_fF": {
+        "vdrv": {
+          "to_substrate_fF": 672.65,
+          "coupling_sum_fF": 47.595,
+          "total_node_fF": 720.245
+        },
+        "vbg": {
+          "to_substrate_fF": 3.667,
+          "coupling_sum_fF": 2.549,
+          "total_node_fF": 6.215
+        },
+        "vdd": {
+          "to_substrate_fF": 72.888,
+          "coupling_sum_fF": 82.034,
+          "total_node_fF": 154.923
+        }
+      },
+      "key_net_rcx_ohm": {
+        "vdrv": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vbg": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdd": {
+          "r_elem_count": 240,
+          "r_sum_ohm": 177145.825,
+          "r_max_elem_ohm": 4500.0,
+          "r_min_elem_ohm": 1.61
+        },
+        "vss": {
+          "r_elem_count": 385,
+          "r_sum_ohm": 1120306.598,
+          "r_max_elem_ohm": 163059.0,
+          "r_min_elem_ohm": 0.038
+        }
+      },
+      "raw_device_count": 36,
+      "merged_device_count": 26,
+      "net_count": 15
+    },
+    "serdes_tx_sst_driver_pdk": {
+      "cell": "serdes_tx_sst_driver_pdk",
+      "source_subckt": "serdes_tx_sst_driver_5g",
+      "mag": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_driver_pdk.mag",
+      "ref_spice": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_driver_pdk_ref.spice",
+      "png": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_driver_pdk.png",
+      "review_dir": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_driver_pdk",
+      "pex_spice": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_driver_pdk/serdes_tx_sst_driver_pdk_pex.spice",
+      "rcx_spice": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_driver_pdk/serdes_tx_sst_driver_pdk_rcx.spice",
+      "bbox_um": [
+        -25.2,
+        -1.7,
+        231.5,
+        112.02
+      ],
+      "width_um": 256.7,
+      "height_um": 113.72,
+      "area_um2": 29191.92,
+      "aspect_ratio": 2.26,
+      "expected_port_count": 27,
+      "exported_port_count": 27,
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 11479,
+      "key_port_caps_fF": {
+        "pad_p": {
+          "to_substrate_fF": 29.265,
+          "coupling_sum_fF": 18.49,
+          "total_node_fF": 47.755
+        },
+        "pad_n": {
+          "to_substrate_fF": 27.785,
+          "coupling_sum_fF": 16.95,
+          "total_node_fF": 44.735
+        },
+        "vdrv": {
+          "to_substrate_fF": 751.79,
+          "coupling_sum_fF": 79.188,
+          "total_node_fF": 830.978
+        },
+        "vdd": {
+          "to_substrate_fF": 511.87,
+          "coupling_sum_fF": 365.711,
+          "total_node_fF": 877.581
+        },
+        "phi0": {
+          "to_substrate_fF": 2.225,
+          "coupling_sum_fF": 1.025,
+          "total_node_fF": 3.251
+        }
+      },
+      "key_net_rcx_ohm": {
+        "pad_p": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "pad_n": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdrv": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdd": {
+          "r_elem_count": 4482,
+          "r_sum_ohm": 409366.694,
+          "r_max_elem_ohm": 4500.0,
+          "r_min_elem_ohm": 0.012
+        },
+        "vss": {
+          "r_elem_count": 5917,
+          "r_sum_ohm": 3056480.863,
+          "r_max_elem_ohm": 204703.0,
+          "r_min_elem_ohm": 0.001
+        },
+        "phi0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        }
+      },
+      "raw_device_count": 792,
+      "merged_device_count": 758,
+      "net_count": 368
+    },
+    "serdes_tx_sst_serializer16_pdk": {
+      "cell": "serdes_tx_sst_serializer16_pdk",
+      "source_subckt": "serdes_tx_sst_serializer16_5g",
+      "mag": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_serializer16_pdk.mag",
+      "ref_spice": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_serializer16_pdk_ref.spice",
+      "png": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_serializer16_pdk.png",
+      "review_dir": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_serializer16_pdk",
+      "pex_spice": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_serializer16_pdk/serdes_tx_sst_serializer16_pdk_pex.spice",
+      "rcx_spice": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_serializer16_pdk/serdes_tx_sst_serializer16_pdk_rcx.spice",
+      "bbox_um": [
+        -4.5,
+        -1.86,
+        251.86,
+        49.76
+      ],
+      "width_um": 256.36,
+      "height_um": 51.62,
+      "area_um2": 13233.3,
+      "aspect_ratio": 4.97,
+      "expected_port_count": 33,
+      "exported_port_count": 33,
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 5750,
+      "key_port_caps_fF": {
+        "phi0": {
+          "to_substrate_fF": 1.435,
+          "coupling_sum_fF": 3.909,
+          "total_node_fF": 5.344
+        },
+        "d0": {
+          "to_substrate_fF": 6.986,
+          "coupling_sum_fF": 11.026,
+          "total_node_fF": 18.012
+        },
+        "db0": {
+          "to_substrate_fF": 1.824,
+          "coupling_sum_fF": 15.477,
+          "total_node_fF": 17.301
+        },
+        "clk500_out": {
+          "to_substrate_fF": 1.511,
+          "coupling_sum_fF": 3.307,
+          "total_node_fF": 4.817
+        },
+        "clk250_out": {
+          "to_substrate_fF": 1.84,
+          "coupling_sum_fF": 2.469,
+          "total_node_fF": 4.309
+        },
+        "vdd": {
+          "to_substrate_fF": 713.11,
+          "coupling_sum_fF": 458.724,
+          "total_node_fF": 1171.834
+        }
+      },
+      "key_net_rcx_ohm": {
+        "phi0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "d0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "db0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "clk500_out": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "clk250_out": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdd": {
+          "r_elem_count": 2378,
+          "r_sum_ohm": 157200.096,
+          "r_max_elem_ohm": 413.3,
+          "r_min_elem_ohm": 0.043
+        },
+        "vss": {
+          "r_elem_count": 2877,
+          "r_sum_ohm": 1142710.03,
+          "r_max_elem_ohm": 675026.0,
+          "r_min_elem_ohm": 0.012
+        }
+      },
+      "raw_device_count": 1244,
+      "merged_device_count": 1244,
+      "net_count": 553
+    },
+    "serdes_tx_sst_top_pdk": {
+      "cell": "serdes_tx_sst_top_pdk",
+      "source_subckt": "serdes_tx_sst_top_5g",
+      "mag": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_top_pdk.mag",
+      "ref_spice": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_top_pdk_ref.spice",
+      "png": "analog/tx/sst/layout/variants/v5_pdk/serdes_tx_sst_top_pdk.png",
+      "review_dir": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_top_pdk",
+      "pex_spice": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_top_pdk/serdes_tx_sst_top_pdk_pex.spice",
+      "rcx_spice": "results/layout/tx_sst_v5_pdk/review/serdes_tx_sst_top_pdk/serdes_tx_sst_top_pdk_rcx.spice",
+      "bbox_um": [
+        -25.3,
+        -57.56,
+        231.5,
+        112.02
+      ],
+      "width_um": 256.8,
+      "height_um": 169.58,
+      "area_um2": 43548.14,
+      "aspect_ratio": 1.51,
+      "expected_port_count": 38,
+      "exported_port_count": 38,
+      "port_count_match": true,
+      "physical_passed": true,
+      "drc_total": 0,
+      "floating_poly": 0,
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "rc_devices_preserved": true,
+      "rc_resistor_count": 18875,
+      "key_port_caps_fF": {
+        "pad_p": {
+          "to_substrate_fF": 29.265,
+          "coupling_sum_fF": 18.49,
+          "total_node_fF": 47.755
+        },
+        "pad_n": {
+          "to_substrate_fF": 27.785,
+          "coupling_sum_fF": 16.95,
+          "total_node_fF": 44.735
+        },
+        "vdrv": {
+          "to_substrate_fF": 752.79,
+          "coupling_sum_fF": 81.068,
+          "total_node_fF": 833.858
+        },
+        "vdd": {
+          "to_substrate_fF": 1229.0,
+          "coupling_sum_fF": 823.559,
+          "total_node_fF": 2052.559
+        },
+        "phi0": {
+          "to_substrate_fF": 10.32,
+          "coupling_sum_fF": 16.622,
+          "total_node_fF": 26.943
+        },
+        "phi90": {
+          "to_substrate_fF": 8.201,
+          "coupling_sum_fF": 18.095,
+          "total_node_fF": 26.296
+        },
+        "phi180": {
+          "to_substrate_fF": 8.822,
+          "coupling_sum_fF": 18.64,
+          "total_node_fF": 27.462
+        },
+        "phi270": {
+          "to_substrate_fF": 13.504,
+          "coupling_sum_fF": 14.26,
+          "total_node_fF": 27.764
+        },
+        "clk500_out": {
+          "to_substrate_fF": 1.937,
+          "coupling_sum_fF": 2.632,
+          "total_node_fF": 4.569
+        },
+        "clk250_out": {
+          "to_substrate_fF": 1.729,
+          "coupling_sum_fF": 2.411,
+          "total_node_fF": 4.14
+        }
+      },
+      "key_net_rcx_ohm": {
+        "pad_p": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "pad_n": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdrv": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "vdd": {
+          "r_elem_count": 8341,
+          "r_sum_ohm": 746906.424,
+          "r_max_elem_ohm": 4500.0,
+          "r_min_elem_ohm": 0.012
+        },
+        "vss": {
+          "r_elem_count": 8844,
+          "r_sum_ohm": 3535928.968,
+          "r_max_elem_ohm": 204703.0,
+          "r_min_elem_ohm": 0.001
+        },
+        "phi0": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "phi90": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "phi180": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "phi270": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "clk500_out": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        },
+        "clk250_out": {
+          "r_elem_count": 0,
+          "r_sum_ohm": 0.0,
+          "r_max_elem_ohm": 0.0,
+          "note": "below Magic extresist 1 ohm threshold"
+        }
+      },
+      "raw_device_count": 2036,
+      "merged_device_count": 2002,
+      "net_count": 907
+    }
+  }
+}

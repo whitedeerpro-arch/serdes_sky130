@@ -1,0 +1,65 @@
+* NGSPICE file created from serdes_rx_ctle_shunt_5g_w3_pdk.ext - technology: sky130A
+
+.subckt serdes_rx_ctle_shunt_5g_w3_pdk inp inn outp outn eq0 eq1 vbias vdd vss
+X0 a_n3561_2630# eq0 a_n2866_2630# vss sky130_fd_pr__nfet_01v8 ad=1.18 pd=8.59 as=0.6 ps=4.3 w=4 l=0.18
+X1 a_n2866_2630# a_n2902_2602# a_n3561_2630# vdd sky130_fd_pr__pfet_01v8 ad=0.6 pd=4.3 as=0.6 ps=4.3 w=4 l=0.18
+X2 vss vbias a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X3 a_n3290_4908# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X4 outn inp a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.744 ps=5.42 w=2.4 l=0.15
+X5 a_n3290_4908# a_n2866_2630# sky130_fd_pr__cap_mim_m3_1 l=6 w=6
+X6 vss vbias a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X7 outn vdd vss sky130_fd_pr__res_high_po_2p85 l=2.83
+X8 outn inp a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.744 ps=5.42 w=2.4 l=0.15
+X9 vss vbias a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X10 a_n3290_4908# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X11 outn inp a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X12 vss eq0 a_n2902_2602# vss sky130_fd_pr__nfet_01v8 ad=0.29 pd=2.58 as=0.29 ps=2.58 w=1 l=0.18
+X13 a_n3290_4908# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.744 pd=5.42 as=0.396 ps=2.73 w=2.4 l=0.15
+X14 a_n3290_4908# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.744 pd=5.42 as=0.396 ps=2.73 w=2.4 l=0.15
+X15 a_n3290_4908# a_n3466_2630# sky130_fd_pr__cap_mim_m3_1 l=6 w=6
+X16 a_n3561_2630# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X17 a_n3561_2630# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X18 outp inn a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X19 a_n3561_2630# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.744 pd=5.42 as=0.396 ps=2.73 w=2.4 l=0.15
+X20 a_n3290_4908# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=2.61 ps=18.58 w=9 l=0.5
+X21 vss vbias a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=2.61 pd=18.58 as=1.305 ps=9.29 w=9 l=0.5
+X22 a_n3561_2630# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X23 outp inn a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X24 a_n3290_4908# a_n3772_2830# a_n3466_2630# vss sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0.1218 ps=1.42 w=0.42 l=0.5
+X25 a_n3772_2830# eq1 vss vss sky130_fd_pr__nfet_01v8 ad=0.29 pd=2.58 as=0.29 ps=2.58 w=1 l=0.18
+X26 outp inn a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.744 ps=5.42 w=2.4 l=0.15
+X27 a_n3290_4908# a_n3466_2630# sky130_fd_pr__cap_mim_m3_1 l=6 w=6
+X28 vss vbias a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X29 a_n3561_2630# a_n3772_2830# a_n3466_2630# vdd sky130_fd_pr__pfet_01v8 ad=1.18 pd=8.59 as=0.6 ps=4.3 w=4 l=0.18
+X30 a_n3561_2630# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X31 a_n3561_2630# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X32 a_n3290_4908# a_n2902_2602# a_n2866_2630# vss sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0.1218 ps=1.42 w=0.42 l=0.5
+X33 a_n3466_2630# a_n3772_2830# a_n3561_2630# vdd sky130_fd_pr__pfet_01v8 ad=0.6 pd=4.3 as=1.18 ps=8.59 w=4 l=0.18
+X34 vdd eq0 a_n2902_2602# vdd sky130_fd_pr__pfet_01v8 ad=0.58 pd=4.58 as=0.58 ps=4.58 w=2 l=0.18
+X35 a_n3561_2630# a_n2902_2602# a_n2866_2630# vdd sky130_fd_pr__pfet_01v8 ad=1.18 pd=8.59 as=0.6 ps=4.3 w=4 l=0.18
+X36 vss vbias a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X37 vss vbias a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X38 a_n3561_2630# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X39 outp vdd vss sky130_fd_pr__res_high_po_2p85 l=2.83
+X40 a_n3290_4908# inp outn vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X41 a_n3772_2830# eq1 vdd vdd sky130_fd_pr__pfet_01v8 ad=0.58 pd=4.58 as=0.58 ps=4.58 w=2 l=0.18
+X42 a_n2866_2630# a_n2902_2602# a_n3561_2630# vdd sky130_fd_pr__pfet_01v8 ad=0.6 pd=4.3 as=1.18 ps=8.59 w=4 l=0.18
+X43 a_n3561_2630# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X44 vss vbias a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X45 a_n3561_2630# a_n3772_2830# a_n3466_2630# vdd sky130_fd_pr__pfet_01v8 ad=0.6 pd=4.3 as=0.6 ps=4.3 w=4 l=0.18
+X46 a_n3466_2630# eq1 a_n3561_2630# vss sky130_fd_pr__nfet_01v8 ad=0.6 pd=4.3 as=1.18 ps=8.59 w=4 l=0.18
+X47 outn inp a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.396 ps=2.73 w=2.4 l=0.15
+X48 a_n3561_2630# a_n3290_4908# vss sky130_fd_pr__res_high_po_2p85 l=5.1
+X49 a_n3561_2630# inn outp vss sky130_fd_pr__nfet_01v8_lvt ad=0.744 pd=5.42 as=0.396 ps=2.73 w=2.4 l=0.15
+X50 a_n2866_2630# eq0 a_n3561_2630# vss sky130_fd_pr__nfet_01v8 ad=0.6 pd=4.3 as=1.18 ps=8.59 w=4 l=0.18
+X51 a_n3561_2630# a_n2902_2602# a_n2866_2630# vdd sky130_fd_pr__pfet_01v8 ad=0.6 pd=4.3 as=0.6 ps=4.3 w=4 l=0.18
+X52 a_n3290_4908# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X53 vss vbias a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X54 a_n3466_2630# a_n3772_2830# a_n3561_2630# vdd sky130_fd_pr__pfet_01v8 ad=0.6 pd=4.3 as=0.6 ps=4.3 w=4 l=0.18
+X55 a_n3561_2630# eq1 a_n3466_2630# vss sky130_fd_pr__nfet_01v8 ad=1.18 pd=8.59 as=0.6 ps=4.3 w=4 l=0.18
+X56 vss vbias a_n3290_4908# vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X57 a_n3290_4908# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X58 a_n3290_4908# vbias vss vss sky130_fd_pr__nfet_01v8_lvt ad=1.305 pd=9.29 as=1.305 ps=9.29 w=9 l=0.5
+X59 outp inn a_n3561_2630# vss sky130_fd_pr__nfet_01v8_lvt ad=0.396 pd=2.73 as=0.744 ps=5.42 w=2.4 l=0.15
+.ends
+

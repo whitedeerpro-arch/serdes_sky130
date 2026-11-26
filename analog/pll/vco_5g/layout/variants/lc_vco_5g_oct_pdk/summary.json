@@ -1,0 +1,167 @@
+{
+  "variant": "oct",
+  "cell": "vco5g_lc_div2_oct_pdk",
+  "active_submacro": {
+    "cell": "vco5g_lc_active_div2_oct_pdk",
+    "width_um": 238.2,
+    "height_um": 104.3,
+    "area_um2": 24844.26,
+    "drc_total": 0,
+    "lvs_match": true,
+    "lvs_property_errors": false,
+    "physical_passed": true,
+    "ports": [
+      "vp",
+      "vn",
+      "ip",
+      "in",
+      "qp",
+      "qn",
+      "vctrl",
+      "b0",
+      "b1",
+      "b2",
+      "b3",
+      "vdd",
+      "vss"
+    ],
+    "device_count_ref": 157,
+    "parasitics": {
+      "extracted_mos_segments": 264,
+      "ad_um2": 163.375,
+      "as_um2": 163.375,
+      "pd_um": 1165.0,
+      "ps_um": 1165.0,
+      "pex_cap_elements": 461,
+      "total_substrate_cap_fF": 675.293,
+      "total_coupling_cap_fF": 247.774,
+      "port_caps_fF": {
+        "vp": {
+          "to_substrate_fF": 31.272,
+          "coupling_sum_fF": 57.755,
+          "total_node_fF": 89.027
+        },
+        "vn": {
+          "to_substrate_fF": 29.84,
+          "coupling_sum_fF": 57.089,
+          "total_node_fF": 86.93
+        },
+        "ip": {
+          "to_substrate_fF": 8.62,
+          "coupling_sum_fF": 7.647,
+          "total_node_fF": 16.267
+        },
+        "in": {
+          "to_substrate_fF": 8.031,
+          "coupling_sum_fF": 9.292,
+          "total_node_fF": 17.323
+        },
+        "qp": {
+          "to_substrate_fF": 7.297,
+          "coupling_sum_fF": 8.673,
+          "total_node_fF": 15.97
+        },
+        "qn": {
+          "to_substrate_fF": 8.912,
+          "coupling_sum_fF": 8.379,
+          "total_node_fF": 17.291
+        },
+        "vctrl": {
+          "to_substrate_fF": 37.574,
+          "coupling_sum_fF": 17.264,
+          "total_node_fF": 54.838
+        },
+        "b0": {
+          "to_substrate_fF": 12.068,
+          "coupling_sum_fF": 13.655,
+          "total_node_fF": 25.723
+        },
+        "b1": {
+          "to_substrate_fF": 8.299,
+          "coupling_sum_fF": 20.065,
+          "total_node_fF": 28.364
+        },
+        "b2": {
+          "to_substrate_fF": 11.123,
+          "coupling_sum_fF": 24.629,
+          "total_node_fF": 35.752
+        },
+        "b3": {
+          "to_substrate_fF": 19.952,
+          "coupling_sum_fF": 30.138,
+          "total_node_fF": 50.09
+        },
+        "vdd": {
+          "to_substrate_fF": 291.03,
+          "coupling_sum_fF": 51.242,
+          "total_node_fF": 342.272
+        }
+      },
+      "top_coupling_fF": [
+        {
+          "node_a": "vdd",
+          "node_b": "vn",
+          "cap_fF": 10.494
+        },
+        {
+          "node_a": "vdd",
+          "node_b": "vp",
+          "cap_fF": 8.954
+        },
+        {
+          "node_a": "b3",
+          "node_b": "vdd",
+          "cap_fF": 8.608
+        },
+        {
+          "node_a": "vctrl",
+          "node_b": "vp",
+          "cap_fF": 7.833
+        },
+        {
+          "node_a": "b2",
+          "node_b": "b3",
+          "cap_fF": 7.225
+        },
+        {
+          "node_a": "b1",
+          "node_b": "b2",
+          "cap_fF": 6.699
+        },
+        {
+          "node_a": "b0",
+          "node_b": "b1",
+          "cap_fF": 6.643
+        },
+        {
+          "node_a": "vctrl",
+          "node_b": "vn",
+          "cap_fF": 6.553
+        }
+      ]
+    }
+  },
+  "inductor_submacro": {
+    "cell": "vco5g_ind_oct_2n5_pdk",
+    "width_um": 266.0,
+    "height_um": 266.0,
+    "l_diff_nh": 2.408,
+    "l_eff_5g_nh": 2.724,
+    "q_5g": 7.26,
+    "r_dc_tt_ohm": 3.065,
+    "c_sub_total_ff": 410.49,
+    "ct_floating": true
+  },
+  "top_macro": {
+    "width_um": 266.0,
+    "height_um": 371.1,
+    "area_mm2": 0.0987,
+    "drc_total": 0,
+    "drc_rules": [],
+    "klayout_drc": {
+      "status": "ok",
+      "total_items": 0,
+      "by_category": {}
+    }
+  }
+}

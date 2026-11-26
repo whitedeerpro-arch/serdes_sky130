@@ -1,0 +1,33 @@
+* Full 16:1 All-CMOS + N-over-N SST 5.0 Gb/s Hardened SerDes TX Top-Level Netlist (v5_5g)
+* Combines:
+*   1. serdes_tx_sst_serializer16_5g (5.0 Gb/s hardened clock buffers + output stagger DFFs)
+*   2. serdes_tx_sst_driver_5g       (zero-stacked-PMOS pulsegen + 6-stage all-NAND2+INV MUX + BBM slices + v4.5 LDO)
+*
+* Exact same 38-port pin order and interface as serdes_tx_sst_top!
+* Requires: sky130_primitives.spice, tx_sst_driver_5g.spice, tx_sst_serializer16_5g.spice.
+
+.subckt serdes_tx_sst_top_5g
++ din0 din1 din2 din3 din4 din5 din6 din7
++ din8 din9 din10 din11 din12 din13 din14 din15
++ phi0 phi90 phi180 phi270 rst_n
++ m0 m1 m2 m3 m4 f0 f1 f2 ffe_en
++ vbg pad_p pad_n vdrv clk500_out clk250_out vdd vss
++ params: wpu=3.8 wpd=2.6 lres=3.75 ltop=63.0 lbot=37.0
+
+Xser
++ din0 din1 din2 din3 din4 din5 din6 din7
++ din8 din9 din10 din11 din12 din13 din14 din15
++ phi0 phi90 phi180 phi270 rst_n
++ d0 d1 d2 d3 db0 db1 db2 db3
++ clk500_out clk250_out
++ vdd vss
++ serdes_tx_sst_serializer16_5g
+
+Xdrv
++ d0 d1 d2 d3 db0 db1 db2 db3
++ phi0 phi90 phi180 phi270
++ m0 m1 m2 m3 m4 f0 f1 f2 ffe_en
++ vbg pad_p pad_n vdrv vdd vss
++ serdes_tx_sst_driver_5g wpu={wpu} wpd={wpd} lres={lres} ltop={ltop} lbot={lbot}
+
+.ends serdes_tx_sst_top_5g

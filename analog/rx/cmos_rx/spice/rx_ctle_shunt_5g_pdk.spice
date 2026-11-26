@@ -1,0 +1,74 @@
+* Shunt-Peaked PDK-Mapped RX CTLE for 5.0 Gb/s SerDes — Real Extracted PDK Spiral Inductor Model
+* SKY130A, 1.8 V, 100% real SKY130A PDK active/res/cap devices + Magic DRC=0 / CPEX extracted
+* parameters for `rx_ctle_ind_6n5_pdk` (analog/rx/cmos_rx/layout/variants/ctle_shunt_ind_5g_pdk/summary.json).
+*
+* =========================================================================================
+* Extracted Physical Inductor Parameters (`rx_ctle_ind_6n5_pdk`, Magic drc_total=0):
+*   - Geometry: 5 turns/deck x 2 stacked decks (10 effective turns), D_out = 74.0 um, D_in = 43.2 um,
+*     W = 1.8 um, S = 1.6 um, bbox = 91.6 x 91.6 um^2 (8,390.56 um^2), deck trace = 1,172 um.
+*   - Inductance: L_stacked_diff = 8.252 nH -> L_half = 2.845 nH, K = 0.45
+*     -> 2 * 2.845 * (1 + 0.45) = 8.2505 nH diff (4.125 nH/side effective differential!).
+*   - Resistance: R_dc = 24.74 Ohm/arm (49.48 Ohm diff) -> Rsa1=Rsa2=12.37 Ohm, Rsb1=Rsb2=12.37 Ohm.
+*   - Magic CPEX total substrate cap: C_sub,total = 104.71 fF
+*     -> 35 fF on pa, 35 fF on pb, plus 35 fF on ct (AC-shorted to VDD), via Rsub = 500 Ohm,
+*        plus inter-winding Cw = 10 fF per half.
+* =========================================================================================
+* Dependencies: sky130_primitives.spice (serdes_nfet, serdes_nfet_lvt, serdes_pfet).
+
+.subckt ctle5g_inv_s a y vdd vss params: wn=1.0 wp=2.0
+Xn y a vss vss serdes_nfet w={wn} l=0.18 nf=1
+Xp y a vdd vdd serdes_pfet w={wp} l=0.18 nf=1
+.ends ctle5g_inv_s
+
+.subckt ctle5g_tgate_s a b en en_b vdd vss params: wn=4.0 wp=8.0
+Xn a en   b vss serdes_nfet w={wn} l=0.18 nf=2
+Xp a en_b b vdd serdes_pfet w={wp} l=0.18 nf=4
+.ends ctle5g_tgate_s
+
+.subckt rx_ctle_ind_6n5_pdk pa pb ct sub
++ params: lhalf=2.845n kmut=0.45 rs=24.74 csub=35f rsub=500 cw=10f rm_scale=1.0 c_scale=1.0
+* Left half (pa <-> ct)
+Rsa1 pa  na1 {0.5*rs*rm_scale} tc1=3.2e-3
+La   na1 na2 {lhalf}
+Rsa2 na2 ct  {0.5*rs*rm_scale} tc1=3.2e-3
+Cwa  pa  ct  {cw*c_scale}
+Csa  pa  sa  {csub*c_scale}
+Rsub_a sa sub {rsub} tc1=1.5e-3
+* Right half (ct <-> pb) — dot convention: differential current enters pa & exits pb -> aiding flux!
+Rsb1 ct  nb1 {0.5*rs*rm_scale} tc1=3.2e-3
+Lb   nb1 nb2 {lhalf}
+Rsb2 nb2 pb  {0.5*rs*rm_scale} tc1=3.2e-3
+Cwb  ct  pb  {cw*c_scale}
+Csb  pb  sb  {csub*c_scale}
+Rsub_b sb sub {rsub} tc1=1.5e-3
+* Center-tap substrate capacitance (AC-shorted to VDD in CTLE)
+Cs_ct   ct  sct {csub*c_scale}
+Rsub_ct sct sub {rsub} tc1=1.5e-3
+* Differential mutual coupling (aiding for differential, opposing for common-mode)
+Kab La Lb {kmut}
+.ends rx_ctle_ind_6n5_pdk
+
+* 5.0 Gb/s Shunt-Peaked PDK CTLE (default 5G-tuned shunt_480_5g: RL~480 Ohm, wtail=60, nftail=10, real 8.252 nH coil)
+* Positive differential input (inp - inn > 0) -> positive differential output (outp - outn > 0).
+.subckt serdes_rx_ctle_shunt_5g_pdk inp inn outp outn eq0 eq1 vbias vdd vss
++ params: win=24 nfin=8 wtail=60 nftail=10 l_rload=3.20 l_rdeg=4.14 c_w=9.81 c_l=9.81 wsw=4
++ lhalf=2.845n kmut=0.45 rs=24.74 csub=35f rsub=500 cw=10f rm_scale=1.0 c_scale=1.0
+Xind lp_mid ln_mid vdd vss rx_ctle_ind_6n5_pdk
++ lhalf={lhalf} kmut={kmut} rs={rs} csub={csub} rsub={rsub} cw={cw} rm_scale={rm_scale} c_scale={c_scale}
+Xrp lp_mid outp vss sky130_fd_pr__res_high_po_2p85 l={l_rload}
+Xrn ln_mid outn vss sky130_fd_pr__res_high_po_2p85 l={l_rload}
+Xip outn inp sp vss serdes_nfet_lvt w={win} l=0.15 nf={nfin}
+Xin outp inn sn vss serdes_nfet_lvt w={win} l=0.15 nf={nfin}
+Xtp sp vbias vss vss serdes_nfet_lvt w={wtail} l=0.5 nf={nftail}
+Xtn sn vbias vss vss serdes_nfet_lvt w={wtail} l=0.5 nf={nftail}
+Xrdeg sp sn vss sky130_fd_pr__res_high_po_2p85 l={l_rdeg}
+Xeq0 eq0 eq0_b vdd vss ctle5g_inv_s wn=1.0 wp=2.0
+Xeq1 eq1 eq1_b vdd vss ctle5g_inv_s wn=1.0 wp=2.0
+Xceq0  sp cap0 sky130_fd_pr__cap_mim_m3_1 w={c_w} l={c_l}
+Xceq1a sp cap1 sky130_fd_pr__cap_mim_m3_1 w={c_w} l={c_l}
+Xceq1b sp cap1 sky130_fd_pr__cap_mim_m3_1 w={c_w} l={c_l}
+Xsw0 cap0 sn eq0 eq0_b vdd vss ctle5g_tgate_s wn={wsw} wp={2*wsw}
+Xsw1 cap1 sn eq1 eq1_b vdd vss ctle5g_tgate_s wn={wsw} wp={2*wsw}
+Xtie0 cap0 eq0_b sp vss serdes_nfet w=0.42 l=0.50 nf=1
+Xtie1 cap1 eq1_b sp vss serdes_nfet w=0.42 l=0.50 nf=1
+.ends serdes_rx_ctle_shunt_5g_pdk

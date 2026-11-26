@@ -1,0 +1,117 @@
+* Pure Static CMOS 16:4 Quarter-Rate 5.0 Gb/s Hardened Serializer (v5_5g)
+* (312.5 MHz -> 625 MHz -> 1.25 GHz; 100% backwards-compatible with 4.0 Gb/s 250->500->1000 MHz!)
+* + Built-in /2 -> /4 Clock Divider + 4-Phase Stagger Retimer.
+*
+* 5.0 Gb/s real-CPEX hardening vs v4.5 (`tx_sst_serializer16.spice`):
+*   1. Strengthened local 4-phase clock buffers (`Xc0/Xc0b 2.6/6.0 -> 5.0/12.5`,
+*      `Xc18/Xc18b 2.2/5.4 -> 4.2/10.5`, `Xc90b/Xc27b 3.6/9.0`) to crush the 92 fF `c0`
+*      and 3-DFF `c180` insertion lag at SS/SF 1.65V -40C.
+*   2. Strengthened final 4 stagger output DFFs (`Xst0, Xst1, Xst2b, Xst3b`: `wn=1.8, wp=4.5`
+*      -> `Xbq1/Xbq2 wn=2.7, wp=6.75`, +50% PMOS drive) to slash `d0..d3/db0..db3` rise time
+*      from 164-184 ps to ~95 ps and eliminate the SS -40C `db0/db2` setup lag into `p0..p3`.
+*
+* Requires: sky130_primitives.spice, tx_sst_driver_5g.spice (sst_inv, sst_nand2, sst_tgate).
+
+* --- Compact Static CMOS 2:1 MUX (non-inverting: sel=0 -> a, sel=1 -> b) ---
+.subckt sst_mux2 a b sel sel_b y vdd vss params: wn=1.2 wp=2.4
+Xta a mid sel_b sel vdd vss sst_tgate wn={wn} wp={wp} nfn=1 nfp=1
+Xtb b mid sel sel_b vdd vss sst_tgate wn={wn} wp={wp} nfn=1 nfp=1
+Xi1 mid yb vdd vss sst_inv wn={wn} wp={wp} nfn=1 nfp=1
+Xi2 yb  y  vdd vss sst_inv wn={wn} wp={wp} nfn=1 nfp=1
+.ends sst_mux2
+
+* --- Rising-Edge Static CMOS Master-Slave DFF with Async Active-Low Reset (rst_n) ---
+* Outputs: q (active-high), qb (complementary). Resets to q=0, qb=1 when rst_n=0.
+.subckt sst_dff_r d clk rst_n q qb vdd vss params: wn=1.2 wp=2.4
+* Local clock complement
+Xci  clk  clkb vdd vss sst_inv wn=1.2 wp=2.4
+Xcb  clkb clki vdd vss sst_inv wn=1.2 wp=2.4
+* Master latch (transparent when clki=0, holds when clki=1)
+Xtg1 d  m1 clkb clki vdd vss sst_tgate wn={wn} wp={wp} nfn=1 nfp=1
+Xm2  m1 rst_n m2 vdd vss sst_nand2 wn={wn*1.5} wp={wp} nfn=1 nfp=1
+Xm3  m2 m3 vdd vss sst_inv wn=0.8 wp=1.6
+Xtg2 m3 m1 clki clkb vdd vss sst_tgate wn=0.8 wp=1.6 nfn=1 nfp=1
+* Slave latch (transparent when clki=1, holds when clki=0)
+Xtg3 m2 s1 clki clkb vdd vss sst_tgate wn={wn} wp={wp} nfn=1 nfp=1
+Xsq  s1 qi vdd vss sst_inv wn={wn*1.2} wp={wp*1.2}
+Xsfb qi rst_n s2 vdd vss sst_nand2 wn=1.2 wp=1.6 nfn=1 nfp=1
+Xtg4 s2 s1 clkb clki vdd vss sst_tgate wn=0.8 wp=1.6 nfn=1 nfp=1
+* Clean output buffers (parallel q = ~s1, qb = ~qi)
+Xbq1 s1 q  vdd vss sst_inv wn={wn*1.5} wp={wp*1.5}
+Xbq2 qi qb vdd vss sst_inv wn={wn*1.5} wp={wp*1.5}
+.ends sst_dff_r
+
+* --- Strengthened 5.0 Gb/s Output Stagger DFF (strong Xsq 2.1/5.0 + Xbq1/Xbq2 2.7/7.5 -> +67% PMOS drive!) ---
+.subckt sst_dff_r_5g d clk rst_n q qb vdd vss
+Xci  clk  clkb vdd vss sst_inv wn=1.4 wp=3.4 nfn=1 nfp=2
+Xcb  clkb clki vdd vss sst_inv wn=1.4 wp=3.4 nfn=1 nfp=2
+Xtg1 d  m1 clkb clki vdd vss sst_tgate wn=1.5 wp=2.8 nfn=1 nfp=1
+Xm2  m1 rst_n m2 vdd vss sst_nand2 wn=2.25 wp=2.8 nfn=1 nfp=1
+Xm3  m2 m3 vdd vss sst_inv wn=0.8 wp=1.6 nfn=1 nfp=1
+Xtg2 m3 m1 clki clkb vdd vss sst_tgate wn=0.8 wp=1.6 nfn=1 nfp=1
+Xtg3 m2 s1 clki clkb vdd vss sst_tgate wn=1.5 wp=2.8 nfn=1 nfp=1
+Xsq  s1 qi vdd vss sst_inv wn=2.1 wp=5.0 nfn=1 nfp=2
+Xsfb qi rst_n s2 vdd vss sst_nand2 wn=1.2 wp=1.6 nfn=1 nfp=1
+Xtg4 s2 s1 clkb clki vdd vss sst_tgate wn=0.8 wp=1.6 nfn=1 nfp=1
+Xbq1 s1 q  vdd vss sst_inv wn=2.7 wp=7.5 nfn=2 nfp=3
+Xbq2 qi qb vdd vss sst_inv wn=2.7 wp=7.5 nfn=2 nfp=3
+.ends sst_dff_r_5g
+
+* --- Single 4:1 Lane Serializer (312.5 MHz -> 625 MHz -> 1.25 GHz) ---
+.subckt sst_lane_ser4 x0 x1 x2 x3 clk250 clk250b clk500 clk500b clk1g rst_n l_out vdd vss
+Xr0   x0   clk250b rst_n r0   r0b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr1   x1   clk250b rst_n r1   r1b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr2   x2   clk250b rst_n r2   r2b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr3_m x3   clk250b rst_n r3_m r3_mb vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr3   r3_m clk250  rst_n r3   r3b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xma r2 r0 clk250b clk250 ma vdd vss sst_mux2 wn=0.9 wp=1.8
+Xmb r1 r3 clk250b clk250 mb vdd vss sst_mux2 wn=0.9 wp=1.8
+Xda ma clk500  rst_n da dab vdd vss sst_dff_r wn=1.2 wp=2.4
+Xdb mb clk500b rst_n db dbb vdd vss sst_dff_r wn=1.2 wp=2.4
+Xmc da db clk500 clk500b mc vdd vss sst_mux2 wn=1.5 wp=3.0
+Xd1g mc clk1g rst_n l_out l_outb vdd vss sst_dff_r wn=1.5 wp=3.0
+.ends sst_lane_ser4
+
+* --- Complete 16:4 Hardened 5.0 Gb/s Static CMOS Serializer + Divider + 4-Phase Stagger Retimer ---
+.subckt serdes_tx_sst_serializer16_5g
++ din0 din1 din2 din3 din4 din5 din6 din7
++ din8 din9 din10 din11 din12 din13 din14 din15
++ phi0 phi90 phi180 phi270 rst_n
++ d0 d1 d2 d3 db0 db1 db2 db3
++ clk500_out clk250_out
++ vdd vss
+
+* Hardened 5.0 Gb/s local clock buffers (strong PMOS for SS/SF -40C 92 fF c0 & 3-DFF c180!)
+Xc0   phi0   c0b   vdd vss sst_inv wn=2.6 wp=6.0  nfn=2 nfp=3
+Xc0b  c0b    c0    vdd vss sst_inv wn=5.0 wp=12.5 nfn=2 nfp=5
+Xc90  phi90  c90b  vdd vss sst_inv wn=2.0 wp=4.8  nfn=1 nfp=2
+Xc90b c90b   c90   vdd vss sst_inv wn=3.6 wp=9.0  nfn=2 nfp=4
+Xc18  phi180 c18b  vdd vss sst_inv wn=2.2 wp=5.4  nfn=1 nfp=3
+Xc18b c18b   c180  vdd vss sst_inv wn=4.2 wp=10.5 nfn=2 nfp=4
+Xc27  phi270 c27b  vdd vss sst_inv wn=2.0 wp=4.8  nfn=1 nfp=2
+Xc27b c27b   c270  vdd vss sst_inv wn=3.6 wp=9.0  nfn=2 nfp=4
+
+* Static CMOS /2 and /4 dividers (c0 1.25 GHz -> clk500 625 MHz -> clk250 312.5 MHz)
+Xdiv500 clk500b_i c0        rst_n clk500_i clk500b_i vdd vss sst_dff_r wn=1.5 wp=3.0
+Xdiv250 clk250b_i clk500_i  rst_n clk250_i clk250b_i vdd vss sst_dff_r wn=1.5 wp=3.0
+Xb500a clk500_i  clk500b vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=3
+Xb500b clk500b_i clk500  vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=3
+Xb250a clk250_i  clk250b vdd vss sst_inv wn=4.0 wp=8.0 nfn=2 nfp=3
+Xb250b clk250b_i clk250  vdd vss sst_inv wn=3.0 wp=6.0 nfn=2 nfp=2
+Xo500 clk500b clk500_out vdd vss sst_inv wn=1.5 wp=3.0 nfn=1 nfp=2
+Xo250 clk250  clk250_out vdd vss sst_inv wn=1.5 wp=3.0 nfn=1 nfp=2
+
+* 4 identical 4:1 lane serializers (natural bit ordering: lane k carries din[k, k+4, k+8, k+12])
+Xlane0 din0 din4 din8  din12 clk250 clk250b clk500 clk500b c0 rst_n l0 vdd vss sst_lane_ser4
+Xlane1 din1 din5 din9  din13 clk250 clk250b clk500 clk500b c0 rst_n l1 vdd vss sst_lane_ser4
+Xlane2 din2 din6 din10 din14 clk250 clk250b clk500 clk500b c0 rst_n l2 vdd vss sst_lane_ser4
+Xlane3 din3 din7 din11 din15 clk250 clk250b clk500 clk500b c0 rst_n l3 vdd vss sst_lane_ser4
+
+* 4-Phase Stagger Retimer (v5_5g: strengthened output stagger DFFs Xst0/Xst1/Xst2b/Xst3b!)
+Xst0  l0   c180 rst_n d0   db0  vdd vss sst_dff_r_5g
+Xst1  l1   c270 rst_n d1   db1  vdd vss sst_dff_r_5g
+Xst2a l2   c180 rst_n l2h  l2hb vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst2b l2h  c0   rst_n d2   db2  vdd vss sst_dff_r_5g
+Xst3a l3   c180 rst_n l3h  l3hb vdd vss sst_dff_r wn=1.5 wp=3.0
+Xst3b l3h  c90  rst_n d3   db3  vdd vss sst_dff_r_5g
+.ends serdes_tx_sst_serializer16_5g

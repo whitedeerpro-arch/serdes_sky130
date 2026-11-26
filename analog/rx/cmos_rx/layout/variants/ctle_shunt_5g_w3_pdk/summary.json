@@ -1,0 +1,165 @@
+{
+  "variant": "ctle_shunt_5g_w3_pdk",
+  "cell": "serdes_rx_ctle_shunt_5g_w3_pdk",
+  "active_cell": "serdes_rx_ctle_active_5g_w3_pdk",
+  "pdk": "sky130A",
+  "gmid_design_point": {
+    "gm_id_tt_S_A": 10.7,
+    "win_um": 19.2,
+    "nfin": 8,
+    "wtail_um": 90.0,
+    "nftail": 10,
+    "l_rload_um": 2.83,
+    "l_rdeg_um": 5.1,
+    "c_mim_w_um": 6.0,
+    "wsw_n_um": 8.0,
+    "wsw_p_um": 16.0,
+    "inductor": "rx_ctle_ind_m4m2_5g_pdk (57.6x57.6 um, 4.10 nH/arm, 0% M5)"
+  },
+  "active_bbox_um": [
+    -20.7,
+    0.0,
+    20.7,
+    29.9
+  ],
+  "active_width_um": 41.4,
+  "active_height_um": 29.9,
+  "bbox_um": [
+    -28.8,
+    -63.8,
+    28.8,
+    31.3
+  ],
+  "width_um": 57.6,
+  "height_um": 95.1,
+  "area_um2": 5477.76,
+  "area_mm2": 0.00548,
+  "area_vs_m5m3_ctle_pct": 47.7,
+  "aspect_ratio": 0.61,
+  "ports": {
+    "inp": {
+      "layer": "metal3",
+      "x_um": 28.8,
+      "y_um": 6.45
+    },
+    "inn": {
+      "layer": "metal3",
+      "x_um": 28.8,
+      "y_um": 5.55
+    },
+    "outp": {
+      "layer": "metal4",
+      "x_um": -28.8,
+      "y_um": 7.3
+    },
+    "outn": {
+      "layer": "metal4",
+      "x_um": -28.8,
+      "y_um": 4.7
+    },
+    "eq0": {
+      "layer": "metal1",
+      "x_um": -28.8,
+      "y_um": 11.45
+    },
+    "eq1": {
+      "layer": "metal1",
+      "x_um": -28.8,
+      "y_um": 26.95
+    },
+    "vbias": {
+      "layer": "metal2",
+      "x_um": 28.8,
+      "y_um": 27.2
+    },
+    "vdd": {
+      "layer": "metal3",
+      "x_um": -28.8,
+      "y_um": -4.2
+    },
+    "vss": {
+      "layer": "metal3",
+      "x_um": -28.8,
+      "y_um": 30.4
+    }
+  },
+  "drc_total": 0,
+  "drc_rules": [],
+  "floating_poly": 0,
+  "dc_lvs_match": true,
+  "dc_lvs_property_errors": false,
+  "inductor_open_drc_total": 0,
+  "inductor_open_lvs_match": true,
+  "inductor_open_lvs_property_errors": false,
+  "metal_shares": {
+    "area_um2": {
+      "M1": 563.993,
+      "M2": 1398.772,
+      "M3": 451.241,
+      "M4": 1305.522,
+      "M5": 0.0
+    },
+    "total_metal_um2": 3719.528,
+    "share_pct": {
+      "M1": 15.2,
+      "M2": 37.6,
+      "M3": 12.1,
+      "M4": 35.1,
+      "M5": 0.0
+    }
+  },
+  "inductor_open_port_caps_fF": {
+    "inp": {
+      "to_substrate_fF": 2.425,
+      "coupling_sum_fF": 3.018,
+      "total_node_fF": 5.443
+    },
+    "inn": {
+      "to_substrate_fF": 2.205,
+      "coupling_sum_fF": 3.123,
+      "total_node_fF": 5.328
+    },
+    "outp": {
+      "to_substrate_fF": 3.076,
+      "coupling_sum_fF": 5.126,
+      "total_node_fF": 8.202
+    },
+    "outn": {
+      "to_substrate_fF": 2.748,
+      "coupling_sum_fF": 5.492,
+      "total_node_fF": 8.24
+    },
+    "eq0": {
+      "to_substrate_fF": 2.248,
+      "coupling_sum_fF": 2.795,
+      "total_node_fF": 5.042
+    },
+    "eq1": {
+      "to_substrate_fF": 2.554,
+      "coupling_sum_fF": 1.722,
+      "total_node_fF": 4.276
+    },
+    "vbias": {
+      "to_substrate_fF": 14.53,
+      "coupling_sum_fF": 9.371,
+      "total_node_fF": 23.902
+    },
+    "vdd": {
+      "to_substrate_fF": 18.792,
+      "coupling_sum_fF": 5.693,
+      "total_node_fF": 24.485
+    },
+    "lp_mid": {
+      "to_substrate_fF": 2.483,
+      "coupling_sum_fF": 1.291,
+      "total_node_fF": 3.774
+    },
+    "ln_mid": {
+      "to_substrate_fF": 2.547,
+      "coupling_sum_fF": 1.249,
+      "total_node_fF": 3.796
+    }
+  },
+  "inductor_submacro": "analog/rx/cmos_rx/layout/variants/ctle_shunt_ind_compact_5g_pdk/rx_ctle_ind_m4m2_5g_pdk.mag",
+  "mag_sha256": "3ba4f6e326afa9e1ae960eacaa8164da88dfc4cc921271885c9d0880b1266b8c"
+}

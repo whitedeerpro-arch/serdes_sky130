@@ -1,0 +1,126 @@
+* 5.0 GHz Octagonal LC-VCO + Quadrature /2 Divider (2.5 GHz I/Q) — Unified Schematic/Layout PDK Netlist
+* SKY130A, 1.8 V, 100% real SKY130A PDK active/cap/varactor/resistor devices + Magic & KLayout DRC=0 / CPEX
+* extracted parameters for `vco5g_ind_oct_2n5_pdk` (analog/pll/vco_5g/layout/variants/ind_oct_2n5_pdk/summary.json).
+*
+* Key Upgrades vs Square `lc_5g_div2_unified_pdk`:
+*   - Replaces 248x248 um square spiral with 45-degree Octagonal 3T `met4||met5` inductor `vco5g_ind_oct_2n5_pdk`:
+*     D_out = 228 um, W = 12 um, S = 4 um, Neumann L_diff = 2.408 nH, R_dc = 3.065 Ohm,
+*     Magic CPEX C_sub = 410.49 fF, Q_5G = 7.26, L_eff(5G) = 2.724 nH, R_p(5G) = 621.1 Ohm, f_SRF = 15.76 GHz,
+*     Magic drc(full) = 0 AND KLayout sky130A_mr.drc = 0.
+*   - Coarse 4-bit MIM bank unit sized to `capw = capl = 3.6 um` (exact 1:1 with `vco5g_lc_active_div2_oct_pdk.mag`)
+*     so that WITH FULL POST-LAYOUT MAGIC CPEX (~92 fF/node on vp/vn), 5.000 GHz sits dead-center inside
+*     mid-bank codes across ALL 4 extreme PVT/RC corners (TT, SS -40C hh, SS +85C hh, FF -40C ll).
+*   - Single-inductor complementary push-pull core with floating inductor center-tap `ct`, clean high-Z tail
+*     (`Xtail` w=60, l=0.5, nf=12), and repurposed 2 pF `VDD-VSS` local decap (`Xctail`).
+*
+* Dependencies: sky130_primitives.spice, sky130_pfet_lvt.spice.
+
+.subckt vco5g_ind_oct_2n5_pdk p n ct sub params: rm_scale=1.0 c_scale=1.0
+* Exact Neumann L_diff = 2 * 0.9632n * (1 + 0.25) = 2.408 nH
+* Effective 5 GHz series resistance (DC 3.065 Ohm + skin/proximity) -> Rs1 = Rs2 = 2.80 Ohm (Q_5G ~ 7.15, R_p ~ 611 Ohm)
+L1  p  m1 0.9632n
+Rs1 m1 ct {2.80*rm_scale} tc1=3.2e-3
+L2  ct m2 0.9632n
+Rs2 m2 n  {2.80*rm_scale} tc1=3.2e-3
+K12 L1 L2 0.25
+* Inter-turn winding capacitance (matches L_eff_5G = 2.68-2.72 nH & f_SRF = 15.8 GHz)
+Cs p n {26f*c_scale}
+* Symmetric Magic CPEX oxide capacitance (3 x 136.83 fF = 410.49 fF) + silicon substrate loss network
+Cox1   p  s1  {136.83f*c_scale}
+Cox2   n  s2  {136.83f*c_scale}
+Cox_ct ct sct {136.83f*c_scale}
+Rsub1   s1  sub 420 tc1=1.5e-3
+Rsub2   s2  sub 420 tc1=1.5e-3
+Rsub_ct sct sub 420 tc1=1.5e-3
+Csub1   s1  sub 30f
+Csub2   s2  sub 30f
+Csub_ct sct sub 30f
+.ends vco5g_ind_oct_2n5_pdk
+
+* Differential switched MIM unit cell with clean ON->VSS / OFF->VDD plate biasing
+.subckt vco5g_oct_bank_unit vp vn en vdd vss params: capw=3.6 capl=3.6 sw=16
+Xcap_p vp sp sky130_fd_pr__cap_mim_m3_1 w={capw} l={capl}
+Xcap_n vn sn sky130_fd_pr__cap_mim_m3_1 w={capw} l={capl}
+Cbpp sp vss {0.0124e-15*(capw+0.28)*(capl+0.28)+0.041e-15*2*(capw+capl+0.56)+0.2e-15}
+Cbpn sn vss {0.0124e-15*(capw+0.28)*(capl+0.28)+0.041e-15*2*(capw+capl+0.56)+0.2e-15}
+Xsw sp en sn vss serdes_nfet_lvt w={sw} l=0.15 nf=4
+Xon_p sp en vss vss serdes_nfet w=1.0 l=0.5 nf=1
+Xon_n sn en vss vss serdes_nfet w=1.0 l=0.5 nf=1
+Xoff_p sp en vdd vdd serdes_pfet w=1.0 l=0.5 nf=1
+Xoff_n sn en vdd vdd serdes_pfet w=1.0 l=0.5 nf=1
+.ends vco5g_oct_bank_unit
+
+* 4-bit binary-weighted differential MIM coarse bank (15 units, codes 0..15)
+.subckt vco5g_oct_bank4 vp vn b0 b1 b2 b3 vdd vss params: capw=3.6 capl=3.6 sw=16
+X0_0 vp vn b0 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X1_0 vp vn b1 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X1_1 vp vn b1 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X2_0 vp vn b2 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X2_1 vp vn b2 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X2_2 vp vn b2 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X2_3 vp vn b2 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_0 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_1 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_2 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_3 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_4 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_5 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_6 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+X3_7 vp vn b3 vdd vss vco5g_oct_bank_unit capw={capw} capl={capl} sw={sw}
+.ends vco5g_oct_bank4
+
+* 5.0 GHz Octagonal Complementary Cross-Coupled LC-VCO Core (Single-Inductor, Clean High-Z Tail)
+.subckt vco5g_lc_core_oct_pdk vp vn vctrl b0 b1 b2 b3 vdd vss
++ params: wn=40.0 l_n=0.15 nfn=16 wp=64.0 l_p=0.35 nfp=16 wt=60.0 l_t=0.5 nft=12
++ var_w=5.2 var_l=0.5 var_m=6 capw=3.6 capl=3.6 sw=16 rm_scale=1.0 c_scale=1.0
+Xind vp vn ct vss vco5g_ind_oct_2n5_pdk rm_scale={rm_scale} c_scale={c_scale}
+Xmn1 vp vn tail vss serdes_nfet_lvt w={wn} l={l_n} nf={nfn}
+Xmn2 vn vp tail vss serdes_nfet_lvt w={wn} l={l_n} nf={nfn}
+Xmp1 vp vn vdd  vdd serdes_pfet_lvt w={wp} l={l_p} nf={nfp}
+Xmp2 vn vp vdd  vdd serdes_pfet_lvt w={wp} l={l_p} nf={nfp}
+Xctail vdd vss sky130_fd_pr__cap_mim_m3_1 w=32.0 l=32.0
+Xrbias vdd vbias_lc vss sky130_fd_pr__res_high_po_1p41 l=9.8
+Xnbias vbias_lc vbias_lc vss vss serdes_nfet w=6.0 l=0.5 nf=2
+Xrf_t vbias_lc vbias_f vss sky130_fd_pr__res_high_po_1p41 l=10.0
+Xcf_t vbias_f vss sky130_fd_pr__cap_mim_m3_1 w=22.0 l=22.0
+Xtail tail vbias_f vss vss serdes_nfet w={wt} l={l_t} nf={nft}
+Xvarp vp vctrl vss sky130_fd_pr__cap_var_lvt w={var_w} l={var_l} vm={var_m}
+Xvarn vn vctrl vss sky130_fd_pr__cap_var_lvt w={var_w} l={var_l} vm={var_m}
+Xbank vp vn b0 b1 b2 b3 vdd vss vco5g_oct_bank4 capw={capw} capl={capl} sw={sw}
+.ends vco5g_lc_core_oct_pdk
+
+* High-Speed 5.0 GHz -> 2.5 GHz Quadrature CML /2 Divider (outputs I+/I- and Q+/Q-)
+.subckt vco5g_oct_cml_latch_5g dp dn qp qn ckp ckn vbias vdd vss
++ params: wd=16.0 wh=14.0 wc=20.0 wt=36.0 rlen=5.6
+Xrp1 vdd qp vss sky130_fd_pr__res_high_po_2p85 l={rlen}
+Xrp2 vdd qp vss sky130_fd_pr__res_high_po_2p85 l={rlen}
+Xrn1 vdd qn vss sky130_fd_pr__res_high_po_2p85 l={rlen}
+Xrn2 vdd qn vss sky130_fd_pr__res_high_po_2p85 l={rlen}
+Xdp qp dp s_trk vss serdes_nfet_lvt w={wd} l=0.15 nf=4
+Xdn qn dn s_trk vss serdes_nfet_lvt w={wd} l=0.15 nf=4
+Xhp qp qn s_hld vss serdes_nfet_lvt w={wh} l=0.15 nf=4
+Xhn qn qp s_hld vss serdes_nfet_lvt w={wh} l=0.15 nf=4
+Xckp s_trk ckp tail vss serdes_nfet_lvt w={wc} l=0.15 nf=4
+Xckn s_hld ckn tail vss serdes_nfet_lvt w={wc} l=0.15 nf=4
+Xtail tail vbias vss vss serdes_nfet w={wt} l=0.35 nf=8
+.ends vco5g_oct_cml_latch_5g
+
+.subckt vco5g_oct_div2_quad clkp clkn ip in qp qn vdd vss
+Xacp clkp ckp sky130_fd_pr__cap_mim_m3_1 w=8.0 l=8.0
+Xacn clkn ckn sky130_fd_pr__cap_mim_m3_1 w=8.0 l=8.0
+Xrb1 vdd vbias_d vss sky130_fd_pr__res_high_po_1p41 l=14.0
+Xnb1 vbias_d vbias_d vss vss serdes_nfet w=6.0 l=0.35 nf=2
+Xrc_hi vdd vck_cm vss sky130_fd_pr__res_high_po_1p41 l=60.0
+Xrc_lo vck_cm vss vss sky130_fd_pr__res_high_po_1p41 l=96.0
+Xrc_p vck_cm ckp vss sky130_fd_pr__res_high_po_1p41 l=80.0
+Xrc_n vck_cm ckn vss sky130_fd_pr__res_high_po_1p41 l=80.0
+Xm qn qp ip in ckp ckn vbias_d vdd vss vco5g_oct_cml_latch_5g
+Xs ip in qp qn ckn ckp vbias_d vdd vss vco5g_oct_cml_latch_5g
+.ends vco5g_oct_div2_quad
+
+* Integrated 5.0 GHz Octagonal LC-VCO + 2.5 GHz Quadrature /2 Top
+.subckt vco5g_lc_div2_oct_pdk vp vn ip in qp qn vctrl b0 b1 b2 b3 vdd vss
++ params: rm_scale=1.0 c_scale=1.0
+Xcore vp vn vctrl b0 b1 b2 b3 vdd vss vco5g_lc_core_oct_pdk rm_scale={rm_scale} c_scale={c_scale}
+Xdiv2 vp vn ip in qp qn vdd vss vco5g_oct_div2_quad
+.ends vco5g_lc_div2_oct_pdk

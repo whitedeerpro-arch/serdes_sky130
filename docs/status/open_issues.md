@@ -15,6 +15,8 @@
 | **I-TOP-05** | **局部极冷失配尾差与 4G 扩角收口**。收口 5G `PI v3` 在 `SS 1.65 V −40 °C` 24 样本 MC 中剩余 4 样本尾差（归因 `pi4_diff_rec` SVT-PMOS 冷角偏斜）；4G 参考基线补齐 RX v2.2 45 角全量 CPEX 及加固 SAFF-TSPC ÷8 提取后冷角 MC | [RX CMOS](../design/rx_cmos_v2.md) · [SAFF-TSPC ÷8](../design/pll_tspc_reclock_divider.md) |
 | **I-TOP-06** | **系统抖动预算、实装封装信道与首片 DFT/BER 验收**。将最终采用的时钟、PDN、Pad/ESD、封装与 PCB S 参数纳入同一抖动与误码预算，完成 45 PVT 功能门槛核对，并随 Pad Map 固化首片 DFT 最小入口（含 ≥42-bit 有效位计数）与实验室 BER 验收口径 | [规格](../overview/spec.md) · [首片 DFT](prelayout_plan.md#首片-dft-最小测试入口) · [信道](../design/channel_model.md) |
 
+I-TOP-01 同时承接 5G LC 父层护环跨有源 M3 VDD 的短接。合入修正后，应从片顶 `VDD_Q/VSS` 分别查到 LC 有源叶电源，从片顶 I/Q、调谐和粗码查到实际器件端，再用相同修订提取、复核带载与电感行为。[同版短接反例及局部修正](../../results/catalog/chip_macro_reformulation_20261126.json)
+
 ---
 
 ## 2. 早期历史编号归档说明（`I-01` – `I-35`）

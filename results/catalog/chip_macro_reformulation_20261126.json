@@ -1,0 +1,1028 @@
+{
+  "date": "2026-11-26",
+  "scope": "Native-shape and port flexibility audit of all 13 5G Plan C functional macros and example decap tiling",
+  "gds_sha256": "4ca91bbd21b881db6400ea8ccc372e6f97f1c56dbe8256a489a9234f2324c6c5",
+  "contour_method": {
+    "grid_um": 2.5,
+    "shape_halo_um": 2.0,
+    "closed_voids_retained": true,
+    "scope": "raster envelope for geometry screening; RF, PG, and access constraints require separate regions; digital row and PDN envelope retained"
+  },
+  "vco_guard_crossing": {
+    "as_built": {
+      "source": {
+        "path": "results/layout/chip_top_5g_20261126/plan_v4p1/vco5g_lc_div2_oct_pdk.ext",
+        "sha256": "cd416bee47fbe11fcdb0da6b8712da1af21e968a6978a33e3cef61684ed20e9f"
+      },
+      "roots": {
+        "act0/vdd": "VSUBS",
+        "act0/vss": "VSUBS",
+        "ind0/sub": "VSUBS"
+      }
+    },
+    "isolated_repair": {
+      "source": {
+        "path": "results/layout/macro_reformulation_20261126_MYr6E5/m4_guard_lc_landed_reference/m4_guard_lc_landed_reference.ext",
+        "sha256": "07ac09d0ce220d7b1c3ec5fc01842f50e97fdf2d0c5ba0a7ce83d7dadb6fb392"
+      },
+      "roots": {
+        "vdd": "vdd",
+        "vss": "VSUBS",
+        "act0/vdd": "vdd",
+        "act0/vss": "VSUBS",
+        "ind0/sub": "VSUBS"
+      }
+    }
+  },
+  "vco_routing_pilots": {
+    "m4_guard_lc_landed_reference": {
+      "drc_total": 0,
+      "matched_external_port_classes": true,
+      "differences": {},
+      "new_ports_native_um": {},
+      "added_manhattan_um": {},
+      "added_root_ground_cap_fF": {},
+      "minimum_extra_south_um": 0.0,
+      "added_geometry_box_um": [
+        -118.3,
+        -70.3,
+        116.47,
+        76.26
+      ]
+    },
+    "m4_guard_lc_split_60": {
+      "drc_total": 0,
+      "matched_external_port_classes": true,
+      "differences": {},
+      "new_ports_native_um": {
+        "ip": [
+          "metal3",
+          -60.0,
+          -79.5
+        ],
+        "in": [
+          "metal3",
+          -60.0,
+          -77.5
+        ],
+        "qp": [
+          "metal3",
+          60.0,
+          -77.5
+        ],
+        "qn": [
+          "metal3",
+          60.0,
+          -79.5
+        ]
+      },
+      "added_manhattan_um": {
+        "ip": 36.0,
+        "in": 36.0,
+        "qp": 36.0,
+        "qn": 36.0
+      },
+      "added_root_ground_cap_fF": {
+        "ip": 2.051,
+        "in": 2.097,
+        "qp": 2.097,
+        "qn": 2.051
+      },
+      "minimum_extra_south_um": 7.3,
+      "added_geometry_box_um": [
+        -118.3,
+        -79.8,
+        116.47,
+        76.26
+      ]
+    },
+    "m4_guard_lc_split_90": {
+      "drc_total": 0,
+      "matched_external_port_classes": true,
+      "differences": {},
+      "new_ports_native_um": {
+        "ip": [
+          "metal3",
+          -90.0,
+          -79.5
+        ],
+        "in": [
+          "metal3",
+          -90.0,
+          -77.5
+        ],
+        "qp": [
+          "metal3",
+          90.0,
+          -77.5
+        ],
+        "qn": [
+          "metal3",
+          90.0,
+          -79.5
+        ]
+      },
+      "added_manhattan_um": {
+        "ip": 66.0,
+        "in": 66.0,
+        "qp": 66.0,
+        "qn": 66.0
+      },
+      "added_root_ground_cap_fF": {
+        "ip": 3.749,
+        "in": 3.794,
+        "qp": 3.794,
+        "qn": 3.749
+      },
+      "minimum_extra_south_um": 7.3,
+      "added_geometry_box_um": [
+        -118.3,
+        -79.8,
+        116.47,
+        76.26
+      ]
+    },
+    "m4_guard_lc_split_126": {
+      "drc_total": 0,
+      "matched_external_port_classes": true,
+      "differences": {},
+      "new_ports_native_um": {
+        "ip": [
+          "metal3",
+          -126.0,
+          -79.5
+        ],
+        "in": [
+          "metal3",
+          -126.0,
+          -77.5
+        ],
+        "qp": [
+          "metal3",
+          126.0,
+          -77.5
+        ],
+        "qn": [
+          "metal3",
+          126.0,
+          -79.5
+        ]
+      },
+      "added_manhattan_um": {
+        "ip": 102.0,
+        "in": 102.0,
+        "qp": 102.0,
+        "qn": 102.0
+      },
+      "added_root_ground_cap_fF": {
+        "ip": 5.786,
+        "in": 5.831,
+        "qp": 5.831,
+        "qn": 5.786
+      },
+      "minimum_extra_south_um": 7.3,
+      "added_geometry_box_um": [
+        -126.26,
+        -79.8,
+        126.26,
+        76.26
+      ]
+    },
+    "m4_guard_lc_split_135": {
+      "drc_total": 0,
+      "matched_external_port_classes": true,
+      "differences": {},
+      "new_ports_native_um": {
+        "ip": [
+          "metal3",
+          -135.0,
+          -79.5
+        ],
+        "in": [
+          "metal3",
+          -135.0,
+          -77.5
+        ],
+        "qp": [
+          "metal3",
+          135.0,
+          -77.5
+        ],
+        "qn": [
+          "metal3",
+          135.0,
+          -79.5
+        ]
+      },
+      "added_manhattan_um": {
+        "ip": 111.0,
+        "in": 111.0,
+        "qp": 111.0,
+        "qn": 111.0
+      },
+      "added_root_ground_cap_fF": {
+        "ip": 6.295,
+        "in": 6.34,
+        "qp": 6.34,
+        "qn": 6.295
+      },
+      "minimum_extra_south_um": 7.3,
+      "added_geometry_box_um": [
+        -135.26,
+        -79.8,
+        135.26,
+        76.26
+      ]
+    },
+    "m4_guard_lc_to_east_135": {
+      "drc_total": 0,
+      "matched_external_port_classes": true,
+      "differences": {},
+      "new_ports_native_um": {
+        "ip": [
+          "metal3",
+          135.0,
+          -78.0
+        ],
+        "in": [
+          "metal3",
+          135.0,
+          -80.0
+        ],
+        "qp": [
+          "metal3",
+          135.0,
+          -74.5
+        ],
+        "qn": [
+          "metal3",
+          135.0,
+          -76.5
+        ]
+      },
+      "added_manhattan_um": {
+        "ip": 176.5,
+        "in": 176.5,
+        "qp": 108.0,
+        "qn": 108.0
+      },
+      "added_root_ground_cap_fF": {
+        "ip": 6.444,
+        "in": 9.996,
+        "qp": 6.148,
+        "qn": 2.603
+      },
+      "minimum_extra_south_um": 7.8,
+      "added_geometry_box_um": [
+        -118.3,
+        -80.3,
+        135.26,
+        76.26
+      ]
+    }
+  },
+  "independent_repack_placement": {
+    "bias_leaves_narrow": {
+      "envelope_um": [
+        118.93,
+        272.335
+      ],
+      "drc_total": 0,
+      "n_leaves": 3,
+      "boxes_um": {
+        "ref": [
+          0.0,
+          0.0,
+          101.11,
+          153.13
+        ],
+        "pbuf": [
+          0.0,
+          158.13,
+          64.96,
+          272.335
+        ],
+        "vbuf": [
+          69.96,
+          158.13,
+          118.93,
+          234.88
+        ]
+      },
+      "scope": "Real existing leaves, placement only. BIAS excludes current-copy arrays. SST excludes differential summing, driver and VDRV."
+    },
+    "bias_leaves_corner": {
+      "envelope_um": [
+        272.335,
+        155.08
+      ],
+      "drc_total": 0,
+      "n_leaves": 3,
+      "boxes_um": {
+        "ref": [
+          0.0,
+          0.0,
+          153.13,
+          101.11
+        ],
+        "pbuf": [
+          158.13,
+          0.0,
+          272.335,
+          64.96
+        ],
+        "vbuf": [
+          0.0,
+          106.11,
+          76.75,
+          155.08
+        ]
+      },
+      "scope": "Real existing leaves, placement only. BIAS excludes current-copy arrays. SST excludes differential summing, driver and VDRV."
+    },
+    "slice_2rows": {
+      "envelope_um": [
+        123.2,
+        52.67
+      ],
+      "drc_total": 0,
+      "n_leaves": 28,
+      "boxes_um": {
+        "s_0_0": [
+          0.0,
+          0.0,
+          8.8,
+          25.17
+        ],
+        "s_0_1": [
+          0.0,
+          27.5,
+          8.8,
+          52.67
+        ],
+        "s_1_0": [
+          8.8,
+          0.0,
+          17.6,
+          25.17
+        ],
+        "s_1_1": [
+          8.8,
+          27.5,
+          17.6,
+          52.67
+        ],
+        "s_2_0": [
+          17.6,
+          0.0,
+          26.4,
+          25.17
+        ],
+        "s_2_1": [
+          17.6,
+          27.5,
+          26.4,
+          52.67
+        ],
+        "s_3_0": [
+          26.4,
+          0.0,
+          35.2,
+          25.17
+        ],
+        "s_3_1": [
+          26.4,
+          27.5,
+          35.2,
+          52.67
+        ],
+        "s_4_0": [
+          35.2,
+          0.0,
+          44.0,
+          25.17
+        ],
+        "s_4_1": [
+          35.2,
+          27.5,
+          44.0,
+          52.67
+        ],
+        "s_5_0": [
+          44.0,
+          0.0,
+          52.8,
+          25.17
+        ],
+        "s_5_1": [
+          44.0,
+          27.5,
+          52.8,
+          52.67
+        ],
+        "s_6_0": [
+          52.8,
+          0.0,
+          61.6,
+          25.17
+        ],
+        "s_6_1": [
+          52.8,
+          27.5,
+          61.6,
+          52.67
+        ],
+        "s_7_0": [
+          61.6,
+          0.0,
+          70.4,
+          25.17
+        ],
+        "s_7_1": [
+          61.6,
+          27.5,
+          70.4,
+          52.67
+        ],
+        "s_8_0": [
+          70.4,
+          0.0,
+          79.2,
+          25.17
+        ],
+        "s_8_1": [
+          70.4,
+          27.5,
+          79.2,
+          52.67
+        ],
+        "s_9_0": [
+          79.2,
+          0.0,
+          88.0,
+          25.17
+        ],
+        "s_9_1": [
+          79.2,
+          27.5,
+          88.0,
+          52.67
+        ],
+        "s_10_0": [
+          88.0,
+          0.0,
+          96.8,
+          25.17
+        ],
+        "s_10_1": [
+          88.0,
+          27.5,
+          96.8,
+          52.67
+        ],
+        "s_11_0": [
+          96.8,
+          0.0,
+          105.6,
+          25.17
+        ],
+        "s_11_1": [
+          96.8,
+          27.5,
+          105.6,
+          52.67
+        ],
+        "s_12_0": [
+          105.6,
+          0.0,
+          114.4,
+          25.17
+        ],
+        "s_12_1": [
+          105.6,
+          27.5,
+          114.4,
+          52.67
+        ],
+        "s_13_0": [
+          114.4,
+          0.0,
+          123.2,
+          25.17
+        ],
+        "s_13_1": [
+          114.4,
+          27.5,
+          123.2,
+          52.67
+        ]
+      },
+      "scope": "Real existing leaves, placement only. BIAS excludes current-copy arrays. SST excludes differential summing, driver and VDRV."
+    },
+    "slice_4rows": {
+      "envelope_um": [
+        61.6,
+        107.67
+      ],
+      "drc_total": 0,
+      "n_leaves": 28,
+      "boxes_um": {
+        "s_0_0": [
+          0.0,
+          0.0,
+          8.8,
+          25.17
+        ],
+        "s_0_1": [
+          0.0,
+          27.5,
+          8.8,
+          52.67
+        ],
+        "s_0_2": [
+          0.0,
+          55.0,
+          8.8,
+          80.17
+        ],
+        "s_0_3": [
+          0.0,
+          82.5,
+          8.8,
+          107.67
+        ],
+        "s_1_0": [
+          8.8,
+          0.0,
+          17.6,
+          25.17
+        ],
+        "s_1_1": [
+          8.8,
+          27.5,
+          17.6,
+          52.67
+        ],
+        "s_1_2": [
+          8.8,
+          55.0,
+          17.6,
+          80.17
+        ],
+        "s_1_3": [
+          8.8,
+          82.5,
+          17.6,
+          107.67
+        ],
+        "s_2_0": [
+          17.6,
+          0.0,
+          26.4,
+          25.17
+        ],
+        "s_2_1": [
+          17.6,
+          27.5,
+          26.4,
+          52.67
+        ],
+        "s_2_2": [
+          17.6,
+          55.0,
+          26.4,
+          80.17
+        ],
+        "s_2_3": [
+          17.6,
+          82.5,
+          26.4,
+          107.67
+        ],
+        "s_3_0": [
+          26.4,
+          0.0,
+          35.2,
+          25.17
+        ],
+        "s_3_1": [
+          26.4,
+          27.5,
+          35.2,
+          52.67
+        ],
+        "s_3_2": [
+          26.4,
+          55.0,
+          35.2,
+          80.17
+        ],
+        "s_3_3": [
+          26.4,
+          82.5,
+          35.2,
+          107.67
+        ],
+        "s_4_0": [
+          35.2,
+          0.0,
+          44.0,
+          25.17
+        ],
+        "s_4_1": [
+          35.2,
+          27.5,
+          44.0,
+          52.67
+        ],
+        "s_4_2": [
+          35.2,
+          55.0,
+          44.0,
+          80.17
+        ],
+        "s_4_3": [
+          35.2,
+          82.5,
+          44.0,
+          107.67
+        ],
+        "s_5_0": [
+          44.0,
+          0.0,
+          52.8,
+          25.17
+        ],
+        "s_5_1": [
+          44.0,
+          27.5,
+          52.8,
+          52.67
+        ],
+        "s_5_2": [
+          44.0,
+          55.0,
+          52.8,
+          80.17
+        ],
+        "s_5_3": [
+          44.0,
+          82.5,
+          52.8,
+          107.67
+        ],
+        "s_6_0": [
+          52.8,
+          0.0,
+          61.6,
+          25.17
+        ],
+        "s_6_1": [
+          52.8,
+          27.5,
+          61.6,
+          52.67
+        ],
+        "s_6_2": [
+          52.8,
+          55.0,
+          61.6,
+          80.17
+        ],
+        "s_6_3": [
+          52.8,
+          82.5,
+          61.6,
+          107.67
+        ]
+      },
+      "scope": "Real existing leaves, placement only. BIAS excludes current-copy arrays. SST excludes differential summing, driver and VDRV."
+    }
+  },
+  "nested_decap_placement": {
+    "tx_4_decap": {
+      "macro": "tx_sst_v5",
+      "macro_bbox_expanded": false,
+      "drc_total": 0,
+      "tile_pitch_um": 20.8,
+      "tile_count": 4,
+      "tile_cell": "serdes_decap_5g_direct_1v8_pdk",
+      "tile_boxes_in_normalized_macro_um": {
+        "tile_0": [
+          12.97,
+          151.44,
+          32.13,
+          168.14
+        ],
+        "tile_1": [
+          33.77,
+          151.44,
+          52.93,
+          168.14
+        ],
+        "tile_2": [
+          54.57,
+          151.44,
+          73.73,
+          168.14
+        ],
+        "tile_3": [
+          75.37,
+          151.44,
+          94.53,
+          168.14
+        ]
+      },
+      "value_pf_if_connected_to_intended_rail": 5.06,
+      "scope": "DRC of real nested geometry. No supply connection, rail-access or EM qualification."
+    },
+    "rx_2_decap_south": {
+      "macro": "rx_top_5g",
+      "macro_bbox_expanded": false,
+      "drc_total": 0,
+      "tile_pitch_um": 20.8,
+      "tile_count": 2,
+      "tile_cell": "serdes_decap_5g_direct_1v8_pdk",
+      "tile_boxes_in_normalized_macro_um": {
+        "tile_0": [
+          191.27,
+          5.4,
+          210.43,
+          22.1
+        ],
+        "tile_1": [
+          212.07,
+          5.4,
+          231.23,
+          22.1
+        ]
+      },
+      "value_pf_if_connected_to_intended_rail": 2.53,
+      "scope": "DRC of real nested geometry. No supply connection, rail-access or EM qualification."
+    },
+    "rx_2_decap_above_ctle": {
+      "macro": "rx_top_5g",
+      "macro_bbox_expanded": false,
+      "drc_total": 0,
+      "tile_pitch_um": 20.8,
+      "tile_count": 2,
+      "tile_cell": "serdes_decap_5g_direct_1v8_pdk",
+      "tile_boxes_in_normalized_macro_um": {
+        "tile_0": [
+          258.57,
+          168.85,
+          277.73,
+          185.55
+        ],
+        "tile_1": [
+          279.37,
+          168.85,
+          298.53,
+          185.55
+        ]
+      },
+      "value_pf_if_connected_to_intended_rail": 2.53,
+      "scope": "DRC of real nested geometry. No supply connection, rail-access or EM qualification."
+    }
+  },
+  "lf_and_pfd_port_pilots": {
+    "lf_ctrl_east": {
+      "drc_total": 0,
+      "lvs_match": true,
+      "old_bbox_um": [
+        -50.4,
+        -32.45,
+        47.94,
+        32.45
+      ],
+      "new_bbox_um": [
+        -50.4,
+        -35.02,
+        51.22,
+        32.45
+      ],
+      "added_manhattan_um": {
+        "ctrl": 60.3
+      },
+      "new_port_native_um": {
+        "ctrl": [
+          "metal3",
+          51.0,
+          -20.0
+        ]
+      },
+      "exact_port_order": true
+    },
+    "lf_pre_en_north": {
+      "drc_total": 0,
+      "lvs_match": true,
+      "old_bbox_um": [
+        -50.4,
+        -32.45,
+        47.94,
+        32.45
+      ],
+      "new_bbox_um": [
+        -53.42,
+        -32.45,
+        47.94,
+        36.22
+      ],
+      "added_manhattan_um": {
+        "pre_en": 74.7
+      },
+      "new_port_native_um": {
+        "pre_en": [
+          "metal3",
+          -39.0,
+          36.0
+        ]
+      },
+      "exact_port_order": true
+    },
+    "pfd_ref_fb_north": {
+      "drc_total": 0,
+      "lvs_match": false,
+      "old_bbox_um": [
+        -1.45,
+        -0.25,
+        23.8,
+        5.69
+      ],
+      "new_bbox_um": [
+        -3.04,
+        -0.25,
+        23.8,
+        8.24
+      ],
+      "added_manhattan_um": {
+        "ref": 14.32,
+        "fb": 12.44
+      },
+      "new_port_native_um": {
+        "ref": [
+          "metal2",
+          2.4,
+          8.1
+        ],
+        "fb": [
+          "metal2",
+          5.8,
+          6.9
+        ]
+      },
+      "exact_port_order": false
+    }
+  },
+  "geometry": [
+    {
+      "macro": "ldo_kelvin",
+      "bbox_um2": 37946.178,
+      "occupied_estimate_um2": 37946.178,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "lc_vco_oct",
+      "bbox_um2": 99085.0,
+      "occupied_estimate_um2": 91732.5,
+      "outer_pocket_estimate_um2": 7352.5
+    },
+    {
+      "macro": "bias_top_v2",
+      "bbox_um2": 26878.458,
+      "occupied_estimate_um2": 26878.458,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "lf_k4",
+      "bbox_um2": 6382.266,
+      "occupied_estimate_um2": 6382.266,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "cp_v4",
+      "bbox_um2": 2577.426,
+      "occupied_estimate_um2": 2577.426,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "pfd",
+      "bbox_um2": 149.985,
+      "occupied_estimate_um2": 149.985,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "bias_cp",
+      "bbox_um2": 102.946,
+      "occupied_estimate_um2": 102.946,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "clk_host_5g",
+      "bbox_um2": 6059.244,
+      "occupied_estimate_um2": 5838.425,
+      "outer_pocket_estimate_um2": 220.82
+    },
+    {
+      "macro": "div_ab_5g_v2",
+      "bbox_um2": 3689.66,
+      "occupied_estimate_um2": 3689.66,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "tx_qdiv2_5g",
+      "bbox_um2": 2472.672,
+      "occupied_estimate_um2": 2472.672,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "tx_sst_v5",
+      "bbox_um2": 43548.144,
+      "occupied_estimate_um2": 41329.794,
+      "outer_pocket_estimate_um2": 2218.35
+    },
+    {
+      "macro": "rx_top_5g",
+      "bbox_um2": 62232.74,
+      "occupied_estimate_um2": 55294.25,
+      "outer_pocket_estimate_um2": 6938.49
+    },
+    {
+      "macro": "digital_v4",
+      "bbox_um2": 136454.24,
+      "occupied_estimate_um2": 136454.24,
+      "outer_pocket_estimate_um2": null
+    },
+    {
+      "macro": "@vco_active",
+      "bbox_um2": 25560.0,
+      "occupied_estimate_um2": 25560.0,
+      "outer_pocket_estimate_um2": 0.0
+    },
+    {
+      "macro": "@vco_coil",
+      "bbox_um2": 70756.0,
+      "occupied_estimate_um2": 63046.25,
+      "outer_pocket_estimate_um2": 7709.75
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/contours.py",
+      "sha256": "7c52b38968955b890a7bd0baab2e18a37e6476aa8a921099c4a68680c707904f"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/polygons.py",
+      "sha256": "ca348c6ef7d1f2440a21259625471319fb78f909c3c45e7b14cfcf7704e645cc"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/macro_polygons.json",
+      "sha256": "adaa9fab361f5a289449b6714d61a2a714b22eafc6c9cd4faa441ef854ba71cb"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/macro_concavities.png",
+      "sha256": "c97241cd6100d44d4d0cbd89aabf4b05d5ba3ab0b90a91fba5817febc9105d33"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/native_ports.json",
+      "sha256": "330cddc1c59269135e7a35ec97612fcda00de63efa6fa2743e0399deb4bd0acd"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/vco_ports.py",
+      "sha256": "181ae35d81b8ad8d127fb4e190159b6cb2f00cccb879e51f7c12518e062e75ea"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/vco_ports_original_attempt.py",
+      "sha256": "88365986bbc4471aab626317d5a1e343739f59daa8fc61800c188c60436bcd8b"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/vco_ports_m4_guard.json",
+      "sha256": "3558d9d8333d3c6cb7a344575bb7a30ecf56acf33514b2554764868126fd6450"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/nested_decap.py",
+      "sha256": "24c9970d03ce1ceb47dfa0cf652c34284d32de2dda8ce92e2a7ee7566a3a16f9"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/nested_decap.json",
+      "sha256": "2e9d8899733aecbdc831c09f6e8d9dd7720f98428f011c823ff1826ba111523b"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/assembly_variants.py",
+      "sha256": "8a843812adbdb528bc1110d47a91ffd34728728f077cb761d13cda2cf24c0aaa"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/assembly_variants.json",
+      "sha256": "a1218762d310f0ce08b228922aa8e54a243e530c471b6c9b210efdd8191f9ebb"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/control_ports.py",
+      "sha256": "abced4112aecf98a14d9746922c8e2add016acfa9a6e1f0cae244b7a088857af"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/control_ports.json",
+      "sha256": "d4497508805ddc4133847f0865cc343686d435bc2e5c12b9659af6ff75d5934a"
+    }
+  ],
+  "report": "docs/layout/chip_floorplan_20261123.md#12-\u5404\u5b8f\u7684\u975e\u51f8\u8f6e\u5ed3\u4e0e\u7aef\u53e3\u8fc1\u79fb"
+}

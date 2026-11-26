@@ -1,0 +1,201 @@
+{
+  "date": "2026-11-26",
+  "scope": "Physical feasibility of reshaping Plan-C west quiet island around an upright LC tank",
+  "baseline_core_um": [
+    936.0,
+    650.0
+  ],
+  "baseline_core_mm2": 0.6084,
+  "as_built_macro_um": {
+    "coil": [
+      266.0,
+      266.0
+    ],
+    "vco_active": [
+      240.0,
+      106.5
+    ],
+    "ldo": [
+      312.52,
+      121.42
+    ],
+    "bias": [
+      176.53,
+      152.26
+    ]
+  },
+  "assumptions": {
+    "same_east_macro_relative_placement": true,
+    "top_decap_tiles": 131,
+    "minimum_coil_to_HV18_or_HV33_Decap_vertical_spacing_um": 50.0,
+    "local_host_cml_manhattan_limit_um": 115.0,
+    "current_east_receiver_upright_vco_maximum_horizontal_distance_lower_bound_um": 240.14
+  },
+  "candidates": {
+    "rigid_east_geom": {
+      "core_um": [
+        893.5,
+        672.82
+      ],
+      "area_mm2": 0.601165,
+      "delta_area_pct": -1.189,
+      "maximum_cml_pin_span_um": 275.485,
+      "pin_spans_um": {
+        "LC_ip": 275.485,
+        "RX_ip": 369.725,
+        "LC_in": 259.575,
+        "RX_in": 339.325,
+        "LC_qp": 239.085,
+        "RX_qp": 386.525,
+        "LC_qn": 223.175,
+        "RX_qn": 356.125,
+        "LF_CTRL": 106.15,
+        "CP_LF": 77.23,
+        "PFD_FB": 318.205,
+        "LDO_QUIET": 555.2,
+        "BIAS_BG": 468.83,
+        "BIAS_I": 479.56,
+        "DIV_p": 145.295,
+        "DIV_n": 140.695
+      },
+      "analog_placement_drc": 0,
+      "placement": "results/layout/top_down_floorplan_20261126_U1z8wp/rigid_east_geom_vertical_lc_refined_geometry/placement_only.mag",
+      "verification": "results/layout/top_down_floorplan_20261126_U1z8wp/rigid_east_geom_vertical_lc_refined_geometry/summary.json"
+    },
+    "rigid_local_geom": {
+      "core_um": [
+        923.5,
+        683.88
+      ],
+      "area_mm2": 0.631563,
+      "delta_area_pct": 3.807,
+      "maximum_cml_pin_span_um": 115.0,
+      "pin_spans_um": {
+        "LC_ip": 103.09,
+        "RX_ip": 482.49,
+        "LC_in": 115.0,
+        "RX_in": 452.09,
+        "LC_qp": 37.76,
+        "RX_qp": 499.29,
+        "LC_qn": 53.67,
+        "RX_qn": 468.89,
+        "LF_CTRL": 78.85,
+        "CP_LF": 113.45,
+        "PFD_FB": 307.145,
+        "LDO_QUIET": 566.26,
+        "BIAS_BG": 287.53,
+        "BIAS_I": 298.26,
+        "DIV_p": 239.1,
+        "DIV_n": 257.3
+      },
+      "analog_placement_drc": 0,
+      "placement": "results/layout/top_down_floorplan_20261126_U1z8wp/rigid_local_geom_vertical_lc_refined_geometry/placement_only.mag",
+      "verification": "results/layout/top_down_floorplan_20261126_U1z8wp/rigid_local_geom_vertical_lc_refined_geometry/summary.json"
+    }
+  },
+  "isolated_mim_shapes": {
+    "ccas_2x3": {
+      "shape": [
+        2,
+        3
+      ],
+      "bbox_um": [
+        75.49,
+        100.06
+      ],
+      "device_count": 12,
+      "drc": 0,
+      "lvs": true,
+      "ports": [
+        "A",
+        "B"
+      ]
+    },
+    "ccas_1x6": {
+      "shape": [
+        1,
+        6
+      ],
+      "bbox_um": [
+        40.58,
+        194.32
+      ],
+      "device_count": 12,
+      "drc": 0,
+      "lvs": true,
+      "ports": [
+        "A",
+        "B"
+      ]
+    },
+    "cva_2x2": {
+      "shape": [
+        2,
+        2
+      ],
+      "bbox_um": [
+        75.49,
+        68.64
+      ],
+      "device_count": 8,
+      "drc": 0,
+      "lvs": true,
+      "ports": [
+        "A",
+        "B"
+      ]
+    },
+    "cva_1x4": {
+      "shape": [
+        1,
+        4
+      ],
+      "bbox_um": [
+        40.58,
+        131.48
+      ],
+      "device_count": 8,
+      "drc": 0,
+      "lvs": true,
+      "ports": [
+        "A",
+        "B"
+      ]
+    }
+  },
+  "source_hashes": {
+    "results/layout/chip_top_5g_20261126/plan_v4p1/serdes_5g_top_pdk.mag": "1332d300d9852484ebe296172bc72bfe2576e1fe110af5c37187ebf0c6a3ca87",
+    "results/layout/chip_top_5g_20261126/plan_v4p1/vco5g_lc_div2_oct_pdk.mag": "8059e70304c57d6efe1758ec401aef5d7d8fcf15279c96bf2f90717c75afa0dd",
+    "results/layout/chip_top_5g_20261126/plan_v4p1/vco5g_lc_active_div2_oct_pdk.mag": "8f1f4b060d0a8730c157a91f0823b999b76f1f424c6324ebb3d6b027ecbcd176",
+    "results/layout/chip_top_5g_20261126/plan_v4p1/vco5g_ind_oct_2n5_pdk.mag": "10c5a7cb0ec74a1224f16c59d2e5b27672710d89d2dc0b629d56449ebd48091a",
+    "results/layout/chip_top_5g_20261126/plan_v4p1/serdes_pll_supply_hv18_v2_cur_pdk.mag": "433ded37eafa647007298e0f2166a571faa04e6dd08819a61dce5fec5f6c8cd4",
+    "results/layout/chip_top_5g_20261126/plan_v4p1/serdes_bias_top_v2_pdk.mag": "53e462e1321a4f26a6cc66f70374e343ea2fd73de44468af71ec2f96a3d15a9d",
+    "results/layout/chip_top_5g_20261126/plan_v4p1/serdes_5g_cml_clock_host.mag": "2b70939f409f6846e819713429b767b543a5da1e5ec1728c395337b3ab92be8c"
+  },
+  "evidence_hashes": {
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_lc.py": "33631c4d8f9725fb795558f039e94c75c2b733ac070bdbf2562b48f003de12b0",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_probe.py": "69f8be50b59e92b091181c8283fd8ac0627d386a74b9aea7aae1b2986d52ba2a",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_refine.py": "4f8d6e074f84379426ccb3a7a972acffcb17022c0caa94c7010b5f3a1f0db102",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_geometry.py": "389852d44c099cb8bb1ece4f4c342a2df8012e1dd6f46a8bfc5baff1d0c1968e",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_lc_probe.log": "d7866708e967ffce8d2d1ba06a05b344f7541182a3725d9a7ff77a0f8c7b1322",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_lc_refined.json": "cea1dee8c4bada636341d25776465d7fda3f68fd278961cb658bcace28d2bdb7",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/vertical_lc_comparison.png": "f1cd5c7edbc8cebc99f7fa03ce5ede2887e7c2ffbf56aa528701478d0d67ddbe",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_shape.py": "4b6270cc340e2e274de0923bfff7d5c147e23d35111cc52505e48908e23cab72",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_shapes.json": "4d6fcd40bbab3850e70ee40a91f671324d4a906d5896dec36f4bc9aee72e3d2b",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/solve.py": "81b7ec1e167b80c30f998108be9dd07e61bb762e233ed76c727c230813bf62b2",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/sensitivity.py": "3be954fecdf1e2c541e19719c7da7c20f64451d076a559d60f5f279da746f171",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_ccas_2x3/drc_rules.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_ccas_2x3/netgen.stdout": "becfece863d96f30d8426c4a5f7179b24eb99bce5594f99bbf62f4629d9503d6",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_ccas_2x3/ccas_2x3.mag": "350a79add0719f19ae619c897af058a3f496165ba6b0bb06289e0ee52d1c4c72",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_ccas_1x6/drc_rules.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_ccas_1x6/netgen.stdout": "3e56d85b36da85f87dd42bd881403d26e326bc25de8c3d25a19e42d45a4c267a",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_ccas_1x6/ccas_1x6.mag": "76e51b1c000ef585a16e39acf9b8141557ab01d05049f8fc181eb9e27313c924",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_cva_2x2/drc_rules.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_cva_2x2/netgen.stdout": "b722cfdedda30d4acf39f43042d20abb64c2d328efcfd0c00440521e639c31c4",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_cva_2x2/cva_2x2.mag": "d0428b6a81b9843e736244f5ee8e762e095040920a462aa7101c1ed427addaa0",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_cva_1x4/drc_rules.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_cva_1x4/netgen.stdout": "374faac35bc22556cf93684d7673a6c99026095f302edf858e2c76b87dfc7f2e",
+    "results/layout/top_down_floorplan_20261126_U1z8wp/mim_cva_1x4/cva_1x4.mag": "6c186dd2341e492fb74038a09026d42130c40ceaa6dfbb00fa19a64d2114a8ba"
+  },
+  "report": "docs/layout/chip_floorplan_20261123.md#11-\u7ad6\u7f6e-lc-vco-\u4e0e\u957f\u6761\u5b8f\u8bd5\u6392"
+}

@@ -22,7 +22,7 @@
 
 | 子系统 | 隔离变体 / 入口 | 物理与提取签核 | 关键实测边界 |
 |---|---|---|---|
-| **5G 八边形 LC-VCO + 正交 ÷2** | [`lc_vco_5g_oct_pdk`](../../analog/pll/vco_5g/layout/variants/lc_vco_5g_oct_pdk/summary.json) | `DRC=0 / LVS=MATCH`（`266.0 × 372.5 µm`） | 6/6 角 + **125 °C 冻码** 3/3 PASS（全角公共交集 `4.469–5.350 GHz`）；`SS +85 °C` 24/24 `_mm` MC 100% 锁定，I/Q `σ = 0.645 ps` |
+| **5G 八边形 LC-VCO + 正交 ÷2** | [`lc_vco_5g_oct_pdk`](../../analog/pll/vco_5g/layout/variants/lc_vco_5g_oct_pdk/summary.json) | 有源叶 DRC=0/LVS=MATCH。父层 Magic DRC=0，后续复核确认父层护环线短接有源 VDD/VSS | 原局部 CPEX 为 6/6 角及 125 °C 冻码 3/3 PASS。父层 M4 跨越候选已通过局部 DRC 与层级连通，采用与带载回归待验。[电源交叉与端口实测](../layout/chip_floorplan_20261123.md#12-各宏的非凸轮廓与端口迁移) |
 | **5G 双速 A/B 分频器** | [`div_ab_5g_v2_pdk`](../../analog/pll/divider/layout/variants/div_ab_5g_v2_pdk/summary.json) · [A/B 分频](../design/pll_feedback_data_dividers.md) | `DRC=0 / LVS=MATCH / M5=0%`（`160.4 × 23.0 µm`） | 6/6 角（12/12 `÷8 / ÷10`）PASS（`SS −40 °C` `H=206.5 / S=131.4 ps`）；50/50 `SS −40 °C` MC 100% 达标（`\|diff_sk\| ≤ 4.77 ps`） |
 | **供电与偏置加固** | [`v2_cur_kelvin_pdk`](../../analog/ldo/layout/variants/v2_cur_kelvin_pdk/README.md) · [`v4p5_pdk`](../../analog/tx/sst/layout/variants/v4p5_pdk/summary.json) · [BIAS v2](../design/bias_v2.md) | `DRC=0 / LVS=MATCH` | HV18 Kelvin `R_eff −92.9%` / `PSRR ≥ 28.7 dB` / 100× RCX MC 本体 `3σ ≤ 10.76 mV`；TX VDRV LDO 200× CPEX MC `3σ ≤ 15.60 mV` |
 | **5G TX SST 顶层** | [`tx/sst/layout/variants/v5_pdk`](../../analog/tx/sst/layout/variants/v5_pdk/summary.json) · [TX 设计](../design/tx_sst_v4.md) | `DRC=0 / LVS=MATCH`（`256.8 × 169.6 µm`，38 端口） | 真 CPEX **16/16（12 路 5G + 4 路 4G）PASS**：散布 `0.006–0.145 UI`，`Vdrv_rip ≤ 44.3 mVpp`（零冷角直通），裕量 `100.1–226.7 mV` |
@@ -33,7 +33,7 @@
 
 ![5G SerDes Plan-C 全片真实硅层版图（Magic DRC = 0）](../figures/layout/serdes_5g_top_pdk_20261126.png)
 
-Plan C 的片顶装配通过已登记的几何和提取门控。参考、复位、LDO 使能及环路预充等端点仍待回接，Pad/ESD、独立全片 LVS、带载 I/Q 寄生和实际供电签核随片顶集成收口。[4G 与 5G 实装复核](../layout/chip_floorplan_20261123.md#10-实装金属与分析缺口复核2026-11-26)
+Plan C 的片顶装配通过已登记的几何和提取门控。新增的 LC 父层 VDD/VSS 短接发生在有源叶与线圈护环之间，片顶原门控仅核对到父层端口。参考、复位、LDO 使能及环路预充等端点也待回接，Pad/ESD、独立全片 LVS、带载 I/Q 寄生和实际供电签核随片顶集成收口。[实装复核](../layout/chip_floorplan_20261123.md#10-实装金属与分析缺口复核2026-11-26) · [LC 两层连接复核](../../results/catalog/chip_macro_reformulation_20261126.json)
 
 ---
 

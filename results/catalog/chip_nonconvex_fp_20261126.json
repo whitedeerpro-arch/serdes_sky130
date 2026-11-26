@@ -1,0 +1,814 @@
+{
+  "date": "2026-11-26",
+  "scope": "Plan C 5G bounded placement of exact analog macro geometries, verified pockets and cap-bank reassignment",
+  "baseline": {
+    "core_um": [
+      936,
+      650
+    ],
+    "area_mm2": 0.6084
+  },
+  "inputs": [
+    {
+      "path": "results/layout/chip_top_5g_20261126/plan_v4p1/serdes_5g_top_pdk.mag",
+      "sha256": "1332d300d9852484ebe296172bc72bfe2576e1fe110af5c37187ebf0c6a3ca87"
+    },
+    {
+      "path": "results/catalog/chip_macro_reformulation_20261126.json",
+      "sha256": "b8afad41a8795de5c331e8bc16e4f14d7f8e982b0cdba53bc53115ba59924f7c"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/macro_polygons.json",
+      "sha256": "adaa9fab361f5a289449b6714d61a2a714b22eafc6c9cd4faa441ef854ba71cb"
+    },
+    {
+      "path": "results/layout/macro_reformulation_20261126_MYr6E5/nested_decap.json",
+      "sha256": "2e9d8899733aecbdc831c09f6e8d9dd7720f98428f011c823ff1826ba111523b"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/search.py",
+      "sha256": "8104e2137a5177dc6b49fa5f209b3baaf37906499399e62f0cd0c7724f88d2d1"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/west.py",
+      "sha256": "1eb151a7761d0ff6f33c091f2040c203ac15808b1c3e0c7d30a7fd9ed996294b"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/counterfactuals.py",
+      "sha256": "6328150c3d6bf77377926c510e9a147b95d498b2cf9d9e20f716e047ca1cde56"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/qdiv_pocket.py",
+      "sha256": "f378154c898265391e8f4e5f7e3336ebeea059da095dc2c880b4e536c0f78188"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/geometry.py",
+      "sha256": "1dcc2dc60420ddac2ebf1a08091f0c5ae0d9cff675f4637704f08fb6dc37bac8"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/results.json",
+      "sha256": "7ea0d5fa34a882e4aff54b49531a512522a3879fb3e8ffc3e486398a01523c4e"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/floorplan_comparison.png",
+      "sha256": "3874a1c43e84d5de742716b000b4dc015aff2c47dfa427409536bf4b46452daa"
+    },
+    {
+      "path": "results/layout/nonconvex_fp_20261126_7pnzK4/geometry.json",
+      "sha256": "df18319902bfdce751306e51e0cc56c3d793b16d8a145aae34042e36c3162224"
+    }
+  ],
+  "candidates": {
+    "boxes_original_access": {
+      "solutions_found": 3,
+      "core_um": [
+        936.0,
+        650.0
+      ],
+      "area_mm2": 0.6084,
+      "area_delta_pct": 0.0,
+      "nested_tiles": 0,
+      "tile_columns": {
+        "DEC_A": 6,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "boxes_original_access",
+        "nest": false,
+        "split": false,
+        "tx_rx_gap": 36.42,
+        "fixed_pin_channels": true,
+        "bank_columns": [
+          6,
+          4,
+          4,
+          1,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 110.805,
+        "rx_ip": 361.732,
+        "tx_input_ip": 96.072,
+        "div_p": 124.868,
+        "tx_0": 23.92,
+        "vco_in": 94.895,
+        "rx_in": 331.332,
+        "tx_input_in": 101.172,
+        "div_n": 120.268,
+        "tx_1": 38.62,
+        "vco_qp": 87.661,
+        "rx_qp": 378.532,
+        "tx_input_qp": 66.622,
+        "tx_2": 53.32,
+        "vco_qn": 103.571,
+        "rx_qn": 348.132,
+        "tx_input_qn": 71.722,
+        "tx_3": 68.02,
+        "feedback": 633.835
+      }
+    },
+    "nested_original_access": {
+      "solutions_found": 7,
+      "core_um": [
+        936.0,
+        650.0
+      ],
+      "area_mm2": 0.6084,
+      "area_delta_pct": 0.0,
+      "nested_tiles": 6,
+      "tile_columns": {
+        "DEC_A": 6,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "nested_original_access",
+        "nest": true,
+        "split": false,
+        "tx_rx_gap": 36.42,
+        "fixed_pin_channels": true,
+        "bank_columns": [
+          6,
+          4,
+          4,
+          1,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 110.805,
+        "rx_ip": 361.732,
+        "tx_input_ip": 96.072,
+        "div_p": 124.868,
+        "tx_0": 23.92,
+        "vco_in": 94.895,
+        "rx_in": 331.332,
+        "tx_input_in": 101.172,
+        "div_n": 120.268,
+        "tx_1": 38.62,
+        "vco_qp": 87.661,
+        "rx_qp": 378.532,
+        "tx_input_qp": 66.622,
+        "tx_2": 53.32,
+        "vco_qn": 103.571,
+        "rx_qn": 348.132,
+        "tx_input_qn": 71.722,
+        "tx_3": 68.02,
+        "feedback": 633.835
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_original_access/placement_only.mag",
+        "sha256": "3a8217a01f9ccbfab0bf2ebee9085a50a50ea451a53156ead09a36a43126c039"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_original_access/summary.json",
+        "sha256": "df9a9f8c9b75ce942fc143038376ecb58957b2b2b9dc48ccbddf9aa3769d6c6e"
+      }
+    },
+    "boxes_pin_coopt": {
+      "solutions_found": 3,
+      "core_um": [
+        936.0,
+        640.213
+      ],
+      "area_mm2": 0.5992394,
+      "area_delta_pct": -1.5057,
+      "nested_tiles": 0,
+      "tile_columns": {
+        "DEC_A": 6,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "boxes_pin_coopt",
+        "nest": false,
+        "split": false,
+        "tx_rx_gap": 36.42,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          6,
+          4,
+          4,
+          1,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 110.805,
+        "rx_ip": 361.732,
+        "tx_input_ip": 96.072,
+        "div_p": 124.868,
+        "tx_0": 23.92,
+        "vco_in": 94.895,
+        "rx_in": 331.332,
+        "tx_input_in": 101.172,
+        "div_n": 120.268,
+        "tx_1": 38.62,
+        "vco_qp": 87.661,
+        "rx_qp": 378.532,
+        "tx_input_qp": 66.622,
+        "tx_2": 53.32,
+        "vco_qn": 103.571,
+        "rx_qn": 348.132,
+        "tx_input_qn": 71.722,
+        "tx_3": 68.02,
+        "feedback": 633.835
+      }
+    },
+    "nested_pin_coopt": {
+      "solutions_found": 7,
+      "core_um": [
+        936.0,
+        640.213
+      ],
+      "area_mm2": 0.5992394,
+      "area_delta_pct": -1.5057,
+      "nested_tiles": 6,
+      "tile_columns": {
+        "DEC_A": 6,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "nested_pin_coopt",
+        "nest": true,
+        "split": false,
+        "tx_rx_gap": 36.42,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          6,
+          4,
+          4,
+          1,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 110.805,
+        "rx_ip": 361.732,
+        "tx_input_ip": 96.072,
+        "div_p": 124.868,
+        "tx_0": 23.92,
+        "vco_in": 94.895,
+        "rx_in": 331.332,
+        "tx_input_in": 101.172,
+        "div_n": 120.268,
+        "tx_1": 38.62,
+        "vco_qp": 87.661,
+        "rx_qp": 378.532,
+        "tx_input_qp": 66.622,
+        "tx_2": 53.32,
+        "vco_qn": 103.571,
+        "rx_qn": 348.132,
+        "tx_input_qn": 71.722,
+        "tx_3": 68.02,
+        "feedback": 633.835
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_pin_coopt/placement_only.mag",
+        "sha256": "85238dcefefb20a16686207244aebe14a66318606086b6373a1f9c0cb4b49f0c"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_pin_coopt/summary.json",
+        "sha256": "21a1e48f2b3ff5be312b61202b04451b997751b5f56f5dc69edb4f935a76b9a5"
+      }
+    },
+    "nested_split_pin_coopt": {
+      "solutions_found": 7,
+      "core_um": [
+        936.0,
+        640.213
+      ],
+      "area_mm2": 0.5992394,
+      "area_delta_pct": -1.5057,
+      "nested_tiles": 6,
+      "tile_columns": {
+        "DEC_A": 6,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "nested_split_pin_coopt",
+        "nest": true,
+        "split": true,
+        "tx_rx_gap": 36.42,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          6,
+          4,
+          4,
+          1,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 108.805,
+        "rx_ip": 357.688,
+        "tx_input_ip": 99.902,
+        "div_p": 125.45,
+        "tx_0": 23.92,
+        "vco_in": 93.205,
+        "rx_in": 327.288,
+        "tx_input_in": 105.002,
+        "div_n": 120.85,
+        "tx_1": 38.62,
+        "vco_qp": 89.875,
+        "rx_qp": 378.488,
+        "tx_input_qp": 66.452,
+        "tx_2": 53.32,
+        "vco_qn": 105.475,
+        "rx_qn": 348.088,
+        "tx_input_qn": 71.552,
+        "tx_3": 68.02,
+        "bias_c2c_i": 63.8,
+        "bias_c2c_q": 31.2,
+        "feedback": 632.833
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_split_pin_coopt/placement_only.mag",
+        "sha256": "8061c189cb782ed3de30938c271f866dd072393888071500ce14579cb65e51bf"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_split_pin_coopt/summary.json",
+        "sha256": "03b1d02d38115409c95ff5e768f2ea20d5783c01a6916a23c26a6333902c4294"
+      }
+    },
+    "nested_split_gap26": {
+      "solutions_found": 10,
+      "core_um": [
+        926.275,
+        640.213
+      ],
+      "area_mm2": 0.5930133,
+      "area_delta_pct": -2.529,
+      "nested_tiles": 6,
+      "tile_columns": {
+        "DEC_A": 4,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 3,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "nested_split_gap26",
+        "nest": true,
+        "split": true,
+        "tx_rx_gap": 26.0,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          4,
+          4,
+          4,
+          3,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 97.487,
+        "rx_ip": 374.725,
+        "tx_input_ip": 101.495,
+        "div_p": 148.295,
+        "tx_0": 33.645,
+        "vco_in": 81.887,
+        "rx_in": 344.325,
+        "tx_input_in": 106.595,
+        "div_n": 143.695,
+        "tx_1": 48.345,
+        "vco_qp": 83.113,
+        "rx_qp": 395.525,
+        "tx_input_qp": 68.045,
+        "tx_2": 63.045,
+        "vco_qn": 98.713,
+        "rx_qn": 365.125,
+        "tx_input_qn": 73.145,
+        "tx_3": 77.745,
+        "bias_c2c_i": 39.98,
+        "bias_c2c_q": 72.58,
+        "feedback": 625.56
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_split_gap26/placement_only.mag",
+        "sha256": "a2fd64ae44dde09d2c6210d57a5a29a7fb76f90f7a23bc357acea4c3197278f1"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_split_gap26/summary.json",
+        "sha256": "2eb8e706a91e22c430b7fa0312c03fe740f44ff6429145d25eff41e5a5e3d790"
+      }
+    },
+    "nested_monolithic_gap26": {
+      "solutions_found": 10,
+      "core_um": [
+        925.58,
+        640.213
+      ],
+      "area_mm2": 0.5925683,
+      "area_delta_pct": -2.6022,
+      "nested_tiles": 6,
+      "tile_columns": {
+        "DEC_A": 4,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 10
+      },
+      "repacked_constraints": {
+        "label": "nested_monolithic_gap26",
+        "nest": true,
+        "split": false,
+        "tx_rx_gap": 26.0,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          4,
+          4,
+          4,
+          1,
+          10
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 108.562,
+        "rx_ip": 353.555,
+        "tx_input_ip": 87.895,
+        "div_p": 131.815,
+        "tx_0": 34.34,
+        "vco_in": 92.652,
+        "rx_in": 323.155,
+        "tx_input_in": 92.995,
+        "div_n": 127.215,
+        "tx_1": 49.04,
+        "vco_qp": 85.418,
+        "rx_qp": 370.355,
+        "tx_input_qp": 58.445,
+        "tx_2": 63.74,
+        "vco_qn": 101.328,
+        "rx_qn": 339.955,
+        "tx_input_qn": 63.545,
+        "tx_3": 78.44,
+        "feedback": 624.645
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_monolithic_gap26/placement_only.mag",
+        "sha256": "037cf7dd4401f20404dfc74b29d16009f6273fb7f37c39c886c7a5f938772b5a"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_monolithic_gap26/summary.json",
+        "sha256": "050948d7063cd131d4f2ca3cf54dc529d1a1eb04ea9dd6335e88f0b235493285"
+      }
+    },
+    "nested_split_gap26_vco60": {
+      "solutions_found": 0
+    },
+    "nested_split_vco60": {
+      "solutions_found": 0
+    },
+    "boxes_monolithic_gap26": {
+      "solutions_found": 6,
+      "core_um": [
+        925.58,
+        640.213
+      ],
+      "area_mm2": 0.5925683,
+      "area_delta_pct": -2.6022,
+      "nested_tiles": 0,
+      "tile_columns": {
+        "DEC_A": 4,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 3,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "boxes_monolithic_gap26",
+        "nest": false,
+        "split": false,
+        "tx_rx_gap": 26.0,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          4,
+          4,
+          4,
+          3,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3.0,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 108.562,
+        "rx_ip": 353.555,
+        "tx_input_ip": 87.895,
+        "div_p": 131.815,
+        "tx_0": 34.34,
+        "vco_in": 92.652,
+        "rx_in": 323.155,
+        "tx_input_in": 92.995,
+        "div_n": 127.215,
+        "tx_1": 49.04,
+        "vco_qp": 85.418,
+        "rx_qp": 370.355,
+        "tx_input_qp": 58.445,
+        "tx_2": 63.74,
+        "vco_qn": 101.328,
+        "rx_qn": 339.955,
+        "tx_input_qn": 63.545,
+        "tx_3": 78.44,
+        "feedback": 624.645
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/boxes_monolithic_gap26/placement_only.mag",
+        "sha256": "a5b6c78d68bf7b5162ababb29b19b52a8d6c61612f0f88b8856b95e444982f75"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/boxes_monolithic_gap26/summary.json",
+        "sha256": "0f343c1f4d470d22cde162edca83c8459b5bc549b4f1210d69d1e06ad2d093d2"
+      }
+    },
+    "boxes_split_gap26": {
+      "solutions_found": 6,
+      "core_um": [
+        926.0,
+        640.213
+      ],
+      "area_mm2": 0.5928372,
+      "area_delta_pct": -2.558,
+      "nested_tiles": 0,
+      "tile_columns": {
+        "DEC_A": 4,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 3,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "boxes_split_gap26",
+        "nest": false,
+        "split": true,
+        "tx_rx_gap": 26.0,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          4,
+          4,
+          4,
+          3,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3.0,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 110.495,
+        "rx_ip": 370.358,
+        "tx_input_ip": 88.212,
+        "div_p": 130.442,
+        "tx_0": 33.92,
+        "vco_in": 94.895,
+        "rx_in": 339.958,
+        "tx_input_in": 93.312,
+        "div_n": 125.842,
+        "tx_1": 48.62,
+        "vco_qp": 82.462,
+        "rx_qp": 395.525,
+        "tx_input_qp": 50.395,
+        "tx_2": 63.32,
+        "vco_qn": 81.338,
+        "rx_qn": 365.125,
+        "tx_input_qn": 55.495,
+        "tx_3": 78.02,
+        "bias_c2c_i": 52.988,
+        "bias_c2c_q": 89.955,
+        "feedback": 620.715
+      }
+    },
+    "nested_pin_coopt_gap30": {
+      "solutions_found": 7,
+      "core_um": [
+        929.58,
+        640.213
+      ],
+      "area_mm2": 0.5951292,
+      "area_delta_pct": -2.1813,
+      "nested_tiles": 6,
+      "tile_columns": {
+        "DEC_A": 4,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 11
+      },
+      "repacked_constraints": {
+        "label": "nested_pin_coopt_gap30",
+        "nest": true,
+        "split": false,
+        "tx_rx_gap": 30.0,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          4,
+          4,
+          4,
+          1,
+          11
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 3.0,
+        "vco_ports": "original"
+      },
+      "endpoints_um": {
+        "vco_ip": 110.805,
+        "rx_ip": 355.312,
+        "tx_input_ip": 87.895,
+        "div_p": 130.058,
+        "tx_0": 32.097,
+        "vco_in": 94.895,
+        "rx_in": 324.912,
+        "tx_input_in": 92.995,
+        "div_n": 125.458,
+        "tx_1": 46.797,
+        "vco_qp": 87.661,
+        "rx_qp": 372.112,
+        "tx_input_qp": 58.445,
+        "tx_2": 61.497,
+        "vco_qn": 103.571,
+        "rx_qn": 341.712,
+        "tx_input_qn": 63.545,
+        "tx_3": 76.197,
+        "feedback": 628.645
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_pin_coopt_gap30/placement_only.mag",
+        "sha256": "94ff66ba0052cf234a92ff0434e17bedaf90527447f1a02cb05d62a64a89df11"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/nested_pin_coopt_gap30/summary.json",
+        "sha256": "04008cf95bc5f9839628ac7f62294e967e00969d164e1daf6b58ee32eaa388b4"
+      }
+    },
+    "qdiv_notch_gap26_allow0": {
+      "solutions_found": 0
+    },
+    "qdiv_notch_gap26_allow100": {
+      "solutions_found": 1,
+      "core_um": [
+        931.74,
+        640.213
+      ],
+      "area_mm2": 0.5965121,
+      "area_delta_pct": -1.954,
+      "nested_tiles": 2,
+      "tile_columns": {
+        "DEC_A": 6,
+        "DEC_D": 4,
+        "DEC_TX_N": 4,
+        "DEC_TX_W": 1,
+        "DEC_RX_S": 10
+      },
+      "repacked_constraints": {
+        "label": "qdiv_notch_gap26_allow100",
+        "nest": true,
+        "split": true,
+        "tx_rx_gap": 26.0,
+        "fixed_pin_channels": false,
+        "bank_columns": [
+          6,
+          4,
+          4,
+          1,
+          10
+        ],
+        "clock_slack_um": 6.0,
+        "core_limit": [
+          936.0,
+          650.0
+        ],
+        "seconds": 4.0,
+        "vco_ports": "original",
+        "qdiv_in_tx_notch": true,
+        "tx_phase_allowance_um": 100.0
+      },
+      "endpoints_um": {
+        "vco_ip": 91.452,
+        "rx_ip": 371.065,
+        "tx_input_ip": 92.375,
+        "div_p": 148.295,
+        "tx_0": 148.15,
+        "vco_in": 75.852,
+        "rx_in": 340.665,
+        "tx_input_in": 100.875,
+        "div_n": 143.695,
+        "tx_1": 130.85,
+        "vco_qp": 75.573,
+        "rx_qp": 391.13,
+        "tx_input_qp": 74.96,
+        "tx_2": 113.55,
+        "vco_qn": 91.173,
+        "rx_qn": 360.73,
+        "tx_input_qn": 69.86,
+        "tx_3": 126.85,
+        "bias_c2c_i": 100.555,
+        "bias_c2c_q": 67.22,
+        "feedback": 633.835
+      },
+      "placement_drc": 0,
+      "tested_tile_total": 131,
+      "mag": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/qdiv_notch_gap26_allow100/placement_only.mag",
+        "sha256": "f7c607bd3f52efab1ea97e25893be47e89cd2d2bb757a7259b20ef32feb7d11f"
+      },
+      "receipt": {
+        "path": "results/layout/nonconvex_fp_20261126_7pnzK4/qdiv_notch_gap26_allow100/summary.json",
+        "sha256": "6ecaaec4c081e4a14299d4d21721ed8a7b61523d20f555b60bf79d92ef217e16"
+      }
+    }
+  },
+  "report": "docs/layout/chip_floorplan_20261123.md#13-\u975e\u51f8\u5f62\u72b6\u56de\u4ee3\u6574\u7247\u8bd5\u6392"
+}

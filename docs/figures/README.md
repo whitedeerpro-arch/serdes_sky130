@@ -8,7 +8,14 @@
 
 | 图表 | 模块与内容 | 对应报告 / 证据 |
 |---|---|---|
-| [serdes_5g_top_pdk_20261126.png](layout/serdes_5g_top_pdk_20261126.png) · [浅色版](layout/serdes_5g_top_pdk_20261126_light.png) | **5G Plan-C 全片物理装配**：`936 × 650 µm (0.6084 mm²)`，13 宏 + 131 紧缩去耦瓦片，`DRC=0` | [片级版图报告第 9 节](../layout/chip_floorplan_20261123.md#9-50-gbs-plan-c-全片物理装配与层级签核2026-11-26) · [5G 台账](../../results/catalog/serdes_5g_signoff_20261126.json) |
+| [serdes_5g_top_pdk_20261126_light.png](layout/serdes_5g_top_pdk_20261126_light.png) · [深色版](layout/serdes_5g_top_pdk_20261126.png) | **5G Plan-C 全片物理装配（浅色首选）**：`936 × 650 µm (0.6084 mm²)`，13 宏 + 131 去耦 + 加固 M5 PDN，`DRC=0` | [片级版图报告第 9 节](../layout/chip_floorplan_20261123.md#9-50-gbs-plan-c-全片物理装配与层级签核2026-11-26) · [5G 台账](../../results/catalog/serdes_5g_signoff_20261126.json) |
+| [serdes_5g_ir_em_20261126.png](layout/serdes_5g_ir_em_20261126.png) | **5G Plan-C 实装几何 2D IR Drop & DC EM 签核**：**8/8 域 IR 与 110 °C EM 全通过**（`VSS ≤ 13.8 mV`） | [analyze_chip_5g_ir_em.py](../../verification/layout/analyze_chip_5g_ir_em.py) |
+| [serdes_5g_tt_eyes_20261126.png](system/serdes_5g_tt_eyes_20261126.png) | **5G / 4G 双速 TT 真 CPEX 端到端眼图与均衡**：`TX v5_pdk → C2_loss6 → W3 CTLE` + `slicer_5g` 250× MC | [plot_5g_tt_eyes_20261126.py](../../verification/plotting/plot_5g_tt_eyes_20261126.py) |
+| [serdes_5g_16ui_waveforms_20261126.png](system/serdes_5g_16ui_waveforms_20261126.png) | **5G 16-UI 真 CPEX 时域波形对比**：`1010111000100010` 三级对齐波形（`FFE=3` vs `FFE=0`）+ `V_drv` 纹波 | [plot_5g_16ui_waveforms_20261126.py](../../verification/plotting/plot_5g_16ui_waveforms_20261126.py) |
+| [serdes_5g_ldo_bias_pdn_20261126.png](verification/serdes_5g_ldo_bias_pdn_20261126.png) | **供电/偏置与 131 瓦片 PDN 稳定性**：HV18 Kelvin RCX、TX `V_drv` `v4p5` CPEX、BIAS v2 温漂/Bode、5G PDN 反谐振 | [verify_5g_stability_suite.py](../../verification/stability/verify_5g_stability_suite.py) |
+| [serdes_5g_lcpll_stability_20261126.png](clocking/serdes_5g_lcpll_stability_20261126.png) | **5G 八边形 LC-VCO 与 Type-II LC-PLL 环路稳定性**：调谐窗、原装 `LF k4` 欠阻尼复核 vs 推荐重调及相噪抖动 | [verify_5g_stability_suite.py](../../verification/stability/verify_5g_stability_suite.py) |
+| [serdes_5g_vco_pll_char_20261126.png](clocking/serdes_5g_vco_pll_char_20261126.png) | **5G LC-VCO 16 码重叠、`K_vdd` 与闭环 LC-PLL 真瞬态**：48/48 CPEX 无死区、推频与原装/重调锁相杂散实测 | [verify_lc_vco_full_char.py](../../analog/pll/vco_5g/tb/verify_lc_vco_full_char.py) |
+| [serdes_5g_digital_v4p1_20261126.png](system/serdes_5g_digital_v4p1_20261126.png) | **5G 数字顶层 `v4p1` 综合表征**：OpenROAD 真实布局、6 角 OCV STA、RTL `±300 ppm` 闭环 CDR 与 PLL 粗搜 FSM | [plot_digital_v4p1_20261126.py](../../verification/plotting/plot_digital_v4p1_20261126.py) |
 | [serdes_5g_chip_top_v4p1_20261126.png](layout/serdes_5g_chip_top_v4p1_20261126.png) | **5G Plan-C 端口协同规划**：`v4p1` 32-bit 数字宏与东侧 RX 33-bit 零交叉总线对齐 | [片级版图报告第 9 节](../layout/chip_floorplan_20261123.md#9-50-gbs-plan-c-全片物理装配与层级签核2026-11-26) |
 | [vco5g_inductor_sq_oct_fig8_20261124.png](layout/vco5g_inductor_sq_oct_fig8_20261124.png) | **5G LC-VCO 电感拓扑对比**：方形 / 八边形 / 8 字形电感几何与 Q/耦合比较 | [analog/pll/vco_5g](../../analog/pll/vco_5g/README.md) |
 | [serdes_5g_top_cosim_20261124.png](system/serdes_5g_top_cosim_20261124.png) | **5G 顶层全链协同仿真**：5.0 Gb/s 发射、信道与接收眼图及锁相波形 | [5G 台账](../../results/catalog/serdes_5g_signoff_20261126.json) |
@@ -41,12 +48,11 @@
 
 | 目录 / 文件 | 涵盖内容 |
 |---|---|
-| [`schematics/`](schematics/) | ISSCC 风格叠层切片原理图：[TX SST](schematics/tx_sst_stacked_slices.png)（[SVG](schematics/tx_sst_stacked_slices.svg)）· [RX PI](schematics/rx_pi_stacked_slices.png)（[SVG](schematics/rx_pi_stacked_slices.svg)） |
-| [`system/`](system/README.md) | 系统架构框图、工作台截图、片级规划与 4G/5G 顶层联调图 |
-| [`layout/`](layout/) | 4G `full_v8` / IR-EM 与 5G Plan-C 全片版图、5G LC-VCO 电感对比图 |
-| [`clocking/`](clocking/) | PLL v4 闭环、VCO r6/PTAT 性能、SAFF-TSPC ÷8 与早期调谐/PVT/预充图集 |
-| [`tx/`](tx/) | TX SST v4 签核眼图与早期 CML 串化器/驱动 PVT 对比图集 |
-| [`rx/`](rx/) · [`rx/pi/`](rx/pi/README.md) | RX CMOS v2 签核图、CMOS PI 原理与内部边沿图，以及早期 CTLE/前端图集 |
-| [`channel/characterization/`](channel/characterization/README.md) | 共享 `C0–C5` 合成 PCB 信道频响、脉冲响应与均衡示意图 |
-| [`verification/`](verification/) | 片级 PDN 稳定性验证图（[stability_pdn_20261123.png](verification/stability_pdn_20261123.png)） |
-| [`common/`](common/) · [`studies/`](studies/) | 时钟电平转换波形、多相时钟叠图、眼图折叠与串化时序研究图集 |
+| [`schematics/`](schematics/) | ISSCC 风格叠层切片原理图：[TX SST](schematics/tx_sst_stacked_slices.png) · [RX PI](schematics/rx_pi_stacked_slices.png) |
+| [`system/`](system/README.md) | 工作台截图、片级规划、4G/5G 顶层联调、5G TT 眼图与数字 `v4p1` 表征 |
+| [`layout/`](layout/) | 5G Plan-C 全片版图/IR-EM、4G `full_v8`/IR-EM 与 5G LC-VCO 电感对比图 |
+| [`clocking/`](clocking/) | 5G LC-PLL 环路稳定性、PLL v4 闭环、VCO r6/PTAT 与 SAFF-TSPC ÷8 波形 |
+| [`tx/`](tx/) | TX SST v4 签核眼图 |
+| [`rx/`](rx/) · [`rx/pi/`](rx/pi/README.md) | RX CMOS v2 签核图、CMOS PI 原理与内部边沿图 |
+| [`channel/characterization/`](channel/characterization/README.md) | 共享 `C0–C5` 合成 PCB 信道频响与单位脉冲响应 |
+| [`verification/`](verification/) | 5G 供电/偏置/PDN 稳定性总图与 4G PDN 稳定性验证图 |

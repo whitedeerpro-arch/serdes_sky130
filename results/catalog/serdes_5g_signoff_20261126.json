@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T09:45:00+08:00",
+  "generated_at": "2026-11-26T16:49:00+08:00",
   "scope": "SKY130A 1.8 V 5.0 Gb/s NRZ SerDes — 8/8 Analog Hardening, Pin-Co-Optimized 32-bit Digital v4p1, Compacted 5G Hybrid Decap Tiles & Plan-C Full-Chip Physical Signoff",
   "status": "SIGNED_OFF",
   "chip_top_5g": {
@@ -35,18 +35,40 @@
     "magic_signoff": {
       "drc_full_total": 0,
       "drc_rules": 0,
-      "gds_bytes": 58119952,
-      "gds_sha256": "4ca91bbd21b881db6400ea8ccc372e6f97f1c56dbe8256a489a9234f2324c6c5",
-      "mag_sha256": "1332d300d9852484ebe296172bc72bfe2576e1fe110af5c37187ebf0c6a3ca87",
+      "gds_bytes": 58174088,
+      "gds_sha256": "c0dec4cbfed304bf6726109abb040af8e651e0de50ef94f2ebef8a4586f655d5",
+      "mag_sha256": "f29031ace715f8a550418881da434290fe69c21b2eaa083b28b62ca6d0cbf67a",
+      "lvs_spice_sha256": "0a646bb6d9c368f3720457030f15a71897379643393c7e240b395ac09656a003",
       "ext2spice_ok": true,
       "hier_audit_ok": true,
       "must_connect": "28/28",
       "must_differ": "41/41"
     },
+    "ir_em_5g_fvm": {
+      "analyzer": "verification/layout/analyze_chip_5g_ir_em.py",
+      "summary": "results/layout/chip_top_5g_20261126/ir_em_5g/summary.json",
+      "all_8_domains_ir_pass": true,
+      "all_8_domains_em_pass": true,
+      "vss_pads_distributed": 4,
+      "chip_i_tt_ma": 66.29,
+      "chip_i_peak_ma": 86.19,
+      "worst_vdd_mv": 16.97,
+      "worst_vss_mv": 13.77,
+      "worst_total_mv": 27.95,
+      "worst_metal_em_pct": 89.3,
+      "worst_via_em_pct": 73.4
+    },
     "figures": [
-      "docs/figures/layout/serdes_5g_top_pdk_20261126.png",
       "docs/figures/layout/serdes_5g_top_pdk_20261126_light.png",
-      "docs/figures/layout/serdes_5g_chip_top_v4p1_20261126.png"
+      "docs/figures/layout/serdes_5g_top_pdk_20261126.png",
+      "docs/figures/layout/serdes_5g_ir_em_20261126.png",
+      "docs/figures/layout/serdes_5g_chip_top_v4p1_20261126.png",
+      "docs/figures/system/serdes_5g_tt_eyes_20261126.png",
+      "docs/figures/system/serdes_5g_16ui_waveforms_20261126.png",
+      "docs/figures/verification/serdes_5g_ldo_bias_pdn_20261126.png",
+      "docs/figures/clocking/serdes_5g_lcpll_stability_20261126.png",
+      "docs/figures/clocking/serdes_5g_vco_pll_char_20261126.png",
+      "docs/figures/system/serdes_5g_digital_v4p1_20261126.png"
     ]
   },
   "decap_5g_tiles": {
@@ -141,7 +163,9 @@
       "size_um": [312.1, 199.4],
       "drc": 0, "fp": 0, "dc_lvs": "MATCH", "open_lvs": "MATCH",
       "ports_closed": 72, "ports_open": 74,
-      "ctle_p_n_fF": [57.293, 57.535]
+      "m5_comb_spines_um": 6.0,
+      "deser16_m5_rows_filled": "12/12",
+      "ctle_p_n_fF": [57.398, 57.671]
     }
   }
 }

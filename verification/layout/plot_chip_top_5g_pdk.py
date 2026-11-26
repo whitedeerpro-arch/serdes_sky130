@@ -113,8 +113,8 @@ def render_chip_top_5g(work_dir: Path, out_png: Path, theme: str = "dark", digit
             if not mpath.exists():
                 cache[cell_name] = ({}, [])
             else:
-                # Filter micro-geometry inside massive arrays while preserving inductors/active/metals
-                min_d = 0.25 if depth >= 1 else 0.12
+                # Preserve fine M1/M2/M3 signal stubs inside submacros without sub-0.14 um contact clutter
+                min_d = 0.14 if depth >= 1 else 0.10
                 cache[cell_name] = parse_mag_rects_and_uses(mpath, valid_layers, min_dim_um=min_d)
         rdict, ulist = cache[cell_name]
         for lyr, rlist in rdict.items():
@@ -135,7 +135,7 @@ def render_chip_top_5g(work_dir: Path, out_png: Path, theme: str = "dark", digit
 
     collect("serdes_5g_top_pdk", (1.0, 0.0, 0.0, 0.0, 1.0, 0.0), depth=0)
 
-    fig, ax = plt.subplots(figsize=(16.0, 11.4), dpi=240)
+    fig, ax = plt.subplots(figsize=(16.0, 11.4), dpi=300)
     fig.patch.set_facecolor(ch["fig_bg"])
     ax.set_facecolor(ch["ax_bg"])
 
@@ -150,11 +150,20 @@ def render_chip_top_5g(work_dir: Path, out_png: Path, theme: str = "dark", digit
     pg_patches = [Rectangle((dig.x + 13.7 + i * 36.0, dig.y + 2), 1.8, dig.h - 4) for i in range(int((dig.w - 20) // 36.0))]
     ax.add_collection(PatchCollection(pg_patches, facecolor=ch["dig_pg"], edgecolor="none", alpha=0.25, zorder=4))
 
-    # Render all physical silicon layers in Z-order
+    # Render all physical silicon layers in Z-order.
+    # Add a hairline self-colored stroke on fine routing metals (M1..M4) so sub-pixel 0.16..0.40 um wires
+    # never break into dashed fragments or leave isolated-looking via pads, and use slightly translucent M5
+    # on light theme so underpassing M3/M4 trunks remain continuously visible.
+    thin_stroke_layers = {"metal1", "metal2", "metal3", "metal4"}
     for lyr, (color, alpha, z) in sorted(layer_style.items(), key=lambda kv: kv[1][2]):
         patches = by_layer.get(lyr, [])
         if patches:
-            ax.add_collection(PatchCollection(patches, facecolor=color, edgecolor="none", alpha=alpha, zorder=z))
+            eff_alpha = 0.78 if (theme == "light" and lyr == "metal5") else alpha
+            if lyr in thin_stroke_layers:
+                ec, lw = color, 0.24
+            else:
+                ec, lw = "none", 0.0
+            ax.add_collection(PatchCollection(patches, facecolor=color, edgecolor=ec, linewidth=lw, alpha=eff_alpha, zorder=z))
 
     # Crisp macro frames & clean labels
     short_labels = {
@@ -223,7 +232,7 @@ def render_chip_top_5g(work_dir: Path, out_png: Path, theme: str = "dark", digit
         color=ch["title_fg"], fontsize=10.2, fontweight="bold", pad=10,
     )
     out_png.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_png, dpi=240, facecolor=ch["fig_bg"], bbox_inches="tight", pad_inches=0.18)
+    fig.savefig(out_png, dpi=300, facecolor=ch["fig_bg"], bbox_inches="tight", pad_inches=0.18)
     plt.close(fig)
     print(f"[plot_5g] Wrote {out_png} ({theme}, {sum(len(v) for v in by_layer.values()):,} silicon shapes)", flush=True)
 

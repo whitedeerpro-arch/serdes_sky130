@@ -490,32 +490,40 @@ def build_rx_cmos_top_5g_pdk(
 
     # --- 9. Low-R Interdigitated M5 Power Comb (`vdd` West-Rooted, `vss` East-Rooted; ZERO M5 Near CTLE Inductor!) ---
     # M5 comb stays strictly inside x <= 228.80 -> 21.4 um magnetic clearance from the 8.252 nH CTLE coil (x >= 250.2)!
-    x_vdd_m5_w = -4.200
-    x_vss_m5_e = 227.600
-    x_vdd_m5_end = 222.000
-    x_vss_m5_beg = 1.800
+    # Both vertical M5 trunks are 6.0 um wide ([-5.4..+0.6] VDD, [222.8..228.8] VSS) so 11.2 mA peak upper-RX current
+    # (8x Slicer + CTLE + Deser16) stays at <=69% of SKY130A 110C DC EM while preserving exact bbox & all 72 ports!
+    x_vdd_m5_w = -4.200          # West port anchor & PI West drop X (strictly inside [-5.400, +0.600])
+    x_vss_m5_e = 227.600         # CTLE VSS drop X (strictly inside [222.800, 228.800])
+    x_vdd_m5_end = 219.000       # right edge 220.100 -> 2.70 um M5 spacing to East VSS spine (222.800)
+    x_vss_m5_beg = 3.800         # left edge 2.700    -> 2.10 um M5 spacing to West VDD spine (+0.600)
 
     y_m5_vdd_lo  = grid(dy_pi + pi_ports["vdd"][1])       # 53.800 (aligned 1:1 with PI M3 vdd rail!)
     y_m5_vdd_sl1 = grid(dy_slicer + 11.300)               # 89.500 (aligned 1:1 with Slicer & CTLE vdd!)
     y_m5_vdd_sl2 = grid(dy_slicer + 29.350)               # 107.550
-    y_m5_vdd_ds0 = grid(dy_deser - 8.400)                 # 111.880
-    y_m5_vdd_hi  = grid(dy_deser + 68.400)                # 188.680
+    y_m5_vdd_ds_rows = [
+        grid(dy_deser + dy_r) for dy_r in (-8.400, 7.600, 22.800, 38.000, 53.200, 68.400)
+    ]  # 111.880, 127.880, 143.080, 158.280, 173.480, 188.680 (all 6 Deser16 VDD rows filled!)
+    y_m5_vdd_ds0 = y_m5_vdd_ds_rows[0]
+    y_m5_vdd_hi  = y_m5_vdd_ds_rows[-1]
 
     y_m5_vss_lo  = 30.000
     y_m5_vss_sl1 = grid(dy_slicer + 0.000)                # 78.200
     y_m5_vss_sl2 = grid(dy_slicer + 20.750)               # 98.950
-    y_m5_vss_ds0 = grid(dy_deser + 0.000)                 # 120.280
-    y_m5_vss_hi  = grid(dy_deser + 76.000)                # 196.280
+    y_m5_vss_ds_rows = [
+        grid(dy_deser + dy_r) for dy_r in (0.000, 15.200, 30.400, 45.600, 60.800, 76.000)
+    ]  # 120.280, 135.480, 150.680, 165.880, 181.080, 196.280 (all 6 Deser16 VSS rows filled!)
+    y_m5_vss_ds0 = y_m5_vss_ds_rows[0]
+    y_m5_vss_hi  = y_m5_vss_ds_rows[-1]
 
-    # Draw VDD M5 Comb
-    c.wire("metal5", [(x_vdd_m5_w, y_m5_vdd_lo), (x_vdd_m5_w, y_m5_vdd_hi)], 2.400)
-    for yv in (y_m5_vdd_lo, y_m5_vdd_sl1, y_m5_vdd_sl2, y_m5_vdd_ds0, y_m5_vdd_hi):
+    # Draw VDD M5 Comb (6.0 um flush West spine [-5.400, +0.600] + 9x 2.2 um horizontal fingers)
+    c.rect("metal5", -5.400, grid(y_m5_vdd_lo - 1.100), 0.600, grid(y_m5_vdd_hi + 1.100))
+    for yv in (y_m5_vdd_lo, y_m5_vdd_sl1, y_m5_vdd_sl2, *y_m5_vdd_ds_rows):
         c.wire("metal5", [(x_vdd_m5_w, yv), (x_vdd_m5_end, yv)], 2.200)
 
-    # Draw VSS M5 Comb
-    c.wire("metal5", [(x_vss_m5_e, y_m5_vss_lo), (x_vss_m5_e, y_m5_vss_hi)], 2.400)
+    # Draw VSS M5 Comb (6.0 um flush East spine [222.800, 228.800] + 9x 2.2 um horizontal fingers)
+    c.rect("metal5", 222.800, grid(y_m5_vss_lo - 1.100), 228.800, grid(y_m5_vss_hi + 1.100))
     c.wire("metal5", [(x_vdd_m5_w, y_m5_vss_lo), (x_vss_m5_e, y_m5_vss_lo)], 2.200)  # full-width South VSS -> West port!
-    for yv in (y_m5_vss_sl1, y_m5_vss_sl2, y_m5_vss_ds0, y_m5_vss_hi):
+    for yv in (y_m5_vss_sl1, y_m5_vss_sl2, *y_m5_vss_ds_rows):
         c.wire("metal5", [(x_vss_m5_beg, yv), (x_vss_m5_e, yv)], 2.200)
 
     # 9a. Stitch PI_4ph vdd (y=53.80) into y_m5_vdd_lo at 5 M4-free locations (West x=-4.2 + 4 interior drops!)
@@ -581,10 +589,14 @@ def build_rx_cmos_top_5g_pdk(
             via3_pad(c, x_drop, yv)
             via4_pad(c, x_drop, yv)
 
-    # 9f. Stitch Deser16 vdd & vss into M5 comb (6 distributed drops; skip col 3 to clear wcap/wcapb!)
+    # 9f. Stitch Deser16 vdd & vss across ALL 12 rows into M5 comb (skip col 3 to clear wcap/wcapb,
+    #     and skip col 1 on y_rel=38.0 to keep generous M3 clearance from Row-6 Johnson /4 j0 pad!)
+    y_vdd_r6 = grid(dy_deser + 38.000)
     for col in (0, 1, 2, 4, 5, 6):
         x_drop = grid(col * col_pitch + 22.400)
-        for yv in (y_m5_vdd_ds0, y_m5_vdd_hi, y_m5_vss_ds0, y_m5_vss_hi):
+        for yv in (*y_m5_vdd_ds_rows, *y_m5_vss_ds_rows):
+            if col == 1 and abs(yv - y_vdd_r6) < 0.05:
+                continue
             via3_pad(c, x_drop, yv)
             via4_pad(c, x_drop, yv)
 

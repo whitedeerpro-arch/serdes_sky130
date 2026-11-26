@@ -340,6 +340,88 @@ def build_5g_floorplan_spec(digital_variant: str = "v4p1") -> tuple[float, float
     return core_w, core_h, macros, decaps
 
 
+def add_box(
+    rects: dict[str, list[tuple[int, int, int, int]]],
+    layer: str,
+    x1: float,
+    y1: float,
+    x2: float,
+    y2: float,
+) -> None:
+    """Paint an exact bounding box (no +/-hw endcap bloat) snapped to the 5 nm Magic grid."""
+    ax, bx = min(x1, x2), max(x1, x2)
+    ay, by = min(y1, y2), max(y1, y2)
+    rects.setdefault(layer, []).append((u(grid(ax)), u(grid(ay)), u(grid(bx)), u(grid(by))))
+
+
+def add_via_12_array(
+    rects: dict[str, list[tuple[int, int, int, int]]],
+    cx: float,
+    cy: float,
+    nx: int,
+    ny: int,
+    pitch: float = 0.60,
+) -> None:
+    """DRC-safe nx x ny M1<->M2 via1 array (0.26 um cut, 0.60 um pitch -> 0.34 um gap >= 0.17 um)."""
+    x0 = cx - 0.5 * (nx - 1) * pitch
+    y0 = cy - 0.5 * (ny - 1) * pitch
+    wm = (nx - 1) * pitch + 0.44
+    hm = (ny - 1) * pitch + 0.44
+    add_box(rects, "metal1", cx - 0.5 * wm, cy - 0.5 * hm, cx + 0.5 * wm, cy + 0.5 * hm)
+    add_box(rects, "metal2", cx - 0.5 * wm, cy - 0.5 * hm, cx + 0.5 * wm, cy + 0.5 * hm)
+    for ix in range(nx):
+        for iy in range(ny):
+            vx = grid(x0 + ix * pitch)
+            vy = grid(y0 + iy * pitch)
+            rects.setdefault("via1", []).append((u(vx - 0.13), u(vy - 0.13), u(vx + 0.13), u(vy + 0.13)))
+
+
+def add_via_23_array(
+    rects: dict[str, list[tuple[int, int, int, int]]],
+    cx: float,
+    cy: float,
+    nx: int,
+    ny: int,
+    pitch: float = 0.80,
+) -> None:
+    """DRC-safe nx x ny M2<->M3 via2 array (0.28 um cut, 0.80 um pitch -> 0.52 um gap >= 0.20 um)."""
+    x0 = cx - 0.5 * (nx - 1) * pitch
+    y0 = cy - 0.5 * (ny - 1) * pitch
+    w2 = (nx - 1) * pitch + 0.52
+    h2 = (ny - 1) * pitch + 0.52
+    w3 = (nx - 1) * pitch + 0.60
+    h3 = (ny - 1) * pitch + 0.60
+    add_box(rects, "metal2", cx - 0.5 * w2, cy - 0.5 * h2, cx + 0.5 * w2, cy + 0.5 * h2)
+    add_box(rects, "metal3", cx - 0.5 * w3, cy - 0.5 * h3, cx + 0.5 * w3, cy + 0.5 * h3)
+    for ix in range(nx):
+        for iy in range(ny):
+            vx = grid(x0 + ix * pitch)
+            vy = grid(y0 + iy * pitch)
+            rects.setdefault("via2", []).append((u(vx - 0.14), u(vy - 0.14), u(vx + 0.14), u(vy + 0.14)))
+
+
+def add_via_34_array(
+    rects: dict[str, list[tuple[int, int, int, int]]],
+    cx: float,
+    cy: float,
+    nx: int,
+    ny: int,
+    pitch: float = 0.80,
+) -> None:
+    """DRC-safe nx x ny M3<->M4 via3 array (0.32 um cut, 0.80 um pitch -> 0.48 um gap >= 0.20 um)."""
+    x0 = cx - 0.5 * (nx - 1) * pitch
+    y0 = cy - 0.5 * (ny - 1) * pitch
+    wm = (nx - 1) * pitch + 0.60
+    hm = (ny - 1) * pitch + 0.60
+    add_box(rects, "metal3", cx - 0.5 * wm, cy - 0.5 * hm, cx + 0.5 * wm, cy + 0.5 * hm)
+    add_box(rects, "metal4", cx - 0.5 * wm, cy - 0.5 * hm, cx + 0.5 * wm, cy + 0.5 * hm)
+    for ix in range(nx):
+        for iy in range(ny):
+            vx = grid(x0 + ix * pitch)
+            vy = grid(y0 + iy * pitch)
+            rects.setdefault("via3", []).append((u(vx - 0.16), u(vy - 0.16), u(vx + 0.16), u(vy + 0.16)))
+
+
 def add_layer_hop(rects: dict, x: float, y: float, l_from: str, l_to: str) -> None:
     order = ["metal1", "metal2", "metal3", "metal4", "metal5"]
     i0, i1 = order.index(l_from), order.index(l_to)
@@ -579,6 +661,7 @@ def build_chip_top_5g(
     export_gds: bool = False,
 ) -> dict:
     t0 = time.time()
+    work = work.resolve()
     work.mkdir(parents=True, exist_ok=True)
     core_w, core_h, macros, decaps = build_5g_floorplan_spec(digital_variant=digital_variant)
     m_map = {m.inst: m for m in macros}
@@ -710,17 +793,22 @@ def build_chip_top_5g(
         b4g.add_wire_rect(rects, "metal4", [(xm, core_h - 4.5), (xm, core_h + 14.0)], 2.40)
         b4g.add_via_45_array(rects, xm, core_h + 14.0, 2, 3)
 
-    # 7 separated outer M5 supply rails (>= 6 um outside VSS ring & >= 14 um between domains!)
+    # 7 separated outer M5 supply rails (>= 5 um outside VSS ring & >= 12 um between domains!)
     b4g.add_wire_rect(rects, "metal5", [(-33.0, 440.0), (-33.0, core_h + 33.0), (376.0, core_h + 33.0)], 12.0)           # 1. VDD_HV33
     b4g.add_wire_rect(rects, "metal5", [(-33.0, 172.0), (-33.0, 420.0)], 8.0)                                              # 2. VDD_BIAS
     b4g.add_wire_rect(rects, "metal5", [(-33.0, 152.0), (-33.0, -33.0), (382.0, -33.0)], 12.0)                             # 3. VDD_Q
     b4g.add_wire_rect(rects, "metal5", [(400.0, core_h + 33.0), (530.0, core_h + 33.0)], 12.0)                             # 4. VDD_A
-    b4g.add_wire_rect(rects, "metal5", [(548.0, core_h + 33.0), (core_w + 33.0, core_h + 33.0), (core_w + 33.0, 278.0)], 10.0)  # 5. VDD_D
-    b4g.add_wire_rect(rects, "metal5", [(600.0, -33.0), (core_w + 33.0, -33.0), (core_w + 33.0, 258.0)], 12.0)             # 6. VDD_RX
+    b4g.add_wire_rect(rects, "metal5", [(548.0, core_h + 33.0), (core_w + 33.0, core_h + 33.0), (core_w + 33.0, 278.0)], 14.0)  # 5. VDD_D (widened 10->14 um)
+    b4g.add_wire_rect(rects, "metal5", [(602.0, -33.0), (core_w + 33.0, -33.0), (core_w + 33.0, 258.0)], 14.0)             # 6. VDD_RX (widened 12->14 um; >=3 um clear of VDD_TX)
     b4g.add_wire_rect(rects, "metal5", [(400.0, -33.0), (586.0, -33.0)], 12.0)                                             # 7. VDD_TX
 
+    # 2d-bis. IR/EM-Hardened Full-Height 24 um Central M5 VSS Spine (x=373..397, y=-14..core_h+14)
+    # Bridges South <-> North 14 um M5 VSS perimeter rings directly over the dual P+ guard moats so
+    # ZERO macro DC return current ever enters the thin M1/M2 P+ substrate guard moats!
+    add_box(rects, "metal5", 373.0, -14.0, 397.0, core_h + 14.0)
+
     # 2e. Tie ALL 8 Decap Banks cleanly to their exact VDD domain & VSS!
-    # 1) DEC_HV33 -> VDD_HV33 (N) & VSS (moat x=387, flush 0.90 um M2!)
+    # 1) DEC_HV33 -> VDD_HV33 (N) & VSS (moat x=387, flush 0.90 um M2; 0 mA DC!)
     b = dp_by["DEC_HV33"]
     b4g.add_wire_rect(rects, "metal4", [b["vdd_top"], (b["vdd_top"][0], core_h + 33.0)], 3.00)
     b4g.add_via_45_array(rects, b["vdd_top"][0], core_h + 33.0, 2, 3)
@@ -744,22 +832,22 @@ def build_chip_top_5g(
     b4g.add_wire_rect(rects, "metal4", [(b["vss_pt"][0], 2.0), (b["vss_pt"][0], -14.0)], 3.60)
     b4g.add_via_45_array(rects, b["vss_pt"][0], -14.0, 2, 3)
 
-    # 4) DEC_A -> VDD_A (N y=core_h+33) & VSS (moat x=397)
+    # 4) DEC_A -> VDD_A (N y=core_h+33) & VSS (moat x=397; 0 mA DC!)
     b = dp_by["DEC_A"]
     b4g.add_wire_rect(rects, "metal4", [b["vdd_top"], (b["vdd_top"][0], core_h + 33.0)], 3.20)
     b4g.add_via_45_array(rects, b["vdd_top"][0], core_h + 33.0, 2, 3)
     b4g.add_wire_rect(rects, "metal2", [(b["x_lo"], b["vss_pt"][1]), (397.0, b["vss_pt"][1])], 0.90)
 
-    # 5) DEC_D -> VDD_D (N via open x=538 -> y=645 -> x=556 -> y=core_h+33) & VSS (W at y=552 -> moat x=397)
+    # 5) DEC_D -> VDD_D (N via open x=538 -> y=653 -> x=556 -> y=core_h+33) & VSS (W at y=552 -> moat x=397; 0 mA DC!)
     b = dp_by["DEC_D"]
     b4g.add_wire_rect(rects, "metal4", [(b["x_hi"], b["vdd_top"][1]), (538.0, b["vdd_top"][1]), (538.0, core_h + 3.0), (556.0, core_h + 3.0), (556.0, core_h + 33.0)], 3.20)
     b4g.add_via_45_array(rects, 556.0, core_h + 33.0, 2, 3)
     b4g.add_wire_rect(rects, "metal2", [(b["x_lo"], b["vss_top"][1]), (436.0, b["vss_top"][1]), (436.0, 552.0), (397.0, 552.0)], 0.90)
 
-    # 6) DEC_TX_N -> VDD_TX (W to x=403.5 M5 TX spine) & VSS (W to moat x=397)
+    # 6) DEC_TX_N -> VDD_TX (M4 bridge under y=258..269 M5 VSS highway at x=405.0; 0 mA DC!) & VSS (W to moat x=397)
     b = dp_by["DEC_TX_N"]
-    b4g.add_wire_rect(rects, "metal4", [b["vdd_pt"], (403.5, b["vdd_pt"][1])], 2.40)
-    b4g.add_via_45_array(rects, 403.5, b["vdd_pt"][1], 1, 2)
+    b4g.add_wire_rect(rects, "metal4", [b["vdd_pt"], (405.0, b["vdd_pt"][1]), (405.0, 252.0)], 2.40)
+    b4g.add_via_45_array(rects, 405.0, 252.0, 1, 2)
     b4g.add_wire_rect(rects, "metal2", [(b["x_lo"], b["vss_pt"][1]), (397.0, b["vss_pt"][1])], 0.90)
 
     # 7) DEC_TX_W -> VDD_TX (S y=-33) & VSS (S y=-14, flush 0.90 um M2!)
@@ -771,16 +859,15 @@ def build_chip_top_5g(
     b4g.add_wire_rect(rects, "metal4", [(b["vss_pt"][0], 2.0), (b["vss_pt"][0], -14.0)], 2.80)
     b4g.add_via_45_array(rects, b["vss_pt"][0], -14.0, 2, 3)
 
-    # 8) DEC_RX_S -> VDD_RX (S y=-33) & VSS (S y=-14, flush 0.90 um M2!)
+    # 8) DEC_RX_S -> VDD_RX (merges directly into 30 um VDD_RX M4 bridge + 16x4=64 via4 array @ y=-33!) & VSS (S y=-14)
     b = dp_by["DEC_RX_S"]
     b4g.add_wire_rect(rects, "metal4", [b["vdd_pt"], (b["vdd_pt"][0], -33.0)], 3.60)
-    b4g.add_via_45_array(rects, b["vdd_pt"][0], -33.0, 2, 3)
     b4g.add_wire_rect(rects, "metal2", [b["vss_pt"], (b["vss_pt"][0], -2.0)], 0.90)
     b4g.add_via_234_array(rects, b["vss_pt"][0], -2.0, 2, 2)
     b4g.add_wire_rect(rects, "metal4", [(b["vss_pt"][0], -2.0), (b["vss_pt"][0], -14.0)], 3.60)
     b4g.add_via_45_array(rects, b["vss_pt"][0], -14.0, 2, 3)
 
-    # 2f. Tie ALL 13 Macros' VDD & VSS Power Rails cleanly to exact domains!
+    # 2f. Tie ALL 13 Macros' VDD & VSS Power Rails with Full IR/EM-Hardened Multi-Via M5/M4 Trunks!
     ldo = m_map["ldo_kelvin"]
     vco = m_map["lc_vco_oct"]
     bias = m_map["bias_top_v2"]
@@ -788,76 +875,122 @@ def build_chip_top_5g(
     clk, div, tq = m_map["clk_host_5g"], m_map["div_ab_5g_v2"], m_map["tx_qdiv2_5g"]
     tx, rx, dig = m_map["tx_sst_v5"], m_map["rx_top_5g"], m_map["digital_v4"]
 
-    # 1) LDO Kelvin (`vin` -> VDD_HV33, `quiet` -> M5 VDD_Q Kelvin spine @ x=379, `host` -> VDD_BIAS, `vss` -> moat x=387)
+    # -------------------------------------------------------------------------
+    # 1) LDO Kelvin:
+    #    - vin (9.11 mA): 12 um M5/M4 + 6x3=18 via4 (y=651.2) + 6x4=24 via4 (y=683.0) -> <50% EM!
+    #    - quiet (8.86 mA): Direct 24 um M5 VDD_Q highway straight South over M5-free VCO active bay!
+    #    - host (0.10 mA): VDD_BIAS with 2x2 via2/via3 arrays
+    #    - vss (0.35 mA): Direct 4 um M4 under VDD_Q into 24 um Central M5 VSS Spine (ZERO moat!)
+    # -------------------------------------------------------------------------
     p = ldo.port_world("vin")
-    b4g.add_wire_rect(rects, "metal5", [(p[0], p[1]), (p[0], core_h + 1.5)], 6.00)
-    b4g.add_via_45_array(rects, p[0], core_h + 1.5, 3, 2)
-    b4g.add_wire_rect(rects, "metal4", [(p[0], core_h + 1.5), (p[0], core_h + 33.0)], 6.00)
-    b4g.add_via_45_array(rects, p[0], core_h + 33.0, 3, 3)
+    add_box(rects, "metal5", p[0] - 6.0, p[1] - 2.4, p[0] + 6.0, core_h + 4.6)
+    b4g.add_via_45_array(rects, p[0], core_h + 1.2, 6, 3)
+    add_box(rects, "metal4", p[0] - 6.0, core_h - 1.4, p[0] + 6.0, core_h + 37.0)
+    b4g.add_via_45_array(rects, p[0], core_h + 33.0, 6, 4)
 
-    # Main M5 VDD_Q Kelvin spine: drop @ x=317.2 w=4.40 -> 5.0 um spine @ x=380.5 (x=[378..383], leaves x=374.2 clear for vco.vss via4!)
+    # Main 24 um M5 VDD_Q Kelvin Highway: ldo.quiet (311.6, 590.7) -> 9.6 um slot (x=314.2..323.8 clear of LDO vss & DEC_HV33)
+    # -> 24 um M5 vertical superhighway (x=314.0..338.0, y=212.0..524.0) straight to lc_vco_oct.vdd!
     pq = ldo.port_world("quiet")
-    b4g.add_wire_rect(rects, "metal5", [(pq[0], pq[1]), (317.2, pq[1]), (317.2, 502.0)], 4.40)
-    b4g.add_wire_rect(rects, "metal5", [(317.2, 502.0), (380.5, 502.0), (380.5, -1.5)], 5.00)
-    b4g.add_via_45_array(rects, 380.5, -1.5, 2, 2)
-    b4g.add_wire_rect(rects, "metal4", [(380.5, -1.5), (380.5, -33.0)], 5.00)
-    b4g.add_via_45_array(rects, 380.5, -33.0, 2, 3)
+    add_box(rects, "metal5", pq[0] - 2.6, pq[1] - 7.0, 323.8, pq[1] + 7.0)
+    add_box(rects, "metal5", 314.2, 522.0, 323.8, pq[1] + 7.0)
+    add_box(rects, "metal5", 314.0, 212.0, 338.0, 524.0)
+    # Branch to outer South VDD_Q rail & DEC_Q (0 mA DC, at x=360.0 strictly clear of DEC_Q M5<=342.6 & Central VSS>=373!)
+    add_box(rects, "metal5", 336.0, 212.0, 362.0, 218.0)
+    add_box(rects, "metal5", 358.0, -4.0, 362.0, 218.0)
+    b4g.add_via_45_array(rects, 360.0, -2.5, 2, 2)
+    add_box(rects, "metal4", 358.0, -35.0, 362.0, -0.5)
+    b4g.add_via_45_array(rects, 360.0, -33.0, 2, 3)
 
     ph = ldo.port_world("host")
-    route_poly(rects, ph, (-33.0, 390.0, "metal4"), [
-        ((ph[0], ph[1]), (-4.5, ph[1]), "metal2"),
-        ((-4.5, ph[1]), (-4.5, 390.0), "metal3"),
-        ((-4.5, 390.0), (-33.0, 390.0), "metal4"),
-    ], width=1.20)
+    b4g.add_wire_rect(rects, "metal2", [(ph[0], ph[1]), (-4.5, ph[1])], 1.20)
+    add_via_23_array(rects, -4.5, ph[1], 2, 2)
+    b4g.add_wire_rect(rects, "metal3", [(-4.5, ph[1]), (-4.5, 390.0)], 1.20)
+    add_via_34_array(rects, -4.5, 390.0, 2, 2)
+    b4g.add_wire_rect(rects, "metal4", [(-4.5, 390.0), (-33.0, 390.0)], 2.00)
     b4g.add_via_45_array(rects, -33.0, 390.0, 2, 2)
 
     pv = ldo.port_world("vss")
-    b4g.add_wire_rect(rects, "metal4", [(pv[0], pv[1]), (pv[0], 512.0), (387.0, 512.0)], 2.40)
-    b4g.add_via_234_array(rects, 387.0, 512.0, 2, 2)
+    add_box(rects, "metal4", pv[0] - 2.0, 511.0, pv[0] + 2.0, pv[1] + 1.0)
+    add_box(rects, "metal4", pv[0] - 2.0, 511.0, 382.0, 515.0)
+    b4g.add_via_45_array(rects, 378.0, 513.0, 3, 2)
 
-    # 2) LC-VCO (`vdd` -> VDD_Q M5 spine x=380.5; `vss` -> M5 over active -> via45 OUTSIDE VCO @ x=374.2 -> M4 under VDD_Q -> moat x=387)
+    # -------------------------------------------------------------------------
+    # 2) LC-VCO (8.06 mA peak):
+    #    Keep top-level VDD_Q M4 strictly inside x=298.1..301.9 (3.8 um neck) over internal vdd bar
+    #    (y=223.9..226.1) with >=1.4 um wide-M4 step-back (y<=222.5) so Magic hierarchical extraction
+    #    NEVER promotes internal act0/vdd (keeps DRC=0 & 41/41 diff PASS!), and parallel-shunt the
+    #    3.8 um M4 neck with 2x1 via4 (@ y=224.7 -> M5) + 4x2 via3 (@ y=224.8 -> 3.6 um M3 shunt)
+    #    so M4, M3, via3, and via4 ALL stay well below SKY130A 110 C DC EM limits!
+    #    - vss: 8 um neck + 4x1 via4 (@ y=228.5) + 12x1 via4 (@ y=231.0, M4 y=230.2..231.8) = 16 via4 ->
+    #      25.5 um M5 North over M5-free VCO active bay -> 22 um M5 West straight to West 14 um M5 VSS ring!
+    # -------------------------------------------------------------------------
     pvd = vco.port_world("vdd")
-    b4g.add_wire_rect(rects, "metal4", [(pvd[0], pvd[1]), (pvd[0], 214.0)], 2.40)
-    b4g.add_via_45_array(rects, pvd[0], 214.0, 2, 2)
-    b4g.add_wire_rect(rects, "metal5", [(pvd[0], 214.0), (380.5, 214.0)], 4.00)
+    add_box(rects, "metal4", 297.0, 211.5, 323.0, 219.5)
+    add_box(rects, "metal4", 298.05, 219.0, 301.95, 226.0)
+    add_box(rects, "metal5", 297.0, 211.5, 338.0, 220.0)
+    b4g.add_via_45_array(rects, 310.0, 215.5, 10, 4)
+    # Parallel M5 (2x1 via4 @ y=224.7, 1.8 um clear of vss M5 @ 227.5) & M3 (4x2 via3) shunts into (300.0, 225.0)!
+    b4g.add_via_45_array(rects, 300.0, 224.7, 2, 1)
+    add_box(rects, "metal5", 298.1, 218.0, 301.9, 225.7)
+    add_via_34_array(rects, 300.0, 225.0, 4, 2, pitch=0.80)
+    add_box(rects, "metal3", 298.2, 214.0, 301.8, 225.8)
+    add_via_34_array(rects, 300.0, 215.5, 4, 3, pitch=0.80)
 
     pvs = vco.port_world("vss")
-    b4g.add_via_45_array(rects, pvs[0], pvs[1], 2, 1)
-    b4g.add_wire_rect(rects, "metal5", [(pvs[0], pvs[1]), (374.2, pvs[1])], 2.00)
-    b4g.add_via_45(rects, 374.2, pvs[1])
-    b4g.add_wire_rect(rects, "metal4", [(374.2, pvs[1]), (387.0, pvs[1])], 2.40)
-    b4g.add_via_234_array(rects, 387.0, pvs[1], 2, 2)
+    add_box(rects, "metal4", 296.0, 227.4, 304.0, 231.8)
+    b4g.add_via_45_array(rects, 300.0, 228.5, 4, 1)
+    add_box(rects, "metal4", 289.0, 230.2, 311.0, 231.8)
+    b4g.add_via_45_array(rects, 300.0, 231.0, 12, 1)
+    add_box(rects, "metal5", 286.0, 227.5, 311.5, 506.0)
+    add_box(rects, "metal5", -14.0, 484.0, 311.5, 506.0)
 
-    # 3) BIAS Top v2 (`vdd` -> VDD_BIAS x=-33 via West M3 trunk; target=metal4 so only via45_array places cuts!)
+    # -------------------------------------------------------------------------
+    # 3) BIAS Top v2 (0.96 mA peak):
+    #    - vdd (M3 @ 59.3, 151.63): 1.4 um M3 entry + 4x3=12 via3 @ (59.3, 155.0) -> 3.6 um M4 West to x=-33 -> 2x3=6 via4!
+    #    - vss (M1 @ 88.4, 0.63): 6x3=18 via1 + 4x2=8 via234 @ (88.4, -1.8) -> 4.0 um M4 South -> 2x3=6 via4 on VSS!
+    # -------------------------------------------------------------------------
     pbv = bias.port_world("vdd")
-    route_poly(rects, pbv, (-33.0, 200.0, "metal4"), [
-        ((pbv[0], pbv[1]), (pbv[0], 155.5), "metal3"),
-        ((pbv[0], 155.5), (-1.8, 155.5), "metal3"),
-        ((-1.8, 155.5), (-1.8, 200.0), "metal3"),
-        ((-1.8, 200.0), (-33.0, 200.0), "metal4"),
-    ], width=1.40)
-    b4g.add_via_45_array(rects, -33.0, 200.0, 2, 2)
+    add_box(rects, "metal3", pbv[0] - 0.70, pbv[1] - 0.30, pbv[0] + 0.70, 154.0)
+    add_box(rects, "metal3", pbv[0] - 1.60, 153.4, pbv[0] + 1.60, 156.2)
+    add_via_34_array(rects, pbv[0], 155.0, 4, 3)
+    add_box(rects, "metal4", -35.0, 153.7, pbv[0] + 1.60, 157.3)
+    add_box(rects, "metal4", -35.0, 153.7, -31.0, 176.5)
+    b4g.add_via_45_array(rects, -33.0, 173.5, 2, 3)
 
     pbs = bias.port_world("vss")
-    b4g.add_wire_rect(rects, "metal1", [(pbs[0], pbs[1]), (pbs[0], -2.0)], 1.60)
-    b4g.add_via_12(rects, pbs[0], -2.0)
-    b4g.add_via_234_array(rects, pbs[0], -2.0, 2, 2)
-    b4g.add_wire_rect(rects, "metal4", [(pbs[0], -2.0), (pbs[0], -14.0)], 2.40)
+    add_box(rects, "metal1", pbs[0] - 2.0, -2.7, pbs[0] + 2.0, pbs[1] + 0.35)
+    add_via_12_array(rects, pbs[0], -1.8, 6, 3, pitch=0.60)
+    b4g.add_via_234_array(rects, pbs[0], -1.8, 4, 2, pitch=0.80)
+    add_box(rects, "metal4", pbs[0] - 2.0, -16.8, pbs[0] + 2.0, -1.0)
     b4g.add_via_45_array(rects, pbs[0], -14.0, 2, 3)
 
-    # 4) Quiet PLL Core (`lf_k4`, `cp_v4`, `pfd`, `bias_cp`) -> VDD_Q M5 spine (x=380.5) & VSS (moat x=387)
-    # Shared horizontal M3 VDD_Q rail at y = 200.5 -> via34+via45 into VDD_Q spine @ (380.5, 200.5)
-    b4g.add_wire_rect(rects, "metal3", [(153.65, 200.5), (380.5, 200.5)], 1.20)
-    b4g.add_via_34(rects, 380.5, 200.5)
-    b4g.add_via_45(rects, 380.5, 200.5)
+    # -------------------------------------------------------------------------
+    # 4) Quiet PLL Core (`lf_k4`, `cp_v4`, `pfd`, `bias_cp`, 0.80 mA total):
+    #    - VDD_Q: 4 um M5 branch from 24 um VDD_Q highway @ y=201.0 West to x=186.0 + 2x2 via4 + 3x3=9 via3 -> M3 bus!
+    #      pfd.vdd (0.15 mA): 3x1 via1 + 2x1 via2/via3 along M1 bar y=174.97 -> ~60% max-cut EM (down from 150%!)
+    #    - VSS: Dedicated 6 um M5 riser from South VSS ring @ x=198.0 to y=125.0 + 2x2 via4 + 3x3=9 via3 -> M3 bus
+    #      (ZERO moat connection; cp_v4.vss runs pure M3 via x=191.5 East of bias_cp -> ZERO via2/via3 bottleneck!)
+    # -------------------------------------------------------------------------
+    add_box(rects, "metal5", 318.0, 199.0, 324.0, 214.0)
+    add_box(rects, "metal5", 184.0, 199.0, 324.0, 203.0)
+    b4g.add_via_45_array(rects, 186.0, 200.5, 2, 2)
+    add_via_34_array(rects, 186.0, 200.5, 3, 3)
+    b4g.add_wire_rect(rects, "metal3", [(153.65, 200.5), (315.0, 200.5)], 1.60)
     for m_q, pn_q in ((lf, "vdd"), (cp, "vdd")):
         pqm = m_q.port_world(pn_q)
         b4g.add_wire_rect(rects, "metal3", [(pqm[0], pqm[1]), (pqm[0], 200.5)], 1.00)
-    # pfd.vdd hops M1->M4 right at (153.65, 174.97) (100% clear of pfd M2/M3!) -> straight North on M4 to y=200.5!
+    # pfd.vdd (0.15 mA): 3 via1 cuts straddling (153.65, 174.97) at x=153.45, 154.05, 154.65 + 2 via2/via3 -> M4 North!
     ppfd_v = pfd.port_world("vdd")
-    route_poly(rects, ppfd_v, (ppfd_v[0], 200.5, "metal3"), [
-        ((ppfd_v[0], ppfd_v[1]), (ppfd_v[0], 200.5), "metal4"),
-    ], width=0.50)
+    for vx_1 in (grid(ppfd_v[0] - 0.20), grid(ppfd_v[0] + 0.40), grid(ppfd_v[0] + 1.00)):
+        b4g.add_via_12(rects, vx_1, ppfd_v[1])
+    for vx_23 in (grid(ppfd_v[0] - 0.15), grid(ppfd_v[0] + 0.65)):
+        b4g.add_via_23(rects, vx_23, ppfd_v[1])
+        b4g.add_via_34(rects, vx_23, ppfd_v[1])
+        b4g.add_via_34(rects, vx_23, 200.5)
+    add_box(rects, "metal1", ppfd_v[0] - 0.38, ppfd_v[1] - 0.18, ppfd_v[0] + 1.18, ppfd_v[1] + 0.18)
+    add_box(rects, "metal2", ppfd_v[0] - 0.38, ppfd_v[1] - 0.18, ppfd_v[0] + 1.18, ppfd_v[1] + 0.18)
+    add_box(rects, "metal3", ppfd_v[0] - 0.41, ppfd_v[1] - 0.26, ppfd_v[0] + 0.91, ppfd_v[1] + 0.26)
+    add_box(rects, "metal4", ppfd_v[0] - 0.41, ppfd_v[1] - 0.26, ppfd_v[0] + 0.91, 200.76)
     pbcp_v = bcp.port_world("vcp")
     route_poly(rects, pbcp_v, (244.0, 200.5, "metal3"), [
         ((pbcp_v[0], pbcp_v[1]), (pbcp_v[0], 140.5), "metal2"),
@@ -865,85 +998,161 @@ def build_chip_top_5g(
         ((244.0, 140.5), (244.0, 200.5), "metal3"),
     ], width=0.80)
 
-    # Shared horizontal M3 VSS rail at y = 125.0 -> via23 into moat x = 387.0
-    b4g.add_wire_rect(rects, "metal3", [(179.0, 125.0), (387.0, 125.0)], 1.20)
-    b4g.add_via_234_array(rects, 387.0, 125.0, 2, 2)
+    # Quiet PLL Core VSS: dedicated 6 um M5 riser @ x=198.0 from South VSS ring (-14..127) — ZERO moat DC!
+    add_box(rects, "metal5", 195.0, -14.0, 201.0, 127.0)
+    b4g.add_via_45_array(rects, 198.0, 125.0, 2, 2)
+    add_via_34_array(rects, 198.0, 125.0, 3, 3)
+    b4g.add_wire_rect(rects, "metal3", [(182.0, 125.0), (282.5, 125.0)], 2.00)
     plf_s = lf.port_world("vss")
     b4g.add_wire_rect(rects, "metal3", [(plf_s[0], plf_s[1]), (plf_s[0], 125.0)], 1.00)
+    # cp_v4.vss (0.55 mA): pure M3 East to x=191.5 (East of bias_cp @ 188.9) -> South M3 to y=125.0 (ZERO via2!)
     pcp_s = cp.port_world("vss")
-    route_poly(rects, pcp_s, (179.0, 125.0, "metal3"), [
-        ((pcp_s[0], pcp_s[1]), (179.0, pcp_s[1]), "metal3"),
-        ((179.0, pcp_s[1]), (179.0, 125.0), "metal2"),
-    ], width=0.80)
+    b4g.add_wire_rect(rects, "metal3", [(pcp_s[0], pcp_s[1]), (191.5, pcp_s[1]), (191.5, 125.0)], 1.20)
     pbcp_s = bcp.port_world("vss")
-    route_poly(rects, pbcp_s, (pbcp_s[0], 125.0, "metal3"), [((pbcp_s[0], pbcp_s[1]), (pbcp_s[0], 125.0), "metal2")], width=0.80)
+    b4g.add_wire_rect(rects, "metal2", [(pbcp_s[0], pbcp_s[1]), (pbcp_s[0], 125.0)], 0.80)
+    add_via_23_array(rects, pbcp_s[0], 125.0, 2, 1)
     ppfd_s = pfd.port_world("vss")
-    route_poly(rects, ppfd_s, (-14.0, 152.5, "metal4"), [
-        ((ppfd_s[0], ppfd_s[1]), (147.0, ppfd_s[1]), "metal2"),
-        ((147.0, ppfd_s[1]), (147.0, 152.5), "metal2"),
-        ((147.0, 152.5), (-4.0, 152.5), "metal2"),
-        ((-4.0, 152.5), (-14.0, 152.5), "metal4"),
-    ], width=1.00)
-    b4g.add_via_45_array(rects, -14.0, 152.5, 2, 2)
+    b4g.add_wire_rect(rects, "metal2", [(ppfd_s[0], ppfd_s[1]), (147.0, ppfd_s[1]), (147.0, 151.5), (-4.0, 151.5)], 1.00)
+    b4g.add_via_234_array(rects, -4.0, 151.5, 2, 2)
+    b4g.add_wire_rect(rects, "metal4", [(-4.0, 151.5), (-14.0, 151.5)], 1.60)
+    b4g.add_via_45_array(rects, -14.0, 151.5, 2, 2)
 
-    # 5) 5G Clock Bay (`clk_host_5g`, `div_ab_5g_v2`, `tx_qdiv2_5g`) -> VDD_A & VSS
-    # Vertical VDD_A M4 spine along x = 404.0 from y = 387 up to VDD_A N ring (y=core_h+33)
-    b4g.add_wire_rect(rects, "metal4", [(404.0, 387.6), (404.0, core_h + 33.0)], 2.40)
-    b4g.add_via_45_array(rects, 404.0, core_h + 33.0, 2, 3)
-    pdiv_v = div.port_world("vdd")
-    b4g.add_wire_rect(rects, "metal4", [(pdiv_v[0], pdiv_v[1]), (404.0, pdiv_v[1])], 1.60)
-    # div_ab.vss runs up to y=546.32 at x=419.5 -> exit NORTH cleanly into y=552.0 M2 VSS bus (ZERO crossing over South vdd M4 bar!)
-    pdiv_s = div.port_world("vss")
-    b4g.add_wire_rect(rects, "metal4", [(pdiv_s[0], 545.8), (pdiv_s[0], 552.0)], 1.20)
-    b4g.add_via_234_array(rects, pdiv_s[0], 552.0, 2, 1)
-    b4g.add_wire_rect(rects, "metal2", [(pdiv_s[0], 552.0), (397.0, 552.0)], 1.40)
-
-    # clk_host_5g vdd_clk (M5) -> North to y=381 -> West to x=435.5 -> North M5 to y=555.5 -> via45 -> M4 to x=404.0 (clear of y=552.0 div_ab.vss!)
+    # -------------------------------------------------------------------------
+    # 5) 5G Clock Bay (`clk_host_5g` 8.80mA, `div_ab_5g_v2` 3.55mA, `tx_qdiv2_5g` 3.20mA = 15.55mA):
+    #    - VDD_A: 20 um M4 bridge under North VSS ring (40+40 via4!) -> 20 um M5 header (y=634..654) ->
+    #      DUAL M5 vertical trunks flanking DEC_A/DEC_D (West x=400.0..407.4 + East x=534.6..542.0) +
+    #      12 um M5 center drop (x=429..441) -> 14 um M5 bridge directly across clk_host_5g.vdd_clk!
+    #      tx_qdiv2_5g.vdd: 3.6 um M3 + 8x4=32 via3 + 3x3=9 via4 -> 6 um M5 North over M5-free tx_qdiv2_5g!
+    #    - VSS (ZERO moat DC!):
+    #      * div_ab_5g_v2.vss (3.55 mA): 6 um M4 West @ y=550.5..556.5 -> 4x3=12 via4 into 24 um Central M5 VSS Spine!
+    #      * clk_host_5g.vss (8.80 mA): 10 um M5 straight West (y=302.4..312.4) into 24 um Central M5 VSS Spine
+    #        PLUS 14 um M5 South (x=498..512) into tx_sst_v5.vss & East VSS Highway!
+    #      * tx_qdiv2_5g.vss (3.20 mA): 2.6->4.4 um M3 + 5x8=40 via3 + 2x4=8 via4 -> 22 um M5 East-West VSS Highway!
+    # -------------------------------------------------------------------------
+    # North VDD_A entry right under VDD_A pad (460, 683): 20 um M4 bridge + 10x4=40 via4 on BOTH ends!
+    add_box(rects, "metal4", 450.0, 644.0, 470.0, core_h + 37.5)
+    b4g.add_via_45_array(rects, 460.0, core_h + 33.0, 10, 4)
+    b4g.add_via_45_array(rects, 460.0, 648.0, 10, 4)
+    # 20 um M5 North VDD_A Header (y=634..654, x=400.0..542.0)
+    add_box(rects, "metal5", 400.0, 634.0, 542.0, 654.0)
+    # West M5 VDD_A Trunk (x=400.0..407.4, y=386.0..654.0; clear of Central VSS<=397 & DEC_A>=409.42 & clkp>=412.8!)
+    add_box(rects, "metal5", 400.0, 386.0, 407.4, 654.0)
+    # Mid-North M5 tie below DEC_A (y=548.0..564.0, x=400.0..441.0) -> 12 um Center M5 Trunk (x=429..441, y=378..564)
+    add_box(rects, "metal5", 400.0, 548.0, 441.0, 564.0)
+    add_box(rects, "metal5", 429.0, 378.0, 441.0, 564.0)
+    # East M5 VDD_A Trunk (x=534.6..542.0, y=365.5..654.0; clear of DEC_A<=532.58, DEC_D<=526.78, dig M5>=547.68!)
+    add_box(rects, "metal5", 534.6, 365.5, 542.0, 654.0)
+    # 14 um M5 horizontal clk_host_5g.vdd_clk bus connecting Center Trunk + clk_host_5g.vdd_clk + East Trunk!
     pck_v = clk.port_world("vdd_clk")
-    b4g.add_wire_rect(rects, "metal5", [(pck_v[0], pck_v[1]), (pck_v[0], 381.0), (435.5, 381.0), (435.5, 555.5)], 2.40)
-    b4g.add_via_45_array(rects, 435.5, 555.5, 1, 2)
-    b4g.add_wire_rect(rects, "metal4", [(435.5, 555.5), (404.0, 555.5)], 2.40)
+    add_box(rects, "metal5", 429.0, 378.0, 490.0, 390.0)
+    add_box(rects, "metal5", 482.5, 365.5, 542.0, 379.5)
+    add_box(rects, "metal5", 482.5, 365.5, 490.0, 390.0)
 
-    # tx_qdiv2_5g vdd (M3) -> M5 over M5=0% tx_qdiv2 -> North to y=419 -> West M5 into x=435.5 VDD_A M5 trunk!
+    # div_ab_5g_v2.vdd (3.55 mA): 4 um M4 West from (408.5, 387.6) -> 5 um M4 North (x=401.3..406.3) -> 3x6=18 via4!
+    pdiv_v = div.port_world("vdd")
+    add_box(rects, "metal4", 401.3, 386.2, 409.0, 390.2)
+    add_box(rects, "metal4", 401.3, 386.2, 406.3, 420.0)
+    b4g.add_via_45_array(rects, 403.7, 409.0, 3, 6)
+
+    # div_ab_5g_v2.vss (3.55 mA): 4->6 um M4 North from (419.5, 545.8) -> West @ y=550.5..556.5 -> 4x3=12 via4 on Central VSS!
+    pdiv_s = div.port_world("vss")
+    add_box(rects, "metal4", pdiv_s[0] - 2.0, 545.0, pdiv_s[0] + 2.0, 556.5)
+    add_box(rects, "metal4", 384.0, 550.5, pdiv_s[0] + 2.0, 556.5)
+    b4g.add_via_45_array(rects, 389.0, 553.5, 4, 3)
+
+    # tx_qdiv2_5g.vdd (3.20 mA): 3.6 um M3 entry + 8x4=32 via3 + 3x3=9 via4 @ (522.5, 271.9) -> 6 um M5 North to y=379.5!
+    # (M5 starts at y=269.1 -> 2.6 um clear of tx_sst_v5.vss M5 <= 266.5!)
     ptq_v = tq.port_world("vdd")
-    add_layer_hop(rects, ptq_v[0], 273.0, "metal3", "metal5")
-    b4g.add_wire_rect(rects, "metal3", [(ptq_v[0], ptq_v[1]), (ptq_v[0], 273.0)], 0.90)
-    b4g.add_wire_rect(rects, "metal5", [(ptq_v[0], 273.0), (ptq_v[0], 419.0), (435.5, 419.0)], 2.00)
+    add_box(rects, "metal3", 521.2, 269.5, 524.8, 277.0)
+    add_via_34_array(rects, 522.5, 271.9, 8, 4, pitch=0.80)
+    add_box(rects, "metal4", 519.4, 269.0, 525.6, 274.8)
+    b4g.add_via_45_array(rects, 522.5, 271.9, 3, 3)
+    add_box(rects, "metal5", 519.5, 269.1, 525.5, 379.5)
 
-    # clk_host_5g vss (M5) -> South to y=305.5 -> West M5 to x=408 -> via45+via234 -> West M2 into moat x=397 (ZERO M4 conflict!)
+    # clk_host_5g.vss (8.80 mA): 10 um M5 straight West (y=302.4..312.4) into 24 um Central M5 VSS Spine
+    # PLUS 14 um M5 East/South (x=498..512, y=258.2..324) tying cleanly to tx_sst_v5.vss!
     pck_s = clk.port_world("vss")
-    b4g.add_wire_rect(rects, "metal5", [(pck_s[0], pck_s[1]), (pck_s[0], 305.5), (408.0, 305.5)], 2.40)
-    b4g.add_via_45_array(rects, 408.0, 305.5, 1, 2)
-    b4g.add_via_234_array(rects, 408.0, 305.5, 2, 2)
-    b4g.add_wire_rect(rects, "metal2", [(408.0, 305.5), (397.0, 305.5)], 1.60)
+    add_box(rects, "metal5", 395.0, 302.4, 491.1, 312.4)
+    add_box(rects, "metal5", 488.9, 310.0, 512.0, 324.0)
+    add_box(rects, "metal5", 498.0, 258.2, 512.0, 324.0)
 
-    # 6) TX SST v5 (`vdd` M5: land with exact 2.0 um stub matching TX vdd bar -> widen to 3.2 um @ x=403.5!)
+    # -------------------------------------------------------------------------
+    # 6) TX SST v5 (17.50 mA peak):
+    #    - vdd (M5 @ 408.22, 144.7): 14 um M5 highway (x=399.5..413.5, y=-4.9..148.0) ->
+    #      24 um M4 bridge (x=400.5..424.5) under South VSS ring with 13x2+3x3=35 via4 (N) & 13x4=52 via4 (S)!
+    #    - vss (M5 @ 518.52, 256.5): 3-way ZERO-VIA M5 return:
+    #      (a) 8.3 um M5 straight West (y=258.2..266.5) -> 24 um Central M5 VSS Spine (2.6 um clear of tx_qdiv2_5g.vdd M5>=269.1!)
+    #      (b) 14 um M5 North (x=498..512) -> clk_host_5g.vss -> Central M5 VSS Spine!
+    #      (c) 22 um M5 straight East (y=264.0..286.0, x=534..950) -> East 14 um M5 VSS ring!
+    #    - tx_qdiv2_5g.vss (3.20 mA): 2.6->4.4 um M3 + 5x8=40 via3 + 2x4=8 via4 @ (530.2, 271.5) -> East VSS Highway!
+    # -------------------------------------------------------------------------
     ptx_v = tx.port_world("vdd")
-    b4g.add_wire_rect(rects, "metal5", [(ptx_v[0], ptx_v[1]), (403.5, ptx_v[1])], 2.00)
-    b4g.add_wire_rect(rects, "metal5", [(403.5, -1.5), (403.5, 297.0)], 3.20)
-    b4g.add_via_45_array(rects, 403.5, -1.5, 2, 2)
-    b4g.add_wire_rect(rects, "metal4", [(403.5, -1.5), (403.5, -33.0)], 3.60)
-    b4g.add_via_45_array(rects, 403.5, -33.0, 2, 3)
+    add_box(rects, "metal5", 399.5, -4.9, 413.5, 148.0)
+    add_box(rects, "metal5", 400.5, -4.9, 425.0, -1.1)
+    b4g.add_via_45_array(rects, 413.0, -3.0, 13, 2)
+    b4g.add_via_45_array(rects, 403.5, 2.5, 3, 3)
+    add_box(rects, "metal4", 400.5, -37.0, 424.8, -1.2)
+    add_box(rects, "metal4", 400.5, -3.0, 406.5, 5.5)
+    b4g.add_via_45_array(rects, 413.0, -33.0, 13, 4)
+    # 0 mA DC spur North to DEC_TX_N M4 bridge @ (405.0, 252.0)
+    add_box(rects, "metal5", 402.5, 146.0, 406.5, 254.0)
 
     ptx_s = tx.port_world("vss")
     ptq_s = tq.port_world("vss")
-    b4g.add_wire_rect(rects, "metal5", [(ptx_s[0], ptx_s[1]), (ptx_s[0], 261.5), (410.0, 261.5)], 2.40)
-    b4g.add_via_45_array(rects, 410.0, 261.5, 1, 2)
-    b4g.add_via_234_array(rects, 410.0, 261.5, 2, 2)
-    b4g.add_wire_rect(rects, "metal2", [(410.0, 261.5), (397.0, 261.5)], 1.60)
-    b4g.add_wire_rect(rects, "metal3", [(ptq_s[0], ptq_s[1]), (ptq_s[0], 271.0)], 0.90)
-    add_layer_hop(rects, ptq_s[0], 271.0, "metal3", "metal5")
-    b4g.add_wire_rect(rects, "metal5", [(ptq_s[0], 271.0), (ptq_s[0], 261.5), (ptx_s[0], 261.5)], 2.00)
+    # West M5 VSS bridge from tx_sst_v5.vss (518.52, 256.5) to Central M5 VSS Spine (x=373..397)
+    add_box(rects, "metal5", 517.3, 254.7, 524.8, 266.5)
+    add_box(rects, "metal5", 395.0, 258.2, 524.8, 266.5)
+    # East 22 um M5 VSS Highway (y=264.0..286.0, x=534.0..core_w+14.0) + tie from tx_sst_v5.vss (y=254.7..266.5)!
+    add_box(rects, "metal5", 517.3, 254.7, 576.6, 266.5)
+    add_box(rects, "metal5", 534.0, 264.0, core_w + 14.0, 286.0)
+    # tx_qdiv2_5g.vss (3.20 mA): 2.6 um M3 entry (clear of 529.14!) + 5x8=40 via3 + 2x4=8 via4 @ (530.2, 271.5)!
+    add_box(rects, "metal3", 529.8, 274.2, 532.4, 277.0)
+    add_via_34_array(rects, 530.2, 271.5, 5, 8, pitch=0.80)
+    add_box(rects, "metal4", 528.3, 267.8, 532.1, 275.2)
+    b4g.add_via_45_array(rects, 530.2, 271.5, 2, 4)
+    add_box(rects, "metal5", 528.3, 264.0, 536.0, 275.2)
 
-    # 7) RX Top 5G: `vdd` (higher y=117.7) takes OUTER x=603.5 S -> M4 -> VDD_RX; `vss` (lower y=93.9) takes INNER x=609.0 S -> VSS! (0 crossing!)
+    # -------------------------------------------------------------------------
+    # 7) RX Top 5G (28.47 mA peak — highest-current macro!):
+    #    - vdd (M5 @ 615.2, 117.68): DUAL-FEED (East Direct + South-West):
+    #      (a) EAST DIRECT: 21.4 um M5 (y=116.6..138.0, x=614.2..839.2) -> 4x9=36 via4 -> 16 um M4 jump
+    #          (x=831.8..856.0, 1.24 um clear of ctle_p M4 @ 857.24) under widened 6.0 um rx.vss spine (842.2..848.2)
+    #          -> 3x9=27 via4 -> 24 um M5 (y=114..138) -> 4x12=48 via4 -> 24 um M4 under East VSS ring -> 4x12=48 via4
+    #          straight into East VDD_RX pad (969, 120)!
+    #      (b) SOUTH-WEST: 10.4 um M5 (x=601.6..612.0) South -> 16x2+5x3=47 via4 -> 30 um M4 bridge under South VSS ring
+    #          -> 16x4=64 via4 onto South VDD_RX M5 rail!
+    #    - vss (M5 @ 615.2, 93.88): DUAL-ENDED (South + North) ZERO-VIA M5 return:
+    #      (a) SOUTH: 48 um M5 East (y=47.0..94.9, 11.1 um clear of DEC_RX_S M5<=35.9!) -> East VSS ring
+    #          + 30 um M5 South branch (x=856..886) -> South VSS ring!
+    #      (b) NORTH: 6.0 um M5 tie (x=842.2..848.2, y=259.0..266.0) bridging rx_top_5g's East VSS spine directly
+    #          into the 22 um North VSS Highway (y=264..286), halving internal RX VSS spine current!
+    # -------------------------------------------------------------------------
     prx_v = rx.port_world("vdd")
-    b4g.add_wire_rect(rects, "metal5", [(prx_v[0], prx_v[1]), (603.5, prx_v[1]), (603.5, -1.5)], 2.80)
-    b4g.add_via_45_array(rects, 603.5, -1.5, 2, 2)
-    b4g.add_wire_rect(rects, "metal4", [(603.5, -1.5), (603.5, -33.0)], 2.80)
-    b4g.add_via_45_array(rects, 603.5, -33.0, 2, 3)
+    # (a) East Direct Feed -> East VDD_RX pad (969, 120)
+    add_box(rects, "metal5", 614.2, 116.6, 839.2, 138.0)
+    b4g.add_via_45_array(rects, 835.3, 129.8, 4, 9)
+    add_box(rects, "metal4", 831.8, 121.8, 856.0, 137.8)
+    b4g.add_via_45_array(rects, 853.4, 129.8, 3, 9)
+    add_box(rects, "metal5", 850.6, 114.0, core_w + 5.0, 138.0)
+    b4g.add_via_45_array(rects, core_w + 1.0, 126.0, 4, 12)
+    add_box(rects, "metal4", core_w - 3.0, 114.0, core_w + 38.0, 138.0)
+    b4g.add_via_45_array(rects, core_w + 33.0, 126.0, 4, 12)
+    # (b) South-West Parallel Feed -> South VDD_RX rail
+    add_box(rects, "metal5", 601.6, 116.6, 616.4, 136.6)
+    add_box(rects, "metal5", 601.6, -4.9, 612.0, 136.6)
+    add_box(rects, "metal5", 601.6, -4.9, 633.5, -1.1)
+    add_box(rects, "metal5", 601.6, -4.9, 612.0, 7.0)
+    b4g.add_via_45_array(rects, 618.0, -3.0, 16, 2)
+    b4g.add_via_45_array(rects, 606.8, 3.0, 5, 3)
+    add_box(rects, "metal4", 602.0, -37.0, 632.5, -1.2)
+    add_box(rects, "metal4", 602.0, -3.0, 611.6, 6.0)
+    b4g.add_via_45_array(rects, 618.0, -33.0, 16, 4)
 
+    # RX VSS: 48 um M5 South-East + 30 um M5 South leg + 6 um M5 North dual-return bridge to y=264..286 VSS Highway!
     prx_s = rx.port_world("vss")
-    b4g.add_wire_rect(rects, "metal5", [(prx_s[0], prx_s[1]), (609.0, prx_s[1]), (609.0, -14.0)], 2.80)
+    add_box(rects, "metal5", 614.1, 47.0, core_w + 14.0, 94.9)
+    add_box(rects, "metal5", 856.0, -14.0, 886.0, 50.0)
+    add_box(rects, "metal5", 842.2, 259.0, 848.2, 266.0)
 
     # 8) Digital Top v4/v4p1 (ALL 10 East VGND M5 stripes -> East VSS ring + ALL 9 East VPWR M5 stripes -> East VDD_D ring!)
     x_dig_e = grid(dig.x + dig.w - 3.5)
@@ -956,9 +1165,9 @@ def build_chip_top_5g(
     for yl in vpwr_ys:
         if yl < dig.h - 2.0:
             yc = grid(dig.y + yl)
-            b4g.add_wire_rect(rects, "metal5", [(x_dig_e, yc), (core_w + 3.0, yc)], 2.00)
-            b4g.add_via_45_array(rects, core_w + 3.0, yc, 1, 2)
-            b4g.add_wire_rect(rects, "metal4", [(core_w + 3.0, yc), (core_w + 33.0, yc)], 2.40)
+            b4g.add_wire_rect(rects, "metal5", [(x_dig_e, yc), (core_w + 3.0, yc)], 2.40)
+            b4g.add_via_45_array(rects, core_w + 2.5, yc, 2, 2)
+            b4g.add_wire_rect(rects, "metal4", [(core_w + 2.5, yc), (core_w + 33.0, yc)], 3.20)
             b4g.add_via_45_array(rects, core_w + 33.0, yc, 2, 2)
 
     # 3. Route ALL 5G Inter-Macro High-Speed Clock, PLL, BIAS, Data & Control Buses!
@@ -1339,9 +1548,12 @@ def build_chip_top_5g(
         rects.setdefault("metal5", []).append((u(core_w + 47.0), u(y_pad - 2.6), u(core_w + 57.0), u(y_pad + 2.6)))
         labels.append(("metal5", u(core_w + 50.0), u(y_pad - 1.2), u(core_w + 55.0), u(y_pad + 1.2), ext_lbl, len(labels) + 1))
 
-    # Top-level power perimeter labels
+    # Top-level power perimeter labels (4 distributed root VSS GSSG/perimeter landing ports + 7 VDD domains!)
     for lyr, px_l, py_l, nm in [
         ("metal5", -14.0, 300.0, "VSS"),
+        ("metal5", 435.0, -14.0, "VSS"),
+        ("metal5", core_w + 14.0, 104.0, "VSS"),
+        ("metal5", 460.0, core_h + 14.0, "VSS"),
         ("metal5", -33.0, 540.0, "VDD_HV33"),
         ("metal5", -33.0, 300.0, "VDD_BIAS"),
         ("metal5", -33.0, 60.0, "VDD_Q"),

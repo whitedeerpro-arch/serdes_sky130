@@ -1,0 +1,148 @@
+* NGSPICE file created from serdes_pll_bias_lowpass_stacked_pdk.ext - technology: sky130A
+
+.subckt serdes_pll_bias_lowpass_stacked_pdk original filtered vss
+X0 filtered a_4192_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X1 a_3896_9723# a_3600_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X2 a_n4392_9723# a_n4688_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X3 a_n4392_9723# a_n4096_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X4 a_2120_9723# a_1824_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X5 a_3304_9723# a_3600_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X6 original a_n4688_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X7 a_936_9723# a_1232_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X8 a_2712_9723# a_2416_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X9 a_3304_9723# a_3008_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X10 a_2712_9723# a_3008_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X11 a_n3800_9723# a_n4096_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X12 a_344_9723# a_640_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X13 a_1528_9723# a_1824_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X14 a_2120_9723# a_2416_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X15 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X16 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X17 a_344_9723# a_48_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X18 a_1528_9723# a_1232_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X19 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X20 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X21 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X22 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X23 a_n3800_9723# a_n3504_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X24 a_n2024_9723# a_n2320_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X25 a_936_9723# a_640_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X26 a_n3208_9723# a_n2912_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X27 a_n1432_9723# a_n1728_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X28 a_n840_9723# a_n544_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X29 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X30 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X31 a_n3208_9723# a_n3504_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X32 a_n2616_9723# a_n2912_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X33 a_n1432_9723# a_n1136_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X34 a_n248_9723# a_n544_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X35 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X36 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X37 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X38 a_n2616_9723# a_n2320_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X39 a_n2024_9723# a_n1728_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X40 a_n840_9723# a_n1136_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X41 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X42 vss filtered sky130_fd_pr__cap_mim_m3_2 l=22.2 w=22.2
+X43 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X44 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X45 filtered vss sky130_fd_pr__cap_mim_m3_1 l=22.2 w=22.2
+X46 a_3896_9723# a_4192_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+X47 a_n248_9723# a_48_n10155# vss sky130_fd_pr__res_high_po w=1 l=97.39
+C0 filtered a_n3208_9723# 0.10282f
+C1 a_1232_n10155# a_1824_n10155# 0.15377f
+C2 a_2120_9723# a_1528_9723# 0.15377f
+C3 a_n544_n10155# filtered 0.03626f
+C4 filtered a_n1728_n10155# 0.04034f
+C5 filtered a_n2320_n10155# 0.04034f
+C6 a_n3800_9723# filtered 0.06323f
+C7 a_3600_n10155# a_3008_n10155# 0.15377f
+C8 filtered a_3896_9723# 0.26548f
+C9 a_n840_9723# a_n1432_9723# 0.15377f
+C10 filtered a_936_9723# 0.09111f
+C11 a_344_9723# a_936_9723# 0.15377f
+C12 a_n3800_9723# a_n4392_9723# 0.15377f
+C13 filtered a_n840_9723# 0.07057f
+C14 a_n248_9723# filtered 0.11842f
+C15 a_n2616_9723# filtered 0.10083f
+C16 a_344_9723# a_n248_9723# 0.15377f
+C17 filtered original 0.02114f
+C18 filtered a_n4688_n10155# 0.04034f
+C19 filtered a_2416_n10155# 0.03293f
+C20 a_n2912_n10155# a_n3504_n10155# 0.15377f
+C21 a_n4096_n10155# a_n4688_n10155# 0.15377f
+C22 a_640_n10155# a_48_n10155# 0.15377f
+C23 a_936_9723# a_1528_9723# 0.15377f
+C24 a_n2616_9723# a_n2024_9723# 0.15377f
+C25 filtered a_2712_9723# 0.10755f
+C26 a_640_n10155# filtered 0.03135f
+C27 a_n4392_9723# original 0.15196f
+C28 a_3304_9723# a_3896_9723# 0.15377f
+C29 filtered a_n2912_n10155# 0.04063f
+C30 a_n3800_9723# a_n3208_9723# 0.15377f
+C31 a_n1136_n10155# filtered 0.03993f
+C32 a_640_n10155# a_1232_n10155# 0.15377f
+C33 filtered a_n1432_9723# 0.08798f
+C34 a_n2320_n10155# a_n1728_n10155# 0.15377f
+C35 filtered a_n3504_n10155# 0.04034f
+C36 a_n4096_n10155# a_n3504_n10155# 0.15377f
+C37 filtered a_4192_n10155# 0.03135f
+C38 filtered a_48_n10155# 0.04218f
+C39 a_3008_n10155# a_2416_n10155# 0.15377f
+C40 a_2120_9723# a_2712_9723# 0.15377f
+C41 a_n2024_9723# a_n1432_9723# 0.15377f
+C42 a_n4096_n10155# filtered 0.04034f
+C43 a_344_9723# filtered 0.08645f
+C44 a_1824_n10155# a_2416_n10155# 0.15377f
+C45 a_n2616_9723# a_n3208_9723# 0.15377f
+C46 a_1232_n10155# filtered 0.03135f
+C47 filtered a_n2024_9723# 0.09277f
+C48 a_3304_9723# a_2712_9723# 0.15377f
+C49 filtered a_n4392_9723# 0.05035f
+C50 filtered a_2120_9723# 0.10482f
+C51 a_3008_n10155# filtered 0.03135f
+C52 a_3600_n10155# a_4192_n10155# 0.15377f
+C53 filtered a_1528_9723# 0.09677f
+C54 a_n544_n10155# a_n1136_n10155# 0.15377f
+C55 a_n1136_n10155# a_n1728_n10155# 0.15377f
+C56 a_n2912_n10155# a_n2320_n10155# 0.15377f
+C57 a_3600_n10155# filtered 0.03135f
+C58 a_3304_9723# filtered 0.09925f
+C59 filtered a_1824_n10155# 0.03135f
+C60 a_n544_n10155# a_48_n10155# 0.15377f
+C61 a_n248_9723# a_n840_9723# 0.15377f
+C62 filtered vss 0.68348p
+C63 original vss 0.49297f
+C64 a_4192_n10155# vss 1.05381f
+C65 a_3896_9723# vss 0.77914f
+C66 a_3600_n10155# vss 0.88005f
+C67 a_3304_9723# vss 0.78021f
+C68 a_3008_n10155# vss 0.87637f
+C69 a_2712_9723# vss 0.78666f
+C70 a_2416_n10155# vss 0.87875f
+C71 a_2120_9723# vss 0.77098f
+C72 a_1824_n10155# vss 0.87616f
+C73 a_1528_9723# vss 0.77376f
+C74 a_1232_n10155# vss 0.87757f
+C75 a_936_9723# vss 0.7694f
+C76 a_640_n10155# vss 0.88226f
+C77 a_344_9723# vss 0.76107f
+C78 a_48_n10155# vss 0.86024f
+C79 a_n248_9723# vss 0.66236f
+C80 a_n544_n10155# vss 0.88626f
+C81 a_n840_9723# vss 0.75712f
+C82 a_n1136_n10155# vss 0.78849f
+C83 a_n1432_9723# vss 0.7657f
+C84 a_n1728_n10155# vss 0.76396f
+C85 a_n2024_9723# vss 0.77095f
+C86 a_n2320_n10155# vss 0.75701f
+C87 a_n2616_9723# vss 0.77571f
+C88 a_n2912_n10155# vss 0.75661f
+C89 a_n3208_9723# vss 0.77841f
+C90 a_n3504_n10155# vss 0.75623f
+C91 a_n3800_9723# vss 0.77511f
+C92 a_n4096_n10155# vss 0.75494f
+C93 a_n4392_9723# vss 0.77018f
+C94 a_n4688_n10155# vss 0.90241f
+.ends
+

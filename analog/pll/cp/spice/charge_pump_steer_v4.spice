@@ -11,11 +11,11 @@
 *   3. External vbp port cleanly biases the servo OTA via Xsb_p/Xsb_n (5 uA -> 2.5 uA tail), keeping
 *      all 8 ports functional and LVS-clean with zero extra load on ibias.
 .subckt pll_cp_steer_v4 up dn out vbn vbp ibias vdd vss
-+ params: wn=20 wp=112 lmirror=1 wsn=8 wsp=24 up_wn=2 up_wp=8 up_ln=0.88 dn_wn=4 dn_wp=8 pnf=16 nnf=4
++ params: wn=20 wp=112 lmirror=1 wsn=8 wsp=24 up_wn=4.0 up_wp=12.0 up_ln=0.30 dn_wn=4 dn_wp=8 pnf=16 nnf=4
 + win=24 lin=1 wl=96 ll=1 ntail=2 cdum_w=12.08 csrv_w=10.0 csrv_l=14.0
-* --- Pulse drivers ---
-Xupn up_b up vss vss serdes_nfet w={up_wn} l={up_ln}
-Xupp up_b up vdd vdd serdes_pfet w={up_wp} nf=4
+* --- Pulse drivers (v4.1 skew-aligned UP inverter for 24 um Xps switch) ---
+Xupn up_b up vss vss serdes_nfet w={up_wn} l={up_ln} nf=2
+Xupp up_b up vdd vdd serdes_pfet w={up_wp} nf=6
 Xdn1 dn dn_b vdd vss serdes_cmos_inv wn={dn_wn} wp={dn_wp}
 Xdn2 dn_b dn_on vdd vss serdes_cmos_inv wn={dn_wn} wp={dn_wp}
 

@@ -5,7 +5,7 @@
 - **Directory**: [`sst/`](sst/) (`spice/`, `tb/`, `layout/variants/v4_pdk/`)
 - **Design Doc**: [docs/design/tx_sst_v4.md](../../docs/design/tx_sst_v4.md)
 - **Architecture**: Static CMOS 16:4 serializer + 4-phase stagger retimers + 28-slice (23 Main + 5 Post-1 FFE) N-over-N **Source-Series-Terminated (SST)** line driver powered by a compact `1.8 V → 0.44 V` sub-regulator (`sst_vdrv_ldo_pdk`).
-- **Signoff**: `231.50 × 146.98 µm = 34,025.9 µm²`, 5/5 cells Magic full-rule `DRC = 0`, Netgen `LVS = MATCH`, `pad_p/n = 46.5 / 42.9 fF`, **22/22 RCX** post-layout corners PASS across `C2_loss6` (`4 Gb/s`).
+- **Verification** covers standalone driver ZQ/S11 and full TX waveforms with CPEX or RCX. The full TX benches drive ideal four-phase clocks and select RLC16 or C2 by case. [Current verification boundaries](../../docs/status/current.md)
 
 ## 2. Legacy CML Reference Subdirectories
 

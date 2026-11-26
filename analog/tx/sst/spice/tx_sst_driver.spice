@@ -164,17 +164,39 @@ X0 din_p din_n en pad_p pad_n vdrv vdd vss sst_bank_4x wpu={wpu} wpd={wpd} lres=
 X1 din_p din_n en pad_p pad_n vdrv vdd vss sst_bank_4x wpu={wpu} wpd={wpd} lres={lres}
 .ends sst_bank_8x
 
+* Local LVT-PMOS adapter (keeps tx_sst_driver.spice self-contained without extra include)
+.subckt sst_pfet_lvt d g s b params: w=4 l=0.35 nf=1
+Xmos d g s b sky130_fd_pr__pfet_01v8_lvt w={w} l={l} nf={nf}
++ ad={floor((nf+1)/2)*(w/nf)*0.29}
++ as={floor((nf+2)/2)*(w/nf)*0.29}
++ pd={2*floor((nf+1)/2)*(w/nf+0.29)}
++ ps={2*floor((nf+2)/2)*(w/nf+0.29)}
+.ends sst_pfet_lvt
+
 * --- Compact On-Chip V_drv Sub-Regulator (1.8 V -> ~0.44 V, all-transistor SKY130) ---
-* PMOS-input 5T OTA + wide min-L LVT NMOS source-follower pass transistor + stacked MIM bypass (~15 pF).
+* High-Z 2-stage NMOS-input unity-gain vbg buffer (0 nA DC load on unbuffered bias_v2.vbg!)
+* + PMOS-input 5T OTA + wide min-L LVT NMOS source-follower pass transistor + stacked MIM bypass (~15 pF).
 * Wide pass device (W=240u, L=0.15u) keeps vgate <= 1.05 V even at 6 mA, SS/FS 1.65 V 85 C (>0.6 V headroom!).
-* Reference divider from vbg (1.20 V) using matched res_high_po_1p41 (ratio-insensitive to R corner).
+* Reference divider from buffered vbg_buf using matched res_high_po_1p41 (ratio-insensitive to R corner).
 .subckt sst_vdrv_ldo vbg vdrv vdd vss params: ltop=63.0 lbot=37.0
-* Matched high-poly voltage divider: vref = vbg * Rbot / (Rtop + Rbot) ~ 0.446 V from 1.20 V
-Xrtop vbg  vref vss sky130_fd_pr__res_high_po_1p41 l={ltop}
-Xrbot vref vss  vss sky130_fd_pr__res_high_po_1p41 l={lbot}
 * Self-bias current reference (~60 uA) using wide PMOS diode + high_po resistor (low Vsg overhead)
 Xbp_ref vbp vbp vdd vdd serdes_pfet w=20 l=0.35 nf=4
 Xrbias  vbp vss vss sky130_fd_pr__res_high_po_1p41 l=80.0
+* High-Z 2-stage unity-gain vbg buffer (pure MOSFET gate on vbg -> 0 nA DC load, <1.5 mV offset, >80 deg PM)
+Xb_pmir vbn_b   vbp     vdd    vdd serdes_pfet  w=5  l=0.35 nf=1
+Xb_nref vbn_b   vbn_b   vss    vss serdes_nfet  w=4  l=0.50 nf=2
+Xb_tail tail_b  vbn_b   vss    vss serdes_nfet  w=8  l=0.50 nf=4
+Xbn_fb  nd_b    vbg_buf tail_b vss serdes_nfet  w=16 l=1.00 nf=4
+Xbn_ref vg_b    vbg     tail_b vss serdes_nfet  w=16 l=1.00 nf=4
+Xbp1    nd_b    nd_b    vdd    vdd sst_pfet_lvt w=16 l=1.00 nf=4
+Xbp2    vg_b    nd_b    vdd    vdd sst_pfet_lvt w=16 l=1.00 nf=4
+Xbo_p   vbg_buf vg_b    vdd    vdd sst_pfet_lvt w=24 l=0.70 nf=4
+Xcm_b1  vg_b    cm_mid  sky130_fd_pr__cap_mim_m3_1 w=10.0 l=10.0
+Xcm_b2  cm_mid  vg_b    sky130_fd_pr__cap_mim_m3_2 w=10.0 l=10.0
+Xrz_b   cm_mid  vbg_buf vss sky130_fd_pr__res_high_po_1p41 l=15.0
+* Matched high-poly voltage divider driven by buffered vbg_buf: vref = vbg_buf * Rbot / (Rtop + Rbot) ~ 0.446 V
+Xrtop vbg_buf vref vss sky130_fd_pr__res_high_po_1p41 l={ltop}
+Xrbot vref    vss  vss sky130_fd_pr__res_high_po_1p41 l={lbot}
 * 5T PMOS-input OTA (tail ~120 uA, wide devices for high output swing up to Vdd - 0.2 V)
 Xtail tail vbp vdd vdd serdes_pfet w=40 l=0.35 nf=8
 Xref nd    vref tail vdd serdes_pfet w=48 l=0.35 nf=8
@@ -187,7 +209,7 @@ Xcg2 vss vgate sky130_fd_pr__cap_mim_m3_2 w=17.0 l=17.0
 * Wide LVT NMOS source-follower pass device (low Vgs -> huge 1.65V headroom, Rout_ol ~ 15 ohm)
 Xpass vdd vgate vdrv vss serdes_nfet_lvt w=240 l=0.15 nf=32
 * Small bleed resistor (~50 uA) ensures Mpass stays active even when TX disabled
-Xrbleed vdrv vss vss sky130_fd_pr__res_high_po_1p41 l=38.0
+Xrbleed vdrv vss vss sky130_fd_pr__res_high_po_1p41 l=5.0
 * On-chip bypass cap on vdrv (~15.3 pF = 6x 24.8x24.8 um stacked MIM1+MIM2)
 Xcd0a vdrv vss sky130_fd_pr__cap_mim_m3_1 w=24.8 l=24.8
 Xcd0b vss vdrv sky130_fd_pr__cap_mim_m3_2 w=24.8 l=24.8

@@ -33,8 +33,8 @@ def rot90(src: Cell) -> Cell:
     return dst
 
 
-def build_bias_top_v2(root: Path, bmod) -> dict:
-    """Build and verify integrated serdes_bias_top_v2_pdk using helpers from build_bias_v2_pdk."""
+def build_bias_top_v2(root: Path, bmod, export_ptat: bool = False) -> dict:
+    """Build and verify integrated serdes_bias_top_v2_pdk (or _ptat_pdk with North vgi/vg ports)."""
     grid = bmod.grid
     clean_primitive = bmod.clean_primitive
     sd_xs_of = bmod.sd_xs_of
@@ -49,7 +49,7 @@ def build_bias_top_v2(root: Path, bmod) -> dict:
     verify_cell = bmod.verify_cell
     MIM1, MIM2, PNP_MAG = bmod.MIM1, bmod.MIM2, bmod.PNP_MAG
 
-    cell = "serdes_bias_top_v2_pdk"
+    cell = "serdes_bias_top_v2_ptat_pdk" if export_ptat else "serdes_bias_top_v2_pdk"
     w = root / cell
     w.mkdir(parents=True, exist_ok=True)
 
@@ -1464,35 +1464,40 @@ def build_bias_top_v2(root: Path, bmod) -> dict:
     c.wire("metal3", [(x_na_m3, min(na_ys)), (x_na_m3, max(na_ys))], 0.34)
     c.wire("metal3", [(x_nbn_m3, min(nbn_ys)), (x_nbn_m3, max(nbn_ys))], 0.34)
     c.wire("metal3", [(x_otada_m3, min(otada_ys)), (x_otada_m3, max(otada_ys))], 0.36)
-    c.wire("metal3", [(x_vgi_m3, min(vgi_ys)), (x_vgi_m3, max(vgi_ys))], 0.44)
+    c.wire("metal3", [(x_vgi_m3, min(vgi_ys)), (x_vgi_m3, gy2 if export_ptat else max(vgi_ys))], 0.44)
     c.wire("metal3", [(x_s_m3, min(s_ys)), (x_s_m3, max(s_ys))], 0.36)
     c.wire("metal3", [(x_ipin_m3, min(pc_m3_ys["ip_in"])), (x_ipin_m3, max(pc_m3_ys["ip_in"]))], 0.36)
     c.wire("metal3", [(x_ipb_m3, min(pc_m3_ys["ip_b"])), (x_ipb_m3, max(pc_m3_ys["ip_b"]))], 0.36)
     for nm, x_tr in (("nb", x_nb_m3), ("ta", x_ta_m3), ("tb", x_tb_m3), ("nb2", x_nb2_m3), ("vg", x_vg_m3)):
         ys = xm_net_ys[nm]
-        c.wire("metal3", [(x_tr, min(ys)), (x_tr, max(ys))], 0.34)
+        y_hi = gy2 if (export_ptat and nm == "vg") else max(ys)
+        c.wire("metal3", [(x_tr, min(ys)), (x_tr, y_hi)], 0.34)
     c.wire("metal3", [(x_vbg_m3, min(xm_net_ys["vbg"])), (x_vbg_m3, gy2)], 0.44)
 
     # =========================================================================
-    # ALL 20 TOP-LEVEL PERIMETER PORTS
+    # ALL TOP-LEVEL PERIMETER PORTS (20 base, or 22 with North vgi/vg for A3 PTAT)
     # =========================================================================
     c.port("vbg", "metal3", x_vbg_m3, gy2)
     c.port("vcm", "metal3", x_vcm_m3, gy1)
     c.port("pref", "metal3", x_po_out, gy1)
-    for nm, y_ex in left_port_ys.items():
-        c.port(nm, "metal2", gx1, y_ex)
+    for nm in ("icml", "ictle", "icp", "i_ldo0", "i_ldo1"):
+        c.port(nm, "metal2", gx1, left_port_ys[nm])
+    if export_ptat:
+        c.port("vgi", "metal3", x_vgi_m3, gy2)
+        c.port("vg", "metal3", x_vg_m3, gy2)
     for gnm in ("g4", "g3", "g2", "g1", "g0"):
         c.port(gnm, "metal2", *g_port_pts[gnm])
-    for i in range(4):
+    for i in (3, 2, 1, 0):
         c.port(f"c{i}", "metal3", c_m3_in[i], gy1)
     c.port("en_pbuf", "metal3", x_en_port, gy1)
     c.port("vdd", "metal3", x_vdd_m, gy2)
     c.port("vss", "metal1", grid((gx1 + gx2) / 2.0), gy1)
     c.write(w / f"{cell}.mag")
 
+    ptat_ports = " vgi vg" if export_ptat else ""
     ref_lines = [
-        "* BIAS v2 serdes_bias_top_v2_pdk (Integrated 4-band macro, internal vgi, 100% real transistors)",
-        f".subckt {cell} vbg vcm pref icml ictle icp i_ldo0 i_ldo1 g4 g3 g2 g1 g0 c3 c2 c1 c0 en_pbuf vdd vss",
+        f"* BIAS v2 {cell} (Integrated 4-band macro, {'exported North vgi/vg for VCO PTAT' if export_ptat else 'internal vgi'}, 100% real transistors)",
+        f".subckt {cell} vbg vcm pref icml ictle icp i_ldo0 i_ldo1{ptat_ports} g4 g3 g2 g1 g0 c3 c2 c1 c0 en_pbuf vdd vss",
         "Xm1 ta vg vdd vdd sky130_fd_pr__pfet_01v8_lvt w=56 l=12",
         "Xm2 tb vg vdd vdd sky130_fd_pr__pfet_01v8_lvt w=56 l=12",
         "Xm3 vbg vg vdd vdd sky130_fd_pr__pfet_01v8_lvt w=56 l=12",

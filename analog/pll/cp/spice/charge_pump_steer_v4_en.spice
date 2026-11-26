@@ -1,0 +1,26 @@
+* Wide-swing active-matching current-steering charge pump with real `cp_en` gating (v4_en).
+* Tapeout-clean companion to analog/pll/cp/spice/charge_pump_steer_v4.spice.
+* 100% real SKY130A devices (no B-sources, no ideal R/C).
+*
+* Addition over `pll_cp_steer_v4`:
+*   - Active-high `cp_en` port gates BOTH `up` and `dn` through matched 2-input static CMOS
+*     NAND2+INV stages (`up_g = up & cp_en`, `dn_g = dn & cp_en`), keeping UP/DN path skew
+*     identical when enabled (`cp_en = VDD`).
+*   - When `cp_en = 0` (during PLL power-up precharge or coarse band search), `up_g = dn_g = 0`:
+*     both output switches Xps/Xns stay OFF and 100% of current steers cleanly into `dum`,
+*     leaving `out` high-Z with zero contention against `pre_en`.
+* Dependencies: sky130_primitives.spice, sky130_pfet_lvt.spice, cmos_logic.spice, charge_pump_steer_v4.spice.
+
+.subckt pll_cp_steer_v4_en up dn cp_en out vbn vbp ibias vdd vss
++ params: wn=20 wp=112 lmirror=1 wsn=8 wsp=24 up_wn=4.0 up_wp=12.0 up_ln=0.30 dn_wn=4 dn_wp=8 pnf=16 nnf=4
++ win=24 lin=1 wl=96 ll=1 ntail=2 cdum_w=12.08 csrv_w=10.0 csrv_l=14.0
+Xup_n up cp_en up_gb vdd vss serdes_cmos_nand2 wn=4 wp=4
+Xup_i up_gb up_g vdd vss serdes_cmos_inv wn=4 wp=8
+Xdn_n dn cp_en dn_gb vdd vss serdes_cmos_nand2 wn=4 wp=4
+Xdn_i dn_gb dn_g vdd vss serdes_cmos_inv wn=4 wp=8
+Xcp up_g dn_g out vbn vbp ibias vdd vss pll_cp_steer_v4
++ wn={wn} wp={wp} lmirror={lmirror} wsn={wsn} wsp={wsp}
++ up_wn={up_wn} up_wp={up_wp} up_ln={up_ln} dn_wn={dn_wn} dn_wp={dn_wp}
++ pnf={pnf} nnf={nnf} win={win} lin={lin} wl={wl} ll={ll} ntail={ntail}
++ cdum_w={cdum_w} csrv_w={csrv_w} csrv_l={csrv_l}
+.ends pll_cp_steer_v4_en

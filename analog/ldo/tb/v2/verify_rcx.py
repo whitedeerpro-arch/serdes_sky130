@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Post-layout RCX (100 mOhm threshold, 6,290 resistors) verification for LDO v2.
+"""Replay the historical voltage-input LDO v2 RCX check with an archived probe netlist.
 
 Measures on serdes_pll_supply_hv18_v2_probe_pdk_rcx.spice (1 ngspice worker):
   1. Real 10 mA quiet power-rail IR drop across ALL 29 extracted Xpass source sub-nodes
@@ -10,7 +10,9 @@ Measures on serdes_pll_supply_hv18_v2_probe_pdk_rcx.spice (1 ngspice worker):
 """
 from __future__ import annotations
 
+import argparse
 from datetime import datetime, timezone
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -25,7 +27,6 @@ spec = importlib.util.spec_from_file_location("ldo_v2_tb", V2_TB_PATH)
 v2tb = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(v2tb)
 
-RCX_SPICE = ROOT / "analog/ldo/layout/variants/v2_pdk/serdes_pll_supply_hv18_v2_probe_pdk_rcx.spice"
 SUBCKT = "serdes_pll_supply_hv18_v2_probe_pdk"
 OUT_ROOT = ROOT / "results/analog/ldo/v2"
 
@@ -42,13 +43,21 @@ def find_xpass_quiet_nodes(rcx_path: Path) -> list[str]:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--rcx", required=True, type=Path, help=f"Archived {SUBCKT} netlist")
+    rcx_spice = parser.parse_args().rcx.resolve()
+    if not rcx_spice.is_file():
+        parser.error(f"RCX netlist is unavailable: {rcx_spice}")
+    if not re.search(rf"^\.subckt\s+{SUBCKT}(?:\s|$)", rcx_spice.read_text(), re.M | re.I):
+        parser.error(f"RCX netlist must define {SUBCKT}: {rcx_spice}")
+
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     work = OUT_ROOT / f"{ts}_pex_rcx"
     work.mkdir(parents=True)
 
-    spice_files = v2tb.reg.BIAS + [RCX_SPICE]
-    q_nodes = find_xpass_quiet_nodes(RCX_SPICE)
-    print(f"RCX netlist: {RCX_SPICE.name} | {len(q_nodes)} Xpass quiet sub-nodes", flush=True)
+    spice_files = v2tb.reg.BIAS + [rcx_spice]
+    q_nodes = find_xpass_quiet_nodes(rcx_spice)
+    print(f"RCX netlist: {rcx_spice.name} | {len(q_nodes)} Xpass quiet sub-nodes", flush=True)
 
     # Calibrated trim codes (from locked v2 CPEX, verified monotonic)
     profiles = [
@@ -60,7 +69,8 @@ def main() -> None:
     ]
 
     out: dict = {
-        "rcx_macro": str(RCX_SPICE.relative_to(ROOT)),
+        "rcx_macro": str(rcx_spice.relative_to(ROOT) if rcx_spice.is_relative_to(ROOT) else rcx_spice),
+        "rcx_sha256": hashlib.sha256(rcx_spice.read_bytes()).hexdigest(),
         "subckt": SUBCKT,
         "xpass_quiet_subnodes": len(q_nodes),
         "ir_drop": [],

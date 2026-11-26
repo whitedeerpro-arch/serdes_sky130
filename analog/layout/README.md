@@ -10,7 +10,7 @@
 
 原始包在 `/opt/serdes_archive/layout_imports/20261113T080522Z/gemini_original.tar.gz`，删除前核对了归档和合并目标。[导入清单](import.json)记录实际去向；原始逐文件清单在同目录 `merge.json`。图中的外观、命名或原说明里的“生产级”不代表验收通过。
 
-该清单记录的是导入时位置。已失效的完整 PLL 草案随后移入[退役归档](../../results/catalog/retired_pll_top_20261117.json)，初始审计按哈希读取原件；VCO 目录的重复 CML buffer 种子改为指向 `common/cml_buffer/layout/` 的相对链接。现行候选仍从模块 README 进入，不从历史来件恢复覆盖。
+该清单记录的是导入时位置。完整 PLL 草案及后续退役的叶单元从各批[退役清单](../../results/catalog/README.md#退役索引)按大小和哈希读取，复现时无需回填源码目录。VCO 目录的重复 CML buffer 种子指向 `common/cml_buffer/layout/`。七份 BIAS/HV18 旧参考副本与设计侧的规范 SPICE 逐字节一致，原件和规范路径见[参考清单](../../results/catalog/retired_gemini_duplicate_references_20261124.json)。现行候选从模块 README 进入。
 
 2026-11-17 已撤下七个旧 suite/打包生成器和六张总览，包括 `ldo_bias_tx_master_overview`。它们使用通用 MOS 绘图、硬编码面积和未验证的器件/等价声明；运行整包还会重新生成已否决的 PLL 顶层。原件与 SHA256 见[退役清单](../../results/catalog/retired_layout_suites_20261117.json)，判断依据和恢复方法见[审查记录](../../docs/history/legacy_layout_retirement_20261117.md)。旧模块 README 的原文也已归档，不再作为现行物理指标。
 

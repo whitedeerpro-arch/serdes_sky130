@@ -1,0 +1,104 @@
+* Chip-Level Integrated 2 GHz PLL v4.2 (Zero Legacy CML /8!):
+*   r6 VCO + BIAS v2 (PTAT 28/66) + HV18 LDO v2_cur + CP v4.1 + Fused LF k4
+*   + 4x Matched r5 CML->CMOS + Hardened SAFF-TSPC /8 (`v2_cand`, I-TOP-03)
+*
+* Matches the exact physical macro topology of `serdes_4g_top_pdk`:
+*   - Removes legacy `pll_clock_frontend_r6q` (legacy CML /8 prescaler + legacy
+*     CML->CMOS receiver + 3x frontend dummy loads), saving ~10-13 mW host power.
+*   - Loads all four VCO extraction buffers (`b0..b3`) identically with four
+*     `serdes_cml_to_cmos_r5` receivers generating the monotonic 45-deg 8-phase
+*     2 GHz CMOS clock spine `c0..c7` (0, 45, 90, 135, 180, 225, 270, 315 deg).
+*   - Closes the 250 MHz PLL feedback loop directly from `(c1, c5)` through the
+*     hardened `pll_saff_reclock_prescaler8_2g` (`v2_cand`) -> `q8p` (`fb0`) -> PFD.
+*
+* Isolated candidate netlist; does NOT modify v1.0 adopted netlists.
+*
+* Dependencies loaded by testbench:
+*   sky130_primitives.spice, sky130_pfet_lvt.spice, cmos_logic.spice,
+*   cml_delay_resistive.spice, cml_buffer.spice, cml_to_cmos_r5.spice,
+*   cap_bank_5b.spice, vco_delay_r6.spice, vco_ring4_r6.spice,
+*   tspc_reclock_prescaler8_2g_v2_cand.spice,
+*   pfd_sc.spice (+ sky130_fd_sc_hd.spice), charge_pump_steer_v4.spice,
+*   passive_rc_precharge.spice, passive_rc_pdk_k4.spice,
+*   ldo_passives.spice, pll_bias_filter_r4.spice,
+*   ldo_v2_passives.spice, ldo_hv18_core_v2.spice, pll_supply_hv18_v2_cur.spice,
+*   bias_v2.spice, vco_ptat_bias.spice.
+
+.subckt pll_clock_frontend_r6_saff ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias_q fb0 vdd vdd_q vss
++ c0 c1 c2 c3 c4 c5 c6 c7 q2p q2n q4p q4n q8p q8n params: cclk=12f cdiv=15f cfb=25f
+* Quiet-rail 2 GHz 4-stage differential ring VCO + 4 identical CML extraction buffers
+Xvco  v0p v0n v1p v1n v2p v2n v3p v3n ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias_q vdd_q vss pll_vco_ring4_r6
+Xbuf0 v0p v0n b0p b0n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf1 v1p v1n b1p b1n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf2 v2p v2n b2p b2n vbias_q vdd_q vss serdes_cml_buffer
+Xbuf3 v3p v3n b3p b3n vbias_q vdd_q vss serdes_cml_buffer
+
+* 4x Identical r5 CML->CMOS Receivers (monotonic 45-deg 8-phase CMOS spine, matching serdes_4g_top_pdk!)
+*   c0=0, c1=45, c2=90, c3=135, c4=180, c5=225, c6=270, c7=315 deg
+Xc2c0 b0p b0n c0 c4 vbias vdd vss serdes_cml_to_cmos_r5
+Xc2c1 b1n b1p c1 c5 vbias vdd vss serdes_cml_to_cmos_r5
+Xc2c2 b2p b2n c2 c6 vbias vdd vss serdes_cml_to_cmos_r5
+Xc2c3 b3n b3p c3 c7 vbias vdd vss serdes_cml_to_cmos_r5
+
+* Top-level M5 clock spine parasitic allowance per phase (0 when downstream TX/RX loads attached)
+Cc0 c0 vss {cclk}
+Cc1 c1 vss {cclk}
+Cc2 c2 vss {cclk}
+Cc3 c3 vss {cclk}
+Cc4 c4 vss {cclk}
+Cc5 c5 vss {cclk}
+Cc6 c6 vss {cclk}
+Cc7 c7 vss {cclk}
+
+* Hardened SAFF-TSPC Reclocked 2 GHz /8 Prescaler (`v2_cand`, driven by c1/c5 as in serdes_4g_top_pdk)
+Xdiv8 c1 c5 q2p q2n q4p q4n q8p q8n vdd vss pll_saff_reclock_prescaler8_2g
+Cq2p q2p vss {cdiv}
+Cq2n q2n vss {cdiv}
+Cq4p q4p vss {cdiv}
+Cq4n q4n vss {cdiv}
+Cq8p q8p vss {cfb}
+Cq8n q8n vss {cfb}
+Vfb_wire q8p fb0 0
+.ends pll_clock_frontend_r6_saff
+
+.subckt pll_core_r6k4q_v4p2_saff ref rst_b vbn vbp ibias vbias vbias_vco cfg0 cfg1 cfg2 cfg3 cfg4 pre_ref pre_en ctrl z up dn fb0
++ c0 c1 c2 c3 c4 c5 c6 c7 q2p q2n q4p q4n q8p q8n vdd vdd_q vss params: cclk=12f cdiv=15f cfb=25f
+Xtail  vbias_vco vbias_q vss serdes_pll_bias_lowpass_slow_r4
+Xclock ctrl cfg0 cfg1 cfg2 cfg3 cfg4 vbias vbias_q fb0 vdd vdd_q vss
++ c0 c1 c2 c3 c4 c5 c6 c7 q2p q2n q4p q4n q8p q8n pll_clock_frontend_r6_saff cclk={cclk} cdiv={cdiv} cfb={cfb}
+Xpfd   ref fb0 rst_b up dn vdd vss pll_pfd_sc_dly
+Xcp    up dn cpo vbn vbp ibias vdd_q vss pll_cp_steer_v4
+Xlf    cpo ctrl z pre_ref pre_en vdd_q vss pll_loop_filter_k4
+.ends pll_core_r6k4q_v4p2_saff
+
+.subckt pll_top_r6_v4p2_saff vin vdd vdd_q vss ref rst_b en_ldo
++ cfg0 cfg1 cfg2 cfg3 cfg4
++ g4 g3 g2 g1 g0
++ t0 t1 t2 t3 t4 t5
++ pre_ref pre_en
++ vbg ctrl z up dn fb0
++ c0 c1 c2 c3 c4 c5 c6 c7 q2p q2n q4p q4n q8p q8n
++ params: nf_const=28 nf_ptat=66 cclk=12f cdiv=15f cfb=25f
+
+* --- Integrated BIAS v2 + 28/66 PTAT VCO bias macro ---
+Xbias vbg vcm pref icml icml_vco ictle icp i_ldo0 i_ldo1
++ g4 g3 g2 g1 g0 vss vss vss vss vss vdd vss
++ serdes_bias_top_v2_ptat nf_const={nf_const} nf_ptat={nf_ptat}
+
+* Local bias diodes & clean terminations for unused shared-chip bias branches
+Xdcml_host icml     vss serdes_bias_cml_v2
+Xdcml_vco  icml_vco vss serdes_bias_cml_v2
+Xdcp       icp vbp  vdd_q vss serdes_bias_cp_v2
+Xdctle     ictle    vss serdes_bias_ctle_v2
+Cvcm       vcm      vss 5p
+Cpref      pref     vss 100f
+Rpref_b    pref     vss 100Meg
+
+* --- Current-mode HV18 LDO v2_cur (3.0-3.6 V -> 1.8 V quiet rail) ---
+Xldo vin vdd vdd_q vbg i_ldo0 en_ldo t0 t1 t2 t3 t4 t5 vss serdes_pll_supply_hv18_v2_cur
+
+* --- Chip-Level r6 PLL v4.2 Core (CP v4.1 + 4x r5 C2C + Hardened SAFF-TSPC /8) ---
+Xcore ref rst_b icp vbp i_ldo1 icml icml_vco cfg0 cfg1 cfg2 cfg3 cfg4 pre_ref pre_en ctrl z up dn fb0
++ c0 c1 c2 c3 c4 c5 c6 c7 q2p q2n q4p q4n q8p q8n vdd vdd_q vss
++ pll_core_r6k4q_v4p2_saff cclk={cclk} cdiv={cdiv} cfb={cfb}
+.ends pll_top_r6_v4p2_saff

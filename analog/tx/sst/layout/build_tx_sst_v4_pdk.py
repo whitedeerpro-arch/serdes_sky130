@@ -41,7 +41,11 @@ VARIANT_DIR = HERE / "variants" / "v4_pdk"
 RESULTS_DIR = slc.REPO / "results" / "layout" / "tx_sst_v4"
 
 
-def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
+def build_sst_top(
+    cache: PdkCache,
+    add_ports: bool = True,
+    compact_a1: bool = False,
+) -> tuple[Cell, dict]:
     """Assemble integrated 16:1 Zero-CML TX v4 SST Top (`serdes_tx_sst_top_pdk`).
 
     Floorplan (~231.5 x 147.0 um = ~34,030 um^2, AR ~ 1.57, flush West edge x = 0.000):
@@ -57,8 +61,9 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     """
     c = Cell()
 
-    dx_ser = 4.200  # Exact flush West alignment: Xser xmin (-4.200) + 4.200 = 0.000 == Xldo xmin!
-    drv_cell, drv_meta = sdm.build_sst_driver(cache, add_ports=False)
+    drv_cell, drv_meta = sdm.build_sst_driver(cache, add_ports=False, compact_a1=compact_a1)
+    x_west_port = grid(drv_meta["ports"]["vbg"][1])  # -25.000 (v4.4 A1 buffer West edge) or 0.000 (v4.3)
+    dx_ser = grid(x_west_port - (-4.200))            # Flush West alignment with Xldo West edge!
     north_pin_xs = {k: grid(x - dx_ser) for k, (x, _) in drv_meta["south_ports"].items()}
     ser_cell, ser_meta = ssm.build_sst_serializer16(cache, add_ports=False, north_pin_xs=north_pin_xs)
 
@@ -72,9 +77,8 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
     for nm, (px, py_drv) in drv_meta["south_ports"].items():
         c.wire("metal4", [(px, y_ser_north), (px, py_drv)], 0.520)
 
-    # 2. Export `phi0..phi270` West on M3 inside the 5.8 um corridor to flush West perimeter (x=0.000)
+    # 2. Export `phi0..phi270` West on M3 inside the 5.8 um corridor to flush West perimeter (x=x_west_port)
     #    1.30 um track pitch (0.86 um edge-to-edge gap) minimizes lateral inter-phase coupling!
-    x_west_port = 0.000
     phi_ports: dict[str, tuple[float, float]] = {}
     for idx, nm in enumerate(("phi0", "phi90", "phi180", "phi270")):
         yp = grid(-5.250 + idx * 1.300)
@@ -83,17 +87,15 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
         c.rect("metal3", x_west_port, grid(yp - 0.220), grid(xp + 0.220), grid(yp + 0.220))
         phi_ports[nm] = (x_west_port, yp)
 
-    # 3. Join `vss` (`Xser` West M5 & M3 spine -> flush West M5 x=0.90 [0.0..1.8] + M2 -> `Xldo` y_vss_m5=1.50!)
-    #    Crosses cleanly above/below `phi0..phi270` M3; export `vss` on M5 at West perimeter (0.000, 1.50)!
-    x_vss_w = grid(dx_ser + ser_meta["x_vss_w"])       # 0.600
-    x_vss_m5_w = grid(dx_ser + ser_meta["x_vss_m5_w"]) # 0.900 (width 1.80 -> exact flush West edge 0.000!)
+    # 3. Join `vss` (`Xser` West M5 & M3 spine -> flush West M5 + M2 -> `Xldo` y_vss_m5=1.50!)
+    x_vss_w = grid(dx_ser + ser_meta["x_vss_w"])
+    x_vss_m5_w = grid(dx_ser + ser_meta["x_vss_m5_w"])
     y_ser_vss_hi = grid(dy_ser + ser_meta["vss_ys"][-1])
     y_ldo_vss_m5 = drv_meta["y_vss_m5_bot"]            # 1.500 on M5
     c.wire("metal2", [(x_vss_w, y_ser_vss_hi), (x_vss_w, 1.200)], 1.200)
     c.wire("metal5", [(x_vss_m5_w, y_ser_vss_hi), (x_vss_m5_w, y_ldo_vss_m5)], 1.800)
-    # Widen bottom M5 VSS trunk across Xldo & Xdrv (y=[-4.8..2.7] = 7.5 um, >=2.0 um clear of Xser top VDD M5)
-    # so TOP_RCX Vdrv ref lift stays < 2.5 mV across full 232.5 um span!
-    c.rect("metal5", 0.000, -4.800, 222.400, 2.700)
+    # Widen bottom M5 VSS trunk across Xldo & Xdrv (y=[-4.8..2.7] = 7.5 um)
+    c.rect("metal5", x_west_port, -4.800, 222.400, 2.700)
 
     # 4. Join `vdd` (`Xser` East M5 spine -> straight North into `Xdrv` East M5 spine x=229.4! + M2 backup)
     x_ser_vdd = grid(dx_ser + ser_meta["x_vdd_e"])
@@ -111,7 +113,13 @@ def build_sst_top(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
         (x_drv_vdd_e, y_vdd_jog),
         (x_drv_vdd_e, y_drv_r1_vdd),
     ], 1.400)
-    c.wire("metal5", [(x_ser_vdd_m5, y_ser_vdd_hi), (x_drv_vdd_m5_e, -0.500)], 2.000)
+    c.rect(
+        "metal5",
+        grid(min(x_ser_vdd_m5, x_drv_vdd_m5_e) - 1.000),
+        grid(y_ser_vdd_hi - 0.900),
+        grid(max(x_ser_vdd_m5, x_drv_vdd_m5_e) + 1.000),
+        grid(0.500),
+    )
 
     # 5. `vbg` already exits cleanly at (0.000, 89.200); extend `vdd`/`vdrv` North flush to y_north_port!
     _, x_vbg, y_vbg = drv_meta["ports"]["vbg"]
@@ -267,6 +275,7 @@ def _count_floating_poly(mag_path: Path) -> int:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--variant", default="v4p4_pdk", help="Target isolated variant subdir under variants/ (default: v4p4_pdk, leaves v4_pdk untouched)")
     ap.add_argument("--only", nargs="*", help="Optional subset of cells to build/verify")
     ap.add_argument("--skip-png", action="store_true", help="Skip PNG rendering")
     ap.add_argument(
@@ -276,20 +285,23 @@ def main() -> None:
     )
     args = ap.parse_args()
 
-    VARIANT_DIR.mkdir(parents=True, exist_ok=True)
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    cache = PdkCache(RESULTS_DIR / "_pdk_cache")
+    variant_dir = HERE / "variants" / args.variant
+    results_dir = slc.REPO / "results" / "layout" / f"tx_sst_{args.variant}"
+    variant_dir.mkdir(parents=True, exist_ok=True)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    cache = PdkCache(results_dir / "_pdk_cache")
 
+    compact_a1 = (args.variant == "v4p5_pdk")
     specs = [
         ("sst_slice_unit_pdk", "sst_slice_unit", lambda: sab.build_sst_slice_unit(cache, add_ports=True),
          ["pad_p", "pad_n", "vdrv", "din_p", "din_n", "vdd", "vss"], 120),
-        ("sst_vdrv_ldo_pdk", "sst_vdrv_ldo", lambda: sab.build_sst_vdrv_ldo(cache, add_ports=True),
+        ("sst_vdrv_ldo_pdk", "sst_vdrv_ldo", lambda: sab.build_sst_vdrv_ldo(cache, add_ports=True, compact_a1=compact_a1),
          ["vdrv", "vbg", "vdd", "vss"], 150),
-        ("serdes_tx_sst_driver_pdk", "serdes_tx_sst_driver", lambda: sdm.build_sst_driver(cache, add_ports=True),
+        ("serdes_tx_sst_driver_pdk", "serdes_tx_sst_driver", lambda: sdm.build_sst_driver(cache, add_ports=True, compact_a1=compact_a1),
          ["pad_p", "pad_n", "vdrv", "vdd", "vss", "phi0"], 240),
         ("serdes_tx_sst_serializer16_pdk", "serdes_tx_sst_serializer16", lambda: ssm.build_sst_serializer16(cache, add_ports=True),
          ["phi0", "d0", "db0", "clk500_out", "clk250_out", "vdd", "vss"], 240),
-        ("serdes_tx_sst_top_pdk", "serdes_tx_sst_top", lambda: build_sst_top(cache, add_ports=True),
+        ("serdes_tx_sst_top_pdk", "serdes_tx_sst_top", lambda: build_sst_top(cache, add_ports=True, compact_a1=compact_a1),
          ["pad_p", "pad_n", "vdrv", "vdd", "vss", "phi0", "phi90", "phi180", "phi270", "clk500_out", "clk250_out"], 360),
     ]
 
@@ -300,9 +312,9 @@ def main() -> None:
     summary: dict[str, dict] = {}
 
     for cell_name, src_subckt, builder, rc_watch_nets, timeout_s in specs:
-        mag_path = VARIANT_DIR / f"{cell_name}.mag"
-        ref_path = VARIANT_DIR / f"{cell_name}_ref.spice"
-        review_dir = RESULTS_DIR / "review" / cell_name
+        mag_path = variant_dir / f"{cell_name}.mag"
+        ref_path = variant_dir / f"{cell_name}_ref.spice"
+        review_dir = results_dir / "review" / cell_name
         if args.refresh_artifacts:
             print(f"\n=== Refreshing {cell_name} from {review_dir} ===", flush=True)
             expected_ports = slc.exported_ports(ref_path, cell_name)
@@ -334,7 +346,7 @@ def main() -> None:
         key_caps = {k: pcaps[k] for k in rc_watch_nets if k in pcaps}
         rc_nets = _parse_rcx_net_resistors(review_dir / f"{cell_name}_rcx.spice", rc_watch_nets)
 
-        png_path = VARIANT_DIR / f"{cell_name}.png"
+        png_path = variant_dir / f"{cell_name}.png"
         if not args.skip_png:
             slc.render_png_plot_mag(mag_path, png_path)
 
@@ -393,8 +405,8 @@ def main() -> None:
             )
 
     if not args.only:
-        out_json = VARIANT_DIR / "summary.json"
-        out_json.write_text(json.dumps({"variant": "v4_pdk", "pdk": "sky130A", "cells": summary}, indent=2) + "\n")
+        out_json = variant_dir / "summary.json"
+        out_json.write_text(json.dumps({"variant": args.variant, "pdk": "sky130A", "cells": summary}, indent=2) + "\n")
         print(f"\nWrote {out_json}", flush=True)
 
 

@@ -1,0 +1,138 @@
+{
+  "cell": "pll_saff_reclock_prescaler8_2g_v2_cand_pdk",
+  "inputs": {
+    "pll_saff_reclock_prescaler8_2g_v2_cand_pdk.mag": {
+      "source": "results/layout/pll_divider/saff_v2_harden_20261123/build_r2/pll_saff_reclock_prescaler8_2g_v2_cand_pdk/pll_saff_reclock_prescaler8_2g_v2_cand_pdk.mag",
+      "sha256": "dc9be656d791d8a1f024b20fd9e52602df823106da85f84a92bfab55f599f1ff"
+    },
+    "reference.spice": {
+      "source": "results/layout/pll_divider/saff_v2_harden_20261123/build_r2/pll_saff_reclock_prescaler8_2g_v2_cand_pdk/pll_saff_reclock_prescaler8_2g_v2_cand_pdk_ref.spice",
+      "sha256": "879a606f6b0d61c582602bcf4e8031dce25e96277ace0c15c1299bb72a76bcd5"
+    }
+  },
+  "checker_exit": 0,
+  "physical_passed": true,
+  "ports": [
+    "clkp",
+    "clkn",
+    "q2p",
+    "q2n",
+    "q4p",
+    "q4n",
+    "q8p",
+    "q8n",
+    "vdd",
+    "vss"
+  ],
+  "bbox_um": [
+    -1.1,
+    -8.76,
+    99.69,
+    8.76
+  ],
+  "size_um": [
+    100.78999999999999,
+    17.52
+  ],
+  "magic": "/home/host/.local/opt/magic-8.3.685-capfix/bin/magic-capfix",
+  "extraction": "C + device AD/AS/PD/PS; wire R not extracted",
+  "parasitics": {
+    "extracted_mos_segments": 328,
+    "ad_um2": 120.729,
+    "as_um2": 158.852,
+    "pd_um": 934.71,
+    "ps_um": 1266.9,
+    "pex_cap_elements": 829,
+    "total_substrate_cap_fF": 236.978,
+    "total_coupling_cap_fF": 148.361,
+    "port_caps_fF": {
+      "clkp": {
+        "to_substrate_fF": 0.514,
+        "coupling_sum_fF": 1.041,
+        "total_node_fF": 1.555
+      },
+      "clkn": {
+        "to_substrate_fF": 0.511,
+        "coupling_sum_fF": 1.04,
+        "total_node_fF": 1.551
+      },
+      "q2p": {
+        "to_substrate_fF": 0.873,
+        "coupling_sum_fF": 2.206,
+        "total_node_fF": 3.079
+      },
+      "q2n": {
+        "to_substrate_fF": 0.844,
+        "coupling_sum_fF": 2.211,
+        "total_node_fF": 3.055
+      },
+      "q4p": {
+        "to_substrate_fF": 0.878,
+        "coupling_sum_fF": 2.194,
+        "total_node_fF": 3.072
+      },
+      "q4n": {
+        "to_substrate_fF": 0.863,
+        "coupling_sum_fF": 2.195,
+        "total_node_fF": 3.057
+      },
+      "q8p": {
+        "to_substrate_fF": 1.133,
+        "coupling_sum_fF": 1.952,
+        "total_node_fF": 3.086
+      },
+      "q8n": {
+        "to_substrate_fF": 0.978,
+        "coupling_sum_fF": 2.028,
+        "total_node_fF": 3.005
+      },
+      "vdd": {
+        "to_substrate_fF": 165.82,
+        "coupling_sum_fF": 77.26,
+        "total_node_fF": 243.08
+      }
+    },
+    "top_coupling_fF": [
+      {
+        "node_a": "a_2192_n1492#",
+        "node_b": "vdd",
+        "cap_fF": 12.088
+      },
+      {
+        "node_a": "a_7830_872#",
+        "node_b": "vdd",
+        "cap_fF": 7.116
+      },
+      {
+        "node_a": "a_3022_n580#",
+        "node_b": "vdd",
+        "cap_fF": 4.179
+      },
+      {
+        "node_a": "a_3022_486#",
+        "node_b": "vdd",
+        "cap_fF": 4.17
+      },
+      {
+        "node_a": "a_8905_n580#",
+        "node_b": "vdd",
+        "cap_fF": 2.898
+      },
+      {
+        "node_a": "a_360_208#",
+        "node_b": "vdd",
+        "cap_fF": 2.821
+      },
+      {
+        "node_a": "a_8905_486#",
+        "node_b": "vdd",
+        "cap_fF": 2.149
+      },
+      {
+        "node_a": "a_2192_n1492#",
+        "node_b": "a_360_208#",
+        "cap_fF": 2.062
+      }
+    ]
+  }
+}

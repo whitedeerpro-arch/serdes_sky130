@@ -1,0 +1,24 @@
+* PFD Phase-Error Window Detector — 100% Real SKY130A PDK Devices (Zero Ideal Caps)
+* Tapeout-clean companion to analog/pll/pfd/spice/phase_window.spice.
+* Replaces the 6 ideal 10 fF capacitors with real `sky130_fd_pr__cap_mim_m3_1` unit cells
+* (w=2.2 um, l=2.2 um -> ~10.0 fF nominal including fringe capacitance).
+* Dependencies:
+*   sky130_primitives.spice, cmos_logic.spice, cmos_dff_reset.spice.
+
+.subckt pll_phase_window_pdk up dn clr_b late vdd vss params: cw=2.2 cl=2.2
+Xx  up  dn   e    vdd vss serdes_cmos_xor
+Xd1 e   d1   vdd  vss serdes_cmos_inv
+Xd2 d1  d2   vdd  vss serdes_cmos_inv
+Xd3 d2  d3   vdd  vss serdes_cmos_inv
+Xd4 d3  d4   vdd  vss serdes_cmos_inv
+Xd5 d4  d5   vdd  vss serdes_cmos_inv
+Xd6 d5  dly  vdd  vss serdes_cmos_inv
+Xc1 d1  vss sky130_fd_pr__cap_mim_m3_1 w={cw} l={cl}
+Xc2 d2  vss sky130_fd_pr__cap_mim_m3_1 w={cw} l={cl}
+Xc3 d3  vss sky130_fd_pr__cap_mim_m3_1 w={cw} l={cl}
+Xc4 d4  vss sky130_fd_pr__cap_mim_m3_1 w={cw} l={cl}
+Xc5 d5  vss sky130_fd_pr__cap_mim_m3_1 w={cw} l={cl}
+Xc6 dly vss sky130_fd_pr__cap_mim_m3_1 w={cw} l={cl}
+Xo  e   late dset vdd vss serdes_cmos_or2
+Xff dset dly clr_b late vdd vss serdes_cmos_dff_reset
+.ends pll_phase_window_pdk

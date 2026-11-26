@@ -21,6 +21,7 @@ from sst_layout_common import (  # noqa: E402
     N_STD,
     N_LVT,
     P_STD,
+    P_LVT,
     R_2P85,
     R_1P41,
     W_M1,
@@ -542,7 +543,11 @@ def _place_res_1p41(c: Cell, cache: PdkCache, length: float, dx: float, dy: floa
     return {"R1": p1, "R2": p2, "B": pb}
 
 
-def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
+def build_sst_vdrv_ldo(
+    cache: PdkCache,
+    add_ports: bool = True,
+    compact_a1: bool = False,
+) -> tuple[Cell, dict]:
     """Build Compact 1.8 V -> 0.44 V V_drv LDO (`sst_vdrv_ldo_pdk`).
 
     Floorplan (~86.50 x 88.62 um = ~7,666 um^2, flush West edge xmin = 0.000):
@@ -591,17 +596,21 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     r_bias = _place_res_1p41(c, cache, 80.0, dx=10.0, dy=45.0)    # y in [2.1..87.9]
     r_top  = _place_res_1p41(c, cache, 63.0, dx=18.0, dy=45.0)    # y in [10.6..79.4]
     r_bot  = _place_res_1p41(c, cache, 37.0, dx=26.0, dy=38.0)    # y in [16.6..59.4]
-    r_bld  = _place_res_1p41(c, cache, 38.0, dx=34.0, dy=45.0)    # y in [23.1..66.9]
+    r_bld  = _place_res_1p41(c, cache, 5.0,  dx=34.0, dy=70.5)    # v4.3.1: l=5.0 (310 uA bleed -> light-load PM 58.3 deg), y in [66.1..74.9]
 
     # Continuous M2 VSS spine along bottom edge (exact flush [0.000 .. x_east_edge])
     c.rect("metal2", 0.000, grid(y_vss_bot - 0.400), x_east_edge, grid(y_vss_bot + 0.400))
-    for rinfo in (r_bias, r_top, r_bot, r_bld):
+    for rinfo in (r_bias, r_top, r_bot):
         bx, by = rinfo["B"]
         xb_drop = grid(bx - 1.200)
         c.wire("metal2", [(bx, by), (xb_drop, by), (xb_drop, y_vss_bot)], 0.360)
-    for rinfo in (r_bias, r_bot, r_bld):
+    for rinfo in (r_bias, r_bot):
         x2, y2 = rinfo["R2"]
         c.wire("metal2", [(x2, y2), (x2, y_vss_bot)], 0.360)
+    # Tie short r_bld (above y_vbp=63.5) directly East on M2 into central M3 VSS trunk at x_vss_mid=63.0!
+    for pt_vss in (r_bld["B"], r_bld["R2"]):
+        c.wire("metal2", [pt_vss, (x_vss_mid, pt_vss[1])], 0.360)
+        via2_clean(c, x_vss_mid, pt_vss[1])
 
     # Divider vref node: r_top.R2 (18.0, 11.595) -> r_bot.R1 (26.0, 58.405) on M2
     x_vref_bus = 22.000
@@ -814,25 +823,319 @@ def build_sst_vdrv_ldo(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, d
     via4_array(c, 81.500, y_vdrv_t, nx=2, ny=1)
     c.rect("metal5", 79.000, grid(y_vdrv_t - 1.200), x_east_edge, grid(y_vdrv_t + 1.200))
 
-    # Export `vbg` cleanly West at flush x = 0.000, y = 89.200 (above r_bias top 87.90)
-    y_vbg = 89.200
-    c.rect("metal2", 0.000, grid(y_vbg - 0.220), grid(r_top["R1"][0] + 0.220), grid(y_vbg + 0.220))
-    c.wire("metal2", [(r_top["R1"][0], y_vbg), r_top["R1"]], 0.440)
+    # ------------------------------------------------------------------
+    # Zone 0 (A1 Fix): West Bay (x in [-25.0..0.0]) — High-Z 2-Stage Unity-Gain vbg Buffer
+    #   Pure MOSFET gate input on vbg (0 nA DC load on bias_v2.vbg, <2.3 mV offset, PM > 73 deg!)
+    # ------------------------------------------------------------------
+    x_west_edge = -25.000
+    x_vss_b = -23.400
+    x_vdd_b = -1.600
+    y_vbg = 32.800
+
+    # Extend South VSS rails (M2/M3/M5) cleanly West to x_west_edge
+    c.rect("metal2", x_west_edge, grid(y_vss_bot - 0.400), 0.200, grid(y_vss_bot + 0.400))
+    c.rect("metal3", x_west_edge, grid(yb3 - 0.500), 0.200, grid(yb3 + 0.500))
+    c.rect("metal5", x_west_edge, grid(y_vss_m5 - 1.200), 0.200, grid(y_vss_m5 + 1.200))
+    c.wire("metal3", [(x_vss_b, y_vss_bot), (x_vss_b, yb3)], 0.800)
+    via2_clean(c, x_vss_b, y_vss_bot)
+    via34_pillar(c, -14.000, y_vss_m5, big=False)
+
+    # Route VDD from x_vdd_b=-1.6 East along open top M2 band y=89.80 into x_vdd_e=85.0!
+    via2_clean(c, x_vdd_b, 89.800)
+    c.wire("metal2", [(x_vdd_b, 89.800), (x_vdd_e, 89.800), (x_vdd_e, y_vdd_t)], 0.600)
+    via2_clean(c, x_vdd_e, 89.800)
+
+    if compact_a1:
+        # Compact Zone 0 (v4.5):
+        #   - Rows B1..B4 tightly packed directly under Row B5 at 9.0-11.0 um pitch:
+        #       Row B1 (y=28.0): Xb_nref (4/0.5 nf=2) + Xb_tail (8/0.5 nf=4)
+        #       Row B2 (y=42.2): Xbn_ref (WEST, G=vbg) + Xbn_fb (EAST, G=vbg_buf)
+        #       Row B3 (y=51.2): Xbp2 (WEST, D=vg_b)   + Xbp1 (EAST, D/G=nd_b)
+        #       Row B4 (y=61.0): Xbo_p (WEST, G=vg_b collinear at x=-16.38) + Xb_pmir (EAST)
+        #       Row B5 (y=73.5/76.8): Xcm_b1/2 (south-exit M4 `a`, direct-East M3 `b3`) + Xrz_b (x=-10.435)
+        #   - High-Z Miller node `vg_b` runs DEAD STRAIGHT vertically on M4 at x=-16.380 (25.2 um total!)
+        #     with 3.47 um + 1-layer separation from `vbg_buf` M3 (x=-12.915) and 7.02 um from `x_vss_b` (-23.40)!
+        #   - `vbg_buf` drops cleanly down the empty inter-column corridor (x=-12.915, zero Xbp1/nd_b overlap!),
+        #     rises outside mim_cd M3 at x=-3.50 to y=78.405, and runs straight East (M1 hop under r_bias) to r_top.R1!
+        c.wire("metal3", [(x_vss_b, yb3), (x_vss_b, 66.800)], 0.800)
+        c.wire("metal3", [(x_vdd_b, 49.400), (x_vdd_b, 89.800)], 0.800)
+
+        # Row B1 (y = 28.0): Xb_nref (w=2.0 l=0.50 nf=2) & Xb_tail (w=2.0 l=0.50 nf=4)
+        p_bnref = cache.device(N_STD, dict(w=2.0, l=0.50, nf=2, m=1, conn_gates=1, guard=1))
+        p_btail = cache.device(N_STD, dict(w=2.0, l=0.50, nf=4, m=1, conn_gates=1, guard=1))
+        u_bnref = _strap_mos_guard1(c, p_bnref, "ndiffc", -17.500, 28.000, tie_sb=True)
+        u_btail = _strap_mos_guard1(c, p_btail, "ndiffc",  -9.500, 28.000, tie_sb=True)
+        c.wire("metal2", [(x_vss_b, u_bnref["S"][1]), (u_btail["S_right"][0], u_bnref["S"][1])], 0.440)
+        via2_clean(c, x_vss_b, u_bnref["S"][1])
+
+        y_vbnb = 30.800
+        x_vbnb_m3 = -3.400
+        c.wire("metal2", [u_bnref["G"], (u_bnref["G"][0], y_vbnb), (x_vbnb_m3, y_vbnb)], 0.340)
+        c.wire("metal2", [u_bnref["D_right"], (u_bnref["D_right"][0], y_vbnb)], 0.340)
+        c.wire("metal2", [u_btail["G"], (u_btail["G"][0], y_vbnb)], 0.340)
+
+        # Row B2 (y = 42.2): NMOS Diff Pair Xbn_ref (WEST, -17.5) & Xbn_fb (EAST, -8.5)
+        p_bndp = cache.device(N_STD, dict(w=4.0, l=1.00, nf=4, m=1, conn_gates=1, guard=1))
+        u_bnref_dp = _strap_mos_guard1(c, p_bndp, "ndiffc", -17.500, 42.200, tie_sb=False)
+        u_bnfb     = _strap_mos_guard1(c, p_bndp, "ndiffc",  -8.500, 42.200, tie_sb=False)
+        c.wire("metal2", [(x_vss_b, u_bnref_dp["B"][1]), (u_bnfb["B"][0], u_bnref_dp["B"][1])], 0.360)
+        via2_clean(c, x_vss_b, u_bnref_dp["B"][1])
+        y_tailb = u_bnref_dp["S"][1]
+        c.wire("metal2", [(u_bnref_dp["S"][0], y_tailb), (u_bnfb["S_right"][0], y_tailb)], 0.380)
+        xtb = u_btail["D_right"][0]
+        via2_clean(c, xtb, u_btail["D_right"][1])
+        via2_clean(c, xtb, y_tailb)
+        c.wire("metal3", [(xtb, u_btail["D_right"][1]), (xtb, y_tailb)], 0.400)
+
+        # Row B3 (y = 51.2): LVT-PMOS Mirror Xbp2 (WEST, -17.5) & Xbp1 (EAST, -8.5)
+        p_bpl = cache.device(P_LVT, dict(w=4.0, l=1.00, nf=4, m=1, conn_gates=1, guard=1))
+        u_bp2 = _strap_mos_guard1(c, p_bpl, "pdiffc", -17.500, 51.200, tie_sb=True)
+        u_bp1 = _strap_mos_guard1(c, p_bpl, "pdiffc",  -8.500, 51.200, tie_sb=True)
+        c.wire("metal2", [(u_bp2["S"][0], u_bp2["S"][1]), (x_vdd_b, u_bp2["S"][1])], 0.440)
+        via2_clean(c, x_vdd_b, u_bp2["S"][1])
+
+        # nd_b: u_bnfb.D_right (-5.92) -> u_bp1.D_right (-5.92) + u_bp1.G + u_bp2.G on M2 at y_ndb=55.2
+        y_ndb = 55.200
+        c.wire("metal2", [u_bp2["G"], (u_bp2["G"][0], y_ndb), (u_bp1["D_right"][0], y_ndb), u_bp1["D_right"]], 0.300)
+        c.wire("metal2", [u_bp1["G"], (u_bp1["G"][0], y_ndb)], 0.300)
+        x_ndb_m3 = u_bnfb["D_right"][0]
+        via2_clean(c, x_ndb_m3, u_bnfb["D_right"][1])
+        via2_clean(c, x_ndb_m3, u_bp1["D_right"][1])
+        c.wire("metal3", [(x_ndb_m3, u_bnfb["D_right"][1]), (x_ndb_m3, u_bp1["D_right"][1])], 0.360)
+
+        # Row B4 (y = 61.0): Output LVT-PMOS Xbo_p (WEST, dx=-14.895 -> G at x=-16.380!) + Xb_pmir (EAST, -5.5)
+        p_bop = cache.device(P_LVT, dict(w=6.0, l=0.70, nf=4, m=1, conn_gates=1, guard=1))
+        p_bpm = cache.device(P_STD, dict(w=5.0, l=0.35, nf=1, m=1, conn_gates=1, guard=1))
+        u_bop = _strap_mos_guard1(c, p_bop, "pdiffc", -14.895, 61.000, tie_sb=True)
+        u_bpm = _strap_mos_guard1(c, p_bpm, "pdiffc",  -5.500, 61.000, tie_sb=True)
+        c.wire("metal2", [(u_bop["S"][0], u_bop["S"][1]), (x_vdd_b, u_bop["S"][1])], 0.440)
+        via2_clean(c, x_vdd_b, u_bop["S"][1])
+        # Xb_pmir.G (63.98) -> y_vbp (63.500) -> join main vbp M2 bus straight East!
+        c.wire("metal2", [u_bpm["G"], (u_bpm["G"][0], y_vbp), (r_bias["R1"][0], y_vbp)], 0.340)
+        # Xb_pmir.D -> vbn_b (y_vbnb=30.800) via vertical M3 at x_vbnb_m3=-3.400
+        c.wire("metal2", [u_bpm["D_right"], (x_vbnb_m3, u_bpm["D_right"][1])], 0.340)
+        via2_clean(c, x_vbnb_m3, u_bpm["D_right"][1])
+        via2_clean(c, x_vbnb_m3, y_vbnb)
+        c.wire("metal3", [(x_vbnb_m3, y_vbnb), (x_vbnb_m3, u_bpm["D_right"][1])], 0.400)
+
+        # Row B5: Stacked 10x10 MIM1+MIM2 (dx_c=-15.5, dy_c=74.6 -> >=1.94 um capm.11 clearance to M3!)
+        # with South-exit M4 `a` (`vg_b` at x=-16.380) and direct-East M3 `b3` (`cm_mid`) + Xrz_b at (-10.435, 76.8)
+        dx_mim, dy_mim = -15.500, 74.600
+        lower_cb = cache.device(slc.MIM1, dict(w=10.0, l=10.0, nx=1, ny=1, stack=1, doports=1))
+        upper_cb = cache.device(slc.MIM2, dict(w=10.0, l=10.0, nx=1, ny=1, doports=1))
+        lp_cb = sorted(lower_cb.rects["mimcapcontact"], key=lambda r: (r[0], r[1]))
+        up_cb = sorted([(-r[2], r[1], -r[0], r[3]) for r in upper_cb.rects["mimcap2contact"]], key=lambda r: (r[0], r[1]))
+        adx_cb = grid((lp_cb[0][0] + lp_cb[0][2] - up_cb[0][0] - up_cb[0][2]) / 2.0)
+        ady_cb = grid((lp_cb[0][1] + lp_cb[0][3] - up_cb[0][1] - up_cb[0][3]) / 2.0)
+        a_cb_pt  = [(grid(x + dx_mim), grid(y + dy_mim)) for _, x, y, nm in lower_cb.labels if nm.startswith("C1")][0]
+        b3_cb_pt = [(grid(x + dx_mim), grid(y + dy_mim)) for _, x, y, nm in lower_cb.labels if nm.startswith("C2")][0]
+        b5_cb_pt = [(grid(-x + adx_cb + dx_mim), grid(y + ady_cb + dy_mim)) for _, x, y, nm in upper_cb.labels if nm.startswith("C1")][0]
+        lower_cb.labels.clear()
+        upper_cb.labels.clear()
+        c.include(lower_cb, dx=dx_mim, dy=dy_mim)
+        c.include(upper_cb, dx=grid(dx_mim + adx_cb), dy=grid(dy_mim + ady_cb), mirror_x=True)
+        lx1, ly1, lx2, ly2 = lower_cb.bbox()
+        ux1, uy1, ux2, uy2 = upper_cb.bbox()
+        bx2_cb = grid(max(lx2 + dx_mim, -ux1 + adx_cb + dx_mim))
+        by1_cb = grid(min(ly1 + dy_mim, uy1 + ady_cb + dy_mim))
+        by2_cb = grid(max(ly2 + dy_mim, uy2 + ady_cb + dy_mim))
+        xg_cb = grid(bx2_cb + 3.600)
+        yb5_cb = grid(by2_cb + 2.600)
+        c.wire("metal3", [b3_cb_pt, (xg_cb, dy_mim)], 1.000)
+        c.wire("metal5", [b5_cb_pt, (b5_cb_pt[0], yb5_cb), (xg_cb, yb5_cb), (xg_cb, dy_mim)], 1.600)
+        via34_pillar(c, xg_cb, dy_mim, big=False)
+
+        r_zb = _place_res_1p41(c, cache, 15.0, dx=u_bnfb["G"][0], dy=76.800)
+        # Tie r_zb.B (y=66.655) straight West to x_vss_b (-23.4)
+        c.wire("metal2", [r_zb["B"], (x_vss_b, r_zb["B"][1])], 0.300)
+        via2_clean(c, x_vss_b, r_zb["B"][1])
+        # cm_mid: pillar (xg_cb, dy_mim) -> r_zb.R1 (-10.435, 86.205) on M2
+        via2_clean(c, xg_cb, dy_mim)
+        c.wire("metal2", [(xg_cb, dy_mim), (xg_cb, r_zb["R1"][1]), r_zb["R1"]], 0.320)
+
+        # vg_b: dead-straight vertical M4 spine at x_vgb = a_cb_pt[0] (-16.380) connecting:
+        #   Xbn_ref.D (43.40) -> Xbp2.D (52.40) -> Xbo_p.G (64.48) -> mim_cb M4 South edge (68.60)! (25.2 um!)
+        x_vgb = a_cb_pt[0]  # -16.380
+        for y_tap in (u_bnref_dp["D"][1], u_bp2["D"][1], u_bop["G"][1]):
+            via2_clean(c, x_vgb, y_tap)
+            via3_pad(c, x_vgb, y_tap)
+        c.wire("metal4", [(x_vgb, u_bnref_dp["D"][1]), (x_vgb, grid(by1_cb + 0.500))], 0.340)
+
+        # vbg_buf: dead-straight vertical M3 down the empty inter-column gap x_fb_m3 = u_bop.D_right (-12.915)
+        #   joining Xbn_fb.G -> Xbo_p.D_right -> r_zb.R2 (zero overlap with Xbp1/nd_b!),
+        #   then rises outside mim_cd M3 at x=-3.50 up to y=78.405 and runs straight East (minimal M2-under-M3!)
+        #   with a 4.0 um M1 bridge under r_bias M2 (x=10.0) directly into r_top.R1 (18.0, 78.405)!
+        x_fb_m3 = u_bop["D_right"][0]  # -12.915 (strictly in empty gap between Xbp2=-14.085 and Xbp1=-11.915!)
+        y_vbgbuf_r2 = r_zb["R2"][1]    # 67.395
+        for y_tap in (u_bnfb["G"][1], u_bop["D_right"][1], y_vbgbuf_r2):
+            via2_clean(c, x_fb_m3, y_tap)
+        c.wire("metal3", [(x_fb_m3, u_bnfb["G"][1]), (x_fb_m3, y_vbgbuf_r2)], 0.300)
+        c.wire("metal2", [(x_fb_m3, u_bnfb["G"][1]), u_bnfb["G"]], 0.240)
+        x_vbgbuf_rise = -2.800
+        y_rtop_r1 = r_top["R1"][1]     # 78.405
+        c.wire("metal2", [
+            (x_fb_m3, y_vbgbuf_r2),
+            r_zb["R2"],
+            (x_vbgbuf_rise, y_vbgbuf_r2),
+            (x_vbgbuf_rise, y_rtop_r1),
+            (8.000, y_rtop_r1),
+        ], 0.200)
+        c.via1(8.000, y_rtop_r1)
+        c.wire("metal1", [(8.000, y_rtop_r1), (12.000, y_rtop_r1)], 0.200)
+        c.via1(12.000, y_rtop_r1)
+        c.wire("metal2", [(12.000, y_rtop_r1), r_top["R1"]], 0.200)
+
+        # Export `vbg` input cleanly West at flush (-25.000, 32.800, w=0.400 -> exact -25.200 bbox!) -> Xbn_ref.G!
+        x_vbg_m3 = -21.800
+        c.wire("metal2", [(x_west_edge, y_vbg), (x_vbg_m3, y_vbg)], 0.400)
+        via2_clean(c, x_vbg_m3, y_vbg)
+        via2_clean(c, x_vbg_m3, u_bnref_dp["G"][1])
+        c.wire("metal3", [(x_vbg_m3, y_vbg), (x_vbg_m3, u_bnref_dp["G"][1])], 0.320)
+        c.wire("metal2", [(x_vbg_m3, u_bnref_dp["G"][1]), u_bnref_dp["G"]], 0.300)
+    else:
+        # Legacy Zone 0 (v4.4, preserved bit-for-bit when compact_a1=False):
+        #   Row B1 (y=12.0): Xb_nref (4/0.5 nf=2) + Xb_tail (8/0.5 nf=4)
+        #   Row B2 (y=26.5): Xbn_fb (16/1.0 nf=4) + Xbn_ref (16/1.0 nf=4)
+        #   Row B3 (y=42.5): Xbp1 (16/1.0 nf=4 LVT) + Xbp2 (16/1.0 nf=4 LVT)
+        #   Row B4 (y=57.5): Xbo_p (24/0.7 nf=4 LVT) + Xb_pmir (5/0.35 nf=1)
+        #   Row B5 (y=76.5): Xcm_b1/Xcm_b2 (10x10 stacked MIM1+MIM2, pillar_side="east") + under-MIM Xrz_b (l=15.0)
+        c.wire("metal3", [(x_vss_b, yb3), (x_vss_b, 67.000)], 0.800)
+        c.wire("metal3", [(x_vdd_b, 38.000), (x_vdd_b, 89.800)], 0.800)
+
+        # Row B1 (y = 12.0): Xb_nref (w=2.0 l=0.50 nf=2) & Xb_tail (w=2.0 l=0.50 nf=4)
+        p_bnref = cache.device(N_STD, dict(w=2.0, l=0.50, nf=2, m=1, conn_gates=1, guard=1))
+        p_btail = cache.device(N_STD, dict(w=2.0, l=0.50, nf=4, m=1, conn_gates=1, guard=1))
+        u_bnref = _strap_mos_guard1(c, p_bnref, "ndiffc", -18.500, 12.000, tie_sb=True)
+        u_btail = _strap_mos_guard1(c, p_btail, "ndiffc", -9.500, 12.000, tie_sb=True)
+        # Tie both sources/bodies to x_vss_b
+        c.wire("metal2", [(x_vss_b, u_bnref["S"][1]), (u_btail["S_right"][0], u_bnref["S"][1])], 0.440)
+        via2_clean(c, x_vss_b, u_bnref["S"][1])
+        # vbn_b: u_bnref.D_right (clears G!) + u_bnref.G + u_btail.G -> vertical M3 up to Xb_pmir.D!
+        y_vbnb = 15.600
+        c.wire("metal2", [u_bnref["G"], (u_bnref["G"][0], y_vbnb), (u_btail["G"][0], y_vbnb), u_btail["G"]], 0.340)
+        c.wire("metal2", [u_bnref["D_right"], (u_bnref["D_right"][0], y_vbnb)], 0.340)
+
+        # Row B2 (y = 26.5): NMOS Diff Pair Xbn_fb (16/1.0 nf=4) & Xbn_ref (16/1.0 nf=4)
+        p_bndp = cache.device(N_STD, dict(w=4.0, l=1.00, nf=4, m=1, conn_gates=1, guard=1))
+        u_bnfb     = _strap_mos_guard1(c, p_bndp, "ndiffc", -18.000, 26.500, tie_sb=False)
+        u_bnref_dp = _strap_mos_guard1(c, p_bndp, "ndiffc", -8.000, 26.500, tie_sb=False)
+        # Bodies -> x_vss_b on M2
+        c.wire("metal2", [(x_vss_b, u_bnfb["B"][1]), (u_bnref_dp["B"][0], u_bnfb["B"][1])], 0.360)
+        via2_clean(c, x_vss_b, u_bnfb["B"][1])
+        # Shared tail_b: u_bnfb.S <-> u_bnref_dp.S <-> u_btail.D_right on M2 + M3 drop
+        y_tailb = u_bnfb["S"][1]
+        c.wire("metal2", [(u_bnfb["S"][0], y_tailb), (u_bnref_dp["S_right"][0], y_tailb)], 0.400)
+        xtb = u_btail["D_right"][0]
+        via2_clean(c, xtb, u_btail["D_right"][1])
+        via2_clean(c, xtb, y_tailb)
+        c.wire("metal3", [(xtb, u_btail["D_right"][1]), (xtb, y_tailb)], 0.400)
+
+        # Row B3 (y = 42.5): LVT-PMOS Mirror Xbp1 (16/1.0 nf=4) & Xbp2 (16/1.0 nf=4)
+        p_bpl = cache.device(P_LVT, dict(w=4.0, l=1.00, nf=4, m=1, conn_gates=1, guard=1))
+        u_bp1 = _strap_mos_guard1(c, p_bpl, "pdiffc", -18.000, 42.500, tie_sb=True)
+        u_bp2 = _strap_mos_guard1(c, p_bpl, "pdiffc", -8.000, 42.500, tie_sb=True)
+        # Sources/bodies -> x_vdd_b
+        c.wire("metal2", [(u_bp1["S"][0], u_bp1["S"][1]), (x_vdd_b, u_bp1["S"][1])], 0.440)
+        via2_clean(c, x_vdd_b, u_bp1["S"][1])
+
+        # nd_b: u_bnfb.D_right -> u_bp1.D_right + u_bp1.G + u_bp2.G
+        y_ndb = 48.200
+        c.wire("metal2", [u_bp1["G"], (u_bp1["G"][0], y_ndb), (u_bp2["G"][0], y_ndb), u_bp2["G"]], 0.340)
+        c.wire("metal2", [u_bp1["D_right"], (u_bp1["D_right"][0], y_ndb)], 0.340)
+        x_ndb_m3 = u_bnfb["D_right"][0]
+        via2_clean(c, x_ndb_m3, u_bnfb["D_right"][1])
+        via2_clean(c, x_ndb_m3, u_bp1["D_right"][1])
+        c.wire("metal3", [(x_ndb_m3, u_bnfb["D_right"][1]), (x_ndb_m3, u_bp1["D_right"][1])], 0.400)
+
+        # Row B4 (y = 57.5): Output LVT-PMOS Xbo_p (24/0.70 nf=4 -> w_f=6.0) + Xb_pmir (5/0.35 nf=1)
+        p_bop  = cache.device(P_LVT, dict(w=6.0, l=0.70, nf=4, m=1, conn_gates=1, guard=1))
+        p_bpm  = cache.device(P_STD, dict(w=5.0, l=0.35, nf=1, m=1, conn_gates=1, guard=1))
+        u_bop  = _strap_mos_guard1(c, p_bop, "pdiffc", -16.800, 57.500, tie_sb=True)
+        u_bpm  = _strap_mos_guard1(c, p_bpm, "pdiffc", -6.500, 57.500, tie_sb=True)
+        # Sources/bodies -> x_vdd_b
+        c.wire("metal2", [(u_bop["S"][0], u_bop["S"][1]), (x_vdd_b, u_bop["S"][1])], 0.440)
+        via2_clean(c, x_vdd_b, u_bop["S"][1])
+        # Xb_pmir.G -> y_vbp (63.500) -> join main vbp M2 bus straight East!
+        c.wire("metal2", [u_bpm["G"], (u_bpm["G"][0], y_vbp), (r_bias["R1"][0], y_vbp)], 0.340)
+        # Xb_pmir.D -> vbn_b (y_vbnb=15.600) via vertical M3 at x = -3.600 (clear of Xbn_ref/Xbp2 internal M3!)
+        x_vbnb_m3 = -3.600
+        c.wire("metal2", [u_bpm["D_right"], (x_vbnb_m3, u_bpm["D_right"][1])], 0.340)
+        via2_clean(c, x_vbnb_m3, u_bpm["D_right"][1])
+        c.wire("metal2", [(u_btail["G"][0], y_vbnb), (x_vbnb_m3, y_vbnb)], 0.340)
+        via2_clean(c, x_vbnb_m3, y_vbnb)
+        c.wire("metal3", [(x_vbnb_m3, y_vbnb), (x_vbnb_m3, u_bpm["D_right"][1])], 0.400)
+
+        # Row B5 (y = 76.5): Compensation Cap Xcm_b1/Xcm_b2 (10x10 stacked MIM1+MIM2, pillar_side="east"!) + under-MIM Xrz_b (l=15.0)
+        mim_cb = place_stacked_mim(
+            c, cache, side=10.0, cols=1, rows=1,
+            dx_c=-15.500, dy_c=76.500,
+            a_off=1.50, b3_off=1.50, b5_off=2.60,
+            pillar_side="east",
+        )
+        r_zb = _place_res_1p41(c, cache, 15.0, dx=-15.500, dy=76.500)
+        # Tie r_zb.B (y=66.36) straight West to x_vss_b (-23.4) -> ZERO crossing with R2 (y=67.1 going East!)
+        c.wire("metal2", [r_zb["B"], (x_vss_b, r_zb["B"][1])], 0.360)
+        via2_clean(c, x_vss_b, r_zb["B"][1])
+        # cm_mid: mim_cb["b"] (M3/M5 pillar on East, x~-7.0) -> r_zb["R1"] (top pin of r_zb at y=85.9)
+        bx_cb, by_cb = mim_cb["b"]
+        via2_clean(c, bx_cb, by_cb)
+        c.wire("metal2", [(bx_cb, by_cb), (bx_cb, r_zb["R1"][1]), r_zb["R1"]], 0.360)
+
+        # vg_b: u_bnref_dp.D_right -> u_bp2.D_right -> around West of u_bop (x=-20.60, clears D/S/B!) -> u_bop.G -> mim_cb["a"] (M4)
+        x_vgb_m3 = u_bnref_dp["D_right"][0]
+        via2_clean(c, x_vgb_m3, u_bnref_dp["D_right"][1])
+        via2_clean(c, x_vgb_m3, u_bp2["D_right"][1])
+        c.wire("metal3", [(x_vgb_m3, u_bnref_dp["D_right"][1]), (x_vgb_m3, u_bp2["D_right"][1])], 0.400)
+        y_vgb_h = 49.400
+        x_vgb_w = -20.600
+        c.wire("metal2", [
+            (u_bp2["D_right"][0], u_bp2["D_right"][1]),
+            (u_bp2["D_right"][0], y_vgb_h),
+            (x_vgb_w, y_vgb_h),
+            (x_vgb_w, u_bop["G"][1]),
+            u_bop["G"],
+        ], 0.340)
+        ax_cb, ay_cb = mim_cb["a"]
+        via2_clean(c, x_vgb_w, u_bop["G"][1])
+        via3_pad(c, x_vgb_w, u_bop["G"][1])
+        c.wire("metal4", [(x_vgb_w, u_bop["G"][1]), (x_vgb_w, ay_cb), (ax_cb, ay_cb)], 0.500)
+
+        # vbg_buf: u_bop.D_right -> r_zb.R2 (at y=67.1, exits EAST so never touches r_zb.B!)
+        #   -> rises at x=-4.4 to open top M2 band y=88.80 (strictly ABOVE r_bias=87.9!) -> r_top.R1 (18.0, 78.41)!
+        #   -> feedback drops on M4 at x=-22.2 down to u_bnfb.G!
+        y_vbgbuf_r2 = r_zb["R2"][1]  # 67.10
+        x_vbgbuf_e = -4.400
+        c.wire("metal2", [u_bop["D_right"], (u_bop["D_right"][0], y_vbgbuf_r2), r_zb["R2"], (x_vbgbuf_e, y_vbgbuf_r2)], 0.360)
+        c.wire("metal2", [(x_vbgbuf_e, y_vbgbuf_r2), (x_vbgbuf_e, 88.800), (r_top["R1"][0], 88.800), r_top["R1"]], 0.400)
+        # Feedback vbg_buf: run West on M2 at y_vbgbuf_r2 (67.10, passes UNDER vg_b M4 at x=-20.60 & 0.38 um North of r_zb.B!)
+        #   then drop South on M4 at x_fb_b=-22.20 down to u_bnfb.G!
+        x_fb_b = -22.200
+        c.wire("metal2", [(r_zb["R2"][0], y_vbgbuf_r2), (x_fb_b, y_vbgbuf_r2)], 0.360)
+        via2_clean(c, x_fb_b, y_vbgbuf_r2)
+        via3_pad(c, x_fb_b, y_vbgbuf_r2)
+        c.wire("metal4", [(x_fb_b, y_vbgbuf_r2), (x_fb_b, u_bnfb["G"][1])], 0.440)
+        via3_pad(c, x_fb_b, u_bnfb["G"][1])
+        via2_clean(c, x_fb_b, u_bnfb["G"][1])
+        c.wire("metal2", [(x_fb_b, u_bnfb["G"][1]), u_bnfb["G"]], 0.360)
+
+        # Export `vbg` input cleanly West at flush x = x_west_edge (-25.000), y = 32.800 -> pure MOSFET gate Xbn_ref.G!
+        c.wire("metal2", [(x_west_edge, y_vbg), (u_bnref_dp["G"][0], y_vbg), u_bnref_dp["G"]], 0.400)
 
     if add_ports:
         # Exact schematic port order: vbg vdrv vdd vss
-        c.port("vbg",  "metal2", 0.000,       y_vbg)
+        c.port("vbg",  "metal2", x_west_edge, y_vbg)
         c.port("vdrv", "metal5", x_east_port, y_vdrv_t)
         c.port("vdd",  "metal5", x_east_port, y_vdd_t)
         c.port("vss",  "metal5", x_east_port, y_vss_m5)
 
     return c, {
-        "vbg":  (0.000,       y_vbg),
+        "vbg":  (x_west_edge, y_vbg),
         "vdrv": (x_east_port, y_vdrv_t),
         "vdd":  (x_east_port, y_vdd_t),
         "vss":  (x_east_port, y_vss_bot),
         "y_vss_m5": y_vss_m5,
         "x_east_edge": x_east_edge,
+        "x_west_edge": x_west_edge,
     }
 
 

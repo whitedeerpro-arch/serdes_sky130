@@ -58,8 +58,9 @@ from rx_layout_common import (  # noqa: E402
     W_M4,
 )
 
-VARIANT_DIR = HERE / "variants" / "v2_pdk"
-RESULTS_DIR = rlc.REPO / "results" / "layout" / "rx_cmos_v2" / "top"
+BASE_VARIANT_DIR = HERE / "variants" / "v2_pdk"
+VARIANT_DIR = HERE / "variants" / "v2p3_pdk"
+RESULTS_DIR = rlc.REPO / "results" / "layout" / "rx_cmos_v2p3" / "top"
 
 
 def _draw_bias_ctle_diode(c: Cell, cache: PdkCache, cx: float, cy: float) -> dict:
@@ -118,22 +119,34 @@ def _dual_via3_v(c: Cell, x: float, y: float, dy: float = 0.62) -> None:
     c.wire("metal4", [(x, y), (x, y2)], 0.520)
 
 
-def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True) -> tuple[Cell, dict]:
+def _resolve_submacro(variant_dir: Path, filename: str) -> Path:
+    p = variant_dir / filename
+    return p if p.exists() else (BASE_VARIANT_DIR / filename)
+
+
+def build_rx_cmos_top_pdk(
+    cache: PdkCache | None = None,
+    add_ports: bool = True,
+    variant_dir: Path = VARIANT_DIR,
+    results_dir: Path = RESULTS_DIR,
+) -> tuple[Cell, dict]:
     """Assemble full integrated `serdes_rx_cmos_top_pdk` (76 ports) from signed-off PDK sub-macros."""
     if cache is None:
-        cache = PdkCache(RESULTS_DIR / "_pdk_cache")
+        cache = PdkCache(results_dir / "_pdk_cache")
     c = Cell()
 
     # Load all 5 signed-off RX sub-macros (labels stripped so only top-level 76 ports are exported!)
-    pi_cell = _read_unlabeled(VARIANT_DIR / "serdes_rx_cmos_pi_8ph_pdk.mag")
-    term_cell = _read_unlabeled(VARIANT_DIR / "serdes_rx_term_pdk.mag")
-    ctle_cell = _read_unlabeled(VARIANT_DIR / "serdes_rx_ctle_pdk.mag")
-    slicer_cell = _read_unlabeled(VARIANT_DIR / "serdes_rx_dt_slicer_pdk.mag")
-    deser_cell = _read_unlabeled(VARIANT_DIR / "serdes_rx_cmos_deser16_pdk.mag")
+    pi_mag = _resolve_submacro(variant_dir, "serdes_rx_cmos_pi_8ph_pdk.mag")
+    deser_mag = _resolve_submacro(variant_dir, "serdes_rx_cmos_deser16_pdk.mag")
+    pi_cell = _read_unlabeled(pi_mag)
+    term_cell = _read_unlabeled(_resolve_submacro(variant_dir, "serdes_rx_term_pdk.mag"))
+    ctle_cell = _read_unlabeled(_resolve_submacro(variant_dir, "serdes_rx_ctle_pdk.mag"))
+    slicer_cell = _read_unlabeled(_resolve_submacro(variant_dir, "serdes_rx_dt_slicer_pdk.mag"))
+    deser_cell = _read_unlabeled(deser_mag)
 
     # Also read port coordinates from original labeled cells for zero-typo exact stitching
-    pi_ports = {nm: (x, y) for _l, x, y, nm in Cell.read(VARIANT_DIR / "serdes_rx_cmos_pi_8ph_pdk.mag").labels}
-    deser_ports = {nm: (x, y) for _l, x, y, nm in Cell.read(VARIANT_DIR / "serdes_rx_cmos_deser16_pdk.mag").labels}
+    pi_ports = {nm: (x, y) for _l, x, y, nm in Cell.read(pi_mag).labels}
+    deser_ports = {nm: (x, y) for _l, x, y, nm in Cell.read(deser_mag).labels}
 
     # --- 1. Place South Band: PI_8ph v2.2 (124.88 um wide, West!) + Isolated Analog FE Bay (East) ---
     dx_pi, dy_pi = 1.900, 0.500
@@ -357,13 +370,14 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
     for yv in (y_m5_vss_sl1, y_m5_vss_sl2, y_m5_vss_ds0, y_m5_vss_hi):
         c.wire("metal5", [(x_vss_m5_beg, yv), (x_vss_m5_e, yv)], 2.200)
 
-    # --- 8a. Stitch PI_8ph v2.2 vdd & vss into M5 comb ---
+    # --- 8a. Stitch PI_8ph vdd & vss into M5 comb (v2p3 East VDD=123.70, East VSS=125.00) ---
     c.wire("metal4", [(0.600, y_m5_vdd_lo), (1.000, y_m5_vdd_lo)], 0.800)
     via4_pad(c, 0.600, y_m5_vdd_lo)
-    c.wire("metal4", [(123.700, y_m5_vdd_lo), (124.500, y_m5_vdd_lo)], 0.800)
-    via4_pad(c, 124.500, y_m5_vdd_lo)
-    c.wire("metal4", [(122.600, y_m5_vss_pi), (123.300, y_m5_vss_pi)], 0.800)
-    via4_pad(c, 123.300, y_m5_vss_pi)
+    c.wire("metal4", [(122.800, y_m5_vdd_lo), (123.700, y_m5_vdd_lo)], 0.800)
+    via4_pad(c, 122.800, y_m5_vdd_lo)
+    x_pi_vss_e = grid(dx_pi + (123.100 if variant_dir.name != "v2_pdk" else 120.700))
+    c.wire("metal4", [(x_pi_vss_e, y_m5_vss_pi), (grid(x_pi_vss_e + 0.600), y_m5_vss_pi)], 0.800)
+    via4_pad(c, grid(x_pi_vss_e + 0.600), y_m5_vss_pi)
     y_pi_vss = grid(dy_pi + pi_ports["vss"][1])  # 50.100
     c.wire("metal3", [(-3.600, y_pi_vss), (grid(dx_pi + pi_ports["vss"][0]), y_pi_vss)], 0.600)
     via3_pad(c, -3.600, y_pi_vss)
@@ -430,15 +444,16 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
         c.port("ibias_ctle", "metal4", x_ibias_s, y_south)
         c.port("eq0", "metal4", x_eq0_s, y_south)
         c.port("eq1", "metal4", x_eq1_s, y_south)
-        # 2 GHz PLL anchor clocks + rst_n (West)
+        # 2 GHz PLL anchor clocks (West)
         for k in range(8):
             c.port(f"c{k}", "metal3", *west_c_ports[f"c{k}"])
-        c.port("rst_n", "metal3", x_west, y_pi_rstn)
         # 64-code CDR PI controls (South)
         for grp in ("a", "b", "f"):
             for k in range(8):
                 nm = f"{grp}{k}"
                 c.port(nm, "metal2", *south_ctrl_ports[nm])
+        # Reset (West — placed after f7 to match rx_cmos_top.spice / _ref.spice port order 1:1!)
+        c.port("rst_n", "metal3", x_west, y_pi_rstn)
         # 250 MHz Digital Word Bus (North)
         for nm, pt in north_ports.items():
             c.port(nm, "metal4", *pt)
@@ -458,12 +473,16 @@ def build_rx_cmos_top_pdk(cache: PdkCache | None = None, add_ports: bool = True)
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--variant", default="v2p3_pdk",
+                    help="Target variant directory name under analog/rx/cmos_rx/layout/variants/ (default: v2p3_pdk)")
     ap.add_argument("--signoff", action="store_true",
-                    help="Run full independent review_cell.py --rc, install into variants/v2_pdk/, update summary.json")
+                    help="Run full independent review_cell.py --rc, install into variants/<variant>/, update summary.json")
     args = ap.parse_args()
 
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    VARIANT_DIR.mkdir(parents=True, exist_ok=True)
+    variant_dir = HERE / "variants" / args.variant
+    results_dir = rlc.REPO / "results" / "layout" / f"rx_cmos_{args.variant}" / "top"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    variant_dir.mkdir(parents=True, exist_ok=True)
 
     cell_name = "serdes_rx_cmos_top_pdk"
     src_subckt = "serdes_rx_cmos_top"
@@ -474,13 +493,13 @@ def main() -> None:
     ]
 
     if args.signoff:
-        print(f"\n=== Independent Signoff (`review_cell.py --rc`) for {cell_name} ===", flush=True)
-        mag = VARIANT_DIR / f"{cell_name}.mag"
-        ref = VARIANT_DIR / f"{cell_name}_ref.spice"
-        png = VARIANT_DIR / f"{cell_name}.png"
-        review_dir = RESULTS_DIR / "review" / cell_name
+        print(f"\n=== Independent Signoff (`review_cell.py --rc`) for {cell_name} [{args.variant}] ===", flush=True)
+        mag = variant_dir / f"{cell_name}.mag"
+        ref = variant_dir / f"{cell_name}_ref.spice"
+        png = variant_dir / f"{cell_name}.png"
+        review_dir = results_dir / "review" / cell_name
 
-        cell, _meta = build_rx_cmos_top_pdk(add_ports=True)
+        cell, _meta = build_rx_cmos_top_pdk(add_ports=True, variant_dir=variant_dir, results_dir=results_dir)
         cell.write(mag)
         expected_ports = rlc.generate_rx_ref_spice(src_subckt, cell_name, ref)
         rev = pi_b._run_review_with_rc_audit(mag, ref, review_dir, timeout_s=600)
@@ -544,9 +563,9 @@ def main() -> None:
             "key_net_rcx_ohm": rc_nets,
         }
 
-        summary_path = VARIANT_DIR / "summary.json"
+        summary_path = variant_dir / "summary.json"
         summary_doc = json.loads(summary_path.read_text()) if summary_path.exists() else {
-            "variant": "v2_pdk", "pdk": "sky130A", "cells": {}
+            "variant": args.variant, "pdk": "sky130A", "cells": {}
         }
         summary_doc["cells"][cell_name] = entry
         summary_path.write_text(json.dumps(summary_doc, indent=2) + "\n")
@@ -567,13 +586,13 @@ def main() -> None:
             flush=True,
         )
     else:
-        print(f"\n=== Building & Verifying {cell_name} ===", flush=True)
-        work = RESULTS_DIR / "work_top"
+        print(f"\n=== Building & Verifying {cell_name} [{args.variant}] ===", flush=True)
+        work = results_dir / "work_top"
         work.mkdir(parents=True, exist_ok=True)
         mag = work / f"{cell_name}.mag"
         ref = work / f"{cell_name}_ref.spice"
         png = work / f"{cell_name}.png"
-        cell, _meta = build_rx_cmos_top_pdk(add_ports=True)
+        cell, _meta = build_rx_cmos_top_pdk(add_ports=True, variant_dir=variant_dir, results_dir=results_dir)
         cell.write(mag)
         expected_ports = rlc.generate_rx_ref_spice(src_subckt, cell_name, ref)
         rep = rlc.verify_flat_cell(work, cell_name, mag, ref, expected_ports, timeout_s=360)

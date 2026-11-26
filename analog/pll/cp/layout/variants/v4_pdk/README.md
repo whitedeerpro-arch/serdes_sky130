@@ -2,8 +2,8 @@
 
 - **Generator**: `analog/pll/cp/layout/build_cp_steer_v4_pdk.py`
 - **Circuit**: `analog/pll/cp/spice/charge_pump_steer_v4.spice` (`k = 4 / Icp = 200 µA`, 100% real SKY130A devices, exact 8-port drop-in interface `up dn out vbn vbp ibias vdd vss`)
-- **Signoff build**: `results/layout/pll_cp/v4_pdk/signoff_v5/`
-- **Independent review (`review_cell.py --rc`)**: `results/layout/pll_cp/v4_pdk/review_rc_v5/`
+- **Signoff build**: `results/layout/pll_cp/20261123_v4p1_sync/` (synced to **v4.1** skew-aligned UP inverter `Xupn 4.0/0.30 nf=2`, `Xupp 12.0/0.15 nf=6` in the exact same `58.98 × 43.70 µm = 2,577.43 µm²` footprint, cutting 250 MHz `Vctrl` glitch `2.2–3.5×` → `−60 dBc` ref spur)
+- **Independent review (`review_cell.py --rc`)**: `results/layout/pll_cp/20261123_v4p1_sync/review/` (`DRC = 0`, `LVS = MATCH`, `PROP_ERR = False`, `8/8` ports, `out` CPEX `19.950 fF`, `2,686` RCX resistors, `devices_preserved = True`)
 - **Verification**: `results/analog/pll/cp/v4/verify_20261122/` (135-corner real-BIAS DC), `results/analog/pll/cp/v4/verify_20261122_v2/` (AC servo stability + 250 MHz transient), `results/analog/pll/cp/v4/verify_20261122_pex/` (6-corner post-layout CPEX DC)
 
 ## v3 vs v4 Physical & Electrical Summary

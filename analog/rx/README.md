@@ -5,7 +5,7 @@
 - **Directory**: [`cmos_rx/`](cmos_rx/) (`spice/`, `tb/`, `layout/variants/v2_pdk/`)
 - **Design Doc**: [docs/design/rx_cmos_v2.md](../../docs/design/rx_cmos_v2.md)
 - **Architecture**: On-die `100 Ω` termination + 4-level tunable CTLE → 2 GHz 64-code pure-CMOS Phase Interpolator + 8-phase 1 GHz quadrature ÷2 → 8× quarter-rate Double-Tail dynamic CMOS slicers (4 Data + 4 Edge) → pitch-matched 8→32 static CMOS deserializer (`250 MHz` word clock).
-- **Signoff**: `245.30 × 195.40 µm = 47,931.6 µm²`, 8/8 cells Magic full-rule `DRC = 0`, Netgen `LVS = MATCH`, **45/45** schematic link + **3/3 CPEX** post-layout transient PASS (`TT`, `SS -40 °C`, `FF -40 °C`: `0/64` data, `0/27..30` edge, `TT 36.11 mW`), standalone PI 64-code TT CPEX `|INL| = 0.0177 UI` (100% monotonic).
+- **Verification** covers same-deck schematic stress cases, schematic MOS45 replay and RX CPEX replay driven by TX→C2 waveforms. The RX bench uses ideal PI clock anchors. [Current verification boundaries](../../docs/status/current.md)
 
 ## 2. Legacy CML Reference Subdirectories
 

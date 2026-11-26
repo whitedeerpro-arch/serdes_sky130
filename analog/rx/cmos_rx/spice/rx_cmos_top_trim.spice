@@ -1,0 +1,99 @@
+* Integrated RX v2 Zero-CML (CMOS) Top-Level with Exposed 48-Bit Slicer Offset Calibration
+* Tapeout-clean companion to analog/rx/cmos_rx/spice/rx_cmos_top.spice.
+* 100% real SKY130A transistors, high_po resistors, and MIM capacitors (zero B-sources, zero ideal passives).
+*
+* Resolves Audit A-C4 cleanly without bloating analog macros with digital shift-register logic:
+* exposes the 8 x 6-bit binary offset-trim ports (`td0..3[5:0]`, `te0..3[5:0]`) directly so the
+* digital/top CSR can drive them statically (nominal mid-code 32 = 100000 -> Vos = 0.00 mV).
+*
+* Dependencies:
+*   sky130_primitives.spice, sky130_pfet_lvt.spice, bias_v2.spice,
+*   rx_ctle_pdk.spice, rx_cmos_pi.spice, rx_dt_sampler.spice, rx_cmos_deser16.spice.
+
+.subckt serdes_rx_cmos_top_trim48_split
++ rxp rxn vcm_ref ibias_ctle eq0 eq1
++ c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ rst_n
++ td0_5 td0_4 td0_3 td0_2 td0_1 td0_0
++ td1_5 td1_4 td1_3 td1_2 td1_1 td1_0
++ td2_5 td2_4 td2_3 td2_2 td2_1 td2_0
++ td3_5 td3_4 td3_3 td3_2 td3_1 td3_0
++ te0_5 te0_4 te0_3 te0_2 te0_1 te0_0
++ te1_5 te1_4 te1_3 te1_2 te1_1 te1_0
++ te2_5 te2_4 te2_3 te2_2 te2_1 te2_0
++ te3_5 te3_4 te3_3 te3_2 te3_1 te3_0
++ wd0 wd1 wd2 wd3 wd4 wd5 wd6 wd7 wd8 wd9 wd10 wd11 wd12 wd13 wd14 wd15
++ we0 we1 we2 we3 we4 we5 we6 we7 we8 we9 we10 we11 we12 we13 we14 we15
++ wclk ctle_p ctle_n
++ vdd_ctle vdd_pi vdd_slicer vdd_deser vss
+
+Xterm rxp rxn vcm_ref vss serdes_rx_term_pdk
+Xbias_ctle ibias_ctle vss serdes_bias_ctle_v2
+Xctle rxp rxn ctle_p ctle_n eq0 eq1 ibias_ctle vdd_ctle vss serdes_rx_ctle_pdk
+
+Xpi c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ rst_n dp dn ep en ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3
++ vdd_pi vss serdes_rx_cmos_pi_8ph
+
+Xsd0 ctle_p ctle_n ckd0 d0 d0b td0_5 td0_4 td0_3 td0_2 td0_1 td0_0 vdd_slicer vss serdes_rx_dt_slicer
+Xsd1 ctle_p ctle_n ckd1 d1 d1b td1_5 td1_4 td1_3 td1_2 td1_1 td1_0 vdd_slicer vss serdes_rx_dt_slicer
+Xsd2 ctle_p ctle_n ckd2 d2 d2b td2_5 td2_4 td2_3 td2_2 td2_1 td2_0 vdd_slicer vss serdes_rx_dt_slicer
+Xsd3 ctle_p ctle_n ckd3 d3 d3b td3_5 td3_4 td3_3 td3_2 td3_1 td3_0 vdd_slicer vss serdes_rx_dt_slicer
+
+Xse0 ctle_p ctle_n cke0 e0 e0b te0_5 te0_4 te0_3 te0_2 te0_1 te0_0 vdd_slicer vss serdes_rx_dt_slicer
+Xse1 ctle_p ctle_n cke1 e1 e1b te1_5 te1_4 te1_3 te1_2 te1_1 te1_0 vdd_slicer vss serdes_rx_dt_slicer
+Xse2 ctle_p ctle_n cke2 e2 e2b te2_5 te2_4 te2_3 te2_2 te2_1 te2_0 vdd_slicer vss serdes_rx_dt_slicer
+Xse3 ctle_p ctle_n cke3 e3 e3b te3_5 te3_4 te3_3 te3_2 te3_1 te3_0 vdd_slicer vss serdes_rx_dt_slicer
+
+Xdeser d0 d1 d2 d3 e0 e1 e2 e3
++ ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3 rst_n
++ wd0 wd1 wd2 wd3 wd4 wd5 wd6 wd7 wd8 wd9 wd10 wd11 wd12 wd13 wd14 wd15
++ we0 we1 we2 we3 we4 we5 we6 we7 we8 we9 we10 we11 we12 we13 we14 we15
++ wclk vdd_deser vss serdes_rx_cmos_deser16
+.ends serdes_rx_cmos_top_trim48_split
+
+* Unified Single-Supply RX v2 Top with Direct 48-Bit Trim Bus
+.subckt serdes_rx_cmos_top_trim48
++ rxp rxn vcm_ref ibias_ctle eq0 eq1
++ c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ rst_n
++ td0_5 td0_4 td0_3 td0_2 td0_1 td0_0
++ td1_5 td1_4 td1_3 td1_2 td1_1 td1_0
++ td2_5 td2_4 td2_3 td2_2 td2_1 td2_0
++ td3_5 td3_4 td3_3 td3_2 td3_1 td3_0
++ te0_5 te0_4 te0_3 te0_2 te0_1 te0_0
++ te1_5 te1_4 te1_3 te1_2 te1_1 te1_0
++ te2_5 te2_4 te2_3 te2_2 te2_1 te2_0
++ te3_5 te3_4 te3_3 te3_2 te3_1 te3_0
++ wd0 wd1 wd2 wd3 wd4 wd5 wd6 wd7 wd8 wd9 wd10 wd11 wd12 wd13 wd14 wd15
++ we0 we1 we2 we3 we4 we5 we6 we7 we8 we9 we10 we11 we12 we13 we14 we15
++ wclk ctle_p ctle_n
++ vdd vss
+Xrx rxp rxn vcm_ref ibias_ctle eq0 eq1
++ c0 c1 c2 c3 c4 c5 c6 c7
++ a0 a1 a2 a3 a4 a5 a6 a7
++ b0 b1 b2 b3 b4 b5 b6 b7
++ f0 f1 f2 f3 f4 f5 f6 f7
++ rst_n
++ td0_5 td0_4 td0_3 td0_2 td0_1 td0_0
++ td1_5 td1_4 td1_3 td1_2 td1_1 td1_0
++ td2_5 td2_4 td2_3 td2_2 td2_1 td2_0
++ td3_5 td3_4 td3_3 td3_2 td3_1 td3_0
++ te0_5 te0_4 te0_3 te0_2 te0_1 te0_0
++ te1_5 te1_4 te1_3 te1_2 te1_1 te1_0
++ te2_5 te2_4 te2_3 te2_2 te2_1 te2_0
++ te3_5 te3_4 te3_3 te3_2 te3_1 te3_0
++ wd0 wd1 wd2 wd3 wd4 wd5 wd6 wd7 wd8 wd9 wd10 wd11 wd12 wd13 wd14 wd15
++ we0 we1 we2 we3 we4 we5 we6 we7 we8 we9 we10 we11 we12 we13 we14 we15
++ wclk ctle_p ctle_n
++ vdd vdd vdd vdd vss serdes_rx_cmos_top_trim48_split
+.ends serdes_rx_cmos_top_trim48

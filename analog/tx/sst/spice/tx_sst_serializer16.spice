@@ -40,11 +40,14 @@ Xbq2 qi qb vdd vss sst_inv wn={wn*1.5} wp={wp*1.5}
 * Serializes (x0, x1, x2, x3) captured on clk250 rising -> l_out at 1 GHz on phi0 rising:
 * chronological order x0, x1, x2, x3.
 .subckt sst_lane_ser4 x0 x1 x2 x3 clk250 clk250b clk500 clk500b clk1g rst_n l_out vdd vss
-* Stage 0: 250 MHz input word capture (Xr0..Xr2 on clk250b rising @ ~1.2ns, Xr3 on clk250 rising @ ~3.2ns -> natural r0,r1,r2,r3 order!)
-Xr0 x0 clk250b rst_n r0 r0b vdd vss sst_dff_r wn=0.8 wp=1.6
-Xr1 x1 clk250b rst_n r1 r1b vdd vss sst_dff_r wn=0.8 wp=1.6
-Xr2 x2 clk250b rst_n r2 r2b vdd vss sst_dff_r wn=0.8 wp=1.6
-Xr3 x3 clk250  rst_n r3 r3b vdd vss sst_dff_r wn=0.8 wp=1.6
+* Stage 0: Full-cycle 250 MHz input word capture (ALL 4 bits x0..x3 capture on clk250b rising ->
+* full 4.00 ns setup window from clk250_out=clk250b! Xr3 retimes r3_m -> r3 on clk250 rising 2.0 ns later
+* so r0,r1,r2,r3 preserve exact natural chronological order with zero half-cycle external interface path!)
+Xr0   x0   clk250b rst_n r0   r0b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr1   x1   clk250b rst_n r1   r1b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr2   x2   clk250b rst_n r2   r2b   vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr3_m x3   clk250b rst_n r3_m r3_mb vdd vss sst_dff_r wn=0.8 wp=1.6
+Xr3   r3_m clk250  rst_n r3   r3b   vdd vss sst_dff_r wn=0.8 wp=1.6
 * Stage 1: 4:2 MUX + half-cycle staggered 500 MHz registers (Xda on clk500 rising, Xdb on clk500b rising -> +1.0 ns setup to Xd1g!)
 Xma r2 r0 clk250b clk250 ma vdd vss sst_mux2 wn=0.9 wp=1.8
 Xmb r1 r3 clk250b clk250 mb vdd vss sst_mux2 wn=0.9 wp=1.8
@@ -86,9 +89,10 @@ Xb500a clk500_i  clk500b vdd vss sst_inv wn=4.0 wp=8.0
 Xb500b clk500b_i clk500  vdd vss sst_inv wn=4.0 wp=8.0
 Xb250a clk250_i  clk250b vdd vss sst_inv wn=4.0 wp=8.0
 Xb250b clk250b_i clk250  vdd vss sst_inv wn=3.0 wp=6.0
-* Export divider clocks
+* Export divider clocks (clk250_out = ~clk250 = clk250b so digital launches on clk250b rising and
+* ALL 16 input bits din[15:0] enjoy a full 4.00 ns setup window & +0.7 ns hold margin to Xr0..Xr3_m!)
 Xo500 clk500b clk500_out vdd vss sst_inv wn=1.5 wp=3.0
-Xo250 clk250b clk250_out vdd vss sst_inv wn=1.5 wp=3.0
+Xo250 clk250  clk250_out vdd vss sst_inv wn=1.5 wp=3.0
 
 * 4 identical 4:1 lane serializers (natural bit ordering: lane k carries din[k, k+4, k+8, k+12])
 Xlane0 din0 din4 din8  din12 clk250 clk250b clk500 clk500b c0 rst_n l0 vdd vss sst_lane_ser4

@@ -194,7 +194,23 @@ def count_floating_poly(cell_obj: Cell) -> int:
     return sum(1 for v in comp_anchored.values() if not v)
 
 
-def build_supply_v2_cur(out: Path, is_probe: bool, extract_rcx: bool = True) -> dict:
+def via2_array(c: Cell, x: float, y: float, nx: int = 2, ny: int = 2, pitch: float = 0.56) -> None:
+    """Multi-via2 array with full SKY130 M2/M3 enclosure."""
+    grid = v2.grid
+    x0 = x - (nx - 1) * pitch / 2.0
+    y0 = y - (ny - 1) * pitch / 2.0
+    hw2 = (nx - 1) * pitch / 2.0 + 0.22
+    hh2 = (ny - 1) * pitch / 2.0 + 0.22
+    hw3 = (nx - 1) * pitch / 2.0 + 0.28
+    hh3 = (ny - 1) * pitch / 2.0 + 0.28
+    c.rect("metal2", grid(x - hw2), grid(y - hh2), grid(x + hw2), grid(y + hh2))
+    c.rect("metal3", grid(x - hw3), grid(y - hh3), grid(x + hw3), grid(y + hh3))
+    for ix in range(nx):
+        for iy in range(ny):
+            c.pad("via2", grid(x0 + ix * pitch), grid(y0 + iy * pitch), 0.28)
+
+
+def build_supply_v2_cur(out: Path, is_probe: bool, extract_rcx: bool = True, kelvin_opt: bool = False) -> dict:
     """Build complete flat LDO v2 current-mode supply macro (DRC=0, LVS=MATCH, 0 floating poly)."""
     grid = v2.grid
     via2_clean = v2.via2_clean
@@ -467,17 +483,74 @@ def build_supply_v2_cur(out: Path, is_probe: bool, extract_rcx: bool = True) -> 
     top.wire("metal2", [p_cl_r1["R1"], (p_cl_r1["R1"][0], +45.4), (p_clamp["D"][0], +45.4), p_clamp["D"]], 0.44)
 
     y_kelv_tap = -48.5
-    via3_single(top, 304.8, y_kelv_tap)
-    via2_clean(top, 304.8, y_kelv_tap)
-    y_kelv_m2 = -62.7
-    top.wire("metal2", [(304.8, y_kelv_tap), (304.8, y_kelv_m2), (m_cff["b"][0], y_kelv_m2)], 0.44)
-    via2_clean(top, m_cff["b"][0], y_kelv_m2)
-    top.wire("metal3", [(m_cff["b"][0], y_kelv_m2), m_cff["b"]], 0.60)
-    x_kelv_up = 139.2
-    via2_clean(top, x_kelv_up, y_kelv_m2)
-    top.wire("metal3", [(x_kelv_up, y_kelv_m2), (x_kelv_up, -50.2)], 0.44)
-    via2_clean(top, x_kelv_up, -50.2)
-    top.wire("metal2", [(x_kelv_up, -50.2), (x_kelv_up, p_rdiv_top["quiet"][1]), p_rdiv_top["quiet"]], 0.44)
+    if not kelvin_opt:
+        via3_single(top, 304.8, y_kelv_tap)
+        via2_clean(top, 304.8, y_kelv_tap)
+        y_kelv_m2 = -62.7
+        top.wire("metal2", [(304.8, y_kelv_tap), (304.8, y_kelv_m2), (m_cff["b"][0], y_kelv_m2)], 0.44)
+        via2_clean(top, m_cff["b"][0], y_kelv_m2)
+        top.wire("metal3", [(m_cff["b"][0], y_kelv_m2), m_cff["b"]], 0.60)
+        x_kelv_up = 139.2
+        via2_clean(top, x_kelv_up, y_kelv_m2)
+        top.wire("metal3", [(x_kelv_up, y_kelv_m2), (x_kelv_up, -50.2)], 0.44)
+        via2_clean(top, x_kelv_up, -50.2)
+        top.wire("metal2", [(x_kelv_up, -50.2), (x_kelv_up, p_rdiv_top["quiet"][1]), p_rdiv_top["quiet"]], 0.44)
+    else:
+        # Optimized Coaxial-Shielded Kelvin sense return:
+        #   1. Preserves exact distal load-side Kelvin tap at (304.8, -48.5) on quiet M4/M5 plate.
+        #   2. Routes Zone 3 east-of-guard on wide parallel M4+M5 (1.6/1.8 um) at y=-57.5 -> x=255.5.
+        #   3. Drops at x=255.5 (east of x_vgb, zero signal tracks) into a coaxial-shielded south
+        #      corridor at y=-63.80 on parallel 1.40 um M1 + 1.40 um M2 (+ parallel M3 where open),
+        #      directly beneath the solid 1.60 um y_vss_south M4 ground plane (and M3 VSS east of 220)
+        #      and separated from i_ldo (y=-62.00) by a continuous grounded M2 VSS guard rail at
+        #      y=-62.65 (tied to VSS at x=71.0, 222.0, 251.5).
+        #   4. Feeds m_cff["b"] directly on M3 at (98.43, -63.80) (zero crossings of control bus!)
+        #      and taps north once at x=139.8 via multi-via2 to 47-bar divider p_rdiv_top["quiet"].
+        y_kelv_hi = -57.5
+        x_kelv_tap = 304.4
+        x_drop = 255.5
+        y_kelv_coax = -63.80
+        x_cff_b = m_cff["b"][0]
+
+        # Zone 3: distal tap directly off quiet M4/M5 plate corner (304.8, -48.5) -> x=255.5
+        top.wire("metal4", [(x_kelv_tap, y_kelv_tap), (x_kelv_tap, y_kelv_hi), (x_drop, y_kelv_hi)], 1.60)
+        top.wire("metal5", [(x_kelv_tap, y_kelv_tap), (x_kelv_tap, y_kelv_hi), (256.5, y_kelv_hi)], 1.80)
+        via4_array(top, 256.5, y_kelv_hi, nx=1, ny=1)
+
+        # Drop at x=255.5 (clean of all control/bias buses) from M4 -> M3 -> M2/M1 coax bus
+        via3_array(top, x_drop, y_kelv_hi, nx=2, ny=2)
+        top.wire("metal3", [(x_drop, y_kelv_hi), (x_drop, -61.50)], 1.10)
+        via2_array(top, x_drop, -61.50, nx=2, ny=2)
+        top.wire("metal2", [(x_drop, -61.50), (x_drop, y_kelv_coax)], 1.20)
+
+        # Coaxial-shielded parallel M1 + M2 Kelvin bus at y=-63.80 (beneath y_vss_south M4 ground plane!)
+        top.wire("metal2", [(x_drop, y_kelv_coax), (x_cff_b, y_kelv_coax)], 1.40)
+        top.wire("metal1", [(x_drop, y_kelv_coax), (x_cff_b, y_kelv_coax)], 1.40)
+        for xv1 in (255.0, 240.0, 225.0, 210.0, 195.0, 183.5, 170.0, 155.0, 139.8, 125.0, 110.0, x_cff_b):
+            for dx1 in (-0.28, +0.28):
+                for dy1 in (-0.28, +0.28):
+                    top.via1(grid(xv1 + dx1), grid(y_kelv_coax + dy1))
+
+        # Parallel M3 strap west from x=139.8 straight into m_cff["b"] M3 (y=-63.76)
+        top.wire("metal3", [(139.8, y_kelv_coax), (x_cff_b, y_kelv_coax)], 1.00)
+        for xv2_w in (139.8, 120.0, x_cff_b):
+            via2_array(top, xv2_w, y_kelv_coax, nx=2, ny=2)
+
+        # Continuous grounded M2 VSS guard wire between i_ldo (y=-62.00) and coax Kelvin (y=-63.80)
+        y_vss_shld = -62.65
+        top.wire("metal2", [(71.0, y_vss_shld), (x_vgb, y_vss_shld)], 0.34)
+        for xv_sh in (71.0, 222.0):
+            top.wire("metal3", [(xv_sh, y_vss_south), (xv_sh, y_vss_shld)], 0.56)
+            via2_clean(top, xv_sh, y_vss_shld)
+        via2_clean(top, x_vgb, y_vss_shld)
+
+        # Single compact low-R vertical tap north at x=139.8 to 47-bar common-centroid divider quiet pin
+        x_kelv_up = 139.8
+        y_kelv_v2 = -50.80
+        top.wire("metal3", [(x_kelv_up, y_kelv_coax), (x_kelv_up, y_kelv_v2)], 0.56)
+        via2_array(top, x_kelv_up, y_kelv_v2, nx=2, ny=2)
+        top.wire("metal2", [(x_kelv_up, y_kelv_v2), (x_kelv_up, p_rdiv_top["quiet"][1])], 0.80)
+        top.wire("metal2", [(x_kelv_up, p_rdiv_top["quiet"][1]), p_rdiv_top["quiet"]], 0.44)
 
     # --- 4. POWER GROUND: vss ---
     top.wire("metal4", [(x_vss_west, y_vss_south), (305.0, y_vss_south)], 1.6)
@@ -786,21 +859,50 @@ def build_supply_v2_cur(out: Path, is_probe: bool, extract_rcx: bool = True) -> 
 
     y_trim_port = -64.5
     x_fbret_p = 180.4
+    x_fbin_p = 213.0
     top.wire("metal4", [m_cff["a"], (100.5, m_cff["ya"]), (100.5, -47.8), (x_fbret_p, -47.8)], 0.50)
     via3_single(top, x_fbret_p, -47.8)
     via2_clean(top, x_fbret_p, -47.8)
     top.wire("metal2", [p_rdiv_top["fb_return"], (x_fbret_p, p_rdiv_top["fb_return"][1]), (x_fbret_p, -47.8)], 0.42)
-    top.wire("metal3", [(x_fbret_p, -47.8), (x_fbret_p, y_trim_port)], 0.44)
 
-    x_fbin_p = 213.0
-    top.wire("metal3", [(x_fbin_p, y_trim_port), (x_fbin_p, grid(p_pl_a["G"][1] + 0.60))], 0.40)
-    for ppl, dy_f in ((p_pl_a, +0.60), (p_pl_b, +1.10)):
-        yf = grid(ppl["G"][1] + dy_f)
-        via2_clean(top, x_fbin_p, yf)
-        top.wire("metal2", [(x_fbin_p, yf), (ppl["G"][0], yf), ppl["G"]], 0.34)
-
-    if not is_probe:
-        top.wire("metal3", [(x_fbret_p, y_trim_port), (x_fbin_p, y_trim_port)], 0.48)
+    if not kelvin_opt:
+        top.wire("metal3", [(x_fbret_p, -47.8), (x_fbret_p, y_trim_port)], 0.44)
+        top.wire("metal3", [(x_fbin_p, y_trim_port), (x_fbin_p, grid(p_pl_a["G"][1] + 0.60))], 0.40)
+        for ppl, dy_f in ((p_pl_a, +0.60), (p_pl_b, +1.10)):
+            yf = grid(ppl["G"][1] + dy_f)
+            via2_clean(top, x_fbin_p, yf)
+            top.wire("metal2", [(x_fbin_p, yf), (ppl["G"][0], yf), ppl["G"]], 0.34)
+        if not is_probe:
+            top.wire("metal3", [(x_fbret_p, y_trim_port), (x_fbin_p, y_trim_port)], 0.48)
+    else:
+        # Kelvin-opt feedback routing:
+        #   - Probe macro preserves exact external loop-break ports (180.4, -64.5) & (213.0, -64.5)
+        #     while jogging fb_input M3 to x=214.5 above y=-45.5 (2.6 um clear of gate @ x=211.9).
+        #   - Production macro eliminates the 96 um south U-turn completely by bridging fb_return ->
+        #     fb_input directly across y=-23.0 on M4 (34.1 um straight between m_cc and m_cghf).
+        x_fbin_ea = 214.5
+        if is_probe:
+            top.wire("metal3", [(x_fbret_p, -47.8), (x_fbret_p, y_trim_port)], 0.44)
+            top.wire("metal3", [
+                (x_fbin_p, y_trim_port),
+                (x_fbin_p, -45.5),
+                (x_fbin_ea, -45.5),
+                (x_fbin_ea, grid(p_pl_a["G"][1] + 0.60)),
+            ], 0.40)
+        else:
+            y_fb_br = -23.0
+            via2_clean(top, x_fbret_p, y_fb_br)
+            via3_single(top, x_fbret_p, y_fb_br)
+            top.wire("metal4", [(x_fbret_p, y_fb_br), (x_fbin_ea, y_fb_br)], 0.44)
+            via3_single(top, x_fbin_ea, y_fb_br)
+            top.wire("metal3", [
+                (x_fbin_ea, grid(p_pl_b["G"][1] + 1.10)),
+                (x_fbin_ea, grid(p_pl_a["G"][1] + 0.60)),
+            ], 0.40)
+        for ppl, dy_f in ((p_pl_a, +0.60), (p_pl_b, +1.10)):
+            yf = grid(ppl["G"][1] + dy_f)
+            via2_clean(top, x_fbin_ea, yf)
+            top.wire("metal2", [(x_fbin_ea, yf), (ppl["G"][0], yf), ppl["G"]], 0.34)
 
     # --- 10. ACTIVE OVERSHOOT CLAMP ---
     top.wire("metal2", [p_cl_en["D"], (192.2, p_cl_en["D"][1]), (192.2, +30.0), (p_rcl_arr["a"][0], +30.0), p_rcl_arr["a"]], 0.36)
@@ -885,6 +987,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output-dir", type=Path, required=True)
     ap.add_argument("--install-dir", type=Path, default=None)
+    ap.add_argument("--variant", default="v2_cur_pdk",
+                    help="Variant name for summary metadata and optional default install target")
+    ap.add_argument("--kelvin-opt", action="store_true",
+                    help="Enable shielded upper-metal M4/M5 Kelvin return & shortened fb routing")
     ap.add_argument("--probe-only", action="store_true")
     ap.add_argument("--no-rcx", action="store_true")
     args = ap.parse_args()
@@ -893,17 +999,23 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
 
     records = []
-    rec_probe = build_supply_v2_cur(out, is_probe=True, extract_rcx=not args.no_rcx)
+    rec_probe = build_supply_v2_cur(out, is_probe=True, extract_rcx=not args.no_rcx, kelvin_opt=args.kelvin_opt)
     records.append(rec_probe)
     print(json.dumps({k: v for k, v in rec_probe.items() if k != "parasitics"}, indent=2), flush=True)
 
     if not args.probe_only:
-        rec_prod = build_supply_v2_cur(out, is_probe=False, extract_rcx=not args.no_rcx)
+        rec_prod = build_supply_v2_cur(out, is_probe=False, extract_rcx=not args.no_rcx, kelvin_opt=args.kelvin_opt)
         records.append(rec_prod)
         print(json.dumps({k: v for k, v in rec_prod.items() if k != "parasitics"}, indent=2), flush=True)
 
     summary = {
-        "architecture": "LDO v2 Current-Mode Bias Input (i_ldo -> local 1:1 Xnb/Xnr 30/2 NMOS mirror, BIAS v2 i_ldo0 compatible)",
+        "variant": args.variant,
+        "kelvin_opt": bool(args.kelvin_opt),
+        "architecture": (
+            "LDO v2 Current-Mode Bias Input + Shielded M4/M5 Kelvin Return & Shortened FB Routing"
+            if args.kelvin_opt else
+            "LDO v2 Current-Mode Bias Input (i_ldo -> local 1:1 Xnb/Xnr 30/2 NMOS mirror, BIAS v2 i_ldo0 compatible)"
+        ),
         "bias_interface": "Direct 10 uA current-mode input i_ldo from serdes_bias_top_v2_pdk.i_ldo0 (vgi removed, redundant v1 Xcopy removed)",
         "total_mim_pf": 60.0,
         "macros": records,

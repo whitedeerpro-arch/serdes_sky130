@@ -1,0 +1,61 @@
+{
+  "variant": "v2_ptat_pdk",
+  "pdk": "sky130A",
+  "cells": [
+    {
+      "cell": "serdes_bias_top_v2_ptat_pdk",
+      "drc_boxes": 0,
+      "drc_rules": [],
+      "lvs_match": true,
+      "lvs_property_errors": false,
+      "lvs_disconnected": [],
+      "exported_ports": [
+        "vbg",
+        "vcm",
+        "pref",
+        "icml",
+        "ictle",
+        "icp",
+        "i_ldo0",
+        "i_ldo1",
+        "vgi",
+        "vg",
+        "g4",
+        "g3",
+        "g2",
+        "g1",
+        "g0",
+        "c3",
+        "c2",
+        "c1",
+        "c0",
+        "en_pbuf",
+        "vdd",
+        "vss"
+      ],
+      "bbox_um": [
+        -0.03,
+        -0.63,
+        176.5,
+        151.63
+      ],
+      "size_um": [
+        176.53,
+        152.26
+      ],
+      "area_um2": 26878.46,
+      "aspect_ratio": 1.16,
+      "rcx_generated": false,
+      "extracted_models": {
+        "sky130_fd_pr__nfet_01v8": 187,
+        "sky130_fd_pr__pfet_01v8_lvt": 261,
+        "sky130_fd_pr__res_high_po": 67,
+        "sky130_fd_pr__pfet_01v8": 117,
+        "sky130_fd_pr__nfet_01v8_lvt": 11,
+        "sky130_fd_pr__pnp_05v5_W3p40L3p40": 10,
+        "sky130_fd_pr__cap_mim_m3_2": 4,
+        "sky130_fd_pr__cap_mim_m3_1": 4
+      }
+    }
+  ]
+}

@@ -46,6 +46,21 @@ Xpa y a vdd vdd serdes_pfet     w={wp} l=0.15 nf={nfp}
 Xpb y b vdd vdd serdes_pfet     w={wp} l=0.15 nf={nfp}
 .ends pi_nand2
 
+* 100% Symmetric TG-isolated resettable clock gate:
+*   rst_n=1 (run):  identical static-ON LVT TG + balanced inverter on BOTH p & n legs -> 0.00 ps systematic skew, 50% duty!
+*   rst_n=0 (rst):  TG isolates toggling 2 GHz clock (0 uA static crowbar!) while clamp sets ckb=1 (p) or ckb=0 (n).
+.subckt pi_clk_gate_lo ck_in rst_n rst ckb vdd vss params: wn=1.20 wp=3.60 nfn=1 nfp=2
+Xtg   ck_in ck_g rst_n rst vdd vss pi_tgate_lvt wn=2.40 wp=6.00 nfn=2 nfp=2
+Xclmp ck_g  rst  vss   vss serdes_nfet w=0.80 l=0.18 nf=1
+Xinv  ck_g  ckb  vdd   vss pi_inv wn={wn} wp={wp} nfn={nfn} nfp={nfp}
+.ends pi_clk_gate_lo
+
+.subckt pi_clk_gate_hi ck_in rst_n rst ckb vdd vss params: wn=1.20 wp=3.60 nfn=1 nfp=2
+Xtg   ck_in ck_g rst_n rst vdd vss pi_tgate_lvt wn=2.40 wp=6.00 nfn=2 nfp=2
+Xclmp ck_g  rst_n vdd  vdd serdes_pfet w=1.60 l=0.18 nf=1
+Xinv  ck_g  ckb  vdd   vss pi_inv wn={wn} wp={wp} nfn={nfn} nfp={nfp}
+.ends pi_clk_gate_hi
+
 * Static-DC-gated LVT transmission gate: pfet_lvt (l=0.35, |Vthp|~0.52V) conducts cleanly at VDD/2 even at SS 1.65V -40C!
 * Static DC control bits mean pfet_lvt gate cap does NOT switch (zero CV^2f penalty).
 .subckt pi_tgate_lvt a b en enb vdd vss params: wn=1.00 wp=1.80 nfn=1 nfp=1
@@ -208,11 +223,14 @@ Xcc qp    qn vdd vss pi_cc_align wn=0.42 wp=1.00
 * --- Slimmed Deterministic Quadrature CMOS /2 (8-Phase 1 GHz Clock Generator) ---
 .subckt serdes_rx_qdiv2_8ph dp dn ep en rst_n ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3 vdd vss
 Xrst rst_n rst vdd vss pi_inv_static wn=0.6 wp=1.2
-* Centered 2-stage reset-gated 2 GHz clock buffers + cross-coupled 50% duty-cycle aligners!
-Xg_dpb dp rst_n dp_ckb vdd vss pi_nand2 wn=1.40 wp=4.60 nfn=1 nfp=2
-Xg_dnb dn rst_n dn_ckb vdd vss pi_nand2 wn=1.40 wp=4.60 nfn=1 nfp=2
-Xg_epb ep rst_n ep_ckb vdd vss pi_nand2 wn=1.40 wp=4.60 nfn=1 nfp=2
-Xg_enb en rst_n en_ckb vdd vss pi_nand2 wn=1.40 wp=4.60 nfn=1 nfp=2
+* Centered 2-stage 100%-symmetric TG-isolated complementary reset-gated 2 GHz clock buffers:
+*   - During rst_n=0 (rst=1): TG disconnects 2 GHz input (0 uA crowbar), forces dp_ck=0/dn_ck=1 & ep_ck=0/en_ck=1
+*     so Xld0/Xle0 pass gates turn OFF cleanly (0 mV contention at SF!) and Xcc_* draw 0 uA static current.
+*   - During rst_n=1 (rst=0): identical static-ON LVT TG + matched pi_inv on all 4 phases -> 0 ps systematic skew & 50% duty!
+Xg_dpb dp rst_n rst dp_ckb vdd vss pi_clk_gate_lo wn=1.40 wp=4.60 nfn=1 nfp=2
+Xg_dnb dn rst_n rst dn_ckb vdd vss pi_clk_gate_hi wn=1.40 wp=4.60 nfn=1 nfp=2
+Xg_epb ep rst_n rst ep_ckb vdd vss pi_clk_gate_lo wn=1.40 wp=4.60 nfn=1 nfp=2
+Xg_enb en rst_n rst en_ckb vdd vss pi_clk_gate_hi wn=1.40 wp=4.60 nfn=1 nfp=2
 Xcc_dckb dp_ckb dn_ckb vdd vss pi_cc_align wn=0.50 wp=1.50
 Xcc_eckb ep_ckb en_ckb vdd vss pi_cc_align wn=0.50 wp=1.50
 Xg_dp  dp_ckb dp_ck vdd vss pi_inv wn=2.00 wp=6.90 nfn=2 nfp=3
@@ -230,15 +248,15 @@ Xld1 d0 d2 dn_ck dp_ck rst_n rst d1 d3 vdd vss pi_diff_latch
 Xle0 d0 d2 ep_ck en_ck rst_n rst e0 e2 vdd vss pi_diff_latch
 Xle1 d1 d3 en_ck ep_ck rst_n rst e1 e3 vdd vss pi_diff_latch
 
-* 1 GHz Output Buffers driving full ~40 fF real Double-Tail slicer + deser16 clock loads (< 45 ps edges @ SS -40C!)
-Xbd0 d2 ckd0 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbd2 d0 ckd2 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbd1 d3 ckd1 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbd3 d1 ckd3 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbe0 e2 cke0 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbe2 e0 cke2 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbe1 e3 cke1 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
-Xbe3 e1 cke3 vdd vss pi_inv wn=2.60 wp=6.80 nfn=2 nfp=4
+* 1 GHz Output Buffers driving full ~40 fF real Double-Tail slicer + deser16 clock loads (Wp/Wn=3.69 keeps SS -40C duty >=48%!)
+Xbd0 d2 ckd0 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbd2 d0 ckd2 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbd1 d3 ckd1 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbd3 d1 ckd3 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbe0 e2 cke0 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbe2 e0 cke2 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbe1 e3 cke1 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
+Xbe3 e1 cke3 vdd vss pi_inv wn=2.60 wp=9.60 nfn=2 nfp=4
 Xccd0 ckd0 ckd2 vdd vss pi_cc_align wn=0.45 wp=1.10
 Xccd1 ckd1 ckd3 vdd vss pi_cc_align wn=0.45 wp=1.10
 Xcce0 cke0 cke2 vdd vss pi_cc_align wn=0.45 wp=1.10

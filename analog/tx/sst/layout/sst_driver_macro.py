@@ -281,7 +281,11 @@ def _build_mux4_row(
     return c, nets, x
 
 
-def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dict]:
+def build_sst_driver(
+    cache: PdkCache,
+    add_ports: bool = True,
+    compact_a1: bool = False,
+) -> tuple[Cell, dict]:
     """Build complete `serdes_tx_sst_driver_pdk` macro (~231.5 x 90.1 um)."""
     c = Cell()
     row = scc.ROW_DRV
@@ -289,7 +293,7 @@ def build_sst_driver(cache: PdkCache, add_ports: bool = True) -> tuple[Cell, dic
     # ------------------------------------------------------------------
     # 1. West Block: Compacted On-Chip V_drv LDO (`Xldo`, x in [0.0..86.5])
     # ------------------------------------------------------------------
-    ldo_cell, ldo_meta = sab.build_sst_vdrv_ldo(cache, add_ports=False)
+    ldo_cell, ldo_meta = sab.build_sst_vdrv_ldo(cache, add_ports=False, compact_a1=compact_a1)
     c.include(ldo_cell, dx=0.0, dy=0.0)
 
     # ------------------------------------------------------------------

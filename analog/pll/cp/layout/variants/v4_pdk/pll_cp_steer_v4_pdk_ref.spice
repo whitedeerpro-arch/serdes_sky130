@@ -1,7 +1,7 @@
 * Physical LVS reference for pll_cp_steer_v4 (k=4, Icp=200 uA, wide-swing + active replica servo)
 .subckt pll_cp_steer_v4_pdk up dn out vbn vbp ibias vdd vss
-Xupn up_b up vss vss sky130_fd_pr__nfet_01v8 w=2 l=0.88
-Xupp up_b up vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
+Xupn up_b up vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.3
+Xupp up_b up vdd vdd sky130_fd_pr__pfet_01v8 w=12 l=0.15
 Xdn1_n dn_b dn vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15
 Xdn1_p dn_b dn vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15
 Xdn2_n dn_on dn_b vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15

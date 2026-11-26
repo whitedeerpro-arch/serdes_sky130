@@ -1,0 +1,143 @@
+* Hardened Equalized Nikolic SAFF-TSPC Reclocked 2 GHz /8 Prescaler (v2_cand, I-TOP-03)
+* Pin-compatible 10-port pure-CMOS drop-in interface: clkp clkn q2p q2n q4p q4n q8p q8n vdd vss
+* Dependencies: sky130_primitives.spice
+*
+* Key cold-corner (SS 1.65 V -40 C mismatch & CPEX) hardening improvements over baseline v7:
+*   1. Dedicated HI-skewed 1 GHz clock buffer `Xck1g` (b0p -> ck_1g, wn=2.6 LVT, wp=11.2) +
+*      identical mirror dummy `Xck1g_dum` on b0n:
+*      - Eliminates 4.3x capacitive load asymmetry on Xff0 (b0n previously carried 33.3 um gate
+*        + 21.9 fF M3 wire, collapsing b0n to 1.32 V / 241 ps slew and causing Xff0 metastable
+*        startup lockup + 512 ps b1/b2 reclock race).
+*      - Delivers crisp full-rail 1.65 V ck_1g to Xff1/Xff2 ~50 ps earlier with 4x sharper slew.
+*   2. Static Restoring LVT-CMOS Differential XOR/XNOR `Xxor2` replacing passive TG-MUX `Xtg2`:
+*      - Eliminates SS -40 C transmission-gate Vtn+|Vtp| mid-rail dead-zone and overlapping-select
+*        b2p<->b2n shorting that locked Xff2 at ~0.76 V (21/32 CPEX MC failures).
+*      - Provides full rail-to-rail restoring gain and complete b2-to-d2 isolation.
+*   3. HI-skewed local sense-amp inverters (`winv_n=0.65, winv_p=2.60`) & 1 GHz-trimmed precharge
+*      devices (`wpre=1.8, wmid=0.9, weq=1.4`) on Xff1/Xff2 + boosted startup seed (`seed_k=0.45/0.40`):
+*      - Cuts full-CPEX ck_2g -> b1/b2 from 512.6 ps (-12.6 ps margin) to ~404 ps (+96 ps margin)
+*        while preserving >160 ps hold margin at FF 1.95 V -40 C.
+*   4. Retimers Xr0/Xr1/Xr2 (`seed_k=0.0`) and deskewed output buffers Xo0/Xo1/Xo2 kept 100% matched.
+
+* -----------------------------------------------------------------------------
+* Common small CMOS helpers
+* -----------------------------------------------------------------------------
+.subckt tspc_inv a y vdd vss params: wn=1.0 nfn=1 wp=2.2 nfp=1
+Xn y a vss vss serdes_nfet w={wn} nf={nfn}
+Xp y a vdd vdd serdes_pfet w={wp} nf={nfp}
+.ends tspc_inv
+
+.subckt tspc_inv_lvt a y vdd vss params: wn=1.0 nfn=1 wp=2.2 nfp=1
+Xn y a vss vss serdes_nfet_lvt w={wn} nf={nfn}
+Xp y a vdd vdd serdes_pfet w={wp} nf={nfp}
+.ends tspc_inv_lvt
+
+* Static Restoring LVT-CMOS Differential XOR/XNOR:
+*   d2p = b1p ? b2n : b2p = ~( (b1p & b2p) | (b1n & b2n) )
+*   d2n = b1p ? b2p : b2n = ~( (b1p & b2n) | (b1n & b2p) )
+.subckt tspc_xor_diff b1p b1n b2p b2n d2p d2n vdd vss params: wn=1.5 nfn=1 wp=2.8 nfp=1
+* d2p pull-down (LVT NMOS 2-stacks)
+Xnp1a np1 b1p vss vss serdes_nfet_lvt w={wn} nf={nfn}
+Xnp1b d2p b2p np1 vss serdes_nfet_lvt w={wn} nf={nfn}
+Xnp2a np2 b1n vss vss serdes_nfet_lvt w={wn} nf={nfn}
+Xnp2b d2p b2n np2 vss serdes_nfet_lvt w={wn} nf={nfn}
+* d2p pull-up (PMOS 2-stacks)
+Xpp1a pp1 b1p vdd vdd serdes_pfet w={wp} nf={nfp}
+Xpp1b d2p b2n pp1 vdd serdes_pfet w={wp} nf={nfp}
+Xpp2a pp2 b1n vdd vdd serdes_pfet w={wp} nf={nfp}
+Xpp2b d2p b2p pp2 vdd serdes_pfet w={wp} nf={nfp}
+* d2n pull-down (LVT NMOS 2-stacks)
+Xnn1a nn1 b1p vss vss serdes_nfet_lvt w={wn} nf={nfn}
+Xnn1b d2n b2n nn1 vss serdes_nfet_lvt w={wn} nf={nfn}
+Xnn2a nn2 b1n vss vss serdes_nfet_lvt w={wn} nf={nfn}
+Xnn2b d2n b2p nn2 vss serdes_nfet_lvt w={wn} nf={nfn}
+* d2n pull-up (PMOS 2-stacks)
+Xpn1a pn1 b1p vdd vdd serdes_pfet w={wp} nf={nfp}
+Xpn1b d2n b2p pn1 vdd serdes_pfet w={wp} nf={nfp}
+Xpn2a pn2 b1n vdd vdd serdes_pfet w={wp} nf={nfp}
+Xpn2b d2n b2n pn2 vdd serdes_pfet w={wp} nf={nfp}
+.ends tspc_xor_diff
+
+* Balanced differential output deskew buffer
+.subckt tspc_outbuf qp_i qn_i qp qn vdd vss params: wn=2.4 nfn=2 wp=5.2 nfp=2 wkn=0.50 wkp=1.05
+Xobp qp_i qp vdd vss tspc_inv wn={wn} nfn={nfn} wp={wp} nfp={nfp}
+Xobn qn_i qn vdd vss tspc_inv wn={wn} nfn={nfn} wp={wp} nfp={nfp}
+Xkp  qp   qn vdd vss tspc_inv wn={wkn} nfn=1 wp={wkp} nfp=1
+Xkn  qn   qp vdd vss tspc_inv wn={wkn} nfn=1 wp={wkp} nfp=1
+.ends tspc_outbuf
+
+* Balanced differential-to-single-phase 2 GHz clock receiver/buffer
+.subckt tspc_ckbuf clkp clkn ck_2g vdd vss params: wn1=2.6 wp1=6.2 wn2=12.0 wp2=24.8
+X1p clkp ck1n vdd vss tspc_inv wn={wn1} nfn=2 wp={wp1} nfp=2
+X1n clkn ck1p vdd vss tspc_inv wn={wn1} nfn=2 wp={wp1} nfp=2
+Xk1p ck1p ck1n vdd vss tspc_inv wn=0.45 nfn=1 wp=1.00 nfp=1
+Xk1n ck1n ck1p vdd vss tspc_inv wn=0.45 nfn=1 wp=1.00 nfp=1
+X2p ck1n ck_2g vdd vss tspc_inv wn={wn2} nfn=4 wp={wp2} nfp=4
+X2n_dum ck1p ck_dum vdd vss tspc_inv wn={wn2*0.25} nfn=2 wp={wp2*0.25} nfp=2
+Xcdum vss ck_dum vss vss serdes_nfet w=4.0 l=0.5 nf=2
+.ends tspc_ckbuf
+
+* Nikolic-Symmetric Equalized SAFF-TSPC DFF
+.subckt saff_tspc_dff dp dn ck qp qn vdd vss
++ params: wt=4.4 nft=2 wd=2.8 nfd=2 wl=2.4 nfl=2 wlp=1.6 nflp=1 wpre=2.4 wmid=1.2 weq=1.8
++         wop=2.8 nfop=2 wdn=2.4 nfdn=2 winv_n=0.80 winv_p=1.75 wkp=0.70 wkn=0.60 seed_k=0.0
+* Stage 1: Differential Sense-Amplifier (active when ck=1)
+Xtail tail ck   vss  vss serdes_nfet_lvt w={wt}  nf={nft}
+Xdp   n_sp dp   tail vss serdes_nfet_lvt w={wd}  nf={nfd}
+Xdn   n_sn dn   tail vss serdes_nfet_lvt w={wd}  nf={nfd}
+Xlnp  sp   sn   n_sp vss serdes_nfet_lvt w={wl}  nf={nfl}
+Xlnn  sn   sp   n_sn vss serdes_nfet_lvt w={wl}  nf={nfl}
+Xlpp  sp   sn   vdd  vdd serdes_pfet     w={wlp} nf={nflp}
+Xlpn  sn   sp   vdd  vdd serdes_pfet     w={wlp} nf={nflp}
+* Precharge + equalization switch when ck=0
+Xprep sp   ck   vdd  vdd serdes_pfet     w={wpre} nf=2
+Xpren sn   ck   vdd  vdd serdes_pfet     w={wpre} nf=2
+Xeq   sp   ck   sn   vdd serdes_pfet     w={weq}  nf=1
+Xpmp  n_sp ck   vdd  vdd serdes_pfet     w={wmid} nf=1
+Xpmn  n_sn ck   vdd  vdd serdes_pfet     w={wmid} nf=1
+* Fast local inverters generating active-HIGH direct pulldown pulses (sb=~sp, rb=~sn)
+Xinvs sp   sb   vdd  vss tspc_inv        wn={winv_n} nfn=1 wp={winv_p} nfp=1
+Xinvr sn   rb   vdd  vss tspc_inv        wn={winv_n} nfn=1 wp={winv_p} nfp=1
+* Stage 2: Symmetric Direct-Push-Pull Static Slave Latch
+Xpp_s qp   sp   vdd  vdd serdes_pfet     w={wop} nf={nfop}
+Xdp_d qp   rb   vss  vss serdes_nfet_lvt w={wdn} nf={nfdn}
+Xpn_s qn   sn   vdd  vdd serdes_pfet     w={wop} nf={nfop}
+Xdn_d qn   sb   vss  vss serdes_nfet_lvt w={wdn} nf={nfdn}
+* Static cross-coupled keeper (0 Hz retention; optional startup asymmetry ONLY on internal FFs)
+Xkp_p qp   qn   vdd  vdd serdes_pfet     w={wkp+seed_k} nf=1
+Xkp_n qp   qn   vss  vss serdes_nfet     w={wkn}        nf=1
+Xkn_p qn   qp   vdd  vdd serdes_pfet     w={wkp}        nf=1
+Xkn_n qn   qp   vss  vss serdes_nfet     w={wkn+seed_k} nf=1
+.ends saff_tspc_dff
+
+* =============================================================================
+* Hardened 2 GHz Equalized SAFF-TSPC Reclocked /8 Prescaler (v2_cand)
+* =============================================================================
+.subckt pll_saff_reclock_prescaler8_2g clkp clkn q2p q2n q4p q4n q8p q8n vdd vss
+* Matched differential-to-single-phase 2 GHz clock receiver/buffer
+Xck clkp clkn ck_2g vdd vss tspc_ckbuf wn1=2.6 wp1=6.2 wn2=12.0 wp2=24.8
+
+* Stage A: Internal 2 GHz Toggle /2 (all finger widths <= 1.80 um N / <= 3.10 um P)
+* HI-skewed local inverters (0.65 / 2.60) + balanced b0p/b0n loading + seed_k=0.45
+Xff0 b0n b0p ck_2g b0p b0n vdd vss saff_tspc_dff wt=5.8 nft=2 wd=3.6 nfd=2 wl=3.0 nfl=2 wlp=1.6 wpre=3.0 wmid=1.3 weq=2.2 wop=4.2 nfop=2 wdn=3.6 nfdn=2 winv_n=0.65 winv_p=2.60 wkp=0.65 wkn=0.55 seed_k=0.45
+
+* Dedicated HI-skewed 1 GHz clock buffer (b0p -> ck_1g) + identical mirror dummy on b0n
+Xck1g     b0p ck_1g     vdd vss tspc_inv_lvt wn=2.6 nfn=2 wp=11.2 nfp=4
+Xck1g_dum b0n ck_1g_dum vdd vss tspc_inv_lvt wn=2.6 nfn=2 wp=11.2 nfp=4
+
+* Stage B: Internal 1 GHz 2-bit Synchronous Counter clocked by full-rail ck_1g
+* 500 ps precharge window allows lighter wpre/wmid/weq (1.8/0.9/1.4), reducing ck_1g & sp/sn load
+Xff1 b1n b1p ck_1g b1p b1n vdd vss saff_tspc_dff wt=4.8 nft=2 wd=3.0 nfd=2 wl=2.6 nfl=2 wlp=1.3 wpre=1.8 wmid=0.9 weq=1.4 wop=3.4 nfop=2 wdn=3.2 nfdn=2 winv_n=0.65 winv_p=2.60 wkp=0.60 wkn=0.50 seed_k=0.40
+Xxor2 b1p b1n b2p b2n d2p d2n vdd vss tspc_xor_diff wn=1.5 nfn=1 wp=2.8 nfp=1
+Xff2 d2p d2n ck_1g b2p b2n vdd vss saff_tspc_dff wt=4.8 nft=2 wd=3.0 nfd=2 wl=2.6 nfl=2 wlp=1.3 wpre=1.8 wmid=0.9 weq=1.4 wop=3.4 nfop=2 wdn=3.2 nfdn=2 winv_n=0.65 winv_p=2.60 wkp=0.60 wkn=0.50 seed_k=0.40
+
+* Stage C: Three 100% IDENTICAL 2 GHz Equalized Nikolic-Symmetric SAFF-TSPC Retimers (seed_k=0.0)
+Xr0 b0p b0n ck_2g r0p r0n vdd vss saff_tspc_dff wt=4.4 nft=2 wd=2.8 nfd=2 wl=2.3 nfl=2 wlp=1.5 wpre=2.8 wmid=1.3 weq=2.0 wop=2.8 nfop=2 wdn=2.6 nfdn=2 winv_n=0.80 winv_p=1.75 wkp=0.65 wkn=0.55 seed_k=0.0
+Xr1 b1p b1n ck_2g r1p r1n vdd vss saff_tspc_dff wt=4.4 nft=2 wd=2.8 nfd=2 wl=2.3 nfl=2 wlp=1.5 wpre=2.8 wmid=1.3 weq=2.0 wop=2.8 nfop=2 wdn=2.6 nfdn=2 winv_n=0.80 winv_p=1.75 wkp=0.65 wkn=0.55 seed_k=0.0
+Xr2 b2p b2n ck_2g r2p r2n vdd vss saff_tspc_dff wt=4.4 nft=2 wd=2.8 nfd=2 wl=2.3 nfl=2 wlp=1.5 wpre=2.8 wmid=1.3 weq=2.0 wop=2.8 nfop=2 wdn=2.6 nfdn=2 winv_n=0.80 winv_p=1.75 wkp=0.65 wkn=0.55 seed_k=0.0
+
+* Stage D: Matched Deskewed Output Buffers (Xo2 scaled 1.15x to equalize 20 fF q8 load vs 15 fF q2/q4)
+Xo0 r0n r0p q2p q2n vdd vss tspc_outbuf wn=2.6 nfn=2 wp=5.4 nfp=2 wkn=0.60 wkp=1.25
+Xo1 r1n r1p q4p q4n vdd vss tspc_outbuf wn=2.6 nfn=2 wp=5.4 nfp=2 wkn=0.60 wkp=1.25
+Xo2 r2n r2p q8p q8n vdd vss tspc_outbuf wn=3.0 nfn=2 wp=6.2 nfp=2 wkn=0.65 wkp=1.35
+.ends pll_saff_reclock_prescaler8_2g

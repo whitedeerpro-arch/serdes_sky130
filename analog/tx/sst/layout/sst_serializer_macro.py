@@ -151,12 +151,19 @@ def _build_lane_row(
             add(qb_n, u["qb"])
 
     x = 0.0
-    # Stage 0: 4x 250 MHz input capture DFFs (Xr0..Xr2 on clk250b, Xr3 on clk250 -> exact natural r0,r1,r2,r3 order!)
+    # Stage 0: Full-cycle 250 MHz input word capture (C2 fix: Xr0..Xr2 + Xr3_m on clk250b -> full 4.00 ns setup;
+    # Xr3 retimes r3_m -> r3 on clk250 via direct M1 abutment, preserving natural r0,r1,r2,r3 order!)
     r_dffs: list[dict] = []
-    for k in range(4):
+    for k in range(3):
         u, x = scc.place_dff_r(c, cache, row, x, wn=0.8, wp=1.6, gap_l=0.900)
-        wire_dff_ctrl(u, ("clk250" if k == 3 else "clk250b"), d_in_global=dins[k])
+        wire_dff_ctrl(u, "clk250b", d_in_global=dins[k])
         r_dffs.append(u)
+    u_r3m, x = scc.place_dff_r(c, cache, row, x, wn=0.8, wp=1.6, gap_l=0.900)
+    wire_dff_ctrl(u_r3m, "clk250b", d_in_global=dins[3])
+    u_r3, x = scc.place_dff_r(c, cache, row, x, wn=0.8, wp=1.6, gap_l=0.900)
+    _local_m1_abut_to_dff_d(c, u_r3m["q"][0], u_r3["d"][0])
+    wire_dff_ctrl(u_r3, "clk250")
+    r_dffs.append(u_r3)
 
     # Stage 1 interleaved as (Xma, Xda, Xmb, Xdb) with staggered 500 MHz clocks (Xda=clk500, Xdb=clk500b)!
     u_ma, x = scc.place_mux2(c, cache, row, x, wn=0.9, wp=1.8, gap_l=1.360)
@@ -249,8 +256,8 @@ def _build_clk_div_row(cache: PdkCache) -> tuple[Cell, dict[str, list[tuple[floa
     c.wire("metal2", [(u250["qb"][0], Y_M2_N2), (ub250["a"][0], Y_M2_N2)], 0.240)
     # clk250_i: u250.q -> ua250.a on direct pure M1 at y=6.65!
     c.wire("metal1", [(u250["q"][0], 5.990), (u250["q"][0], Y_M1_HOP), (ua250["a"][0], Y_M1_HOP), ua250["a"]], slc.W_M1)
-    # clk250b: ua250.y -> uo250.a (local PMOS M2 P2)
-    _local_m2_pmos_strap(c, ua250["y_col_x"], uo250["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=y2)
+    # clk250_out = ~clk250 = clk250b (C2 fix: ub250.y -> uo250.a on local PMOS M2 P2!)
+    _local_m2_pmos_strap(c, ub250["y_col_x"], uo250["a"][0], Y_M2_P2, src_y0=5.990, dst_y0=y2)
     add("clk250b",    ua250["y"])
     add("clk250",     ub250["y"])
     add("clk250_out", uo250["y"])
@@ -381,7 +388,7 @@ def build_sst_serializer16(
     x_vss_m5_w = -3.300            # width 1.80 -> [-4.20..-2.40] (flush x=0.000 in top at dx=+4.20!)
     x_rst_w = grid(x_row_l - 0.500) # -1.500 -> 0.53 um M4 gap to x_vss_m5_w via4 M4 (-2.25)!
     x_vdd_e = grid(x_row_r + 1.400)
-    x_vdd_m5_e = 225.200           # width 2.00 -> [224.2..226.2] (aligns with driver x_vdd_m5_e=229.4 in top!)
+    x_vdd_m5_e = grid(max(225.200, x_vdd_e + 1.400))  # aligns with driver x_vdd_m5_e in top!
     vss_ys = [y_r0, y_r1, y_r3_vss]
     vdd_ys = [grid(y_r0 + H), grid(y_r2 + H), y_top]
     # Parallel M2 over-straps on every M1 power rail (0.48 um wide -> >=0.19 um clear of y_s1 M2!)
@@ -415,9 +422,19 @@ def build_sst_serializer16(
     c.wire("metal3", [(x_vdd_e, vdd_ys[0]), (x_vdd_e, vdd_ys[-1])], 1.200)
     c.wire("metal5", [(x_vdd_m5_e, vdd_ys[0]), (x_vdd_m5_e, vdd_ys[-1])], 2.000)
 
-    # Distributed mid-rail M5-to-M2 stitch pillars across all 6 power rails (slashes serializer vdd/vss RCX R 10x!)
+    # Distributed mid-rail M5-to-M2 stitch pillars across all 6 power rails (auto-nudge clear of pin X!)
+    all_pin_xs = [px for net, pts in all_nets.items() if net != "rst_n" for px, _, _ in pts]
     ser_pwr_pillars: list[tuple[float, float]] = []
-    ser_pillar_xs = (37.700, 83.300, 141.500, 186.600, 210.800)
+    base_pillar_xs = (37.700, 83.300, 141.500, 186.600, 210.800)
+    ser_pillar_xs = []
+    for x0 in base_pillar_xs:
+        xp = x0
+        for off in (0.0, 2.0, -2.0, 4.0, -4.0, 6.0, -6.0, 8.0, -8.0):
+            cand = grid(x0 + off)
+            if 5.0 <= cand <= x_row_r - 2.0 and all(abs(cand - px) >= 2.200 for px in all_pin_xs):
+                xp = cand
+                break
+        ser_pillar_xs.append(xp)
     for yv in vss_ys + vdd_ys:
         for xp in ser_pillar_xs:
             if xp <= x_row_r - 1.500:

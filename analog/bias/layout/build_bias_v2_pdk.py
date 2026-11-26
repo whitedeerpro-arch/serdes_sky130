@@ -2530,19 +2530,21 @@ def build_bias_ref_v2(root: Path) -> dict:
     return verify_cell(w, cell, "\n".join(ref_lines))
 
 
-def build_bias_top_v2(root: Path) -> dict:
+def build_bias_top_v2(root: Path, export_ptat: bool = False) -> dict:
     import sys as _sys
     _dir = str(Path(__file__).resolve().parent)
     if _dir not in _sys.path:
         _sys.path.insert(0, _dir)
     import build_bias_top_v2 as _top
-    return _top.build_bias_top_v2(root, _sys.modules[__name__])
+    return _top.build_bias_top_v2(root, _sys.modules[__name__], export_ptat=export_ptat)
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--work-dir", type=Path, default=None)
     ap.add_argument("--cells", default="ctle,cp,cml,vbuf,pbuf,bias_ref,bias_top")
+    ap.add_argument("--install-variant", default=None,
+                    help="Optional isolated variant name under analog/bias/layout/variants/ (e.g. v2_ptat_pdk); never overwrites v2_pdk")
     args = ap.parse_args()
     work = (args.work_dir or (REPO / "results/layout/bias_v2_pdk" / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()))).resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -2553,13 +2555,27 @@ def main() -> None:
         "vbuf": build_ref_vbuf_v2,
         "pbuf": build_ref_pbuf_v2,
         "bias_ref": build_bias_ref_v2,
-        "bias_top": build_bias_top_v2,
+        "bias_top": lambda r: build_bias_top_v2(r, export_ptat=False),
+        "bias_top_ptat": lambda r: build_bias_top_v2(r, export_ptat=True),
     }
     reports = []
     for k in args.cells.split(","):
         if k in builders:
             reports.append(builders[k](work))
     (work / "summary.json").write_text(json.dumps(reports, indent=2) + "\n")
+    if args.install_variant:
+        assert args.install_variant != "v2_pdk", "Refusing to overwrite v1.0-hashed v2_pdk/"
+        vdir = Path(__file__).resolve().parent / "variants" / args.install_variant
+        vdir.mkdir(parents=True, exist_ok=True)
+        for rep in reports:
+            cn = rep["cell"]
+            cdir = work / cn
+            for suf in (".mag", ".png", "_ref.spice", "_lvs.spice", "_pex.spice"):
+                src = cdir / f"{cn}{suf}"
+                if src.exists():
+                    shutil.copy2(src, vdir / src.name)
+        (vdir / "summary.json").write_text(json.dumps({"variant": args.install_variant, "pdk": "sky130A", "cells": reports}, indent=2) + "\n")
+        print(f"Installed clean artifacts -> {vdir}")
     print(f"Done -> {work}")
 
 

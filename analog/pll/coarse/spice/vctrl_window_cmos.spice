@@ -1,0 +1,14 @@
+* PLL Vctrl Window Detector — 100% Real SKY130A CMOS/PDK Devices (Zero B-Sources)
+* Tapeout-clean companion to analog/pll/coarse/spice/vctrl_window.spice.
+* Directly accepts the 4-bit digital threshold codes `lo3..lo0` (pll_lo_code) and `hi3..hi0`
+* (pll_hi_code) from `serdes_digital_top_v3`.
+* Dependencies:
+*   sky130_primitives.spice, sky130_pfet_lvt.spice, cmos_logic.spice,
+*   monitor.spice, monitor_cmos.spice.
+
+.subckt pll_vctrl_window_cmos z hi lo lo3 lo2 lo1 lo0 hi3 hi2 hi1 hi0 ilo ihi ibh ibl vdd vss
+Xlo ilo lo3 lo2 lo1 lo0 vlo vdd vss serdes_vref_gnd_cmos r0=160k rstep=4k
+Xhi ihi hi3 hi2 hi1 hi0 vhi vdd vss serdes_vref_vdd_cmos r0=64k  rstep=6k
+Xh  z   vhi hi  ibh vdd vss serdes_cmp_hv
+Xl  vlo z   lo  ibl vdd vss serdes_cmp_hv
+.ends pll_vctrl_window_cmos

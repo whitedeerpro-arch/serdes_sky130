@@ -2,6 +2,12 @@
 
 行为级先验证架构，再在晶体管级及提取后复查；相邻模块集成与系统测试分开。
 
+当前 [PLL v4 闭环台](tb/lock_v4/verify_pll_v4_closed_loop.py) 使用 [v4 顶层](spice/pll_top_r6_v4_upgrade.spice)、固定粗码和双节点预充。发布结果的反馈路径是 `clock_frontend_r6q` 的 CML ÷8，片级目标 `r5` + SAFF-TSPC 的独立结果与后续验证见[当前状态](../../../docs/status/current.md)。
+
+片级 [v4.2 候选](spice/pll_top_r6_v4p2_saff.spice) 使用四路 `r5` 直接驱动八相时钟，由 `c1/c5` 经加固 SAFF ÷8 反馈。[v4.2 测试台](tb/verify_pll_v4p2_saff.py)覆盖固定粗码、预充后短窗功能。正式判锁、带 TX/RX 负载、从零冷启分开验收。功耗比较需固定起停状态、负载并统一供电轨求和。 [片级证据](../../../results/catalog/chip_integration_20261124.json)
+
+## 历史集成试验
+
 已有相邻模块原型、PFD/CP/LF 开环联调和混合视图闭环捕获；真实 VCO 加平衡 dummy 的反馈链已完成 TT 预充后持续工程判锁观察，LF 仍为理想 R/C。
 新结果见 [LF预充与PLL捕获](../../../docs/history/pll_precharge_capture.md)，不代表 PVT、噪声或提取后签核。
 新跑的近锁定原生PLL另保存所有VCO相位及CML slave/master分频节点，供[实际分发buffer联调](../../../docs/history/physical_clock_distribution_results.md)使用；该记录不重定义原来的捕获时间。

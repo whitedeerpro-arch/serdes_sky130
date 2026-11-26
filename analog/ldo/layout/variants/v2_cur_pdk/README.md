@@ -1,6 +1,6 @@
 # `serdes_pll_supply_hv18_v2_cur` — Current-Mode Bias Input LDO v2 (`v2_cur_pdk`)
 
-Current-mode bias input variant of the **LDO v2** (`3.0–3.6 V → 1.8 V`, `2–10 mA`, `60.00 pF` stacked+fused MIM2) PLL supply macro, resolving the **BIAS v2 vs LDO v2 interface mismatch** without touching the adopted `v2_pdk` baseline or `config/pll_working_revision.toml`.
+Adopted current-input HV18 PLL supply macro, with a 3.0–3.6 V input and 60 pF of stacked and fused MIM. It accepts the BIAS v2 current directly. The older voltage-input v2 characterization and current-input v2_cur verification are documented in the LDO report. [LDO v2 and v2_cur](../../../../../docs/design/ldo_v2.md)
 
 ## Interface Mismatch Resolved
 

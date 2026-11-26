@@ -185,10 +185,11 @@ def build_cp_steer_v4(out: Path) -> dict:
     w = out / cell
     w.mkdir(parents=True, exist_ok=True)
 
-    # --- PDK primitives ---
-    upn_p = clean_prim(w, "upn_pdk", "sky130_fd_pr__nfet_01v8", dict(w=2.0, l=0.88, nf=1, conn_gates=1, guard=0))
+    # --- PDK primitives (v4.1 skew-aligned UP inverter: Xupn 4/0.30 nf=2, Xupp 12/0.15 nf=6) ---
+    upn_p = clean_prim(w, "upn_pdk", "sky130_fd_pr__nfet_01v8", dict(w=2.0, l=0.30, nf=2, conn_gates=1, guard=0))
     n2_p = clean_prim(w, "n2_pdk", "sky130_fd_pr__nfet_01v8", dict(w=2.0, l=0.15, nf=2, conn_gates=1, guard=0))
     p4_p = clean_prim(w, "p4_pdk", "sky130_fd_pr__pfet_01v8", dict(w=2.0, l=0.15, nf=4, conn_gates=1, guard=0))
+    p6_p = clean_prim(w, "p6_pdk", "sky130_fd_pr__pfet_01v8", dict(w=2.0, l=0.15, nf=6, conn_gates=1, guard=0))
     nsw8_p = clean_prim(w, "nsw8_pdk", "sky130_fd_pr__nfet_01v8",
                         dict(w=2.0, l=0.15, nf=8, conn_gates=0, guard=0, topc=1, botc=1))
     psw16_p = clean_prim(w, "psw16_3_pdk", "sky130_fd_pr__pfet_01v8",
@@ -255,19 +256,19 @@ def build_cp_steer_v4(out: Path) -> dict:
     # COLUMN 1 (Center Band): Digital Pulse Drivers
     # =========================================================================
     dy_drvn, dy_drvp = -3.90, 3.90
-    x_up, x_dn1, x_dn2 = 4.10, 7.45, 10.80
+    x_up, x_dn1, x_dn2 = 3.95, 7.65, 11.00
 
     c.include(upn_p, dx=x_up, dy=dy_drvn)
     c.include(n2_p, dx=x_dn1, dy=dy_drvn)
     c.include(n2_p, dx=x_dn2, dy=dy_drvn)
-    c.include(p4_p, dx=x_up, dy=dy_drvp, mirror_y=True)
+    c.include(p6_p, dx=x_up, dy=dy_drvp, mirror_y=True)
     c.include(p4_p, dx=x_dn1, dy=dy_drvp, mirror_y=True)
     c.include(p4_p, dx=x_dn2, dy=dy_drvp, mirror_y=True)
 
     i_upn = prim_info(upn_p, x_up, dy_drvn, False)
     i_dn1n = prim_info(n2_p, x_dn1, dy_drvn, False)
     i_dn2n = prim_info(n2_p, x_dn2, dy_drvn, False)
-    i_upp = prim_info(p4_p, x_up, dy_drvp, True, mirror_y=True)
+    i_upp = prim_info(p6_p, x_up, dy_drvp, True, mirror_y=True)
     i_dn1p = prim_info(p4_p, x_dn1, dy_drvp, True, mirror_y=True)
     i_dn2p = prim_info(p4_p, x_dn2, dy_drvp, True, mirror_y=True)
 
@@ -938,8 +939,8 @@ def build_cp_steer_v4(out: Path) -> dict:
     ref_lines = [
         "* Physical LVS reference for pll_cp_steer_v4 (k=4, Icp=200 uA, wide-swing + active replica servo)",
         f".subckt {cell} up dn out vbn vbp ibias vdd vss",
-        "Xupn up_b up vss vss sky130_fd_pr__nfet_01v8 w=2 l=0.88",
-        "Xupp up_b up vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15",
+        "Xupn up_b up vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.3",
+        "Xupp up_b up vdd vdd sky130_fd_pr__pfet_01v8 w=12 l=0.15",
         "Xdn1_n dn_b dn vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15",
         "Xdn1_p dn_b dn vdd vdd sky130_fd_pr__pfet_01v8 w=8 l=0.15",
         "Xdn2_n dn_on dn_b vss vss sky130_fd_pr__nfet_01v8 w=4 l=0.15",

@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-11-26T09:45:00+08:00",
+  "scope": "SKY130A 1.8 V 5.0 Gb/s NRZ SerDes — 8/8 Analog Hardening, Pin-Co-Optimized 32-bit Digital v4p1, Compacted 5G Hybrid Decap Tiles & Plan-C Full-Chip Physical Signoff",
+  "status": "SIGNED_OFF",
+  "chip_top_5g": {
+    "cell": "serdes_5g_top_pdk",
+    "plan": "Plan C (v4p1 pin-co-optimized, R90 LC-VCO, R270_MX TX South ortho RX East)",
+    "builder": "verification/layout/build_chip_top_5g_pdk.py",
+    "renderer": "verification/layout/plot_chip_top_5g_pdk.py",
+    "core_um": [936.0, 650.0],
+    "core_area_mm2": 0.6084,
+    "aspect_ratio": 1.44,
+    "active_macro_count": 13,
+    "active_macro_density_pct": 70.3,
+    "decap_banks": 8,
+    "decap_tiles_total": 131,
+    "decap_tiles_breakdown": {"direct_1v8": 68, "damped_1v8": 51, "hv33": 12},
+    "decap_area_pct": 10.9,
+    "decap_top_cap_pf": 147.03,
+    "rx_33b_crossings": 0,
+    "rx_33b_max_dx_um": 0.23,
+    "rx_33b_wl_um": 937.3,
+    "tx_17b_wl_um": 1658.7,
+    "vco_to_clk_host_avg_um": 99.5,
+    "lf_to_vco_vctrl_um": 49.8,
+    "top_python_audit": {
+      "signals_checked": 99,
+      "opens": 0,
+      "shorts": 0,
+      "power_domains_distinct": 8,
+      "macro_pwr_ties": "28/28",
+      "decap_banks_tied": "8/8",
+      "top_spacing_viols": 0
+    },
+    "magic_signoff": {
+      "drc_full_total": 0,
+      "drc_rules": 0,
+      "gds_bytes": 58119952,
+      "gds_sha256": "4ca91bbd21b881db6400ea8ccc372e6f97f1c56dbe8256a489a9234f2324c6c5",
+      "mag_sha256": "1332d300d9852484ebe296172bc72bfe2576e1fe110af5c37187ebf0c6a3ca87",
+      "ext2spice_ok": true,
+      "hier_audit_ok": true,
+      "must_connect": "28/28",
+      "must_differ": "41/41"
+    },
+    "figures": [
+      "docs/figures/layout/serdes_5g_top_pdk_20261126.png",
+      "docs/figures/layout/serdes_5g_top_pdk_20261126_light.png",
+      "docs/figures/layout/serdes_5g_chip_top_v4p1_20261126.png"
+    ]
+  },
+  "decap_5g_tiles": {
+    "builder": "verification/layout/decap_5g_tiles.py",
+    "pitch_um": [20.8, 17.2],
+    "tile_area_um2": 357.8,
+    "area_vs_4g_pct": -12.6,
+    "variants": {
+      "serdes_decap_5g_direct_1v8_pdk": {"cap_pf": 1.265, "drc": 0},
+      "serdes_decap_5g_damped_1v8_pdk": {"cap_pf": 1.05, "r_damp_ohm": 121.0, "drc": 0},
+      "serdes_decap_5g_hv33_pdk": {"cap_pf": 0.622, "drc": 0},
+      "serdes_decap_5g_mixed_2x2_check": {"drc": 0}
+    }
+  },
+  "digital_top_5g": {
+    "v4_32b": {
+      "dir": "digital/pnr/variants/hd_pnr_v4_32b/serdes_digital_top_v4",
+      "size_um": [394.7, 372.6],
+      "area_um2": 147065.2,
+      "drc": 0,
+      "lvs": "MATCH",
+      "sta_5g_4g_5corner_ocv": "MET"
+    },
+    "v4p1_5g_coopt": {
+      "builder": "digital/pnr/run_v4p1_5g_coopt_pnr.py",
+      "dir": "digital/pnr/variants/hd_pnr_v4p1_5g_coopt/serdes_digital_top_v4",
+      "size_um": [385.9, 353.6],
+      "area_um2": 136454.2,
+      "area_vs_v4_pct": -7.2,
+      "util_pct": 75.0,
+      "builtin_decap_pf": 88.93,
+      "sta_6corner_ocv_min_setup_ns": 0.059,
+      "sta_6corner_ocv_min_hold_ns": 0.073,
+      "cdc_sync1_fanout1": "26/26",
+      "drc": 0,
+      "lvs": "MATCH"
+    }
+  },
+  "analog_5g_macros": {
+    "lc_vco_5g_oct_pdk": {
+      "dir": "analog/pll/vco_5g/layout/variants/lc_vco_5g_oct_pdk",
+      "drc": 0, "lvs": "MATCH",
+      "pvt_cpex": "6/6 PASS + 125C frozen-code 3/3 PASS (all-PVT intersection 4.469..5.350 GHz)",
+      "mc_ss85": "24/24 (100%), IQ sigma=0.645 ps"
+    },
+    "div_ab_5g_v2_pdk": {
+      "dir": "analog/pll/divider/layout/variants/div_ab_5g_v2_pdk",
+      "drc": 0, "lvs": "MATCH", "m5_pct": 0.0,
+      "pvt_cpex": "6/6 (12/12 /8 & /10) PASS (SS -40C H=206.5 / S=131.4 ps)",
+      "mc_ss_n40": "50/50 (100%), |diff_sk| <= 4.77 ps"
+    },
+    "ldo_hv18_v2_cur_kelvin_pdk": {
+      "dir": "analog/ldo/layout/variants/v2_cur_kelvin_pdk",
+      "drc": 0, "lvs": "MATCH",
+      "pvt_rcx": "5/5 + SF/FF cold skew PASS (PSRR >= 28.7 dB, R_eff -92.9%)",
+      "mc_rcx": "100x intrinsic 3sigma = 8.70..10.76 mV"
+    },
+    "tx_vdrv_ldo_v4p5_pdk": {
+      "dir": "analog/tx/sst/layout/variants/v4p5_pdk",
+      "drc": 0, "lvs": "MATCH",
+      "pvt_cpex": "3/3 skew PASS (PM 71.1..85.2 deg)",
+      "mc_cpex": "200x TT/SS 85C vdrv 3sigma <= 15.60 mV"
+    },
+    "tx_sst_5g_v5_pdk": {
+      "dir": "analog/tx/sst/layout/variants/v5_pdk",
+      "size_um": [256.8, 169.58],
+      "drc": 0, "lvs": "MATCH", "ports": 38,
+      "pvt_cpex": "16/16 PASS (12/12 5G + 4/4 4G, spread 0.006..0.145 UI, Vdrv_rip <= 44.3 mVpp, margin 100.1..226.7 mV)"
+    },
+    "ctle_shunt_5g_w3_pdk": {
+      "dir": "analog/rx/cmos_rx/layout/variants/ctle_shunt_5g_w3_pdk",
+      "drc": 0, "lvs": "MATCH", "m5_pct": 0.0,
+      "pvt_cpex": "45/45 AC + loaded 5G eyes PASS (C2 no-FFE & C3+FFE)",
+      "mc_cpex": "400x TT/SS 85C Vos 3sigma <= 20.28 mV"
+    },
+    "slicer_5g_pdk": {
+      "dir": "analog/rx/cmos_rx/layout/variants/slicer_5g_pdk",
+      "size_um": [29.6, 31.54],
+      "drc": 0, "lvs": "MATCH", "m5_pct": 0.0,
+      "pvt_cpex": "6/6 PASS (99..259 ps @ +/-10 mV, hyst <= 0.50 mV, C_in -4.4..-10.4%)",
+      "mc_cpex": "250/250 (100%) sigma=6.09..6.77 mV (3sigma <= 20.30 mV, >= 8.05sigma trim)"
+    },
+    "pi_4ph_5g_v3_pdk": {
+      "dir": "analog/rx/cmos_rx/layout/variants/v5g_4ph_v3_pdk",
+      "size_um": [173.38, 72.72],
+      "drc": 0, "lvs": "MATCH", "m5_pct": 0.0, "ports": 43,
+      "pvt_cpex": "6/6 (24/24 code x reset) ALL_OK=True (3.00..10.66 ps, Hi-Z <= 4.5 mV)",
+      "mc_ss_n40": "24x: 0/24 180-deg flips, 0/24 dead, 22/24 locked 0-deg, 20/24 < 30 ps (2x v2)"
+    },
+    "rx_cmos_top_5g_pdk": {
+      "dir": "analog/rx/cmos_rx/layout/variants/rx_top_5g_pdk",
+      "size_um": [312.1, 199.4],
+      "drc": 0, "fp": 0, "dc_lvs": "MATCH", "open_lvs": "MATCH",
+      "ports_closed": 72, "ports_open": 74,
+      "ctle_p_n_fF": [57.293, 57.535]
+    }
+  }
+}

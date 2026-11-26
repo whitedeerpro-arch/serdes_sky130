@@ -71,9 +71,15 @@
 - **`tb_serdes_digital_top_v3`**：PASS（4 子系统联合验证：PLL 423 周期锁定 `vco_code=18`、TX 预热与 A/B 流水、RX `offset=11` 对齐与异步 FIFO 60 字 0 错、CDR 跨 `arst_n` 纪元复位持续跟踪且 PI 选通严格独热）。
 - **v3.1 专项验证**：确认 `pll_startup_supervisor` 周期中段拉高 `abort_async` 不产生模拟端口组合毛刺并在同步后安全进入 `FAULT 5`、确认 `rx_word_align16` 异步复位后 32 个控制/偏移/候选寄存器全零无 X 态。
 
+### 现行 CMOS RX RTL 的独立 CDR 回归
+
+v3.2 工作树的 PI 码递增使采样时钟延后。独立 CDR 台使用与 GLS 台相同的历史 LUT 步长，两路采样都按 CMOS 极性增加延时。以 400,000 UI 的行为时钟、±300 ppm 频偏分别回归，两点各 19,936 字，错字、缺口和滑移均为 0。下节 GLS 收据对应发布的 v3.1。复现步骤见[横向审查记录](../history/project_review_20261124.md#rtl-回归和历史版图复现)。
+
+02:17 的独立核心复跑导入 01:22 的 v3.2 GDS，SS 建立违例位于 RX 字时钟域和 CDR 时钟域。02:31 的后续 GDS 宏级 DRC=0、LVS=MATCH，SS 的 RX 字时钟域达到正裕量，仍有 CDR 建立违例。该版最长路径从 `rx_cdr_phase_applied` 寄存器出发，经过延时单元和运算逻辑。[两版 STA 与 GDS 哈希](../../results/catalog/chip_integration_20261124.json)
+
 ## VCS SDF 后布局门级仿真（GLS）+ SVA + Verdi FSDB 签核
 
-使用本机 Synopsys **VCS-MX O-2018.09-SP2** 与 **Verdi O-2018.09-SP2 PLI** 对签核门级网表 [serdes_digital_top_v3.v](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.v) 完成 4 模式（RTL 黄金 + 3 角 OpenRCX 导出 SDF 3.0）门级后仿签核（脚本：[run_v3_gls_vcs.py](../../digital/pnr/run_v3_gls_vcs.py)，测试台：[tb_serdes_digital_top_v3_gls.sv](../../digital/pnr/rtl_v3/tb_serdes_digital_top_v3_gls.sv)，文件清单：[rtl_v3.f](../../digital/pnr/rtl_v3/rtl_v3.f) / [gls_v3.f](../../digital/pnr/rtl_v3/gls_v3.f)）。单线程 OpenROAD（`-threads 1`）从签核 `.def` + `nom/max/min` OpenRCX `.spef` 导出三份完整 SDF 3.0（每角均含 **12,026 IOPATH、12,489 INTERCONNECT、1,375 TIMINGCHECK**，覆盖全部 2,750 SETUP、2,750 HOLD、806 RECOVERY、806 REMOVAL；VCS 反标 `0` 报错，156 条提示全为顶层输出端口上层互连 `SDFCOM_UHICD`）。
+本机 Synopsys **VCS-MX O-2018.09-SP2** 和 **Verdi O-2018.09-SP2 PLI** 完成 1 个 RTL 参考模式及 3 个 SDF 3.0 门级模式。OpenROAD（`-threads 1`）从签核 `.def` 与 `nom/max/min` OpenRCX `.spef` 导出 SDF，每角含 12,026 IOPATH、12,489 INTERCONNECT 和 1,375 TIMINGCHECK。VCS 反标 0 报错，156 条提示对应顶层输出端口上层互连 `SDFCOM_UHICD`。[门级网表](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/serdes_digital_top_v3.v) · [运行脚本](../../digital/pnr/run_v3_gls_vcs.py) · [测试台](../../digital/pnr/rtl_v3/tb_serdes_digital_top_v3_gls.sv) · [RTL 清单](../../digital/pnr/rtl_v3/rtl_v3.f) · [GLS 清单](../../digital/pnr/rtl_v3/gls_v3.f)
 
 | 仿真模式 | SDF 反标 / 标志 | 状态 | 同步时序违例 | 异步 FIFO 未选中体 `s1_b*` 跨越 | SVA 通过 / 失败 | PLL 模拟端口毛刺 | RX 错字 (`e0/e1`) | CDR `+300` / `−300 ppm` 峰值误差 (ps) |
 |---|---|---|---:|---:|---:|---:|---:|---:|
@@ -91,5 +97,6 @@
 
 ## 交付物与适用范围
 
+- FIFO 采用 `DATA_WIDTH=16`、`ADDR_BITS=4`。v3.1 读出固定读取 16 个存储槽，写指针更新按 16 位实现。现有 FIFO 压力台复用 v3.1 RTL 时，默认深度通过，`ADDR_BITS=3/2` 各出现存储越界和读出错误。上述两个参数以采用值作为集成边界。
 - 交付物位于 [digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/)：`.def`、`.gds`、`.v`、`_pg.v`、`.png` 与 [summary.json](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json)。
 - 适用范围：3 角 STA 覆盖 SKY130A `sky130_fd_sc_hd` `tt_025C_1v80` / `ss_100C_1v60` / `ff_n40C_1v95` 与对应 OpenRCX 寄生规则；顶层与模拟核心对接后的片级电源网压降（IR drop）与模拟-数字端口寄生耦合待顶层集成阶段验证。

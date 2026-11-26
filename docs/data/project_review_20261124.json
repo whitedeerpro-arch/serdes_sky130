@@ -1,0 +1,383 @@
+{
+  "date": "2026-11-24",
+  "seed": "20261124",
+  "source": "Working tree at initial inventory, including untracked, non-ignored paths. Pool sizes and selected paths refer to that inventory.",
+  "pool_command": "git ls-files -co --exclude-standard",
+  "eligibility_suffixes": [
+    ".py",
+    ".spice",
+    ".sv",
+    ".md",
+    ".json",
+    ".toml",
+    ".js",
+    ".html",
+    ".css",
+    ".sch",
+    ".sym",
+    ".mdx",
+    ".f",
+    ".lib"
+  ],
+  "method": "Use the lowest SHA-256 hex digests of <seed>:<stratum-id>:<repo-relative-path> inside each directory stratum. Read the selected source, data fields or pertinent sections, in addition to targeted checks.",
+  "sample_count": 76,
+  "strata": [
+    {
+      "id": "pll",
+      "pool_size": 284,
+      "count": 5,
+      "prefixes": [
+        "analog/pll/"
+      ],
+      "sample": [
+        "analog/pll/vco/tb/tuning/parasitic_ends.py",
+        "analog/pll/divider/layout/build_prescaler8_pdk.py",
+        "analog/pll/vco/schematic/pll_vco_cap_unit.sch",
+        "analog/pll/pfd/README.md",
+        "analog/pll/vco/behavioral/vco_feedback_model.spice"
+      ]
+    },
+    {
+      "id": "tx-sst",
+      "pool_size": 20,
+      "count": 4,
+      "prefixes": [
+        "analog/tx/sst/"
+      ],
+      "sample": [
+        "analog/tx/sst/layout/variants/v4_pdk/serdes_tx_sst_driver_pdk_ref.spice",
+        "analog/tx/sst/layout/variants/v4_pdk/sst_vdrv_ldo_pdk_ref.spice",
+        "analog/tx/sst/spice/tx_sst_driver.spice",
+        "analog/tx/sst/layout/build_tx_sst_v4_pdk.py"
+      ]
+    },
+    {
+      "id": "rx-cmos",
+      "pool_size": 33,
+      "count": 4,
+      "prefixes": [
+        "analog/rx/cmos_rx/"
+      ],
+      "sample": [
+        "analog/rx/cmos_rx/layout/variants/v2_pdk/serdes_rx_cmos_pi_8ph_pdk_ref.spice",
+        "analog/rx/cmos_rx/schematic/pi_tgate_symbol.sym",
+        "analog/rx/cmos_rx/tb/slicer/verify_slicer.py",
+        "analog/rx/cmos_rx/layout/build_rx_dt_slicer_pdk.py"
+      ]
+    },
+    {
+      "id": "bias-and-ldo",
+      "pool_size": 128,
+      "count": 5,
+      "prefixes": [
+        "analog/bias/",
+        "analog/ldo/"
+      ],
+      "sample": [
+        "analog/ldo/layout/variants/v2_cur_pdk/serdes_pll_supply_hv18_v2_cur_probe_pdk_rcx.spice",
+        "analog/ldo/layout/ldo_hv18_core_r4_ref.spice",
+        "analog/bias/layout/variants/v2_pdk/serdes_bias_cml_v2_pdk_rcx.spice",
+        "analog/bias/spice/bias_dist.spice",
+        "analog/ldo/layout/pll_supply_hv18_r4_ref.spice"
+      ]
+    },
+    {
+      "id": "analog-common-layout",
+      "pool_size": 110,
+      "count": 3,
+      "prefixes": [
+        "analog/common/",
+        "analog/layout/"
+      ],
+      "sample": [
+        "analog/common/devices/schematic/symbols/sky130_fd_pr__pfet_01v8.sym",
+        "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice",
+        "analog/common/devices/spice/sky130_pfet_lvt.spice"
+      ]
+    },
+    {
+      "id": "analog-legacy",
+      "pool_size": 173,
+      "count": 3,
+      "prefixes": [
+        "analog/tx/",
+        "analog/rx/"
+      ],
+      "exclude_prefixes": [
+        "analog/tx/sst/",
+        "analog/rx/cmos_rx/"
+      ],
+      "sample": [
+        "analog/rx/top/tb/loaded_link/case.toml",
+        "analog/tx/clock_distribution/spice/tx_clock_state_detector.spice",
+        "analog/rx/ctle/tb/channel_replay/case.toml"
+      ]
+    },
+    {
+      "id": "production-rtl",
+      "pool_size": 21,
+      "count": 4,
+      "prefixes": [
+        "digital/pnr/rtl_v3/"
+      ],
+      "sample": [
+        "digital/pnr/rtl_v3/mon_sync.sv",
+        "digital/pnr/rtl_v3/rtl_v3.f",
+        "digital/pnr/rtl_v3/bbpd_window_vote.sv",
+        "digital/pnr/rtl_v3/mon_persist.sv"
+      ]
+    },
+    {
+      "id": "pnr-digital",
+      "pool_size": 71,
+      "count": 3,
+      "prefixes": [
+        "digital/"
+      ],
+      "exclude_prefixes": [
+        "digital/pnr/rtl_v3/"
+      ],
+      "sample": [
+        "digital/pnr/rtl_v2/tb_tx_ingress_control_v2.sv",
+        "digital/rx/tb/tb_rx_cdr_closed_loop.sv",
+        "digital/common/tb/tb_mon_freq_meter.sv"
+      ]
+    },
+    {
+      "id": "architecture",
+      "pool_size": 15,
+      "count": 4,
+      "prefixes": [
+        "docs/status/",
+        "docs/overview/"
+      ],
+      "sample": [
+        "docs/status/prelayout_plan.md",
+        "docs/status/goal_mc_bias.md",
+        "docs/status/changelog.md",
+        "docs/status/workflow.md"
+      ]
+    },
+    {
+      "id": "design",
+      "pool_size": 88,
+      "count": 5,
+      "prefixes": [
+        "docs/design/"
+      ],
+      "sample": [
+        "docs/design/pll_divider.md",
+        "docs/design/pll_sync_prescaler8.md",
+        "docs/design/iterations/rx.readout/20261107T150911Z_fb43de4ab8.json",
+        "docs/design/tx_parallel_serializer.md",
+        "docs/design/r6_mainline_review.md"
+      ]
+    },
+    {
+      "id": "verification-physical-docs",
+      "pool_size": 19,
+      "count": 4,
+      "prefixes": [
+        "docs/layout/",
+        "docs/verification/"
+      ],
+      "sample": [
+        "docs/layout/pll_acceptance_20261115.md",
+        "docs/layout/chip_floorplan_20261123.md",
+        "docs/verification/README.md",
+        "docs/verification/optimization_toolkit.md"
+      ]
+    },
+    {
+      "id": "history-workpacks",
+      "pool_size": 153,
+      "count": 3,
+      "prefixes": [
+        "docs/history/",
+        "docs/work_packages/"
+      ],
+      "sample": [
+        "docs/history/pll_pfd_cp_lf_next.md",
+        "docs/work_packages/deliveries/tx-final-clock-chain.md",
+        "docs/history/tx_launch_characterization.md"
+      ]
+    },
+    {
+      "id": "config",
+      "pool_size": 32,
+      "count": 4,
+      "prefixes": [
+        "config/"
+      ],
+      "sample": [
+        "config/tx_working_revision.toml",
+        "config/rx_cdr.toml",
+        "config/pll_working_revision.toml",
+        "config/eye_display.toml"
+      ]
+    },
+    {
+      "id": "verification",
+      "pool_size": 178,
+      "count": 5,
+      "prefixes": [
+        "verification/"
+      ],
+      "sample": [
+        "verification/analysis/tx_termination_current.py",
+        "verification/digital/tx_ingress_stimulus.py",
+        "verification/plotting/vco_window_boundaries.py",
+        "verification/layout/magicutil.py",
+        "verification/models/channel/pcb_family/C1_loss3.spice"
+      ]
+    },
+    {
+      "id": "framework",
+      "pool_size": 43,
+      "count": 4,
+      "prefixes": [
+        "src/"
+      ],
+      "sample": [
+        "src/serdes_flow/work_packages.py",
+        "src/serdes_flow/bias.py",
+        "src/serdes_flow/corners.py",
+        "src/serdes_flow/robust_sizing.py"
+      ]
+    },
+    {
+      "id": "tests",
+      "pool_size": 85,
+      "count": 4,
+      "prefixes": [
+        "tests/"
+      ],
+      "sample": [
+        "tests/test_r6_map_wave_audit.py",
+        "tests/test_design_viewer.py",
+        "tests/test_clock_load.py",
+        "tests/test_physical_load_card.py"
+      ]
+    },
+    {
+      "id": "workbench",
+      "pool_size": 5,
+      "count": 3,
+      "prefixes": [
+        "web/design/"
+      ],
+      "sample": [
+        "web/design/index.html",
+        "web/design/style.css",
+        "web/design/catalog.js"
+      ]
+    },
+    {
+      "id": "schematics",
+      "pool_size": 72,
+      "count": 3,
+      "prefixes": [
+        "schematic_lib/",
+        "docs/schematics/"
+      ],
+      "sample": [
+        "schematic_lib/serdes/sky130_fd_pr__cap_var_lvt.sym",
+        "schematic_lib/serdes/serdes_cml_buffer.sch",
+        "schematic_lib/serdes/serdes_cml_to_cmos.sch"
+      ]
+    },
+    {
+      "id": "release-baselines",
+      "pool_size": 60,
+      "count": 2,
+      "prefixes": [
+        "releases/"
+      ],
+      "sample": [
+        "releases/v0.1-design-freeze-20261028/digital/pll/tb/tb_pll_startup_default_timing.sv",
+        "releases/v0.1-design-freeze-20261028/config/vco_coarse_calibration.toml"
+      ]
+    },
+    {
+      "id": "evidence",
+      "pool_size": 129,
+      "count": 4,
+      "prefixes": [
+        "results/catalog/"
+      ],
+      "sample": [
+        "results/catalog/tx_clock_output_confirmation.json",
+        "results/catalog/model_library_cost.json",
+        "results/catalog/experiments.json",
+        "results/catalog/pll_cp_steer_window.json"
+      ]
+    }
+  ],
+  "source_head": "10fdcad38798201f898dfa39b337a689262e9f99",
+  "clock_top_metal_proxy": {
+    "scope": "Magic capacitance extraction of archived top-level metal with endpoint labels, macro pin loads omitted. Arithmetic sum is used as a scalar proxy.",
+    "input_parent_mag_sha256": "98e64b082b0d36c1ee81fdea1cb948133fa89b2739b4603df8915be9bba2124f",
+    "per_phase": [
+      {
+        "phase": "c0",
+        "ground_ff": 19.144,
+        "arithmetic_sum_ff": 38.077
+      },
+      {
+        "phase": "c1",
+        "ground_ff": 11.261,
+        "arithmetic_sum_ff": 42.563
+      },
+      {
+        "phase": "c2",
+        "ground_ff": 12.109,
+        "arithmetic_sum_ff": 43.536
+      },
+      {
+        "phase": "c3",
+        "ground_ff": 9.033,
+        "arithmetic_sum_ff": 38.402
+      },
+      {
+        "phase": "c4",
+        "ground_ff": 9.05,
+        "arithmetic_sum_ff": 38.968
+      },
+      {
+        "phase": "c5",
+        "ground_ff": 12.28,
+        "arithmetic_sum_ff": 45.1
+      },
+      {
+        "phase": "c6",
+        "ground_ff": 13.834,
+        "arithmetic_sum_ff": 43.099
+      },
+      {
+        "phase": "c7",
+        "ground_ff": 23.053,
+        "arithmetic_sum_ff": 39.964
+      }
+    ],
+    "measured_neighbor_coupling_ff_approx": [
+      12,
+      14
+    ],
+    "model": "0.69 R_eq C delay, constant R_eq within each comparison, no added mismatch or tap variation. Compare all pairs with 62.5 ps nominal spacing.",
+    "balance_results": [
+      {
+        "assumed_eq_kohm": 0.5,
+        "worst_pair_skew_ps": 2.423
+      },
+      {
+        "assumed_eq_kohm": 1.0,
+        "worst_pair_skew_ps": 4.846
+      },
+      {
+        "assumed_eq_kohm": 1.2,
+        "worst_pair_skew_ps": 5.815
+      }
+    ],
+    "equalize_to_max_added_ff": 31.091
+  }
+}

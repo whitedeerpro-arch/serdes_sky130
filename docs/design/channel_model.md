@@ -1,6 +1,6 @@
 # 信道模型
 
-> **当前修订**：RLC16 近无损代理（TX PVT 默认负载）+ 合成 100 Ω 差分 PCB 族 C0–C5（[配置](../../config/channel_family.toml)，[模型目录](../../verification/models/channel/)）。
+> **当前修订**：RLC16 近无损代理与合成 100 Ω 差分 PCB 族 C0–C5。TX SST/RX v2.2 的主线链路回归采用 C2；测试层级和实际时钟见[当前状态](../status/current.md)。[配置](../../config/channel_family.toml) · [模型目录](../../verification/models/channel/)
 > **关键数字**：C2（2 GHz 处 6 dB）为 RX 设计起点，C3（10 dB）为挑战场景。
 > **主要缺口**：合成模型，不是具体叠层/连接器提取；无串扰；链路级眼图门槛未定义。
 
@@ -41,5 +41,5 @@
 
 ## 待解决
 
-- 链路级（RX 输入或 CTLE 后）眼图门槛（[问题清单](../status/open_issues.md) I-20）。
-- C3/C4/C5 下的 RX 均衡覆盖（I-14）。
+- 链路级（RX 输入或 CTLE 后）眼图门槛、实际板线与系统噪声边界由 I-TOP-05 承接。[问题清单](../status/open_issues.md)
+- C3/C4/C5 保留为挑战与诊断场景。更强信道的进入条件见[下一版](../status/next_iteration.md)。

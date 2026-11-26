@@ -161,7 +161,7 @@ Xyce 版本为 `verification/smoke/tb_stimuli_xyce.cir`。十项检查值见 [sm
 | 四器件族CML卡，TT/SS_hh/FF_ll，OP＋20MHz AC＋2ns瞬态 | 16.53–19.21s | 1.44–1.54s | 所存DC/AC/瞬态值逐项相同 |
 | 实际r6 VCO TT1.8V/27°C，K9/Vctrl1.163V，14ns/4ps单点新deck | 45.60s | 28.04s | 两端波形相同，均1.997120738GHz |
 
-短卡加载完成时ngspice程序大小约346→24MB；该值不是物理版图面积或整台机器内存预算。短卡提速11.5–12.5倍，VCO单deck仅1.63倍，不能把前者外推成整个campaign加速。VCO多工况合deck已摊销加载；稳定窗口、模型选点及求解器成本仍需分别优化。并发上限继续为全机4、Codex2。
+短卡加载完成时 ngspice 程序大小约 346→24 MB，为进程级测量。短卡提速 11.5–12.5 倍，VCO 单 deck 提速 1.63 倍，多工况合 deck 可摊销加载。稳定窗口、模型选点及求解器成本分别记录。全机上限为 4，执行者配额见[协作页](../work_packages/collaboration.md)。
 
 ```bash
 uv run pytest -q tests/test_model_library.py

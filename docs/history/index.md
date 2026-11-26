@@ -1,5 +1,13 @@
 # 实验记录（历史）
 
+- [数字 v3.3 时序收口复核（2026-11-25）](digital_v3p3_closure_review_20261125.md)记录同口径 STA、RX 发射沿差异、CDC 回放及装配身份。
+
+- [4 Gb/s 片级签核和首片测试性复核（2026-11-24）](serdes_4g_signoff_dft_20261124.md)记录 `full_v5` 端口与电源几何抽查、IR 模型边界及首片 DFT 建议。
+
+- [4 Gb/s PPA 与 5 Gb/s 升级复核（2026-11-24）](ppa_upgrade_review_20261124.md)：同 deck 功耗重算、03:00 GDS 时序缩放、字宽/时钟方案与固定环路噪声分析。
+
+- [SerDes 横向审查与退役记录（2026-11-24）](project_review_20261124.md)：固定分层抽样、RTL 回归、历史版图复现、顶层装配复核和证据同步。
+
 - [文档、工作台与波形整理（2026-11-20）](workbench_refresh_20261120.md)：更新系统框图和证据入口，归档旧波形并保留原引用。
 
 - [分频器旧版与失败候选归档记录（2026-11-20）](divider_retirement_20261120.md)：按 CML 族（2 Var）与 CMOS/TSPC 族（2 Var）分族保留策略清退旧分频源码、测试台、`variants/pdk/` 与失败候选 `cmos_sync_2g`，归档登记见 `results/catalog/retired_divider_vars_20261120.json`。

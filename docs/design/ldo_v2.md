@@ -1,4 +1,6 @@
-# LDO v2：有源预稳压 + 过冲钳位 + 叠层融合 MIM2 完整供电宏（独立候选）
+# LDO v2 / v2_cur：有源预稳压、过冲钳位与融合 MIM2
+
+当前 PLL 安静域采用电流参考 `v2_cur`。下方电气表以早期电压参考 `v2` 为被测版本。现行生产宏保留 v2 的供电核心，偏置端改接 BIAS v2 的 `i_ldo0`。物理检查与 PLL 闭环中的安静域验证分别见 [v2_cur 版图](../../analog/ldo/layout/variants/v2_cur_pdk/README.md) 和[当前状态](../status/current.md)。
 
 **结论**：`serdes_pll_supply_hv18_v2` / `v2_pdk`（13 端口生产宏 + 15 端口环路探针宏，与 `smallcap` 100% 引脚兼容）通过拓扑与版图协同重构，在 **完整 `100 mΩ` 原生 RCX（`6,076` 提取电阻）** 下全面超越旧版 `r4` / `smallcap`：
 
@@ -49,7 +51,7 @@
 ## 3. 适用边界与归档结果
 
 - 本轮验收按 `2–10 mA` PLL 安静模拟域负载边界执行；UVLO 与短路过流保护（OCP）留在系统级电源管理层统一规划，未并入本核心。
-- 尚未接真实 PLL r6 闭环或跑 200 样本失配 MC；未修改现行 `config/ldo_working_revision.toml`。
+- 该前代 v2 实验没有包含真实闭环负载。后续 PLL v4 采用 `v2_cur` 完成预充后闭环特性测量；电流参考版或片级负载的独立电气扩角仍按各自工况验收。
 - 完整运行产物位于 `results/analog/ldo/v2/`：
   - 原理图 15 角 PVT：`20261120T070822.297791Z_schem_pvt/summary.json`
   - 原理图全 PDK 动态：`20261120T073417.659705Z_schem_dyn_fullpdk/summary.json`

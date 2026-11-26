@@ -6,31 +6,16 @@
 
 ---
 
-## 一、当前 4 Gb/s 发布主线（CMOS/SST TX & RX + 2 GHz 环振 PLL）（Active Release）
+## 一、4 Gb/s 发布主线
 
-### 1. PLL v4 与时钟子系统
-- **VCO r6 + PTAT 偏置与相噪/抖动标定**：[pll_vco_r6_ptat.md](pll_vco_r6_ptat.md)（融合 BIAS v2 PTAT 尾流温补，45/45 跨三温单码）· [pll_vco_r6_perf.md](pll_vco_r6_perf.md)（`28/66` + `sym9_clean` CPEX 八相正交误差 `≤ 0.76 ps`、相噪与 PLL v4 抖动 `1.91 ps` TT / `2.29 ps` 最差）· [pll_vco.md](pll_vco.md)（r6 5-bit 31 单元环振核心与量程基础）
-- **电荷泵与环路滤波器**：[pll_cp_v4.md](pll_cp_v4.md)（1/4 副本主动伺服 + 宽摆幅 PDK 签核 `v4_pdk`；v4.1 `up_wn=4.0` 进一步降毛刺至 −60 dBc）· [pll_loop.md](pll_loop.md)（PFD、环路稳定性、锁定检测与相位窗）
-- **反馈分频器与时钟接收**：[pll_tspc_reclock_divider.md](pll_tspc_reclock_divider.md)（Equalized Nikolic SAFF-TSPC 重定时 ÷8，`saff_reclock_2g_pdk`）· [clock_receiver.md](clock_receiver.md)（`r5_pdk` 全速 CML→CMOS 转换与 250 MHz 反馈接收）
-
-### 2. 电源与偏置子系统（LDO & BIAS）
-- **HV18 LDO v2_cur**：[ldo_v2.md](ldo_v2.md)（Native-NMOS 安静供电域 `v2_cur_pdk`，`27,826 µm²`，满/轻载稳定性与 RCX 签核）
-- **带隙与全局偏置 BIAS v2**：[bias_v2.md](bias_v2.md)（单级 FC-OTA + 真 CMOS `ref_pbuf` + 集成 `bias_top` `v2_pdk`，全 PVT/MC/RCX 签核）
-
-### 3. TX CMOS/SST SST 发送端（v4.3）
-- **16:1 串化 + 4 相 N-over-N SST + 2-tap FFE**：[tx_sst_v4.md](tx_sst_v4.md)（`v4_pdk`，`34,026 µm²`，DRC=0/LVS=MATCH，22/22 RCX 后仿通过 `C2_loss6`）
-
-### 4. RX CMOS/SST CMOS 接收端（v2.2）
-- **端接/CTLE + 2 GHz 64 码纯 CMOS PI + 四分之一速 Double-Tail 采样 + 8→32 解串**：[rx_cmos_v2.md](rx_cmos_v2.md)（`v2_pdk`，`47,932 µm²`，45/45 原理图端到端 + 3/3 CPEX 后仿 0 错码，PI 64 码 TT CPEX `|INL| = 0.0177 UI`）
-
-### 5. 统一精简数字顶层宏（v3.1）
-- **多速率数字顶层 P&R + 3 角 OpenRCX STA + 4 模式 VCS SDF GLS**：[digital_top_v3.md](digital_top_v3.md)（`103,932 µm²`，4,932 单元，6 时钟域全 MET，122,608 SVA 0 失败，`±300 ppm` 闭环 CDR）
-
-### 6. 信道与监控
-- **PCB 信道家族（C0–C5）**：[channel_model.md](channel_model.md)
-- **辅助监测电路**：[monitor.md](monitor.md)
-
----
+| 子系统 | 设计与证据入口 |
+|---|---|
+| PLL v4 | [r6/PTAT 码窗](pll_vco_r6_ptat.md) · [相噪与闭环边界](pll_vco_r6_perf.md) · [CP v4/v4.1](pll_cp_v4.md) · [SAFF-TSPC ÷8](pll_tspc_reclock_divider.md) · [时钟接收器](clock_receiver.md) |
+| 电源与偏置 | [HV18 LDO v2/v2_cur](ldo_v2.md) · [BIAS v2](bias_v2.md) |
+| 发送端 | [TX SST v4.3](tx_sst_v4.md) |
+| 接收端 | [CMOS RX v2.2](rx_cmos_v2.md) |
+| 数字 | [统一数字顶层 v3.1](digital_top_v3.md) |
+| 信道与监控 | [合成 PCB 信道族](channel_model.md) · [辅助监测](monitor.md) |
 
 ## 二、历史 CML 演进与设计推导参考（Legacy CML & Studies）
 

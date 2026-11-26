@@ -1,4 +1,4 @@
-# TX v4：四相 1 GHz 融合 4:1 纯 CMOS + 低压轨 N-over-N SST 16:1 发射机（独立候选）
+# TX v4：四相 1 GHz 纯 CMOS 串化与 N-over-N SST 发送端
 
 **结论**：为彻底消除全 CML TX 的高静态功耗（`86.15–118.67 mW`、TT `102.86 mW`）与尾管压差痛点，本轮在独立目录 `analog/tx/sst/` 完成了 **100% 去 CML 的四相 1 GHz 融合 `4:1` + 低压轨 N-over-N SST 完整 16:1 发射机（`serdes_tx_sst_top`）**（内置免费 2-tap FFE、ZQ 50 Ω 切片校准及片上 `V_drv ≈ 0.44 V` 稳压器）。
 
@@ -9,7 +9,7 @@
 - **ZQ 50 Ω 阻抗与回波损耗**：6 极端 MOS×RC 角 `R_avg = 48.73 – 50.68 Ω`（±2.5%），`S11 @ 1 GHz = −17.0 ~ −17.7 dB`，`S11 @ 2 GHz = −16.0 ~ −16.7 dB`。
 - **免费内置 2-tap FFE 实测（过真实 `C2_loss6` PCB 信道、无 RX CTLE）**：`TT` 远端散布 `0.1267 → 0.0339 UI`（收紧 `3.74×`）、裕量 `85.9 → 109.2 mV`；`SS 1.65 V −40 °C` 远端散布由超标 `0.1919 UI` 救回 **`0.0776 UI`**（裕量 `103.0 mV`，总功耗仅 `12.18 mW`）。
 - **四相 IQ 时钟偏斜容限**：`+15 ps` 偏斜下焊盘裕量仍 `205.9 mV`、散布 `0.0658 UI`（仍远低于 `0.15 UI` 门槛）。
-- **采用状态**：独立去 CML 候选（`analog/tx/sst/`），**未修改** `config/tx_working_revision.toml` 现行 CML 主线。
+- **采用状态**：`v1.0` 主线采用 TX SST v4.3。早期原理图数据与后续版图验证按各自修订记录。[当前状态](../status/current.md)
 
 入口：[驱动网表](../../analog/tx/sst/spice/tx_sst_driver.spice)、[16:4 纯 CMOS 串化](../../analog/tx/sst/spice/tx_sst_serializer16.spice)、[顶层 16:1 网表](../../analog/tx/sst/spice/tx_sst_top.spice)、[Stage 1 核心压测台](../../analog/tx/sst/tb/run_core_stress.py)、[Stage 2 45 角台](../../analog/tx/sst/tb/run_pvt45.py)、[绘图脚本](../../verification/plotting/tx_sst_v4.py)。
 
@@ -67,11 +67,11 @@
 ## 3. 适用边界与后续优化点
 
 1. **`V_drv` LDO 高频纹波阻尼**：在 `sf_v1950_t85` 热角下 `V_drv` 瞬态纹波峰峰值达 `103.9 mVpp`（`23.6 mVrms`，TT 为 `48.8 mVpp`），虽不影响 DC 均值（`0.432–0.442 V`）与焊盘眼图（`204.3 mV / 0.0131 UI`），后续可在 `vgate` 补偿电容上串联一小颗调零电阻 `R_z` 进一步阻尼。
-2. **当前测试边界**：45 角整链采用理想 1 GHz 四相时钟（`tr=tf=30 ps`）与 PDK `tt` 电阻卡（极端 `hh/ll` 电阻角已在 Stage 1 核心驱动验证）；物理版图提取后仿（CPEX/RCX）与真实 PLL 四相 1 GHz 时钟联调为下一阶段工作。
+2. **原理图测试边界**：MOS45 整链采用理想 1 GHz 四相时钟（`tr=tf=30 ps`）与 PDK `tt` 电阻卡。极端 `hh/ll` 电阻角用于 Stage 1 核心驱动验证。
 
 ---
 
-## 4. 物理版图签核（`v4_pdk`，5/5 单元 DRC=0 / LVS=MATCH）
+## 4. v4.3 基线版图签核（`v4_pdk`，5/5 单元 DRC=0 / LVS=MATCH）
 
 完整层次化 SKY130A PDK 版图已构建并通过 Magic 全规则 `DRC = 0`、Netgen `LVS = MATCH`（零属性误差、零浮空非器件 poly）以及独立 `verification/layout/review_cell.py --rc`（`physical_passed = True`、`devices_preserved = True`），详见 [v4_pdk/README.md](../../analog/tx/sst/layout/variants/v4_pdk/README.md) 与生成器 [build_tx_sst_v4_pdk.py](../../analog/tx/sst/layout/build_tx_sst_v4_pdk.py)。
 
@@ -91,3 +91,9 @@
   - `sst_vdrv_ldo_pdk` 采用 3D 堆叠将 `6× 24.8×24.8 µm`（`15.3 pF`）MIM1+MIM2 置于 4 条 `high_po_1p41` 电阻上方，双 MIM 共用中央 `via34` 接地柱，单排宽 `Xpass (nf=32, m=1)` 与阵列 `vdd/vdrv` 水平共线直连。
 
 ![TX v4 SST 16:1 顶层 PDK 版图](../../analog/tx/sst/layout/variants/v4_pdk/serdes_tx_sst_top_pdk.png)
+
+## 5. v4.3 后仿与 v4.3.1 泄放微修
+
+固定 `postlayout_v4_3` 汇总的 Stage 1 是驱动器 ZQ/S11，各有 6 项 CPEX 与 RCX。后续完整 TX 用 128-bit 载荷和理想四相时钟，分别验证 6 项 RLC16 CPEX、2 项 C2 CPEX（FFE=3）与 2 项 RLC16 RCX（FFE=0），十项的有效窗口均有正确位序和零错位。引用汇总时保留测试层级、寄生视图和通道。[发布证据索引](../../results/catalog/v1_0_subsystem_evidence.json)
+
+v4.3.1 将 TX 内部 `sst_vdrv_ldo` 的 `Xrbleed` 缩至 `5.0 µm`。本机独立物理收据已核对该几何及其参考，当前完整 TX 摆位外框为 `232.52 × 150.58 µm`。旧后仿汇总的四个提取输入哈希与现有同路径文件不同。下一次电气回归需冻结微修后的提取输入，并保留独立运行目录。[执行计划](../status/prelayout_plan.md)

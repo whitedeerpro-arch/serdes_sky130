@@ -1,4 +1,6 @@
-# BIAS v2：单级折叠共源共栅带隙 + 真晶体管 `ref_pbuf` + 叠层 MIM2 与统一 `bias_top` 集成宏（独立候选）
+# BIAS v2：折叠共栅带隙、`ref_pbuf` 与统一 `bias_top` 集成宏
+
+`v1.0` 采用 BIAS v2，PLL 台集成其 PTAT 尾流分支。单元与共享参考的验证保持各自负载边界。[当前状态](../status/current.md)
 
 **结论**：针对 v1 偏置子系统存在的多段电阻头阻漂移（`Vbg +16.4 mV`）、`-27 dB` 直流线性调整率、`Cc = 6 pF` 面积税、缺失 `ref_pbuf` PDK 版图以及 11 个子单元高度/引脚不对齐无法集成等问题，本轮重构并完成了全套 **BIAS v2** 电路与 7 单元 PDK 版图（核心集成宏 **`serdes_bias_top_v2_pdk`**），全 7 单元通过 Magic full-rule **`DRC = 0`** 与 Netgen **`LVS = MATCH`**，并完成 **135 角后仿 CPEX + 独立单元 RCX + 5 角从零上电/电源阶跃 + 512 ns LF 预充 + 200 样本三温失配 MC**：
 
@@ -13,7 +15,7 @@
   - **直流线性调整率大幅改善**：TT **`+4.10 mV/V`（`−47.7 dB`）**、最差 **`+8.90 mV/V`（`−41.0 dB`）**（较 v1 `39–51 mV/V` `−27 dB` 改善 **5.7×–12×**）；
   - **`+50 mV / 10 ps` 电源阶跃 `Vbg` 尖峰**：后仿仅 **`1.28–1.79 mV`**（较 v1 `24–29 mV` 降低 **16×**）；
   - **512 ns LF 预充**：`TT` 与 `SS hh 1.65 V −40 °C` 均稳态建立至 **`0.1–3.0 mV`** 内，且对 `Vbg` 反冲 **`≤ 0.005 mV`**。
-- **采用状态**：独立候选（`variants/v2_pdk/`），**未更改** `config/bias_working_revision.toml` 现行基线。
+- **修订入口**：`variants/v2_pdk/` 为 v2 物理套件。早期 v1/B2 参数留在原有工作修订文件中。
 
 入口：[电路网表](../../analog/bias/spice/bias_v2.spice)、[叶单元生成器](../../analog/bias/layout/build_bias_v2_pdk.py)、[顶层集成生成器](../../analog/bias/layout/build_bias_top_v2.py)、[PDK 交付目录](../../analog/bias/layout/variants/v2_pdk/README.md)、[PVT/AC 台](../../analog/bias/tb/v2/run_pvt_ac.py)、[启动台](../../analog/bias/tb/v2/run_startup.py)、[MC 台](../../analog/bias/tb/v2/run_mc.py)、[后仿台](../../analog/bias/tb/v2/run_postlayout.py)。
 

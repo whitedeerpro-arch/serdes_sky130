@@ -1,4 +1,6 @@
-# 2 GHz 纯 CMOS Equalized Nikolic SAFF-TSPC 重定时 ÷8 预分频器（独立候选）
+# 2 GHz CMOS Equalized Nikolic SAFF-TSPC 重定时 ÷8 预分频器
+
+片级反馈采用本分频器和 `r5` CML→CMOS 接收器。当前独立宏结果见下，七角 PLL 发布闭环的实际反馈链见[当前状态](../status/current.md)。
 
 **结论**：针对前代纯 CMOS 2 GHz 同步预分频器（`cmos_sync_prescaler8_2g`，已退档）在 `SS 1.65 V −40 °C` 后仿/失配崩溃的问题，本轮提出并完成了 **Equalized Nikolic SAFF-TSPC + 1 GHz 同步 2-bit 计数器 + 三路同构 2 GHz 重定时 DFF** 架构（`pll_saff_reclock_prescaler8_2g` `v7`，100% 纯 SKY130 MOS、零电阻/零 MIM 电容，10 端口接口兼容 `pll_cmos_prescaler8_2g`）。
 
@@ -64,4 +66,10 @@ FF 热角的 0.10 GHz 点对应 `saff_reclock__ff_v1950_t85_id_0.10G`，15 次�
 
 1. **`ss_v1650_t-40_mm` 极寒低压失配瓶颈已精确定位**：23/32 颗未翻样本集中在 `Xtg2 → Xff2`，因为 `Xtg2` 为 2:1 互补传输门 MUX，在 `SS 1.65 V −40 °C` 处于 `Vdd ≈ Vtn + |Vtp|` 的导通死区，叠加器件失配后串联阻值飙升。**v2.1 改进**：将 `Xtg2` 替换为**静态 LVT CMOS XOR / AOI（或带 `b1` LVT 使能脚的感放）**以彻底消除传输门死区，并适当增强内部 `seed` 或接入系统 `por_rst` 以消除无噪声仿真下 `~22 ns` 的偶发慢起振。
 2. **MC 夹具负载边界**：200 样本 MC 为提升吞吐采用 `Cpre = 45 fF` 等效前级驱动模型（未逐样本展开完整 `r5_pdk` CPEX）；45 角与 RCX 边界角均使用真实 `r5_pdk` v6 CPEX/RCX 驱动。
-3. **接口与主线边界**：本模块为 10 端口纯 CMOS ÷8 候选（与 11 端口 CML ÷8 主线分属两套接口族），未计入当前 PLL r6 闭环验证，暂不更改 `config/pll_working_revision.toml`。
+3. **接口与主线边界**。本模块为 10 端口纯 CMOS ÷8。早期发布闭环使用 11 端口 CML ÷8，片级装配采用 SAFF 宏，v4.2 原理图台使用下述加固候选。各次验证以实际 DUT 为准。 [当前状态](../status/current.md)
+
+## 加固候选和冷角验证
+
+[`v2_cand`](../../analog/pll/divider/spice/tspc_reclock_prescaler8_2g_v2_cand.spice)用静态 LVT CMOS 差分 XOR 替换无源传输门，在 1 GHz 计数级增加时钟负载配平，并调整预充和启动不对称。独立候选通过原理图全角和局部 CPEX 检查。原理图 MC 使用 `r5` 接收器 CPEX，候选提取后的失配仍需验证。 [固定结果](../../results/catalog/chip_integration_20261124.json)
+
+SS 冷角 `ch_15.r2` 首样本的 `q4` 首升沿在 21.312 ns，`q8` 首降沿在 22.324 ns。若已进入 4 ns 周期，首次升沿约在 24.3 ns，超出该次运行的 24 ns 窗口。保持 seed 与样本身份延长这一颗的观测，观察内部 `b1/b2` 和输出逐沿计数。若仅启动晚，可比较确定性初态与调整 `seed_k` 对冷启时间和稳态偏斜的影响。

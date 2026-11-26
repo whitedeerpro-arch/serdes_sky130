@@ -1,28 +1,21 @@
 # 芯片面积汇总（实测版图签核）
 
-> **权威实测数据**：以下全部宏尺寸均直接读取自 SKY130A 已签核（`Magic DRC = 0` / `Netgen LVS = MATCH`）的真实 `.mag` 与 `.def` 外框；完整摆位坐标、引脚对齐与阻尼 PDN 填充方案见 **[chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md)**（生成脚本：[plan_chip_floorplan.py](../../verification/layout/plan_chip_floorplan.py)）。
+片级集成以[片级规划](../layout/chip_floorplan_20261123.md)的摆位外框为准，脚本读取本机 `.mag` 和 `.def`。模块自己的签核报告记录对应修订的局部边界。下表按规划使用的供电域汇总，可与规划的实例清单逐项核对。
 
----
+## 1. 4 Gb/s 规划外框
 
-## 1. 4 Gb/s NRZ SerDes 实测片级面积（`0.5084 mm²` 核心）
+| 供电域 | 功能实例 | 数量 | 外框面积 (µm²) |
+|---|---|---:|---:|
+| `vdd_hv33` | HV18 LDO v2_cur | 1 | 37,958.68 |
+| `vdd_q` | 环振、尾偏置慢滤波、LF、CP、CP 偏置 | 5 | 28,068.51 |
+| `vdd_bias` | BIAS v2、VCO PTAT 和本地 CML 偏置 | 3 | 37,805.02 |
+| `vdd_a` | 四组 r5 接收器、SAFF-TSPC ÷8、PFD 和时钟偏置 | 7 | 9,631.46 |
+| `vdd_tx` | TX SST 顶层和 TX 正交 ÷2 | 2 | 37,041.03 |
+| `vdd_rx` | CMOS RX 顶层和 CTLE 偏置 | 2 | 47,955.91 |
+| `vdd_d` | 数字顶层 v3.1 | 1 | 103,931.94 |
+| **功能实例合计** | | **21** | **302,392.55** |
 
-片级规划核心外框 **`845.4 × 601.4 µm = 508,424 µm²（0.5084 mm²）`**，21 个功能宏合计 `302,393 µm²`（`59.5%`），空腔部署 12 块阻尼 MIM1+MIM2 PDN 去耦阵（`109,500 µm²` / `761.0 pF`），总物理填充率 **`81.0%`**，**`0.0 µm²` 重叠**，全片总片上电容 **`957.9 pF`**。
-
-| 子系统 | 包含已签核宏 | 宏数量 | 实测面积 (`µm²`) | 占核心比 | 版图入口 |
-|---|---|---:|---:|---:|---|
-| **Digital Top v3.1** | `serdes_digital_top_v3`（PLL Ctrl + TX Ingress + RX Align/FIFO + BBPD CDR） | 1 | `103,932` | `20.4%` | [digital_top_v3.md](../design/digital_top_v3.md) |
-| **RX CMOS/SST v2.2** | `serdes_rx_cmos_top_pdk` + 独立 8 相分频/PI/采样/解串一体化宏 | 1 (+ 复用) | `47,932` | `9.4%` | [rx/cmos_rx/v2_pdk](../../analog/rx/cmos_rx/layout/variants/v2_pdk/README.md) |
-| **TX CMOS/SST SST v4.3** | `serdes_tx_sst_top_pdk`（16:4 串化 + 28-slice SST + `0.44 V` LDO） | 1 | `34,026` | `6.7%` | [tx/sst/v4_pdk](../../analog/tx/sst/layout/variants/v4_pdk/README.md) |
-| **PLL v4 模拟核** | VCO `sym9_clean` + PTAT 偏置 + CP v4 + 融合 LF v2 + PFD + SAFF-TSPC ÷8 + `r5` CML→CMOS 等 | 9 | `32,684` | `6.4%` | [docs/layout/README.md](../layout/README.md) |
-| **HV18 LDO v2_cur** | `serdes_pll_supply_hv18_v2_cur_pdk` + VCO 慢尾偏置滤波 `bias_filter_r4` | 2 | `29,859` | `5.9%` | [ldo/v2_cur_pdk](../../analog/ldo/layout/variants/v2_cur_pdk/README.md) |
-| **BIAS v2** | `serdes_bias_top_v2_pdk` + 本地 `cml`/`cp`/`ctle` 偏置拷贝宏 | 4 | `28,274` | `5.6%` | [bias/v2_pdk](../../analog/bias/layout/variants/v2_pdk/README.md) |
-| **其余辅助/扇出宏** | 时钟扇出 / 本地复制缓冲与对齐预留宏 | 3 | `25,686` | `5.1%` | [chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md) |
-| **功能宏合计** | 全部 21 个独立签核宏 | **21** | **`302,393`** | **`59.5%`** | — |
-| **阻尼 PDN 去耦阵** | 12 块 MIM1+MIM2 + 串联阻尼电阻（`761.0 pF`, `R_eq = 1.51 Ω`） | 12 | `109,500` | `21.5%` | [chip_floorplan_20261123.md](../layout/chip_floorplan_20261123.md) |
-| **走线通道与隔离沟** | 2 GHz 时钟通道、安静模拟保护沟与电源总线 | — | `96,531` | `19.0%` | — |
-| **芯片核心总计** | **`845.4 × 601.4 µm`**（不含外圈 Padring / ESD） | — | **`508,424`** (`0.5084 mm²`) | **`100.0%`** | — |
-
----
+慢尾滤波的 `100.18 × 103.21 µm` 摆位包络来自当前 Magic 几何。TX 的 `231.50 × 146.98 µm` 记录属于 v4.3 基线。微修后本机独立审阅的 TX 顶层摆位外框为 `232.52 × 150.58 µm`。核心外框、去耦预留与 Padring 边界见[片级规划](../layout/chip_floorplan_20261123.md)。
 
 ## 2. 历史参考：早期版图前 CML 粗估（2026-11-07）
 

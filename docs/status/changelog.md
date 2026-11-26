@@ -2,6 +2,11 @@
 
 按日期倒序。细节见 [history](../history/index.md)。
 
+## 2026-11-23
+
+- 复核 `v1.0` 子系统发布及本机后续装配。按原网表核实 PLL 七点使用 CML 反馈和 CP v4。TX 的 22 项拆回驱动器 CPEX/RCX 与整链 CPEX/RCX，记录四份提取文件的身份差异。RX 区分同 deck 与逐角回放，数字区分 RTL 参考和三角 SDF。[当前状态](current.md) · [固定证据](../../results/catalog/v1_0_subsystem_evidence.json)
+- 主线工作修订覆盖各模块，历史配置供旧台继续使用。工作台迁移主线入口，保留历史模块 ID 和迭代。Bias/LDO 本机结果路径恢复兼容，旧 v2 RCX 可显式使用退役探针网表。两组离线回归改用可随源码检出的输入；退役文件增加只读大小和哈希核验。[工作台](../../web/design/README.md) · [结果与归档](../../results/README.md)
+
 ## 2026-11-15
 
 - 将bank宽度分配整理为鲁棒多目标问题，核查工艺角不等于出现概率，分离全局工艺/局部失配与实际校准策略。复用实测叶枚举有限Pareto集、给出S/α/最低位宽参数化和研究候选，见[研究](../design/vco_bank_optimization.md)；0NG，不更换电路或推定良率。

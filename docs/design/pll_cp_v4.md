@@ -1,4 +1,4 @@
-# PLL Charge Pump v4（宽摆幅 + 1/4 单位指副本主动伺服匹配候选）
+# PLL Charge Pump v4 / v4.1（宽摆幅与副本主动伺服匹配）
 
 > **状态**：独立候选（`charge_pump_steer_v4.spice` / `pll_cp_steer_v4_pdk`），未替换主线 `config/pll_working_revision.toml`；保持 `up dn out vbn vbp ibias vdd vss` 精确 8 端口即插即用兼容。
 
@@ -39,7 +39,7 @@
 ## 适用范围与验证边界
 
 - 所有 135 角 DC、AC、250 MHz 瞬态与 6 极端角 CPEX DC 均采用真实 SKY130A 器件模型与真实偏置接口；135 角包含 `5 MOS × 3 VDD (1.65/1.80/1.95 V) × 3 T (−40/27/85 °C) × 3 RC (ll/tt/hh)`。
-- 尚未跑完整 PLL 闭环噪声与锁定瞬态整机替换回归；正式采纳前需在 PLL 顶层接入 `charge_pump_steer_v4` 复核参考杂散与锁定时间。
+- PLL v4 发布的固定码、预充后原理图闭环已经接入 CP v4。v4.1 的降毛刺对照与本机独立物理复核属于后续小修订。采用 SAFF-TSPC 反馈链与 v4.1 的联合闭环仍待回归。[当前状态](../status/current.md)
 
 ## 证据路径
 

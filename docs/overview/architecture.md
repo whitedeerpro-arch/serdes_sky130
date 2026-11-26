@@ -13,9 +13,9 @@
 | 时钟域 | 频率 / 周期 | 来源 | 用途与驱动边界 |
 |---|---|---|---|
 | **参考时钟 (`ref_clk`)** | `250 MHz` / `4.0 ns` | 外部参考 | PLL PFD 参考输入及 `pll_control_top` 根时钟（内部同步 ÷4 至 `62.5 MHz` 驱动 5-bit 粗搜/启动监督） |
-| **VCO 多相时钟** | `2 GHz`（八相 `45°` 间隔） | 四级环振 `r6` + PTAT `28/66`（`sym9_clean` CPEX） | 经缓冲馈送 PLL 反馈（`r5` CML→CMOS + SAFF-TSPC ÷8）、TX SST 4 相时钟入口（`phi0..phi270`）及 RX 2 GHz CMOS PI 锚点 |
+| **VCO 多相时钟** | `2 GHz`（八相 `45°` 间隔） | 四级环振 `r6` + PTAT `28/66`（`sym9_clean` CPEX） | 经 CML→CMOS 接收器供片级反馈、TX 前级正交 ÷2 及 RX 2 GHz CMOS PI |
 | **PLL 反馈 (`fb_clk`)** | `250 MHz` / `4.0 ns` | `r5` CML→CMOS + SAFF-TSPC 重定时 ÷8 | 进入标准单元 PFD (`pll_pfd_sc_dly`) 与相位窗锁定检测 |
-| **TX 字时钟 (`tx_word_clk`)** | `250 MHz` / `4.0 ns` | TX SST 内部 `2G → 1G → 500M → 250M` 同步分频输出 | 驱动 `tx_ingress_control` 16-bit 字捕获与 16:4 CMOS 串化器 |
+| **TX 字时钟 (`tx_word_clk`)** | `250 MHz` / `4.0 ns` | TX 前级正交 ÷2 将 2 GHz 转为 1 GHz 四相。SST 顶层进一步得到 500 MHz 和 250 MHz | 驱动 `tx_ingress_control` 16-bit 字捕获与 16:4 CMOS 串化器 |
 | **RX 恢复 8 相时钟** | `1 GHz`（4 数据相 + 4 边沿相） | 2 GHz 64 码纯 CMOS PI + 8 相正交 ÷2 (`qdiv2`) | 驱动四分之一速 Double-Tail 动态 CMOS 采样器（4 Data + 4 Edge），连续调相跟踪每路远端 `±300 ppm` 频偏 |
 | **RX 恢复字时钟 (`rx_word_clk`)** | `250 MHz` / `4.0 ns` | RX `deser16` 8→32 解串器输出 | 驱动共享 `rx_word_map`、`rx_word_align16`、异步 FIFO 写端；内部同步 ÷2 至 `125 MHz` (`cdr_clk_div2`) 驱动 2 阶 BBPD CDR |
 | **宿主时钟 (`host_clk`)** | `250 MHz`（异步） | 外部系统域 | 异步 FIFO 读端（格雷码指针双拍同步 + 无条件预取保护） |
@@ -25,13 +25,16 @@
 ## 2. 关键信号链结构
 
 ### 2.1 PLL v4（250 MHz → 2 GHz 八相）
+
+以下为片级集成目标。发布原理图闭环固定粗码并预充 LF，反馈仍经 `clock_frontend_r6q` 的 CML ÷8；相应验证覆盖见[当前状态](../status/current.md)。
+
 - **VCO 八相顺序**（物理级号并非相位顺序，实测上升过零顺序 `d_k = q_kp − q_kn`，2 GHz 下相邻间隔 `62.5 ps = 0.25 UI`）：
   `0°: d0` · `45°: −d1` · `90°: d2` · `135°: −d3` · `180°: −d0` · `225°: d1` · `270°: −d2` · `315°: d3`
 - **环路组成**：`pll_pfd_sc_dly` → 200 µA 主动伺服宽摆幅电荷泵 `CP v4/v4.1` → 6 站点堆叠 MIM1+MIM2 融合二阶无源滤波器 `LF v2`（`Rz = 4.13 kΩ, Ci = 18 pF`）→ `VCO r6`（5-bit / 31 单元电容阵 + BIAS v2 PTAT `28/66` 尾流温补）→ `r5` CML→CMOS + `SAFF-TSPC ÷8`。
 - **安静供电域**：HV18 Native-NMOS LDO（`v2_cur`）提供独立安静供电轨 `quiet ≈ 1.79 V`，配 `1 MΩ / 16 pF` 慢 RC 滤波器（`bias_filter_r4`）隔离尾偏置噪声。
 
 ### 2.2 TX CMOS/SST SST v4.3（16:1，4 Gb/s）
-- **前端串化**：全静态 CMOS 16:4 多路选择树 + 四相交错重定时（无静态 CML 功耗），由 2 GHz 派生 `1 GHz / 500 MHz / 250 MHz` 时钟。
+- **前端串化**：全静态 CMOS 16:4 多路选择树及四相交错重定时，使用正交 ÷2 提供的 1 GHz 四相。
 - **输出级**：28 个并联 N-over-N **源端串联端接（SST）** 切片（23 主抽头 Main + 5 后一拍均衡 Post-1 FFE），由片上 `1.8 V → 0.44 V` 子稳压器（`sst_vdrv_ldo_pdk`）供电，直接提供匹配 `100 Ω` 差分输出阻抗与 400 mVpp 摆幅，驱动 `C0–C5` PCB 信道。
 
 ### 2.3 RX CMOS/SST CMOS v2.2（1:16，4 Gb/s）

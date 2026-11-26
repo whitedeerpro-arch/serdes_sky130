@@ -1,6 +1,6 @@
 # VCO r6 (5-bit + PTAT `28/66`, `sym9_clean` CPEX) 与 PLL v4 噪声/抖动特性报告
 
-**结论**：在五个代表性 `PVT × RC` 角点（`TT 1.80 V 27 °C tt`、`SF 1.65 V 85 °C hh`、`FS 1.65 V 85 °C hh`、`FF 1.95 V −40 °C ll`、`SS 1.65 V −40 °C hh`）上完成现行 **VCO r6（5-bit 阵 + BIAS v2 PTAT `28/66` 混流偏置、`sym9_clean` 提取 CPEX）** 与 **升级版 PLL v4（`CP v4 200 µA` + `LDO v2 CPEX` + `k = 4` `4.13 kΩ / 18.38 pF` 环路 + `1 MΩ / 16 pF` 尾偏置滤波）** 的完整功能、相噪与抖动标定，补齐 [pll_vco.md](pll_vco.md) 与 [pll_loop.md](pll_loop.md) 中仍停留在旧 3-bit r5 的相噪与抖动缺口：
+本报告在五个代表性 `PVT × RC` 角点完成 VCO r6/BIAS v2 PTAT `28/66` 的原理图与 `sym9_clean` CPEX 表征，并用 CP v4、LDO v2 CPEX 及 k=4 环路线性模型合成相噪和抖动。七角 PLL v4 原生锁定是独立的预充后瞬态，使用冻结的 CML 反馈链，见[当前状态](../status/current.md)。
 
 - **提取版图 `sym9_clean` CPEX 精度全面过关**：5/5 角点在 2.000 GHz 干净锁定，同码相对原理图 `cwire = 12 fF` 频差仅 `−0.61% .. −2.65%`（低/中码；高码 21 为 `−5.36%`，切码 20 补齐），验证了 `12 fF/node` 原理图走线预算。提取后 **8 相正交相位误差仅 `0.451–0.752 ps`（`0.32°–0.54°`）**，相对 4 Gb/s `0.15 UI (37.5 ps)` 边沿散布门槛具备 **~50× 余量**；差分占空比失真 `|DCD| ≤ 0.005%`（`< 0.03 ps`），单端 `|DCD| ≤ 0.571%`。
 - **VCO r6 + PTAT `28/66` 本征相位噪声全面优于旧 3-bit r5**：含实测 `noisy=1` 变容 `rg`、5-bit 开关阵及成对长多晶负载热噪声后，`L(1 MHz)` 为 **`−86.12 .. −90.30 dBc/Hz`**（TT **`−88.47 dBc/Hz`**，旧 Worst 角 `SF 85 °C hh` 由 `−85.0` 改善 **`−2.70 dB`** 至 **`−87.70 dBc/Hz`**，得益于 PTAT `28/66` 将高温核心摆幅从 `389` 抬升至 `500 mVpp`）；核功耗 `FoM(1 MHz) = 143.9–146.8 dBc/Hz`，`FoM_T(1 MHz) = 163.1–166.2 dBc/Hz`（FTR `77.7%–101.6%`）。
@@ -104,7 +104,7 @@ PLL v4 综合模型沿用 [pll_noise.py](../../analog/pll/top/theory/pll_noise.p
 ## 3. 适用范围与归档证据
 
 - **验证范围**：Part A 提取后仿为完整耦合电容 CPEX（`pll_vco_core_sym9_s32p5_clean_pex.spice`，DC 钳位偏置 + 5 ns 缓升），不含尚未收敛的原生分布 RCX 与失配 MC；Part B 相位噪声基于原理图 `vco_ring4_r6`（`cwire = 12 fF`）+ 真实 `serdes_bias_vco_ptat_core (28/66)`、实测 `noisy=1` 变容与解析 `4 k T / R_load` 负载热噪声；PLL 闭环为线性传递函数 + 非线性 bang-bang CDR 行为仿真，带内底噪沿用 `−125 dBc/Hz` 假设。
-- **采用状态**：独立表征报告与候选分析，**未修改** `config/*_working_revision.toml`、`vco_ring4_r6.spice` 或 `bias_v2.spice`。
+- **采用边界**：VCO 核与 PTAT 偏置用于 PLL v4。表中 RMS 抖动为分段积分模型结果，后续按实际片级反馈与载荷复核。
 - **完整可复现产物**：
   - 脚本：[analog/pll/vco/tb/phase_noise/char_r6_ptat_perf.py](../../analog/pll/vco/tb/phase_noise/char_r6_ptat_perf.py)（严格 `--workers 2`，二进制 raw + `t_end` 完备校验，分阶段断点续跑）
   - 汇总数据：`results/analog/pll/vco/r6_ptat_perf_20261123/{stage1_calib,stage2_cpex,stage3_psrr,stage4_isf,stage5_noise,stage6_synth}/summary.json`

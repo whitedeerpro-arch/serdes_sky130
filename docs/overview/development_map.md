@@ -26,7 +26,7 @@
 
 ![模块边界、模型规划和局部迭代](../figures/system/closure_workflow.png)
 
-执行协议见 [workflow.md](../status/workflow.md)：器件/版图可实现性与寄生 → 模型/$g_m/I_D$ 参数规划 → 局部校准与压力点 → 受影响接口与全角回归。配置入口见 [revisions.md](revisions.md)，工作修订文件位于 `config/*_working_revision.toml`。
+执行协议见[工作流](../status/workflow.md)。从器件可实现性与版图寄生，推进到模型、局部压力点、受影响接口与全角回归。源码与版本见[主线工作修订](../../config/mainline_working_revision.toml)和[版本说明](revisions.md)。
 
 ---
 

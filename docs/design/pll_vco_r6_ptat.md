@@ -1,4 +1,4 @@
-# PLL VCO r6 + BIAS v2 PTAT 尾流温补（独立候选）
+# PLL VCO r6 + BIAS v2 PTAT 尾流温补
 
 **结论**：**不改动 `vco_ring4_r6` 与 `vco_delay_r6` 任何晶体管尺寸**，仅将 BIAS v2 内部既有的 **恒摆幅支路 `vgi`（`28` 指 `8/4` `pfet_lvt`）** 与 **带隙核心 PTAT 支路 `vg`（`66` 指 `14/6` `pfet_lvt`，约 67% PTAT 占比）** 混合送入 VCO 本地偏置二极管（[vco_ptat_bias.spice](../../analog/pll/vco/spice/vco_ptat_bias.spice)），在全部 **135 条件（5 MOS × 3 VDD × 3 T × 3 RC）** 下实现：
 
@@ -8,7 +8,7 @@
 - **高温慢角差分摆幅大幅抬升**：`SF/SS/FS/FF 1.65 V 85 °C hh` 全部抬升 `+73..+80 mVpp`（`SF 85 °C hh` 由 `360..451` 升至 **`440..542 mVpp`**），直接验证的 33 个 2 GHz 锁定点摆幅全部 **`418–545 mVpp`（全过 ≥ 400 mVpp 目标）**；
 - **尾管饱和裕量充裕**：全 135 角最差 `Vds − Vdsat = +220.6 mV`（`fs_v1650_t85:ll`，为 50 mV 门槛的 `4.4×`）；
 - **常温功耗几乎不变**：TT 1.8 V 27 °C（VCO + 4 buf + bias）为 `11.82 mW`（相对基线 `11.74 mW` 仅 `+0.7%`），低温 `−40 °C` 反降 `13.3%`（`10.40 mW`），高温 `85 °C` 仅增 `13.0%`（`12.87 mW`）；
-- **采用状态**：独立候选，**未替换** `config/pll_working_revision.toml`、`vco_ring4_r6.spice` 或 `bias_v2.spice`。
+- **采用状态**：PLL v4 使用 `28/66` 配比。下方码窗结果对应 VCO 局部表征，闭环与物理目标见[当前状态](../status/current.md)。
 
 入口：[混流偏置网表](../../analog/pll/vco/spice/vco_ptat_bias.spice) · [验证脚本](../../analog/pll/vco/tb/tuning/r6_ptat.py) · [原 r6 文档](pll_vco.md) · [BIAS v2 文档](bias_v2.md)
 

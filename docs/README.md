@@ -13,7 +13,7 @@
 | 接下来做什么、先后依赖和退出条件 | [执行计划](status/prelayout_plan.md) | 一个任务交付、遇到阻塞或主线调整后 |
 | 模块在哪里、该找哪份设计说明 | [模块地图](overview/development_map.md)、[工作台](../web/design/index.html) | 模块或资料归属改变 |
 | 该电路的原理、约束、取舍和局部证据 | [模块设计文档](design/)；物理实现见 [layout](layout/) | 该模块的一次迭代产生可复核结果 |
-| 采用的源码路径、机器参数和数据身份 | [工作修订配置](../config/)、SPICE/RTL | 电路/参数被采用时；不能仅因候选完成就切换 |
+| 采用的源码路径、机器参数和数据身份 | [主线工作修订](../config/mainline_working_revision.toml)、SPICE/RTL、[发布证据索引](../results/catalog/v1_0_subsystem_evidence.json) | 电路或参数被采用时 |
 | 本轮如何执行、如何判断与接手 | [工作流](status/workflow.md)、[验证方法](verification/methods.md)、[测量定义](verification/measurement_conventions.md) | 方法或接口约定变化 |
 | 谁正在改什么、可用仿真名额 | [协作与接手](work_packages/collaboration.md) | 开工、资源交接或停止时 |
 | 一项有边界的任务如何交付和复核 | [工作包](work_packages/README.md)、[任务索引](../config/work_packages.json) | 领取、交付和审阅时 |

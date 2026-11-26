@@ -28,4 +28,4 @@
 
 从current.md对应模块进入设计文档和小数据，再定位campaign的deck/log/raw/metrics。固定时间点审计见[design_status_evidence.json](../data/design_status_evidence.json)和[审计脚本](../../verification/design_status_audit.py)：包含曾用的summary身份、窗口基表/补点来源及有效样本数；它不是实时项目状态。
 
-历史快照中的“数字未映射/无STA”等说法仅限当时：当前宿主映射/STA范围见[RX字时序](../design/rx_word_host_timing.md)，通过哪些库点、SS负裕量和物理CDC是否闭合仍须逐项核对。
+`v1.0` 的数字顶层映射、三角 STA 和 SDF 模式见[数字顶层 v3.1](../design/digital_top_v3.md)。早期字接口的映射、SS 负裕量与时序预算留在[历史 RX 字时序](../design/rx_word_host_timing.md)。

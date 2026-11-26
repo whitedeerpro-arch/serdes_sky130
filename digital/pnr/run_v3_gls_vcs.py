@@ -228,15 +228,15 @@ def prepare_primitives_and_cdc_optconfig(include_fifo_s1_banks: bool = False) ->
         rst_net = conns.get("RESET_B", "")
         srcs = trace_sources(d_net)
 
-        # Case A: Async reset synchronizer 1st stage (w_rst_s0 / r_rst_s0: D tied HI, RESET_B=arst_n)
-        if rst_net == "arst_n" and any(s[0] == "CONST" for s in srcs):
+        # Case A: Async reset synchronizer 1st stage (D tied HI, RESET_B=arst_n or rst_n)
+        if rst_net in ("arst_n", "rst_n") and any(s[0] == "CONST" for s in srcs):
             exempt_ffs.append({
                 "instance": inst,
                 "cell": cell,
                 "clock_domain": dst_dom,
                 "category": "async_reset_sync_stage0",
-                "role": "w_rst_s0" if dst_dom == "rx_word_clk" else "r_rst_s0",
-                "reason": "1st-stage async reset synchronizer (D=1, RESET_B=arst_n)",
+                "role": f"rst_sync_s0({rst_net}->{dst_dom})",
+                "reason": f"1st-stage async reset synchronizer (D=1, RESET_B={rst_net})",
             })
             continue
 
@@ -449,14 +449,69 @@ def run_vcs_mode(
 
 
 def main() -> int:
+    global PNR_RESULTS, PNR_VARIANT, NETLIST_V, DEF_FILE, SDC_FILE, GLS_FILELIST
+    global OUT_ROOT, SDF_DIR, FSDB_TT_PATH, PRIMITIVES_VCS_V, OPTCONFIG_PATH, SUMMARY_JSON, CORNERS
+
     ap = argparse.ArgumentParser(description="Run VCS 3-corner SDF GLS + SVA + Verdi FSDB for serdes_digital_top_v3")
-    ap.add_argument("--skip-sdf", action="store_true", help="Reuse existing SDF files in results/digital/gls_v3_1/sdf/")
+    ap.add_argument("--skip-sdf", action="store_true", help="Reuse existing SDF files in out-root/sdf/")
+    ap.add_argument("--pnr-results", type=Path, default=PNR_RESULTS)
+    ap.add_argument("--pnr-variant", type=Path, default=PNR_VARIANT)
+    ap.add_argument("--out-root", type=Path, default=OUT_ROOT)
+    ap.add_argument("--revision", type=str, default="v3.1")
     ap.add_argument(
         "--exempt-fifo-s1-banks",
         action="store_true",
         help="Also exempt FIFO Stage-1 unconditional 4-bank prefetch FFs (s1_b0..s1_b3) if async bank writes trigger unselected-bank warnings",
     )
     args = ap.parse_args()
+
+    PNR_RESULTS = args.pnr_results.resolve()
+    PNR_VARIANT = args.pnr_variant.resolve()
+    OUT_ROOT = args.out_root.resolve()
+    NETLIST_V = PNR_VARIANT / "serdes_digital_top_v3.v"
+    DEF_FILE = PNR_RESULTS / "serdes_digital_top_v3.def"
+    SDC_FILE = PNR_RESULTS / "serdes_digital_top_v3_postroute.sdc"
+    SDF_DIR = OUT_ROOT / "sdf"
+    FSDB_TT_PATH = OUT_ROOT / "serdes_digital_top_v3_tt_gls.fsdb"
+    PRIMITIVES_VCS_V = OUT_ROOT / "sky130_primitives_vcs.v"
+    OPTCONFIG_PATH = OUT_ROOT / "cdc_sync_optconfig.cfg"
+    SUMMARY_JSON = OUT_ROOT / "summary.json"
+    CORNERS = [
+        {
+            "name": "tt_025C_1v80",
+            "lib": SC_HD / "lib/sky130_fd_sc_hd__tt_025C_1v80.lib",
+            "spef": PNR_RESULTS / "serdes_digital_top_v3_nom.spef",
+            "sdf": SDF_DIR / "serdes_digital_top_v3_tt_025C_1v80.sdf",
+            "sdf_mtm": "typ",
+            "dump_fsdb": True,
+        },
+        {
+            "name": "ss_100C_1v60",
+            "lib": SC_HD / "lib/sky130_fd_sc_hd__ss_100C_1v60.lib",
+            "spef": PNR_RESULTS / "serdes_digital_top_v3_max.spef",
+            "sdf": SDF_DIR / "serdes_digital_top_v3_ss_100C_1v60.sdf",
+            "sdf_mtm": "max",
+            "dump_fsdb": False,
+        },
+        {
+            "name": "ff_n40C_1v95",
+            "lib": SC_HD / "lib/sky130_fd_sc_hd__ff_n40C_1v95.lib",
+            "spef": PNR_RESULTS / "serdes_digital_top_v3_min.spef",
+            "sdf": SDF_DIR / "serdes_digital_top_v3_ff_n40C_1v95.sdf",
+            "sdf_mtm": "min",
+            "dump_fsdb": False,
+        },
+    ]
+    OUT_ROOT.mkdir(parents=True, exist_ok=True)
+    if args.out_root.resolve() != (REPO / "results/digital/gls_v3_1").resolve():
+        GLS_FILELIST = OUT_ROOT / "gls_v3.f"
+        GLS_FILELIST.write_text("\n".join([
+            "+define+SKY130_FD_SC_HD__LPFLOW_BLEEDER_1_TIMING_V",
+            str(PRIMITIVES_VCS_V),
+            f"-v {SKY130_CELLS_V}",
+            str(NETLIST_V),
+            str(REPO / "digital/pnr/rtl_v3/tb_serdes_digital_top_v3_gls.sv"),
+        ]) + "\n")
 
     sdf_stats = {}
     if args.skip_sdf and all(c["sdf"].exists() for c in CORNERS):
@@ -515,7 +570,7 @@ def main() -> int:
     )
     summary = {
         "design": "serdes_digital_top_v3",
-        "revision": "v3.1",
+        "revision": args.revision,
         "netlist": str(NETLIST_V.relative_to(REPO)),
         "tool_vcs": "VCS-MX O-2018.09-SP2_Full64",
         "tool_verdi_pli": "Verdi O-2018.09-SP2",

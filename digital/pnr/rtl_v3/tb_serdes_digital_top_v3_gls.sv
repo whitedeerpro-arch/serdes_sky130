@@ -36,7 +36,7 @@ module tb_serdes_digital_top_v3_gls;
     reg  [3:0]  pll_hi_run          = 4'd2;
     reg  [11:0] pll_stop_code       = 12'd0;
     reg  [2:0]  pll_stop_sel        = 3'd0;
-    wire        precharge_en, pfd_rst_b, cp_en;
+    wire        precharge_en, pfd_rst_b, cp_en, pll_pw_clr_b;
     wire [4:0]  vco_code;
     wire [7:0]  switches;
     wire        pll_locked, pll_busy, pll_fault;
@@ -79,6 +79,7 @@ module tb_serdes_digital_top_v3_gls;
         .precharge_en        (precharge_en),
         .pfd_rst_b           (pfd_rst_b),
         .cp_en               (cp_en),
+        .pll_pw_clr_b        (pll_pw_clr_b),
         .vco_code            (vco_code),
         .switches            (switches),
         .pll_enable          (pll_enable),
@@ -336,37 +337,25 @@ module tb_serdes_digital_top_v3_gls;
         end
     endfunction
 
-    // Pack 16 data samples d[15:0] and 16 post-data edge samples e_after[15:0] into rx_phys[31:0]
-    // matching rx_word_map.sv exactly:
-    //   d[12-4k]=phys[0*4+k], e_after[12-4k]=phys[2*4+k]
-    //   d[13-4k]=phys[5*4+k], e_after[13-4k]=phys[7*4+k]
-    //   d[14-4k]=phys[1*4+k], e_after[14-4k]=phys[3*4+k]
-    //   d[15-4k]=phys[4*4+k], e_after[15-4k]=phys[6*4+k]
-    function automatic [31:0] pack_rx_phys(input [15:0] d, input [15:0] e_after);
-        integer k;
-        reg [31:0] p;
+    // Pack 16 chronological data samples d[15:0] and 16 pre-data edge samples e_before[15:0]
+    // into rx_phys[31:0] matching serdes_rx_cmos_deser16.spice & rx_word_map.sv (v3.2):
+    //   rx_phys[15:0]  = wd[15:0],  rx_phys[31:16] = we[15:0] (we[b] between wd[b-1] and wd[b])
+    function automatic [31:0] pack_rx_phys(input [15:0] d, input [15:0] e_before);
         begin
-            p = 32'd0;
-            for (k = 0; k < 4; k = k + 1) begin
-                p[0*4 + k] = d[12 - 4*k];  p[2*4 + k] = e_after[12 - 4*k];
-                p[5*4 + k] = d[13 - 4*k];  p[7*4 + k] = e_after[13 - 4*k];
-                p[1*4 + k] = d[14 - 4*k];  p[3*4 + k] = e_after[14 - 4*k];
-                p[4*4 + k] = d[15 - 4*k];  p[6*4 + k] = e_after[15 - 4*k];
-            end
-            pack_rx_phys = p;
+            pack_rx_phys = {e_before, d};
         end
     endfunction
 
     // Drive rx_phys for RX align/FIFO test (s = bit offset in stream)
     function automatic [31:0] build_align_phys(input integer s, input integer epoch);
-        reg [15:0] d, ea;
+        reg [15:0] d, eb;
         integer b;
         begin
             for (b = 0; b < 16; b = b + 1) begin
                 d[b]  = sbit_epoch(s + b, epoch);
-                ea[b] = sbit_epoch(s + b + 1, epoch);
+                eb[b] = sbit_epoch(s + b, epoch);
             end
-            build_align_phys = pack_rx_phys(d, ea);
+            build_align_phys = pack_rx_phys(d, eb);
         end
     endfunction
 
@@ -467,10 +456,11 @@ module tb_serdes_digital_top_v3_gls;
                 ptime_ps  = cdr_phase_time_ps(cdr_phase_steps);
                 t_base_ps = 2000.0 + w * 4000.0;
                 for (b = 0; b < 16; b = b + 1) begin
-                    td_ps       = t_base_ps + b * 250.0 + 125.0 - ptime_ps;
-                    te_after_ps = t_base_ps + (b + 1) * 250.0 - ptime_ps;
-                    d_word[b]   = cdr_source_bit(td_ps);
-                    ea_word[b]  = cdr_source_bit(te_after_ps);
+                    // Real physical CMOS PI polarity (rx_cmos_pi.spice): higher phase_code DELAYS sampling clocks (+ptime_ps)
+                    td_ps        = t_base_ps + b * 250.0 + 125.0 + ptime_ps;
+                    te_after_ps  = t_base_ps + b * 250.0 + ptime_ps; // pre-data edge (we[b] between wd[b-1] & wd[b])
+                    d_word[b]    = cdr_source_bit(td_ps);
+                    ea_word[b]   = cdr_source_bit(te_after_ps);
                     if (w >= settle_words) begin
                         idx       = cdr_source_index(td_ps);
                         center_ps = 0.5 * (cdr_boundary(idx) + cdr_boundary(idx + 1));
@@ -688,8 +678,8 @@ module tb_serdes_digital_top_v3_gls;
         @(posedge tx_word_clk); #0.650;
         tx_enable     = 1'b1;
         tx_clock_good = 1'b1;
-        // Wait 2 cycles for warmup to assert tx_word_ready
-        repeat (2) @(posedge tx_word_clk);
+        // Wait 4 cycles for 2-FF tx_clock_good sync + warmup to assert tx_word_ready
+        repeat (4) @(posedge tx_word_clk);
         if (!tx_word_ready)
             $fatal(1, "TX tx_word_ready did not assert after warmup");
 

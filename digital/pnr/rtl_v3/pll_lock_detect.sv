@@ -12,7 +12,8 @@ module pll_lock_detect #(
     input  wire lo_async,
     output reg  quality_valid,
     output reg  frequency_good,
-    output reg  phase_good
+    output reg  phase_good,
+    output reg  pw_clr_b
 );
     localparam integer CW = (WINDOW < 2) ? 1 : $clog2(WINDOW + 1);
     localparam integer LAST_I = (WINDOW > 1) ? (WINDOW - 1) : 0;
@@ -28,6 +29,9 @@ module pll_lock_detect #(
 
     reg [CW-1:0] n;
     reg          phase_bad, window_bad, tainted;
+    // Mask synchronized pw_late during the first 2 slow ticks after pulsing pw_clr_b=0
+    // so stale pre-clear sticky values in u_sync do not poison the new measurement window.
+    wire         pw_sample_en = (n >= 2);
 
     always @(posedge ctrl_clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -38,6 +42,7 @@ module pll_lock_detect #(
             quality_valid  <= 1'b0;
             frequency_good <= 1'b0;
             phase_good     <= 1'b0;
+            pw_clr_b       <= 1'b0;
         end else begin
             quality_valid <= 1'b0;
             if (!enable) begin
@@ -45,21 +50,24 @@ module pll_lock_detect #(
                 phase_bad  <= 1'b0;
                 window_bad <= 1'b0;
                 tainted    <= 1'b1;
+                pw_clr_b   <= 1'b0;
             end else if (n == LAST) begin
                 if (!tainted && !hold) begin
                     quality_valid  <= 1'b1;
-                    phase_good     <= !(phase_bad || pw_late);
+                    phase_good     <= !(phase_bad || (pw_sample_en && pw_late));
                     frequency_good <= coarse_ready && !(window_bad || hi || lo);
                 end
                 n          <= {CW{1'b0}};
                 phase_bad  <= 1'b0;
                 window_bad <= 1'b0;
                 tainted    <= hold;
+                pw_clr_b   <= 1'b0; // Pulse active-low clear for sticky pll_phase_window on new window
             end else begin
                 n          <= n + 1'b1;
-                phase_bad  <= phase_bad || pw_late;
+                phase_bad  <= phase_bad || (pw_sample_en && pw_late);
                 window_bad <= window_bad || hi || lo;
                 tainted    <= tainted || hold;
+                pw_clr_b   <= !hold; // Keep sticky latch cleared while hold/coarse search is active
             end
         end
     end

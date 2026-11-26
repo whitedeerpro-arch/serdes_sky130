@@ -36,7 +36,7 @@ module tb_serdes_digital_top_v3;
     reg  [3:0]  pll_hi_run          = 4'd2;
     reg  [11:0] pll_stop_code       = 12'd0;
     reg  [2:0]  pll_stop_sel        = 3'd0;
-    wire        precharge_en, pfd_rst_b, cp_en;
+    wire        precharge_en, pfd_rst_b, cp_en, pll_pw_clr_b;
     wire [4:0]  vco_code;
     wire [7:0]  switches;
     wire        pll_locked, pll_busy, pll_fault;
@@ -90,6 +90,7 @@ module tb_serdes_digital_top_v3;
         .precharge_en        (precharge_en),
         .pfd_rst_b           (pfd_rst_b),
         .cp_en               (cp_en),
+        .pll_pw_clr_b        (pll_pw_clr_b),
         .vco_code            (vco_code),
         .switches            (switches),
         .pll_enable          (pll_enable),
@@ -183,21 +184,17 @@ module tb_serdes_digital_top_v3;
     endfunction
 
     task automatic drive_rx_phys(input integer s, input reg edge_late);
-        integer k;
-        reg d0, d1, d2, d3, e0, e1, e2, e3;
+        integer b;
+        reg [15:0] d, eb;
         begin
-            for (k = 0; k < 4; k = k + 1) begin
-                d0 = sbit(s + 12 - 4*k); d1 = sbit(s + 13 - 4*k);
-                d2 = sbit(s + 14 - 4*k); d3 = sbit(s + 15 - 4*k);
-                e0 = edge_late ? sbit(s + 13 - 4*k) : d0;
-                e1 = edge_late ? sbit(s + 14 - 4*k) : d1;
-                e2 = edge_late ? sbit(s + 15 - 4*k) : d2;
-                e3 = edge_late ? sbit(s + 16 - 4*k) : d3;
-                rx_phys[0*4 + k] = d0; rx_phys[2*4 + k] = e0;
-                rx_phys[5*4 + k] = d1; rx_phys[7*4 + k] = e1;
-                rx_phys[1*4 + k] = d2; rx_phys[3*4 + k] = e2;
-                rx_phys[4*4 + k] = d3; rx_phys[6*4 + k] = e3;
+            // Direct chronological CMOS RX deser16 contract:
+            //   rx_phys[15:0]  = wd[15:0] (chronological data)
+            //   rx_phys[31:16] = we[15:0] (pre-data edges: we[b] lies between wd[b-1] and wd[b])
+            for (b = 0; b < 16; b = b + 1) begin
+                d[b]  = sbit(s + b);
+                eb[b] = edge_late ? sbit(s + b) : sbit(s + b - 1);
             end
+            rx_phys = {eb, d};
         end
     endtask
 
@@ -225,28 +222,31 @@ module tb_serdes_digital_top_v3;
         rst_n = 1; arst_n = 1; #1; rst_n = 0; arst_n = 0; #12; rst_n = 1; arst_n = 1;
 
         // 1. PLL startup + 5-bit coarse search + lock (via /4 62.5 MHz internal domain)
+        // Simulate a sticky pll_phase_window latch tripped during startup and cleared by pll_pw_clr_b!
+        pw_late_async = 1'b1;
         @(negedge ref_clk);
         pll_enable = 1; bias_ready_async = 1; pre_ref_ready_async = 1;
-        repeat (6) @(negedge ref_clk);
+        repeat (16) @(negedge ref_clk);
         pll_start = 1; @(negedge ref_clk); pll_start = 0;
 
         cyc = 0;
         while (!pll_locked && cyc < 5000) begin
             @(posedge ref_clk);
+            if (!pll_pw_clr_b) pw_late_async = 1'b0;
             cyc = cyc + 1;
         end
-        if (!pll_locked || pll_fault || !cp_en || !pfd_rst_b || precharge_en)
-            $fatal(1, "PLL failed to lock: locked=%b fault=%b state=%0d vco_code=%0d",
-                   pll_locked, pll_fault, pll_state_id, vco_code);
+        if (!pll_locked || pll_fault || !cp_en || !pfd_rst_b || precharge_en || pw_late_async)
+            $fatal(1, "PLL failed to lock: locked=%b fault=%b state=%0d vco_code=%0d pw_late=%b",
+                   pll_locked, pll_fault, pll_state_id, vco_code, pw_late_async);
         if (vco_code < 5'd17 || vco_code > 5'd21)
             $fatal(1, "PLL 5-bit coarse code out of expected band [17..21]: got %0d", vco_code);
-        $display("PASS [1/4] PLL (/4 62.5 MHz) locked in %0d ref_clk cycles (vco_code=%0d, switches=0x%02h)",
-                 cyc, vco_code, switches);
+        $display("PASS [1/4] PLL (/4 62.5 MHz) locked in %0d ref_clk cycles (vco_code=%0d, switches=0x%02h, pw_clr_b=%b)",
+                 cyc, vco_code, switches, pll_pw_clr_b);
 
-        // 2. TX ingress warmup + capture + A/B pipeline (250 MHz)
+        // 2. TX ingress warmup + capture + A/B pipeline (250 MHz, incl. 2-FF tx_clock_good sync)
         tx_sent[0] = 16'ha55a; tx_sent[1] = 16'h1234; tx_sent[2] = 16'hdead; tx_sent[3] = 16'hbeef;
         @(negedge tx_word_clk); tx_enable = 1; tx_clock_good = 1;
-        @(posedge tx_word_clk); #0.2;
+        repeat (3) @(posedge tx_word_clk); #0.2;
         if (!tx_word_ready) $fatal(1, "TX word_ready did not assert");
         for (j = 0; j < 4; j = j + 1) begin
             @(negedge tx_word_clk); tx_in_valid = 1; tx_in_data = tx_sent[j];

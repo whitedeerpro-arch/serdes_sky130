@@ -32,6 +32,7 @@ module pll_control_top #(
     output wire                 precharge_en,
     output wire                 pfd_rst_b,
     output wire                 cp_en,
+    output wire                 pw_clr_b,
     output wire                 locked,
     output wire                 busy,
     output wire                 fault,
@@ -90,16 +91,18 @@ module pll_control_top #(
     end
 
     reg start_s0, start_s1;
-    reg enable_r;
+    (* ASYNC_REG = "TRUE" *) reg enable_s0, enable_r;
     always @(posedge pll_clk_div4 or negedge rst_n) begin
         if (!rst_n) begin
-            start_s0 <= 1'b0;
-            start_s1 <= 1'b0;
-            enable_r <= 1'b0;
+            start_s0  <= 1'b0;
+            start_s1  <= 1'b0;
+            enable_s0 <= 1'b0;
+            enable_r  <= 1'b0;
         end else begin
-            start_s0 <= start_tog;
-            start_s1 <= start_s0;
-            enable_r <= enable;
+            start_s0  <= start_tog;
+            start_s1  <= start_s0;
+            enable_s0 <= enable;
+            enable_r  <= enable_s0;
         end
     end
     wire start_div = start_s0 ^ start_s1;
@@ -170,6 +173,7 @@ module pll_control_top #(
         end
     end
 
+    wire coarse_abort = !enable_r || (state_id == 3'd0) || (state_id == 3'd7);
     wire track_en = searched && coarse_done && cp_en;
     pll_coarse_ctrl #(
         .CODE_BITS    (CODE_BITS),
@@ -180,6 +184,7 @@ module pll_control_top #(
     ) u_coarse (
         .ctrl_clk (pll_clk_div4),
         .rst_n    (rst_n),
+        .abort    (coarse_abort),
         .search   (search_pulse),
         .track_en (track_en),
         .tclass   (tclass),
@@ -212,6 +217,7 @@ module pll_control_top #(
         .lo_async      (lo_async),
         .quality_valid (quality_valid_raw),
         .frequency_good(frequency_good),
-        .phase_good    (phase_good)
+        .phase_good    (phase_good),
+        .pw_clr_b      (pw_clr_b)
     );
 endmodule

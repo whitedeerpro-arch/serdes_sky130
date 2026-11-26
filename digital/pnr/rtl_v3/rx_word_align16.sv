@@ -99,6 +99,7 @@ module rx_word_align16 #(
     // Async-reset (clean arst_n) + synchronous epoch-clear (sclr) control & X-safe offset/cand FFs (32 FFs)
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
+            prev         <= 16'd0;
             s1_valid     <= 1'b0;
             s2a_valid    <= 1'b0;
             s2b_valid    <= 1'b0;
@@ -118,6 +119,7 @@ module rx_word_align16 #(
             off2_a       <= 1'b0; off2_b <= 1'b0;
             off3_a       <= 1'b0; off3_b <= 1'b0;
         end else if (sclr) begin
+            prev         <= 16'd0;
             s1_valid     <= 1'b0;
             s2a_valid    <= 1'b0;
             s2b_valid    <= 1'b0;
@@ -137,6 +139,7 @@ module rx_word_align16 #(
             off2_a       <= 1'b0; off2_b <= 1'b0;
             off3_a       <= 1'b0; off3_b <= 1'b0;
         end else begin
+            if (chunk_valid) prev <= chunk;
             s1_valid  <= chunk_valid;
             s2a_valid <= s1_valid;
             s2b_valid <= s2a_valid;
@@ -184,7 +187,6 @@ module rx_word_align16 #(
 
     // Unconditional datapath pipeline registers
     always @(posedge clk) begin
-        if (chunk_valid) prev <= chunk;
         s1_train  <= training_enable;
         s1_mlo    <= mlo_c;
         s1_mhi    <= mhi_c;

@@ -36,6 +36,7 @@ module tx_ingress_control #(
     localparam [COUNT_WIDTH-1:0] LAST_COUNT = LAST_COUNT_INT[COUNT_WIDTH-1:0];
 
     reg [COUNT_WIDTH-1:0] warmup_count;
+    (* ASYNC_REG = "TRUE" *) reg clk_good_s0, clk_good_s1;
     (* keep = "true" *) reg word_ready_lo, word_ready_hi;
     wire accept_word    = word_ready    && in_valid;
     wire accept_word_lo = word_ready_lo && in_valid;
@@ -43,6 +44,8 @@ module tx_ingress_control #(
 
     always @(posedge word_clk or negedge rst_n) begin
         if (!rst_n) begin
+            clk_good_s0   <= 1'b0;
+            clk_good_s1   <= 1'b0;
             word_ready    <= 1'b0;
             word_ready_lo <= 1'b0;
             word_ready_hi <= 1'b0;
@@ -52,6 +55,10 @@ module tx_ingress_control #(
             a_valid       <= 1'b0;
             b_valid       <= 1'b0;
         end else begin
+            // 2-FF CDC synchronizer for async pll_locked -> tx_word_clk
+            clk_good_s0 <= clock_good;
+            clk_good_s1 <= clk_good_s0;
+
             // Registered capture stage + A/B in-flight pipeline tracking (split lo/hi halves: fanout 8!)
             capture_valid      <= accept_word;
             capture_data[7:0]  <= accept_word_lo ? in_data[7:0]  : IDLE_WORD[7:0];
@@ -60,7 +67,7 @@ module tx_ingress_control #(
             b_valid            <= a_valid;
 
             // Warmup & readiness FSM (posedge-only, full 4.0 ns cycle)
-            if (!enable || !clock_good) begin
+            if (!enable || !clk_good_s1) begin
                 word_ready    <= 1'b0;
                 word_ready_lo <= 1'b0;
                 word_ready_hi <= 1'b0;

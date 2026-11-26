@@ -1,6 +1,7 @@
 `timescale 1ps/1fs
 // Closed-loop behavioral sampling/clock plant around ACTUAL v3 rx_cdr_loop (/2 125 MHz)
-// and rx_deserializer16 using the measured PI static phase LUT (pi_phase_fs.hex).
+// and rx_deserializer16. The phase LUT uses the same step magnitudes as GLS;
+// increasing the current CMOS PI code delays both sampling clocks.
 // Parameterizable OFFSET_PPM (verified at BOTH +300 ppm and -300 ppm).
 module tb_rx_cdr_closed_loop_v3;
     parameter real OFFSET_PPM = 300.0, TX_PHASE_PS = 73.0, JITTER_PS = 0.0;
@@ -98,11 +99,11 @@ module tb_rx_cdr_closed_loop_v3;
         for (j = 0; j < 16; j = j + 1) begin dpipe[j] = 0; epipe[j] = 0; prev_pipe[j] = 0; end
         #1; rst_n = 0; #10; rst_n = 1;
         for (n = 0; n < SIM_BITS; n = n + 1) begin
-            te = 2000 + n * 250.0 - phase_time();
+            te = 2000 + n * 250.0 + phase_time();
             if (te < $realtime) $fatal(1, "nonmonotonic edge clock");
             #(te - $realtime);
             ebuf[n % 16] = source_bit($realtime + EDGE_SKEW_PS + ((n % 2) ? EDGE_DUTY_PS : -EDGE_DUTY_PS));
-            td = 2000 + n * 250.0 + 125.0 - phase_time();
+            td = 2000 + n * 250.0 + 125.0 + phase_time();
             if (td < $realtime) $fatal(1, "nonmonotonic data clock");
             #(td - $realtime);
             idx = source_index($realtime);

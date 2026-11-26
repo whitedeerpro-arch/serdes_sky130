@@ -121,6 +121,7 @@ def build_pin_groups() -> list[PinGroup]:
                     "precharge_en",
                     "pfd_rst_b",
                     "cp_en",
+                    "pll_pw_clr_b",
                 ]
                 + _bus("vco_code", 5)
                 + _bus("switches", 8)
@@ -146,20 +147,31 @@ def build_pin_groups() -> list[PinGroup]:
             ),
         ),
         PinGroup(
-            key="south_rx",
-            label="RX Analog (rx_phys[31:0], PI ctrl)",
-            short_label="RX Analog (rx_phys[31:0], PI ctrl)",
+            key="south_rx_pi",
+            label="RX PI Control (a/b/f, phase_code)",
+            short_label="RX PI Ctrl",
             edge="bottom",
             frac_start=0.370,
+            frac_end=0.565,
+            color="#e11d48",
+            pins=(
+                _bus("rx_select_a", 8)
+                + _bus("rx_select_b", 8)
+                + _bus("rx_fine_b", 8)
+                + _bus("rx_phase_code", 6)
+            ),
+        ),
+        PinGroup(
+            key="south_rx_data",
+            label="RX Analog Data/Edge (wclk, wd[15:0], we[15:0])",
+            short_label="RX Data/Edge",
+            edge="bottom",
+            frac_start=0.585,
             frac_end=0.975,
             color="#dc2626",
             pins=(
                 ["rx_word_clk"]
                 + _bus("rx_phys", 32)
-                + _bus("rx_phase_code", 6)
-                + _bus("rx_select_a", 8)
-                + _bus("rx_select_b", 8)
-                + _bus("rx_fine_b", 8)
             ),
         ),
         # WEST EDGE — PLL Host Config & Calibration + Global rst_n
@@ -390,8 +402,8 @@ set_input_delay  -clock ref_clk      -max 0.800 [get_ports {{pll_start}}]
 set_input_delay  -clock ref_clk      -min 0.500 [get_ports {{pll_start}}]
 set_input_delay  -clock pll_clk_div4 -max 1.600 [get_ports {{pll_enable pll_tclass* pll_lo_run* pll_hi_run* pll_stop_code* pll_stop_sel*}}]
 set_input_delay  -clock pll_clk_div4 -min 0.500 [get_ports {{pll_enable pll_tclass* pll_lo_run* pll_hi_run* pll_stop_code* pll_stop_sel*}}]
-set_output_delay -clock pll_clk_div4 -max 1.600 [get_ports {{precharge_en pfd_rst_b cp_en pll_locked pll_busy pll_fault pll_state_id* pll_fault_code* vco_code* pll_lo_code* pll_hi_code* pll_coarse_busy pll_coarse_done pll_fast_end pll_slow_end switches*}}]
-set_output_delay -clock pll_clk_div4 -min 0.100 [get_ports {{precharge_en pfd_rst_b cp_en pll_locked pll_busy pll_fault pll_state_id* pll_fault_code* vco_code* pll_lo_code* pll_hi_code* pll_coarse_busy pll_coarse_done pll_fast_end pll_slow_end switches*}}]
+set_output_delay -clock pll_clk_div4 -max 1.600 [get_ports {{precharge_en pfd_rst_b cp_en pll_pw_clr_b pll_locked pll_busy pll_fault pll_state_id* pll_fault_code* vco_code* pll_lo_code* pll_hi_code* pll_coarse_busy pll_coarse_done pll_fast_end pll_slow_end switches*}}]
+set_output_delay -clock pll_clk_div4 -min 0.100 [get_ports {{precharge_en pfd_rst_b cp_en pll_pw_clr_b pll_locked pll_busy pll_fault pll_state_id* pll_fault_code* vco_code* pll_lo_code* pll_hi_code* pll_coarse_busy pll_coarse_done pll_fast_end pll_slow_end switches*}}]
 
 # TX ingress (250 MHz tx_word_clk)
 set_input_delay  -clock tx_word_clk  -max 0.800 [get_ports {{tx_enable tx_clock_good tx_in_valid tx_in_data*}}]
@@ -625,10 +637,7 @@ def v3_openroad_dont_use_tcl() -> str:
     """
     drc_exclude = sorted(base.load_excluded_cells())
     allow_cells = {
-        "sky130_fd_sc_hd__buf_1",
         "sky130_fd_sc_hd__mux4_2",
-        "sky130_fd_sc_hd__dlygate4sd1_1",
-        "sky130_fd_sc_hd__dlygate4sd2_1",
         "sky130_fd_sc_hd__dlygate4sd3_1",
         "sky130_fd_sc_hd__dlymetal6s2s_1",
         "sky130_fd_sc_hd__dlymetal6s4s_1",
@@ -643,6 +652,8 @@ def v3_openroad_dont_use_tcl() -> str:
         "sky130_fd_sc_hd__probe*",
         "sky130_fd_sc_hd__ebuf*",
         "sky130_fd_sc_hd__clkdlybuf*",
+        "sky130_fd_sc_hd__dlygate4sd1_1",
+        "sky130_fd_sc_hd__dlygate4sd2_1",
         "sky130_fd_sc_hd__dlymetal6s6s_1",
         "sky130_fd_sc_hd__clkbuf_*",
         "sky130_fd_sc_hd__clkinv_*",
@@ -815,6 +826,10 @@ def run_v3_yosys(block: base.BlockSpec, work: Path, synth_lib: Path) -> tuple[Pa
         f"read_verilog -sv {wrap_sv}",
         f"chparam -set PLL_CODE_BITS {block.params.get('PLL_CODE_BITS', 5)} {block.name}",
         f"hierarchy -check -top {block.name}",
+        "proc",
+        "opt_clean",
+        "techmap",
+        f"dfflibmap -liberty {synth_lib}",
         "flatten",
         "splitnets",
         "opt_clean -purge",
@@ -1078,6 +1093,15 @@ set_max_transition 0.95 [current_design]
 set_max_capacitance 0.11 [current_design]
 set_max_fanout 14 [current_design]
 repair_design -slew_margin 0 -cap_margin 0
+# Immediately replace any slow dly* cell inserted as a rebuffer* with fast buf_4!
+foreach _ri [[[[ord::get_db] getChip] getBlock] getInsts] {{
+  set _rn [$_ri getName]
+  set _rm [[$_ri getMaster] getName]
+  if {{[string match "rebuffer*" $_rn] && [string match "*__dly*" $_rm]}} {{
+    replace_cell $_rn sky130_fd_sc_hd__buf_4
+    puts "REBUF_FIX: replaced $_rn ($_rm -> sky130_fd_sc_hd__buf_4)"
+  }}
+}}
 repair_tie_fanout -separation 0 sky130_fd_sc_hd__conb_1/HI
 repair_tie_fanout -separation 0 sky130_fd_sc_hd__conb_1/LO
 detailed_placement
@@ -1274,6 +1298,10 @@ foreach lib [$db_eco getLibs] {{
   }}
 }}
 proc _next_drv {{mname all_masters}} {{
+  if {{[string match "*__dly*" $mname]}} {{
+    if {{[dict exists $all_masters "sky130_fd_sc_hd__buf_4"]}} {{ return "sky130_fd_sc_hd__buf_4" }}
+    return ""
+  }}
   if {{[regexp {{^sky130_fd_sc_hd__clkbuf_([0-9]+)$}} $mname -> drv]}} {{
     foreach d {{6 8 12}} {{
       if {{$d > $drv}} {{
@@ -1349,10 +1377,10 @@ set post_hold_ff [sta::worst_slack -corner ff -min]
 set post_hold_ss [sta::worst_slack -corner ss -min]
 
 # General Hold-Guarded Useful-Skew Clock-Leaf ECO (in-place clkbuf_{2,4,8,16} master sizing only;
-# 0 new cells, 0 new nets, 100% LVS clean, strictly guarded by FF_HOLD >= 0.10 ns!).
-# Runs only on violating paths where data-cell upsizing has saturated (passes 1..4).
+# 0 new cells, 0 new nets, 100% LVS clean, strictly guarded by FF_HOLD >= 0.11 ns & SS_HOLD >= 0.05 ns!).
+# Runs only on genuinely violating paths (WNS < -0.005 ns) when data-cell upsizing has saturated.
 set eco_cloned 0
-if {{$post_eco_wns < 0.05 && $post_hold_ff >= 0.10 && {eco_pass} <= 5}} {{
+if {{$post_eco_wns < -0.005 && $post_hold_ff >= 0.11 && $post_hold_ss >= 0.05 && {eco_pass} <= 3}} {{
   set launch_leaves {{}}
   set cap_leaves {{}}
   foreach clk_grp {{{clk_groups_tcl}}} {{
@@ -1406,11 +1434,7 @@ if {{$post_eco_wns < 0.05 && $post_hold_ff >= 0.10 && {eco_pass} <= 5}} {{
       continue
     }}
     if {{$cmn eq "sky130_fd_sc_hd__clkbuf_16"}} {{
-      dict set skew_swaps $cnm "sky130_fd_sc_hd__clkbuf_4"
-    }} elseif {{$cmn eq "sky130_fd_sc_hd__clkbuf_8"}} {{
-      dict set skew_swaps $cnm "sky130_fd_sc_hd__clkbuf_4"
-    }} elseif {{$cmn eq "sky130_fd_sc_hd__clkbuf_4" && $post_eco_wns < -0.10}} {{
-      dict set skew_swaps $cnm "sky130_fd_sc_hd__clkbuf_2"
+      dict set skew_swaps $cnm "sky130_fd_sc_hd__clkbuf_8"
     }}
   }}
   dict for {{snm smn}} $skew_swaps {{
@@ -1420,7 +1444,8 @@ if {{$post_eco_wns < 0.05 && $post_hold_ff >= 0.10 && {eco_pass} <= 5}} {{
 }}
 
 set need_hold_fix [expr {{$post_hold_ff < 0.035 || $post_hold_ss < 0.035}}]
-if {{$eco_swapped == 0 && $eco_cloned == 0 && !$need_hold_fix && $init_ant == 0}} {{
+set need_setup_buf 0
+if {{$eco_swapped == 0 && $eco_cloned == 0 && !$need_hold_fix && !$need_setup_buf && $init_ant == 0}} {{
   puts "ECO_P{eco_pass}_NO_CHANGES"
   exit 0
 }}
@@ -1473,9 +1498,14 @@ if {{$init_ant > 0 && [file exists {ant_post_rpt}]}} {{
   puts "ECO_P{eco_pass}_DRT_DIODES_ADDED: $drt_diodes_added"
 }}
 
+if {{$need_setup_buf}} {{
+  set_dont_use {{sky130_fd_sc_hd__clkbuf_16 sky130_fd_sc_hd__clkbuf_8 sky130_fd_sc_hd__clkbuf_4 sky130_fd_sc_hd__clkbuf_2}}
+  repair_timing -setup -slack_margin 0.08 -max_buffer_percent 2
+}}
+
 if {{$need_hold_fix}} {{
   set_dont_use {{sky130_fd_sc_hd__clkbuf_16 sky130_fd_sc_hd__clkbuf_8 sky130_fd_sc_hd__clkbuf_4 sky130_fd_sc_hd__clkbuf_2}}
-  estimate_parasitics -placement
+  # Keep the exact loaded OpenRCX SPEFs (do NOT overwrite with estimate_parasitics -placement, which hides SPEF clock skew!)
   repair_timing -hold -slack_margin 0.08 -max_buffer_percent 10
 }}
 
@@ -2016,6 +2046,8 @@ def main() -> None:
     ap.add_argument("--setup-margin", type=float, default=0.35, help="Pre-route setup repair margin ns (default: 0.35)")
     ap.add_argument("--hold-margin", type=float, default=0.08, help="Pre-route hold repair margin ns (default: 0.08)")
     ap.add_argument("--resume-eco", action="store_true", help="Resume ECO/STA/DRC/LVS/PNG from existing Pass-0 DEF")
+    ap.add_argument("--results-dir", type=Path, default=RESULTS_BASE, help="Results base directory")
+    ap.add_argument("--variant-dir", type=Path, default=VARIANT_BASE, help="Variant export base directory")
     args = ap.parse_args()
 
     t0 = time.time()
@@ -2028,14 +2060,16 @@ def main() -> None:
     )
     pin_groups = build_pin_groups()
 
-    work = RESULTS_BASE / block.name
+    res_base = args.results_dir.resolve()
+    var_base = args.variant_dir.resolve()
+    work = res_base / block.name
     work.mkdir(parents=True, exist_ok=True)
-    variant_dir = VARIANT_BASE / block.name
+    variant_dir = var_base / block.name
     variant_dir.mkdir(parents=True, exist_ok=True)
 
     synth_lib = build_v3_synth_lib(
         base.LIB_SS,
-        RESULTS_BASE / "_work/sky130_fd_sc_hd__ss_v31_synth.lib",
+        res_base / "_work/sky130_fd_sc_hd__ss_v31_synth.lib",
     )
 
     print(

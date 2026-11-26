@@ -36,31 +36,36 @@ module rx_async_word_fifo_core #(
 
     reg [DATA_WIDTH-1:0] mem [0:DEPTH-1];
 
-    // Replicated 2nd-stage reset synchronizers (every RESET_B net has fanout <= 16!)
-    (* ASYNC_REG = "TRUE" *) reg w_rst_s0, r_rst_s0;
+    // Two-stage reset synchronizer (s0 -> single s1 -> replicated low-fanout leaf resets!)
+    // Eliminates split-metastability across parallel reset trees while keeping RESET_B fanout <= 16.
+    (* ASYNC_REG = "TRUE" *) reg w_rst_s0, w_rst_s1, r_rst_s0, r_rst_s1;
     (* ASYNC_REG = "TRUE", keep = "true" *) reg w_rst0, w_rst1, w_rst2, w_rst3, w_rst4;
     (* ASYNC_REG = "TRUE", keep = "true" *) reg r_rst0, r_rst1, r_rst2, r_rst3, r_rst4, r_rst5, r_rst6, r_rst7;
 
     always @(posedge w_clk or negedge arst_n) begin
         if (!arst_n) begin
             w_rst_s0 <= 1'b0;
+            w_rst_s1 <= 1'b0;
             w_rst0 <= 1'b0; w_rst1 <= 1'b0; w_rst2 <= 1'b0; w_rst3 <= 1'b0; w_rst4 <= 1'b0;
         end else begin
             w_rst_s0 <= 1'b1;
-            w_rst0 <= w_rst_s0; w_rst1 <= w_rst_s0; w_rst2 <= w_rst_s0;
-            w_rst3 <= w_rst_s0; w_rst4 <= w_rst_s0;
+            w_rst_s1 <= w_rst_s0;
+            w_rst0 <= w_rst_s1; w_rst1 <= w_rst_s1; w_rst2 <= w_rst_s1;
+            w_rst3 <= w_rst_s1; w_rst4 <= w_rst_s1;
         end
     end
 
     always @(posedge r_clk or negedge arst_n) begin
         if (!arst_n) begin
             r_rst_s0 <= 1'b0;
+            r_rst_s1 <= 1'b0;
             r_rst0 <= 1'b0; r_rst1 <= 1'b0; r_rst2 <= 1'b0; r_rst3 <= 1'b0;
             r_rst4 <= 1'b0; r_rst5 <= 1'b0; r_rst6 <= 1'b0; r_rst7 <= 1'b0;
         end else begin
             r_rst_s0 <= 1'b1;
-            r_rst0 <= r_rst_s0; r_rst1 <= r_rst_s0; r_rst2 <= r_rst_s0; r_rst3 <= r_rst_s0;
-            r_rst4 <= r_rst_s0; r_rst5 <= r_rst_s0; r_rst6 <= r_rst_s0; r_rst7 <= r_rst_s0;
+            r_rst_s1 <= r_rst_s0;
+            r_rst0 <= r_rst_s1; r_rst1 <= r_rst_s1; r_rst2 <= r_rst_s1; r_rst3 <= r_rst_s1;
+            r_rst4 <= r_rst_s1; r_rst5 <= r_rst_s1; r_rst6 <= r_rst_s1; r_rst7 <= r_rst_s1;
         end
     end
 
@@ -71,8 +76,9 @@ module rx_async_word_fifo_core #(
     (* ASYNC_REG = "TRUE" *) reg [PTR_BITS-1:0] w_gray_r1, w_gray_r2;
 
     // Write-side state: single 16-bit w_oh (fanout 3 per bit!) + bit-0 inverted p1 (fast dfrtp!)
-    // Dedicated w_gray_p1_fa/fb isolate full_p1 comparators (fanout <= 4 -> +0.8 ns SS slack!)
+    // Dedicated w_gray_f/m & w_gray_p1_f/m isolate full comparators (zero rebuffer -> +0.6 ns SS slack!)
     reg [PTR_BITS-1:0] w_gray;
+    (* keep = "true" *) reg [PTR_BITS-1:0] w_gray_f, w_gray_m;
     reg [PTR_BITS-1:1] w_bin_p1_hi, w_gray_p1_hi;
     reg                w_bin_p1_b0n, w_gray_p1_b0n;
     (* keep = "true" *) reg [PTR_BITS-1:1] w_gray_p1_fhi, w_gray_p1_mhi;
@@ -169,10 +175,10 @@ module rx_async_word_fifo_core #(
     (* keep = "true" *) wire full_p1_b;
     (* keep = "true" *) wire full_p1_c;
     (* keep = "true" *) wire full_p1_d;
-    assign full_cur_a = (w_gray      == r_gray_full_cmp);
-    assign full_cur_b = (w_gray      == r_gray_full_cmp);
-    assign full_cur_c = (w_gray      == r_gray_full_cmp_m);
-    assign full_cur_d = (w_gray      == r_gray_full_cmp_m);
+    assign full_cur_a = (w_gray_f    == r_gray_full_cmp);
+    assign full_cur_b = (w_gray_f    == r_gray_full_cmp);
+    assign full_cur_c = (w_gray_m    == r_gray_full_cmp_m);
+    assign full_cur_d = (w_gray_m    == r_gray_full_cmp_m);
     assign full_p1_a  = (w_gray_p1_f == r_gray_full_cmp);
     assign full_p1_b  = (w_gray_p1_f == r_gray_full_cmp);
     assign full_p1_c  = (w_gray_p1_m == r_gray_full_cmp_m);
@@ -252,10 +258,12 @@ module rx_async_word_fifo_core #(
         end
     end
 
-    // Write-domain pointers (w_rst1: 20 FFs, ALL dfrtp -> -0.48 ns vs slow dfstp!)
+    // Write-domain pointers (w_rst1: 30 FFs, ALL dfrtp -> -0.48 ns vs slow dfstp!)
     always @(posedge w_clk or negedge w_rst1) begin
         if (!w_rst1) begin
             w_gray         <= {PTR_BITS{1'b0}};
+            w_gray_f       <= {PTR_BITS{1'b0}};
+            w_gray_m       <= {PTR_BITS{1'b0}};
             w_bin_p1_hi    <= {(PTR_BITS-1){1'b0}};
             w_bin_p1_b0n   <= 1'b0;
             w_gray_p1_hi   <= {(PTR_BITS-1){1'b0}};
@@ -265,7 +273,11 @@ module rx_async_word_fifo_core #(
             w_gray_p1_mhi  <= {(PTR_BITS-1){1'b0}};
             w_gray_p1_mb0n <= 1'b0;
         end else begin
-            if (w_take_g0) w_gray <= w_gray_p1;
+            if (w_take_g0) begin
+                w_gray   <= w_gray_p1;
+                w_gray_f <= w_gray_p1;
+                w_gray_m <= w_gray_p1;
+            end
             if (w_take_g1) begin
                 w_bin_p1_hi    <= w_bin_p2[PTR_BITS-1:1];
                 w_bin_p1_b0n   <= !w_bin_p2[0];

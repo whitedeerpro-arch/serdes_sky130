@@ -72,18 +72,23 @@ module pi_step_commutator #(
         endcase
     endfunction
 
-    wire [5:0] code_p1 = phase_code + 6'd1;
-    wire [5:0] code_m1 = phase_code + 6'd63;
-    wire [5:0] next_code = advance ? code_p1 : code_m1;
-    wire [7:0] next_a    = advance ? decode_a(code_p1[5:3]) : decode_a(code_m1[5:3]);
-    wire [7:0] next_b    = advance ? decode_b(code_p1[5:3]) : decode_b(code_m1[5:3]);
-    wire [7:0] next_f    = advance ? decode_f(code_p1[3:0]) : decode_f(code_m1[3:0]);
+    // Physical RX CMOS PI (rx_cmos_pi.spice): increasing phase_code monotonically DELAYS the
+    // sampling clocks (+7.8125 ps/step). Therefore advance=1 ("clock is late -> move sampling
+    // clock EARLIER") must DECREMENT phase_code (step_up=0), and advance=0 ("clock is early ->
+    // move sampling clock LATER") must INCREMENT phase_code (step_up=1).
+    wire       step_up         = !advance;
+    wire [5:0] code_p1         = phase_code + 6'd1;
+    wire [5:0] code_m1         = phase_code + 6'd63;
+    wire [5:0] next_code       = step_up ? code_p1 : code_m1;
+    wire [7:0] next_a          = step_up ? decode_a(code_p1[5:3]) : decode_a(code_m1[5:3]);
+    wire [7:0] next_b          = step_up ? decode_b(code_p1[5:3]) : decode_b(code_m1[5:3]);
+    wire [7:0] next_f          = step_up ? decode_f(code_p1[3:0]) : decode_f(code_m1[3:0]);
 
     // Exact algebraic octant-crossing identities (eliminates 8-bit decoded bus comparators!):
-    //   advance=1 crosses octant only at code[2:0]==3'b111 (active endpoint -> ENDPOINT)
-    //   advance=0 crosses octant only at code[2:0]==3'b000 (inactive leg at 0x00/0xff -> PREPARE)
-    wire coarse_change   = advance ? (&phase_code[2:0]) : (~|phase_code[2:0]);
-    wire inactive_change = (!advance) && (~|phase_code[2:0]);
+    //   step_up=1 crosses octant only at code[2:0]==3'b111 (active endpoint -> ENDPOINT)
+    //   step_up=0 crosses octant only at code[2:0]==3'b000 (inactive leg at 0x00/0xff -> PREPARE)
+    wire       coarse_change   = step_up ? (&phase_code[2:0]) : (~|phase_code[2:0]);
+    wire       inactive_change = (!step_up) && (~|phase_code[2:0]);
 
     assign step_ready = (state == IDLE);
 

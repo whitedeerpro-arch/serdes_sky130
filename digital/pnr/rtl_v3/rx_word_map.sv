@@ -1,5 +1,8 @@
-// Timing-closed v2 rx_word_map (identical zero-comb-depth input register stage;
-// only primed/bundle_valid use async rst_n to keep word_online reset fanout <= 16!).
+// Direct 1:1 chronological capture matching analog/rx/cmos_rx/spice/rx_cmos_deser16.spice (v3.2):
+//   phys[15:0]  = wd[15:0] (chronological data: wd[0] oldest .. wd[15] newest)
+//   phys[31:16] = we[15:0] (chronological pre-data edges: we[k] lies strictly between wd[k-1] and wd[k];
+//                           we[0] = e3_4 lies between previous word's wd[15] and current wd[0])
+// Zero-comb-depth input register stage; only primed/bundle_valid use async rst_n (fanout <= 2).
 module rx_word_map (
     input  wire        clk,
     input  wire        rst_n,
@@ -9,19 +12,7 @@ module rx_word_map (
     output reg         previous_data,
     output reg         bundle_valid
 );
-    localparam integer A0 = 0, B0 = 1, AE1 = 2, BE1 = 3, A1 = 4, B1 = 5, AE0 = 6, BE0 = 7;
-    reg [15:0] d, e_after;
-    reg last_data, last_edge, primed;
-    integer k;
-
-    always @* begin
-        for (k = 0; k < 4; k = k + 1) begin
-            d[12-4*k] = phys[4*A0+k];  e_after[12-4*k] = phys[4*AE1+k];
-            d[13-4*k] = phys[4*B1+k];  e_after[13-4*k] = phys[4*BE0+k];
-            d[14-4*k] = phys[4*B0+k];  e_after[14-4*k] = phys[4*BE1+k];
-            d[15-4*k] = phys[4*A1+k];  e_after[15-4*k] = phys[4*AE0+k];
-        end
-    end
+    reg last_data, primed;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -34,10 +25,9 @@ module rx_word_map (
     end
 
     always @(posedge clk) begin
-        data_samples  <= d;
-        edge_samples  <= {e_after[14:0], last_edge};
+        data_samples  <= phys[15:0];
+        edge_samples  <= phys[31:16];
         previous_data <= last_data;
-        last_data     <= d[15];
-        last_edge     <= e_after[15];
+        last_data     <= phys[15];
     end
 endmodule

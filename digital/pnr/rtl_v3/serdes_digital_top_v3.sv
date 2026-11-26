@@ -49,6 +49,7 @@ module serdes_digital_top_v3 #(
     output wire                        precharge_en,
     output wire                        pfd_rst_b,
     output wire                        cp_en,
+    output wire                        pll_pw_clr_b,
     output wire [PLL_CODE_BITS-1:0]    vco_code,
     output wire [7:0]                  switches,
 
@@ -129,6 +130,32 @@ module serdes_digital_top_v3 #(
     output wire signed [22:0]          rx_cdr_phase_debt_q
 );
     // =========================================================================
+    // 0. Per-Domain 2-FF Async-Assert / Sync-Deassert Reset Synchronizers
+    //    Guarantees clean synchronous release in every independent clock domain
+    //    (prevents cdr_clk_div2_q / phase_hi_q split-release & TX word_ready split).
+    // =========================================================================
+    (* ASYNC_REG = "TRUE" *) reg [1:0] ref_rst_sync;
+    (* ASYNC_REG = "TRUE" *) reg [1:0] tx_rst_sync;
+    (* ASYNC_REG = "TRUE" *) reg [1:0] rx_rst_sync;
+
+    always @(posedge ref_clk or negedge rst_n) begin
+        if (!rst_n) ref_rst_sync <= 2'b00;
+        else        ref_rst_sync <= {ref_rst_sync[0], 1'b1};
+    end
+    always @(posedge tx_word_clk or negedge rst_n) begin
+        if (!rst_n) tx_rst_sync <= 2'b00;
+        else        tx_rst_sync <= {tx_rst_sync[0], 1'b1};
+    end
+    always @(posedge rx_word_clk or negedge rst_n) begin
+        if (!rst_n) rx_rst_sync <= 2'b00;
+        else        rx_rst_sync <= {rx_rst_sync[0], 1'b1};
+    end
+
+    wire ref_rst_n = ref_rst_sync[1];
+    wire tx_rst_n  = tx_rst_sync[1];
+    wire rx_rst_n  = rx_rst_sync[1];
+
+    // =========================================================================
     // 1. PLL Control Top v3 (5-bit coarse VCO code, /4 62.5 MHz internal domain)
     // =========================================================================
     pll_control_top #(
@@ -145,7 +172,7 @@ module serdes_digital_top_v3 #(
         .ACQ_TIMEOUT_CYCLES    (PLL_ACQ_TIMEOUT_CYCLES)
     ) u_pll (
         .ref_clk            (ref_clk),
-        .rst_n              (rst_n),
+        .rst_n              (ref_rst_n),
         .enable             (pll_enable),
         .start              (pll_start),
         .abort_async        (pll_abort_async),
@@ -162,6 +189,7 @@ module serdes_digital_top_v3 #(
         .precharge_en       (precharge_en),
         .pfd_rst_b          (pfd_rst_b),
         .cp_en              (cp_en),
+        .pw_clr_b           (pll_pw_clr_b),
         .locked             (pll_locked),
         .busy               (pll_busy),
         .fault              (pll_fault),
@@ -185,7 +213,7 @@ module serdes_digital_top_v3 #(
         .WARMUP_FALLS(TX_WARMUP_FALLS)
     ) u_tx (
         .word_clk     (tx_word_clk),
-        .rst_n        (rst_n),
+        .rst_n        (tx_rst_n),
         .enable       (tx_enable),
         .clock_good   (tx_clock_good),
         .in_valid     (tx_in_valid),
@@ -207,7 +235,7 @@ module serdes_digital_top_v3 #(
 
     rx_word_map u_rx_map (
         .clk          (rx_word_clk),
-        .rst_n        (rst_n),
+        .rst_n        (rx_rst_n),
         .phys         (rx_phys),
         .data_samples (rx_map_data),
         .edge_samples (rx_map_edges),
@@ -244,7 +272,7 @@ module serdes_digital_top_v3 #(
     // =========================================================================
     rx_cdr_loop u_rx_cdr (
         .ctrl_clk     (rx_word_clk),
-        .rst_n        (rst_n),
+        .rst_n        (rx_rst_n),
         .enable       (rx_cdr_enable),
         .bundle_valid (rx_map_bundle_valid),
         .previous_data(rx_map_prev),
@@ -295,10 +323,23 @@ module rx_word_host_shared #(
     reg         payload_started;
     reg         source_fault;
     (* ASYNC_REG = "TRUE" *) reg [1:0] fault_host;
+    (* ASYNC_REG = "TRUE" *) reg [1:0] rx_arst_sync;
+    (* ASYNC_REG = "TRUE" *) reg [1:0] host_arst_sync;
 
-    // Clean async reset from primary arst_n + synchronous clear on !word_online_int (zero derived-FF async resets!)
     always @(posedge word_clk or negedge arst_n) begin
-        if (!arst_n) begin
+        if (!arst_n) rx_arst_sync <= 2'b00;
+        else         rx_arst_sync <= {rx_arst_sync[0], 1'b1};
+    end
+    always @(posedge host_clk or negedge arst_n) begin
+        if (!arst_n) host_arst_sync <= 2'b00;
+        else         host_arst_sync <= {host_arst_sync[0], 1'b1};
+    end
+    wire rx_arst_n   = rx_arst_sync[1];
+    wire host_arst_n = host_arst_sync[1];
+
+    // Clean per-domain synchronized async reset + synchronous clear on !word_online_int
+    always @(posedge word_clk or negedge rx_arst_n) begin
+        if (!rx_arst_n) begin
             align_prime0 <= 1'b0;
             align_prime1 <= 1'b0;
         end else if (!word_online_int) begin
@@ -317,7 +358,7 @@ module rx_word_host_shared #(
         .TRAIN_HITS(TRAIN_HITS)
     ) u_align (
         .clk            (word_clk),
-        .rst_n          (arst_n),
+        .rst_n          (rx_arst_n),
         .sclr           (!word_online_int),
         .chunk_valid    (align_chunk_valid),
         .training_enable(training_enable),
@@ -332,8 +373,8 @@ module rx_word_host_shared #(
     wire retraining = training_enable && (payload_started || aligned_valid);
     wire ovf_hit    = word_online_int && wv_a && !source_fault && !fifo_ready;
 
-    always @(posedge word_clk or negedge arst_n) begin
-        if (!arst_n) begin
+    always @(posedge word_clk or negedge rx_arst_n) begin
+        if (!rx_arst_n) begin
             payload_started <= 1'b0;
             source_fault    <= 1'b0;
         end else if (!word_online_int) begin
@@ -366,9 +407,9 @@ module rx_word_host_shared #(
     );
 
     reg host_error_r;
-    // Clean async reset from primary arst_n + synchronous clear on !host_online (zero derived-FF async resets!)
-    always @(posedge host_clk or negedge arst_n) begin
-        if (!arst_n) begin
+    // Clean per-domain synchronized async reset + synchronous clear on !host_online
+    always @(posedge host_clk or negedge host_arst_n) begin
+        if (!host_arst_n) begin
             fault_host   <= 2'b00;
             host_error_r <= 1'b0;
         end else if (!host_online) begin

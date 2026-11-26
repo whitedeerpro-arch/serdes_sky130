@@ -78,7 +78,7 @@ module cdr_phase_frequency #(
     reg              in_err_neg_r;
     reg signed [6:0] in_vote_r;
     reg        [5:0] in_trans_r;
-    reg              enable_r;
+    (* ASYNC_REG = "TRUE" *) reg enable_s0, enable_r;
 
     always @(posedge ctrl_clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -88,6 +88,7 @@ module cdr_phase_frequency #(
             in_err_neg_r   <= 1'b0;
             in_vote_r      <= 7'sd0;
             in_trans_r     <= 6'd0;
+            enable_s0      <= 1'b0;
             enable_r       <= 1'b0;
         end else begin
             in_valid_r     <= vote_valid;
@@ -96,7 +97,8 @@ module cdr_phase_frequency #(
             in_err_neg_r   <= err_neg_c;
             in_vote_r      <= pair_vote_c;
             in_trans_r     <= pair_cnt_c;
-            enable_r       <= enable;
+            enable_s0      <= enable;
+            enable_r       <= enable_s0;
         end
     end
 
@@ -134,71 +136,90 @@ module cdr_phase_frequency #(
     wire signed [3:0] d_hi4_s1 = $signed({frequency_q[16], frequency_q[16:14]}) + kp_hi4;
     wire signed [17:0] delta_s1_next = enable_r ? $signed({d_hi4_s1, frequency_q[13:0]}) : 18'sd0;
 
-    // Lower 16 bits [15:0]: 2-level parallel carry-select (4+4 lo8 || 4+4 hi8 for cin=0/1) -> c16_out in ~3.0 ns!
-    wire [4:0] p_n0 = {1'b0, phase_debt_q[3:0]} + {1'b0, s2_delta_q[3:0]};
+    // Lower 16 bits [15:0]: 2-level parallel carry-select (4+4 lo8 || 4+4 hi8 for cin=0/1) -> c16_out in 5 levels!
     /* verilator lint_off UNUSED */
+    (* keep = "true" *) wire [4:0] p_n0;
     (* keep = "true" *) wire [5:0] p_n1_0w;
     (* keep = "true" *) wire [5:0] p_n1_1w;
     (* keep = "true" *) wire [5:0] p_n2_0w;
     (* keep = "true" *) wire [5:0] p_n2_1w;
     (* keep = "true" *) wire [5:0] p_n3_0w;
     (* keep = "true" *) wire [5:0] p_n3_1w;
+    (* keep = "true" *) wire       c8_out;
+    (* keep = "true" *) wire       c16_if0;
+    (* keep = "true" *) wire       c16_if1;
+    (* keep = "true" *) wire       c16_out;
     /* verilator lint_on UNUSED */
+    assign p_n0    = {1'b0, phase_debt_q[3:0]} + {1'b0, s2_delta_q[3:0]};
     assign p_n1_0w = {1'b0, phase_debt_q[7:4],   1'b0} + {1'b0, s2_delta_q[7:4],   1'b0};
     assign p_n1_1w = {1'b0, phase_debt_q[7:4],   1'b1} + {1'b0, s2_delta_q[7:4],   1'b1};
-    wire [3:0] p_n1    = p_n0[4] ? p_n1_1w[4:1] : p_n1_0w[4:1];
-    wire       c8_out  = p_n1_0w[5] | (p_n1_1w[5] & p_n0[4]);
+    wire [3:0] p_n1 = p_n0[4] ? p_n1_1w[4:1] : p_n1_0w[4:1];
+    assign c8_out   = p_n1_0w[5] | (p_n1_1w[5] & p_n0[4]);
 
     assign p_n2_0w = {1'b0, phase_debt_q[11:8],  1'b0} + {1'b0, s2_delta_q[11:8],  1'b0};
     assign p_n2_1w = {1'b0, phase_debt_q[11:8],  1'b1} + {1'b0, s2_delta_q[11:8],  1'b1};
     assign p_n3_0w = {1'b0, phase_debt_q[15:12], 1'b0} + {1'b0, s2_delta_q[15:12], 1'b0};
     assign p_n3_1w = {1'b0, phase_debt_q[15:12], 1'b1} + {1'b0, s2_delta_q[15:12], 1'b1};
 
-    // Speculative hi8 for c8_out=0 and c8_out=1 in parallel with lo8!
-    wire       c16_if0 = p_n3_0w[5] | (p_n3_1w[5] & p_n2_0w[5]);
-    wire       c16_if1 = p_n3_0w[5] | (p_n3_1w[5] & p_n2_1w[5]);
-    wire       c16_out = c8_out ? c16_if1 : c16_if0;
+    // Speculative hi8 for c8_out=0 and c8_out=1 in parallel with lo8 (1 mux2 after c8_out!)
+    assign c16_if0 = p_n3_0w[5] | (p_n3_1w[5] & p_n2_0w[5]);
+    assign c16_if1 = p_n3_0w[5] | (p_n3_1w[5] & p_n2_1w[5]);
+    assign c16_out = c8_out ? c16_if1 : c16_if0;
     wire       c12_out = c8_out ? p_n2_1w[5] : p_n2_0w[5];
     wire [3:0] p_n2    = c8_out  ? p_n2_1w[4:1] : p_n2_0w[4:1];
     wire [3:0] p_n3    = c12_out ? p_n3_1w[4:1] : p_n3_0w[4:1];
     wire [15:0] p_lo16 = {p_n3, p_n2, p_n1, p_n0[3:0]};
 
-    // Upper 8 bits [23:16] = {phase_debt_q[22], phase_debt_q[22:16]} + delta_hi + step_hi + c16_out
-    // delta_hi is in [-2, +1], step_hi is in [-1, +1] -> combined inc_u4 is in [-3, +2] (4-bit signed)
-    wire signed [3:0] step_hi4 = step_applied ? (issued_advance ? -4'sd1 : 4'sd1) : 4'sd0;
-    wire signed [3:0] inc_u4   = $signed({{2{s2_delta_q[17]}}, s2_delta_q[17:16]}) + step_hi4;
-    wire [7:0]        inc_u8   = {{4{inc_u4[3]}}, inc_u4};
-    wire [7:0]        pd_u8    = {phase_debt_q[22], phase_debt_q[22:16]};
+    // Upper 8 bits [23:16] = pd_u8 + (d_u8 + offset), where d_u8 in {-2,-1,0,+1}:
+    //   c16_out=0 -> offset in {-1, 0, +1} => d_c0 in {-3..+2} (4-bit signed, 2 gates from registered FFs!)
+    //   c16_out=1 -> offset in { 0,+1, +2} => d_c1 in {-2..+3} (4-bit signed, 2 gates from registered FFs!)
+    // Pre-selecting d_c0 / d_c1 BEFORE two 4+4 carry-select adders cuts 2 full 8-bit adders AND 2 mux2 levels (+2.0 ns SS!).
+    wire [7:0] pd_u8 = {phase_debt_q[22], phase_debt_q[22:16]};
+    wire [3:0] d_s4  = {{2{s2_delta_q[17]}}, s2_delta_q[17:16]};
+    wire [3:0] off_c0 = step_applied ? (issued_advance ? 4'hF : 4'h1) : 4'h0;  // -1, +1, 0
+    wire [3:0] off_c1 = step_applied ? (issued_advance ? 4'h0 : 4'h2) : 4'h1;  //  0, +2, +1
+    wire [3:0] d_c0   = d_s4 + off_c0;
+    wire [3:0] d_c1   = d_s4 + off_c1;
 
-    // Parallel 4b + 4b carry-select + speculative saturation for cin=0 and cin=1 (c16_out drives ONLY final 2:1 mux!)
+    // 4+4 carry-select for u_sum_c0 and u_sum_c1 (only 2 adders, 4 levels!)
+    wire [4:0] u0_lo  = {1'b0, pd_u8[3:0]} + {1'b0, d_c0};
+    wire [3:0] u0_h0  = pd_u8[7:4] + {4{d_c0[3]}};
+    wire [3:0] u0_h1  = pd_u8[7:4] + {4{d_c0[3]}} + 4'd1;
+    wire [7:0] u_sum_c0 = {u0_lo[4] ? u0_h1 : u0_h0, u0_lo[3:0]};
+
+    wire [4:0] u1_lo  = {1'b0, pd_u8[3:0]} + {1'b0, d_c1};
+    wire [3:0] u1_h0  = pd_u8[7:4] + {4{d_c1[3]}};
+    wire [3:0] u1_h1  = pd_u8[7:4] + {4{d_c1[3]}} + 4'd1;
+    wire [7:0] u_sum_c1 = {u1_lo[4] ? u1_h1 : u1_h0, u1_lo[3:0]};
+
+    wire ovf_pc0 = (!u_sum_c0[7]) && (u_sum_c0[6] || u_sum_c0[5]);
+    wire ovf_nc0 = ( u_sum_c0[7]) && (!u_sum_c0[6] || !u_sum_c0[5]);
+    wire ovf_pc1 = (!u_sum_c1[7]) && (u_sum_c1[6] || u_sum_c1[5]);
+    wire ovf_nc1 = ( u_sum_c1[7]) && (!u_sum_c1[6] || !u_sum_c1[5]);
+
     /* verilator lint_off UNUSED */
-    (* keep = "true" *) wire [5:0] u_lo0w;
-    (* keep = "true" *) wire [5:0] u_lo1w;
-    (* keep = "true" *) wire [4:0] u_hi0w;
-    (* keep = "true" *) wire [4:0] u_hi1w;
+    (* keep = "true" *) wire [6:0] sat_c0;
+    (* keep = "true" *) wire [6:0] sat_c1;
+    (* keep = "true" *) wire       ge1_c0;
+    (* keep = "true" *) wire       ge1_c1;
+    (* keep = "true" *) wire       ovf_c0;
+    (* keep = "true" *) wire       ovf_c1;
     /* verilator lint_on UNUSED */
-    assign u_lo0w = {1'b0, pd_u8[3:0], 1'b0} + {1'b0, inc_u8[3:0], 1'b0};
-    assign u_lo1w = {1'b0, pd_u8[3:0], 1'b1} + {1'b0, inc_u8[3:0], 1'b1};
-    assign u_hi0w = {pd_u8[7:4], 1'b0} + {inc_u8[7:4], 1'b0};
-    assign u_hi1w = {pd_u8[7:4], 1'b1} + {inc_u8[7:4], 1'b1};
-    wire [7:0] u_sum0 = {u_lo0w[5] ? u_hi1w[4:1] : u_hi0w[4:1], u_lo0w[4:1]};
-    wire [7:0] u_sum1 = {u_lo1w[5] ? u_hi1w[4:1] : u_hi0w[4:1], u_lo1w[4:1]};
+    assign sat_c0 = ovf_pc0 ? 7'b001_1111 : (ovf_nc0 ? 7'b110_0000 : u_sum_c0[6:0]);
+    assign sat_c1 = ovf_pc1 ? 7'b001_1111 : (ovf_nc1 ? 7'b110_0000 : u_sum_c1[6:0]);
+    assign ge1_c0 = (!sat_c0[6] && (|sat_c0[5:0])) || (sat_c0[6] && (sat_c0[5:0] != 6'h3f));
+    assign ge1_c1 = (!sat_c1[6] && (|sat_c1[5:0])) || (sat_c1[6] && (sat_c1[5:0] != 6'h3f));
+    assign ovf_c0 = ovf_pc0 || ovf_nc0;
+    assign ovf_c1 = ovf_pc1 || ovf_nc1;
 
-    wire       ovf_p0 = (!u_sum0[7]) && (u_sum0[6] || u_sum0[5]);
-    wire       ovf_n0 = ( u_sum0[7]) && (!u_sum0[6] || !u_sum0[5]);
-    wire [6:0] sat_u0 = ovf_p0 ? 7'b001_1111 : (ovf_n0 ? 7'b110_0000 : u_sum0[6:0]);
-    wire       ovf_p1 = (!u_sum1[7]) && (u_sum1[6] || u_sum1[5]);
-    wire       ovf_n1 = ( u_sum1[7]) && (!u_sum1[6] || !u_sum1[5]);
-    wire [6:0] sat_u1 = ovf_p1 ? 7'b001_1111 : (ovf_n1 ? 7'b110_0000 : u_sum1[6:0]);
-
-    wire p_ovf_pos = c16_out ? ovf_p1 : ovf_p0;
-    wire p_ovf_neg = c16_out ? ovf_n1 : ovf_n0;
-    wire [6:0] p_hi7 = c16_out ? sat_u1 : sat_u0;
-    wire signed [22:0] pnext = $signed({p_hi7, p_lo16});
-    wire ge1_u0 = (!sat_u0[6] && (|sat_u0[5:0])) || (sat_u0[6] && (sat_u0[5:0] != 6'h3f));
-    wire ge1_u1 = (!sat_u1[6] && (|sat_u1[5:0])) || (sat_u1[6] && (sat_u1[5:0] != 6'h3f));
-    wire debt_ge1_next = c16_out ? ge1_u1 : ge1_u0;
-    wire debt_adv_next = !p_hi7[6];
+    wire [6:0]  p_hi7         = c16_out ? sat_c1 : sat_c0;
+    wire        debt_ge1_next = c16_out ? ge1_c1 : ge1_c0;
+    wire        p_ovf_pos     = c16_out ? ovf_pc1 : ovf_pc0;
+    wire        p_ovf_neg     = c16_out ? ovf_nc1 : ovf_nc0;
+    wire        p_ovf_any     = c16_out ? ovf_c1 : ovf_c0;
+    wire [15:0] p_lo16_sat    = p_ovf_pos ? 16'hFFFF : (p_ovf_neg ? 16'h0000 : p_lo16);
+    wire signed [22:0] pnext  = $signed({p_hi7, p_lo16_sat});
+    wire        debt_adv_next = !p_hi7[6];
 
     // 2-stage pipelined quality window evaluation (zero-adder exact 2's-complement identity:
     //   for x < 0, -x <= T  <=>  (~x) + 1 <= T  <=>  (~x) < T  ->  1 XOR level, +5 ns SS slack!)
@@ -212,9 +233,9 @@ module cdr_phase_frequency #(
 
     reg signed [12:0] qsum_next;
     reg        [11:0] qtrans_next;
-    wire       [11:0] qsum_mag_c = quality_sum[12] ? ~quality_sum[11:0] : quality_sum[11:0];
-    wire              q_cmp_ok   = q_neg_r ? (q_mag_r < q_thr_r) : (q_mag_r <= q_thr_r);
-    wire              q_pass_r   = q_tok_r && q_cmp_ok && q_debt_ok_r && q_age_ok_r;
+    wire       [11:0] qsum_next_mag_c = qsum_next[12] ? ~qsum_next[11:0] : qsum_next[11:0];
+    wire              q_cmp_ok        = q_neg_r ? (q_mag_r < q_thr_r) : (q_mag_r <= q_thr_r);
+    wire              q_pass_r        = q_tok_r && q_cmp_ok && q_debt_ok_r && q_age_ok_r;
 
     always @* begin
         // KI = 128 (1<<7): 11-bit +/-1 update & clamp on upper bits only
@@ -274,11 +295,11 @@ module cdr_phase_frequency #(
             s2_delta_q <= delta_s1_next;
 
             // Stage 2 phase_debt_q update + zero-latency debt_ge1_r/debt_adv_r shadow
-            if (s2_enable || step_applied) begin
+            if (enable_r && (s2_enable || step_applied)) begin
                 phase_debt_q <= pnext;
                 debt_ge1_r   <= debt_ge1_next;
                 debt_adv_r   <= debt_adv_next;
-                if (s2_enable && (p_ovf_pos || p_ovf_neg)) begin
+                if (s2_enable && p_ovf_any) begin
                     range_limited <= 1'b1;
                 end
             end
@@ -301,7 +322,7 @@ module cdr_phase_frequency #(
                     good_count <= 3'd0;
                 end
 
-                // Stage 1 of quality evaluation: capture |quality_sum| and threshold on window end
+                // Stage 1 of quality evaluation: capture full 64-tick |qsum_next| and threshold on window end
                 q_eval_r <= 1'b0;
                 if (in_valid_r) begin
                     if (quality_ticks == QTICKS_LAST) begin
@@ -309,10 +330,10 @@ module cdr_phase_frequency #(
                         quality_sum         <= 13'sd0;
                         quality_transitions <= 12'd0;
                         q_eval_r            <= 1'b1;
-                        q_neg_r             <= quality_sum[12];
-                        q_mag_r             <= qsum_mag_c;
-                        q_thr_r             <= {2'b00, quality_transitions[11:2]};
-                        q_tok_r             <= (quality_transitions >= 12'd128);
+                        q_neg_r             <= qsum_next[12];
+                        q_mag_r             <= qsum_next_mag_c;
+                        q_thr_r             <= {2'b00, qtrans_next[11:2]};
+                        q_tok_r             <= (qtrans_next >= 12'd128);
                         q_age_ok_r          <= (age < NO_TRANS_9);
                         q_debt_ok_r         <= debt_in_2one && !range_limited;
                     end else begin
@@ -338,8 +359,15 @@ module cdr_phase_frequency #(
                 // Registered range_limited clears locked on next cycle (breaks p_ovf -> locked path!)
                 if (range_limited) locked <= 1'b0;
             end else begin
+                frequency_q         <= 17'sd0;
+                phase_debt_q        <= 23'sd0;
+                debt_ge1_r          <= 1'b0;
+                debt_adv_r          <= 1'b1;
+                s2_enable           <= 1'b0;
+                s2_delta_q          <= 18'sd0;
                 locked              <= 1'b0;
                 holdover            <= 1'b0;
+                range_limited       <= 1'b0;
                 age                 <= 9'd0;
                 q_eval_r            <= 1'b0;
                 good_count          <= 3'd0;

@@ -7,7 +7,7 @@ SystemVerilog RTL, behavioral testbenches, unified OpenROAD SKY130A (`sky130_fd_
 - **RTL Source**: [`pnr/rtl_v3/`](pnr/rtl_v3/) (`serdes_digital_top_v3.sv` integrating `pll_control_top`, `tx_ingress_control`, shared `rx_word_map`, `rx_word_align16` + `rx_async_word_fifo`, and 2nd-order `rx_cdr_loop`).
 - **P&R & GLS Flows**: [`pnr/run_unified_v3_pnr.py`](pnr/run_unified_v3_pnr.py) (Yosys + OpenROAD + OpenRCX + Magic DRC + Netgen LVS) and [`pnr/run_v3_gls_vcs.py`](pnr/run_v3_gls_vcs.py) (4-mode RTL + 3-corner SDF 3.0 GLS + SVA + Verdi FSDB).
 - **Deliverables**: [`pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/`](pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/) — tracked post-P&R Verilog (`serdes_digital_top_v3.v`), layout preview (`.png`), and machine-readable [`summary.json`](pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json) (`.gds`/`.def`/`_pg.v` stay on local disk / GitHub Releases).
-- **Design & Signoff Report**: [docs/design/digital_top_v3.md](../docs/design/digital_top_v3.md) — `338.10 × 307.40 µm = 103,932 µm²`, `4,932` std cells, `0` `hold_clkbuf_16`, 3-corner OpenRCX STA (all 6 clocks MET, `TNS = 0`), Magic DRC=0, Netgen LVS=MATCH, **4/4 VCS SDF GLS PASS** (`122,608/122,608` SVA PASS, `0` sync timing violations, `±300 ppm` CDR lock).
+- **Verification** covers physical review, three-corner STA, an RTL reference, and three SDF gate-level modes. The design report gives the clock boundaries, assertions, and CDC exceptions. [Design and signoff report](../docs/design/digital_top_v3.md)
 
 ## 2. Subsystem Unit RTL & Reference Directories
 

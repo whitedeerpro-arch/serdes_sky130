@@ -9,6 +9,7 @@ module pll_coarse_ctrl #(
 ) (
     input  wire                 ctrl_clk,
     input  wire                 rst_n,
+    input  wire                 abort,
     input  wire                 search,
     input  wire                 track_en,
     input  wire [1:0]           tclass,
@@ -90,6 +91,15 @@ module pll_coarse_ctrl #(
             fast_end <= 1'b0;
             slow_end <= 1'b0;
             switches <= 8'd0;
+            wait_n   <= {SW{1'b0}};
+            hold_n   <= {HW{1'b0}};
+            div_n    <= {DW{1'b0}};
+        end else if (abort) begin
+            state    <= IDLE;
+            busy     <= 1'b0;
+            done     <= 1'b0;
+            fast_end <= 1'b0;
+            slow_end <= 1'b0;
             wait_n   <= {SW{1'b0}};
             hold_n   <= {HW{1'b0}};
             div_n    <= {DW{1'b0}};

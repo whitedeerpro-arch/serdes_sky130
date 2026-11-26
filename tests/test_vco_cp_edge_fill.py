@@ -17,6 +17,21 @@ fill = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(fill)
 
 
+@pytest.fixture
+def campaign(tmp_path, monkeypatch):
+    cp = tmp_path / "cp_window.json"
+    cp.write_text(json.dumps({"rows": {
+        "ff_v1950_t85:tt": {"hi": 1.61},
+        "ff_v1950_t85:ll": {"hi": 1.60},
+        "fs_v1950_t85:ll": {"hi": 1.60},
+    }}))
+    library = tmp_path / "sky130.lib.spice"
+    library.write_text("* Offline fixture used for the campaign's input hash\n")
+    monkeypatch.setattr(fill, "CP", cp)
+    monkeypatch.setattr(fill, "model_library", lambda: library)
+    return tmp_path / "campaign"
+
+
 def output(campaign, name, raw, stop):
     for directory in [campaign / f'{name}.r2', campaign / name]:
         path = directory / raw
@@ -47,8 +62,8 @@ def batch_run(jobs, workers, smoke):
     return result
 
 
-def test_resume_only_missing_and_invalid_measurements(tmp_path):
-    camp = tmp_path / 'campaign'
+def test_resume_only_missing_and_invalid_measurements(campaign):
+    camp = campaign
     manifest = fill.prepare(camp)
     name = 'ff_tt'
     cases = manifest['cases'][name]
@@ -88,8 +103,8 @@ def test_resume_only_missing_and_invalid_measurements(tmp_path):
         assert report['rows'][name]['samples'][1]['frequency_hz'] is None
 
 
-def test_truncated_smoke_aborts_before_batch(tmp_path):
-    camp = tmp_path / 'campaign'
+def test_truncated_smoke_aborts_before_batch(campaign):
+    camp = campaign
     fill.prepare(camp)
 
     def truncated_smoke(deck, directory, **kwargs):

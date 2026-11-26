@@ -1,0 +1,165 @@
+{
+  "date": "2026-11-24",
+  "baseline_tag": "v1.0",
+  "scope": "Post-release chip integration and separate candidates; fixed copies of summary receipts.",
+  "artifacts": [
+    {
+      "id": "pll_v4p2_short_pull_in",
+      "path": "results/verification/project_review/20261124/pll_v4p2_short_pull_in.json",
+      "source": "results/analog/pll/top/v4p2_saff_20261123/summary.json",
+      "sha256": "e2c229562d22f50e987d9763711e35050113873b9357ac6f6fbedd600ed5b2a9",
+      "bytes": 2928,
+      "boundary": "TT/SS-cold/FS-hot schematic PLL, four r5 receivers plus v2_cand feedback, fixed coarse code and +20 mV precharge offset, 140 ns",
+      "interpretation": "3/3 under the local +/-1000 ppm screen; the engineering lock screen reports insufficient_hold_record for all three."
+    },
+    {
+      "id": "mixed_signal_link",
+      "path": "results/verification/project_review/20261124/mixed_signal_link.json",
+      "source": "results/verification/top_cosim_4g_20261123/summary.json",
+      "sha256": "944c723cc55d35fd5c4f8b922110fdd9c5abc4e9927bed7419549d6823487b5c",
+      "bytes": 24560,
+      "boundary": "76 ns schematic link with legacy CML divider in the PLL feedback and four external r5 clock receivers, C2_loss6, fixed PI code(s)",
+      "interpretation": "Three Stage-1 and Stage-2 pressure points, plus one TT same-deck analog link. The three-code RX gate spans 0.50 UI from endpoint to endpoint. Production RTL CDR/FIFO separate."
+    },
+    {
+      "id": "divider_candidate_pvt45",
+      "path": "results/verification/project_review/20261124/divider_candidate_pvt45.json",
+      "source": "results/analog/pll/divider/tspc_harden_20261123/pvt45_v2_cand/analysis/20261123T100815.443104Z/summary.json",
+      "sha256": "8d9be9b22fcc51c1b4d41e2f9783af997bdb707080380caec39aab8b0b3b845e",
+      "bytes": 118169,
+      "boundary": "Candidate schematic with r5 receiver CPEX and nominal 2 GHz excited CML source; per-process RC stress section",
+      "interpretation": "45/45 local functionality and 30 ps skew gates."
+    },
+    {
+      "id": "divider_candidate_mc",
+      "path": "results/verification/project_review/20261124/divider_candidate_mc.json",
+      "source": "results/analog/pll/divider/tspc_harden_20261123/mc_v2_cand/analysis/20261123T143245.153043Z/summary.json",
+      "sha256": "9c3bdb277f2dd0a945f74e09e4f5aa3bb3d93ccd839248554514d41060f985ca",
+      "bytes": 4431,
+      "boundary": "Candidate schematic, r5 CPEX, 200 samples each at SS cold and FS hot, first-edge measurements from a 24 ns record",
+      "interpretation": "199/200 and 200/200 under that measurement window; candidate extracted-layout MC remains open."
+    },
+    {
+      "id": "divider_candidate_physical",
+      "path": "results/verification/project_review/20261124/divider_candidate_physical.json",
+      "source": "results/layout/pll_divider/saff_v2_harden_20261123/review_cpex/summary.json",
+      "sha256": "a57f86bf5595470dec35908c30bc7dce28a4be874bb8cbc8fe8b3c2ff909b1a1",
+      "bytes": 3336,
+      "boundary": "Separate candidate geometry and design-side reference",
+      "interpretation": "Macro-level physical review and capacitance extraction. Top assembly uses a different preserved divider macro."
+    },
+    {
+      "id": "divider_candidate_cpex",
+      "path": "results/verification/project_review/20261124/divider_candidate_cpex.json",
+      "source": "results/analog/pll/divider/tspc_harden_20261123/cpex_corners_v2_cand_pdk/analysis/20261123T144541.778058Z/summary.json",
+      "sha256": "7f7f5f77f517c0a577574cc31221744fd2a7ebc3d66983b63238557acaee1e24",
+      "bytes": 18185,
+      "boundary": "Candidate divider CPEX and r5 CPEX, seven selected pressure points",
+      "interpretation": "7/7 local checks; no inferred 45-corner or extracted mismatch coverage."
+    },
+    {
+      "id": "top_assembly_audit",
+      "path": "results/verification/project_review/20261124/top_assembly_audit.json",
+      "source": "results/layout/chip_top_20261123/audit_20261124/summary.json",
+      "sha256": "c1800d958dee4e1a8694f8af360d91299c0fd6d763c1e6de402eacbfd2cad4e8",
+      "bytes": 34861,
+      "boundary": "Full core assembly using working digital v3.2 GDS and current layout generator; no GDS export",
+      "interpretation": "99 geometric signal-net checks, 12 connected decap banks, 8 distinct parent power nets; full-rule Magic DRC still reports 2 areas. Global LVS and top RCX remain open."
+    },
+    {
+      "id": "digital_v3p2_trial_sta",
+      "path": "results/verification/project_review/20261124/digital_v3p2_trial_sta.json",
+      "source": "results/digital/pnr_v3p2_cmos_rx/serdes_digital_top_v3/summary.json",
+      "sha256": "ec02b3d828bbb8edceba05f51d12ac27f6cfbed904133abc7d3cc20fc67d5a11",
+      "bytes": 6957,
+      "boundary": "First placed-and-routed v3.2 CMOS RX macro candidate, dated 2026-11-23",
+      "interpretation": "DRC/LVS passed for this candidate; SS STA retains setup and hold violations. The live RTL has further changes."
+    },
+    {
+      "id": "retired_layout_import_replay",
+      "path": "results/verification/project_review/20261124/retired_layout_import_replay.json",
+      "source": "results/layout/gemini_review/20261124_audit/summary.json",
+      "sha256": "677506e6c36c0fd953fad273f9afe3d95b8c4c3cbcbd5aa6b64093759ab6bb19",
+      "bytes": 3558,
+      "boundary": "Reproduced six historical leaf DRC/LVS checks from verified retirement copies",
+      "interpretation": "Original six DRC results reproduced, all 40 imported MAGs inspected for exported ports."
+    },
+    {
+      "id": "pll_v4p2_hold_recheck",
+      "path": "results/verification/project_review/20261124/pll_v4p2_hold_recheck.json",
+      "source": "results/verification/project_review/20261124/pll_v4p2_hold_recheck.json",
+      "sha256": "49452517dbcf994c9531d70256d3286bf52618d38611f16819f1a2db0f5e5e97",
+      "bytes": 1572,
+      "boundary": "Original short PLL raw data, rising edges at 0.5 VDD, analysis interval 55–140 ns",
+      "interpretation": "Engineering hold screen reports insufficient record for all three cases."
+    },
+    {
+      "id": "digital_v3p2_assembled_sta",
+      "path": "results/verification/project_review/20261124/digital_v3p2_assembled_sta.json",
+      "source": "results/digital/pnr_v3p2_final/serdes_digital_top_v3/summary.json",
+      "sha256": "03997079df331314c1310c44c0a147cc37544efcaa29567c4e49ec5dec8c09eb",
+      "bytes": 6901,
+      "boundary": "01:22 CST v3.2 re-route used by the 02:17 core audit; dedicated results GDS copied to the workspace when imported.",
+      "interpretation": "DRC=0/LVS=MATCH. SS setup/hold WNS is −318.4/+29.3 ps. Setup fails in rx_word_clk and cdr_clk_div2.",
+      "gds": {
+        "path": "results/digital/pnr_v3p2_final/serdes_digital_top_v3/serdes_digital_top_v3.gds",
+        "sha256": "cc9e0c2e1b342f750d16677802cb3d873cf87faf0ac03781c0b1300cc5434f41"
+      }
+    },
+    {
+      "id": "rtl_cdr_cmos_behavioral",
+      "path": "results/verification/project_review/20261124/rtl_cdr/summary.json",
+      "source": "results/verification/project_review/20261124/rtl_cdr/summary.json",
+      "sha256": "128b4f43f598b2236d042351ae55a9d3a730185633efb315df356d510e0158dc",
+      "bytes": 5149,
+      "boundary": "Current working RTL, historical PI step magnitudes with CMOS timing polarity, 400,000 UI per direction",
+      "interpretation": "±300 ppm each passed 19,936 words with zero word errors, gaps or slips."
+    },
+    {
+      "id": "top_strap_east_candidate",
+      "path": "results/verification/project_review/20261124/top_strap_east_candidate.json",
+      "sha256": "91e45c9eb203be25179ce58bfe530f228ebf46de4f5ca9247db82af0ce86ca55",
+      "bytes": 2093,
+      "scope": "Independent full-core layout copy and geometric connectivity replay",
+      "interpretation": "A 0.20 µm eastward move of the HV33 north M2 VSS trunk reduces full-rule DRC from 2 to 0; 99 signal-net, 8 power-domain and 12 decap-bank checks agree before and after."
+    },
+    {
+      "id": "digital_v3p2_signoff_met_sta",
+      "path": "results/verification/project_review/20261124/digital_v3p2_signoff_met_sta.json",
+      "source": "results/digital/pnr_v3p2_signoff_met/serdes_digital_top_v3/summary.json",
+      "sha256": "2f10e75c9a00ac7c183c6f2b443ca37e834a4ce1ad666a08017f77b362429718",
+      "bytes": 6927,
+      "gds": {
+        "sha256": "0fd27a31bfbe6ccb4d1ea1baeba6487e143837b16572b7f294b45ba6937bd4d8",
+        "path_at_capture": "results/digital/pnr_v3p2_signoff_met/serdes_digital_top_v3/serdes_digital_top_v3.gds",
+        "availability": "Later overwritten at the original path; binary at capture unavailable.",
+        "staged_magic_geometry": {
+          "path": "results/layout/chip_top_20261123/audit_20261124_signoff_met/serdes_digital_top_v3.mag",
+          "sha256": "1e78e860be75e9fcc9f5bb3f10e8a7cbb663c9a6d72c240b150ecbb75a58e2df",
+          "bytes": 10878382,
+          "boundary": "Saved imported geometry from the 02:31 GDS for the independent core DRC audit."
+        }
+      },
+      "boundary": "Later workspace v3.2 GDS, matched by hash to the separate pnr_v3p2_signoff_met run on 2026-11-24 at 02:40 CST.",
+      "interpretation": "Macro DRC=0, LVS=MATCH. SS setup/hold WNS −198.5/+171.4 ps. Earlier independent DRC ECO receipt uses the previous GDS."
+    },
+    {
+      "id": "top_strap_east_signoff_met",
+      "path": "results/verification/project_review/20261124/top_strap_east_signoff_met.json",
+      "sha256": "314eb5f802c46a195022220c23e3b3cd27974d82c302d765328024ab84d73903",
+      "bytes": 481,
+      "source": "results/layout/chip_top_20261123/audit_20261124_signoff_met_strap_east_trial/review_summary.json",
+      "boundary": "Independent full-core copy using the 02:31 v3.2 GDS, with the separate 0.20 µm east shift and all staged macros.",
+      "interpretation": "Full-rule Magic DRC=0 and unchanged geometric connectivity with 99 signal nets, 8 distinct power nets and 12 connected decap banks.",
+      "full_rule_magic_log": {
+        "path": "results/layout/chip_top_20261123/audit_20261124_signoff_met_strap_east_trial/audit_drc_boxes.log",
+        "sha256": "5f2d91a7ed839da25b41f14c6f8e74cb9bbbca9add6d63656a8dcefea50b393b"
+      },
+      "candidate_geometry": {
+        "path": "results/layout/chip_top_20261123/audit_20261124_signoff_met_strap_east_trial/serdes_4g_top_pdk.mag",
+        "sha256": "e8e7a761deb9ab695f755cfd95be976409ac3aca6cd5fc308f3a6585f6a4bae9"
+      }
+    }
+  ],
+  "later_evidence_catalog": "results/catalog/ppa_upgrade_review_20261124.json"
+}

@@ -4,6 +4,8 @@ from pathlib import Path
 import re
 
 ROOT=Path(__file__).resolve().parents[1]
+# FS hot bench and PDK-resistor snapshots from coupling_state/20261112T043742.580713Z_66e65343.
+FIXTURES = Path(__file__).with_name("fixtures") / "tx_physical_load"
 spec=importlib.util.spec_from_file_location('tx_physical_load_test',ROOT/'analog/tx/output_driver/tb/physical_load_card/run.py')
 card=importlib.util.module_from_spec(spec);spec.loader.exec_module(card)
 
@@ -14,8 +16,8 @@ def samples():
 
 
 def inputs():
-    root=card.PARENT/'snap/fs_v1650_t85/pdk_resistors'
-    return [(root/p).read_text() for p in (card.REL_DRIVER,card.REL_DELAY,card.REL_BUFFER)]
+    return [(FIXTURES / Path(path).name).read_text()
+            for path in (card.REL_DRIVER, card.REL_DELAY, card.REL_BUFFER)]
 
 
 def test_fixed_replacement_scoped_to_pre_and_termination():
@@ -49,7 +51,8 @@ def test_complete_per_branch_probe_coverage():
 
 
 def test_pair_deck_modes_and_probes():
-    parent=(card.PARENT/'prepared/fs_v1650_t85/tb.cir').read_text();net=samples()
+    parent = (FIXTURES / "parent.cir").read_text()
+    net = samples()
     for mode in card.MODES:
         text=card.deck(parent,mode,net,'/overlay/sky130.lib.spice','/tmp/variant.spice')
         assert text.count('Xdriver1 ')==1 and text.count('Xdriver2 ')==1

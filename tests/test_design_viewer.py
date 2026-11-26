@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import re
 
 import pytest
 
@@ -65,11 +66,18 @@ def test_standalone_export_contains_attached_records(workspace, tmp_path):
     assert data["nodes"][1]["iterations"][0]["module"] == "pll.vco"
 
 
-def test_project_hierarchy_and_evidence_links_are_valid():
+def test_project_hierarchy_and_evidence_links_are_valid(tmp_path):
     workspace = Workspace(ROOT)
     data = workspace.catalog()
     assert {n["id"] for n in data["nodes"] if n["parent"] == "serdes"} == {"tx", "bias", "rx", "pll", "channel"}
-    assert next(n for n in data["nodes"] if n["id"] == "pll")["state"] == "顶层集成已有"
+    nodes = {n["id"]: n for n in data["nodes"]}
+    assert nodes["pll.saff_feedback"]["parent"] == "pll"
+    assert nodes["tx.serializer"]["parent"] == "tx.legacy"
+    assert nodes["rx.readout"]["parent"] == "rx.legacy"
+    assert nodes["pll.divider"]["parent"] == "pll.legacy"
+    export = tmp_path / "catalog.js"
+    export_catalog(workspace, export)
+    assert export.read_bytes() == (ROOT / "web/design/catalog.js").read_bytes()
     for node in data["nodes"]:
         assert "boundary" in node
         for ref in node.get("references", []) + [a for record in node.get("iterations", []) for a in record.get("attachments", [])]:
@@ -78,3 +86,24 @@ def test_project_hierarchy_and_evidence_links_are_valid():
             assert workspace.artifact(figure["path"]).suffix in {".png", ".svg"}
             assert workspace.artifact(figure["report"]).suffix == ".md"
             assert figure["title"] and figure["scope"]
+
+
+def test_source_catalog_links_to_definitions_and_covers_production_rtl():
+    workspace = Workspace(ROOT)
+    source_paths = set()
+    for node in workspace.catalog()["nodes"]:
+        for entry in node.get("sources", []):
+            name, _, symbol = entry["path"].partition("#")
+            source = workspace.artifact(name)
+            assert source.suffix in {".sv", ".spice", ".f"}
+            assert entry["title"]
+            source_paths.add(name)
+            if symbol:
+                declaration = r"module\s+" if source.suffix == ".sv" else r"\.subckt\s+"
+                assert re.search(r"^\s*" + declaration + re.escape(symbol) + r"(?=\s|[;#(]|$)",
+                                 source.read_text(), re.MULTILINE), entry["path"]
+
+    filelist = workspace.artifact("digital/pnr/rtl_v3/rtl_v3.f").read_text().splitlines()
+    production = {line for line in filelist if line.startswith("digital/") and not Path(line).name.startswith("tb_")}
+    assert production
+    assert production <= source_paths

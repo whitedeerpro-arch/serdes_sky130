@@ -13,6 +13,7 @@
     return n;
   };
   const PHASE = {planning:"问题与规划", model:"模型规划", circuit:"参数 / 电路", validation:"仿真验证", conclusion:"迭代结论"};
+  const SOURCE_TYPES = {sv:"SystemVerilog RTL", spice:"SPICE 网表", f:"编译清单"};
   const DOMAIN = {serdes:["#5e83ce", "#edf3ff", "S"], tx:["#c18a64", "#fbf1e9", "TX"], bias:["#62a18b", "#eef8f3", "B"], rx:["#5e92b0", "#edf6fa", "RX"], pll:["#9b80bf", "#f4effa", "P"], channel:["#8c9dab", "#f1f5f8", "C"]};
   let catalog = window.DESIGN_CATALOG;
   let nodes = new Map();
@@ -178,13 +179,42 @@
   function empty(title, copy) {
     const n = el("div", {class:"empty-state"}); n.append(el("strong", {}, title), el("p", {}, copy)); return n;
   }
-  function reference(ref) {
+  const sourceType = path => path.split("#")[0].split(".").pop().toLowerCase();
+  function sourceReferences(node) {
+    const refs = new Map();
+    for (const ref of [...(node.sources || []), ...(node.references || [])]) {
+      const file = ref.path.split("#")[0];
+      if (SOURCE_TYPES[sourceType(file)] && !refs.has(file)) refs.set(file, ref);
+    }
+    return [...refs.values()];
+  }
+  function reference(ref, related) {
     const b = el("button", {class:"reference-card"});
     const suffix = ref.path.split("#")[0].split(".").pop().toUpperCase();
     const info = el("span", {class:"reference-info"}); info.append(el("strong", {}, ref.title), el("small", {}, ref.path));
     b.append(el("span", {class:"reference-icon"}, suffix.slice(0, 4)), info, el("span", {}, "↗"));
-    b.addEventListener("click", () => openArtifact(ref.path, ref.title));
+    b.addEventListener("click", () => openArtifact(ref.path, ref.title, related));
     return b;
+  }
+  function sourcePanel(body, node, sources) {
+    for (const [type, title] of Object.entries(SOURCE_TYPES)) {
+      const files = sources.filter(ref => sourceType(ref.path) === type);
+      if (!files.length) continue;
+      body.append(label(title));
+      files.forEach(ref => body.append(reference(ref, sources)));
+    }
+    const kids = children(node.id).filter(child => sourceReferences(child).length);
+    if (kids.length) {
+      body.append(label("子模块源码"));
+      const list = el("div", {class:"child-list"});
+      kids.forEach(child => {
+        const button = el("button", {class:"child-link"}, child.name + " ›");
+        button.addEventListener("click", () => select(child.id, true));
+        list.append(button);
+      });
+      body.append(list);
+    }
+    if (!sources.length && !kids.length) body.append(el("p", {class:"subtle-copy"}, "此模块暂无源码入口。"));
   }
   function evidenceFigure(figure) {
     const card = el("figure", {class:"evidence-figure"});
@@ -204,6 +234,7 @@
   }
   function renderInspector() {
     const n = nodes.get(selected), d = domain(n.id), h = $("#inspector-heading"), body = $("#inspector-body");
+    const sources = sourceReferences(n);
     h.replaceChildren();
     const id = el("div", {class:"module-id", style:`--domain-color:${d[0]}`}); id.append(el("i"), document.createTextNode(n.key ? `${n.id.toUpperCase()} / ${n.key}` : n.id.toUpperCase()));
     h.append(id, el("h2", {}, n.name), el("span", {class:"state-chip"}, n.state));
@@ -214,11 +245,18 @@
       body.append(el("p", {class:"body-summary"}, n.summary));
       const entries = n.id === "serdes" ? n.references?.slice(0, 2) : n.references?.slice(1, 2);
       entries?.forEach(ref => body.append(reference(ref)));
-      if (n.figures?.length) {
-        const figures = el("button", {class:"quiet-button figure-jump"}, "查看波形与版图 ↗");
-        figures.addEventListener("click", () => setTab("evidence"));
-        body.append(figures);
+      const actions = el("div", {class:"overview-actions"});
+      if (sources.length) {
+        const link = el("button", {class:"quiet-button"}, "查看源码 ↗");
+        link.addEventListener("click", () => setTab("sources"));
+        actions.append(link);
       }
+      if (n.figures?.length) {
+        const figures = el("button", {class:"quiet-button"}, "查看波形与版图 ↗");
+        figures.addEventListener("click", () => setTab("evidence"));
+        actions.append(figures);
+      }
+      if (actions.childElementCount) body.append(actions);
       const kids = children(n.id);
       if (kids.length) {
         body.append(label("下一级模块"));
@@ -227,6 +265,8 @@
           const b = el("button", {class:"child-link"}); b.append(el("span", {}, c.name), el("small", {}, `${c.key || c.state}  ›`)); b.addEventListener("click", () => select(c.id, true)); list.append(b);
         }); body.append(list);
       }
+    } else if (tab === "sources") {
+      sourcePanel(body, n, sources);
     } else if (tab === "boundary") {
       [["输入边界", "inputs"], ["输出边界", "outputs"], ["适用范围与假设", "assumptions"]].forEach(([title, key]) => {
         body.append(label(title)); const ul = el("ul", {class:`boundary-list${key === "assumptions" ? " assumptions" : ""}`});
@@ -284,23 +324,31 @@
     const hits = [];
     catalog.nodes.forEach(n => {
       const base = [n.id, n.key, n.name, n.subtitle, n.summary].join(" ").toLowerCase();
+      const sources = sourceReferences(n);
+      const source = sources.find(ref => [ref.title, ref.path].join(" ").toLowerCase().includes(query));
       const iteration = (n.iterations || []).find(i => [i.title, i.problem, i.model, i.changes].join(" ").toLowerCase().includes(query));
       const figure = (n.figures || []).find(f => f.title.toLowerCase().includes(query));
-      if (base.includes(query) || iteration || figure) hits.push({n, iteration, figure, score:n.name.toLowerCase().includes(query) ? 0 : 1});
+      const nameMatch = n.name.toLowerCase().includes(query);
+      const match = source || figure || iteration;
+      if (base.includes(query) || match) hits.push({
+        n, sources, match: nameMatch ? null : match,
+        tab: nameMatch ? "overview" : source ? "sources" : figure ? "evidence" : iteration ? "iterations" : "overview",
+        score: nameMatch ? 0 : source ? 1 : 2
+      });
     });
-    hits.sort((a, b) => a.score - b.score).slice(0, 16).forEach(({n, iteration, figure}) => {
-      const match = figure || iteration;
+    hits.sort((a, b) => a.score - b.score).slice(0, 16).forEach(({n, sources, match, tab}) => {
       const b = el("button", {class:"search-result"});
       b.append(el("strong", {}, match?.title || n.name), el("small", {}, parents(n.id).map(x => x.name).join(" / ")));
       b.addEventListener("click", () => {
         select(n.id, true);
-        setTab(figure ? "evidence" : iteration ? "iterations" : "overview");
+        setTab(tab);
         box.hidden = true;
         $("#search").value = "";
+        if (tab === "sources") openArtifact(match.path, match.title, sources);
       });
       box.append(b);
     });
-    if (!hits.length) box.append(el("div", {class:"search-empty"}, "没有匹配的模块、迭代或图表"));
+    if (!hits.length) box.append(el("div", {class:"search-empty"}, "没有匹配的模块、源码或证据"));
     box.hidden = false;
   }
 
@@ -367,8 +415,66 @@
     }
     return fragment;
   }
+  function renderSource(content, text, file, anchor, related) {
+    const type = sourceType(file);
+    const pattern = {
+      sv: /^\s*module\s+(?:(?:automatic|static)\s+)?([A-Za-z_$][\w$]*)/,
+      spice: /^\s*\.subckt\s+(\S+)/i
+    }[type];
+    const code = el("pre", {class:"source-code", tabindex:"0", "aria-label":file});
+    const lines = text.split(/\r?\n/);
+    if (lines.length > 1 && lines.at(-1) === "") lines.pop();
+    const definitions = [];
+    const rows = lines.map((line, index) => {
+      const found = pattern?.exec(line);
+      if (found) definitions.push({name:found[1], line:index + 1});
+      return el("span", {class:"source-line"}, line);
+    });
+    const fragment = document.createDocumentFragment();
+    rows.forEach(row => fragment.append(row));
+    code.append(fragment);
+
+    let highlighted;
+    function jump(number) {
+      const row = rows[number - 1];
+      if (!row || !row.isConnected) return;
+      highlighted?.classList.remove("source-target");
+      row.classList.add("source-target");
+      highlighted = row;
+      row.scrollIntoView({block:"start", inline:"nearest"});
+    }
+
+    const toolbar = el("div", {class:"source-toolbar"});
+    if (related.length > 1) {
+      const files = el("select", {"aria-label":"切换源码文件"});
+      related.forEach(ref => files.append(el("option", {value:ref.path}, ref.title)));
+      files.value = related.find(ref => ref.path.split("#")[0] === file)?.path || "";
+      files.addEventListener("change", () => {
+        const ref = related.find(entry => entry.path === files.value);
+        if (ref) openArtifact(ref.path, ref.title, related);
+      });
+      toolbar.append(files);
+    }
+    if (definitions.length) {
+      const name = type === "sv" ? "module" : ".subckt";
+      const outline = el("select", {"aria-label":"跳到 " + name});
+      outline.append(el("option", {value:""}, "跳到 " + name));
+      definitions.forEach(def => outline.append(el("option", {value:def.line}, `${def.name} · L${def.line}`)));
+      outline.addEventListener("change", () => jump(Number(outline.value)));
+      toolbar.append(outline);
+      if (anchor) {
+        const marker = decodeURIComponent(anchor);
+        const line = definitions.find(def => def.name === marker)?.line || Number(/^L(\d+)$/.exec(marker)?.[1]);
+        if (line) {
+          if (definitions.some(def => def.line === line)) outline.value = line;
+          requestAnimationFrame(() => jump(line));
+        }
+      }
+    }
+    content.replaceChildren(...(toolbar.childElementCount ? [toolbar, code] : [code]));
+  }
   let artifactRequest = 0;
-  async function openArtifact(path, title) {
+  async function openArtifact(path, title, related = []) {
     if (fileMode) {window.open(repoURL(path), "_blank", "noopener"); return;}
     const request = ++artifactRequest;
     const dialog = $("#artifact-dialog"), content = $("#artifact-content"), [file, anchor] = path.split("#");
@@ -382,8 +488,12 @@
       }
       const response = await fetch(repoURL(file)); if (!response.ok) throw new Error("无法读取资料，请检查仓库路径");
       const text = await response.text(); if (request !== artifactRequest) return;
-      content.replaceChildren(/\.md$/i.test(file) ? renderMarkdown(text, file) : el("pre", {}, text));
       content.scrollTop = 0;
+      if (SOURCE_TYPES[sourceType(file)]) {
+        renderSource(content, text, file, anchor, related);
+        return;
+      }
+      content.replaceChildren(/\.md$/i.test(file) ? renderMarkdown(text, file) : el("pre", {}, text));
       if (anchor) requestAnimationFrame(() => content.querySelector("#" + CSS.escape(decodeURIComponent(anchor)))?.scrollIntoView({block:"start"}));
     } catch (err) {if (request === artifactRequest) content.replaceChildren(el("p", {class:"form-error"}, err.message));}
   }

@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-24",
+  "scope": "16 x 16 retained storage. Incremental width-management area only.",
+  "artifacts": [
+    {
+      "path": "results/verification/fifo_fixed_storage_gearbox/20261123T202921.186213Z/summary.json",
+      "sha256": "a61e415c026632c251e2c7e554802d7c8b45205c6260df124a6f6465e1ef5652",
+      "bytes": 2582,
+      "boundary": "Fixed 256 FIFO bits. TT mapped area of two single-clock converters at each width and current 16-bit FIFO reference."
+    },
+    {
+      "path": "results/verification/fifo_fixed_storage_gearbox/20261123T202838.414778Z/summary.json",
+      "sha256": "a084a62c6c3d5256b827f4d71135d36b61cd06284bda631560657449850cf4a9",
+      "bytes": 3589,
+      "boundary": "Unfiltered first mapping and behavioral checks, with sample widths and run identity."
+    },
+    {
+      "path": "results/verification/fifo_fixed_storage_gearbox/20261123T202838.414778Z/gearbox.sv",
+      "sha256": "c978b08374f6eaeb079e6ba509d0201d6a6d5170ec523472195c9467b8da2b9f",
+      "bytes": 2684,
+      "boundary": "Isolation RTL for the converters."
+    },
+    {
+      "path": "results/verification/fifo_fixed_storage_gearbox/20261123T202838.414778Z/tb.sv",
+      "sha256": "cd9ffc6f948fe99603678608ff8da82270ec57b0950a1cdf74c4d551b9e0eeae",
+      "bytes": 1829,
+      "boundary": "Random stalls with bit chronology and output stability checks."
+    }
+  ]
+}

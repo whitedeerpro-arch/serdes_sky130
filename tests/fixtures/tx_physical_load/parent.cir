@@ -1,0 +1,83 @@
+TX output stage alone: clean data input, the full-TX pad / package / AC coupling / RLC16 / remote termination
+.lib "sky130.lib.spice" fs
+.include "analog/common/devices/spice/sky130_primitives.spice"
+.include "analog/common/devices/spice/sky130_pfet_lvt.spice"
+.include "analog/common/devices/spice/cmos_logic.spice"
+.include "analog/common/cml_buffer/spice/cml_delay_resistive.spice"
+.include "analog/common/cml_buffer/spice/cml_buffer.spice"
+.include "analog/tx/output_driver/spice/cml_line_driver_lowvt_enable.spice"
+.include "verification/models/channel/diff_rlc16.spice"
+.param supply=1.65
+Vdd vdd 0 {supply}
+Vref vref 0 {supply}
+XIref vbias vgi_bias vdd serdes_bias_pcopy n=85
+Xbias vbias 0 serdes_bias_cml
+.include "stimuli.inc"
+.include "analog/common/bias/spice/bandgap.spice"
+.include "analog/common/bias/spice/bias_dist.spice"
+Xbias_ref bias_vbg bias_i0 bias_i1 bias_i2 bias_i3 vgi_bias vdd 0 serdes_bias_ref trim=15
+Vbias_i0 bias_i0 0 0.7
+Vbias_i1 bias_i1 0 0.7
+Vbias_i2 bias_i2 0 0.7
+Vbias_i3 bias_i3 0 0.7
+.nodeset v(bias_vbg)=1.23 v(xbias_ref.xbg.s)=1.23 v(xbias_ref.vg)=0.9 v(vgi_bias)=0.9 v(xbias_ref.xbg.ta)=0.95 v(xbias_ref.xbg.tb)=0.95
+Ven1 tx_en1 0 PWL(0 0 4n 0 4.1n 1.65)
+Ven2 tx_en2 0 1.65
+* the serializer output node qp/qn as in the full TX: 2 fF besides the driver
+Cqp qp 0 2f
+Cqn qn 0 2f
+Vsense1 vdd vd1 0
+Xdriver1 qp qn tx_en1 lqp1 lqn1 vbias vd1 vd1 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32 rpre=120 wout=192 wtpre=60
+Clpp1 lqp1 0 200f
+Clpn1 lqn1 0 200f
+Rlpp1 lqp1 llp1 .3
+Rlpn1 lqn1 lln1 .3
+Llpp1 llp1 lap1 .5n
+Llpn1 lln1 lan1 .5n
+Clacp1 lap1 ltp1 10n
+Clacn1 lan1 ltn1 10n
+Xchannel1 ltp1 ltn1 lxp1 lxn1 0 serdes_diff_rlc16
+Rlc01 lxp1 lrp1 .01
+Rlc11 lxn1 lrn1 .01
+Clc01 lrp1 0 100f
+Clc11 lrn1 0 100f
+Vlcm1 lcm1 0 .9
+Rlterm01 lrp1 lcm1 50
+Rlterm11 lrn1 lcm1 50
+Vsense2 vdd vd2 0
+Xdriver2 qp qn tx_en2 lqp2 lqn2 vbias vd2 vd2 0 serdes_tx_cml_line_driver_lowvt_enable wgatep=32 rpre=120 wout=192 wtpre=60
+Clpp2 lqp2 0 200f
+Clpn2 lqn2 0 200f
+Rlpp2 lqp2 llp2 .3
+Rlpn2 lqn2 lln2 .3
+Llpp2 llp2 lap2 .5n
+Llpn2 lln2 lan2 .5n
+Clacp2 lap2 ltp2 10n
+Clacn2 lan2 ltn2 10n
+Xchannel2 ltp2 ltn2 lxp2 lxn2 0 serdes_diff_rlc16
+Rlc02 lxp2 lrp2 .01
+Rlc12 lxn2 lrn2 .01
+Clc02 lrp2 0 100f
+Clc12 lrn2 0 100f
+Vlcm2 lcm2 0 .9
+Rlterm02 lrp2 lcm2 50
+Rlterm12 lrn2 lcm2 50
+.temp 85
+.options reltol=1e-4 abstol=1p vntol=1u klu
+.save v(vdd) v(vbias) v(bias_vbg) v(qp) v(qn) v(lqp1) v(lqn1) v(lrp1) v(lrn1) v(xdriver1.tail) v(xdriver1.vbtail) v(lqp2) v(lqn2) v(lrp2) v(lrn2) v(xdriver2.tail) v(xdriver2.vbtail) i(vsense1) i(vsense2) @r.xdriver1.xrp.rbody[i] @r.xdriver1.xrn.rbody[i] @m.xdriver1.xt.xmos.msky130_fd_pr__nfet_01v8[id] @m.xdriver1.xt.xmos.msky130_fd_pr__nfet_01v8[vdsat] @r.xdriver2.xrp.rbody[i] @r.xdriver2.xrn.rbody[i] @m.xdriver2.xt.xmos.msky130_fd_pr__nfet_01v8[id] @m.xdriver2.xt.xmos.msky130_fd_pr__nfet_01v8[vdsat]
+.control
+set num_threads=1
+set filetype=binary
+tran 2p 9.200000000000002e-08 0 2p
+let irp1=@r.xdriver1.xrp.rbody[i]
+let irn1=@r.xdriver1.xrn.rbody[i]
+let itail1=@m.xdriver1.xt.xmos.msky130_fd_pr__nfet_01v8[id]
+let vdsat1=@m.xdriver1.xt.xmos.msky130_fd_pr__nfet_01v8[vdsat]
+let irp2=@r.xdriver2.xrp.rbody[i]
+let irn2=@r.xdriver2.xrn.rbody[i]
+let itail2=@m.xdriver2.xt.xmos.msky130_fd_pr__nfet_01v8[id]
+let vdsat2=@m.xdriver2.xt.xmos.msky130_fd_pr__nfet_01v8[vdsat]
+write waveforms.raw v(vdd) v(vbias) v(bias_vbg) v(qp) v(qn) v(lqp1) v(lqn1) v(lrp1) v(lrn1) v(xdriver1.tail) v(xdriver1.vbtail) v(lqp2) v(lqn2) v(lrp2) v(lrn2) v(xdriver2.tail) v(xdriver2.vbtail) i(vsense1) i(vsense2) irp1 irn1 itail1 vdsat1 irp2 irn2 itail2 vdsat2
+quit
+.endc
+.end

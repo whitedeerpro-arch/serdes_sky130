@@ -1,0 +1,150 @@
+{
+  "date": "2026-11-25",
+  "scope": "4G full_v8 active-device placement and cross-macro spans, with separate 5G candidate review",
+  "method": {
+    "gate_locator": "SKY130 GDS drawing layers DIFF(65/20) intersect POLY(66/20), merged contours include gate dummies and MOS caps",
+    "gap": "Largest internal empty interval after projecting all gates in a cell onto each axis, in micrometres",
+    "mim_plate_union": [
+      "89/44",
+      "97/44"
+    ],
+    "upper_metal_drawings": [
+      "70/20",
+      "71/20",
+      "72/20"
+    ],
+    "port_span": "Centres of installed Magic macro labels transformed to root, same-net verified in full_v8 EXT",
+    "local_pex": "Ground plus summed coupling of explicit extracted C elements; excludes device capacitance and intentional capacitors"
+  },
+  "coverage": {
+    "core_functional_placements": 20,
+    "core_decap_banks": 12,
+    "geometry_cell_types": 44
+  },
+  "artifacts": [
+    {
+      "id": "full_v8_gds",
+      "path": "results/layout/chip_top_20261123/full_v8/serdes_4g_top_pdk.gds",
+      "sha256": "f573e667f977699cc9257ec13a38b54a5dff24e22c1f2e68d047431efe0e8f0b",
+      "bytes": 54622784,
+      "boundary": "4G assembled core GDS"
+    },
+    {
+      "id": "full_v8_mag",
+      "path": "results/layout/chip_top_20261123/full_v8/serdes_4g_top_pdk.mag",
+      "sha256": "275dffca2834a65de1ee378b251bbe1f95ef70f6990cf1aafa422eba969e5008",
+      "bytes": 238833,
+      "boundary": "Assembled transforms from Magic"
+    },
+    {
+      "id": "full_v8_ext",
+      "path": "results/layout/chip_top_20261123/full_v8/serdes_4g_top_pdk.ext",
+      "sha256": "dc3237af904dfd49e9e0f6c07c133af28ae4a1c7a64af64ee9bb668739bdee2b",
+      "bytes": 975651,
+      "boundary": "Assembled physical net equivalence"
+    },
+    {
+      "id": "gds_geometry",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/gap_summary.json",
+      "sha256": "1cd45a7d1bde0c1316a8a1cd570a90dbe66f23271a957b1f64f5a84e351eeb2d",
+      "bytes": 29510,
+      "boundary": "20 functional core instances and 12 decap banks"
+    },
+    {
+      "id": "leaf_geometry",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/leaf_summary.json",
+      "sha256": "41c8e7a1c0719992542966704c15daeda62a8b515304b6b5b1700ab32d64a40a",
+      "bytes": 27690,
+      "boundary": "Additional analog leaf and 5G candidate geometry"
+    },
+    {
+      "id": "macro_identity",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/snapshot_identity.json",
+      "sha256": "db16f384aef0aa58ace57237558789e5bffcf46afd81ca02252b507e9dc81404",
+      "bytes": 6319,
+      "boundary": "MAG hashes and installed TX, RX and QDiv2 equality"
+    },
+    {
+      "id": "addendum_geometry",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/addendum/geometry_summary.json",
+      "sha256": "99dbcdac4e2903d14731da0e8255cf3a3f648568a4cc310616ece2cefb581896",
+      "bytes": 9560,
+      "boundary": "New LC octagonal GDS, four-phase RX PI, CTLE leaves and digital v4 GDS"
+    },
+    {
+      "id": "addendum_identity",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/addendum/snapshot_identity.json",
+      "sha256": "ed7d9babeda2c495625431b0586b29eecd82f7168aa1542db48cf18203ad784f",
+      "bytes": 1778,
+      "boundary": "Hashes for later candidate snapshots"
+    },
+    {
+      "id": "top_pin_spans",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/assembly_pin_spans.json",
+      "sha256": "35c5c17ac75b001a260645540bcc0d7bbd3cd6a94be2fb16107989dad8eb4b8a",
+      "bytes": 46107,
+      "boundary": "Physical-port centres, Manhattan spans and same-net checks"
+    },
+    {
+      "id": "local_pex_watch_nodes",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/watch_node_caps.json",
+      "sha256": "d7927ea4c57b8b92b622fa84ae17a8eb7a91fa763ff905ce333187d8450a0283",
+      "bytes": 1588,
+      "boundary": "Local explicit C-elements on TX VDRV and LC VCO bias nodes"
+    },
+    {
+      "id": "tx_ldo_active_plot",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/tx_and_ldo.png",
+      "sha256": "1d3eade7bfe19e82220d227b1ddb7ff23439d2f7b882fcbaa06d312e935d9cbc",
+      "bytes": 270666,
+      "boundary": "Layer overlay for TX, VDRV, HV18 and CP"
+    },
+    {
+      "id": "rx_pll_active_plot",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/rx_and_pll.png",
+      "sha256": "da29531244f155a94793b200e9b0aff1e363a8f54bd3ed8aef57279b5caa86be",
+      "bytes": 310625,
+      "boundary": "Layer overlay for 4G ring, PTAT, RX and feedback divider"
+    },
+    {
+      "id": "5g_active_plot",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/five_gigabit_latest.png",
+      "sha256": "5251d220700f46c2751b11a97b8e963cfab6f1d5ce22384772c6df410dc2088c",
+      "bytes": 252758,
+      "boundary": "Layer overlay for latest octagonal LC and 5G RX candidates"
+    },
+    {
+      "id": "5g_dividers_and_8ph_plot",
+      "path": "results/layout/active_placement_review_20261125_OJZpon/five_gigabit.png",
+      "sha256": "786712268a3d62aaae08a52f21f4906e09d699b6343beac7d84f2d9efbabc96d",
+      "bytes": 260146,
+      "boundary": "Earlier 5G candidates including standalone A/B and directly driven 8-phase RX PI"
+    },
+    {
+      "id": "r6_ring_pex_context",
+      "path": "analog/pll/vco/layout/review.md",
+      "sha256": "c48de569e83262866bab1f9510c2e78c499b57fb704854e1dd5796ae1d3a1204",
+      "bytes": 5448,
+      "boundary": "4G ring CPEX and oscillator corner back-annotation"
+    },
+    {
+      "id": "5g_4phase_cpex",
+      "path": "analog/rx/cmos_rx/layout/variants/v5g_4ph_pdk/summary.json",
+      "sha256": "6acf3685372ffbb1e85a8ca519e8c593127f93013d743c6ec3dbd1ef9b67046e",
+      "bytes": 26236,
+      "boundary": "DRC/LVS and octature mixing-node CPEX"
+    }
+  ],
+  "reproduction": [
+    "results/layout/active_placement_review_20261125_OJZpon/geometry.py",
+    "results/layout/active_placement_review_20261125_OJZpon/snapshot.py",
+    "results/layout/active_placement_review_20261125_OJZpon/leaves.py",
+    "results/layout/active_placement_review_20261125_OJZpon/snapshot_addendum.py",
+    "results/layout/active_placement_review_20261125_OJZpon/geometric_addendum.py",
+    "results/layout/active_placement_review_20261125_OJZpon/check_assembly_pin_spans.py",
+    "results/layout/active_placement_review_20261125_OJZpon/watch_node_caps.py",
+    "results/layout/active_placement_review_20261125_OJZpon/plot_active.py",
+    "results/layout/active_placement_review_20261125_OJZpon/plot_addendum.py"
+  ],
+  "report": "docs/layout/chip_floorplan_20261123.md#6-11-25-有源器件排布复核"
+}

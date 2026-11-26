@@ -1,0 +1,64 @@
+# Adopted v1.0 subsystem identities. Verification results live in docs/status/current.md.
+baseline_tag = "v1.0"
+status_report = "docs/status/current.md"
+evidence_catalog = "results/catalog/v1_0_subsystem_evidence.json"
+integration_evidence_catalog = "results/catalog/chip_integration_20261124.json"
+
+[pll]
+revision = "pll_top_r6_v4_upgrade"
+source = "analog/pll/top/spice/pll_top_r6_v4_upgrade.spice"
+source_feedback = "analog/pll/top/spice/clock_frontend_r6q.spice"
+vco = "analog/pll/vco/spice/vco_ring4_r6.spice"
+ptat = "analog/pll/vco/spice/vco_ptat_bias.spice"
+ptat_const_fingers = 28
+ptat_weighted_fingers = 66
+charge_pump = "analog/pll/cp/spice/charge_pump_steer_v4.spice"
+loop_filter = "analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice"
+pfd = "analog/pll/pfd/spice/pfd_sc.spice"
+chip_feedback_divider = "analog/pll/divider/spice/tspc_reclock_prescaler8_2g.spice"
+chip_clock_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice"
+report = "docs/design/pll_vco_r6_perf.md"
+legacy_config = "config/pll_working_revision.toml"
+
+[ldo]
+revision = "v2_cur"
+source = "analog/ldo/spice/pll_supply_hv18_v2_cur.spice"
+tail_bias_filter = "analog/ldo/spice/pll_bias_filter_r4.spice"
+layout_summary = "analog/ldo/layout/variants/v2_cur_pdk/summary.json"
+report = "docs/design/ldo_v2.md"
+legacy_config = "config/ldo_working_revision.toml"
+
+[bias]
+revision = "v2"
+source = "analog/bias/spice/bias_v2.spice"
+layout_summary = "analog/bias/layout/variants/v2_pdk/summary.json"
+report = "docs/design/bias_v2.md"
+legacy_config = "config/bias_working_revision.toml"
+
+[tx]
+revision = "v4.3"
+source = "analog/tx/sst/spice/tx_sst_top.spice"
+serializer = "analog/tx/sst/spice/tx_sst_serializer16.spice"
+driver_and_vdrv_ldo = "analog/tx/sst/spice/tx_sst_driver.spice"
+layout_summary = "analog/tx/sst/layout/variants/v4_pdk/summary.json"
+report = "docs/design/tx_sst_v4.md"
+legacy_config = "config/tx_working_revision.toml"
+
+[rx]
+revision = "v2.2"
+source = "analog/rx/cmos_rx/spice/rx_cmos_top.spice"
+layout_summary = "analog/rx/cmos_rx/layout/variants/v2_pdk/summary.json"
+report = "docs/design/rx_cmos_v2.md"
+legacy_config = "config/rx_working_revision.toml"
+
+[digital]
+revision = "v3.1"
+source = "digital/pnr/rtl_v3/serdes_digital_top_v3.sv"
+source_git_ref = "v1.0" # The working tree at this path carries v3.2 candidate edits.
+layout_summary = "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json"
+report = "docs/design/digital_top_v3.md"
+
+[channel]
+source = "config/channel_family.toml"
+design_case = "C2_loss6"
+report = "docs/design/channel_model.md"

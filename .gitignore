@@ -7,6 +7,7 @@ __pycache__/
 # Simulation runs stay on disk only; the catalog and README are tracked.
 results/**
 !results/README.md
+!results/catalog/
 !results/catalog/**
 
 # Scratch layout work directory
@@ -20,6 +21,7 @@ analog/layout/work/
 *.mag
 *.spef
 *.sdf
+*.guide
 *.fsdb
 *.fsdb.*
 

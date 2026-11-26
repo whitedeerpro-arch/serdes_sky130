@@ -4,37 +4,30 @@
     "name": "Simple SerDes",
     "subtitle": "SKY130 · 1.8 V · 4 Gb/s",
     "description": "按模块浏览结构、边界、模型和设计依据；采用与验证统一查看current.md，工作顺序查看执行计划。",
-    "updated": "2026-11-20"
+    "updated": "2026-11-24"
   },
   "nodes": [
     {
       "id": "serdes",
       "parent": null,
       "name": "SerDes",
-      "subtitle": "16:1 TX · 四相半速 RX · 共享 PLL",
-      "state": "模块设计",
-      "summary": "250 MHz 参考产生 2 GHz 多相时钟，发送端串化 16 位字，接收端以独立 PI-CDR 恢复数据。各子系统通过明确的激励、负载和测量边界独立推进。",
+      "subtitle": "4 Gb/s NRZ · CMOS/SST TX · 四分之一速 CMOS RX",
+      "state": "v1.0 子系统基线",
+      "summary": "共享 2 GHz 环振 PLL，集成多速率数字控制。v1.0 记录独立模块验证与片级摆位。",
       "boundary": {
         "inputs": [
-          "250 MHz 参考；16 位并行 TX 数据；远端 4 Gb/s 差分数据"
+          "250 MHz 参考、16 位 TX 并行字、远端差分数据"
         ],
         "outputs": [
-          "100 Ω 差分线；恢复字时钟域 16 位 RX 数据"
+          "100 Ω 差分 TX 线、恢复时钟域的 16 位数据与 16 位边沿字"
         ],
         "assumptions": [
-          "4 Gb/s 原始线速，不含编码；信道以 C2 为设计起点。",
-          "模块集成与某次参数改进的验证范围分别记录，不要求每一步都做整机长仿真。"
+          "数字顶层统一承担 PLL 粗搜、TX 入口、RX 对齐、CDR 和 CDC。"
         ]
-      },
-      "planning": {
-        "question": "怎样通过可信的模块边界拆解设计成本？",
-        "model": "约束与粗模型 → 参数求解 → 局部电路校准 → 边界回归。",
-        "parameters": "250 MHz 参考、2 GHz 半速时钟、250 ps UI、16 bit 字。",
-        "verification": "优先在暴露问题的工况验证模块；按需要选择短联合测试。"
       },
       "references": [
         {
-          "title": "当前状态与证据（统一维护）",
+          "title": "当前状态与验证边界",
           "path": "docs/status/current.md"
         },
         {
@@ -42,7 +35,7 @@
           "path": "docs/status/prelayout_plan.md"
         },
         {
-          "title": "架构与接口",
+          "title": "架构与信号边界",
           "path": "docs/overview/architecture.md"
         },
         {
@@ -50,65 +43,930 @@
           "path": "docs/overview/spec.md"
         },
         {
-          "title": "尺寸设计方法",
-          "path": "docs/verification/sizing.md"
+          "title": "主线工作修订",
+          "path": "config/mainline_working_revision.toml"
         },
         {
-          "title": "文档导航与维护职责",
-          "path": "docs/README.md"
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        },
+        {
+          "title": "发布证据索引",
+          "path": "results/catalog/v1_0_subsystem_evidence.json"
+        },
+        {
+          "title": "片级集成证据",
+          "path": "results/catalog/chip_integration_20261124.json"
+        },
+        {
+          "title": "片级宏摆位与去耦规划",
+          "path": "docs/layout/chip_floorplan_20261123.md"
         },
         {
           "title": "项目工作流",
           "path": "docs/status/workflow.md"
         }
       ],
-      "iterations": []
+      "iterations": [],
+      "figures": [
+        {
+          "title": "片级宏摆位与阻尼去耦规划",
+          "path": "docs/figures/system/serdes_chip_floorplan_20261123.png",
+          "scope": "宏边界与引脚用于几何摆位，去耦按电源域估算。",
+          "report": "docs/layout/chip_floorplan_20261123.md"
+        }
+      ],
+      "sources": [
+        {
+          "title": "SerDes 统一数字顶层",
+          "path": "digital/pnr/rtl_v3/serdes_digital_top_v3.sv#serdes_digital_top_v3"
+        },
+        {
+          "title": "统一数字 RTL 编译清单（工作树）",
+          "path": "digital/pnr/rtl_v3/rtl_v3.f"
+        }
+      ]
     },
     {
       "id": "tx",
       "parent": "serdes",
       "name": "TX",
-      "subtitle": "并行输入 → 16:1 串化 → 线驱动",
-      "state": "模块设计",
-      "summary": "并行字经过捕获、同步选择时钟、CML 串化树、重定时与线驱动。完整 TX 已在理想时钟边界表征，锁定 PLL 的动态同 deck 证据待补。",
+      "subtitle": "16:4 CMOS 串化 → 四相 SST",
+      "state": "主线",
+      "summary": "静态 CMOS 串化和四相交错选通驱动 N-over-N SST。低压子稳压器供给 V_drv。",
       "boundary": {
         "inputs": [
-          "16 位 CMOS 字；250M/500M/1G/2G 选择时钟；模块偏置"
+          "16 位 CMOS 字、四相 1 GHz 时钟、Vbg 和静态 ZQ/FFE 控制"
         ],
         "outputs": [
-          "4 Gb/s NRZ，源端 2×50 Ω，约 400 mVpp 差分目标"
+          "4 Gb/s NRZ 差分输出、500 MHz 和 250 MHz 字时钟"
         ],
         "assumptions": [
-          "当前extra5/WT16/R240＋预驱/输出对候选，理想2GHz、真实偏置/PDK R tt、计数器初态、RTL PWL；非原生PLL或物理guard。",
-          "原r2的45点使用同一份理想化TT时钟，历史数据单独保留。"
+          "发布的 TX 局部后仿使用理想四相输入。"
         ]
-      },
-      "planning": {
-        "question": "哪种时钟构造使各路 PVT 漂移自然抵消？",
-        "model": "serdes_flow.balance 比较路径组成，再以单元实测延迟校准。",
-        "parameters": "分频级数、clk→q、buffer 延迟、数据入口 clk→q 与扇出。",
-        "verification": "同时检查眼图健康和 bit_mapping；局部通过后扩角。"
       },
       "references": [
         {
-          "title": "当前状态与证据（统一维护）",
+          "title": "当前状态与验证边界",
           "path": "docs/status/current.md"
         },
         {
-          "title": "TX 工作修订",
-          "path": "config/tx_working_revision.toml"
+          "title": "TX SST 设计与后仿",
+          "path": "docs/design/tx_sst_v4.md"
         },
         {
-          "title": "串化器",
-          "path": "docs/design/tx_serializer.md"
+          "title": "TX SST v4_pdk 物理入口",
+          "path": "analog/tx/sst/layout/variants/v4_pdk/README.md"
         },
         {
-          "title": "当前完整TX 45条件",
-          "path": "docs/data/tx_full_pvt45.json"
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
         },
         {
-          "title": "45条件结果图",
-          "path": "docs/figures/tx/ingress/tx_full_pvt45.png"
+          "title": "发布证据索引",
+          "path": "results/catalog/v1_0_subsystem_evidence.json"
+        }
+      ],
+      "iterations": [],
+      "figures": [
+        {
+          "title": "TX SST 原理图眼图",
+          "path": "docs/figures/tx/tx_sst_v4_eyes.png",
+          "scope": "理想四相源；包含焊盘与 C2 对照。",
+          "report": "docs/design/tx_sst_v4.md"
+        }
+      ],
+      "sources": [
+        {
+          "title": "SST TX 顶层",
+          "path": "analog/tx/sst/spice/tx_sst_top.spice#serdes_tx_sst_top"
+        },
+        {
+          "title": "TX 入口控制 · tx_ingress_control",
+          "path": "digital/pnr/rtl_v3/tx_ingress_control.sv"
+        }
+      ]
+    },
+    {
+      "id": "bias",
+      "parent": "serdes",
+      "name": "Bias",
+      "subtitle": "BIAS v2 带隙与分配",
+      "state": "主线",
+      "summary": "折叠共栅带隙、共模与预充缓冲及局部电流拷贝，为安静供电、VCO、CP 和 RX 提供参考。",
+      "boundary": {
+        "inputs": [
+          "主 1.8 V 供电、带隙与参考调码"
+        ],
+        "outputs": [
+          "Vbg、Vcm、预充参考与各域电流端口"
+        ],
+        "assumptions": [
+          "PTAT 与恒流的组合归 PLL VCO 子模块。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "BIAS v2 设计",
+          "path": "docs/design/bias_v2.md"
+        },
+        {
+          "title": "BIAS v2 物理入口",
+          "path": "analog/bias/layout/variants/v2_pdk/README.md"
+        },
+        {
+          "title": "主线工作修订",
+          "path": "config/mainline_working_revision.toml"
+        },
+        {
+          "title": "发布证据索引",
+          "path": "results/catalog/v1_0_subsystem_evidence.json"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "BIAS v2 顶层与子电路",
+          "path": "analog/bias/spice/bias_v2.spice#serdes_bias_top_v2"
+        }
+      ]
+    },
+    {
+      "id": "rx",
+      "parent": "serdes",
+      "name": "RX",
+      "subtitle": "CTLE → CMOS PI 与四分之一速采样 → 解串",
+      "state": "主线",
+      "summary": "动态 double-tail 切片采集数据与边沿，静态 CMOS 解串给数字顶层对齐及 CDR。",
+      "boundary": {
+        "inputs": [
+          "100 Ω 差分输入、八相 2 GHz PI 锚点、均衡/相位/失调控制"
+        ],
+        "outputs": [
+          "每个 250 MHz 字时钟输出 16 位数据与 16 位边沿"
+        ],
+        "assumptions": [
+          "端到端局部回归以合成 C2 通道为输入；原理图与 CPEX 的回放范围见当前状态。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "RX v2.2 设计与链路台",
+          "path": "docs/design/rx_cmos_v2.md"
+        },
+        {
+          "title": "RX v2_pdk 物理入口",
+          "path": "analog/rx/cmos_rx/layout/variants/v2_pdk/README.md"
+        },
+        {
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        },
+        {
+          "title": "发布证据索引",
+          "path": "results/catalog/v1_0_subsystem_evidence.json"
+        }
+      ],
+      "iterations": [],
+      "figures": [
+        {
+          "title": "RX v2 原理图链路表征",
+          "path": "docs/figures/rx/rx_cmos_v2_signoff.png",
+          "scope": "含 C2 链路、采样窗口与 PI，实际时钟边界见原报告。",
+          "report": "docs/design/rx_cmos_v2.md"
+        }
+      ],
+      "sources": [
+        {
+          "title": "CMOS RX 顶层",
+          "path": "analog/rx/cmos_rx/spice/rx_cmos_top.spice#serdes_rx_cmos_top"
+        },
+        {
+          "title": "CDR 顶层 · rx_cdr_loop",
+          "path": "digital/pnr/rtl_v3/rx_cdr_loop.sv"
+        },
+        {
+          "title": "RX 共享字映射入口与宿主接口",
+          "path": "digital/pnr/rtl_v3/serdes_digital_top_v3.sv#rx_word_host_shared"
+        }
+      ]
+    },
+    {
+      "id": "pll",
+      "parent": "serdes",
+      "name": "PLL",
+      "subtitle": "2 GHz 八相环振 PLL v4",
+      "state": "反馈集成待复核",
+      "summary": "片级目标为 r5 与 SAFF-TSPC 反馈。发布台使用 CML 反馈，v4.2 候选已完成新版反馈短窗筛查。",
+      "boundary": {
+        "inputs": [
+          "250 MHz 参考、HV18 安静轨、BIAS v2、粗码与预充控制"
+        ],
+        "outputs": [
+          "2 GHz 多相时钟、250 MHz 反馈"
+        ],
+        "assumptions": [
+          "闭环、分频器和相噪模型各自沿用对应的冻结输入。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "闭环台",
+          "path": "analog/pll/top/tb/lock_v4/verify_pll_v4_closed_loop.py"
+        },
+        {
+          "title": "VCO 相噪与 PLL/CDR 模型",
+          "path": "docs/design/pll_vco_r6_perf.md"
+        },
+        {
+          "title": "主线工作修订",
+          "path": "config/mainline_working_revision.toml"
+        },
+        {
+          "title": "发布证据索引",
+          "path": "results/catalog/v1_0_subsystem_evidence.json"
+        }
+      ],
+      "iterations": [],
+      "figures": [
+        {
+          "title": "PLL v4 固定粗码预充后锁定",
+          "path": "docs/figures/clocking/pll_v4_closed_loop_20261123.png",
+          "scope": "原理图 CML 反馈链与 CP v4，供电边界见状态页。",
+          "report": "docs/status/current.md"
+        }
+      ],
+      "sources": [
+        {
+          "title": "PLL v4 原理图闭环顶层",
+          "path": "analog/pll/top/spice/pll_top_r6_v4_upgrade.spice#pll_top_r6_v4_upgrade"
+        },
+        {
+          "title": "PLL v4.2 片级反馈候选",
+          "path": "analog/pll/top/spice/pll_top_r6_v4p2_saff.spice#pll_clock_frontend_r6_saff"
+        },
+        {
+          "title": "PLL 控制顶层 · pll_control_top",
+          "path": "digital/pnr/rtl_v3/pll_control_top.sv"
+        }
+      ]
+    },
+    {
+      "id": "channel",
+      "parent": "serdes",
+      "name": "Channel",
+      "subtitle": "C0–C5 合成差分 PCB 族",
+      "state": "主线",
+      "summary": "C2_loss6 用于当前 SST/RX 设计回归，RLC16 用于近无损对照。",
+      "boundary": {
+        "inputs": [
+          "TX 差分源与独立装夹模型"
+        ],
+        "outputs": [
+          "RX 端接处的差分信号"
+        ],
+        "assumptions": [
+          "合成 PCB 模型的实际板线与封装约束见信道文档。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "信道模型",
+          "path": "docs/design/channel_model.md"
+        },
+        {
+          "title": "信道配置",
+          "path": "config/channel_family.toml"
+        },
+        {
+          "title": "发布证据索引",
+          "path": "results/catalog/v1_0_subsystem_evidence.json"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "C2_loss6 PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C2_loss6.spice"
+        },
+        {
+          "title": "RLC16 近无损负载",
+          "path": "verification/models/channel/diff_rlc16.spice"
+        }
+      ]
+    },
+    {
+      "id": "tx.sst",
+      "parent": "tx",
+      "name": "CMOS 串化与 SST 驱动",
+      "subtitle": "16:4 静态串化、四相交错与 2-tap FFE",
+      "state": "主线",
+      "summary": "用 1 GHz 四相时钟形成四个 250 ps 槽，在输出级合成为 4 Gb/s 差分信号。",
+      "boundary": {
+        "inputs": [
+          "四相时钟、并行字、V_drv、ZQ/FFE"
+        ],
+        "outputs": [
+          "差分 PAD、字时钟"
+        ],
+        "assumptions": [
+          "C2 后仿与 RLC16 筛查的范围见当前状态。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "TX 顶层网表",
+          "path": "analog/tx/sst/spice/tx_sst_top.spice"
+        },
+        {
+          "title": "静态串化网表",
+          "path": "analog/tx/sst/spice/tx_sst_serializer16.spice"
+        },
+        {
+          "title": "TX 后仿台",
+          "path": "analog/tx/sst/tb/postlayout/verify_tx_v4_pex.py"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "SST TX 顶层",
+          "path": "analog/tx/sst/spice/tx_sst_top.spice#serdes_tx_sst_top"
+        },
+        {
+          "title": "TX 16:4 静态 CMOS 串化",
+          "path": "analog/tx/sst/spice/tx_sst_serializer16.spice#serdes_tx_sst_serializer16"
+        },
+        {
+          "title": "SST 驱动器、选通与切片",
+          "path": "analog/tx/sst/spice/tx_sst_driver.spice#serdes_tx_sst_driver"
+        },
+        {
+          "title": "TX 复用的 1 GHz 正交 ÷2",
+          "path": "analog/rx/cmos_rx/spice/rx_cmos_pi.spice#serdes_rx_qdiv2_8ph"
+        }
+      ]
+    },
+    {
+      "id": "tx.vdrv_supply",
+      "parent": "tx",
+      "name": "V_drv 子稳压器",
+      "subtitle": "SST 低压轨",
+      "state": "主线",
+      "summary": "带补偿的 NMOS 源跟随稳压器由主模拟轨生成 SST 源端低压轨。轻载泄放的复核归此单元。",
+      "boundary": {
+        "inputs": [
+          "1.8 V 域、Vbg、切片时变负载"
+        ],
+        "outputs": [
+          "约 0.44 V 的 V_drv"
+        ],
+        "assumptions": [
+          "实际负载及提取身份随 TX 修订记录。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "TX 驱动与子稳压器网表",
+          "path": "analog/tx/sst/spice/tx_sst_driver.spice"
+        },
+        {
+          "title": "物理入口",
+          "path": "analog/tx/sst/layout/variants/v4_pdk/README.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "V_drv 子稳压器 · sst_vdrv_ldo",
+          "path": "analog/tx/sst/spice/tx_sst_driver.spice#sst_vdrv_ldo"
+        }
+      ]
+    },
+    {
+      "id": "bias.v2",
+      "parent": "bias",
+      "name": "带隙、缓冲与分配",
+      "subtitle": "FC-OTA、共模及本地参考",
+      "state": "主线",
+      "summary": "从带隙产生全局参考，通过电流拷贝与缓冲供各域消费。",
+      "boundary": {
+        "inputs": [
+          "BIAS 供电和 trim"
+        ],
+        "outputs": [
+          "Vbg/Vcm、预充与电流参考"
+        ],
+        "assumptions": [
+          "芯片跨宏分配寄生仍待回灌。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "BIAS v2 网表",
+          "path": "analog/bias/spice/bias_v2.spice"
+        },
+        {
+          "title": "BIAS v2 设计",
+          "path": "docs/design/bias_v2.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "BIAS v2 顶层与子电路",
+          "path": "analog/bias/spice/bias_v2.spice#serdes_bias_top_v2"
+        },
+        {
+          "title": "PLL PTAT 偏置分支",
+          "path": "analog/pll/vco/spice/vco_ptat_bias.spice#serdes_bias_top_v2_ptat"
+        }
+      ]
+    },
+    {
+      "id": "rx.ctle_v2",
+      "parent": "rx",
+      "name": "终端与 CTLE",
+      "subtitle": "差分端接和四档均衡",
+      "state": "主线",
+      "summary": "片内端接设置输入共模，CTLE 提升对主信道损耗的容限。",
+      "boundary": {
+        "inputs": [
+          "差分输入、Vcm、EQ 码"
+        ],
+        "outputs": [
+          "差分采样器输入"
+        ],
+        "assumptions": [
+          "局部 AC 与实际 C2 波形联调分别记录。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "CTLE 网表",
+          "path": "analog/rx/cmos_rx/spice/rx_ctle_pdk.spice"
+        },
+        {
+          "title": "信道模型",
+          "path": "docs/design/channel_model.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "RX 片上端接与 CTLE",
+          "path": "analog/rx/cmos_rx/spice/rx_ctle_pdk.spice#serdes_rx_ctle_pdk"
+        }
+      ]
+    },
+    {
+      "id": "rx.cmos_pi",
+      "parent": "rx",
+      "name": "CMOS PI 与八相 ÷2",
+      "subtitle": "相位控制与重复启动",
+      "state": "主线",
+      "summary": "在 2 GHz 插值后分频到八相 1 GHz，分别供数据和边沿采样。",
+      "boundary": {
+        "inputs": [
+          "八相时钟、选相与细分温度计码"
+        ],
+        "outputs": [
+          "8 相采样时钟"
+        ],
+        "assumptions": [
+          "逐码线性度、相位和复位释放需要同时核对。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "PI 与 ÷2 网表",
+          "path": "analog/rx/cmos_rx/spice/rx_cmos_pi.spice"
+        },
+        {
+          "title": "PI 验证台",
+          "path": "analog/rx/cmos_rx/tb/pi/verify_pi.py"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "CMOS PI 与八相 ÷2",
+          "path": "analog/rx/cmos_rx/spice/rx_cmos_pi.spice#serdes_rx_cmos_pi_8ph"
+        }
+      ]
+    },
+    {
+      "id": "rx.dt_readout",
+      "parent": "rx",
+      "name": "Double-Tail 采样与解串",
+      "subtitle": "8 路动态采样，输出 16 数据 + 16 边沿",
+      "state": "主线",
+      "summary": "8 个采样通道以四分之一速运行，静态解串连接数字 Word Map。",
+      "boundary": {
+        "inputs": [
+          "CTLE 差分输出、八相 1 GHz 采样时钟、失调码"
+        ],
+        "outputs": [
+          "数据字、边沿字、字时钟"
+        ],
+        "assumptions": [
+          "PI 锚点来源与 RX 回放范围见当前状态。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "采样网表",
+          "path": "analog/rx/cmos_rx/spice/rx_dt_sampler.spice"
+        },
+        {
+          "title": "解串网表",
+          "path": "analog/rx/cmos_rx/spice/rx_cmos_deser16.spice"
+        },
+        {
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "Double-Tail 采样器与再生锁存",
+          "path": "analog/rx/cmos_rx/spice/rx_dt_sampler.spice#serdes_rx_dt_slicer"
+        },
+        {
+          "title": "静态 CMOS 8→32 解串",
+          "path": "analog/rx/cmos_rx/spice/rx_cmos_deser16.spice#serdes_rx_cmos_deser16"
+        }
+      ]
+    },
+    {
+      "id": "pll.r6_ptat",
+      "parent": "pll",
+      "name": "VCO r6 与 PTAT",
+      "subtitle": "5-bit 调谐、尾流温补与八相输出",
+      "state": "主线",
+      "summary": "定宽电阻、MIM 阵列与变容控制共同决定可用频率窗。尾流把 BIAS v2 恒流和 PTAT 混合。",
+      "boundary": {
+        "inputs": [
+          "Vctrl、五位粗码、安静轨、尾偏置"
+        ],
+        "outputs": [
+          "四对差分时钟"
+        ],
+        "assumptions": [
+          "温度覆盖、CPEX 与相噪模型按各自边界读取。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "PTAT 设计与码窗",
+          "path": "docs/design/pll_vco_r6_ptat.md"
+        },
+        {
+          "title": "VCO 性能",
+          "path": "docs/design/pll_vco_r6_perf.md"
+        },
+        {
+          "title": "sym9_clean 版图",
+          "path": "analog/pll/vco/layout/variants/sym9_clean/README.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "r6 环振核心",
+          "path": "analog/pll/vco/spice/vco_ring4_r6.spice#pll_vco_ring4_r6"
+        },
+        {
+          "title": "r6 延迟单元",
+          "path": "analog/pll/vco/spice/vco_delay_r6.spice"
+        },
+        {
+          "title": "五位电容阵",
+          "path": "analog/pll/vco/spice/cap_bank_5b.spice"
+        },
+        {
+          "title": "恒流与 PTAT 尾偏置",
+          "path": "analog/pll/vco/spice/vco_ptat_bias.spice#serdes_bias_cml_blend_v2"
+        }
+      ]
+    },
+    {
+      "id": "pll.quiet_ldo",
+      "parent": "pll",
+      "name": "HV18 安静供电与尾偏置 RC",
+      "subtitle": "v2_cur 电流参考接口",
+      "state": "主线",
+      "summary": "HV18 主稳压器提供 PLL 安静域，慢尾偏置滤波器隔离 VCO 偏置。",
+      "boundary": {
+        "inputs": [
+          "3.3 V HV 域、1.8 V 主域、BIAS v2 电流参考、trim"
+        ],
+        "outputs": [
+          "PLL 安静轨、滤波后的偏置"
+        ],
+        "assumptions": [
+          "v2 电压参考与 v2_cur 电流参考的结果按身份查阅。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "HV18 设计",
+          "path": "docs/design/ldo_v2.md"
+        },
+        {
+          "title": "v2_cur 物理入口",
+          "path": "analog/ldo/layout/variants/v2_cur_pdk/README.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "HV18 v2_cur 电流参考顶层",
+          "path": "analog/ldo/spice/pll_supply_hv18_v2_cur.spice#serdes_pll_supply_hv18_v2_cur"
+        },
+        {
+          "title": "HV18 调整管与误差放大器核心",
+          "path": "analog/ldo/spice/ldo_hv18_core_v2.spice#serdes_ldo_hv18_core_v2"
+        },
+        {
+          "title": "HV18 v2 无源单元",
+          "path": "analog/ldo/spice/ldo_v2_passives.spice"
+        },
+        {
+          "title": "VCO 尾偏置慢滤波",
+          "path": "analog/ldo/spice/pll_bias_filter_r4.spice#serdes_pll_bias_lowpass_slow_r4"
+        }
+      ]
+    },
+    {
+      "id": "pll.pfd_cp_lf",
+      "parent": "pll",
+      "name": "PFD、CP 与融合 LF",
+      "subtitle": "鉴相、主动匹配和预充",
+      "state": "主线",
+      "summary": "标准单元 PFD 控制主动伺服电荷泵，融合 LF 设置环路零极点及预充参考。",
+      "boundary": {
+        "inputs": [
+          "参考、反馈、预充、BIAS v2 电流"
+        ],
+        "outputs": [
+          "Vctrl 与状态量"
+        ],
+        "assumptions": [
+          "微修后的独立物理复核与联合环路回归分开登记。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "电荷泵设计",
+          "path": "docs/design/pll_cp_v4.md"
+        },
+        {
+          "title": "融合 LF 物理入口",
+          "path": "analog/pll/loop_filter/layout/variants/fused_pdk/README.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "延迟复位标准单元 PFD",
+          "path": "analog/pll/pfd/spice/pfd_sc.spice#pll_pfd_sc_dly"
+        },
+        {
+          "title": "主动匹配 CP",
+          "path": "analog/pll/cp/spice/charge_pump_steer_v4.spice#pll_cp_steer_v4"
+        },
+        {
+          "title": "k=4 融合环路滤波器",
+          "path": "analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice#pll_loop_filter_k4_fused"
+        }
+      ]
+    },
+    {
+      "id": "pll.saff_feedback",
+      "parent": "pll",
+      "name": "r5 接收器与 SAFF-TSPC ÷8",
+      "subtitle": "采用的片级反馈目标",
+      "state": "主线",
+      "summary": "r5 恢复差分 CML，SAFF 与 TSPC 重定时得到鉴相反馈。",
+      "boundary": {
+        "inputs": [
+          "2 GHz 差分时钟和 CMOS 供电"
+        ],
+        "outputs": [
+          "250 MHz 反馈"
+        ],
+        "assumptions": [
+          "低压冷角 Xtg2 失配及与真实 PLL 的联合锁定是集成边界。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "SAFF-TSPC 设计",
+          "path": "docs/design/pll_tspc_reclock_divider.md"
+        },
+        {
+          "title": "r5 物理入口",
+          "path": "analog/common/cml_to_cmos/layout/variants/r5_pdk/README.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "r5 CML→CMOS 接收器",
+          "path": "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice#serdes_cml_to_cmos_r5"
+        },
+        {
+          "title": "SAFF-TSPC ÷8",
+          "path": "analog/pll/divider/spice/tspc_reclock_prescaler8_2g.spice#pll_saff_reclock_prescaler8_2g"
+        },
+        {
+          "title": "加固 SAFF-TSPC ÷8 候选",
+          "path": "analog/pll/divider/spice/tspc_reclock_prescaler8_2g_v2_cand.spice#pll_saff_reclock_prescaler8_2g"
+        }
+      ]
+    },
+    {
+      "id": "pll.digital_control",
+      "parent": "pll",
+      "name": "数字粗搜与启动",
+      "subtitle": "5-bit 粗调与启动监督",
+      "state": "主线",
+      "summary": "多速率数字宏负责 PLL 粗码、控制状态和启动次序。",
+      "boundary": {
+        "inputs": [
+          "参考时钟、有效/锁定状态、宿主配置"
+        ],
+        "outputs": [
+          "五位粗码、初始化与复位控制"
+        ],
+        "assumptions": [
+          "行为台与真实电源/预充链路的联合启动需要单列。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        },
+        {
+          "title": "执行计划",
+          "path": "docs/status/prelayout_plan.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "PLL 控制顶层 · pll_control_top",
+          "path": "digital/pnr/rtl_v3/pll_control_top.sv"
+        },
+        {
+          "title": "预充与启动监督 · pll_startup_supervisor",
+          "path": "digital/pnr/rtl_v3/pll_startup_supervisor.sv"
+        },
+        {
+          "title": "粗码搜索 · pll_coarse_ctrl",
+          "path": "digital/pnr/rtl_v3/pll_coarse_ctrl.sv"
+        },
+        {
+          "title": "锁定检测 · pll_lock_detect",
+          "path": "digital/pnr/rtl_v3/pll_lock_detect.sv"
+        },
+        {
+          "title": "状态同步 · mon_sync",
+          "path": "digital/pnr/rtl_v3/mon_sync.sv"
+        },
+        {
+          "title": "状态保持检测 · mon_persist",
+          "path": "digital/pnr/rtl_v3/mon_persist.sv"
+        }
+      ]
+    },
+    {
+      "id": "tx.digital_ingress",
+      "parent": "tx",
+      "name": "TX 字入口 RTL",
+      "subtitle": "握手、预热与 16 位并行字捕获",
+      "state": "主线",
+      "summary": "将宿主写入字交给 SST 串化接口。",
+      "boundary": {
+        "inputs": [
+          "TX 字时钟、宿主握手和 16 位数据"
+        ],
+        "outputs": [
+          "发送捕获字和有效信号"
+        ],
+        "assumptions": []
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "TX 入口控制 · tx_ingress_control",
+          "path": "digital/pnr/rtl_v3/tx_ingress_control.sv"
+        },
+        {
+          "title": "SerDes 统一数字顶层",
+          "path": "digital/pnr/rtl_v3/serdes_digital_top_v3.sv#serdes_digital_top_v3"
+        }
+      ]
+    },
+    {
+      "id": "tx.legacy",
+      "parent": "tx",
+      "name": "CML TX 历史",
+      "subtitle": "早期实现、模型与固定证据",
+      "state": "历史参考",
+      "summary": "保留原模块 ID、迭代记录与适用边界，供历史复现与方案对照。",
+      "boundary": {
+        "inputs": [],
+        "outputs": [],
+        "assumptions": [
+          "具体采用状态以当时的记录为准。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "历史设计文档",
+          "path": "docs/design/tx_parallel_serializer.md"
+        },
+        {
+          "title": "历史记录目录",
+          "path": "docs/history/index.md"
         }
       ],
       "iterations": [],
@@ -128,132 +986,183 @@
       ]
     },
     {
-      "id": "bias",
-      "parent": "serdes",
-      "name": "Bias",
-      "subtitle": "带隙 · 恒 I·R · 电流分配 · 参考缓冲",
-      "state": "模块设计",
-      "summary": "带隙与恒I·R参考经本地拷贝提供电流、RX共模与LF预充。支路扇出、去耦、ready和同时加载属于消费接口。",
+      "id": "bias.legacy",
+      "parent": "bias",
+      "name": "BIAS v1 与 B2 历史",
+      "subtitle": "早期实现、模型与固定证据",
+      "state": "历史参考",
+      "summary": "保留原模块 ID、迭代记录与适用边界，供历史复现与方案对照。",
       "boundary": {
-        "inputs": [
-          "1.65–1.95 V 电源；5 bit r_ref 修调码；各支路实际负载"
-        ],
-        "outputs": [
-          "CML 212.5 µA、CTLE/CP 50 µA 拷贝；vcm 1.05 V；B2 预充参考"
-        ],
+        "inputs": [],
+        "outputs": [],
         "assumptions": [
-          "恒 I·R 保持静态摆幅代理，不保证恒速度。",
-          "PNP 模型没有失配项；共享参考误差在各支路间相关。"
+          "具体采用状态以当时的记录为准。"
         ]
-      },
-      "planning": {
-        "question": "应保持恒电流还是恒摆幅，误差怎样分配？",
-        "model": "器件卡 / gm-ID / 电阻温漂 → 拓扑约束 → 放大器环路与修调范围。",
-        "parameters": "N=8，r_ref 5 bit，核心补偿与分配栅负载共同确定稳定性。",
-        "verification": "DC、上电、供电阶跃、局部 MC 与修调后的配对温漂。"
       },
       "references": [
         {
-          "title": "当前状态与证据（统一维护）",
+          "title": "当前状态与验证边界",
           "path": "docs/status/current.md"
         },
         {
-          "title": "偏置设计",
+          "title": "历史设计文档",
           "path": "docs/design/bias.md"
         },
         {
-          "title": "工作修订",
-          "path": "config/bias_working_revision.toml"
+          "title": "历史记录目录",
+          "path": "docs/history/index.md"
         }
       ],
       "iterations": []
     },
     {
-      "id": "rx",
-      "parent": "serdes",
-      "name": "RX",
-      "subtitle": "CTLE → PI 采样 → 物理读出 → CDR",
-      "state": "模块设计",
-      "summary": "四相采样与物理 deser16 将高速模拟判决转为恢复字时钟域的数据和边沿票。独立 PI 跟踪每一路远端频偏。",
+      "id": "rx.digital_cdr",
+      "parent": "rx",
+      "name": "RX CDR RTL",
+      "subtitle": "边沿投票、频率估计与 PI 码",
+      "state": "主线",
+      "summary": "在恢复时钟域累计 Alexander 投票，将相位调整送往 CMOS PI。",
       "boundary": {
         "inputs": [
-          "AC 耦合远端差分数据；四对相位锚点；vcm 与局部偏置"
+          "解串得到的数据与边沿"
         ],
         "outputs": [
-          "16 位数据、恢复字时钟；PI 调相控制与锁定状态"
+          "PI 码、控制状态"
         ],
-        "assumptions": [
-          "当前模块表征主要使用理想相关锚点或登记的 C2 远端边界。",
-          "窗口、读出和动态 CDR 各自有不同测试边界，分别引用。"
-        ]
-      },
-      "planning": {
-        "question": "怎样将采样、读出和控制路径放在各自可行的时序域？",
-        "model": "共模可行区、时钟 buffer 粗模型、读出位映射与时序规划。",
-        "parameters": "PI 64 码；cmix 120 fF；c2 AC 时钟；读出 ÷2 保持 W40。",
-        "verification": "压力角窗口全扫、其余门槛；读出逐位检查；短时物理闭环配合长时行为模型。"
+        "assumptions": []
       },
       "references": [
         {
-          "title": "当前状态与证据（统一维护）",
+          "title": "当前状态与验证边界",
           "path": "docs/status/current.md"
         },
         {
-          "title": "RX 工作修订",
-          "path": "config/rx_working_revision.toml"
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "CDR 顶层 · rx_cdr_loop",
+          "path": "digital/pnr/rtl_v3/rx_cdr_loop.sv"
         },
         {
-          "title": "PI / 采样 / 读出",
+          "title": "Alexander 投票 · bbpd_window_vote",
+          "path": "digital/pnr/rtl_v3/bbpd_window_vote.sv"
+        },
+        {
+          "title": "频率和相位控制 · cdr_phase_frequency",
+          "path": "digital/pnr/rtl_v3/cdr_phase_frequency.sv"
+        },
+        {
+          "title": "PI 控制换码 · pi_step_commutator",
+          "path": "digital/pnr/rtl_v3/pi_step_commutator.sv"
+        }
+      ]
+    },
+    {
+      "id": "rx.digital_words",
+      "parent": "rx",
+      "name": "RX 字对齐与 FIFO RTL",
+      "subtitle": "字映射、训练对齐与宿主 CDC",
+      "state": "主线",
+      "summary": "将物理解串字重映射，完成训练字对齐，经异步 FIFO 交给宿主。",
+      "boundary": {
+        "inputs": [
+          "物理解串并行字、恢复字时钟和宿主时钟"
+        ],
+        "outputs": [
+          "对齐后的 16 位数据及宿主握手"
+        ],
+        "assumptions": []
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "统一数字顶层 v3.1",
+          "path": "docs/design/digital_top_v3.md"
+        }
+      ],
+      "iterations": [],
+      "sources": [
+        {
+          "title": "RX 共享字映射入口与宿主接口",
+          "path": "digital/pnr/rtl_v3/serdes_digital_top_v3.sv#rx_word_host_shared"
+        },
+        {
+          "title": "物理位映射 · rx_word_map",
+          "path": "digital/pnr/rtl_v3/rx_word_map.sv"
+        },
+        {
+          "title": "训练与字对齐 · rx_word_align16",
+          "path": "digital/pnr/rtl_v3/rx_word_align16.sv"
+        },
+        {
+          "title": "异步 FIFO · rx_async_word_fifo_core",
+          "path": "digital/pnr/rtl_v3/rx_async_word_fifo.sv#rx_async_word_fifo_core"
+        }
+      ]
+    },
+    {
+      "id": "rx.legacy",
+      "parent": "rx",
+      "name": "CML RX 历史",
+      "subtitle": "早期实现、模型与固定证据",
+      "state": "历史参考",
+      "summary": "保留原模块 ID、迭代记录与适用边界，供历史复现与方案对照。",
+      "boundary": {
+        "inputs": [],
+        "outputs": [],
+        "assumptions": [
+          "具体采用状态以当时的记录为准。"
+        ]
+      },
+      "references": [
+        {
+          "title": "当前状态与验证边界",
+          "path": "docs/status/current.md"
+        },
+        {
+          "title": "历史设计文档",
           "path": "docs/design/rx_pi_sampler.md"
+        },
+        {
+          "title": "历史记录目录",
+          "path": "docs/history/index.md"
         }
       ],
       "iterations": []
     },
     {
-      "id": "pll",
-      "parent": "serdes",
-      "name": "PLL",
-      "subtitle": "PFD / CP / LF / VCO / ÷8 / 粗调码",
-      "state": "顶层集成已有",
-      "summary": "完整PLL由VCO、抽出、反馈分频/接收、PFD、CP与LF组成。参数迭代与原生闭环、启动及TX接口分别保留证据。",
+      "id": "pll.legacy",
+      "parent": "pll",
+      "name": "早期 PLL、供电与接口研究",
+      "subtitle": "早期实现、模型与固定证据",
+      "state": "历史参考",
+      "summary": "保留原模块 ID、迭代记录与适用边界，供历史复现与方案对照。",
       "boundary": {
-        "inputs": [
-          "250 MHz 参考；粗调码；局部偏置；reset / CP enable / 预充控制"
-        ],
-        "outputs": [
-          "2 GHz 四对八相；250 MHz 反馈；Vctrl 与锁定测量接口"
-        ],
+        "inputs": [],
+        "outputs": [],
         "assumptions": [
-          "保留已有 PLL 集成与闭环证据；近期参数改进在子模块下附着。",
-          "近锁初始化、分层模型捕获、从零上电是不同验证场景。"
+          "具体采用状态以当时的记录为准。"
         ]
-      },
-      "planning": {
-        "question": "怎样联合选择工作点、Kvco、CP 电流、LF 和预充目标？",
-        "model": "实测 VCO 曲线作为 plant，实际 PFD/CP 与 LF 做分层捕获；线性模型比较带宽、稳定性与噪声。",
-        "parameters": "k4转向CP200µA、poly4.13kΩ、18×1pF MIM（12接VDD/6接地）、无外加Cf。",
-        "verification": "保留模型/原生/启动边界，优先粗码/CP窗口交接和当前码噪声。"
       },
       "references": [
         {
-          "title": "当前状态与证据（统一维护）",
+          "title": "当前状态与验证边界",
           "path": "docs/status/current.md"
         },
         {
-          "title": "r6 原生锁定与 TX 静态加载",
-          "path": "docs/design/r6_lock_confirmation.md"
+          "title": "历史设计文档",
+          "path": "docs/design/r6_mainline_review.md"
         },
         {
-          "title": "完整 PLL 核心（r6 quiet）",
-          "path": "analog/pll/top/spice/pll_core_r6k4q.spice"
-        },
-        {
-          "title": "历史 r5 k4 核心",
-          "path": "analog/pll/top/spice/pll_core_r5k4q.spice"
-        },
-        {
-          "title": "环路设计与验证",
-          "path": "docs/design/pll_loop.md"
+          "title": "历史记录目录",
+          "path": "docs/history/index.md"
         }
       ],
       "iterations": [
@@ -289,53 +1198,12 @@
       ]
     },
     {
-      "id": "channel",
-      "parent": "serdes",
-      "name": "Channel",
-      "subtitle": "端接 / PCB / 封装边界",
-      "state": "模块设计",
-      "summary": "以近无损 RLC16 支持 TX 局部回归，以 C0–C5 合成 PCB 族研究损耗、支路和偏斜。C2 是当前 RX 设计起点。",
-      "boundary": {
-        "inputs": [
-          "TX 源阻抗、pad/封装代理、AC 耦合"
-        ],
-        "outputs": [
-          "接收端差分电压与输入阻抗"
-        ],
-        "assumptions": [
-          "C2：2 GHz 插损 6 dB；不是具体板线提取。",
-          "回放边界应登记源修订、负载签名和适用工况。"
-        ]
-      },
-      "planning": {
-        "question": "在固定源和接收负载下，ISI 如何影响眼图？",
-        "model": "被动 RLC / Foster 模型、S 参数、脉冲响应与有限记忆叠加。",
-        "parameters": "损耗、延时、支路、偏斜、端接和封装。",
-        "verification": "AC / 无源性 / 脉冲与实际驱动局部联调。"
-      },
-      "references": [
-        {
-          "title": "当前状态与证据（统一维护）",
-          "path": "docs/status/current.md"
-        },
-        {
-          "title": "信道模型",
-          "path": "docs/design/channel_model.md"
-        },
-        {
-          "title": "边界条件登记",
-          "path": "config/boundary_conditions.json"
-        }
-      ],
-      "iterations": []
-    },
-    {
       "id": "tx.capture",
-      "parent": "tx",
+      "parent": "tx.legacy",
       "name": "并行字捕获",
       "key": "T01",
       "subtitle": "同沿完整捕获 · 两组互补保持",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "字时钟接收、首级捕获与两组保持负责固定字纪元；guard、标签与blank的物理时序归属本模块。",
       "boundary": {
         "inputs": [
@@ -426,11 +1294,11 @@
     },
     {
       "id": "tx.clocking",
-      "parent": "tx",
+      "parent": "tx.legacy",
       "name": "选择时钟分发",
       "key": "T02",
       "subtitle": "同步计数器与 2G 延迟复制",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "同步计数器与公共复制路径构造选择时钟，按实际扇出规划相对延迟、共模、增益及供电敏感度。",
       "boundary": {
         "inputs": [
@@ -585,11 +1453,11 @@
     },
     {
       "id": "tx.serializer",
-      "parent": "tx",
+      "parent": "tx.legacy",
       "name": "16:1 串化器",
       "key": "T03",
       "subtitle": "CMOS→CML / 选择树 / 末级重定时",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "CMOS数据转换为CML后进入选择树和末级保持。时序、位映射、内部幅度与ISI在相同源/负载下联合判断。",
       "boundary": {
         "inputs": [
@@ -643,7 +1511,7 @@
       "name": "末级重定时",
       "key": "T03.4",
       "subtitle": "g3数据 → 保持/选择 · 2G接口",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "末级重定时的建立/关闭关系由数据到达与选择时钟共同决定，局部模型须由完整加载的接口实验校准。",
       "boundary": {
         "inputs": [
@@ -693,11 +1561,11 @@
     },
     {
       "id": "tx.driver",
-      "parent": "tx",
+      "parent": "tx.legacy",
       "name": "线驱动与使能",
       "key": "T04",
       "subtitle": "隔离 / 预驱 / 电流舵输出",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "预驱、线驱动、端接与使能构成焊盘接口；耦合电荷历史、实际外围、回流和器件应力归属本模块。",
       "boundary": {
         "inputs": [
@@ -738,11 +1606,11 @@
     },
     {
       "id": "bias.reference",
-      "parent": "bias",
+      "parent": "bias.legacy",
       "name": "带隙与 V→I",
       "key": "B01",
       "subtitle": "N=8 / r_ref 5 bit 修调",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "电压型带隙抬高误差放大器输入共模，V→I 采用单级 OTA，主误差由修 r_ref 处理。",
       "boundary": {
         "inputs": [
@@ -791,11 +1659,11 @@
     },
     {
       "id": "bias.distribution",
-      "parent": "bias",
+      "parent": "bias.legacy",
       "name": "电流分配与去耦",
       "key": "B02",
       "subtitle": "远距离电流 / 本地栅偏置",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "模块本地二极管产生栅压，参考分配保持电流密度。vbg 和 vbias 去耦降低高频供电耦合。",
       "boundary": {
         "inputs": [
@@ -832,11 +1700,11 @@
     },
     {
       "id": "bias.vcm",
-      "parent": "bias",
+      "parent": "bias.legacy",
       "name": "RX 共模参考",
       "key": "B03",
       "subtitle": "1.05 V / 单级 OTA 缓冲",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "端接共模由独立电压缓冲提供，配合 AC 耦合允许 CTLE 保持足够尾管余量。",
       "boundary": {
         "inputs": [
@@ -869,11 +1737,11 @@
     },
     {
       "id": "bias.precharge",
-      "parent": "bias",
+      "parent": "bias.legacy",
       "name": "LF 预充参考 B2",
       "key": "B04",
       "subtitle": "16 档 / 0.95–1.35 V",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "单级 LVT OTA 仅开关尾流，参考拷贝常通以免扰动共享 vgi。",
       "boundary": {
         "inputs": [
@@ -910,10 +1778,10 @@
     },
     {
       "id": "pll.supply",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "安静供电 / LDO",
       "subtitle": "静态3.3→1.8 V / 外供同源直连",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "PLL安静域采用静态供电配置，分别分析主电源、参考与尾偏置路径。局部稳定性、原生负载和从零启动分别验收。",
       "boundary": {
         "inputs": [
@@ -1087,11 +1955,11 @@
     },
     {
       "id": "pll.vco",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "VCO 与粗调阵列",
       "key": "C01",
       "subtitle": "四级CML / r6 / 5bit / 版图寄生",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "四级环使用实体电阻、MIM阵列和变容器。器件/版图寄生先与模型对账，再校准量程、工作区、动态调码和噪声。",
       "boundary": {
         "inputs": [
@@ -1230,11 +2098,11 @@
     },
     {
       "id": "pll.extraction",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "多相抽出与负载",
       "key": "C02",
       "subtitle": "四路 buffer / 供电 dummy",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "四路CML buffer隔离VCO相位节点；反馈支路与轻dummy须在实际负载下核对相位、频率和功耗。",
       "boundary": {
         "inputs": [
@@ -1275,11 +2143,11 @@
     },
     {
       "id": "pll.divider",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "预分频 ÷8 / CML ÷2",
       "key": "C03",
       "subtitle": "r3 CML 反馈与重定时候选",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "r6 闭环采用 r3 CML ÷8 与 250 MHz 反馈接收。双叠层同步 CML 和 10 端口 SAFF-TSPC 是独立候选，各有驱动与提取边界。",
       "boundary": {
         "inputs": [
@@ -1360,10 +2228,10 @@
     },
     {
       "id": "pll.receivers",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "CML→CMOS 接收器",
       "subtitle": "反馈转换与全速转换分开",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "250 MHz 反馈与 2 GHz 全速输出使用不同尺寸的时钟接收器。静态 RX 数据转换器归属 RX 读出。",
       "boundary": {
         "inputs": [
@@ -1390,10 +2258,10 @@
     },
     {
       "id": "pll.loop",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "鉴相与环路",
       "subtitle": "PFD → CP → LF → Vctrl",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "PFD、转向CP与物理LF共同闭合VCO环路；控制范围、输入导纳、供电分接和实际plant须保持一致。",
       "boundary": {
         "inputs": [
@@ -1434,11 +2302,11 @@
     },
     {
       "id": "pll.startup",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "预充与启动监督",
       "key": "C09",
       "subtitle": "双节点预充 / 门控 / 状态机",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "监督器连接偏置/安静域ready、预充、粗搜与锁定质量检测；预充后捕获与真实上电单独验证。",
       "boundary": {
         "inputs": [
@@ -1475,11 +2343,11 @@
     },
     {
       "id": "pll.coarse",
-      "parent": "pll",
+      "parent": "pll.legacy",
       "name": "粗调搜索与切码控制",
       "key": "C10",
       "subtitle": "慢端逐码搜索 / Vctrl窗口 / 温度粗分",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "粗码搜索、越界切邻码和故障控制连接模拟门限/码驱动。数字位宽、译码瞬态和跨供电域接口分别核对。",
       "boundary": {
         "inputs": [
@@ -1554,7 +2422,7 @@
       "name": "反馈时钟转换",
       "key": "C04",
       "subtitle": "250 MHz / 保留 pvt_candidate 尺寸",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "反馈接收将分频后的CML转换为PFD输入；实际负载、宿主纹波、参考路径配平与停钟复位共同约束接口。",
       "boundary": {
         "inputs": [
@@ -1589,7 +2457,7 @@
       "name": "全速时钟转换",
       "key": "C05",
       "subtitle": "r4 big / 2 GHz",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "2 GHz AC 耦合全速转换服务候选 CMOS 分频夹具。现行 r6q 反馈路径使用 ÷8 后的 250 MHz 接收。",
       "boundary": {
         "inputs": [
@@ -1632,7 +2500,7 @@
       "name": "PFD",
       "key": "C06",
       "subtitle": "三态 CMOS / 复位脉宽",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "实际 CMOS 鉴相器通过公共复位产生 UP/DN，有限脉宽进入 CP 电荷行为。",
       "boundary": {
         "inputs": [
@@ -1663,7 +2531,7 @@
       "name": "Charge pump",
       "key": "C07",
       "subtitle": "电流匹配 / 合规窗口 / 电荷",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "转向CP的电流、净电荷和控制电压窗口与VCO工作区、监测门限、纹波及决策延迟共同规划。",
       "boundary": {
         "inputs": [
@@ -1736,7 +2604,7 @@
       "name": "Loop filter",
       "key": "C08",
       "subtitle": "Rz / Ci / Cf / 双节点预充",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "物理R/MIM、电源分接和预充门构成LF；真实控制端导纳与提取寄生纳入环路及供电模型。",
       "boundary": {
         "inputs": [
@@ -1789,11 +2657,11 @@
     },
     {
       "id": "rx.frontend",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "端接与 CTLE",
       "key": "R01",
       "subtitle": "vcm 1.05 V / C2 默认 EQ3",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "提高输入共模恢复慢角尾管余量，四档 RC 退化提供可控峰化。",
       "boundary": {
         "inputs": [
@@ -1826,11 +2694,11 @@
     },
     {
       "id": "rx.pi",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "相位插值器 PI",
       "key": "R02",
       "subtitle": "64 码 / cmix 120 fF",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "相邻相位间以8个电流单位插值，数据/边沿两路差90°；减小混合电容改善慢热角时钟幅度。",
       "boundary": {
         "inputs": [
@@ -1867,11 +2735,11 @@
     },
     {
       "id": "rx.sampler",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "四相采样与时钟接口",
       "key": "R03",
       "subtitle": "ac_trim / c2 / 辅助修调对",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "低过驱尾管和 AC 时钟将时钟共模与 PI 输出静态电平解耦；修调辅助对用于消除输入失调。",
       "boundary": {
         "inputs": [
@@ -1909,11 +2777,11 @@
     },
     {
       "id": "rx.readout",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "物理读出与 deser16",
       "key": "R04",
       "subtitle": "CML 1:2 → 匹配转换 → CMOS 1:4",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "CML分路与匹配转换将高速判决交给CMOS字路径。读出加载、捕获位映射、冷角数值和真实启动分别验收。",
       "boundary": {
         "inputs": [
@@ -2073,11 +2941,11 @@
     },
     {
       "id": "rx.calibration",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "失调 DAC 与校准",
       "key": "R05",
       "subtitle": "电压型修调 / 两边沿顺序 SAR",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "寻找迟滞带的两个边沿取中点，逐路校准以控制共用输入buffer造成的回踢。",
       "boundary": {
         "inputs": [
@@ -2136,11 +3004,11 @@
     },
     {
       "id": "rx.cdr",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "映射、投票与数字 CDR",
       "key": "R06",
       "subtitle": "恢复字时钟域 / 独立 PI 跟踪",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "物理字映射成时间顺序的数据/边沿票，二阶环路通过受保护PI步进跟踪频差；训练字确定字边界。",
       "boundary": {
         "inputs": [
@@ -2178,11 +3046,11 @@
     },
     {
       "id": "rx.cdc",
-      "parent": "rx",
+      "parent": "rx.legacy",
       "name": "系统域 FIFO / CDC",
       "key": "R07",
       "subtitle": "恢复字时钟 → 系统时钟",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "map、字对齐和异步FIFO连接恢复字域与宿主域。共同纪元、容量/频偏、溢出恢复、库时序和物理CDC分别核对。",
       "boundary": {
         "inputs": [
@@ -2277,6 +3145,40 @@
           "scope": "C2 设计信道与其余 RLC 模型的脉冲对照。",
           "report": "docs/design/channel_model.md"
         }
+      ],
+      "sources": [
+        {
+          "title": "RLC16 近无损负载",
+          "path": "verification/models/channel/diff_rlc16.spice"
+        },
+        {
+          "title": "C2_loss6 PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C2_loss6.spice"
+        },
+        {
+          "title": "C0_debug PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C0_debug.spice"
+        },
+        {
+          "title": "C1_loss3 PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C1_loss3.spice"
+        },
+        {
+          "title": "C3_loss10 PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C3_loss10.spice"
+        },
+        {
+          "title": "C4_stub PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C4_stub.spice"
+        },
+        {
+          "title": "C5_skew PCB 等效网表",
+          "path": "verification/models/channel/pcb_family/C5_skew.spice"
+        },
+        {
+          "title": "Foster 损耗单元",
+          "path": "verification/models/channel/pcb_family/pcb_foster_cells.spice"
+        }
       ]
     },
     {
@@ -2285,7 +3187,7 @@
       "name": "2 GHz输出缓冲",
       "key": "T02.1",
       "subtitle": "实际末级扇出 · 幅度/关闭时刻",
-      "state": "模块设计",
+      "state": "历史参考",
       "summary": "末级时钟buffer在实际重负载下同时满足幅度、共模和关闭建立关系，尺寸取舍由消费方需求及模型误差决定。",
       "boundary": {
         "inputs": [

@@ -1,7 +1,0 @@
-* Slow tail-gate filter for static initialization: nominal ~10kHz.
-* Reference and VCO coarse-code state must settle before PLL acquisition.
-* Depends on ldo_passives.spice; place AFTER local CML diode, before gates.
-.subckt serdes_pll_bias_lowpass_slow_r4 original filtered vss
-Xr original filtered vss serdes_ldo_ref_res
-Xc filtered vss serdes_ldo_mim16
-.ends serdes_pll_bias_lowpass_slow_r4

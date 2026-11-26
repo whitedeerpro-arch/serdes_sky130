@@ -13,6 +13,15 @@ uv run python verification/maintenance/waveform_archive.py restore results/某�
 
 ## 历史打包归档
 
+Bias 与 LDO 源码升到 `analog/bias/` 和 `analog/ldo/` 后，历史运行仍存于 `results/analog/common/{bias,ldo}/`。如果这两个历史目录存在且新结果路径尚未建立，可从仓库根目录建立相对链接供现行台读取同一份校准与分析数据：
+
+```bash
+ln -sT common/bias results/analog/bias
+ln -sT common/ldo results/analog/ldo
+```
+
+若新路径已有独立结果，保留两个目录，按[证据索引](catalog/v1_0_subsystem_evidence.json)解析所需运行身份。
+
 ```text
 results/
   acceptance/20261029-rx-functional/  阶段审阅入口、VCD/FST、GTKWave会话

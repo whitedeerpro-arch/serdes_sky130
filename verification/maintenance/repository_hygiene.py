@@ -31,18 +31,43 @@ def runtime_files():
     return sorted(files)
 
 
-def restored_retired_files():
-    """Detect regeneration even when a retired path is ignored or a broken link."""
-    restored = set()
-    for catalog in sorted((ROOT / "results/catalog").glob("retired_*.json")):
+def retirement_records(root=None):
+    root = ROOT if root is None else Path(root)
+    for catalog in sorted((root / "results/catalog").glob("retired_*.json")):
         for row in json.loads(catalog.read_text())["files"]:
             relative = Path(row["former_path"])
             if relative.is_absolute() or ".." in relative.parts:
                 raise ValueError(f"Invalid retired path in {catalog}: {relative}")
-            path = ROOT / relative
-            if path.exists() or path.is_symlink():
-                restored.add(path)
+            yield catalog, relative, row
+
+
+def restored_retired_files():
+    """Detect regeneration even when a retired path is ignored or a broken link."""
+    restored = set()
+    for _, relative, _ in retirement_records():
+        path = ROOT / relative
+        if path.exists() or path.is_symlink():
+            restored.add(path)
     return sorted(restored)
+
+
+def verify_retired():
+    checked = 0
+    issues = []
+    for catalog, relative, row in retirement_records():
+        location = row.get("archive") or row.get("archive_path")
+        if not location:
+            issues.append(f"{catalog.name}: {relative}: missing archive path")
+            continue
+        path = ROOT / location
+        if not path.is_file():
+            issues.append(f"{catalog.name}: {relative}: missing archive {path}")
+            continue
+        if path.stat().st_size != row["bytes"] or digest(path) != row["sha256"]:
+            issues.append(f"{catalog.name}: {relative}: archive size or SHA-256 mismatch")
+            continue
+        checked += 1
+    return checked, issues
 
 
 def archive(output):
@@ -76,11 +101,18 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     sub = ap.add_subparsers(dest="command", required=True)
     sub.add_parser("audit")
+    sub.add_parser("verify-retired", help="Check local archived bytes against all retirement receipts")
     arch = sub.add_parser("archive")
     arch.add_argument("--output-dir", type=Path, required=True)
     args = ap.parse_args()
     if args.command == "archive":
         archive(args.output_dir)
+    elif args.command == "verify-retired":
+        checked, issues = verify_retired()
+        for issue in issues:
+            print(issue)
+        print(f"Retired archives verified: {checked}; issues: {len(issues)}")
+        raise SystemExit(bool(issues))
     else:
         files = runtime_files()
         for path in files:

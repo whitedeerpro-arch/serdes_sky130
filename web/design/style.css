@@ -5,9 +5,58 @@
 
 @media(max-width:760px){.graph-viewport{touch-action:pan-y}.graph-node{padding:12px}.node-name{font-size:13px}.node-subtitle{font-size:9px}.node-top{margin-bottom:9px}.node-label{font-size:8px}.node-state{font-size:8px}.node-enter{font-size:8px;padding:3px}.node-bottom{margin-top:10px}}
 
-.figure-jump {
-  display: block;
+.overview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin: 12px 0 18px;
+}
+.inspector-tabs {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.source-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  background: #fff;
+}
+.source-toolbar select {
+  flex: 1 1 210px;
+  min-width: 0;
+}
+.artifact-content .source-code {
+  counter-reset: source-line;
+  padding: 12px 0;
+  font-size: 12px;
+  tab-size: 4;
+}
+.source-line {
+  display: block;
+  padding-right: 12px;
+  scroll-margin-top: 94px;
+}
+.source-line::before {
+  counter-increment: source-line;
+  content: counter(source-line);
+  display: inline-block;
+  width: 5ch;
+  margin-right: 1.5ch;
+  color: #6b7e9a;
+  text-align: right;
+  user-select: none;
+}
+.source-target {
+  background: #e2edff;
+}
+@media (max-width: 760px) {
+  .inspector-tabs {
+    gap: 12px;
+  }
 }
 .evidence-figure {
   margin: 0 0 18px;

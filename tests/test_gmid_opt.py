@@ -510,3 +510,36 @@ class TestOptCampaignAndPolish:
         )
         assert res_nm.feasible
         assert res_nm.best_objective < 0.15
+
+    def test_high_level_gmid_sizing_helpers(self):
+        tbl = gmid.synthetic_ekv_table(
+            device_models=("nfet_01v8", "nfet_01v8_lvt", "pfet_01v8", "pfet_01v8_lvt"),
+            corners=("ss", "tt", "ff"),
+            temps_c=(-40.0, 27.0, 85.0),
+            vds_list=(0.4, 0.9, 1.4),
+        )
+        op = tbl.eval_at_vgs(0.9, 0.15, device_model="nfet_lvt", corner="tt", temp_c=27.0, vds_v=0.9)
+        assert op["id_w"] > 0.0 and op["gm_w"] > 0.0 and op["ft_hz"] > 1e9
+
+        inv_fast = gmid.size_cmos_inverter(
+            tbl, n_dev="nfet_lvt", p_dev="pfet", l_n=0.15, l_p=0.15,
+            conditions=(("tt", 1.80, 27.0), ("ss", 1.65, 85.0), ("ff", 1.95, -40.0)),
+        )
+        inv_slow = gmid.size_cmos_inverter(
+            tbl, n_dev="nfet_lvt", p_dev="pfet_lvt", l_n=0.15, l_p=0.35,
+            conditions=(("tt", 1.80, 27.0), ("ss", 1.65, 85.0), ("ff", 1.95, -40.0)),
+        )
+        assert 1.5 <= inv_fast["opt_wp_over_wn"] <= 6.5
+        assert inv_fast["worst_ft_eff_ghz"] > inv_slow["worst_ft_eff_ghz"]
+
+        dp = gmid.size_diff_pair(
+            tbl, device_model="nfet_lvt", l_um=0.15, gm_target_s=10e-3, gmid_target=11.0,
+            conditions=(("tt", 1.80, 27.0), ("ss", 1.65, 85.0), ("ff", 1.95, -40.0)),
+        )
+        assert dp["w_total_um"] > 5.0 and dp["nf"] >= 2 and dp["min_bw_ghz"] > 0.5
+
+        cm = gmid.size_current_mirror(
+            tbl, device_model="nfet", l_um=0.5, id_target_a=2e-3, gmid_target=10.0,
+            vds_min_v=0.40, conditions=(("tt", 27.0), ("ss", 85.0), ("ff", -40.0)),
+        )
+        assert cm["w_total_um"] > 10.0 and cm["min_ro_kohm"] > 0.5

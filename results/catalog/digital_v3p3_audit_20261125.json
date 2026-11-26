@@ -1,0 +1,399 @@
+{
+  "date": "2026-11-25",
+  "baseline_tag": "v1.0",
+  "scope": "4 Gb/s full_v8 digital identity and isolated v3.3 timing, RTL and CDC review",
+  "artifacts": [
+    {
+      "id": "full_v8_gds",
+      "path": "results/layout/chip_top_20261123/full_v8/serdes_4g_top_pdk.gds",
+      "sha256": "f573e667f977699cc9257ec13a38b54a5dff24e22c1f2e68d047431efe0e8f0b",
+      "bytes": 54622784,
+      "boundary": "Core assembly GDS"
+    },
+    {
+      "id": "full_v8_summary",
+      "path": "results/layout/chip_top_20261123/full_v8/summary.json",
+      "sha256": "a4d6c8c7bbb5a0bff5ce397a369a9fe872496692ab9655932a710a09595ab1e7",
+      "bytes": 34491,
+      "boundary": "Core DRC, listed top connectivity and extracted terminal spot checks"
+    },
+    {
+      "id": "full_v8_import_digital",
+      "path": "results/layout/chip_top_20261123/full_v8/_import_digital.tcl",
+      "sha256": "dd3f625af3aa820cc86f337a146bb61b69b4bea456cb361d94bc719aaf490a3b",
+      "bytes": 353,
+      "boundary": "Digital import points to v3.2"
+    },
+    {
+      "id": "v32_gds",
+      "path": "digital/pnr/variants/hd_pnr_v3p2_cmos_rx/serdes_digital_top_v3/serdes_digital_top_v3.gds",
+      "sha256": "c67104a76bfa6f208370a08d088df346ba32001fbf78c60b784043669fb18262",
+      "bytes": 13493716,
+      "boundary": "Source digital macro for full_v8"
+    },
+    {
+      "id": "old_route_cold_sta",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/sta_replay/v33_ss_n40C_1v65_interp_fall.log",
+      "sha256": "ce4f45c35786e55d1677f3556a5c390845eac6a0e81228436c0b99170411a3cd",
+      "bytes": 47401,
+      "boundary": "Old v3.3 routed DEF, min/max SPEF, interpolated cold Liberty"
+    },
+    {
+      "id": "baseline_paired_sta",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/latest_first_route/paths/ss_n40C_1v65_interp_fall.log",
+      "sha256": "a9fb9b6750b3335f92b3da5ad3cf05f43046fbced1e18018bf4743eb38866469",
+      "bytes": 10868,
+      "boundary": "Routed baseline with fixed paths and separately labelled status multicycle scenario"
+    },
+    {
+      "id": "train_paired_sta",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/rx_training_ingress/paired_rc_sta/ss_n40C_1v65_interp_fall.log",
+      "sha256": "b5761bc7c84cf43b0bf653086728beae401bb77c427c8bd03201b0a0f92c8052",
+      "bytes": 9858,
+      "boundary": "Independently routed training ingress candidate, same top timing constraints"
+    },
+    {
+      "id": "train_control_rtl",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/rx_training_ingress/rtl/serdes_digital_top_v3.sv",
+      "sha256": "302b2084c9d6b0e27425753c9a98b39ae889b75b5b454629da449db5a8071b93",
+      "bytes": 19746,
+      "boundary": "Isolated prototype"
+    },
+    {
+      "id": "cdc_flow_patch",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/cdc_flow_fix/cdc_audit.patch",
+      "sha256": "7d401c8b36696009126520736da4134e8e66e109dd3a40958c41143b26a3965e",
+      "bytes": 4507,
+      "boundary": "Isolated patch that requires correct endpoint and complete FIFO CDC probing"
+    },
+    {
+      "id": "cdc_candidate",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/cdc_flow_fix/train/summary.json",
+      "sha256": "b1bb53de51834045f2a4bee2b518991bc9782f3976d60bd591ddb6bc9043549a",
+      "bytes": 6362,
+      "boundary": "15 first-stage nets and 15 sequential FIFO probes; interpolated cold Liberty"
+    },
+    {
+      "id": "rtl_joint_32us",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/rx_training_ingress/baseline-procedural.log",
+      "sha256": "1a87770aa22d941965fa248b0059f8cfc78b2e3af25fc8153da1df028b88ca9a",
+      "bytes": 670,
+      "boundary": "Icarus RTL replay with procedural check translation; original +300 ppm window"
+    },
+    {
+      "id": "rtl_joint_extended",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/rx_training_ingress/extended.log",
+      "sha256": "07179cb694e0dd64221dc5a05b30738d630884f293f50fe0b01ae22f4a75d69e",
+      "bytes": 14459,
+      "boundary": "Longer +300 ppm acquisition followed by -300 ppm in one diagnostic run"
+    },
+    {
+      "id": "route_a_final",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/final_route_A/summary.json",
+      "sha256": "b1e48c0fe0c8fc1a47e1605aa98a0586ee90156b55f6cf6911ed1a5332507b2b",
+      "bytes": 17984,
+      "boundary": "Snapshot of Antigravity final Route A report; setup incomplete"
+    },
+    {
+      "id": "route_a_paired_sta",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/final_route_A/ss_n40C_1v65_interp_fall.log",
+      "sha256": "fa6dd8cc03f4b56616c395950a11e448aaf9b294a8436453d2442c025b989e06",
+      "bytes": 11323,
+      "boundary": "Fixed Route A, paired min/max RC, original timing and qualified status scenario"
+    },
+    {
+      "id": "cdr_quality_patch",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/quality_snapshot.patch",
+      "sha256": "d0665ed4ca13e7165b695b965a49ceed8d25015fec3ae6a300f41f1d7df07f25",
+      "bytes": 1932,
+      "boundary": "Two quality flags sampled with the pipelined window inputs"
+    },
+    {
+      "id": "train_and_enqueue_patch",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/train_and_enqueue.patch",
+      "sha256": "8f58d9fd03cc3cb274e1b2c592bdec2a281084368c2b981f98a60b83ff68c615",
+      "bytes": 1411,
+      "boundary": "Synchronous training ingress and redundant write predicate removal"
+    },
+    {
+      "id": "rtl_fall_test",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/gls_rx_launch_edge/behavior.log",
+      "sha256": "99d93984d03d44eb31ca975008ec5d66abb633d68651f0b4dc1b52c239632f51",
+      "bytes": 997,
+      "boundary": "Original criteria with analog input now launched after the word clock falling edge"
+    },
+    {
+      "id": "comb_gate_zero",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/gate_and_sdf/gate_zero_delay.log",
+      "sha256": "99d93984d03d44eb31ca975008ec5d66abb633d68651f0b4dc1b52c239632f51",
+      "bytes": 997,
+      "boundary": "Zero-delay routed gate netlist; no SDF annotation or timingchecks"
+    },
+    {
+      "id": "comb_tt_sdf",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/gate_and_sdf/combined_tt.sdf",
+      "sha256": "e07124775a2ab45d020b6471a7db456654e9cc883901b191393add1e50106144",
+      "bytes": 2960940,
+      "boundary": "Exported from the pass-0 combined candidate never adopted into the top"
+    },
+    {
+      "id": "full_v8_macro_xor",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/full_v8_geometry/compare.log",
+      "sha256": "a273b359ee57cb82b9f63e9c1b6c62dcdce1378d9f165a727f468fd0fa1e955e",
+      "bytes": 392,
+      "boundary": "M2-M5 geometry comparison of imported vs standalone digital v3.2"
+    },
+    {
+      "id": "cold_lib_arc_identity",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/liberty_check/arc_identity.json",
+      "sha256": "0ea1e9f53ac81bf211baeb29f1967f50f9eceb9dd559cfd14adbeb754acb2464",
+      "bytes": 830,
+      "boundary": "Ordered arc and table identity through the three official source libraries and the local interpolant"
+    },
+    {
+      "id": "eco_status_paired",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/status_contract_eco/final_paired/all_status.log",
+      "sha256": "64d9517dc05dc3f40e6d9d70651e39d0d023e15733f87a8b74aafed1e4e1859e",
+      "bytes": 7522,
+      "boundary": "Cold paired min/max RC; alternate status sampling only, FIFO internal setup remains open"
+    },
+    {
+      "id": "eco_rtl_path_map",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/status_contract_eco/net_mapping/critical_map.txt",
+      "sha256": "0223fd18cd9689e8726d21de1e68e504b66f3319a0356701d65b7170a0373614",
+      "bytes": 971,
+      "boundary": "Maps the remaining RX and host data paths to specific RTL registers"
+    },
+    {
+      "id": "eco_gate_zero",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/status_contract_eco/gate/behavior.log",
+      "sha256": "99d93984d03d44eb31ca975008ec5d66abb633d68651f0b4dc1b52c239632f51",
+      "bytes": 997,
+      "boundary": "Two-pass ECO routed netlist at zero delay; no timing checks"
+    },
+    {
+      "id": "route_a_gray_extrema",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/gray_bus_extrema/summary.json",
+      "sha256": "8624865ce64679aeecb3113889345cdf1e84600c01470a139518d2068e020241",
+      "bytes": 330,
+      "boundary": "Five bits each direction over early/min and late/max RC in local cold library"
+    },
+    {
+      "id": "route_a_156p25",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/clock_scaling/ss_n40C_1v65_interp_fall.log",
+      "sha256": "04e7634d2a9aad7d8b809a4c99255c50f9b19d756600889bf0994b73141e51e8",
+      "bytes": 8981,
+      "boundary": "Diagnostic 6.4 ns CDR generated clock applied to the 4G layout"
+    },
+    {
+      "id": "eco_six_paired_corners",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/eco_paired_corners_retry/summary.json",
+      "sha256": "94d5bc6a35b6fac391ffd425866f4ef6776cccc648b7bb30b7f28fecc61b6a8a",
+      "bytes": 15696,
+      "boundary": "Six Liberty corners on an identical DEF and min/max SPEFs, fixed period; single-cycle status and explicitly labeled timing diagnostics"
+    },
+    {
+      "id": "eco_magic_netgen",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/eco_physical/summary.json",
+      "sha256": "0a814f273844af8b6317ac18770999784abaef5a7457003281d7e11a9069d404",
+      "bytes": 1251,
+      "boundary": "Two-pass ECO DEF and powered netlist hashes, Magic full DRC, Netgen LVS and generated GDS identity"
+    },
+    {
+      "id": "fifo_four_variant_trace",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/registered_rows/trace.log",
+      "sha256": "1e8cb3908688ab744105c2116f1d153aa1784af2ae004a22c4584eab4dc9b12a",
+      "bytes": 71,
+      "boundary": "Cycle-exact 16x16 FIFO differential regression; representative run, both stopped-clock reset orders"
+    },
+    {
+      "id": "fifo_host_useful_skew",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/clock_margin/all_host_windows.log",
+      "sha256": "d35c430fbc9e08cf6fab60d1a7404cffa02fde09bf8f81db5ec2c2c61342992a",
+      "bytes": 4150,
+      "boundary": "Local clock-shift feasibility only, with data paths and all other clock edges fixed"
+    },
+    {
+      "id": "fifo_nand_rewrite_sta",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/write_polarity/sta.log",
+      "sha256": "b424b9d8b502208ac0133b004d87ccfe3b03504b2cf407e8a52dcc696d94f68b",
+      "bytes": 7663,
+      "boundary": "Same RTL and capacity; fully rerouted NAND selection candidate; overall cold STA did not close"
+    },
+    {
+      "id": "fifo_enabled_memory_map",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/cell_mapping.json",
+      "sha256": "c567a3183a0a3d1fe246a328bcfe8936c0d1ab12d9fa21e6eb533c52277c8136",
+      "bytes": 59628,
+      "boundary": "Identifies 256 feedback MUX and DFF pairs and exact enabled DFF port mapping"
+    },
+    {
+      "id": "fifo_enabled_corners",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/all_corners/summary.json",
+      "sha256": "eeadb18e5d670624d28af2106d97483fbd42aca00a930b7fd3439a9e35a9c3d0",
+      "bytes": 15621,
+      "boundary": "Same rerouted enabled DFF DEF/netlist and paired min/max RC in six corners"
+    },
+    {
+      "id": "fifo_enabled_magic_lvs",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/physical/summary.json",
+      "sha256": "86db95c692588287b6daebee0f087974ff68ca239e48a5b0df1ea7151ff8015f",
+      "bytes": 1269,
+      "boundary": "Full rule Magic DRC and Netgen LVS, exact enabled-memory DEF and powered gate netlist identities"
+    },
+    {
+      "id": "fifo_enabled_zero_delay",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/routed_zero_delay.log",
+      "sha256": "99d93984d03d44eb31ca975008ec5d66abb633d68651f0b4dc1b52c239632f51",
+      "bytes": 997,
+      "boundary": "Actual enabled-memory routed netlist at zero delay, including two RX epochs and original ±300 ppm CDR gates"
+    },
+    {
+      "id": "fifo_enabled_gray_syncs",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/cdc/fifo.json",
+      "sha256": "c2a821ffc0e908da1abeca8bb3e41335209b5edd93e02c8112cd4f482af9602c",
+      "bytes": 6363,
+      "boundary": "Cold max-RC FIFO CDC path and fanout audit, 15 pairs and both 5-bit Gray directions"
+    },
+    {
+      "id": "fifo_enabled_top_syncs",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/cdc/top.log",
+      "sha256": "e935c8984798b69333c69cd5aea7a639a9f824f15b15557d9b4fa93a45df917a",
+      "bytes": 3183,
+      "boundary": "16 additional reset and asynchronous control pairs on paired RC in the local cold library"
+    },
+    {
+      "id": "fifo_enabled_bundled_data",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/bundled_data/enabled_memory.log",
+      "sha256": "24604e1eb1e780c631f4ccc8b2461b65a129a83503d3313a5bf1403586a3ddf1",
+      "bytes": 3723,
+      "boundary": "Cold diagnostic 8 ns clock-independent maximum delay, covering all 32 read-bank data endpoints"
+    },
+    {
+      "id": "fifo_enabled_sdf",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/sdf/summary.json",
+      "sha256": "82bc98df558cbbf6bd7d0991de988f0e6e2db1c6ec33046867858327319a3f66",
+      "bytes": 2887,
+      "boundary": "Three exported SDFs and exact DEF, logic netlist, RC and SDF hashes; no timed simulator verdict"
+    },
+    {
+      "id": "fifo_enabled_vcs_license",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/fifo_path_closure/enabled_memory/sdf/vcs_compile_tt.log",
+      "sha256": "06cac012bd6a11b17a153152b44eccd8eed6991238f3fa3fdcbdffe8abe09f6c",
+      "bytes": 766,
+      "boundary": "Licensed TT SDF invocation stopped at VCS license connection"
+    },
+    {
+      "id": "v33_host_mux_eco",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/cell_changes.json",
+      "sha256": "07005ea9aa5bb50ec9c05d988819a4f7b3b177107033f61322587ce5deb0e420",
+      "bytes": 13988,
+      "boundary": "Exact netlist map reducing the 32 prefetch feedback bits to data selects"
+    },
+    {
+      "id": "v33_host_mux_paired_sta",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/all_corners/summary.json",
+      "sha256": "e33005b5498524a09e137c6e55c4c6c785d729669aa1da9115fef76efa26e4a1",
+      "bytes": 15595,
+      "boundary": "Same-version min/max RC and six Liberty corner replay, including original single-cycle status budget"
+    },
+    {
+      "id": "v33_status_port_budget",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/status_paths.log",
+      "sha256": "4443a86c4bd1c60575114e738c4f77d024e95139b51dc7682ba2981e0c15e94e",
+      "bytes": 179503,
+      "boundary": "Per-state input and output slack on the preceding enabled FIFO route, status capture-side timing contract remains one cycle"
+    },
+    {
+      "id": "v33_host_mux_gate",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/routed_zero_delay.log",
+      "sha256": "99d93984d03d44eb31ca975008ec5d66abb633d68651f0b4dc1b52c239632f51",
+      "bytes": 997,
+      "boundary": "Exact rerouted netlist zero-delay behavioral regression"
+    },
+    {
+      "id": "v33_host_mux_drc_lvs",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/physical/summary.json",
+      "sha256": "707a8c58d814516f7d38751bb4e69609d6e71348cf6c269731153de2044532ed",
+      "bytes": 1179,
+      "boundary": "Same DEF and powered netlist by hash; Magic full rule DRC, Netgen LVS, GDS identity"
+    },
+    {
+      "id": "v33_host_mux_fifo_cdc",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/cdc/fifo.json",
+      "sha256": "dea2a272a7515ca8ae4bc88212ae46f3b41b20f7561c730e4a146ab4db7f5327",
+      "bytes": 6363,
+      "boundary": "Both 5-bit FIFO Gray directions plus 15 FIFO synchronizer pairs"
+    },
+    {
+      "id": "v33_host_mux_top_cdc",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/cdc/top.log",
+      "sha256": "beb1a7dda7d5cd96be689bf366c6d51ad0f223d63d3ed091bae1f9d7f42688ad",
+      "bytes": 3153,
+      "boundary": "16 named async controls and reset chains audited by routed sink and slack"
+    },
+    {
+      "id": "v33_host_mux_sdf",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/sdf/summary.json",
+      "sha256": "328fa00d7901f08458b563eb4b082e81ea707b507a38ec3545da2ec5d9411d6c",
+      "bytes": 2677,
+      "boundary": "SDF exports and paired netlist/DEF/RC identity; no timed test verdict"
+    },
+    {
+      "id": "v33_host_mux_vcs_license",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/sdf/vcs_compile_tt.log",
+      "sha256": "ce550d3fb3504e36ccaeb0fc43a289a21e6c2e87c3589c60d8d79f149f6531f4",
+      "bytes": 766,
+      "boundary": "SDF regression halted during VCS license connection"
+    },
+    {
+      "id": "v33_def_area_by_class",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/area_audit/summary.json",
+      "sha256": "6985608450764684a93ceaffc7748e423e165ae17b6d01f2b731448c051ec8e9",
+      "bytes": 7082,
+      "boundary": "Area by DEF instance and cell LEF; separates macro footprint and tap/fill/decap from functional area"
+    },
+    {
+      "id": "v33_aligner_area_compare",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/align_match_precombine/equiv.log",
+      "sha256": "627843cbcce2f7006eeef11f1566fb11433a75a4145637d912330e2dac8920b4",
+      "bytes": 63,
+      "boundary": "Cycle-exact reference comparison including all 16 offsets and invalid data gaps"
+    },
+    {
+      "id": "v33_voter_lean_area_compare",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/voter_valid_only_reset/lean.scoped.synth.log",
+      "sha256": "ecb7d4867c976edbb99ed972b0903db120c0b42ada3efa4aa6b489815b064aad",
+      "bytes": 140821,
+      "boundary": "Local candidate synthesis with BBPD voter mapping hierarchy temporarily retained"
+    },
+    {
+      "id": "v33_voter_lean_reset_equiv",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/voter_valid_only_reset/equiv.log",
+      "sha256": "0d9700248457b69adeaa27e4adc4851ec5040d26e96f459b56c20d12501c18a5",
+      "bytes": 98,
+      "boundary": "Pair-output differential regression, including staggered reset release"
+    },
+    {
+      "id": "v33_area_rtl_function",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/combined_area_rtl/behavior.log",
+      "sha256": "99d93984d03d44eb31ca975008ec5d66abb633d68651f0b4dc1b52c239632f51",
+      "bytes": 997,
+      "boundary": "Combined area candidates with original 4G training, reset, backpressure and CDR functional gates"
+    },
+    {
+      "id": "v4_paired_cold_readonly",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/v4_readonly/summary.json",
+      "sha256": "e77a7bb5173dc36ee66cefbb575913684a50857ab98a6b21c91e61de4b4ed3e3",
+      "bytes": 1215,
+      "boundary": "Independent cold paired-RC replay and hash equality between v4 run and export; standalone 4G/5G modes"
+    },
+    {
+      "id": "v4_max_rc_only_control",
+      "path": "results/digital/audit_v3p3_20261125_543NRK/host_mux_feedback/v4_readonly/5g_cold_max_only.log",
+      "sha256": "751e74e3aa005fdb89d5c968eba91b94709d3cf9c091100901188936ed29175a",
+      "bytes": 4583,
+      "boundary": "Control for vendor flow 5G interpolated cold corner with single max RC"
+    }
+  ]
+}

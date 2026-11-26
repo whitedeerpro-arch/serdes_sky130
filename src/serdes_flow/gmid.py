@@ -281,6 +281,19 @@ class GmIdTable:
             raise KeyError(f"Curve key {k} not found in GmIdTable")
         return self.curves[k]
 
+    def temps_for(self, device_model: str, corner: str) -> list[float]:
+        model, cn = canonical_device_model(device_model), corner.lower()
+        return sorted({k[2] for k in self.curves if k[0] == model and k[1] == cn})
+
+    def vds_for(self, device_model: str, corner: str, temp_c: float) -> list[float]:
+        model, cn, t = canonical_device_model(device_model), corner.lower(), round(float(temp_c), 6)
+        return sorted({k[3] for k in self.curves if k[0] == model and k[1] == cn and k[2] == t})
+
+    def lengths_for(self, device_model: str, corner: str, temp_c: float, vds_v: float) -> list[float]:
+        model, cn = canonical_device_model(device_model), corner.lower()
+        t, vd = round(float(temp_c), 6), round(float(vds_v), 6)
+        return sorted({k[4] for k in self.curves if k[0] == model and k[1] == cn and k[2] == t and k[3] == vd})
+
     def _resolve_defaults(
         self,
         device_model: str | None,
@@ -583,6 +596,100 @@ class GmIdTable:
                             vth_v=vth_v,
                         )
         return cls(curves=curves, meta={"source": "DeviceCard", "vsb_v": vsb, "card_path": str(card.path)})
+
+    @classmethod
+    def from_device_card_dirs(
+        cls,
+        card_dirs: Sequence[str | Path],
+        *,
+        vsb: float = 0.0,
+        cdd_overlap_ratio: float = 0.45,
+    ) -> "GmIdTable":
+        """Load and merge multiple real SKY130A ``DeviceCard`` corner directories.
+
+        Each entry in ``card_dirs`` may be either a single corner directory
+        containing ``card.json`` / ``card.npz`` or a campaign root whose
+        subdirectories (``tt``, ``ss``, ``ff``, ``fs``, ``sf``) contain cards.
+        Later directories override earlier ones if a corner appears twice.
+        """
+        from .devices import DeviceCard
+
+        merged: dict[GmIdKey, GmIdCurve] = {}
+        loaded_paths: list[str] = []
+        for entry in card_dirs:
+            p = Path(entry)
+            sub_dirs = [p] if (p / "card.json").exists() else sorted(
+                d for d in p.iterdir() if d.is_dir() and (d / "card.json").exists()
+            )
+            for d in sub_dirs:
+                sub = cls.from_device_card(
+                    DeviceCard.load(d),
+                    vsb=vsb,
+                    cdd_overlap_ratio=cdd_overlap_ratio,
+                )
+                merged.update(sub.curves)
+                loaded_paths.append(str(d))
+        if not merged:
+            raise FileNotFoundError(f"No DeviceCard (card.json + card.npz) found under {card_dirs!r}")
+        return cls(
+            curves=merged,
+            meta={
+                "source": "DeviceCard_multi",
+                "vsb_v": vsb,
+                "card_paths": loaded_paths,
+            },
+        )
+
+    def eval_at_vgs(
+        self,
+        vgs_v: float,
+        l_um: float,
+        *,
+        device_model: str = "sky130_fd_pr__nfet_01v8",
+        corner: str = "tt",
+        temp_c: float = 27.0,
+        vds_v: float = 0.9,
+    ) -> dict[str, float]:
+        """Evaluate all per-unit-width quantities directly at ``|Vgs| = vgs_v``."""
+        model = canonical_device_model(device_model)
+        cn = corner.lower()
+        t0, t1, at = _bracket(self.temps_for(model, cn), float(temp_c), "temp_c")
+        if at == 0.0:
+            t_terms = ((t0, 1.0),)
+        elif at == 1.0:
+            t_terms = ((t1, 1.0),)
+        else:
+            t_terms = ((t0, 1.0 - at), (t1, at))
+
+        def eval_one(tc: float) -> dict[str, float]:
+            v0, v1, av = _bracket(self.vds_for(model, cn, tc), float(vds_v), "vds_v")
+            v_terms = ((v0, 1.0),) if av == 0.0 else (((v1, 1.0),) if av == 1.0 else ((v0, 1.0 - av), (v1, av)))
+
+            def eval_vds(vd: float) -> dict[str, float]:
+                l0, l1, al = _bracket(self.lengths_for(model, cn, tc, vd), float(l_um), "l_um", log_axis=True)
+                l_terms = ((l0, 1.0),) if al == 0.0 else (((l1, 1.0),) if al == 1.0 else ((l0, 1.0 - al), (l1, al)))
+                rows = []
+                for li, _ in l_terms:
+                    c = self.get(model, cn, tc, vd, li)
+                    vq = float(np.clip(vgs_v, c.vgs_v[0], c.vgs_v[-1]))
+                    row: dict[str, float] = {}
+                    for fname in CURVE_FIELDS:
+                        arr = getattr(c, fname)
+                        if fname in _LOG_INTERP_FIELDS:
+                            safe = np.maximum(arr, 1e-30)
+                            row[fname] = float(math.exp(np.interp(vq, c.vgs_v, np.log(safe))))
+                        else:
+                            row[fname] = float(np.interp(vq, c.vgs_v, arr))
+                    row["gm_w"] = row["gm_id"] * row["id_w"]
+                    row["gds_w"] = row["gm_w"] / max(row["gm_gds"], 1e-12)
+                    rows.append(row)
+                return rows[0] if len(rows) == 1 else _blend_rows(rows[0], rows[1], al)
+
+            rows = [eval_vds(vd) for vd, _ in v_terms]
+            return rows[0] if len(rows) == 1 else _blend_rows(rows[0], rows[1], av)
+
+        rows = [eval_one(tc) for tc, _ in t_terms]
+        return rows[0] if len(rows) == 1 else _blend_rows(rows[0], rows[1], at)
 
 
 def snap_sky130_width(
@@ -973,3 +1080,267 @@ def synthetic_ekv_table(
             "note": "Analytic EKV-calibrated reference curves for first-pass sizing and tests; calibrate with SPICE.",
         },
     )
+
+
+def size_cmos_inverter(
+    table: GmIdTable,
+    *,
+    n_dev: str = "nfet_lvt",
+    p_dev: str = "pfet",
+    l_n: float = 0.15,
+    l_p: float = 0.15,
+    conditions: Sequence[tuple[str, float, float]] = (
+        ("tt", 1.80, 27.0),
+        ("ss", 1.65, -40.0),
+        ("ss", 1.65, 85.0),
+        ("ff", 1.95, -40.0),
+    ),
+    p_alt_dev: str | None = None,
+    l_p_alt: float = 0.35,
+    p_alt_frac: float = 0.0,
+    ratio_bounds: tuple[float, float] = (1.0, 8.0),
+    ratio_steps: int = 141,
+) -> dict[str, Any]:
+    """Solve PVT-centered ``Wp/Wn`` ratio, switching threshold ``V_M``, and FO1 speed.
+
+    Supports pure PMOS (``p_alt_frac == 0``) or hybrid parallel PMOS
+    (e.g., ``pfet L=0.15`` in parallel with ``pfet_lvt L=0.35``).
+    Minimizes worst-case ``|V_M - VDD/2|`` across all supplied ``(corner, vdd, temp_c)``
+    conditions and returns exact per-corner switching threshold, short-circuit current,
+    intrinsic FO1 delay ``tau_FO1 = C_in * VDD / I_on``, and effective ``f_T``.
+    """
+    n_model = canonical_device_model(n_dev)
+    p_model = canonical_device_model(p_dev)
+    p_alt_model = canonical_device_model(p_alt_dev) if p_alt_dev else None
+    frac_alt = float(np.clip(p_alt_frac, 0.0, 1.0)) if p_alt_model else 0.0
+    frac_main = 1.0 - frac_alt
+
+    ratios = np.linspace(ratio_bounds[0], ratio_bounds[1], ratio_steps)
+
+    # Pre-sample fine V_in grids per condition for fast, exact root-finding of I_n(V_M) = I_p(V_M)
+    per_cond_grids: list[dict[str, Any]] = []
+    for cn, vdd, tc in conditions:
+        vm_grid = np.linspace(0.25 * vdd, 0.75 * vdd, 101)
+        vds_mid = 0.5 * vdd
+        id_n = np.array([
+            table.eval_at_vgs(float(v), l_n, device_model=n_model, corner=cn, temp_c=tc, vds_v=vds_mid)["id_w"]
+            for v in vm_grid
+        ])
+        id_p = np.array([
+            frac_main * table.eval_at_vgs(float(vdd - v), l_p, device_model=p_model, corner=cn, temp_c=tc, vds_v=vds_mid)["id_w"]
+            + (frac_alt * table.eval_at_vgs(float(vdd - v), l_p_alt, device_model=p_alt_model, corner=cn, temp_c=tc, vds_v=vds_mid)["id_w"] if frac_alt > 0 else 0.0)
+            for v in vm_grid
+        ])
+        on_n = table.eval_at_vgs(vdd, l_n, device_model=n_model, corner=cn, temp_c=tc, vds_v=vds_mid)
+        on_p = table.eval_at_vgs(vdd, l_p, device_model=p_model, corner=cn, temp_c=tc, vds_v=vds_mid)
+        on_pa = table.eval_at_vgs(vdd, l_p_alt, device_model=p_alt_model, corner=cn, temp_c=tc, vds_v=vds_mid) if frac_alt > 0 else None
+        mid_n = table.eval_at_vgs(vds_mid, l_n, device_model=n_model, corner=cn, temp_c=tc, vds_v=vds_mid)
+        mid_p = table.eval_at_vgs(vds_mid, l_p, device_model=p_model, corner=cn, temp_c=tc, vds_v=vds_mid)
+        mid_pa = table.eval_at_vgs(vds_mid, l_p_alt, device_model=p_alt_model, corner=cn, temp_c=tc, vds_v=vds_mid) if frac_alt > 0 else None
+        per_cond_grids.append({
+            "corner": cn, "vdd": vdd, "temp_c": tc,
+            "vm_grid": vm_grid, "id_n": id_n, "id_p": id_p,
+            "on_n": on_n, "on_p": on_p, "on_pa": on_pa,
+            "mid_n": mid_n, "mid_p": mid_p, "mid_pa": mid_pa,
+        })
+
+    def eval_ratio(ratio: float) -> tuple[float, list[dict[str, float]]]:
+        rows = []
+        worst_err_mv = 0.0
+        for g in per_cond_grids:
+            diff = g["id_n"] - ratio * g["id_p"]
+            # diff increases monotonically with V_in: find zero crossing
+            idx = int(np.searchsorted(diff, 0.0))
+            if idx <= 0:
+                vm = float(g["vm_grid"][0])
+            elif idx >= len(diff):
+                vm = float(g["vm_grid"][-1])
+            else:
+                d0, d1 = float(diff[idx - 1]), float(diff[idx])
+                alpha = -d0 / max(d1 - d0, 1e-30)
+                vm = float(g["vm_grid"][idx - 1] + alpha * (g["vm_grid"][idx] - g["vm_grid"][idx - 1]))
+            vdd = g["vdd"]
+            err_mv = (vm - 0.5 * vdd) * 1e3
+            worst_err_mv = max(worst_err_mv, abs(err_mv))
+
+            # Effective drive current (harmonic avg of pull-down and pull-up) & input cap per unit Wn
+            ion_n = g["on_n"]["id_w"]
+            ion_p = ratio * (frac_main * g["on_p"]["id_w"] + (frac_alt * g["on_pa"]["id_w"] if frac_alt > 0 else 0.0))
+            ion_eff = 2.0 * ion_n * ion_p / max(ion_n + ion_p, 1e-18)
+            cin_w = g["mid_n"]["cgg_w"] + ratio * (
+                frac_main * g["mid_p"]["cgg_w"] + (frac_alt * g["mid_pa"]["cgg_w"] if frac_alt > 0 else 0.0)
+            )
+            gm_mid_w = g["mid_n"]["gm_w"] + ratio * (
+                frac_main * g["mid_p"]["gm_w"] + (frac_alt * g["mid_pa"]["gm_w"] if frac_alt > 0 else 0.0)
+            )
+            isc_w = float(np.interp(vm, g["vm_grid"], g["id_n"]))
+            tau_fo1_ps = (cin_w * vdd / max(ion_eff, 1e-18)) * 1e12
+            ft_eff_ghz = (gm_mid_w / (2.0 * math.pi * max(cin_w, 1e-21))) / 1e9
+            rows.append({
+                "corner": g["corner"],
+                "vdd_v": vdd,
+                "temp_c": g["temp_c"],
+                "vm_v": round(vm, 4),
+                "vm_err_mv": round(err_mv, 2),
+                "vm_ratio_pct": round(100.0 * vm / vdd, 2),
+                "isc_ua_per_um_wn": round(isc_w * 1e6, 2),
+                "cin_ff_per_um_wn": round(cin_w * 1e15, 3),
+                "ion_eff_ua_per_um_wn": round(ion_eff * 1e6, 1),
+                "tau_fo1_ps": round(tau_fo1_ps, 2),
+                "ft_eff_ghz": round(ft_eff_ghz, 2),
+            })
+        return worst_err_mv, rows
+
+    best_ratio = float(ratios[0])
+    best_err, best_rows = eval_ratio(best_ratio)
+    for r in ratios[1:]:
+        err, rows = eval_ratio(float(r))
+        if err < best_err:
+            best_ratio, best_err, best_rows = float(r), err, rows
+
+    vm_errs = [r["vm_err_mv"] for r in best_rows]
+    return {
+        "n_dev": n_model,
+        "p_dev": p_model,
+        "l_n_um": l_n,
+        "l_p_um": l_p,
+        "p_alt_dev": p_alt_model,
+        "l_p_alt_um": l_p_alt if p_alt_model else None,
+        "p_alt_frac": frac_alt,
+        "opt_wp_over_wn": round(best_ratio, 3),
+        "worst_abs_vm_err_mv": round(best_err, 2),
+        "vm_err_span_mv": round(max(vm_errs) - min(vm_errs), 2),
+        "worst_tau_fo1_ps": round(max(r["tau_fo1_ps"] for r in best_rows), 2),
+        "worst_ft_eff_ghz": round(min(r["ft_eff_ghz"] for r in best_rows), 2),
+        "corners": best_rows,
+    }
+
+
+def size_diff_pair(
+    table: GmIdTable,
+    *,
+    device_model: str = "nfet_lvt",
+    l_um: float = 0.15,
+    gm_target_s: float = 10e-3,
+    gmid_target: float = 11.0,
+    vdd_nom: float = 1.80,
+    v_in_cm: float = 1.05,
+    r_load_ohm: float = 400.0,
+    c_load_f: float = 80e-15,
+    conditions: Sequence[tuple[str, float, float]] = (
+        ("tt", 1.80, 27.0),
+        ("ss", 1.65, -40.0),
+        ("ss", 1.65, 85.0),
+        ("ff", 1.95, -40.0),
+    ),
+    w_finger_max: float = 5.0,
+) -> dict[str, Any]:
+    """Direct multi-corner ``gm/ID`` sizing for a differential input pair."""
+    model = canonical_device_model(device_model)
+    id_branch = gm_target_s / gmid_target
+    v_out_nom = vdd_nom - id_branch * r_load_ohm
+    vds_nom = max(0.25, min(1.5, v_out_nom - (v_in_cm - 0.55)))
+    sz = table.size_for_gm(
+        gm_target_s, gmid_target, l_um,
+        device_model=model, corner="tt", temp_c=27.0, vds_v=vds_nom,
+    )
+    geom = snap_sky130_width(sz.w_um, w_finger_max=w_finger_max)
+    id_w = id_branch / geom.w_total
+
+    corner_rows = []
+    for cn, vdd, tc in conditions:
+        v_out = vdd - id_branch * r_load_ohm
+        # Solve self-consistent V_s = V_in_cm - V_gs at fixed tail current I_branch
+        vds = max(0.15, min(1.75, v_out - (v_in_cm - sz.vgs_v)))
+        c = table.get(model, cn, tc, min(table.vds_for(model, cn, tc), key=lambda x: abs(x - vds)), l_um)
+        vgs_c = float(np.interp(id_w, c.id_w, c.vgs_v))
+        vs = v_in_cm - vgs_c
+        vds = max(0.15, min(1.75, v_out - vs))
+        op = table.eval_at_vgs(vgs_c, l_um, device_model=model, corner=cn, temp_c=tc, vds_v=vds)
+        gm = op["gm_w"] * geom.w_total
+        gds = op["gds_w"] * geom.w_total
+        cdd = op["cdd_w"] * geom.w_total
+        cgg = op["cgg_w"] * geom.w_total
+        r_eff = 1.0 / (1.0 / r_load_ohm + gds)
+        av_db = 20.0 * math.log10(max(gm * r_eff, 1e-6))
+        bw_ghz = 1.0 / (2.0 * math.pi * r_eff * (c_load_f + cdd)) / 1e9
+        corner_rows.append({
+            "corner": cn, "vdd_v": vdd, "temp_c": tc,
+            "vgs_v": round(vgs_c, 4), "vs_v": round(vs, 4),
+            "vds_v": round(vds, 4), "vdsat_v": round(op["vdsat_v"], 4),
+            "headroom_mv": round((vds - op["vdsat_v"]) * 1e3, 1),
+            "gm_ms": round(gm * 1e3, 3),
+            "gm_id": round(op["gm_id"], 2),
+            "av_db": round(av_db, 2),
+            "bw_ghz": round(bw_ghz, 2),
+            "cgg_ff": round(cgg * 1e15, 2),
+            "cdd_ff": round(cdd * 1e15, 2),
+        })
+    return {
+        "device_model": model,
+        "l_um": l_um,
+        "id_branch_ma": round(id_branch * 1e3, 3),
+        "w_total_um": geom.w_total,
+        "nf": geom.nf,
+        "w_finger_um": geom.w_finger,
+        "worst_headroom_mv": min(r["headroom_mv"] for r in corner_rows),
+        "min_av_db": min(r["av_db"] for r in corner_rows),
+        "min_bw_ghz": min(r["bw_ghz"] for r in corner_rows),
+        "corners": corner_rows,
+    }
+
+
+def size_current_mirror(
+    table: GmIdTable,
+    *,
+    device_model: str = "nfet",
+    l_um: float = 0.5,
+    id_target_a: float = 2e-3,
+    gmid_target: float = 10.0,
+    vds_min_v: float = 0.35,
+    conditions: Sequence[tuple[str, float]] = (
+        ("tt", 27.0),
+        ("ss", -40.0),
+        ("ss", 85.0),
+        ("ff", -40.0),
+    ),
+    w_finger_max: float = 10.0,
+) -> dict[str, Any]:
+    """Direct multi-corner ``gm/ID`` sizing for a tail source or current mirror."""
+    model = canonical_device_model(device_model)
+    sz = table.size_for_id(
+        id_target_a, gmid_target, l_um,
+        device_model=model, corner="tt", temp_c=27.0, vds_v=max(vds_min_v, 0.3),
+    )
+    geom = snap_sky130_width(sz.w_um, w_finger_max=w_finger_max)
+    id_w = id_target_a / geom.w_total
+    area_um2 = geom.w_total * l_um
+    rows = []
+    for cn, tc in conditions:
+        vds_grid = table.vds_for(model, cn, tc)
+        vds_q = min(vds_grid, key=lambda x: abs(x - vds_min_v))
+        c = table.get(model, cn, tc, vds_q, l_um)
+        vgs_c = float(np.interp(id_w, c.id_w, c.vgs_v))
+        op = table.eval_at_vgs(vgs_c, l_um, device_model=model, corner=cn, temp_c=tc, vds_v=vds_min_v)
+        ro_kohm = (1.0 / max(op["gds_w"] * geom.w_total, 1e-18)) / 1e3
+        rows.append({
+            "corner": cn, "temp_c": tc,
+            "vgs_v": round(vgs_c, 4),
+            "vdsat_v": round(op["vdsat_v"], 4),
+            "compliance_margin_mv": round((vds_min_v - op["vdsat_v"]) * 1e3, 1),
+            "gm_id": round(op["gm_id"], 2),
+            "ro_kohm": round(ro_kohm, 2),
+            "mismatch_proxy": round(op["gm_id"] / math.sqrt(max(area_um2, 1e-6)), 3),
+        })
+    return {
+        "device_model": model,
+        "l_um": l_um,
+        "id_target_ma": round(id_target_a * 1e3, 3),
+        "w_total_um": geom.w_total,
+        "nf": geom.nf,
+        "w_finger_um": geom.w_finger,
+        "gate_area_um2": round(area_um2, 2),
+        "worst_compliance_margin_mv": min(r["compliance_margin_mv"] for r in rows),
+        "min_ro_kohm": min(r["ro_kohm"] for r in rows),
+        "corners": rows,
+    }

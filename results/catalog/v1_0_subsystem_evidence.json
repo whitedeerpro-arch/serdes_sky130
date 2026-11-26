@@ -1,0 +1,222 @@
+{
+  "baseline_tag": "v1.0",
+  "reviewed": "2026-11-23",
+  "status": "docs/status/current.md",
+  "scope": "发布证据及已核对的后续局部物理记录。SHA-256 固定所列文件字节；支撑输入是否冻结按各条证据边界判断。",
+  "modules": {
+    "pll": [
+      {
+        "scope": "原理图预充后闭环锁定（旧 CML 反馈链）",
+        "path": "results/analog/pll/top/v4_closed_loop_20261123/summary.json",
+        "sha256": "761dda2618e15a4e35e03c19e1cafa4074e176b408b07ac8e2ef6fcb4fa65f38",
+        "availability": "local_results"
+      },
+      {
+        "scope": "闭环台固定顶层网表",
+        "path": "results/analog/pll/top/v4_closed_loop_20261123/snap/pdk_fixed_resistors/analog/pll/top/spice/pll_top_r6_v4_upgrade.spice",
+        "sha256": "72dacbdc1e5d4442783562d7609b34098f4f5e053e2d52dec643b660e9ea3e66",
+        "availability": "local_results"
+      },
+      {
+        "scope": "闭环台冻结的 CML 反馈前端",
+        "path": "results/analog/pll/top/v4_closed_loop_20261123/snap/pdk_fixed_resistors/analog/pll/top/spice/clock_frontend_r6q.spice",
+        "sha256": "41c2410797fdc86d0c47a82f6f4dd5e792ecf8fb493b1d4d700176b9e225c935",
+        "availability": "local_results"
+      },
+      {
+        "scope": "闭环台固定 CP v4 网表",
+        "path": "results/analog/pll/top/v4_closed_loop_20261123/snap/pdk_fixed_resistors/analog/pll/cp/spice/charge_pump_steer_v4.spice",
+        "sha256": "a6d2299590295f78ca9c017540ad2aca2b985781bd1c6da2e7bf8e84f6cb464f",
+        "availability": "local_results"
+      },
+      {
+        "scope": "VCO 实测校准、ISF、噪声与 PLL/CDR 模型合成",
+        "path": "results/analog/pll/vco/r6_ptat_perf_20261123/stage6_synth/summary.json",
+        "sha256": "6e83ff4658898eeab37682d649a5fbcc9b435eeed4760106721d24b211ceaef7",
+        "availability": "local_results"
+      },
+      {
+        "scope": "独立 ÷8 物理摘要",
+        "path": "analog/pll/divider/layout/variants/saff_reclock_2g_pdk/summary.json",
+        "sha256": "87385fe74b9ee4ee342f0f069b8187047f148dce815b202a4b77ae7a6a2c670e",
+        "availability": "tracked"
+      },
+      {
+        "scope": "CP v4.1 局部物理复核",
+        "path": "results/layout/pll_cp/20261123_v4p1_sync/review/summary.json",
+        "sha256": "11ba2336427daccba31073e29c287c8eba5c250c689151f8bb3c9d7d0d5481e1",
+        "availability": "local_results"
+      },
+      {
+        "scope": "CP v4.1 物理复核 RCX",
+        "path": "results/layout/pll_cp/20261123_v4p1_sync/review/rc_summary.json",
+        "sha256": "580edf0f2cd1dfdfb9e32f923c971eb1855a085459f6e0586f04ef9aefa71154",
+        "availability": "local_results"
+      }
+    ],
+    "ldo": [
+      {
+        "scope": "v2_cur 物理摘要",
+        "path": "analog/ldo/layout/variants/v2_cur_pdk/summary.json",
+        "sha256": "4043c9e824d9437204561b163e55a8a8ddcb7cf7a6dd86419c9570d680b2385f",
+        "availability": "tracked"
+      },
+      {
+        "scope": "v2 电压参考前代校准表（闭环台用作 trim 输入）",
+        "path": "results/analog/common/ldo/v2/20261120T070822.297791Z_schem_pvt/summary.json",
+        "sha256": "e83e5188a59dd01f0e4e99da8ca2bbd231f8aad737f875bb065e491bfc54f62f",
+        "availability": "local_results"
+      },
+      {
+        "scope": "v2 电压参考前代终版 Option-B RCX",
+        "path": "results/analog/common/ldo/v2/20261120T130702.587460Z_pex_rcx/summary.json",
+        "sha256": "490eb5998616184587379f33b4b81e1bcdfb28f98f9b7856d1f0a5417fad9269",
+        "availability": "local_results"
+      }
+    ],
+    "bias": [
+      {
+        "scope": "v2 物理摘要",
+        "path": "analog/bias/layout/variants/v2_pdk/summary.json",
+        "sha256": "fbac0adf64eeb954be2d793d410d653a69dcd3c4017003a824c4bca60b37f167",
+        "availability": "tracked"
+      },
+      {
+        "scope": "原理图 PVT/AC",
+        "path": "results/analog/common/bias/v2/20261120T090254Z_pvt_ac/summary.json",
+        "sha256": "a644c669ce7253a6e5e686a4563c7891491df94b0b7082ba342c382a9400cfc8",
+        "availability": "local_results"
+      },
+      {
+        "scope": "缩略启动",
+        "path": "results/analog/common/bias/v2/20261120T090820Z_startup_fast/summary.json",
+        "sha256": "2c6d27349594966b37157e4cb24bf02fb68b155b7b78e471ebdc0e9b7d75a453",
+        "availability": "local_results"
+      },
+      {
+        "scope": "失配",
+        "path": "results/analog/common/bias/v2/20261120T091915Z_mc200/summary.json",
+        "sha256": "54a4e031b19f78940b40510d95cc26c32dff1796df78cbfe5e91b01b702f719e",
+        "availability": "local_results"
+      },
+      {
+        "scope": "CPEX/RCX",
+        "path": "results/analog/common/bias/v2/20261120T145746Z_postlayout/summary.json",
+        "sha256": "95fff8c542e5aeb3e748993d95c48cbad1e16b8c9ce6756d7bc03a8dcbefc60c",
+        "availability": "local_results"
+      }
+    ],
+    "tx": [
+      {
+        "scope": "原理图 MOS45，理想四相",
+        "path": "results/analog/tx/sst/20261120T163338Z_top16_pvt45/summary.json",
+        "sha256": "53b55943235fef273f3564bfae78b29940d73aa1d3b1394902c40e36e3339a2c",
+        "availability": "local_results"
+      },
+      {
+        "scope": "原理图后的 CPEX/RCX 结果与原提取身份；原 include 路径现有文件哈希已变",
+        "path": "results/analog/tx/sst/postlayout_v4_3/summary.json",
+        "sha256": "22648278449b96ab19a5c8ee4646972b19abe3a8c407c37717d6c094dbd80ab2",
+        "availability": "local_results"
+      },
+      {
+        "scope": "v4.3.1 泄放微修子 LDO 局部审阅",
+        "path": "results/layout/tx_sst_v4/review/sst_vdrv_ldo_pdk/summary.json",
+        "sha256": "2e60b93d4a0dec47e956280a007983ad11ade8c8708d8456604cc4767544eb80",
+        "availability": "local_results"
+      },
+      {
+        "scope": "v4.3.1 泄放微修驱动器物理复核",
+        "path": "results/layout/tx_sst_v4/review/serdes_tx_sst_driver_pdk/summary.json",
+        "sha256": "6a9b36b3b4b781a9bb4575245361f35247eb2781d6c73801d334aa3c991226af",
+        "availability": "local_results"
+      },
+      {
+        "scope": "v4.3.1 泄放微修完整 TX 物理复核",
+        "path": "results/layout/tx_sst_v4/review/serdes_tx_sst_top_pdk/summary.json",
+        "sha256": "f3ad6f407b2d93d943b9b9c2ef3fd1a79c2bbdba83549e5b502ae675a192e972",
+        "availability": "local_results"
+      }
+    ],
+    "rx": [
+      {
+        "scope": "Stage A 实时 TX→C2→RX，理想时钟",
+        "path": "results/analog/rx/cmos_rx/link/20261121T112319Z_stageA/summary.json",
+        "sha256": "e683e544eed54637da3ee415f921dddcbf827240942c660551093550e68d7b8a",
+        "availability": "local_results"
+      },
+      {
+        "scope": "Stage B 原理图 RX 回放逐角 TX→C2 PWL",
+        "path": "results/analog/rx/cmos_rx/link/20261121T152322Z_stageB/summary.json",
+        "sha256": "abe9b6c732563ad188cc173c76e1571d5b251e85a81132fcb5edbf733e91f675",
+        "availability": "local_results"
+      },
+      {
+        "scope": "RX v2.2 CPEX 回放压力点",
+        "path": "results/analog/rx/cmos_rx/postlayout_v2_2/20261122_rx_v2_2_final_3of3_pass/summary.json",
+        "sha256": "7942bd0c716dcda34d3c1265e6fcdc6773f9976597fb3511fc756646249002fb",
+        "availability": "local_results"
+      },
+      {
+        "scope": "RX PI CPEX TT 64 码",
+        "path": "results/analog/rx/cmos_rx/postlayout_v2_2/pi_cpex_v22g_64/summary.json",
+        "sha256": "b425556330891bc73c0b1b246fb7dda230d307da1318bfd6d61d353bd34d3966",
+        "availability": "local_results"
+      }
+    ],
+    "digital": [
+      {
+        "scope": "P&R、物理检查与 OpenRCX STA",
+        "path": "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json",
+        "sha256": "5b0fb6c4884b40670c05b1395130eb96d7471def963a9967fa35c10f7c35c01e",
+        "availability": "tracked"
+      },
+      {
+        "scope": "RTL golden + 三角 VCS SDF GLS",
+        "path": "results/digital/gls_v3_1/summary.json",
+        "sha256": "5d9cbe962eeb894afcc1d9a6516e07b2a56a35599673b95c427b826c78f86f98",
+        "availability": "local_results"
+      }
+    ],
+    "channel": [
+      {
+        "scope": "合成 PCB 通道家族定义",
+        "path": "config/channel_family.toml",
+        "sha256": "df19fd1b7feffb4dc4f494a247429756de555a7ee1387b5da0868f5003728c1a",
+        "availability": "tracked"
+      },
+      {
+        "scope": "C2 被动等效模型",
+        "path": "verification/models/channel/pcb_family/C2_loss6.spice",
+        "sha256": "118e373dc3f4c32557cb8f9fda34036fbc0701dd22c89fada9773d4f62aaa85c",
+        "availability": "tracked"
+      },
+      {
+        "scope": "S 参数与 SPICE 相关性",
+        "path": "docs/data/pcb_channel_family_validation.json",
+        "sha256": "406d87537138b3465866e994f6556869ae5f61185be185d85ed625212c400875",
+        "availability": "tracked"
+      }
+    ],
+    "floorplan": [
+      {
+        "scope": "21 个有效功能实例及阻尼 PDN 规划基线",
+        "path": "results/layout/chip_floorplan_20261123/summary.json",
+        "sha256": "f11101e9ec36e36144dcce87876570687609463d7a1001afd9753ddd6ae43a67",
+        "availability": "local_results"
+      },
+      {
+        "scope": "本机 full_v2 装配的核心布线、去耦与顶层 DRC 摘要",
+        "path": "results/layout/chip_top_20261123/full_v2/summary.json",
+        "sha256": "96303b46e5ca4705da99409e61b65522d039a2bb32c2a605d492e81d7c8f0721",
+        "availability": "local_results"
+      },
+      {
+        "scope": "本机 full_v2 Magic DRC 实际日志",
+        "path": "results/layout/chip_top_20261123/full_v2/magic_top.log",
+        "sha256": "443e06a5f8bd0c08e2b6ea454a32265ba15cdaee7249513e3ff3c3bbab6a4912",
+        "availability": "local_results"
+      }
+    ]
+  }
+}

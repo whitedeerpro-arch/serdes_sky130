@@ -7,7 +7,6 @@ Full-chip cells are deliberately outside this first leaf-level review.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 import shutil
@@ -18,7 +17,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(REPO / "verification/maintenance"))
 from check import exported_ports  # noqa: E402
+from repository_hygiene import digest, retirement_records  # noqa: E402
 
 PASSIVES = "analog/ldo/spice/ldo_passives.spice"
 CASES = [
@@ -33,46 +34,64 @@ CASES = [
 ]
 
 
-def imported_mags(manifest):
-    """Keep the historical import audit reproducible after a draft is retired."""
-    catalog = REPO / "results/catalog/retired_pll_top_20261117.json"
-    retired = {r["former_path"]: r for r in json.loads(catalog.read_text())["files"]} if catalog.exists() else {}
-    paths = []
-    for relative in manifest["imported_files"]:
-        if not relative.endswith(".mag"):
+def historical_input(relative: str, retired: dict[Path, dict]) -> Path:
+    """Resolve and verify a leaf from the original import or its retirement receipt."""
+    original = Path(relative)
+    candidates = [original]
+    if original.parts[:2] in (("analog", "bias"), ("analog", "ldo")):
+        # The import manifest uses the post-merge spelling; some receipts
+        # preserve the location before Bias and LDO moved out of common/.
+        candidates.append(Path("analog", "common", *original.parts[1:]))
+    for candidate in candidates:
+        record = retired.get(candidate)
+        if record is None:
             continue
-        path = REPO / relative
+        archive = record.get("archive") or record.get("archive_path")
+        if not archive:
+            raise ValueError(f"Missing archive path in retirement receipt: {candidate}")
+        path = REPO / archive
         if not path.is_file():
-            record = retired[relative]
-            path = (REPO / record["archive"]).resolve()
-            if not path.is_relative_to(REPO / "results") or hashlib.sha256(path.read_bytes()).hexdigest() != record["sha256"]:
-                raise ValueError(f"Retired import identity changed: {relative}")
-        paths.append(path)
-    return paths
+            raise FileNotFoundError(f"Archived import is unavailable: {path}")
+        if path.stat().st_size != record["bytes"] or digest(path) != record["sha256"]:
+            raise ValueError(f"Retired import identity changed: {candidate}")
+        return path
+    path = REPO / original
+    if not path.is_file():
+        raise FileNotFoundError(f"No live file or retirement receipt for imported input: {relative}")
+    return path
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output-dir", type=Path, required=True)
     args = ap.parse_args()
+    manifest = json.loads((REPO / "analog/layout/import.json").read_text())
+    retired = {path: row for _, path, row in retirement_records(REPO)}
+    mag_paths = [
+        historical_input(relative, retired)
+        for relative in manifest["imported_files"]
+        if relative.endswith(".mag")
+    ]
+    cases = [
+        (cell, f"{folder}/{cell}.mag", historical_input(f"{folder}/{cell}.mag", retired),
+         refs, [historical_input(ref, retired) for ref in refs])
+        for folder, cell, refs in CASES
+    ]
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=False)
     shutil.copy2(__file__, out / "review.py")
-    manifest = json.loads((REPO / "analog/layout/import.json").read_text())
-    mag_paths = imported_mags(manifest)
     report = {
         "scope": "initial six leaf cells; not full-chip validation",
         "imported_mag_count": len(mag_paths),
         "imported_mag_without_ports": sum(not re.search(r"^port ", p.read_text(), re.M) for p in mag_paths),
         "cases": [],
     }
-    for folder, cell, refs in CASES:
+    for cell, relative, source, refs, ref_paths in cases:
         work = out / cell
         work.mkdir()
-        source = REPO / folder / f"{cell}.mag"
         shutil.copy2(source, work / source.name)
         ref = work / "reference.spice"
-        ref.write_text("* Current design-side references, unchanged\n" + "\n".join((REPO / p).read_text() for p in refs))
+        ref.write_text("* Design-side references for the import review\n" + "\n".join(p.read_text() for p in ref_paths))
         proc = subprocess.run(
             [sys.executable, str(REPO / "verification/layout/check.py"), str(work), cell, "--ref", str(ref)],
             capture_output=True, text=True, check=False,
@@ -84,7 +103,7 @@ def main() -> None:
         drc = re.search(r"^DRC_TOTAL (\d+)$", log, re.M)
         shorted_caps = re.findall(r"^X\S+ (\S+) \1 sky130_fd_pr__cap_mim_m3_1\b", netlist, re.M)
         row = {
-            "cell": cell, "source": str(source.relative_to(REPO)), "references": refs,
+            "cell": cell, "source": relative, "source_sha256": digest(source), "references": refs,
             "full_rule_drc_boxes": int(drc[1]) if drc else None,
             "netgen_graph_match": "LVS_MATCH True" in log,
             "exported_ports": exported_ports(extracted, cell) if extracted.exists() else [],

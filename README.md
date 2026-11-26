@@ -1,29 +1,17 @@
 # Simple SerDes — SKY130A 1.8 V 4 Gb/s NRZ SerDes
 
-An open-source, transistor-level and layout-signed-off **4 Gb/s NRZ SerDes transceiver** designed in the **SkyWater SKY130A (130 nm CMOS, 1.8 V)** PDK using 100% open-source EDA flows (`ngspice 47`, `Magic`, `Netgen`, `OpenROAD` / `OpenRCX` / `OpenSTA`, `Yosys`, `Verilator` / `Icarus Verilog`) plus post-layout SDF gate-level signoff.
+An open-source **4 Gb/s NRZ SerDes** design in **SkyWater SKY130A (130 nm CMOS, 1.8 V)**. The v1.0 baseline covers subsystem verification and chip floorplanning. The transistor and physical implementation flows use ngspice 47, Magic, Netgen, OpenROAD, OpenRCX, OpenSTA, and Yosys. The published SDF gate-level regression uses Synopsys VCS.
 
-> **Architecture Highlight — 4 Gb/s Mainline (CMOS/SST TX & RX + 2 GHz CML Ring PLL)**:
-> - **Clocking (PLL v4)**: 250 MHz reference → 2 GHz 4-stage differential CML ring VCO (`r6` + PTAT `28/66` tail bias, `sym9_clean` CPEX 8-phase quadrature error `≤ 0.76 ps`) → active-servo wide-swing steering CP (`v4` / `v4.1`) → fused MIM1+MIM2 loop filter → SAFF-TSPC ÷8 prescaler + `r5` CML→CMOS receiver, powered by an isolated HV18 native-NMOS LDO (`v2_cur`) and folded-cascode bandgap/bias (`BIAS v2`).
-> - **TX (`tx_sst` v4.3)**: 16:4 static CMOS serializer + 4-phase N-over-N **Source-Series-Terminated (SST)** line driver (`0.44 V` sub-regulator, 28 slices = 23 Main + 5 Post-1 FFE) driving `100 Ω` differential PCB channels (`C0–C5`).
-> - **RX (`cmos_rx` v2.2)**: `100 Ω` on-die termination + 4-level tunable CTLE → 2 GHz 64-code pure-CMOS Phase Interpolator + 8-phase 1 GHz quadrature ÷2 → quarter-rate double-tail dynamic CMOS slicers (4 Data + 4 Edge) → 8→32 static CMOS deserializer.
-> - **Digital (`serdes_digital_top_v3` v3.1)**: Unified multi-rate `sky130_fd_sc_hd` macro (`250 MHz` TX/RX/Host, `125 MHz` 2nd-order BBPD CDR, `62.5 MHz` 5-bit PLL coarse/startup controller), `103,932 µm²`, `4,932` std cells, 3-corner OpenRCX STA MET + 4-mode SDF GLS (`122,608/122,608` SVA PASS, `0` sync violations).
-> - **Chip Floorplan**: **`845.4 × 601.4 µm = 0.5084 mm²`** core (`21` signed-off functional macros + `12` damped PDN decap banks, `957.9 pF` total on-chip capacitance, `0.0 µm²` overlap).
+## Architecture
 
-![Chip-Level Signed-Off Floorplan](docs/figures/system/serdes_chip_floorplan_20261123.png)
+- **Clocking** uses a 250 MHz reference and a four-stage 2 GHz differential CML ring PLL, with independent HV18 quiet supply and BIAS v2. The chip integration targets the SAFF-TSPC feedback divider and r5 CML-to-CMOS receiver.
+- **TX** uses a static CMOS 16:4 serializer and a four-phase N-over-N source-series-terminated (SST) driver with two-tap FFE.
+- **RX** uses on-die termination, CTLE, a CMOS phase interpolator, quarter-rate double-tail samplers, and separate 16-bit data and edge outputs.
+- **Digital** integrates PLL startup control, TX ingress, RX word alignment and CDC, and a multi-rate BBPD CDR.
 
-## 4 Gb/s First-Draft Signoff Summary
+![Chip floorplan and planned damped PDN](docs/figures/system/serdes_chip_floorplan_20261123.png)
 
-Project-wide authoritative status and exact verification boundaries are maintained in [docs/status/current.md](docs/status/current.md).
-
-| Subsystem | Signed-Off Revision | Physical Area (`µm²`) | DRC / LVS | Electrical / Post-Layout Verification | Design Doc |
-|---|---|---:|---|---|---|
-| **PLL v4** (VCO r6 PTAT + CP v4 + LF fused + PFD + SAFF-TSPC ÷8 + `r5` rx) | `pll_top_r6_v4_upgrade` | `32,684` (all PLL macros) | **0 / MATCH** | **7/7 PVT** closed-loop lock (`−4.75..+2.25 ppm`, `TT 1.91 ps` / worst `2.29 ps` RMS jitter, `35.8 mW` TT); `sym9_clean` CPEX 8-ph err `≤ 0.76 ps` | [pll_vco_r6_perf.md](docs/design/pll_vco_r6_perf.md), [pll_cp_v4.md](docs/design/pll_cp_v4.md), [pll_tspc_reclock_divider.md](docs/design/pll_tspc_reclock_divider.md) |
-| **LDO** (HV18 Native-NMOS Quiet Supply) | `ldo_hv18_v2_cur` (`v2_cur_pdk`) | `27,826` (+ `2,033` bias LPF) | **0 / MATCH** | Full PVT DC/AC/RCX verified (`v2_cur` + bleed trim `PM 58.3°` at light load, `quiet 1.781–1.797 V`) | [ldo_v2.md](docs/design/ldo_v2.md) |
-| **BIAS** (Bandgap + Distribution + Buffers) | `bias_v2` (`v2_pdk`) | `28,274` (top + local copies) | **0 / MATCH** | 135-corner PVT + 200-sample MC + RCX verified (`Vbg`, `Vcm`, `Ibias`, PTAT) | [bias_v2.md](docs/design/bias_v2.md) |
-| **TX** (CMOS/SST 16:1 SST + 2-tap FFE) | `tx_sst_v4` (`v4_pdk`, v4.3) | `34,026` (`231.5 × 147.0 µm`) | **0 / MATCH** | **22/22 RCX** post-layout corners PASS across `C2_loss6`; `pad_p/n = 46.5/42.9 fF` | [tx_sst_v4.md](docs/design/tx_sst_v4.md) |
-| **RX** (CMOS/SST CTLE + CMOS PI + 4×Q-rate DT Slicers + Deser16) | `rx_cmos_v2.2` (`v2_pdk`) | `47,932` (`245.3 × 195.4 µm`) | **0 / MATCH** | **45/45** schematic link + **3/3 CPEX** post-layout PASS (`0/64` data, `0/27..30` edge, `TT 36.1 mW`); PI 64-code TT CPEX `\|INL\| = 0.0177 UI` | [rx_cmos_v2.md](docs/design/rx_cmos_v2.md) |
-| **Digital Top** (PLL Ctrl + TX Ingress + RX Align/FIFO + BBPD CDR) | `serdes_digital_top_v3` (v3.1) | `103,932` (`338.1 × 307.4 µm`) | **0 / MATCH** | **3-corner OpenRCX STA** (6 clocks MET, `TNS = 0`); **4/4 VCS SDF GLS** PASS (`122,608` SVA, `0` sync violations, `±300 ppm` CDR) | [digital_top_v3.md](docs/design/digital_top_v3.md) |
-| **System Floorplan & Damped PDN** | `chip_floorplan_20261123` | `508,424` (`0.5084 mm²`) | 0 overlap | 21 functional macros (`59.5%`) + 12 damped MIM1+MIM2 decap banks (`761 pF`, `R_eq = 1.51 Ω`, `957.9 pF` grand total) | [chip_floorplan_20261123.md](docs/layout/chip_floorplan_20261123.md) |
+The [current status](docs/status/current.md) records measured results, stimulus and load boundaries, and open integration items. See the [adopted sources](config/mainline_working_revision.toml) and [fixed evidence index](results/catalog/v1_0_subsystem_evidence.json) for revision and result identity.
 
 ## Repository Layout
 
@@ -48,7 +36,7 @@ simple_serdes_fork1/
 └── web/design/         # Interactive browser-based design workbench
 ```
 
-> **Lightweight Pure-Source Git Policy**: Heavy binary/generated physical outputs (`*.gds`, `*.def`, `*_pg.v`, `*.mag`, `*.spef`, `*.sdf`, `*.fsdb`, vector `*.svg`, raw `results/**` waveforms) are `.gitignore`d to keep git clones fast and clean. Every `.mag` and `.gds` deliverable is **100% reproducible** from the tracked Python/OpenROAD generators in `analog/**/layout/` and `digital/pnr/`, and pre-built layout/GDSII archives are distributed via GitHub Releases.
+> Git carries the sources, compact summaries and selected previews. Generated layout and timing databases and raw waveforms are local artifacts. Use the module layout guides for generation inputs and tool requirements.
 
 ## Quick Start
 

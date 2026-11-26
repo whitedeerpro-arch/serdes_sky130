@@ -28,7 +28,7 @@ ASSETS = ROOT / "web/design"
 PHASES = {"planning", "model", "circuit", "validation", "conclusion"}
 TEXT_FIELDS = ("problem", "model", "changes", "validation", "conclusion")
 ALLOWED_TOP = {"docs", "config", "analog", "digital", "verification", "src"}
-ALLOWED_EXT = {".md", ".toml", ".json", ".spice", ".cir", ".in", ".sv", ".py", ".csv", ".tsv", ".png", ".svg", ".pdf", ".dot", ".txt"}
+ALLOWED_EXT = {".md", ".toml", ".json", ".spice", ".cir", ".in", ".sv", ".f", ".py", ".csv", ".tsv", ".png", ".svg", ".pdf", ".dot", ".txt"}
 
 
 class Workspace:

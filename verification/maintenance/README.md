@@ -12,7 +12,7 @@ uv run python verification/maintenance/repository_hygiene.py audit
 
 检查同时读取 `results/catalog/retired_*.json` 的 `files[].former_path`，拒绝已清退文件重新出现在源码区（包括软链接）。旧大环顶层、旧整包生成器与失效总览因此不会被悄悄恢复。退役清单记录明确判定过的文件，不按文件年龄或所有未提交文件自动删除。下方 `archive` 只搬运行产物；重新出现的退役文件需复核来源，不能直接当作原件覆盖归档。
 
-在装有本地归档的工作区，使用 `uv run python verification/maintenance/repository_hygiene.py verify-retired` 核对退役文件的大小和 SHA-256。归档路径和各清单的恢复线索见[结果索引](../../results/catalog/README.md#退役索引)。普通 Git 检出可独立执行上面的 `audit`。
+在装有本地归档的工作区，使用 `uv run python verification/maintenance/repository_hygiene.py verify-retired` 核对退役文件的大小和 SHA-256。归档路径和各清单的恢复线索见[结果索引](../../results/catalog/README.md#波形归档与历史退役清单)。普通 Git 检出可独立执行上面的 `audit`。
 
 需要清理时显式给新目录：
 

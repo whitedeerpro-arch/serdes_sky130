@@ -97,3 +97,15 @@
 固定 `postlayout_v4_3` 汇总的 Stage 1 是驱动器 ZQ/S11，各有 6 项 CPEX 与 RCX。后续完整 TX 用 128-bit 载荷和理想四相时钟，分别验证 6 项 RLC16 CPEX、2 项 C2 CPEX（FFE=3）与 2 项 RLC16 RCX（FFE=0），十项的有效窗口均有正确位序和零错位。引用汇总时保留测试层级、寄生视图和通道。[发布证据索引](../../results/catalog/v1_0_subsystem_evidence.json)
 
 v4.3.1 将 TX 内部 `sst_vdrv_ldo` 的 `Xrbleed` 缩至 `5.0 µm`。本机独立物理收据已核对该几何及其参考，当前完整 TX 摆位外框为 `232.52 × 150.58 µm`。旧后仿汇总的四个提取输入哈希与现有同路径文件不同。下一次电气回归需冻结微修后的提取输入，并保留独立运行目录。[执行计划](../status/prelayout_plan.md)
+
+---
+
+## 6. 5.0 Gb/s 双速演进变体（`v5_pdk`，2026-11-26 签核）
+
+面向 5.0 Gb/s / 4.0 Gb/s 双速 Plan-C 路线，独立构建并签核了 5G SST 发射机顶层 **`v5_pdk`**（配加固 `V_drv` LDO `v4p5_pdk`）：
+
+- **源码与交付物**：[tx_sst_top_5g.spice](../../analog/tx/sst/spice/tx_sst_top_5g.spice) · [tx_sst_driver_5g.spice](../../analog/tx/sst/spice/tx_sst_driver_5g.spice) · [tx_sst_serializer16_5g.spice](../../analog/tx/sst/spice/tx_sst_serializer16_5g.spice) · [build_tx_sst_v5_pdk.py](../../analog/tx/sst/layout/build_tx_sst_v5_pdk.py) · [v5_pdk/summary.json](../../analog/tx/sst/layout/variants/v5_pdk/summary.json) · [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)
+- **物理与后仿签核**：
+  - 顶层宏 **`256.8 × 169.58 µm`**、38 端口、Magic `DRC = 0`、Netgen `LVS = MATCH`；
+  - **真 CPEX 16/16（12 路 5.0 Gb/s + 4 路 4.0 Gb/s）全通**：焊盘边沿散布 `0.006–0.145 UI`，位中心裕量 `100.1–226.7 mV`，`V_drv` 纹波 `≤ 44.3 mVpp`（零冷角直通）；
+  - 配套 **`v4p5_pdk` TX `V_drv` LDO**：3/3 偏角 CPEX 相位裕度 `71.1°–85.2°`，200× `TT/SS 85 °C` CPEX MC `3σ ≤ 15.60 mV`。

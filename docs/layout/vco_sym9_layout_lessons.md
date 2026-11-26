@@ -1,20 +1,22 @@
 # Ring VCO + CML Buffer 版图设计经验与模型绘图准则（2026-11-15）
 
-**紧凑 Ring VCO＋四路缓冲核的几何为 108.6 × 79.8 µm，原型 DRC/LVS 通过；2026-11-15 独立审阅发现 216 个浮空 field-poly 岛，现有独立清理候选。物理布局、寄生后量程及启动数值边界以 [模块审阅](../../analog/pll/vco/layout/review.md) 为准，不能由本页的几何经验推定性能通过。**
+**4G 环振对照基线（`pll_vco_core_sym9_s32p5_clean`）的紧凑几何为 `108.6 × 79.8 µm`，清理版 [sym9_clean](../../analog/pll/vco/layout/variants/sym9_clean/README.md) 已移除早期原型的 216 个浮空 field-poly 岛并通过 DRC/LVS/CPEX 核验。物理布局、寄生后量程及启动数值边界以 [模块审阅](../../analog/pll/vco/layout/review.md) 为准，不能由本页的几何经验推定性能通过。**
 
-本页汇总 `pll_vco_core_sym9_s32p5` 迭代过程中的物理架构决策、版图配平技巧与 DRC/LVS 避坑规范，供后续接手模型直接复用。
+本页汇总 `pll_vco_core_sym9_s32p5` 迭代过程中沉淀的 SKY130A 模拟版图配平技巧与 DRC/LVS 避坑规范，适用于 4G 环振维护与 5G 模拟宏迭代复用。
 
 ---
 
 ## 1. 交付产物与验证基线
 
-| 层级单元 | 生成脚本 | 规划脚本与图 | 版图渲染图 | 尺寸与面积 | 验证状态 |
-|---|---|---|---|---|---|
-| 5-bit 9 块融合电容阵列 (`pll_vco_cap_bank5_sym9_s32p5`) | [build_cap_bank5_sym9_pdk.py](../../analog/pll/vco/layout/build_cap_bank5_sym9_pdk.py) | [plan_cap_bank.py](../../analog/pll/vco/layout/plan/plan_cap_bank.py) / [cap_bank_plan.png](../../analog/pll/vco/layout/plan/cap_bank_plan.png) | cap_bank5_sym9_w075.png (`../../analog/pll/vco/layout/variants/sym9_pdk/views/cap_bank5_sym9_w075.png`, retired in `retired_legacy_vars_20261120.json`) | `37.48 × 16.70 µm` (`625.92 µm²`) | `DRC = 0, LVS = True` |
-| 含嵌合变容管半谐振腔 (`pll_vco_half_tank_sym9_s32p5`) | [build_half_tank_sym9_pdk.py](../../analog/pll/vco/layout/build_half_tank_sym9_pdk.py) | [plan_delay_stage.py](../../analog/pll/vco/layout/plan/plan_delay_stage.py) | half_tank_sym9_s32p5.png (`../../analog/pll/vco/layout/variants/sym9_pdk/views/half_tank_sym9_s32p5.png`, retired in `retired_legacy_vars_20261120.json`) | `38.18 × 16.70 µm` (`637.61 µm²`) | `DRC = 0, LVS = True` |
-| 单级 Delay + CML Buffer + 8 列电阻核 (`pll_vco_delay_buf_sym9_c`) | [build_vco_core_sym9_pdk.py](../../analog/pll/vco/layout/build_vco_core_sym9_pdk.py) | [plan_vco_core_buf.py](../../analog/pll/vco/layout/plan/plan_vco_core_buf.py) / [vco_core_buf_plan.png](../../analog/pll/vco/layout/plan/vco_core_buf_plan.png) | delay_buf_core_sym9_c.png (`../../analog/pll/vco/layout/variants/sym9_pdk/views/delay_buf_core_sym9_c.png`, retired in `retired_legacy_vars_20261120.json`) | `37.81 × 34.88 µm` (`1,318.81 µm²`) | `DRC = 0, LVS = True` (10 器件 / 11 网络) |
-| 4 级 Ring VCO 裸核 (`pll_vco_ring4_sym9_s32p5`) | [build_vco_ring4_sym9_pdk.py](../../analog/pll/vco/layout/build_vco_ring4_sym9_pdk.py) | [plan_vco_ring4.py](../../analog/pll/vco/layout/plan/plan_vco_ring4.py) / [vco_ring4_plan.png](../../analog/pll/vco/layout/plan/vco_ring4_plan.png) | vco_ring4_sym9_s32p5.png (`../../analog/pll/vco/layout/variants/sym9_pdk/views/vco_ring4_sym9_s32p5.png`, retired in `retired_legacy_vars_20261120.json`) | `101.0 × 79.8 µm` (`8,059.80 µm²`) | `DRC = 0, LVS = True` (172 器件 / 93 网络) |
-| 4 级 Ring VCO + 4× CML Buffer 完整核 (`pll_vco_core_sym9_s32p5`) | [build_vco_core_sym9_pdk.py](../../analog/pll/vco/layout/build_vco_core_sym9_pdk.py) | [plan_vco_core_buf.py](../../analog/pll/vco/layout/plan/plan_vco_core_buf.py) / [vco_core_buf_plan.png](../../analog/pll/vco/layout/plan/vco_core_buf_plan.png) | vco_core_sym9_s32p5.png (`../../analog/pll/vco/layout/variants/sym9_pdk/views/vco_core_sym9_s32p5.png`, retired in `retired_legacy_vars_20261120.json`) | `108.6 × 79.8 µm` (`8,666.28 µm²`) | `DRC = 0, LVS = True` (192 器件 / 105 网络) |
+当前采用清理变体见 [sym9_clean](../../analog/pll/vco/layout/variants/sym9_clean/README.md)（早期原型预览图已归档至 `results/catalog/retired_legacy_vars_20261120.json`）：
+
+| 层级单元 | 生成脚本 | 规划脚本与图 | 尺寸与面积 | 验证状态 |
+|---|---|---|---|---|
+| 5-bit 9 块融合电容阵列 (`pll_vco_cap_bank5_sym9_s32p5`) | [build_cap_bank5_sym9_pdk.py](../../analog/pll/vco/layout/build_cap_bank5_sym9_pdk.py) | [plan_cap_bank.py](../../analog/pll/vco/layout/plan/plan_cap_bank.py) / [cap_bank_plan.png](../../analog/pll/vco/layout/plan/cap_bank_plan.png) | `37.48 × 16.70 µm` (`625.92 µm²`) | `DRC = 0, LVS = True` |
+| 含嵌合变容管半谐振腔 (`pll_vco_half_tank_sym9_s32p5`) | [build_half_tank_sym9_pdk.py](../../analog/pll/vco/layout/build_half_tank_sym9_pdk.py) | [plan_delay_stage.py](../../analog/pll/vco/layout/plan/plan_delay_stage.py) | `38.18 × 16.70 µm` (`637.61 µm²`) | `DRC = 0, LVS = True` |
+| 单级 Delay + CML Buffer + 8 列电阻核 (`pll_vco_delay_buf_sym9_c`) | [build_vco_core_sym9_pdk.py](../../analog/pll/vco/layout/build_vco_core_sym9_pdk.py) | [plan_vco_core_buf.py](../../analog/pll/vco/layout/plan/plan_vco_core_buf.py) / [vco_core_buf_plan.png](../../analog/pll/vco/layout/plan/vco_core_buf_plan.png) | `37.81 × 34.88 µm` (`1,318.81 µm²`) | `DRC = 0, LVS = True` (10 器件 / 11 网络) |
+| 4 级 Ring VCO 裸核 (`pll_vco_ring4_sym9_s32p5`) | [build_vco_ring4_sym9_pdk.py](../../analog/pll/vco/layout/build_vco_ring4_sym9_pdk.py) | [plan_vco_ring4.py](../../analog/pll/vco/layout/plan/plan_vco_ring4.py) / [vco_ring4_plan.png](../../analog/pll/vco/layout/plan/vco_ring4_plan.png) | `101.0 × 79.8 µm` (`8,059.80 µm²`) | `DRC = 0, LVS = True` (172 器件 / 93 网络) |
+| 4 级 Ring VCO + 4× CML Buffer 完整核 (`pll_vco_core_sym9_s32p5_clean`) | [build_vco_core_sym9_pdk.py](../../analog/pll/vco/layout/build_vco_core_sym9_pdk.py) | [plan_vco_core_buf.py](../../analog/pll/vco/layout/plan/plan_vco_core_buf.py) / [vco_core_buf_plan.png](../../analog/pll/vco/layout/plan/vco_core_buf_plan.png) | `108.6 × 79.8 µm` (`8,666.28 µm²`) | `DRC = 0, LVS = True` (192 器件 / 105 网络) |
 
 ---
 

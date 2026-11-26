@@ -1,9 +1,15 @@
-# 波形显示
+# 绘图与可视化脚本（`verification/plotting/`）
 
-[TX完整入口](../../docs/figures/tx/ingress/README.md)：`tx_parallel_serializer.py --collect <campaign>`可重复采集固定动态点，独立重读raw核对逐位/映射；眼图保留最差采样位；pad自2026-11-08起标为门槛（GATE），remote为比较screen。`tx_ingress_timing.py --collect`核对固定STA报告，无参数从小JSON重画；均不启动仿真。
+本目录维护当前 4 Gb/s `v1.0` 与 5 Gb/s Plan-C 核心签核图表和 ISSCC 风格电路示意图的生成脚本。生成图表汇总见 [docs/figures/README.md](../../docs/figures/README.md)；2 UI 眼图显示约定（总宽 2 UI、向右平移 0.5 UI、边界回绕断线，不改变原始测量与判定指标）见 [测量约定](../../docs/verification/measurement_conventions.md#2-ui-眼图显示)。
 
-[当前时钟链路图集](../../docs/figures/clocking/README.md)：`uv run python verification/plotting/current_clocking.py` 从已入库的小数据快照重画 7 组图；加 `--collect` 从显式列出的原始 campaign 采集。只读历史仿真，来源和测量代码哈希写入快照与结果索引。
+| 脚本 | 作用与主要输出 |
+|---|---|
+| [plot_5g_characterization.py](plot_5g_characterization.py) | 绘制 5.0 Gb/s 演进子系统表征汇总与对比图 |
+| [plot_stacked_schematics.py](plot_stacked_schematics.py) | 生成 ISSCC 风格叠层切片原理图（[`docs/figures/schematics/`](../../docs/figures/schematics/)：`tx_sst_stacked_slices`、`rx_pi_stacked_slices`） |
+| [plot_rx_pi_schematic.py](plot_rx_pi_schematic.py) | 生成 2 GHz 64 码纯 CMOS PI 工作原理解析图（[`rx_pi_schematic_explained.png`](../../docs/figures/rx/pi/rx_pi_schematic_explained.png)） |
+| [rx_cmos_v2_signoff.py](rx_cmos_v2_signoff.py) | 从已保存结果生成 RX CMOS v2 四合一签核图（[`rx_cmos_v2_signoff.png`](../../docs/figures/rx/rx_cmos_v2_signoff.png)） |
+| [tx_sst_v4.py](tx_sst_v4.py) | 从已保存结果生成 TX SST v4 眼图与 45 角对比图（[`tx_sst_v4_eyes.png`](../../docs/figures/tx/tx_sst_v4_eyes.png)） |
+| [tspc_divider_study.py](tspc_divider_study.py) | 生成 SAFF-TSPC ÷8 四架构多角度对比图（[`tspc_reclock_multiangle.png`](../../docs/figures/clocking/dividers/tspc_reclock_multiangle.png)） |
+| [saff_reclock_waveforms.py](saff_reclock_waveforms.py) | 生成 SAFF-TSPC ÷8 `v2` 双端原生 RCX 波形图（[`saff_reclock_v2_waveforms.png`](../../docs/figures/clocking/dividers/saff_reclock_v2_waveforms.png)） |
 
-当前2UI眼图显示约定见 [配置](../../config/eye_display.toml)：横向平移0.5UI，中央一个完整眼、左右各半眼。重排原绘图采样点，并在坐标回绕处断线；原始波形、训练延迟、UI、采样点和判定指标不变。
-
-[TX PVT显示器](tx_pvt_eye_display.txt)从已有结果重画当前两组眼图。历史运行目录内的绘图程序仍保留原来的视图，不批量改写历史实验。
+所有绘图脚本只读已有仿真数据或固定几何/网表描述，不自动启动 SPICE 仿真。

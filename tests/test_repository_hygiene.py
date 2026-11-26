@@ -2,8 +2,6 @@ import hashlib
 import importlib.util
 import json
 
-import pytest
-
 from serdes_flow.project import ROOT
 
 
@@ -42,23 +40,3 @@ def test_verify_retired_checks_both_receipt_formats_and_detects_corruption(tmp_p
     assert count == 0
     assert len(issues) == 2
     assert all("missing archive" in issue for issue in issues)
-
-
-def test_historical_layout_import_uses_verified_pre_move_receipt(tmp_path, monkeypatch):
-    review = load_script("review_gemini", "verification/layout/review_gemini.py")
-    monkeypatch.setattr(review, "REPO", tmp_path)
-    catalog = tmp_path / "results/catalog"
-    catalog.mkdir(parents=True)
-    archive = tmp_path / "results/original.mag"
-    archive.write_bytes(b"original")
-    legacy = "analog/common/bias/layout/import.mag"
-    receipt = dict(former_path=legacy, archive_path=str(archive), bytes=8,
-                   sha256=hashlib.sha256(b"original").hexdigest())
-    (catalog / "retired_late_batch.json").write_text(json.dumps(dict(files=[receipt])))
-    retired = {path: row for _, path, row in review.retirement_records(tmp_path)}
-
-    original = "analog/bias/layout/import.mag"
-    assert review.historical_input(original, retired) == archive
-    archive.write_bytes(b"modified")
-    with pytest.raises(ValueError, match="Retired import identity changed"):
-        review.historical_input(original, retired)

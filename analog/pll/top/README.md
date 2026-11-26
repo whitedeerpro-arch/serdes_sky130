@@ -1,31 +1,22 @@
-# PLL 集成与闭环
+# PLL 顶层集成、闭环台与环路模型（`analog/pll/top/`）
 
-行为级先验证架构，再在晶体管级及提取后复查；相邻模块集成与系统测试分开。
+本目录维护 4.0 Gb/s PLL v4 顶层电路网表、晶体管级闭环验收台，以及供 4G / 5G 环路共用的线性环路/相噪/电源抑制理论模型。完整架构与最新结论见 [docs/design/pll_loop.md](../../../docs/design/pll_loop.md)、[docs/design/pll_vco_r6_perf.md](../../../docs/design/pll_vco_r6_perf.md) 与 [docs/status/current.md](../../../docs/status/current.md)；5.0 Gb/s 八边形 LC-VCO 与双速分频器独立入口见 [`../vco_5g/README.md`](../vco_5g/README.md) 与 [`../divider/README.md`](../divider/README.md)。
 
-当前 [PLL v4 闭环台](tb/lock_v4/verify_pll_v4_closed_loop.py) 使用 [v4 顶层](spice/pll_top_r6_v4_upgrade.spice)、固定粗码和双节点预充。发布结果的反馈路径是 `clock_frontend_r6q` 的 CML ÷8，片级目标 `r5` + SAFF-TSPC 的独立结果与后续验证见[当前状态](../../../docs/status/current.md)。
+## 现行顶层网表
 
-片级 [v4.2 候选](spice/pll_top_r6_v4p2_saff.spice) 使用四路 `r5` 直接驱动八相时钟，由 `c1/c5` 经加固 SAFF ÷8 反馈。[v4.2 测试台](tb/verify_pll_v4p2_saff.py)覆盖固定粗码、预充后短窗功能。正式判锁、带 TX/RX 负载、从零冷启分开验收。功耗比较需固定起停状态、负载并统一供电轨求和。 [片级证据](../../../results/catalog/chip_integration_20261124.json)
+| 文件 | 作用与边界 |
+|---|---|
+| [`spice/pll_top_r6_v4_upgrade.spice`](spice/pll_top_r6_v4_upgrade.spice) | **4G `v1.0` 发布闭环顶层**：VCO `r6` + PTAT `28/66` + `CP v4` + `LF k4` + `PFD sc_dly` + `HV18 v2_cur` + 冻结 `clock_frontend_r6q`（7/7 角通过 320 ns 工程锁定合同） |
+| [`spice/pll_top_r6_v4p2_saff.spice`](spice/pll_top_r6_v4p2_saff.spice) | **片级反馈 `v4.2` 候选顶层**：4× `r5` 直接驱动八相时钟，由 `c1/c5` 经加固 SAFF ÷8 `v2_cand` 反馈 |
+| [`spice/pll_core_r6k4q.spice`](spice/pll_core_r6k4q.spice) · [`spice/clock_frontend_r6q.spice`](spice/clock_frontend_r6q.spice) | `r6` 分域安静核与冻结前端参考子电路 |
 
-## 历史集成试验
+## 闭环测试台与理论脚本
 
-已有相邻模块原型、PFD/CP/LF 开环联调和混合视图闭环捕获；真实 VCO 加平衡 dummy 的反馈链已完成 TT 预充后持续工程判锁观察，LF 仍为理想 R/C。
-新结果见 [LF预充与PLL捕获](../../../docs/history/pll_precharge_capture.md)，不代表 PVT、噪声或提取后签核。
-新跑的近锁定原生PLL另保存所有VCO相位及CML slave/master分频节点，供[实际分发buffer联调](../../../docs/history/physical_clock_distribution_results.md)使用；该记录不重定义原来的捕获时间。
-接口见 [架构](../../../docs/overview/architecture.md)，闭环分层结果见 [PLL 首轮调试](../../../docs/history/pll_first_debug.md)。
-原理图从 [pll_balanced_core.sch](schematic/pll_balanced_core.sch) 进入，图册与导出方法见 [原理图说明](../../../docs/history/schematics.md)。
-
-spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。
-
-| 测试项 | 层次 | 收集指标 |
+| 位置 | 层次 | 说明 |
 |---|---|---|
-| [pfd_cp](tb/pfd_cp/case.toml) | integration | net_charge_vs_phase, source_sink_polarity, minimum_effective_pulse |
-| [pfd_cp_lf](tb/pfd_cp_lf/case.toml) | integration | cycle_charge, control_voltage, ripple；不含 VCO 闭环 |
-| vco_divider (`tb/vco_divider/case.toml`, retired in `retired_legacy_vars_20261120.json`) | integration | vco_frequency, feedback_frequency, division_ratio, interface_swing |
-| acquisition (`tb/acquisition/case.toml`, retired in `retired_legacy_vars_20261120.json`) | system | lock_time, frequency_error, phase_error, cycle_slips, control_voltage, power |
-| [tracking](tb/tracking/case.toml) | system | tracking_bandwidth, peaking, phase_margin, recovery_time |
-| [jitter](tb/jitter/case.toml) | system | tie_rms, period_jitter_rms, cycle_to_cycle_jitter_rms, jitter_psd |
-| [spurs](tb/spurs/case.toml) | system | reference_spur, harmonic_spurs, control_voltage_ripple |
+| [`tb/lock_v4/verify_pll_v4_closed_loop.py`](tb/lock_v4/verify_pll_v4_closed_loop.py) | system | **4G PLL v4 主线 7 角闭环锁定验收台**（按 [pll_lock_screen.toml](../../../verification/contracts/pll_lock_screen.toml) 评分） |
+| [`tb/verify_pll_v4p2_saff.py`](tb/verify_pll_v4p2_saff.py) | system | `v4.2`（4× `r5` + 加固 SAFF ÷8）固定粗码、预充后短窗功能筛查（见 [chip_integration_20261124.json](../../../results/catalog/chip_integration_20261124.json)） |
+| [`tb/frontend_r6/run.py`](tb/frontend_r6/run.py) | integration | `r6` VCO + 前端缓冲与分频器开环表征 |
+| [`theory/`](theory/) | analytical | 环路选型（`loop_design.py`）、闭环相噪合成（`pll_noise.py`）、CDR 抖动滤波（`cdr_jitter.py`）、电源分接与 LDO 纹波容限（`loop_psrr.py`、`supply_split.py`、`supply_tolerance.py`、`ldo_supply_tolerance.py`、`recode_transient.py`） |
 
-结果：`results/analog/pll/top/<case>/<run_id>/`。状态以各 case.toml 和结果中的视图、条件为准，不能将测试目录存在解释为规格已通过。
-
-双节点预充、CP使能与RTL接管监督候选见[启动优化](../../../docs/history/pll_startup_optimization.md)；旧核心保留，完整原生冷启动和测量前端待验证/实现。
+所有运行结果追加写入 `results/analog/pll/top/`，接口约定见 [docs/overview/architecture.md](../../../docs/overview/architecture.md)。

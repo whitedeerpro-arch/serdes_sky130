@@ -1,21 +1,14 @@
-# 环路滤波器
+# PLL 环路滤波器（`analog/pll/loop_filter/`）
 
-当前初选无源双电容结构；元件值为候选，夹具注明 CP 源阻抗与 VCO 负载。
+4.0 Gb/s PLL v4 主线与 5.0 Gb/s Plan-C 共享的二阶无源 `k = 4` 环路滤波器（`Rz = 4.13 kΩ`、`Ci = 18.38 pF` 12/6 电源分接、不另加 `Cf`、配双节点普通 NMOS + LVT PMOS 预充传输门）。完整环路选型、电源分接推导与验证记录见 [docs/design/pll_loop.md](../../../docs/design/pll_loop.md)。
 
-已有无源双电容原型：`spice/passive_rc.spice`，接口 `cp_in vctrl vss`，
-输入并联 2 pF，并接 6.5 kΩ 串联 40 pF 到地。数值为理想 R/C 预算，尚未映射到工艺无源器件。
-独立 AC/注入电荷测试及实际 PFD/CP 驱动测试见 [结果](../../../docs/history/pfd_cp_lf_results.md)。
-平均模型的环路交越/相位裕量仅为初步估计，不代表真实 PLL 锁定或噪声已验证。
-两个电容从冷态经实际传输门建立的时间及预充后的捕获见 [预充/捕获记录](../../../docs/history/pll_precharge_capture.md)。
+## 现行源码、版图与测试台
 
-spice/ 保存晶体管或无源实现，behavioral/ 保存行为模型，schematic/ 保存原理图，layout/ 保存版图，tb/ 保存测试。
+| 文件 / 目录 | 角色与状态 |
+|---|---|
+| [`spice/passive_rc_pdk_k4.spice`](spice/passive_rc_pdk_k4.spice) | **主线 PDK `k = 4` 环路滤波器**（`res_high_po_0p69` + 18 颗显式实例化 1 pF `cap_mim_m3_1`，12 接 `VDD` / 6 接 `VSS` + 双节点预充门） |
+| [`spice/passive_rc_precharge.spice`](spice/passive_rc_precharge.spice) | 早期理想 R/C 双节点预充原型参考 |
+| [`layout/README.md`](layout/README.md) · [`layout/variants/fused_pdk/`](layout/variants/fused_pdk/README.md) | 融合 6 站点 MIM1+MIM2 叠层 PDK 版图 `v2`（`6,382 µm²`，`DRC=0 / LVS=MATCH`，`ctrl` 寄生较离散 MIM 降 `−41.4%`；审阅见 [`layout/review.md`](layout/review.md)） |
+| [`tb/layout_pex/run.py`](tb/layout_pex/run.py) | 原理图 / CPEX / 原生 RCX 的 AC 阻抗与双节点预充对比验证脚本 |
 
-| 测试项 | 层次 | 收集指标 |
-|---|---|---|
-| [impedance](tb/impedance/case.toml) | block | transimpedance, poles, zeros |
-| [transient](tb/transient/case.toml) | block | control_voltage_step, ripple, settling_time |
-
-结果：`results/analog/pll/loop_filter/<case>/<run_id>/`；实际驱动测试在 `pll/top/tb/pfd_cp_lf/`。
-尚无工艺无源器件映射或完整 PLL 稳定性/噪声验证，最终规格仍为 ungraded。
-
-新增passive_rc_precharge.spice直接预充ctrl/z两状态；同源阻抗比较及关断扰动见[启动优化](../../../docs/history/pll_startup_optimization.md)。
+注意：SKY130A 中 `cap_mim_m3_1` 的 `mf` 参数仅进入失配项而不乘名义电容，见 [docs/verification/statistics.md](../../../docs/verification/statistics.md#sky130a-失配与高阻多晶硅热噪声边界pdk-实测核对)。所有运行输出追加写入 `results/analog/pll/loop_filter/`。

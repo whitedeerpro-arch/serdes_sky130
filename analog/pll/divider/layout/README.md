@@ -1,14 +1,14 @@
-# PLL ÷8 版图入口
+# PLL 分频器版图入口（`analog/pll/divider/layout/`）
 
-本目录按接口族分别保留最近 2 个可用版图变体（旧版 `variants/pdk/`、中间未布线 `variants/sync2_pdk/` 及失败候选 `variants/cmos_sync_2g_pdk/` 已于 2026-11-20 归档退役，见 [divider_retirement_20261120.md](../../../../docs/history/divider_retirement_20261120.md)）。主线 CML 布局与寄生后审阅见 [review.md](review.md)，不以生成时 DRC/LVS 摘要替代电气验收。
+本目录维护 5G 双速 A/B 分频器与 4G SAFF-TSPC 重定时 ÷8 的 SKY130A PDK 版图生成器及签核交付物；电气验证口径见 [pll_feedback_data_dividers.md](../../../../docs/design/pll_feedback_data_dividers.md)、[pll_tspc_reclock_divider.md](../../../../docs/design/pll_tspc_reclock_divider.md) 与 [serdes_5g_signoff_20261126.json](../../../../results/catalog/serdes_5g_signoff_20261126.json)。
 
-## 当前保留变体
+## 当前保留变体与生成器
 
-| 家族 | 目录 / 变体 | 生成器 | 状态与定位 |
-|---|---|---|---|
-| **CML（11 端口）Var 1** | [variants/review_clean/](variants/review_clean/README.md) | [build_prescaler8_pdk.py](build_prescaler8_pdk.py) + `clean_field_poly.py` | 撤除浮空 field-poly 的 r3 双翼 CML ÷8 与轻 dummy 候选；`LAYOUT-PLL-DIV-RC-01` 原全量 RC 疑点继续暂停 |
-| **CML（11 端口）Var 2** | `variants/sync2_routed/`（已归档） | [build_sync_prescaler8_pdk.py](build_sync_prescaler8_pdk.py)、[route_sync2_blocks.py](route_sync2_blocks.py)、[route_sync2_top.py](route_sync2_top.py) | 2-Stack 同步 CML ÷8 布线候选（[pll_pending_review_20261117.md](../../../../docs/layout/pll_pending_review_20261117.md) 标注尚未完成电气身份验收） |
-| **CMOS/TSPC（10 端口）Var 1** | `variants/cmos_2g_pdk/`（已归档） | [build_cmos_prescaler8_2g_pdk.py](build_cmos_prescaler8_2g_pdk.py) | 级联 C²MOS 纹波 ÷8 基线版图，供 `r5_pdk` 联合验收与对照 |
-| **CMOS/TSPC（10 端口）Var 2** | [variants/saff_reclock_2g_pdk/](variants/saff_reclock_2g_pdk/README.md) | [build_saff_reclock_prescaler8_2g_pdk.py](build_saff_reclock_prescaler8_2g_pdk.py) | **v2 交错紧邻 SAFF-TSPC 重定时 ÷8**（`1,705.31 µm²`，DRC=0 / LVS=MATCH，45 角 CPEX 45/45 功能通过、44/45 `< 30 ps`，`RCX_BOTH` 5/5，`fs_v1650_t85_mm` 200/200 MC 通过；`ss_v1650_t-40_mm` `Xtg2` 边界见 [设计报告](../../../../docs/design/pll_tspc_reclock_divider.md)） |
+| 变体目录 | 生成器 | 状态与定位 |
+|---|---|---|
+| [`variants/div_ab_5g_v2_pdk/`](variants/div_ab_5g_v2_pdk/)（[`summary.json`](variants/div_ab_5g_v2_pdk/summary.json)） | [`build_div_ab_5g_v2_pdk.py`](build_div_ab_5g_v2_pdk.py) | **5G Plan-C 双速 A/B 分频器（`÷8 / ÷10`）**：`DRC=0 / LVS=MATCH / M5=0%`，6/6 角（12/12）CPEX + 50/50 `SS −40 °C` MC 100% PASS（早期初版保留在 `variants/div_ab_5g_pdk/`） |
+| [`variants/saff_reclock_2g_pdk/`](variants/saff_reclock_2g_pdk/README.md) | [`build_saff_reclock_prescaler8_2g_pdk.py`](build_saff_reclock_prescaler8_2g_pdk.py) | **4G 主线 SAFF-TSPC 重定时 ÷8 (`v2`)**：`97.335 × 17.520 µm = 1,705.31 µm²`，`DRC=0 / LVS=MATCH`，45/45 CPEX 功能通过、`RCX_BOTH` 5/5；静态 LVT XOR 加固候选见 [`variants/saff_reclock_2g_v2_pdk/`](variants/saff_reclock_2g_v2_pdk/) |
+| [`variants/review_clean/`](variants/review_clean/) | — | 历史 r3 双翼 CML ÷8 物理清理参考快照（原全量 RC 分支 `LAYOUT-PLL-DIV-RC-01` 已暂停） |
+| — | [`build_cmos_prescaler8_2g_pdk.py`](build_cmos_prescaler8_2g_pdk.py) | 历史级联 C²MOS 纹波 ÷8 生成器参考 |
 
-其余文件：`plan/` 保存早期摆位/通道规划（尺寸以选定 `.mag` 为准）；[build_divider_pdk.py](build_divider_pdk.py) 为旧叶单元原型脚本；[layout_pex/run.py](../tb/layout_pex/run.py) 为 2 GHz 实际 buffer + CML ÷8 + 提取接收器联合台；固定证据索引见 [pll_layout_review_divider_20261115.json](../../../../results/catalog/pll_layout_review_divider_20261115.json)。
+已退役的早期变体（`pdk`、`sync2_routed`、`cmos_sync_2g_pdk`、`cmos_2g_pdk` 等）均按 SHA-256 归档于 [`retired_divider_vars_20261120.json`](../../../../results/catalog/retired_divider_vars_20261120.json) 与 [`retired_pre_release_20261123.json`](../../../../results/catalog/retired_pre_release_20261123.json)。

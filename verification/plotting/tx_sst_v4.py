@@ -21,6 +21,24 @@ from serdes_flow import project, serial, spice
 ROOT = project.ROOT
 SST_RESULTS = ROOT / "results/analog/tx/sst"
 LEGACY_POWER = ROOT / "docs/work_packages/deliveries/POWER-20261110/evidence.json"
+# Archived 45-corner legacy All-CML TX mean power (mW) from POWER-20261110/evidence.json
+LEGACY_TX_POWER_MW_45: dict[str, float] = {
+    "fs_v1650_t85": 86.15166941429149, "fs_v1650_t-40": 87.69380682432308, "fs_v1650_t27": 87.77291037953388,
+    "ss_v1650_t85": 86.60830189830602, "ss_v1650_t-40": 93.10715527969232, "ss_v1650_t27": 88.24167803677857,
+    "sf_v1650_t85": 93.36134305245187, "sf_v1650_t-40": 95.31288135712396, "sf_v1650_t27": 95.11408085958848,
+    "tt_v1650_t85": 89.90879906169945, "tt_v1650_t-40": 91.84653427848849, "tt_v1650_t27": 91.67343730206387,
+    "ff_v1650_t85": 93.09905107647702, "ff_v1650_t-40": 95.15414084217669, "ff_v1650_t27": 94.90083754445577,
+    "fs_v1800_t85": 97.19236649955872, "fs_v1800_t-40": 99.91874686822660, "fs_v1800_t27": 99.29653313199171,
+    "ss_v1800_t85": 97.57549391041738, "ss_v1800_t-40": 100.27366991882683, "ss_v1800_t27": 99.67433172736595,
+    "sf_v1800_t85": 104.23120736847297, "sf_v1800_t-40": 106.99848314320046, "sf_v1800_t27": 106.37888197983457,
+    "tt_v1800_t85": 100.76293014957260, "tt_v1800_t-40": 103.45999663813220, "tt_v1800_t27": 102.85783716402224,
+    "ff_v1800_t85": 103.88616674366808, "ff_v1800_t-40": 106.64291718492973, "ff_v1800_t27": 106.02187631789835,
+    "fs_v1950_t85": 108.08064367115298, "fs_v1950_t-40": 111.51618040352756, "fs_v1950_t27": 110.53024347222181,
+    "ss_v1950_t85": 108.47028646636910, "ss_v1950_t-40": 111.76860256329277, "ss_v1950_t27": 110.89500468325802,
+    "sf_v1950_t85": 115.28701722682895, "sf_v1950_t-40": 118.66848243145343, "sf_v1950_t27": 117.76857833059563,
+    "tt_v1950_t85": 111.62499082331367, "tt_v1950_t-40": 114.98386703852324, "tt_v1950_t27": 114.09887486206680,
+    "ff_v1950_t85": 114.93155059091073, "ff_v1950_t-40": 118.28542296006951, "ff_v1950_t27": 117.38341657066853,
+}
 OUT_FIG = ROOT / "docs/figures/tx/tx_sst_v4_eyes.png"
 
 UI = 250e-12
@@ -107,7 +125,10 @@ def main():
     p45_dir = args.pvt45 or latest_dir("top16_pvt45")
     s1 = json.loads((s1_dir / "summary.json").read_text())
     p45 = json.loads((p45_dir / "summary.json").read_text())
-    legacy = json.loads(LEGACY_POWER.read_text())["tx"]
+    if LEGACY_POWER.exists():
+        legacy = json.loads(LEGACY_POWER.read_text())["tx"]
+    else:
+        legacy = {k: {"mean_power_mw": v} for k, v in LEGACY_TX_POWER_MW_45.items()}
 
     bits_top = np.array(json.loads((p45_dir / "bits.json").read_text()), dtype=int)
     bits_s1 = np.array(json.loads((s1_dir / "bits.json").read_text()), dtype=int)

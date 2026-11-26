@@ -2,9 +2,9 @@
 
 **结论。** 尺寸设计 = 拓扑已定，选参数（W/nf/L、R、C、偏置电流、偏置比例、编码），使所有约束在 45 个 PVT 条件下同时成立、最坏余量最大、代价最小。做法是"粗模型求解 + 仿真校准"的迭代：先用实测卡和理想模型解约束问题，再用 SPICE 测试台验证，把两者之差写回模型或放松中间指标，重复到收敛。行业里这类方法叫基于模型的尺寸设计（仿真在环），迭代结构即代理模型优化 / space mapping；以最坏余量为目标的问题叫设计定心。
 
-**现状。** 流程各步都有可用的脚本，但靠手工串联；共享库有时序部分（[`serdes_flow.balance`](../../src/serdes_flow/balance.py)）和 TT 器件卡查表（[`serdes_flow.devices`](../../src/serdes_flow/devices.py)）；统一的约束/求解/校准接口尚未建立（见文末缺口）。
+**现状。** 两阶段复用工具链（[`serdes_flow.gmid`](../../src/serdes_flow/gmid.py) + [`serdes_flow.opt`](../../src/serdes_flow/opt.py)）已落地，详见 [模拟尺寸与多目标优化工具指南](optimization_toolkit.md)；共享库同时包含结构时序平衡（[`serdes_flow.balance`](../../src/serdes_flow/balance.py)）、器件卡查表（[`serdes_flow.devices`](../../src/serdes_flow/devices.py)）与鲁棒 Pareto 筛选（[`serdes_flow.robust_sizing`](../../src/serdes_flow/robust_sizing.py)）。
 
-多目标/离散叶目录的一个局部实例见[VCO bank鲁棒优化](../design/vco_bank_optimization.md)：明确工艺角与概率的区别、校准策略、ε约束和有限不劣集；公共[`robust_sizing`](../../src/serdes_flow/robust_sizing.py)提供Pareto筛选及带最低宽度的S/α分配，不取代电路评估器或完整良率优化。
+多目标/离散叶目录的典型实例见 [VCO bank 鲁棒优化证据](../../results/catalog/vco_bank_optimization.json)：明确工艺角与概率的区别、校准策略、ε 约束和有限不劣集；公共 [`robust_sizing`](../../src/serdes_flow/robust_sizing.py) 提供 Pareto 筛选及带最低宽度的 S/α 分配，不取代电路评估器或完整良率优化。
 
 ## 流程
 
@@ -57,7 +57,7 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 
 ## 拓扑在哪一层起作用
 
-拓扑 / 架构选择是 sizing 之前的单独一层：spec → 候选结构（经验、文献、器件卡上的结构可行性，如共模范围、失配代价、比例结构能否消掉全局偏差）→ 选定 → sizing。示例：[偏置架构](../design/bias.md#架构方案2026-11-03)。失配与良率预算见 [统计与蒙特卡洛](statistics.md)。
+拓扑 / 架构选择是 sizing 之前的单独一层：spec → 候选结构（经验、文献、器件卡上的结构可行性，如共模范围、失配代价、比例结构能否消掉全局偏差）→ 选定 → sizing。示例：[BIAS v2 偏置架构](../design/bias_v2.md)。失配与良率预算见 [统计与蒙特卡洛](statistics.md)。
 
 尺寸设计在固定拓扑下进行。拓扑决定约束的形状：有些约束是**结构性的**，调尺寸永远满足不了，只能换结构。
 
@@ -68,32 +68,28 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 拓扑问题出现在两种尺度上：
 
 - **器件级（几个管子组成一个单元）。** 堆叠层数、负载类型、偏置方式决定电压余量预算：串联路径上各管 Vdsat 与摆幅之和不超过最低电源。这和时序的 `Budget` 是同一种关系（路径之和不超过上限）。
-  - 例：三层堆叠 CML 锁存器。尾管改为低过驱动后，窗口下沿下移约 0.26 V。
-  - 两层、折叠、PMOS 负载、C²MOS 等候选的比较见 [锁存器结构探索](../history/cml_latch_topology_experiments.md)。
+  - 例：三层堆叠 CML 锁存器尾管改为低过驱动后，窗口下沿下移约 0.26 V；在更低电源或高压摆率下最终进一步向纯 CMOS / Double-Tail 动态采样器（[RX CMOS v2](../design/rx_cmos_v2.md)）及 SAFF-TSPC 分频器（[SAFF-TSPC ÷8](../design/pll_tspc_reclock_divider.md)）演进。
 - **模块级（几个单元组成一个模块）。** 路径组成和实例共享决定 PVT 漂移能否对消。
-  - 例 1：TX 选择时钟比较了 S0–S5 六种构造。S4（同步计数器 + 2G 复制单元）让四路都是"同一 VCO 沿 + 一次 clk→q"，组成相同，漂移对消，`lambda_max ≥ 4`；逐级 ÷2 的方案怎么调尺寸都留有漂移。见 [TX 时钟构造比较](../design/tx_clock_distribution.md#时钟构造结构比较)。
-  - 例 2：RX 采样时钟用源跟随器平移时，时钟共模随工艺漂，锁存器窗口随 VDD 漂，两者方向不同。调跟随器尺寸只能补约 80 mV，需要 200–280 mV，是结构问题；换成隔直后共模由 k·VDD 决定，问题消失。
+  - 例 1：早期 CML TX 选择时钟比较了 S0–S5 六种构造。S4（同步计数器 + 2G 复制单元）让四路都是"同一 VCO 沿 + 一次 clk→q"，组成相同，漂移对消，`lambda_max ≥ 4`；逐级 ÷2 的方案怎么调尺寸都留有漂移。主线现已演进为 CMOS/SST 16:4 串化架构（[TX SST v4](../design/tx_sst_v4.md)）。
+  - 例 2：早期 CML RX 采样时钟用源跟随器平移时，时钟共模随工艺漂，锁存器窗口随 VDD 漂，两者方向不同。调跟随器尺寸只能补约 80 mV，需要 200–280 mV，是结构问题；换成隔直后共模由 k·VDD 决定，问题消失。
 
 ## 现有工具
 
 | 流程步骤 | 工具 |
 |---|---|
 | PVT 网格 | [`serdes_flow.corners`](../../src/serdes_flow/corners.py) |
-| 时序约束与求解 | [`serdes_flow.balance`](../../src/serdes_flow/balance.py)，元件库 [`config/timing_elements.json`](../../config/timing_elements.json)；用例 [clock_structures.py](../../analog/tx/clock_distribution/theory/clock_structures.py)、[fit_elements.py](../../analog/tx/clock_distribution/theory/fit_elements.py)；方法见 [结构时序平衡分析](methods.md#结构时序平衡分析) |
-| 实测卡：锁存器时钟共模窗口 | [headroom_op/window.py](../../analog/rx/sampler/tb/headroom_op/window.py)：理想静态输入，扫时钟共模，求所有导通器件 Vds − Vdsat ≥ 50 mV 的区间；`--dff`、`--ck-half`、`--bias` 改尺寸、时钟幅度和偏置 |
-| 实测卡：链路偏置余量图 | [headroom_op/op.py](../../analog/rx/sampler/tb/headroom_op/op.py)：整条采样链路的工作点，45 条件约 1 分钟；`--dut`、`--param` |
-| 实测卡：时钟通路 | [clock_ac/sweep.py](../../analog/rx/sampler/tb/clock_ac/sweep.py)：PI → 时钟接口 → 锁存器，测各级摆幅、栅极共模、占空比、时钟导向比例；`--variant` 一次比较多组尺寸 |
-| 实测卡：PI 摆幅 | [PI rotation](../../analog/rx/pi/tb/rotation/pvt.py) 的 summary |
-| 粗模型 + 求解 | [clock_interface_plan.py](../../analog/rx/sampler/theory/clock_interface_plan.py)：隔直时钟接口的行为模型，网格穷举驱动方式 × Cc × 时钟对宽度 × 分压比 |
-| 评估器 | [link_pvt/pvt.py](../../analog/rx/sampler/tb/link_pvt/pvt.py)（`--dut stock|ac`、`--param`），readout_pvt，CTLE/PI 的 PVT 测试台 |
-| 单元卡：CMOS DFF | [cmos_dff_card/card.py](../../analog/common/devices/tb/cmos_dff_card/card.py)：1 GHz 时钟，数据跳变从沿前 400 ps 扫到沿后 250 ps（10 ps 步），给出 clk→q（上升/下降）、建立、保持、两级反相器延迟；`--cell reset|dff`，45 条件约 3 分钟 |
+| 两阶段 $g_m/I_D$ + 多角代理优化 | [`serdes_flow.gmid`](../../src/serdes_flow/gmid.py)、[`serdes_flow.opt`](../../src/serdes_flow/opt.py)、[`serdes_flow.robust_sizing`](../../src/serdes_flow/robust_sizing.py)；用法见 [优化工具指南](optimization_toolkit.md) |
+| 时序约束与求解 | [`serdes_flow.balance`](../../src/serdes_flow/balance.py)；方法见 [结构时序平衡分析](methods.md#结构时序平衡分析) |
 | 无源 / 双极卡 | [passive_card/card.py](../../analog/common/devices/tb/passive_card/card.py)：high_po / xhigh_po / generic_po 电阻、MIM、PNP（VBE、ΔVBE）随 tt/ll/hh/ss/ff 与 −40…85 °C；温度系数、角偏差、一阶带隙估计；约 1 分钟 |
 | 失配卡与 MC | [mismatch_card/card.py](../../analog/common/devices/tb/mismatch_card/card.py)（`<corner>_mm`，200 样本约 30 s）：MOS 对的 A_VT、电阻对 σ(ΔR/R)、PNP（模型无失配）；运行器 [`serdes_flow.mc`](../../src/serdes_flow/mc.py)（`mc_source` 每样本约 0.2 s，可复现种子）；统计 [`serdes_flow.stats`](../../src/serdes_flow/stats.py)（容差区间 k 系数、Clopper–Pearson 良率区间、Pelgrom 拟合、平方和预算） |
-| 器件卡 | [gmid/card.py](../../analog/common/devices/tb/gmid/card.py)：nfet / nfet_lvt / pfet（L 0.15–2 µm）、pfet_lvt（L 0.35–4 µm，模型最小 0.35 µm），\|Vgs\| × \|Vds\| × \|Vsb\| 0/0.3/0.6 V × 温度，BSIM4 工作点值（gm、gds 不是差分）；一个工艺角约 25 s。`DeviceCard.at_gmid(dev, L, gmid, vds)` 给 Id/W、gm/gds、ft、Cgg/W、Vgs、Vdsat |
-| 负载 / 扇出检查 | [`serdes_flow.loading`](../../src/serdes_flow/loading.py)（读网表 [`serdes_flow.netlist`](../../src/serdes_flow/netlist.py)，不仿真）：展开子电路，按器件卡的单位宽度栅电容和显式电容汇总每个节点的负载，带电阻负载的 CML 节点给出 R·C 极点，并列出最大的几个负载来自哪个实例。经验规则：时钟节点极点 ≥ 2 倍时钟频率；环路内部节点（分频器主从、锁存器）不直接带外部负载。`uv run python -m serdes_flow.loading <subckt>` |
-| 运行设施 | `spice.run_many`；`spice.case_output` / `next_run_dir`（按工况续跑：超时或被杀的仿真只补缺的工况；`t_end` 把提前中止写出的截断波形算作缺失）；[`serdes_flow.watch`](../../src/serdes_flow/watch.py)（健康探针：正常 / 停滞 / 报错 / 进程消失 / 失败）；`serdes_flow.boundary` |
+| 器件卡 | [gmid/card.py](../../analog/common/devices/tb/gmid/card.py) 与 [build_atlas.py](../../analog/common/devices/tb/gmid/build_atlas.py)：nfet / nfet_lvt / pfet（L 0.15–2 µm）、pfet_lvt（L 0.35–4 µm，模型最小 0.35 µm），\|Vgs\| × \|Vds\| × \|Vsb\| × 温度，BSIM4 工作点值；查表 [`serdes_flow.devices`](../../src/serdes_flow/devices.py) |
+| 网表解析与运行设施 | [`serdes_flow.netlist`](../../src/serdes_flow/netlist.py)；`spice.run_many`；`spice.case_output` / `next_run_dir`（按工况续跑，`t_end` 防截断误判）；[`serdes_flow.watch`](../../src/serdes_flow/watch.py)（健康探针）；[`serdes_flow.boundary`](../../src/serdes_flow/boundary.py) |
 
-## 实例：RX 采样器时钟接口（2026-11-01）
+## 历史方法实例
+
+以下早期 CML/CMOS 模块的定尺寸迭代保留作方法学参考（对应主线电路已演进至 [RX CMOS v2 / 5G](../design/rx_cmos_v2.md)、[SAFF-TSPC / 5G A/B 分频器](../design/pll_feedback_data_dividers.md) 与 [TX SST v4 / v5](../design/tx_sst_v4.md)）。
+
+### 实例 1：早期 CML RX 采样器时钟接口（2026-11-01）
 
 | 步骤 | 内容 |
 |---|---|
@@ -103,63 +99,58 @@ spec ──► 指标 ──► 约束 + 粗模型 ──► 求解 ──► �
 | 求解 | k = 0.634（共模余量 ≥ 150 mV）；源跟随器幅度不够，选 CML 300 Ω / 1 mA、Cc 0.6 pF、W32；预测栅极 76–120 mV 单端峰值 |
 | 仿真 | 工作点 45/45 过，最差尾管余量 157 mV（原 −225 mV）。buffer 增益约 1.27（模型约 2），栅极 198–409 mVpp，**中间指标没达到**；压力角窗口 0.81–1.00 UI（原最差 0.06 UI），**指标达到** |
 | 校准 | CML 增益模型偏乐观约 1.6 倍。器件卡（TT）显示直流 gm 并未高估：输入对实际 gm 7.5 mS，gm·R = 2.24，模型的 I/0.15 V 给 6.7 mS 反而略保守；差距来自 2 GHz 处的输出极点（300 Ω × 约 0.25 pF）和接近完全翻转的大信号压缩，模型里两者都没有。PI 输出被 buffer 输入负载拉低约 10 %。300 mVpp 保留：测试台没有寄生、失配、噪声，以后 shrink 隔离电阻也会消耗幅度 |
-| 待做 | 45 条件确认；用校准后的模型重新求解 buffer（目标：SS 热角栅极 ≥ 300 mVpp），用 [clock_ac/sweep.py](../../analog/rx/sampler/tb/clock_ac/sweep.py) 验证，再回链路复测；本地偏置比例校准（尾电流 327–485 µA，名义 510 µA） |
 
 教训：2 GHz 下的增益模型必须带输出极点和大信号压缩；器件卡给出 gm 和电容，极点由它们算出。顶层指标达到而中间指标未达时，记为未达，不据此放松。
 
-### 第二轮：时钟 buffer（同日）
+#### 第二轮：时钟 buffer（同日）
 
 | 步骤 | 内容 |
 |---|---|
 | 指标 | 栅极 ≥ 300 mVpp（压力角最差 SS/FS 1.65 V 85 °C）；每个条件的共模余量 ≥ 50 mV，按该条件的预测幅度；功耗最小 |
-| 卡片 | 单变量扫描（[clock_ac/sweep.py](../../analog/rx/sampler/tb/clock_ac/sweep.py)，10 组 × 6 压力角，约 12 分钟）：单改一个参数都到不了 300 mVpp；PI 输出 FF 冷 / SS 热之比 2.16，线性 buffer 原样传递。窗口卡扩到单端 0.3 V：幅度最大的 FF 1.95 V −40 °C 窗口也最宽（0.3 V 时余量 179 mV），所以比值本身不是约束。四个工艺角的器件卡（Vsb 网格扩到 0.9 V） |
-| 粗模型 | [clock_buffer_model.py](../../analog/rx/sampler/theory/clock_buffer_model.py)：PI 源（开路幅度 + 源端电容，600 Ω）→ buffer（器件卡 gm/电容，tanh 大信号，输出 RC 按谐波求稳态）→ 电容分压；14 个未知量 |
+| 卡片 | 单变量扫描（10 组 × 6 压力角，约 12 分钟）：单改一个参数都到不了 300 mVpp；PI 输出 FF 冷 / SS 热之比 2.16，线性 buffer 原样传递。窗口卡扩到单端 0.3 V：幅度最大的 FF 1.95 V −40 °C 窗口也最宽（0.3 V 时余量 179 mV），所以比值本身不是约束。四个工艺角的器件卡（Vsb 网格扩到 0.9 V） |
+| 粗模型 | PI 源（开路幅度 + 源端电容，600 Ω）→ buffer（器件卡 gm/电容，tanh 大信号，输出 RC 按谐波求稳态）→ 电容分压；14 个未知量 |
 | 拟合 / 留出 | 用 5 组拟合（RMS 3.5 %），**留出的 5 组预测误差最大 4.0 %，平均 2.1 %**；拟合出的栅电容 130–194 fF、PI 源端约 100 fF、buffer 寄生 1.3 fF/µm |
 | 求解 | 保护带 4 %：最省电可行解在扫描范围边上（R 600 Ω、1.53 mA，I·R 超出实测范围），属于外推 |
 | 验证 | 4 个点：W40/600 Ω/1.53 mA/0.45 pF 预测 327、实测 323（−1 %），通过；两个 W60 点误差 −5 %、−7 %（超出保护带，一个没过）；模型判不可行的 1.28 mA 点实测 287，判断正确。外推误差来自 PI 负载：W60 时 Miller 使输入电容随增益增大，PI 输出比模型低 |
-| 选定 | c2：输入管 40 µm、600 Ω、1.53 mA、Cc 0.45 pF；压力角栅极 323–865 mVpp；工作点 45/45，buffer 尾管余量 ≥ 293 mV |
-| 收敛 | 链路 45 条件：窗口 ≥ 0.5 UI（压力角 0.88–1.00 UI），栅极 325–866 mVpp，全部达标；c2 写为单元默认值。见 [RX 采样器](../design/rx_pi_sampler.md#采样器-pvtc2-回放--ctle-eq3--pi--四相采样) |
+| 收敛 | c2（W40 / 600 Ω / 1.53 mA / Cc 0.45 pF）在历史 CML 采样器链 45 条件全部达标：压力角窗口 0.88–1.00 UI，栅极 325–866 mVpp |
 
 方法验证小结（两轮）：第一轮模型缺物理项（极点、压缩），误差约 1.6 倍；补上物理结构后，第二轮在扫描范围内留出误差 ≤ 4 %，外推误差 5–7 %。保护带取留出误差、验证点覆盖模型判定的边界，能把外推风险暴露出来。
 
-## 实例：RX CMOS 1:4（2026-11-02）
+### 实例 2：RX CMOS 1:4 读出解串（2026-11-02）
 
 结构层面的一次完整流程：单元卡决定拓扑，时序模型在仿真前发现结构错误。
 
 | 步骤 | 内容 |
 |---|---|
 | 指标 | 32 位逐位正确；位映射在 45 条件相同且是一个连续 16 UI 窗口；每条路径建立/保持余量为正（按该条件的 tcq / tsu / th） |
-| 单元卡 | [cmos_dff_card](../../analog/common/devices/tb/cmos_dff_card/card.py)：原复位 DFF clk→q 171–635 ps，大于半个 1 GHz 周期 → 半周期路径在 SS 冷角不可行（结构判定，不是尺寸问题）。换拓扑：精简 TG 主从 DFF，clk→q 37–159 ps |
-| 粗模型 | [readout_deser_plan.py](../../analog/rx/sampler/theory/readout_deser_plan.py)：每类路径（同沿移位、计数器、选通重定时、装载、输出对 w）的余量公式，输入为卡片和 p2 实测时钟半周期 |
+| 单元卡 | 原复位 DFF clk→q 171–635 ps，大于半个 1 GHz 周期 → 半周期路径在 SS 冷角不可行（结构判定，不是尺寸问题）。换拓扑：精简 TG 主从 DFF，clk→q 37–159 ps |
+| 粗模型 | 每类路径（同沿移位、计数器、选通重定时、装载、输出对 w）的余量公式，输入为单元卡和实测时钟半周期 |
 | 结构检查 | 手推每个字寄存器装载的位：原选通方案 16 位不连续（ckqb 路少移一拍）→ 改用 J1 选通。仿真前发现 |
 | 验证 | TT 映射与预测逐位一致；输出对 w 预测 1577 / 1578 ps，实测（扣孔径）1580 / 1619 ps；45 条件 4960 个数据位与 2466 个确定边沿全部正确，映射处处相同，输出对 w ≥ 1518 / 1565 ps（模型最差 1447 / 1521，偏保守） |
 | 剩余风险 | 同沿移位寄存器保持余量 42 ps（FF 冷），版图时钟偏斜预算 |
 
 教训：单元卡里的时间参数（clk→q 的 PVT 跨度、孔径位置）决定哪些路径类型可用，应先于电路确定；多相位、多选通的结构要先在纸面上推一遍位映射。
 
-## 实例：CML ÷2 保持管（2026-11-06）
+### 实例 3：CML ÷2 保持管可行区图（2026-11-06）
 
-**先在单元上画可行区图，比全链手动试快得多，也更能说明原因。** 读出 ÷2 在 FS 1.65 V 85 °C hh 失败后，先后手动试了跟随器电流和宽度、负载 R、时钟对宽度、隔直电容，都只能部分改善。改成 [div2_map](../../analog/pll/divider/tb/div2_map/run.py) 后，不到 15 分钟就看出是保持管，并由自激频率解释了全部现象。
+**先在单元上画可行区图，比全链手动试快得多，也更能说明原因。** 早期 CML ÷2 在 FS 1.65 V 85 °C hh 失败后，先后手动试了跟随器电流和宽度、负载 R、时钟对宽度、隔直电容，都只能部分改善。改成单级 ÷2 可行区图扫描后，不到 15 分钟就看出是保持管，并由自激频率解释了全部现象。
 
 - **模型。** 输入：时钟共模和摆幅（接口）、器件尺寸、工艺角。输出：分频是否正确、输出摆幅、尾电流、自激频率。十几秒一个点，不含上下游。
 - **校准。** 图的预测和全链探针差 ≤ 5 mVpp，所以候选接口不用再跑全链，只看它落在图上哪一点。
 - **历史约束要带着理由走。** W 80 是为已不存在的 400 MHz 模式选的；理由没有写进约束，尺寸沿用到 hh 才暴露。
 - **耦合在模型里才看得见。** 慢级要大的保持管、快级要小的：同一单元的三级不该同尺寸。
 
-## 缺口
+## 缺口与边界
 
-### 当前TX实践的边界（2026-11-11）
+### 联合建模教训
 
-[缓冲链审计](../design/tx_buffer_sizing.md)区分了“幅度规划”与“完整sizing”：TT/FS幅度模型及局部卡已有，但尚无时序、输出级负载与45条件的联合求解。首级14.4、后四级15.6/R320的候选八位窗满足，完整FS焊盘散布0.179857UI失败，SS冷角extra最高435.89mVpp偏离旧400mV目标，尚不构成物理失败证据。内部上界正在[复核](../design/cml_swing_target.md)，TT也不是所有幅度的最强条件。先补消费方时序卡、模式相关输出响应和跨边界误差；缺失模型输出不得当作零惩罚或宣布可行。统一求解接口仍是缺口，不因有拟合和预选profile枚举就视作已经建立。
-
-[需求卡与动态模型](../design/tx_retime_demand.md)已开始补这一步：消费方保留整个记录载荷及当前实际驱动，先通过两角原样波形/逐沿校准，再扰动输入相位和幅度；缓冲前四级则保留真正的尺寸留出组，并区分单级和连续推演误差。需求卡输入变化不等于物理尺寸已实现，部分动态模型也不等于联合求解已完成。
+早期 CML TX 缓冲链实践区分了“单级幅度规划”与“完整 sizing”：仅有幅度静态模型而不包含消费方时序需求、模式相关输出响应和跨级动态误差时，局部幅度通过仍可能在完整 45 角眼图散布上失败。因此缺失的下游模型输出不得当作零惩罚，必须在代理优化循环中显式包含负载与边界角联合评估（见 [`serdes_flow.opt`](../../src/serdes_flow/opt.py)）。
 
 ### 公共设施
 
 - **器件卡的其余部分。** gm/ID 四角、失配（Pelgrom）、电阻 / MIM / PNP 角与温度已建；噪声（1/f 系数）未建；PNP 模型没有失配项，带隙的 VBE 失配只能按文献估计。
 - **消费方需求卡。** 例如采样窗口随时钟幅度的变化、锁存器需要的时钟导向比例。用来量化余量（指标与实测最低需求之差），不用来自动下调指标。
-- **方法有效性验证。** 拿一个小模块完整走一遍流程，不限于本 SerDes。最好选有公开参考设计的基准电路，例如两级 Miller 运放（几何规划尺寸设计文献的标准例子）。记录迭代次数、每轮模型误差、是否收敛，以及与参考结果的差距。
-- **统一接口。** 计划 `serdes_flow.sizing`：指标（带来源）、约束、模型（带校正因子和适用范围）、求解器（穷举 / scipy）、评估器适配、校准记录、放松与收敛判断。`balance` 作为时序约束接入，不重写。
+- **闭环协同验证。** 代理优化收敛后的候选点仍须通过对应模块 45 条件 SPICE 及后仿 CPEX/RCX 签核，不以代理模型自身预测替代仿真验收。
 
 ## 适用范围与假设
 

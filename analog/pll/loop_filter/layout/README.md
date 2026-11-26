@@ -4,7 +4,7 @@
 
 | 位置 | 职责 |
 |---|---|
-| [build_lf_pdk.py](build_lf_pdk.py) / `variants/pdk/`（已归档） | 原 18 个 MIM1、Rz 与双节点预充 |
+| `variants/pdk/`（已归档） | 原 18 个 MIM1、Rz 与双节点预充（已由 `fused_pdk` 取代并归档于 `retired_pre_release_20261123.json`） |
 | [build_lf_fused_pdk.py](build_lf_fused_pdk.py) / [variants/fused_pdk/](variants/fused_pdk/README.md) | 六站点 MIM1＋MIM2 叠层、独立参考 |
 | [plan/](plan/) | 摆位规划，不代表已完成跨块 ctrl 线 |
 | [layout_pex/run.py](../tb/layout_pex/run.py) | AC、预充分别执行；每次输出到新的结果目录 |

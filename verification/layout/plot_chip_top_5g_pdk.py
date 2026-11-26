@@ -233,7 +233,7 @@ def main() -> None:
     ap.add_argument("--work-dir", type=Path, default=REPO / "results/layout/chip_top_5g_20261126/plan_v4p1")
     ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--theme", choices=("dark", "light"), default="dark")
-    ap.add_argument("--digital-variant", choices=("v4p1", "v4"), default="v4p1")
+    ap.add_argument("--digital-variant", choices=("v4p1",), default="v4p1")
     args = ap.parse_args()
     out = args.out or (args.work_dir / f"serdes_5g_top_silicon_{args.theme}.png")
     render_chip_top_5g(args.work_dir.resolve(), out.resolve(), theme=args.theme, digital_variant=args.digital_variant)

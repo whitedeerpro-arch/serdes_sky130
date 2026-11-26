@@ -1,18 +1,18 @@
 * Full Integrated 5.0 Gb/s Zero-CML (CMOS) SerDes Receiver Top-Level Netlist (`serdes_rx_cmos_top_5g_pdk`)
-* SKY130A, 1.8 V, 100% real SKY130A PDK active/res/cap devices + real extracted 8.252 nH stacked CTLE inductor.
+* SKY130A, 1.8 V, 100% real SKY130A PDK active/res/cap devices + real extracted compact 8.204 nH M4+M2 stacked CTLE inductor.
 *
 * Dependencies:
 *   sky130_primitives.spice, sky130_pfet_lvt.spice, bias_v2.spice,
-*   rx_ctle_pdk.spice (for serdes_rx_term_pdk), rx_ctle_shunt_5g_pdk.spice,
-*   rx_pi_4ph_iq_5g_cand.spice, rx_dt_sampler.spice, rx_cmos_deser16.spice.
+*   rx_ctle_pdk.spice (for serdes_rx_term_pdk), rx_ctle_shunt_5g_pdk.spice (for serdes_rx_ctle_shunt_5g_w3_pdk),
+*   rx_pi_4ph_iq_5g_v3.spice, rx_dt_sampler_5g.spice, rx_cmos_deser16.spice.
 *
-* Sub-blocks integrated:
-*   1. serdes_rx_term_pdk          : PDK-mapped 50 Ohm split RX input termination to BIAS v2 Vcm (1.05 V)
-*   2. serdes_bias_ctle_v2         : BIAS v2 local CTLE LVT diode mirror (nfet_lvt 8/0.5 nf=4)
-*   3. serdes_rx_ctle_shunt_5g_pdk : 5.0 Gb/s shunt-peaked PDK CTLE + 8.252 nH stacked inductor (2-bit EQ)
-*   4. serdes_rx_pi_4ph_iq_8ph     : 2.5 GHz 4->8 octature front-end + 64-code pure CMOS PI + 1.25 GHz QDiv2
-*   5. 8x serdes_rx_dt_slicer      : Quarter-rate 1.25 GHz Double-Tail dynamic CMOS slicers (mid-code 32 trim)
-*   6. serdes_rx_cmos_deser16      : Static CMOS 8->32 deserializer -> wd0..wd15, we0..we15, 312.5 MHz wclk
+* Sub-blocks integrated (2026-11-26 signed-off 5G variants):
+*   1. serdes_rx_term_pdk             : PDK-mapped 50 Ohm split RX input termination to BIAS v2 Vcm (1.05 V)
+*   2. serdes_bias_ctle_v2            : BIAS v2 local CTLE LVT diode mirror (nfet_lvt 8/0.5 nf=4)
+*   3. serdes_rx_ctle_shunt_5g_w3_pdk : W3 gm/Id=10.7 5.0 Gb/s shunt-peaked PDK CTLE + compact 8.204 nH M4+M2 coil (2-bit EQ)
+*   4. serdes_rx_pi_4ph_iq_8ph        : Hardened v3 2.5 GHz 4->8 octature + 64-code pure CMOS PI + 1.25 GHz QDiv2 (`rx_pi_4ph_iq_5g_v3.spice`)
+*   5. 8x serdes_rx_dt_slicer_5g      : Quarter-rate 1.25 GHz 5G StrongARM dynamic CMOS slicers (mid-code 32 trim, `rx_dt_sampler_5g.spice`)
+*   6. serdes_rx_cmos_deser16         : Static CMOS 8->32 deserializer -> wd0..wd15, we0..we15, 312.5 MHz wclk
 *
 * Port count: 72 (4 fewer clock inputs than 4G's 76-port top: `ip qp in qn` instead of `c0..c7`!).
 
@@ -28,12 +28,12 @@
 + wclk ctle_p ctle_n
 + vdd_ctle vdd_pi vdd_slicer vdd_deser vss
 
-* 1. PDK-Mapped 50 Ohm Split Input Termination + BIAS v2 CTLE Diode Mirror + 5G Shunt-Peaked CTLE
+* 1. PDK-Mapped 50 Ohm Split Input Termination + BIAS v2 CTLE Diode Mirror + W3 5G Shunt-Peaked CTLE
 Xterm rxp rxn vcm_ref vss serdes_rx_term_pdk
 Xbias_ctle ibias_ctle vss serdes_bias_ctle_v2
-Xctle rxp rxn ctle_p ctle_n eq0 eq1 ibias_ctle vdd_ctle vss serdes_rx_ctle_shunt_5g_pdk
+Xctle rxp rxn ctle_p ctle_n eq0 eq1 ibias_ctle vdd_ctle vss serdes_rx_ctle_shunt_5g_w3_pdk
 
-* 2. 2.5 GHz 4-Phase I/Q -> 8-Phase Octature + 64-Code CMOS PI + 1.25 GHz Quadrature /2
+* 2. Hardened v3 2.5 GHz 4-Phase I/Q -> 8-Phase Octature + 64-Code CMOS PI + 1.25 GHz Quadrature /2
 Xpi ip qp in qn
 + a0 a1 a2 a3 a4 a5 a6 a7
 + b0 b1 b2 b3 b4 b5 b6 b7
@@ -41,17 +41,17 @@ Xpi ip qp in qn
 + rst_n dp dn ep en ckd0 ckd1 ckd2 ckd3 cke0 cke1 cke2 cke3
 + vdd_pi vss serdes_rx_pi_4ph_iq_8ph
 
-* 3. 8x Quarter-Rate 1.25 GHz Double-Tail Dynamic CMOS Slicers (nominal mid-code 32 = 100000 trim)
+* 3. 8x Quarter-Rate 1.25 GHz 5G StrongARM Dynamic CMOS Slicers (nominal mid-code 32 = 100000 trim)
 *    Data slicers: d0..d3 sampled on ckd0..ckd3 (0, 200, 400, 600 ps)
-Xsd0 ctle_p ctle_n ckd0 d0 d0b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
-Xsd1 ctle_p ctle_n ckd1 d1 d1b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
-Xsd2 ctle_p ctle_n ckd2 d2 d2b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
-Xsd3 ctle_p ctle_n ckd3 d3 d3b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
+Xsd0 ctle_p ctle_n ckd0 d0 d0b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
+Xsd1 ctle_p ctle_n ckd1 d1 d1b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
+Xsd2 ctle_p ctle_n ckd2 d2 d2b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
+Xsd3 ctle_p ctle_n ckd3 d3 d3b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
 *    Edge slicers: e0..e3 sampled on cke0..cke3 (100, 300, 500, 700 ps)
-Xse0 ctle_p ctle_n cke0 e0 e0b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
-Xse1 ctle_p ctle_n cke1 e1 e1b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
-Xse2 ctle_p ctle_n cke2 e2 e2b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
-Xse3 ctle_p ctle_n cke3 e3 e3b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer
+Xse0 ctle_p ctle_n cke0 e0 e0b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
+Xse1 ctle_p ctle_n cke1 e1 e1b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
+Xse2 ctle_p ctle_n cke2 e2 e2b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
+Xse3 ctle_p ctle_n cke3 e3 e3b vdd_slicer vss vss vss vss vss vdd_slicer vss serdes_rx_dt_slicer_5g
 
 * 4. Static CMOS 8->32 Deserializer (1.25 GHz -> 312.5 MHz 16-bit Data & Edge Words)
 Xdeser d0 d1 d2 d3 e0 e1 e2 e3

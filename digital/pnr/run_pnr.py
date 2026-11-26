@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Automated SKY130A Digital RTL-to-GDS/MAG P&R, 3-Corner STA, Magic DRC & Netgen LVS Flow.
+"""Shared SKY130A Digital RTL-to-GDS/MAG P&R, 3-Corner STA, Magic DRC & Netgen LVS Helper Library.
 
-Runs single-threaded OpenROAD 2.0 + Yosys 0.38 + Magic 8.3 + Netgen LVS on
-SKY130A ``sky130_fd_sc_hd`` standard cells.
-
-All temporary work files, logs, .ext, .spef, and Tcl scripts are placed under
-``results/digital/pnr/<block>/``; only clean signoff deliverables (.def, .gds,
-.v, _pg.v, .png, summary.json) are written to
-``digital/pnr/variants/hd_pnr/<block>/``.
+Provides single-threaded OpenROAD 2.0 + Yosys 0.38 + Magic 8.3 + Netgen LVS primitives
+on SKY130A ``sky130_fd_sc_hd`` standard cells, imported by the active unified digital top
+PnR flows (``run_unified_v3_pnr.py``, ``run_v4_32b_pnr.py``, ``run_v4p1_5g_coopt_pnr.py``).
 """
 
 from __future__ import annotations
@@ -106,379 +102,6 @@ class BlockSpec:
     hold_margin_ns: float = 0.08
     output_load_pf: float = 0.020
     cts_sink_clustering: bool = True
-
-
-BLOCKS: dict[str, BlockSpec] = {
-    "tx_ingress_control": BlockSpec(
-        name="tx_ingress_control",
-        rtl_files=[
-            "digital/tx/rtl/tx_ingress_control.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="word_clk",
-                port="word_clk",
-                period_ns=4.0,
-                inputs=["enable", "clock_good"],
-                fall_inputs=["in_valid", "in_data*"],
-                outputs=["word_ready", "capture_data*", "capture_valid", "b_valid"],
-                fall_outputs=["a_valid"],
-            )
-        ],
-        reset_ports=["rst_n"],
-        die_area=(0.0, 0.0, 46.0, 32.0),
-        core_area=(4.6, 5.44, 41.4, 27.2),
-        place_density=0.55,
-        pdn_v_pitch=18.0,
-        pdn_v_offset=7.0,
-        pdn_h_pitch=16.0,
-        pdn_h_offset=5.0,
-        use_met5_pdn=True,
-        abc_target_ps=2000,
-        setup_margin_ns=0.15,
-        hold_margin_ns=0.05,
-        output_load_pf=0.015,
-        cts_sink_clustering=False,
-    ),
-    "pll_control_top": BlockSpec(
-        name="pll_control_top",
-        rtl_files=[
-            "digital/common/rtl/mon_sync.sv",
-            "digital/common/rtl/mon_persist.sv",
-            "digital/pll/rtl/pll_startup_supervisor.sv",
-            "digital/pll/rtl/pll_coarse_ctrl.sv",
-            "digital/pll/rtl/pll_lock_detect.sv",
-            "digital/pll/rtl/pll_control_top.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="ref_clk",
-                port="ref_clk",
-                period_ns=4.0,
-                inputs=[
-                    "enable",
-                    "start",
-                    "tclass*",
-                    "lo_run*",
-                    "hi_run*",
-                    "stop_code*",
-                    "stop_sel*",
-                ],
-                outputs=[
-                    "precharge_en",
-                    "pfd_rst_b",
-                    "cp_en",
-                    "locked",
-                    "busy",
-                    "fault",
-                    "state_id*",
-                    "fault_code*",
-                    "vco_code*",
-                    "lo_code*",
-                    "hi_code*",
-                    "coarse_busy",
-                    "coarse_done",
-                    "fast_end",
-                    "slow_end",
-                    "switches*",
-                ],
-            )
-        ],
-        reset_ports=["rst_n"],
-        async_input_ports=[
-            "abort_async",
-            "bias_ready_async",
-            "pre_ref_ready_async",
-            "hi_async",
-            "lo_async",
-            "pw_late_async",
-        ],
-        params={"CODE_BITS": 5},
-        utilization=40.0,
-        aspect_ratio=0.45,
-        core_space=5.0,
-        place_density=0.70,
-        pdn_v_pitch=32.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=32.0,
-        pdn_h_offset=8.0,
-        use_met5_pdn=True,
-        abc_target_ps=1000,
-        setup_margin_ns=0.15,
-        hold_margin_ns=0.08,
-    ),
-    "rx_cdr_loop": BlockSpec(
-        name="rx_cdr_loop",
-        rtl_files=[
-            "digital/rx/rtl/bbpd_window_vote.sv",
-            "digital/rx/rtl/cdr_phase_frequency.sv",
-            "digital/rx/rtl/pi_step_commutator.sv",
-            "digital/rx/rtl/rx_cdr_loop.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="ctrl_clk",
-                port="ctrl_clk",
-                period_ns=4.0,
-                inputs=[
-                    "enable",
-                    "bundle_valid",
-                    "previous_data",
-                    "data_samples*",
-                    "edge_samples*",
-                ],
-                outputs=[
-                    "phase_code*",
-                    "select_a*",
-                    "select_b*",
-                    "fine_b*",
-                    "locked",
-                    "holdover",
-                    "range_limited",
-                    "phase_applied",
-                    "frequency_q*",
-                    "phase_debt_q*",
-                ],
-            )
-        ],
-        reset_ports=["rst_n"],
-        utilization=42.0,
-        aspect_ratio=0.45,
-        core_space=5.0,
-        place_density=0.70,
-        pdn_v_pitch=36.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=36.0,
-        pdn_h_offset=8.0,
-        use_met5_pdn=True,
-        abc_target_ps=1000,
-        setup_margin_ns=0.15,
-        hold_margin_ns=0.08,
-    ),
-    "rx_word_host_path": BlockSpec(
-        name="rx_word_host_path",
-        rtl_files=[
-            "digital/rx/rtl/rx_word_map.sv",
-            "digital/rx/rtl/rx_word_align16.sv",
-            "digital/rx/rtl/rx_async_word_fifo.sv",
-            "digital/rx/rtl/rx_word_host_path.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="word_clk",
-                port="word_clk",
-                period_ns=4.0,
-                inputs=["phys*", "training_enable"],
-                outputs=["word_online", "aligned", "offset*"],
-            ),
-            ClockSpec(
-                name="host_clk",
-                port="host_clk",
-                period_ns=4.0,
-                inputs=["host_ready"],
-                outputs=["host_data*", "host_valid", "host_online", "host_error"],
-            ),
-        ],
-        reset_ports=["arst_n"],
-        utilization=40.0,
-        aspect_ratio=0.45,
-        core_space=5.0,
-        place_density=0.70,
-        pdn_v_pitch=36.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=36.0,
-        pdn_h_offset=8.0,
-        use_met5_pdn=True,
-        abc_target_ps=1000,
-        setup_margin_ns=0.15,
-        hold_margin_ns=0.08,
-    ),
-}
-
-BLOCKS_V2: dict[str, BlockSpec] = {
-    "tx_ingress_control": BlockSpec(
-        name="tx_ingress_control",
-        rtl_files=[
-            "digital/pnr/rtl_v2/tx_ingress_control.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="word_clk",
-                port="word_clk",
-                period_ns=4.0,
-                inputs=["enable", "clock_good", "in_valid", "in_data*"],
-                outputs=["word_ready", "capture_data*", "capture_valid", "a_valid", "b_valid"],
-            )
-        ],
-        reset_ports=["rst_n"],
-        die_area=(0.0, 0.0, 72.0, 48.0),
-        core_area=(4.6, 5.44, 67.16, 40.80),
-        place_density=0.58,
-        pdn_v_pitch=24.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=20.0,
-        pdn_h_offset=6.0,
-        use_met5_pdn=True,
-        abc_target_ps=2200,
-        setup_margin_ns=0.20,
-        hold_margin_ns=0.05,
-        output_load_pf=0.015,
-        cts_sink_clustering=False,
-    ),
-    "pll_control_top": BlockSpec(
-        name="pll_control_top",
-        rtl_files=[
-            "digital/pnr/rtl_v2/mon_sync.sv",
-            "digital/pnr/rtl_v2/mon_persist.sv",
-            "digital/pnr/rtl_v2/pll_startup_supervisor.sv",
-            "digital/pnr/rtl_v2/pll_coarse_ctrl.sv",
-            "digital/pnr/rtl_v2/pll_lock_detect.sv",
-            "digital/pnr/rtl_v2/pll_control_top.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="ref_clk",
-                port="ref_clk",
-                period_ns=4.0,
-                inputs=[
-                    "enable",
-                    "start",
-                    "tclass*",
-                    "lo_run*",
-                    "hi_run*",
-                    "stop_code*",
-                    "stop_sel*",
-                ],
-                outputs=[
-                    "precharge_en",
-                    "pfd_rst_b",
-                    "cp_en",
-                    "locked",
-                    "busy",
-                    "fault",
-                    "state_id*",
-                    "fault_code*",
-                    "vco_code*",
-                    "lo_code*",
-                    "hi_code*",
-                    "coarse_busy",
-                    "coarse_done",
-                    "fast_end",
-                    "slow_end",
-                    "switches*",
-                ],
-            )
-        ],
-        reset_ports=["rst_n"],
-        async_input_ports=[
-            "abort_async",
-            "bias_ready_async",
-            "pre_ref_ready_async",
-            "hi_async",
-            "lo_async",
-            "pw_late_async",
-        ],
-        params={"CODE_BITS": 5},
-        utilization=46.0,
-        aspect_ratio=0.80,
-        core_space=5.0,
-        place_density=0.72,
-        pdn_v_pitch=32.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=32.0,
-        pdn_h_offset=8.0,
-        use_met5_pdn=True,
-        abc_target_ps=1000,
-        setup_margin_ns=0.50,
-        hold_margin_ns=0.05,
-    ),
-    "rx_cdr_loop": BlockSpec(
-        name="rx_cdr_loop",
-        rtl_files=[
-            "digital/pnr/rtl_v2/bbpd_window_vote.sv",
-            "digital/pnr/rtl_v2/cdr_phase_frequency.sv",
-            "digital/pnr/rtl_v2/pi_step_commutator.sv",
-            "digital/pnr/rtl_v2/rx_cdr_loop.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="ctrl_clk",
-                port="ctrl_clk",
-                period_ns=4.0,
-                inputs=[
-                    "enable",
-                    "bundle_valid",
-                    "previous_data",
-                    "data_samples*",
-                    "edge_samples*",
-                ],
-                outputs=[
-                    "phase_code*",
-                    "select_a*",
-                    "select_b*",
-                    "fine_b*",
-                    "locked",
-                    "holdover",
-                    "range_limited",
-                    "phase_applied",
-                    "frequency_q*",
-                    "phase_debt_q*",
-                ],
-            )
-        ],
-        reset_ports=["rst_n"],
-        utilization=46.0,
-        aspect_ratio=0.80,
-        core_space=5.0,
-        place_density=0.72,
-        pdn_v_pitch=36.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=36.0,
-        pdn_h_offset=8.0,
-        use_met5_pdn=True,
-        abc_target_ps=1000,
-        setup_margin_ns=0.50,
-        hold_margin_ns=0.06,
-    ),
-    "rx_word_host_path": BlockSpec(
-        name="rx_word_host_path",
-        rtl_files=[
-            "digital/pnr/rtl_v2/rx_word_map.sv",
-            "digital/pnr/rtl_v2/rx_word_align16.sv",
-            "digital/pnr/rtl_v2/rx_async_word_fifo.sv",
-            "digital/pnr/rtl_v2/rx_word_host_path.sv",
-        ],
-        clocks=[
-            ClockSpec(
-                name="word_clk",
-                port="word_clk",
-                period_ns=4.0,
-                inputs=["phys*", "training_enable"],
-                outputs=["word_online", "aligned", "offset*"],
-            ),
-            ClockSpec(
-                name="host_clk",
-                port="host_clk",
-                period_ns=4.0,
-                inputs=["host_ready"],
-                outputs=["host_data*", "host_valid", "host_online", "host_error"],
-            ),
-        ],
-        reset_ports=["arst_n"],
-        utilization=46.0,
-        aspect_ratio=0.80,
-        core_space=5.0,
-        place_density=0.72,
-        pdn_v_pitch=36.0,
-        pdn_v_offset=8.0,
-        pdn_h_pitch=36.0,
-        pdn_h_offset=8.0,
-        use_met5_pdn=True,
-        abc_target_ps=1000,
-        setup_margin_ns=0.50,
-        hold_margin_ns=0.18,
-    ),
-}
 
 
 def run_cmd(
@@ -1672,11 +1295,13 @@ def render_layout_png(
     plt.close(fig)
 
 
-def run_block(block_name: str, v2: bool = False) -> dict[str, Any]:
-    block_map = BLOCKS_V2 if v2 else BLOCKS
-    results_base = RESULTS_BASE_V2 if v2 else RESULTS_BASE
-    variant_base = VARIANT_BASE_V2 if v2 else VARIANT_BASE
-    block = block_map[block_name]
+def run_block_spec(
+    block: BlockSpec,
+    *,
+    results_base: Path,
+    variant_base: Path,
+    v2: bool = True,
+) -> dict[str, Any]:
     t0 = time.time()
     work = results_base / block.name
     work.mkdir(parents=True, exist_ok=True)
@@ -1720,7 +1345,6 @@ def run_block(block_name: str, v2: bool = False) -> dict[str, Any]:
         title_suffix=" (v2)" if v2 else "",
     )
 
-    # Export clean deliverables to digital/pnr/variants/hd_pnr[_v2]/<block>/
     exports = {
         f"{block.name}.def": Path(pnr_info["routed_def"]),
         f"{block.name}.gds": Path(magic_info["gds_path"]),
@@ -1734,7 +1358,7 @@ def run_block(block_name: str, v2: bool = False) -> dict[str, Any]:
     elapsed = round(time.time() - t0, 1)
     summary = {
         "block": block.name,
-        "variant": "hd_pnr_v2" if v2 else "hd_pnr",
+        "variant": variant_base.name,
         "params": block.params,
         "rtl_files": block.rtl_files,
         "clocks_mhz": {c.name: round(1000.0 / c.period_ns, 2) for c in block.clocks},
@@ -1782,34 +1406,13 @@ def run_block(block_name: str, v2: bool = False) -> dict[str, Any]:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="SKY130A Digital RTL-to-GDS/MAG P&R Flow")
-    ap.add_argument(
-        "--v2",
-        action="store_true",
-        help="Run timing-closed v2 RTL flow (outputs to digital/pnr/variants/hd_pnr_v2)",
+    print(
+        "digital/pnr/run_pnr.py is a shared PnR helper library (legacy v1/v2 standalone RTL blocks were removed).\n"
+        "Run one of the active unified digital top PnR scripts instead:\n"
+        "  - digital/pnr/run_unified_v3_pnr.py\n"
+        "  - digital/pnr/run_v4_32b_pnr.py\n"
+        "  - digital/pnr/run_v4p1_5g_coopt_pnr.py"
     )
-    ap.add_argument(
-        "blocks",
-        nargs="*",
-        choices=list(BLOCKS.keys()),
-        help="Blocks to run (default: all 4 blocks)",
-    )
-    args = ap.parse_args()
-    block_map = BLOCKS_V2 if args.v2 else BLOCKS
-    variant_base = VARIANT_BASE_V2 if args.v2 else VARIANT_BASE
-    targets = args.blocks or list(block_map.keys())
-    all_summaries: list[dict[str, Any]] = []
-    for name in targets:
-        all_summaries.append(run_block(name, v2=args.v2))
-    # Refresh all_blocks_summary.json whenever all 4 block summaries exist
-    existing: list[dict[str, Any]] = []
-    for name in block_map:
-        sp = variant_base / name / "summary.json"
-        if sp.exists():
-            existing.append(json.loads(sp.read_text()))
-    if len(existing) == len(block_map):
-        summary_path = variant_base / "all_blocks_summary.json"
-        summary_path.write_text(json.dumps(existing, indent=2) + "\n")
 
 
 if __name__ == "__main__":

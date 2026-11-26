@@ -1,8 +1,89 @@
-# Adopted v1.0 subsystem identities. Verification results live in docs/status/current.md.
+# Dual-rate 4/5 Gb/s SKY130A SerDes working revisions (updated 2026-11-26).
+# Verification numbers and acceptance boundaries live in docs/status/current.md.
+updated = "2026-11-26"
 baseline_tag = "v1.0"
+dual_rate_plan = "serdes_5g_top_pdk (Plan C v4p1)"
 status_report = "docs/status/current.md"
+chip_floorplan_report = "docs/layout/chip_floorplan_20261123.md"
 evidence_catalog = "results/catalog/v1_0_subsystem_evidence.json"
 integration_evidence_catalog = "results/catalog/chip_integration_20261124.json"
+signoff_5g_catalog = "results/catalog/serdes_5g_signoff_20261126.json"
+physical_audit_catalog = "results/catalog/chip_physical_audit_20261126.json"
+
+# ---------------------------------------------------------------------------
+# 5.0 Gb/s Dual-Rate (4/5 Gb/s) Plan-C Evolution (2026-11-26 Physical Signoff)
+# ---------------------------------------------------------------------------
+[serdes_5g]
+revision = "plan_c_v4p1_20261126"
+top_cell = "serdes_5g_top_pdk"
+builder = "verification/layout/build_chip_top_5g_pdk.py"
+renderer = "verification/layout/plot_chip_top_5g_pdk.py"
+decap_tiles = "verification/layout/decap_5g_tiles.py"
+signoff_catalog = "results/catalog/serdes_5g_signoff_20261126.json"
+physical_audit = "results/catalog/chip_physical_audit_20261126.json"
+report = "docs/layout/chip_floorplan_20261123.md"
+
+[serdes_5g.pll]
+revision = "lc_vco_5g_oct_pdk + div_ab_5g_v2_pdk"
+vco = "analog/pll/vco_5g/spice/lc_5g_div2_oct_pdk.spice"
+vco_layout_summary = "analog/pll/vco_5g/layout/variants/lc_vco_5g_oct_pdk/summary.json"
+divider_ab = "analog/pll/divider/spice/pll_div_ab_5g_v2.spice"
+divider_layout_summary = "analog/pll/divider/layout/variants/div_ab_5g_v2_pdk/summary.json"
+charge_pump = "analog/pll/cp/spice/charge_pump_steer_v4.spice"
+charge_pump_layout_summary = "analog/pll/cp/layout/variants/v4_pdk/summary.json"
+loop_filter = "analog/pll/loop_filter/spice/passive_rc_pdk_k4.spice"
+loop_filter_layout_summary = "analog/pll/loop_filter/layout/variants/fused_pdk/summary.json"
+pfd = "analog/pll/pfd/spice/pfd_sc.spice"
+pfd_layout_summary = "analog/pll/pfd/layout/variants/pdk/summary.json"
+clock_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice"
+clock_receiver_layout_summary = "analog/common/cml_to_cmos/layout/variants/r5_pdk/summary.json"
+
+[serdes_5g.ldo]
+revision = "v2_cur_kelvin_pdk"
+source = "analog/ldo/spice/pll_supply_hv18_v2_cur.spice"
+tail_bias_filter = "analog/ldo/spice/pll_bias_filter_r4.spice"
+layout_summary = "analog/ldo/layout/variants/v2_cur_kelvin_pdk/summary.json"
+bias_filter_layout_summary = "analog/ldo/layout/variants/bias_filter_stacked_pdk/summary.json"
+report = "docs/design/ldo_v2.md"
+
+[serdes_5g.tx]
+revision = "v5_pdk"
+source = "analog/tx/sst/spice/tx_sst_top_5g.spice"
+serializer = "analog/tx/sst/spice/tx_sst_serializer16_5g.spice"
+driver_and_vdrv_ldo = "analog/tx/sst/spice/tx_sst_driver_5g.spice"
+layout_summary = "analog/tx/sst/layout/variants/v5_pdk/summary.json"
+vdrv_ldo_layout_summary = "analog/tx/sst/layout/variants/v4p5_pdk/summary.json"
+report = "docs/design/tx_sst_v4.md"
+
+[serdes_5g.rx]
+revision = "rx_top_5g_pdk"
+source = "analog/rx/cmos_rx/spice/rx_cmos_top_5g_pdk.spice"
+ctle = "analog/rx/cmos_rx/spice/rx_ctle_shunt_5g_pdk.spice"
+pi = "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_v3.spice"
+slicer = "analog/rx/cmos_rx/spice/rx_dt_sampler_5g.spice"
+deserializer = "analog/rx/cmos_rx/spice/rx_cmos_deser16.spice"
+layout_summary = "analog/rx/cmos_rx/layout/variants/rx_top_5g_pdk/summary.json"
+ctle_layout_summary = "analog/rx/cmos_rx/layout/variants/ctle_shunt_5g_w3_pdk/summary.json"
+pi_layout_summary = "analog/rx/cmos_rx/layout/variants/v5g_4ph_v3_pdk/summary.json"
+slicer_layout_summary = "analog/rx/cmos_rx/layout/variants/slicer_5g_pdk/summary.json"
+report = "docs/design/rx_cmos_v2.md"
+
+[serdes_5g.digital]
+revision = "v4p1_5g_coopt"
+source = "digital/pnr/rtl_v4_32b/serdes_digital_top_v4.sv"
+filelist = "digital/pnr/rtl_v4_32b/rtl_v4.f"
+layout_summary = "digital/pnr/variants/hd_pnr_v4p1_5g_coopt/serdes_digital_top_v4/summary.json"
+
+# ---------------------------------------------------------------------------
+# 4.0 Gb/s Ring-VCO Reference Baseline (v1.0 / full_v8)
+# ---------------------------------------------------------------------------
+[serdes_4g]
+revision = "full_v8"
+top_cell = "serdes_4g_top_pdk"
+builder = "verification/layout/build_chip_top_pdk.py"
+renderer = "verification/layout/plot_chip_top_pdk.py"
+physical_audit = "results/catalog/chip_physical_audit_20261126.json"
+report = "docs/layout/chip_floorplan_20261123.md"
 
 [pll]
 revision = "pll_top_r6_v4_upgrade"
@@ -18,7 +99,6 @@ pfd = "analog/pll/pfd/spice/pfd_sc.spice"
 chip_feedback_divider = "analog/pll/divider/spice/tspc_reclock_prescaler8_2g.spice"
 chip_clock_receiver = "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice"
 report = "docs/design/pll_vco_r6_perf.md"
-legacy_config = "config/pll_working_revision.toml"
 
 [ldo]
 revision = "v2_cur"
@@ -26,14 +106,12 @@ source = "analog/ldo/spice/pll_supply_hv18_v2_cur.spice"
 tail_bias_filter = "analog/ldo/spice/pll_bias_filter_r4.spice"
 layout_summary = "analog/ldo/layout/variants/v2_cur_pdk/summary.json"
 report = "docs/design/ldo_v2.md"
-legacy_config = "config/ldo_working_revision.toml"
 
 [bias]
 revision = "v2"
 source = "analog/bias/spice/bias_v2.spice"
 layout_summary = "analog/bias/layout/variants/v2_pdk/summary.json"
 report = "docs/design/bias_v2.md"
-legacy_config = "config/bias_working_revision.toml"
 
 [tx]
 revision = "v4.3"
@@ -42,19 +120,18 @@ serializer = "analog/tx/sst/spice/tx_sst_serializer16.spice"
 driver_and_vdrv_ldo = "analog/tx/sst/spice/tx_sst_driver.spice"
 layout_summary = "analog/tx/sst/layout/variants/v4_pdk/summary.json"
 report = "docs/design/tx_sst_v4.md"
-legacy_config = "config/tx_working_revision.toml"
 
 [rx]
 revision = "v2.2"
 source = "analog/rx/cmos_rx/spice/rx_cmos_top.spice"
 layout_summary = "analog/rx/cmos_rx/layout/variants/v2_pdk/summary.json"
 report = "docs/design/rx_cmos_v2.md"
-legacy_config = "config/rx_working_revision.toml"
 
 [digital]
 revision = "v3.1"
 source = "digital/pnr/rtl_v3/serdes_digital_top_v3.sv"
-source_git_ref = "v1.0" # The working tree at this path carries v3.2 candidate edits.
+source_git_ref = "v1.0" # The working tree at this path carries post-v3.1 candidate edits.
+filelist = "digital/pnr/rtl_v3/rtl_v3.f"
 layout_summary = "digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json"
 report = "docs/design/digital_top_v3.md"
 

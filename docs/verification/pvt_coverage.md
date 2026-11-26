@@ -1,6 +1,6 @@
 # PVT 覆盖口径与结果入口
 
-**当前各模块的覆盖数字、实际驱动和缺测统一见[current.md](../status/current.md)。** 本页维护矩阵含义、继承规则和查询方法。整理前的逐变体表与旧TX r2网格保留在[历史快照](../history/pvt_coverage_snapshot_20261113.md)，用于固定修订对照，不作为当前资格表。
+**当前各模块的覆盖数字、实际驱动和缺测统一见[current.md](../status/current.md)。** 本页维护矩阵含义、继承规则和查询方法；具体版本签核台账见 [v1.0 证据目录](../../results/catalog/v1_0_subsystem_evidence.json) 与 [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)。
 
 ## 矩阵与验证维度
 
@@ -14,7 +14,7 @@
 | 统计和噪声 | MOS角不替代局部MC，相同样本数不保证配对身份；无噪声零错不等于BER或抖动预算通过 |
 | 物理与数字 | DRC/LVS/端口、PEX回测、库映射/STA/CDC分别留证；不互相替代 |
 
-规格与门槛见[spec.md](../overview/spec.md)，机器矩阵见[pvt_plan.toml](../../verification/corners/pvt_plan.toml)，验收配置见[clocking_acceptance.toml](../../verification/corners/clocking_acceptance.toml)。
+规格与门槛见[spec.md](../overview/spec.md)，PVT 网格定义见 [`serdes_flow.corners`](../../src/serdes_flow/corners.py)，PLL 锁定验收合同见 [pll_lock_screen.toml](../../verification/contracts/pll_lock_screen.toml)。
 
 ## 覆盖如何记录和继承
 
@@ -26,6 +26,6 @@
 
 ## 证据查询
 
-从current.md对应模块进入设计文档和小数据，再定位campaign的deck/log/raw/metrics。固定时间点审计见[design_status_evidence.json](../data/design_status_evidence.json)和[审计脚本](../../verification/design_status_audit.py)：包含曾用的summary身份、窗口基表/补点来源及有效样本数；它不是实时项目状态。
+从 [current.md](../status/current.md) 对应模块进入设计文档与目录台账（[results/catalog](../../results/catalog/README.md)），再定位各模块测试台与 `results/` 中的 deck/log/raw/metrics。
 
-`v1.0` 的数字顶层映射、三角 STA 和 SDF 模式见[数字顶层 v3.1](../design/digital_top_v3.md)。早期字接口的映射、SS 负裕量与时序预算留在[历史 RX 字时序](../design/rx_word_host_timing.md)。
+4 Gb/s `v1.0` 的数字顶层映射、三角 STA 和 SDF 模式见[数字顶层 v3.1](../design/digital_top_v3.md)；5 Gb/s 双速 32-bit 端口协同数字顶层 `v4p1` 的 6 角 ±5% OCV STA 与 CDC 签核见 [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)。

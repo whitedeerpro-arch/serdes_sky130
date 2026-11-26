@@ -1,54 +1,43 @@
 # 运行结果与归档入口
 
-本机波形使用两种归档方式。2026-11-20 的整理由 `waveform_archive.py` 将波形移至 `/opt/serdes_archive`，原路径保留软链接，读取与续跑沿用原路径。2026-10-29 的历史批量归档使用 `tar.xz` 并按下文命令读取或恢复。[11 月 20 日归档清单](catalog/waveform_archive_20261120.json)
+`results/` 保存本地仿真、版图装配与签核产物（由 `.gitignore` 排除，本说明与 `results/catalog/` 索引入库）。现行采用状态与验证边界统一见[当前状态](../docs/status/current.md)，完整证据与退役清单见[结果索引](catalog/README.md)。
+
+## 关键签核与证据索引
+
+- [5G 双速签核台账（2026-11-26）](catalog/serdes_5g_signoff_20261126.json) — 8/8 模拟宏 CPEX/RCX、32-bit 数字宏 `v4p1`、紧缩混合去耦瓦片与 Plan-C 全片物理签核
+- [4G / 5G 片级物理审计（2026-11-26）](catalog/chip_physical_audit_20261126.json) — `full_v8`（4G）与 Plan-C `v4p1`（5G）只读连通性、金属 stub 与密度审计
+- [v1.0 4G 子系统证据索引](catalog/v1_0_subsystem_evidence.json) 与 [4G 片级集成证据](catalog/chip_integration_20261124.json)
 
 ## 本机波形软链接
 
-归档工具忽略配置的近期时段和活动仿真目录，每个波形在复制校验后才替换为软链接。逐文件 SHA-256 清单写入 `results/maintenance/waveform_archive/`。
+当 `/home` 余量紧张时，大波形可用 [waveform_archive.py](../verification/maintenance/waveform_archive.py) 转存至 `/opt/serdes_archive`，原路径保留文件软链接，读取与断点续跑沿用原路径（2026-11-26 整理已清理历史原始波形以释放磁盘空间）。
 
 ```bash
 uv run python verification/maintenance/waveform_archive.py verify
 uv run python verification/maintenance/waveform_archive.py restore results/某个运行目录
 ```
 
-## 历史打包归档
+所有退役清单（`catalog/retired_*.json`）可用[维护与校验工具](../verification/maintenance/README.md)核对归档文件完整性与哈希。
 
-Bias 与 LDO 源码升到 `analog/bias/` 和 `analog/ldo/` 后，历史运行仍存于 `results/analog/common/{bias,ldo}/`。如果这两个历史目录存在且新结果路径尚未建立，可从仓库根目录建立相对链接供现行台读取同一份校准与分析数据：
+## 目录结构与路径说明
+
+```text
+results/
+  catalog/                           入库证据台账、物理审计、波形归档与退役清单
+  analog/<模块>/<实验>/<run>/         SPICE 输入快照、日志、指标 JSON 与波形（含软链接）
+  digital/                           RTL / VCS SDF GLS 与 P&R 独立验证产物
+  layout/                            宏级与片级（4G full_v8 / 5G Plan-C）装配、DRC/LVS 与审计产物
+  layout_review/                     阶段版图独立提取与寄生复核产物
+  verification/                      顶层联调、项目复核固定副本与信道分析产物
+  maintenance/                       波形归档逐文件清单与磁盘巡检记录
+  archives/                          历史只读 tar.xz 打包归档（不再新增）
+```
+
+Bias 与 LDO 源码升到 `analog/bias/` 和 `analog/ldo/` 后，历史运行仍保留在 `results/analog/common/{bias,ldo}/`。如本地需要旧台读取同路径历史数据，可按[v1.0 证据索引](catalog/v1_0_subsystem_evidence.json)核对运行身份后按需建立软链接：
 
 ```bash
 ln -sT common/bias results/analog/bias
 ln -sT common/ldo results/analog/ldo
 ```
 
-若新路径已有独立结果，保留两个目录，按[证据索引](catalog/v1_0_subsystem_evidence.json)解析所需运行身份。
-
-```text
-results/
-  acceptance/20261029-rx-functional/  阶段审阅入口、VCD/FST、GTKWave会话
-  catalog/                           实验清单、归档索引、清理/恢复记录
-  archives/
-    analog/<模块>/<实验>/<run>.bulk.tar.xz
-    ...                              原目录层级下的大文件归档
-  analog/<模块>/<实验>/<run>/         输入快照、日志、指标、小数据表
-  digital/                           RTL单元、串并、CDR长时行为plant结果
-  verification/                      信道、流窗、实时数模联调
-  infrastructure/                    工具与激励自检
-  schematics/                        历史原理图导出实验
-```
-
-- 阶段审阅与波形 (`results/acceptance/20261029-rx-functional/README.md`)
-- [按模块／实验索引](catalog/README.md)，[逐运行TSV](catalog/experiments.tsv)
-- [原文件→归档成员索引](catalog/artifacts.tsv)，[完整归档账本](catalog/archive_ledger.json)
-- [清理策略](../verification/results/retention.toml)，[阶段结论](../docs/history/stage_review_20261029.md)
-
-被压缩的运行目录有 `ARTIFACTS_ARCHIVED.json`。大文件从常用目录移出前，已完整解压流校验每个成员的 SHA256；相同内容在归档内用硬链接成员去重。原文件可以按历史路径恢复，输入/netlist/source/snapshots、日志、指标和当前验收波形保留在原处。
-
-```bash
-verification/results/artifact.sh locate results/某个历史运行/raw/waveforms.tsv
-verification/results/artifact.sh verify results/某个历史运行/raw/waveforms.tsv
-verification/results/artifact.sh restore results/某个历史运行/raw/waveforms.tsv
-```
-
-`cat` 可直接读取压缩中的文件。`restore` 校验哈希后恢复到原路径，已存在文件不覆盖。重做旧分析或仿真前，先恢复所需大文件；通用读取脚本不会自动识别归档。历史证据中的哈希指向原始字节，归档后的存放位置由上述索引补充。
-
-运行产物由 .gitignore 排除，本说明除外。需要长期随设计保存的归档定位表在 [docs/data/results_archive_manifest.json](../docs/data/results_archive_manifest.json)。冻结的 `releases/v0.1-design-freeze-20261028` 未修改。详见 [测试与结果约定](../docs/verification/methods.md)。
+详见[测试与结果约定](../docs/verification/methods.md)。

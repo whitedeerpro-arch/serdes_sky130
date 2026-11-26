@@ -1,43 +1,134 @@
-"""bit_mapping separates eye health from bit order on stored TX runs.
+"""Synthetic tests for serdes_flow.serial.bit_mapping.
 
-Uses results on disk (not in git); skipped when absent.
+Verifies order-agnostic eye opening, edge-spread measurement, in-order latency,
+intra-word and cross-word divider permutations, and corrupted bit streams
+without relying on external simulation outputs.
 """
-import json
-
+import numpy as np
 import pytest
 
 from serdes_flow import serial
-from serdes_flow.project import ROOT
-from serdes_flow.spice import Waves, has_waves
 
-OPT = ROOT / "results/analog/tx/optimization/20261030T100258Z"
-# r2 calibration grid (kept: pinned by clock_replay): start state (3, 1) = 500 MHz three VCO
-# cycles and 1 GHz one cycle late against the word clock: clean eye, permuted bits.
-GRID = ROOT / "results/analog/tx/serializer/clock_states/grid_20261030T184620Z"
-SHIFTED = GRID / "tt_v1800_t27_s31/run"
+UI_S = 250e-12
+START_S = 1e-9
 
 
-def _seq(expected, shift_s=0.0):
-    return serial.Sequence.from_expected(dict(expected, start_s=expected["start_s"] + shift_s))
+def _sequence(words=20, seed=7):
+    rng = np.random.default_rng(seed)
+    alternating = np.tile([0, 1], serial.ALTERNATING_BITS // 2)
+    marker = rng.integers(0, 2, size=serial.TRAINING_BITS - serial.ALTERNATING_BITS)
+    payload = rng.integers(0, 2, size=16 * words - serial.TRAINING_BITS)
+    bits = np.concatenate([alternating, marker, payload])
+    return serial.Sequence(bits, start_s=START_S, ui_s=UI_S)
 
 
-@pytest.mark.skipif(not has_waves(OPT / "TX_tt_v1800_t27_s6_sf80_ck96_lowvt32_selected"), reason="campaign results not on disk")
-def test_r2_run_is_in_order_and_matches_contract_eye():
-    expected = json.loads((OPT / "serializer_expected.json").read_text())
-    name = "TX_tt_v1800_t27_s6_sf80_ck96_lowvt32_selected"
-    w = Waves(OPT / name / "waveforms.tsv")
-    r = serial.bit_mapping(w.t, w["dout"], _seq(expected))
-    stored = json.loads((OPT / name / "metrics.json").read_text())["nodes"]["serializer"]
+def _waveform(
+    out_bits,
+    *,
+    start_s=START_S,
+    ui_s=UI_S,
+    phase_ui=0.18,
+    amp_v=0.25,
+    jitter_ui=None,
+    ramp_s=60e-12,
+    end_pad_s=3e-9,
+):
+    levels = amp_v * (2 * np.asarray(out_bits, dtype=float) - 1)
+    ts = [0.0]
+    ys = [levels[0]]
+    for n in range(1, len(levels)):
+        if levels[n] != levels[n - 1]:
+            dt_j = 0.0 if jitter_ui is None else float(jitter_ui[n])
+            tc = start_s + (n + phase_ui + dt_j) * ui_s
+            ts.extend((tc - 0.5 * ramp_s, tc + 0.5 * ramp_s))
+            ys.extend((levels[n - 1], levels[n]))
+    ts.append(start_s + len(levels) * ui_s + end_pad_s)
+    ys.append(levels[-1])
+    return np.asarray(ts, dtype=float), np.asarray(ys, dtype=float)
+
+
+def test_in_order_waveform_matches_contract_eye_and_phase():
+    seq = _sequence()
+    t, y = _waveform(seq.bits, phase_ui=0.18, amp_v=0.25)
+
+    r = serial.bit_mapping(t, y, seq)
+    contract, _ = serial.check(t, y, seq, payload_bits=16 * 12)
+
     assert r["in_order"]
-    # Same eye, measured without the training phase: within a few mV.
-    assert r["eye_min_abs_v"] == pytest.approx(stored["minimum_signed_margin_v"], abs=5e-3)
+    assert r["mapping"] == list(range(16))
+    assert r["frame_offset_ui"] == 0
+    assert r["words_used"] >= 10
+    assert r["sampling_phase_ui"] == pytest.approx(0.18, abs=1e-6)
+    assert r["edge_spread_ui"] == pytest.approx(0.0, abs=1e-6)
+    assert contract["functional"]
+    assert r["eye_min_abs_v"] == pytest.approx(contract["minimum_signed_margin_v"], abs=1e-6)
 
 
-@pytest.mark.skipif(not has_waves(SHIFTED), reason="calibration grid not on disk")
-def test_wrong_divider_state_is_a_permutation():
-    expected = json.loads((ROOT / "analog/tx/serializer/tb/clock_states/serializer_expected.json").read_text())
-    w = Waves(SHIFTED / "waveforms.tsv")
-    r = serial.bit_mapping(w.t, w["dout"], _seq(expected))
-    assert r["mapping"] is not None and not r["in_order"]
+def test_pure_integer_latency_stays_in_order():
+    seq = _sequence()
+    latency = 3
+    out_bits = np.concatenate([np.zeros(latency, dtype=int), seq.bits])
+    t, y = _waveform(out_bits, phase_ui=-0.22, amp_v=0.25)
+
+    r = serial.bit_mapping(t, y, seq)
+
+    assert r["in_order"]
+    assert r["mapping"] == list(range(16))
+    assert r["frame_offset_ui"] == latency
+    assert r["sampling_phase_ui"] == pytest.approx(-0.22, abs=1e-6)
+    assert r["eye_min_abs_v"] == pytest.approx(0.25, abs=1e-6)
+
+
+def test_wrong_divider_state_is_detected_as_permutation_with_healthy_eye():
+    seq = _sequence()
+    perm = [4, 5, 6, 7, 0, 1, 2, 3, 12, 13, 14, 15, 8, 9, 10, 11]
+    words = seq.bits.reshape(-1, 16)
+    permuted = words[:, perm].ravel()
+    out_bits = np.concatenate([np.zeros(2, dtype=int), permuted])
+    t, y = _waveform(out_bits, phase_ui=0.12, amp_v=0.25)
+
+    r = serial.bit_mapping(t, y, seq)
+    contract, _ = serial.check(t, y, seq, payload_bits=16 * 12)
+
+    assert not contract["functional"]
+    assert r["mapping"] == perm
+    assert r["frame_offset_ui"] == 2
+    assert not r["in_order"]
     assert sorted(r["mapping"]) == list(range(16))
-    assert r["eye_min_abs_v"] > 0.1
+    assert r["eye_min_abs_v"] == pytest.approx(0.25, abs=1e-6)
+
+
+def test_cross_word_permutation_resolves_neighbor_word_slots():
+    seq = _sequence()
+    cross_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -4, -3, -2, -1]
+    out_bits = np.zeros_like(seq.bits)
+    for k in range(1, len(seq.bits) // 16):
+        for j, src in enumerate(cross_map):
+            out_bits[16 * k + j] = seq.bits[16 * k + src]
+    t, y = _waveform(out_bits, phase_ui=0.05, amp_v=0.22)
+
+    r = serial.bit_mapping(t, y, seq)
+
+    assert r["mapping"] == cross_map
+    assert r["frame_offset_ui"] == 0
+    assert not r["in_order"]
+    assert any(s < 0 for s in r["mapping"])
+    assert r["eye_min_abs_v"] == pytest.approx(0.22, abs=1e-6)
+
+
+def test_bit_errors_clear_mapping_without_hiding_eye_or_edge_spread():
+    seq = _sequence()
+    corrupted = seq.bits.copy()
+    corrupted[16 * 6 + 3] ^= 1
+    corrupted[16 * 9 + 11] ^= 1
+    jitter = np.where(np.arange(len(corrupted)) % 2 == 0, -0.05, 0.05)
+    t, y = _waveform(corrupted, phase_ui=0.10, amp_v=0.25, jitter_ui=jitter)
+
+    r = serial.bit_mapping(t, y, seq)
+
+    assert r["mapping"] is None
+    assert not r["in_order"]
+    assert r["frame_offset_ui"] is None
+    assert r["words_used"] == 0
+    assert r["eye_min_abs_v"] == pytest.approx(0.25, abs=1e-6)
+    assert r["edge_spread_ui"] == pytest.approx(0.10, abs=1e-6)

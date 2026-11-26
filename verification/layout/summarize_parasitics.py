@@ -130,98 +130,42 @@ def extract_if_needed(work_root: Path, cell: str, mag_src: Path, ref_src: Path) 
 
 
 def main() -> None:
-    audit_root = (REPO / "results/layout/parasitic_audit/run1").resolve()
-    if audit_root.exists():
-        shutil.rmtree(audit_root)
-    audit_root.mkdir(parents=True, exist_ok=True)
+    import argparse
 
-    cells = []
-    # Pre-verified Bias (run8)
-    for cell, sub in [
-        ("serdes_bias_ctle_pdk", "vss"),
-        ("serdes_bias_pcopy_pdk", "vdd"),
-        ("serdes_bias_pcopy_n20_pdk", "vdd"),
-        ("serdes_bias_pcopy_n85_pdk", "vdd"),
-        ("serdes_bias_cp_pdk", "vss"),
-        ("serdes_bias_cml_pdk", "vss"),
-        ("serdes_bg_ota_pdk", "vss"),
-    ]:
-        cells.append(("bias", cell, REPO / "results/layout/bias_pdk/run8" / cell, True, sub))
+    ap = argparse.ArgumentParser(description="Summarize extracted parasitic capacitances from a Magic PEX SPICE file.")
+    ap.add_argument("pex_spice", type=Path, help="Path to extracted *_pex.spice file")
+    ap.add_argument("--mag", type=Path, default=None, help="Optional .mag file to auto-detect ports and bbox")
+    ap.add_argument("--ports", default="", help="Comma-separated port list (overrides --mag labels)")
+    ap.add_argument("--substrate", default="vss", help="Substrate net name (default: vss)")
+    ap.add_argument("--out", type=Path, default=None, help="Optional JSON output path")
+    args = ap.parse_args()
 
-    # Pre-verified Divider (run3)
-    cells.append(("pll_divider", "pll_cml_latch_pdk",
-                  REPO / "results/layout/divider_pdk/run3/pll_cml_latch_pdk", False, "vss"))
-
-    # Pre-verified VCO CML (r6)
-    cells.append(("pll_vco", "pll_vco_delay_r6_pdk",
-                  REPO / "results/layout/pll_r6/delay_abba_v3", False, "vss"))
-    cells.append(("pll_vco", "pll_buffer_r6_pdk",
-                  REPO / "results/layout/pll_r6/buffer_abba_v2", False, "vss"))
-
-    # Extract VCO cap/varactor + LDO MIM16 from variants into parasitic_audit/run1
-    vco_dir = REPO / "analog/pll/vco/layout/variants/r6_pdk"
-    for cell in ("pll_vco_varactor_clean", "pll_vco_cap_unit_r6_pdk", "pll_vco_cap_bank5_shared"):
-        w = extract_if_needed(audit_root, cell, vco_dir / f"{cell}.mag", vco_dir / f"{cell}_ref.spice")
-        cells.append(("pll_vco", cell, w, True, "vss"))
-
-    ldo_dir = REPO / "analog/ldo/layout/variants/mim_pdk"
-    w_ldo = extract_if_needed(audit_root, "serdes_ldo_mim16_pdk",
-                              ldo_dir / "serdes_ldo_mim16_pdk.mag", ldo_dir / "mim_pdk_ref.spice")
-    cells.append(("ldo", "serdes_ldo_mim16_pdk", w_ldo, True, "minus"))
-
-    records = []
-    for mod, cell, w, use_flat_export, substrate in cells:
-        mag = w / f"{cell}.mag"
-        c = Cell.read(mag)
+    pex_path = args.pex_spice.resolve()
+    ports = [p.strip() for p in args.ports.split(",") if p.strip()]
+    size_meta: dict = {}
+    if args.mag is not None:
+        c = Cell.read(args.mag.resolve())
         bx1, by1, bx2, by2 = c.bbox()
-        ports = sorted({nm for _, _, _, nm in c.labels})
-        if use_flat_export:
-            pex_target = audit_root / f"{cell}_flat_pex.spice"
-            try:
-                rep = export_flat_cap(w / f"{cell}.ext", w / f"{cell}_lvs.spice", pex_target)
-                substrate = rep["substrate"]
-                pex_info = summarize_pex_spice(pex_target, ports, substrate=substrate)
-                method = rep["method"]
-            except ValueError:
-                pex_info = summarize_pex_spice(w / f"{cell}_pex.spice", ports, substrate=substrate)
-                method = "magic_capfix_ext2spice"
-        else:
-            pex_src = w / f"{cell}_pex.spice"
-            pex_info = summarize_pex_spice(pex_src, ports, substrate=substrate)
-            method = "magic_capfix_ext2spice"
-
-        chk = (w / "check.log").read_text() if (w / "check.log").exists() else ""
-        drc_m = re.search(r"DRC_TOTAL (\d+)", chk)
-        drc_val = int(drc_m[1]) if drc_m else 0
-        lvs_ok = ("LVS_MATCH True" in chk) if chk else True
-
-        rec = {
-            "module": mod,
-            "cell": cell,
+        size_meta = {
             "size_um": [round(bx2 - bx1, 3), round(by2 - by1, 3)],
             "area_um2": round((bx2 - bx1) * (by2 - by1), 2),
-            "ports": ports,
-            "drc_boxes": drc_val,
-            "lvs_match": lvs_ok,
-            "substrate_ref": substrate,
-            "extraction_method": method,
-            **pex_info,
         }
-        records.append(rec)
-        print(f"{cell:28s} | area={rec['area_um2']:8.2f} um2 | DRC={rec['drc_boxes']} | "
-              f"Cgnd={rec['total_substrate_cap_fF']:7.2f} fF | Ccoup={rec['total_coupling_cap_fF']:7.2f} fF | {method}")
+        if not ports:
+            ports = sorted({nm for _, _, _, nm in c.labels})
 
-    out_data = REPO / "docs/data/layout_migrated_parasitics.json"
-    out_data.parent.mkdir(parents=True, exist_ok=True)
-    out_data.write_text(json.dumps(records, indent=2) + "\n")
-
-    cat = {
-        "date": "2026-11-13",
-        "scope": "Gemini4 Argon layout audit + PDK-clean migration + non-simulated parasitic extraction",
-        "migrated_cells": records,
+    rec = {
+        "pex_spice": str(pex_path),
+        "substrate_ref": args.substrate,
+        "ports": ports,
+        **size_meta,
+        **summarize_pex_spice(pex_path, ports, substrate=args.substrate),
     }
-    (REPO / "results/catalog/layout_migration_20261113.json").write_text(json.dumps(cat, indent=2) + "\n")
-    print("wrote", out_data)
+    text = json.dumps(rec, indent=2) + "\n"
+    if args.out is not None:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(text)
+    else:
+        print(text, end="")
 
 
 if __name__ == "__main__":

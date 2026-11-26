@@ -14,7 +14,7 @@ The PDK ll / hh sections move only PDK resistor devices; the project cells use i
 emulate() rewrites the deck so that every resistor in every included project cell (files under
 analog/) becomes R * k * (1 + tc1 * (T - 27)) and every bench reference current in CURRENTS is divided
 by the same factor: the planned reference I = m * Vbg / R uses the CML load resistor type, so the
-swing I * R stays put while currents and R * C time constants move (docs/design/bias.md).
+swing I * R stays put while currents and R * C time constants move (docs/design/bias_v2.md).
 Defaults from the passive card (high_po, w 1 um): hh k = 1.125, ll k = 0.875, tc1 = 300 ppm/C.
 Rewritten cell copies go to workdir/rcorner_<k>/ and the deck includes those.  Channel models,
 capacitors and sources are not touched; recorded boundary conditions keep their ideal termination.

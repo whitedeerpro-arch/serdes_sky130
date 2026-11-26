@@ -21,7 +21,7 @@
 
 每根线用分布式 Z(s)、Y(s)：三个串联 Rk‖Lk 近似导体损耗，三个并联串联 RC 支路近似介质弛豫。导出 S4P 与等效 SPICE（`pcb_family/*.s4p`、`*.spice`），并做过无源 AC 检查。长度只对本次选择的合成介质成立。
 
-有限长度无均衡眼开口估计（±32 UI、接收端参考 400 mVpp，`0.4 × (h0 − Σ|hk|)`）：C1 约 288 mV、C2 约 174 mV、C3 约 41 mV、C4 约 70 mV、C5 约 168 mV。不含窗外拖尾、噪声、TX/封装/AC 耦合、孔径和时钟误差。来源：[PCB 信道族](../history/pcb_channel_family.md)、[数据](../data/pcb_channel_family_results.json)。
+有限长度无均衡眼开口估计（±32 UI、接收端参考 400 mVpp，`0.4 × (h0 − Σ|hk|)`）：C1 约 288 mV、C2 约 174 mV、C3 约 41 mV、C4 约 70 mV、C5 约 168 mV。不含窗外拖尾、噪声、TX/封装/AC 耦合、孔径和时钟误差。数据见 [pcb_channel_family_results.json](../data/pcb_channel_family_results.json)，图集见 [信道表征图](../figures/channel/characterization/README.md)。
 
 ## 真实 TX 接 PCB（v0.1 TX，TT）
 
@@ -31,7 +31,7 @@
 | C2 | 366.3 mV | 155.1 mV | 76.6 mV | 0.212 UI | 0/256 |
 | C3 | 348.4 mV | 54.0 mV | 25.8 mV | 0.488 UI | 0/256 |
 
-串化器节点散布在三种信道下都约 0.042 UI，远端展宽主要来自信道 ISI，不要求为此重调 PLL。来源：[TX 接 PCB](../history/tx_pcb_channel_integration.md)。CTLE 之后的结果见 [RX 前端](rx_frontend.md)。
+串化器节点散布在三种信道下都约 0.042 UI，远端展宽主要来自信道 ISI，不要求为此重调 PLL。主线 CMOS/SST TX 过 `C2_loss6` 与 RX CTLE 均衡后的实测结果见 [TX SST v4 / v5](tx_sst_v4.md) 与 [CMOS RX v2 / 5G](rx_cmos_v2.md)。
 
 ## 适用范围
 

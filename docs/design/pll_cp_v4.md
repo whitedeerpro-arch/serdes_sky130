@@ -1,6 +1,6 @@
 # PLL Charge Pump v4 / v4.1（宽摆幅与副本主动伺服匹配）
 
-> **状态**：独立候选（`charge_pump_steer_v4.spice` / `pll_cp_steer_v4_pdk`），未替换主线 `config/pll_working_revision.toml`；保持 `up dn out vbn vbp ibias vdd vss` 精确 8 端口即插即用兼容。
+> **状态**：已采用于 4 Gb/s PLL v4 主线（[mainline_working_revision.toml](../../config/mainline_working_revision.toml)）并为 5 Gb/s Plan-C 共享电荷泵宏（`charge_pump_steer_v4.spice` / [v4_pdk](../../analog/pll/cp/layout/variants/v4_pdk/README.md)）；保持 `up dn out vbn vbp ibias vdd vss` 精确 8 端口即插即用兼容。
 
 ## 结论
 

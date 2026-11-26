@@ -1,6 +1,6 @@
 # 监测工具包
 
-> **状态**（2026-11-09）：通用慢速监测积木，模拟部分在 [analog/common/monitor](../../analog/common/monitor/README.md)，数字部分在 [digital/common](../../digital/common/README.md)。与具体模块解耦：只接电流、电压、时钟和参数，阈值、档数、窗口长度都是参数；使用方自己例化、给参数、写控制逻辑。第一个使用方是 PLL 粗码控制（I-18）。
+> **状态**（2026-11-09）：通用慢速监测积木，模拟部分在 [analog/common/monitor](../../analog/common/monitor/README.md)，数字同步器与持续性滤波（`mon_sync.sv`、`mon_persist.sv`）已集成进 [数字顶层 v3 / v4](../../digital/README.md)。与具体模块解耦：只接电流、电压、时钟和参数，阈值、档数、窗口长度都是参数；使用方自己例化、给参数、写控制逻辑。第一个使用方是 PLL 粗码控制（I-18）。
 > **已验证**：数字四件（频率计、同步器、持续性滤波、逐次逼近）Icarus 测试与 Verilator lint 通过。比较器、门限梯、窗口检测、温度感测的 PVT 与失配表征见下文各节。
 
 ## 组成
@@ -64,16 +64,16 @@
 
 ### 门限梯与窗口检测（PLL 实例，135 条件）
 
-PLL 的 [pll_vctrl_window](../../analog/pll/coarse/spice/vctrl_window.spice)：对地梯 0.80–1.10 V（20 mV 一档，运行码 5 = 0.900 V），对电源梯 VDD − 0.32…0.77 V（30 mV 一档，运行码 3 = VDD − 0.410 V），各 2 指拷贝（约 5 µA）。45 条件 × 电阻 tt/ll/hh 全部功能正确（门限内两输出都低，低于 vlo 50 mV 时 lo = 1，高于 vhi 50 mV 时 hi = 1）。
+PLL 的窗口检测网表（现行 CMOS 译码版见 [vctrl_window_cmos.spice](../../analog/pll/coarse/spice/vctrl_window_cmos.spice)）：对地梯 0.80–1.10 V（20 mV 一档，运行码 5 = 0.900 V），对电源梯 VDD − 0.32…0.77 V（30 mV 一档，运行码 3 = VDD − 0.410 V），各 2 指拷贝（约 5 µA）。45 条件 × 电阻 tt/ll/hh 全部功能正确（门限内两输出都低，低于 vlo 50 mV 时 lo = 1，高于 vhi 50 mV 时 hi = 1）。
 
 | 门限 | 对设计值的系统误差 | 主要来源 |
 |---|---|---|
 | vlo（0.900 V） | −14.4 … +3.2 mV | 拷贝电流随 VDD（1.65 V 最低）；电阻角只差约 2 mV |
 | vhi（VDD − 0.410 V） | −9.8 … +0.4 mV | NMOS 灌电流镜两管 Vds 不同（1.95 V 偏大） |
 
-**局部失配比系统误差大：vlo σ 23–31 mV、VDD − vhi σ 13–16 mV（5 个压力点各 105 样本，k·σ 分别 83–117 / 47–56 mV）。** 门限是 I·R：MC 里带隙未修调（vbg σ 2.2 %），2 指 LVT 拷贝匹配差，两项按全额进入（相对误差约 2.8 % / 3.4 %）。修调去掉带隙项后估计仍有约 2 %（拷贝）。对 PLL 的影响见[上电选码](pll_vco.md#门限误差的影响)：按芯片随机抽取时影响很小，约束来自上门限尾部越过 CP 上沿。测试台 [window_mc](../../analog/pll/coarse/tb/window_mc/run.py)，结果 `results/analog/pll/coarse/window_mc/20261109T055255Z`：40 样本/块在第 21 个样本撞上 3 GB 上限（约 140 MB/样本），按样本回收（`--analyse`），默认块改为 8。
+**局部失配比系统误差大：vlo σ 23–31 mV、VDD − vhi σ 13–16 mV（5 个压力点各 105 样本，k·σ 分别 83–117 / 47–56 mV）。** 门限是 I·R：MC 里带隙未修调（vbg σ 2.2 %），2 指 LVT 拷贝匹配差，两项按全额进入（相对误差约 2.8 % / 3.4 %）。修调去掉带隙项后估计仍有约 2 %（拷贝）。当前主线 VCO `r6` + PTAT `28/66`（见 [pll_vco_r6_ptat.md](pll_vco_r6_ptat.md)）已实现跨三温 45/45 单一共同码覆盖（最小边缘裕量 `+86.5 mV`），显著放宽了窗口门限压力。历史窗口 MC 结果位于 `results/analog/pll/coarse/window_mc/20261109T055255Z`。
 
-对地梯原来顶到 1.30 V，1.65 V 时 PMOS 拷贝只剩 0.35 V，vlo 偏 −24 mV；顶端降到 1.10 V 后为上表。检测器自身电流（上门限串 + 两比较器）8.6–12 µA，另加 6 指拷贝 15 µA。工作点测法（z = 1.1 V 及门限外 ±50 mV），比较器自身的系统失调见上节（< 1 mV）。测试台 [window_dc](../../analog/pll/coarse/tb/window_dc/run.py)，结果 `results/analog/pll/coarse/window_dc/20261109T052834Z`。
+对地梯原来顶到 1.30 V，1.65 V 时 PMOS 拷贝只剩 0.35 V，vlo 偏 −24 mV；顶端降到 1.10 V 后为上表。检测器自身电流（上门限串 + 两比较器）8.6–12 µA，另加 6 指拷贝 15 µA。工作点测法（z = 1.1 V 及门限外 ±50 mV），比较器自身的系统失调见上节（< 1 mV），结果位于 `results/analog/pll/coarse/window_dc/20261109T052834Z`。
 
 ### 温度感测 `serdes_tsense_vbe`
 
@@ -81,7 +81,7 @@ PLL 的 [pll_vctrl_window](../../analog/pll/coarse/spice/vctrl_window.spice)：�
 
 初版（rs 38 kΩ、梯 95 k / 1.867 k）量程偏热（码 15 中位 −35 °C），系统散布约 13 K（±6.5 K）：MOS 角 ±2.8 K（PNP 的 VBE 角）、VDD ±2.3 K（拷贝余量）、电阻角 ±1.4 K。降压后拷贝余量增加，VDD 项变小，散布降到 ±5.3 K（`results/analog/common/monitor/tsense_dc/20261109T053634Z`）。
 
-**随机部分（初版梯，未修调）：σ 8.5–12.5 K，k·σ 28–41 K**（TT 1.8 V 200 样本、SS 1.65 V 173 样本，码 3 / 9 / 14）。原因是 VBE 与 vbg / r_ref 派生的参考比较，带隙本身的失配（vbg σ 2.2 %）和两路 LVT 拷贝的失配（pfet_lvt A_VT ≈ 20 mV·µm）都按 1 V 量级全额进入；PTAT 方案同样受这两项限制（约 2 %，≈ 6 K）。做到 1–2 K 需要室温一点修调或斩波。PLL 用途只要粗分档：[上电选码模型](pll_vco.md#上电选码的实现2026-11-09模型待补点数据复核)显示 ±30 K 误差仍保留大部分好处，所以先不修调。测试台 [tsense_mc](../../analog/common/monitor/tb/tsense_mc/run.py)，结果 `results/analog/common/monitor/tsense_mc/20261109T062640Z`：会话结束时中断（FF 1.95 V 点未跑、SS 第 7 块末行截断），按样本回收（`--analyse`，截断行丢弃），默认块改为 8。
+**随机部分（初版梯，未修调）：σ 8.5–12.5 K，k·σ 28–41 K**（TT 1.8 V 200 样本、SS 1.65 V 173 样本，码 3 / 9 / 14）。原因是 VBE 与 vbg / r_ref 派生的参考比较，带隙本身的失配（vbg σ 2.2 %）和两路 LVT 拷贝的失配（pfet_lvt A_VT ≈ 20 mV·µm）都按 1 V 量级全额进入；PTAT 方案同样受这两项限制（约 2 %，≈ 6 K）。做到 1–2 K 需要室温一点修调或斩波；在现行 VCO `r6` + PTAT `28/66` 温补方案下（见 [pll_vco_r6_ptat.md](pll_vco_r6_ptat.md)），跨三温固定单码已 45/45 覆盖，温度感测保留作片上辅助遥测与粗分档。测试台 [tsense_mc](../../analog/common/monitor/tb/tsense_mc/run.py)，结果 `results/analog/common/monitor/tsense_mc/20261109T062640Z`。
 
 
 

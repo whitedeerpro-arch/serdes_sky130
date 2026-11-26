@@ -969,10 +969,20 @@ def main() -> None:
     bot_neu = neumann_inductance(fig8_segs[:16])
     fig8_m_inter = round(0.5 * (fig8_neu["L_total_nH"] - 2.0 * bot_neu["L_total_nH"]), 3)
 
-    # 3. Baseline Square 3T
+    # 3. Baseline Square 3T (archived historical reference; load if present else use archived constants)
     sq_segs = square_spiral_segs(210.0, 12.0, 4.0, 3, cw=True)
     sq_neu = neumann_inductance(sq_segs)
-    sq_sum = json.loads(SQ_SUMMARY.read_text())
+    if SQ_SUMMARY.exists():
+        sq_sum = json.loads(SQ_SUMMARY.read_text())
+    else:
+        sq_sum = {
+            "bbox_um": [-124.0, -124.0, 124.0, 124.0],
+            "width_um": 248.0,
+            "height_um": 248.0,
+            "drc_total": 0,
+            "geometry_and_analytical": {"r_dc_tt_ohm": 3.248},
+            "pex_caps_fF": {"p--sub": 396.51},
+        }
     sq_csub = float(sum(sq_sum["pex_caps_fF"].values()))
     sq_rdc = float(sq_sum["geometry_and_analytical"]["r_dc_tt_ohm"])
 
@@ -1026,12 +1036,32 @@ def main() -> None:
 
     # Top row: actual Magic `.mag` layouts
     ax0 = fig.add_subplot(gs[0, 0])
-    plot_mag_on_ax(
-        ax0, SQ_MAG,
-        f"(A) Square 3T Baseline (210×210 µm)",
-        f"L={sq_neu['L_total_nH']:.2f} nH | Rdc={sq_rdc:.2f} Ω | Csub={sq_csub:.0f} fF | Q5G={rf_sq['Q_5G']:.2f} | DRC=0",
-        arrows=[(0.0, 0.0, "CW (-Bz)")],
-    )
+    if SQ_MAG.exists():
+        plot_mag_on_ax(
+            ax0, SQ_MAG,
+            f"(A) Square 3T Baseline (210×210 µm)",
+            f"L={sq_neu['L_total_nH']:.2f} nH | Rdc={sq_rdc:.2f} Ω | Csub={sq_csub:.0f} fF | Q5G={rf_sq['Q_5G']:.2f} | DRC=0",
+            arrows=[(0.0, 0.0, "CW (-Bz)")],
+        )
+    else:
+        ax0.set_facecolor("#0f141e")
+        ax0.set_xlim(-140, 140)
+        ax0.set_ylim(-140, 140)
+        ax0.set_aspect("equal", adjustable="box")
+        ax0.set_title("(A) Square 3T Baseline (Archived)", color="#f1f5f9", fontsize=10.5, fontweight="bold", pad=6)
+        ax0.set_xlabel(
+            f"L={sq_neu['L_total_nH']:.2f} nH | Rdc={sq_rdc:.2f} Ω | Csub={sq_csub:.0f} fF | Q5G={rf_sq['Q_5G']:.2f}",
+            color="#cbd5e1", fontsize=8.5,
+        )
+        ax0.text(
+            0.0, 0.0,
+            "Square 3T draft archived\n(ind_sym_2n2_pdk removed)\nAnalytical baseline retained",
+            color="#94a3b8", fontsize=9.0, ha="center", va="center",
+            bbox=dict(boxstyle="round,pad=0.4", facecolor="#1e293b", edgecolor="#475569"),
+        )
+        ax0.tick_params(colors="#94a3b8", labelsize=7.5)
+        for sp in ax0.spines.values():
+            sp.set_color("#334155")
     ax1 = fig.add_subplot(gs[0, 1])
     plot_mag_on_ax(
         ax1, RESULTS_DIR / "vco5g_ind_oct_2n5_pdk.mag",

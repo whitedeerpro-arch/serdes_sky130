@@ -4,25 +4,25 @@
 
 项目任务的选择、验收、发布和交接见[工作流](../status/workflow.md)；当前结果与队列分别在[current.md](../status/current.md)和[执行计划](../status/prelayout_plan.md)。本页只维护验证方法。
 
-长扫描出现异常耗时时，先运行 `uv run python -m serdes_flow.audit <campaign>`：区分未启动、运行中断、超时、输出截断和完整求解，并统计各类进程耗时。它不判定电路通过；原始波形按 `tran` 终点核查，旧 MC 没有终点字段时只能检查行数。轻量进度监控仍用 `serdes_flow.watch`。MC 分块恢复与样本身份见 [统计方法](statistics.md#执行续跑与成本)，成本/架构评估见 [2026-11-05 记录](../history/workflow_review_20261105.md)。
+长扫描出现异常耗时时，先运行 `uv run python -m serdes_flow.audit <campaign>`：区分未启动、运行中断、超时、输出截断和完整求解，并统计各类进程耗时。它不判定电路通过；原始波形按 `tran` 终点核查，旧 MC 没有终点字段时只能检查行数。轻量进度监控仍用 `serdes_flow.watch`。MC 分块恢复与样本身份见 [统计方法](statistics.md#执行续跑与成本)。
 
 ## 测试层次
 
 | 层次 | 位置 | 关注点 |
 |---|---|---|
-| infrastructure | `verification/smoke/` | 工具、激励、模型入口 |
-| block | 各模块 `tb/<case>/` | 独立功能、电气范围、噪声、失配 |
-| integration | `analog/pll/top/tb/`、`analog/rx/top/tb/` 等 | 相邻模块的电平、极性、脉宽、负载 |
-| system | PLL 捕获/跟踪、RX 闭环、实时数模联调 | 锁定、跟踪、恢复数据 |
+| unit / infrastructure | `tests/`、`verification/unit_checks/` | 共享库自检、模型插值、局部电路冒烟与单元核对 |
+| block | 各模块 `tb/<case>/` | 独立功能、电气范围、噪声、失配、CPEX/RCX 签核 |
+| integration | `analog/pll/top/tb/`、`analog/rx/cmos_rx/tb/`、`analog/tx/sst/tb/` 等 | 相邻模块的电平、极性、脉宽、负载与后仿联调 |
+| system | `verification/top_cosim/`、`verification/stability/`、`digital/pnr/` | 全链协同仿真、供电 PDN 稳定性、RTL/GLS 闭环与片级签核 |
 
 实现视图（behavioral / schematic / extracted）是另一个维度。行为级锁定不能代替晶体管级起振或噪声验证。
 
 ### 分块衔接的常用边界
 
 - **理想化源 + 真实负载。** 保存上游真实波形的过零时刻，理想化成有限边沿源，再接真实 MOS buffer 与负载（例如 TX 时钟分发用 PLL 边沿记录）。
-- **电压记录回放。** 把上游节点电压用 B 源 `pwl(time, …)` 回放到下一级有限驱动阻抗之前（例如 RX 联调在 TX 隔离 buffer 输入回放），并用原负载对照验证截断误差。
+- **电压记录回放。** 把上游节点电压用 B 源 `pwl(time, …)` 回放到下一级有限驱动阻抗之前（例如 RX 联调在信道远端回放逐角 TX 波形），并用原负载对照验证截断误差。
 - **实测曲线行为模型。** 把同工况实测的 VCO 调谐曲线、PI 相位曲线做成行为模型，配真实 PFD/CP 或真实 RTL 做长时闭环。
-- **实时数模联调。** Verilator C++ 模型与 shared ngspice 连续双向运行，见 [verification/mixed_signal](../../verification/mixed_signal/README.md)。
+- **全链与数模协同仿真。** 模拟顶层与跨宏链路由 [verify_4g_full_chain.py](../../verification/top_cosim/verify_4g_full_chain.py) / [verify_5g_full_chain.py](../../verification/top_cosim/verify_5g_full_chain.py) 分段或同 deck 联调；数字顶层与 CDR/FIFO 闭环在 `digital/pnr/` 内通过 VCS RTL 与带延时 SDF GLS 验证。
 
 每种边界都要写明被裁掉的反向耦合（共享电源、偏置、回流），以及截断误差的验证方法。
 
@@ -78,20 +78,13 @@ run_id 用 UTC 时间加引擎/工况，例如 `20261027T120000Z_ngspice_tt_001`
 
 ### 归档
 
-≥ 1 MiB 的大波形可按原模块/实验/run 无损归档，完整读回核对 SHA256 后才移走原文件。旧路径缺文件时：
+≥ 1 MiB 的大波形按原模块/实验/run 无损压缩或归档，完整读回核对 SHA-256 后才移走原文件。索引见 [results/catalog](../../results/catalog/README.md)，维护命令见 [maintenance README](../../verification/maintenance/README.md)。
 
-```bash
-verification/results/artifact.sh locate results/某运行/raw/waveforms.tsv
-verification/results/artifact.sh restore results/某运行/raw/waveforms.tsv
-```
-
-索引见 [results/catalog](../../results/catalog/README.md)，规则见 [retention.toml](../../verification/results/retention.toml)。
-
-2026-10-31 起，结果目录内的大波形就地 gzip（`spice.Waves` 直接读 `.gz`）；批量处理用 [compress_waveforms.py](../../verification/maintenance/compress_waveforms.py)（跳过入库文件引用的波形、24 h 内的和运行中的目录，解压核对 SHA-256 后才删原件，清单在 `results/maintenance/compress_waveforms/`）。磁盘按固定分区划分，`/home` 只有 47 GB、`/opt` 75 GB。波形本体用 [waveform_archive.py](../../verification/maintenance/waveform_archive.py) `archive` 转存到 `/opt/serdes_archive/<同一相对路径>`，原位置换成文件软链接（先核对 SHA-256，再一次 rename 替换）；读取、续跑判断、登记边界的 SHA 校验都照常，记录文件留在原处，`verify` 检查链接，`restore <前缀>` 搬回。2026-11-08 两轮共转存 4237 个文件、20.6 GB（含 `results/archives` 下的打包文件），`results/` 在 `/home` 上剩 4.7 GB。整个 `results/` 迁到 `/opt` 并 bind mount 回原路径的备选方案是 [results_on_opt.sh](../../verification/maintenance/results_on_opt.sh)（需 root）。已被后续版本取代的探索轮次可以删除波形本体：删除前先用脚本把需要的数提成图和紧凑数据，保留每个运行的 `tb.cir`、日志、`execution.json`、激励和汇总，并把删除清单存在提取结果旁边。登记过的边界条件录制和被代码固定引用的运行不删。第一次清理：TX 选择时钟的 r2/v1/v2/v2b 回放、单链打拍探索与 clock_states 的非标定轮次（约 5 GB），提取见 [retrospective.py](../../analog/tx/serializer/tb/clock_replay/retrospective.py)，清单在 `results/analog/tx/serializer/clock_replay/retrospective/20261031T155741Z/deleted_waveforms.txt`。
+2026-10-31 起，结果目录内的大波形就地 gzip（`spice.Waves` 直接读 `.gz`）；批量处理用 [compress_waveforms.py](../../verification/maintenance/compress_waveforms.py)（跳过入库文件引用的波形、24 h 内的和运行中的目录，解压核对 SHA-256 后才删原件，清单在 `results/maintenance/compress_waveforms/`）。磁盘按固定分区划分，`/home` 只有 47 GB、`/opt` 75 GB。波形本体用 [waveform_archive.py](../../verification/maintenance/waveform_archive.py) `archive` 转存到 `/opt/serdes_archive/<同一相对路径>`，原位置换成文件软链接（先核对 SHA-256，再一次 rename 替换）；读取、续跑判断、登记边界的 SHA 校验都照常，记录文件留在原处，`verify` 检查链接，`restore <前缀>` 搬回。整个 `results/` 迁到 `/opt` 并 bind mount 回原路径的备选方案是 [results_on_opt.sh](../../verification/maintenance/results_on_opt.sh)（需 root）。已被后续版本取代的探索轮次可以删除波形本体：删除前先用脚本把需要的数提成图和紧凑数据，保留每个运行的 `tb.cir`、日志、`execution.json`、激励和汇总，并把删除清单存在提取结果旁边。登记过的边界条件录制和被代码固定引用的运行不删。
 
 ## 结构时序平衡分析
 
-结构层面的问题先在理论层面回答，不跑电路：路径上放哪些元件，各条路径之间的时序关系能否在 45 个 PVT 点上同时成立，每类元件还能变差多少。库是 [`serdes_flow.balance`](../../src/serdes_flow/balance.py)，元件库是 [`config/timing_elements.json`](../../config/timing_elements.json)。
+结构层面的问题先在理论层面回答，不跑电路：路径上放哪些元件，各条路径之间的时序关系能否在 45 个 PVT 点上同时成立，每类元件还能变差多少。库是 [`serdes_flow.balance`](../../src/serdes_flow/balance.py)。
 
 - **元件是约束，不是尺寸。** 延迟 = TT 值 × 工艺系数 × (1 + α·v + β·t)，v = (VDD − 1.8)/0.15，t = (T − 22.5)/62.5。参数由实测拟合（`fit_element`，记录点数与残差），也可以直接写成目标值。复制单元用 `track` 指向被跟踪的元件，跟踪误差另给。
 - **结构是路径。** 路径由 `Inst`（元件实例；两条路径上同一个 id 是同一个物理实例，没有失配）、`Fixed`（精确偏移，例如 VCO 相位）、`Knob`（对中旋钮：固定档、延迟、级数）组成。
@@ -99,31 +92,31 @@ verification/results/artifact.sh restore results/某运行/raw/waveforms.tsv
 - **先配平，再对中。** 旋钮只移动名义偏移，`centre` 按路径顺序逐路联合搜索、再按最差裕量细调。散布由两条路径的元件组成差决定：同类元件互相抵消，异类元件不抵消。
 - **输出。** 最差裕量；每个工艺的带宽（一颗芯片只有一个工艺，带宽就是它随 V/T 的摇动）；`lambda_max`（所有元件的 PVT 变化同时放大多少倍、重新对中后仍成立）；`limits`（旋钮不动时，每类元件的 PVT 变化和延迟各能放大多少倍，以及失配能放大多少倍）。
 
-**用于其他模块。** 把模块写成路径和关系即可，例如 RX 多相采样时钟、PLL 分频反馈、数据路径打拍。`limits` 中的"延迟可放大倍数"就是这类元件的 shrink 余量：可以换成更慢、更省电的单元，直到这个倍数用完。最紧的那条关系指出 enhance 应该花在哪里。新元件类型先拟合或给出目标值，写进元件库并注明来源。
+**用于其他模块。** 把模块写成路径和关系即可，例如 RX 多相采样时钟、PLL 分频反馈、数据路径打拍。`limits` 中的"延迟可放大倍数"就是这类元件的 shrink 余量：可以换成更慢、更省电的单元，直到这个倍数用完。最紧的那条关系指出 enhance 应该花在哪里。新元件类型先拟合或给出目标值，写进结构脚本并注明来源。
 
-第一个用例是 TX 选择时钟构造，见 [TX 时钟分发](../design/tx_clock_distribution.md#时钟构造结构比较)。
+历史上第一个用例是早期 CML TX 选择时钟 S0–S5 结构比较（主线现已采用 CMOS/SST 串化架构，见 [tx_sst_v4.md](../design/tx_sst_v4.md)）。
 
 时序平衡是尺寸设计流程中的一类约束；完整流程（输入、输出、迭代、拓扑判据）见 [尺寸设计流程](sizing.md)。
 
 ## 相位噪声
 
-ngspice 没有 PSS/PNOISE，所以用 ISF：瞬态里在噪声点注入小电荷脉冲，由前后相位跳变得到 h(x)，再和器件噪声谱合成 L(f)。工具都在 [phase_noise](../../analog/pll/vco/tb/phase_noise/)，公式在 [pnoise.py](../../src/serdes_flow/pnoise.py)。
+ngspice 没有 PSS/PNOISE，所以用 ISF：瞬态里在噪声点注入小电荷脉冲，由前后相位跳变得到 h(x)，再和器件噪声谱合成 L(f)。当前 VCO 相噪脚本在 [phase_noise](../../analog/pll/vco/tb/phase_noise/)，公式在 [pnoise.py](../../src/serdes_flow/pnoise.py)。
 
 - 白噪声：L = (S/2)⟨(hα)²⟩/(2πΔf)²；慢噪声：L = (S(Δf)/2)⟨hα⟩²/(2πΔf)²。α(x) 是噪声随工作点的调制（gm、Id）。
-- 一键跑一个角：[corner.py](../../analog/pll/vco/tb/phase_noise/corner.py)（调谐 → ISF → 器件噪声 → L(f) → Kb/Kvdd/Kvco → CP、偏置线噪声 → [PLL 合成](../../analog/pll/top/theory/pll_noise.py)），按步骤断点续跑。之后 [cdr_jitter.py](../../analog/pll/top/theory/cdr_jitter.py) 算 CDR 后抖动，[psrr_tone.py](../../analog/pll/vco/tb/phase_noise/psrr_tone.py) 测电源到频率的相量增益。
-- 核对：直接瞬态噪声（[direct.py](../../analog/pll/vco/tb/phase_noise/direct.py)）÷ ISF 预测，TT 理想偏置（r3）0.85–1.14，差 ≤ 0.7 dB；SF 1.65 V 85 °C R hh、真实偏置（r5），两个种子平均后 m = 4 / 8 / 16 为负载 R 0.97 / 0.98 / 0.90、输入管 0.88 / 0.94 / 0.92，ISF 略偏保守，差 ≤ 0.6 dB。DC 电流引起的频移（[slow.py](../../analog/pll/vco/tb/phase_noise/slow.py)）和 ⟨h⟩ 预测差 1.4 %（TT）。
+- 流程：r6 + PTAT 相噪表征脚本 [char_r6_ptat_perf.py](../../analog/pll/vco/tb/phase_noise/char_r6_ptat_perf.py)（调谐 → ISF → 器件噪声 → L(f) → Kb/Kvdd/Kvco），再由 [pll_noise.py](../../analog/pll/top/theory/pll_noise.py) 合成闭环相噪、[cdr_jitter.py](../../analog/pll/top/theory/cdr_jitter.py) 算 CDR 后抖动、[loop_psrr.py](../../analog/pll/top/theory/loop_psrr.py) 评估电源到频率的相量传递。
+- 历史直接瞬态噪声核对：直接瞬态噪声 ÷ ISF 预测在 TT 理想偏置下为 0.85–1.14（差 ≤ 0.7 dB）；SF 1.65 V 85 °C R hh 真实偏置下，两随机种子平均后负载 R 为 0.90–0.98、输入管为 0.88–0.94，ISF 略偏保守（差 ≤ 0.6 dB）；DC 电流引起的频移与 ⟨h⟩ 预测差 1.4%（TT）。
 
 三个容易出错的地方：
 
-1. **相位覆盖。** 脉冲间隔 = K 周期 + 步进，周期误差会累积：K = 10 时 0.1 % 的周期误差就是每脉冲 5 ps（步进约 20 ps）。环比假设的周期慢时扫不满一周，⟨h⟩ 和 rms 在缺口上插值。`isf.py` 现在名义扫 1.25 周，缺口 > 0.08 周时报错。
-2. **振幅建立。** 热、慢角振幅建立约 14 ns，之前测的频率偏高约 1.4 %。ISF 从 `--settle` 开始加脉冲（r5 用 12 ns）；`slow.py` 的窗口要在建立之后。
-3. **直流灵敏度不等于高频灵敏度。** 偏置线有去耦，VDD 到偏置线这条路只在低频起作用，FS 1.65 V 热角直流 Kvdd −782 MHz/V，20 MHz 下只有 −584。电源门槛用 `psrr_tone.py`，不用 `slow.py --site vdd`。
+1. **相位覆盖。** 脉冲间隔 = K 周期 + 步进，周期误差会累积：K = 10 时 0.1 % 的周期误差就是每脉冲 5 ps（步进约 20 ps）。环比假设的周期慢时扫不满一周，⟨h⟩ 和 rms 在缺口上插值。ISF 扫描须名义覆盖 ≥ 1.25 周，缺口 > 0.08 周时报错。
+2. **振幅建立。** 热、慢角振幅建立约 14 ns，过早测量会使频率偏高约 1.4 %。ISF 脉冲注入和慢灵敏度窗口均须在振幅充分建立之后开始。
+3. **直流灵敏度不等于高频灵敏度。** 偏置线有去耦，VDD 到偏置线这条路只在低频起作用，FS 1.65 V 热角直流 Kvdd −782 MHz/V，20 MHz 下只有 −584 MHz/V。高频电源门槛应采用交流单音相量增益，而非直流灵敏度。
 
-没有进预算的：变容管串联电阻和电容阵列开关的热噪声（手算约 +0.15 dB，SF 热角 r5）。
+没有进预算的：变容管串联电阻和电容阵列开关的热噪声（手算约 +0.15 dB，SF 热角）。
 
 ## 失配与蒙特卡洛
 
-工艺角管全局偏差，MC（`<corner>_mm`）管局部失配；判据分串联（每个实例都必须过）和传播（平方和），器件参数和模块预算超出都不算失败，只看系统判据。方法、样本数、修调与工具见 [统计与蒙特卡洛](statistics.md)。
+工艺角管全局偏差，MC（`<corner>_mm`）管局部失配；判据分串联（每个实例都必须过）和传播（平方和），器件参数和模块预算超出都不算失败，只看系统判据。方法、样本数、修调、工具与 SKY130A 失配/电阻噪声实测边界见 [统计与蒙特卡洛](statistics.md)。
 
 ## 有效性约定
 
@@ -134,17 +127,15 @@ ngspice 没有 PSS/PNOISE，所以用 ISF：瞬态里在噪声点注入小电荷
 - PVT 不开 Monte Carlo；统计运行另记随机种子与失配开关，先确认统计参数确实改变了实例。
 - Xyce 与 ngspice 的模型兼容性、噪声方法分别验证；HB、普通小信号 NOISE 或短窗 FFT 不自动等于已验证的振荡器相噪流程。
 
-## 冒烟测试
+## 离线自检与冒烟
 
-从项目根目录运行，不加载 PDK：
+从项目根目录运行共享库与流程离线自检（不加载 PDK）：
 
 ```bash
-run_dir="results/infrastructure/stimuli/$(date -u +%Y%m%dT%H%M%SZ)_ngspice"
-mkdir -p "$run_dir/logs"
-/opt/ngspice47/bin/ngspice -b -o "$run_dir/logs/simulator.log" verification/smoke/tb_stimuli_ngspice.cir
+uv run pytest -q
 ```
 
-Xyce 版本为 `verification/smoke/tb_stimuli_xyce.cir`。十项检查值见 [smoke README](../../verification/smoke/README.md)。
+批量 SPICE 任务通过 `spice.run_many` 默认执行开跑前 1 ns 冒烟，确认 ngspice 无报错并写出波形后再放行整批。
 
 ## 仿真成本与精简模型库
 
@@ -152,7 +143,7 @@ Xyce 版本为 `verification/smoke/tb_stimuli_xyce.cir`。十项检查值见 [sm
 
 `serdes_flow.model_library.build`提供显式选择器件族的名义精简库：保留完整器件文件、共有参数及原include顺序，不改模型表达式或原PDK；不自动替换任何生产测试台。统计段拒绝生成，MC随机身份未认证；自定义网表须显式给全依赖，新增使用先与完整库对照。
 
-裁剪证明的是与输入库等价；固定电阻的已知AC导数问题仍需显式选用[已验证overlay](../design/fixed_poly_ac_overlay.md)作为输入，不能因两库相同就忽略原模型问题。
+裁剪证明的是与输入库等价；固定多晶硅电阻的已知 AC 导数问题仍需显式选用经验证的模型修正输入，不能因精简库与完整库一致就忽略原模型问题。
 
 2026-11-13实测（单worker、热缓存；[紧凑数据](../data/model_library_cost.json)直接链接完整结果）：
 
@@ -165,7 +156,6 @@ Xyce 版本为 `verification/smoke/tb_stimuli_xyce.cir`。十项检查值见 [sm
 
 ```bash
 uv run pytest -q tests/test_model_library.py
-uv run python verification/benchmarks/model_library.py
 ```
 
 ## 历史脚本

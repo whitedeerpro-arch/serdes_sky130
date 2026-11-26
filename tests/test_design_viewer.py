@@ -71,10 +71,13 @@ def test_project_hierarchy_and_evidence_links_are_valid(tmp_path):
     data = workspace.catalog()
     assert {n["id"] for n in data["nodes"] if n["parent"] == "serdes"} == {"tx", "bias", "rx", "pll", "channel"}
     nodes = {n["id"]: n for n in data["nodes"]}
+    assert not any(n["id"].endswith(".legacy") for n in data["nodes"])
+    assert nodes["pll.lc_vco_5g"]["parent"] == "pll"
+    assert nodes["pll.div_ab_5g"]["parent"] == "pll"
     assert nodes["pll.saff_feedback"]["parent"] == "pll"
-    assert nodes["tx.serializer"]["parent"] == "tx.legacy"
-    assert nodes["rx.readout"]["parent"] == "rx.legacy"
-    assert nodes["pll.divider"]["parent"] == "pll.legacy"
+    assert nodes["bias.ldo_hv18"]["parent"] == "bias"
+    assert nodes["tx.sst"]["parent"] == "tx"
+    assert nodes["rx.cmos_pi"]["parent"] == "rx"
     export = tmp_path / "catalog.js"
     export_catalog(workspace, export)
     assert export.read_bytes() == (ROOT / "web/design/catalog.js").read_bytes()
@@ -103,7 +106,8 @@ def test_source_catalog_links_to_definitions_and_covers_production_rtl():
                 assert re.search(r"^\s*" + declaration + re.escape(symbol) + r"(?=\s|[;#(]|$)",
                                  source.read_text(), re.MULTILINE), entry["path"]
 
-    filelist = workspace.artifact("digital/pnr/rtl_v3/rtl_v3.f").read_text().splitlines()
-    production = {line for line in filelist if line.startswith("digital/") and not Path(line).name.startswith("tb_")}
-    assert production
-    assert production <= source_paths
+    for flist_path in ("digital/pnr/rtl_v4_32b/rtl_v4.f", "digital/pnr/rtl_v3/rtl_v3.f"):
+        filelist = workspace.artifact(flist_path).read_text().splitlines()
+        production = {line for line in filelist if line.startswith("digital/") and not Path(line).name.startswith("tb_")}
+        assert production, flist_path
+        assert production <= source_paths, f"Missing RTL from {flist_path}: {sorted(production - source_paths)}"

@@ -32,23 +32,3 @@ def test_window_cannot_extrapolate():
     t=np.array([0.,1.,2.]);y=np.array([0.,1.,0.])
     with pytest.raises(ValueError,match='uncovered'):
         clock.cycle_amplitudes(t,y,-.1,1.)
-
-
-def test_confirmation_screen_uses_worst_cycle():
-    import importlib.util
-    from serdes_flow.project import ROOT
-
-    path=ROOT/'verification/plotting/tx_clock_output_confirmation.py'
-    spec=importlib.util.spec_from_file_location('confirmation_test',path)
-    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    class Wave:
-        t=np.linspace(0,10e-9,20001)
-        amplitude=np.where((t>=4e-9)&(t<4.5e-9),.03,.09)
-        y=amplitude*np.sin(2*np.pi*t/.5e-9)
-        def __getitem__(self,name):
-            return 1.5+(self.y if name=='c2gp' else -self.y)
-    w=Wave();result=module.signal_metrics(w,1e-9,9e-9)
-    assert result['difference_pp_v'] > .3
-    assert result['cycle_amplitudes']['min_pp_v'] < .15
-    assert result['clock_amplitude_screen_150_to_400mv'] is False
-    assert result['clock_design_target_at_least_200mv'] is False

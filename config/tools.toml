@@ -1,32 +1,20 @@
-# 本机路径；通用 case 执行器未接入，mixed_signal 有独立 C++ 运行入口。
+# 本机 EDA 与仿真工具路径配置。
 [simulators.ngspice]
 executable = "/opt/ngspice47/bin/ngspice"
 version = "47"
 init_file = "config/ngspice/spiceinit"
-
-[simulators.ngspice.windowed_capture]
-status = "small_RC_FIFO_prototype_verified; not_general_interactive_driver"
-preferred_long_run_output = "binary_raw_to_FIFO_and_bounded_external_ring"
-contract = "verification/streaming/case.toml"
-results = "docs/data/ngspice_streaming_capture.json"
-preserves_solver_state = true
-interactive_feedback_verified = false
 
 [simulators.ngspice.shared]
 library = "/home/host/.local/opt/ngspice47-shared/lib/libngspice.so"
 include = "/home/host/.local/opt/ngspice47-shared/include"
 version = "47"
 solver = "KLU"
-status = "live_Verilator_RTL_MOS_PI_CTLE_sampler_CMOS_short_flow_verified"
 one_analysis_per_process = true
-contract = "verification/mixed_signal/case.toml"
-results = "docs/data/mixed_signal_cosim.json"
 
 [simulators.verilator]
 executable = "/usr/bin/verilator"
 version = "4.028"
 flow = "SystemVerilog_to_CXX; direct_eval_ports; no_DPI_wrapper_required"
-build = "verification/mixed_signal/Makefile"
 
 [simulators.xyce]
 executable = "/home/host/.local/eda/bin/Xyce"
@@ -37,20 +25,13 @@ sky130_verified = false
 [timing.opensta]
 executable = "/home/host/.local/opt/opensta-focal-20191111/usr/bin/sta"
 version = "2.0.17"
-flow = "verification/digital/tx_ingress_timing.py"
-status = "local_guard_feasibility_only; not_signoff; see_archived_constraints_and_tool_warnings"
+status = "local_timing_checks_only; signoff_sta_runs_in_openroad_pnr_flow"
 
 [layout]
 magic = "/home/host/.local/bin/magic"
 magic_batch = "/home/host/.local/opt/magic-8.3.685-capfix/bin/magic-capfix"
 klayout = "/home/host/.local/bin/klayout"
 netgen = "/home/host/.local/bin/netgen"
-
-[schematic]
-xschem = "/usr/bin/xschem"
-version = "2.8.1"
-project_rc = "xschemrc"
-library_aliases = "schematic_lib/serdes"
 
 [python]
 executable = ".venv/bin/python"

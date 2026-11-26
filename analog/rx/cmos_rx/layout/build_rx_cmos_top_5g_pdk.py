@@ -6,28 +6,27 @@
                                 1:1 (72 cardinal perimeter ports, ready to mate with `serdes_digital_top_v4`).
 
 Integrated Signed-Off PDK Sub-Macros:
-  1. `serdes_rx_pi_4ph_5g_pdk`     (`variants/v5g_4ph_pdk/`): 2.5 GHz 4->8 octature + 64-code CMOS PI + 1.25 GHz QDiv2
-  2. `serdes_rx_ctle_shunt_5g_pdk` (`variants/ctle_shunt_5g_pdk/`): 5G shunt-peaked CTLE + 8.252 nH stacked inductor
-  3. `serdes_rx_term_pdk`          (`variants/v2_pdk/`): 50 Ohm split RX input termination
-  4. `serdes_bias_ctle_v2`         (inline exact PDK LVT diode mirror adjacent to CTLE vbias)
-  5. `8x serdes_rx_dt_slicer_pdk`  (`variants/v2p3_pdk/`): Abutted 236.80 um quarter-rate Double-Tail slicer bank
-  6. `serdes_rx_cmos_deser16_pdk`  (`variants/v2p3_pdk/`): Pitch-matched 236.80 um 8->32 static CMOS deserializer
+  1. `serdes_rx_pi_4ph_5g_pdk`        (`variants/v5g_4ph_v3_pdk/`): 2.5 GHz 4->8 octature + 64-code CMOS PI + hardened 1.25 GHz QDiv2
+  2. `serdes_rx_ctle_shunt_5g_w3_pdk` (`variants/ctle_shunt_5g_w3_pdk/`): W3 gm/Id=10.7 5G shunt-peaked CTLE + compact 57.6x57.6 um 8.204 nH M4+M2 stacked inductor (0% M5)
+  3. `serdes_rx_term_pdk`             (`variants/v2_pdk/`): 50 Ohm split RX input termination
+  4. `serdes_bias_ctle_v2`            (inline exact PDK LVT diode mirror adjacent to CTLE vbias)
+  5. `8x serdes_rx_dt_slicer_5g_pdk`  (`variants/slicer_5g_pdk/`): Abutted 236.80 um quarter-rate 5G StrongARM slicer bank
+  6. `serdes_rx_cmos_deser16_pdk`     (`variants/v2_pdk/`): Pitch-matched 236.80 um 8->32 static CMOS deserializer
 
-Rectangular Isolated-Coil Floorplan (~350 x 200 um = ~0.070 mm^2, AR ~ 1.75):
+Rectangular Isolated-Coil Floorplan (~312.1 x 199.4 um = 0.0622 mm^2, AR ~ 1.57):
   - West-South  [0..173.4] x [0..72.7]     : `serdes_rx_pi_4ph_5g_pdk` (0% M5; ip/qp/in/qn + rst_n West; a/b/f South)
-  - West-Middle [0..236.8] x [77.1..108.6] : 8x abutted Double-Tail slicers + equalized 110 um 8-phase clock channel
+  - West-Middle [0..236.8] x [77.1..108.6] : 8x abutted 5G StrongARM slicers + equalized 110 um 8-phase clock channel
   - West-North  [0..236.8] x [111.3..197.3]: Pitch-matched `serdes_rx_cmos_deser16_pdk` (wd0..15, we0..15, wclk North)
-  - East Bay    [250.2..341.8] x [27.8..183.8]:
-      * Vertically mirrored (`mirror_y=True`) `serdes_rx_ctle_shunt_5g_pdk`:
-          - Active core at y=[58.5..86.0] directly aligned with slicer `inp/inn` (84.45/85.25) and VDD (89.5)!
-          - 8.252 nH stacked inductor isolated in North-East quiet bay [250.2..341.8] x [92.2..183.8]
-            (13.4 um clear of slicers/deser, 21.4 um clear of M5 power comb, 76.8 um from 2.5 GHz PI, 0 M5 over coil!)
-      * `serdes_rx_term_pdk` ([308.6..342.0] x [27.8..44.2]) + `serdes_bias_ctle_v2` ((290.0, 36.0)) directly below CTLE
-        active -> straight vertical M4 `rxp/rxn` feed into CTLE `inp/inn` with zero crossings!
+  - East Bay    [245.0..302.6] x [33.8..149.1]:
+      * Vertically mirrored (`mirror_y=True`) `serdes_rx_ctle_shunt_5g_w3_pdk`:
+          - Active core directly aligned with slicer `inp/inn` (84.45/85.25) and VDD (89.5)!
+          - Compact 57.6x57.6 um 8.204 nH M4+M2 stacked inductor isolated in North-East quiet bay [245.0..302.6] x [91.5..149.1]
+            (8.2 um clear of slicers, 16.2 um clear of M5 power comb, 0% M5 over coil!)
+      * `serdes_rx_term_pdk` + `serdes_bias_ctle_v2` directly below CTLE active -> straight vertical M4 `rxp/rxn` feed into CTLE `inp/inn` with zero crossings!
   - Cardinal Perimeter Ports (72 total):
       * West  : ip, qp, in, qn (2.5 GHz LC-VCO I/Q clocks), rst_n, vdd, vss
-      * South : a0..7, b0..7, f0..7, eq0, eq1, ibias_ctle, vcm_ref
-      * East  : rxp, rxn (high-speed analog differential input), ctle_p, ctle_n (monitor)
+      * South : a0..7, b0..7, f0..7, eq0, eq1, ibias_ctle, vcm_ref, ctle_p, ctle_n (monitor)
+      * East  : rxp, rxn (high-speed analog differential input)
       * North : wd0..15, we0..15, wclk (33-bit 312.5 MHz digital bus -> `serdes_digital_top_v4`)
 """
 from __future__ import annotations
@@ -44,10 +43,7 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 import rx_layout_common as rlc  # noqa: E402
-import build_rx_cmos_pi_pdk as pi_b  # noqa: E402
 import build_rx_cmos_top_pdk as top4g  # noqa: E402
-import build_rx_ctle_shunt_5g_pdk as ctle5g_b  # noqa: E402
-import build_rx_ctle_shunt_5g_compact_pdk as ctle5g_c  # noqa: E402
 import build_rx_ctle_shunt_5g_w3_pdk as ctle5g_w3  # noqa: E402
 from rx_layout_common import (  # noqa: E402
     Cell,
@@ -65,9 +61,7 @@ if str(LAYOUT_VERIF_DIR) not in sys.path:
     sys.path.insert(0, str(LAYOUT_VERIF_DIR))
 import route_manhattan as rm  # noqa: E402
 SPICE_DIR = REPO / "analog/rx/cmos_rx/spice"
-PI_5G_DIR = HERE / "variants" / "v5g_4ph_pdk"
-CTLE_5G_DIR = HERE / "variants" / "ctle_shunt_5g_pdk"
-CTLE_5G_COMPACT_DIR = HERE / "variants" / "ctle_shunt_5g_compact_pdk"
+PI_5G_DIR = HERE / "variants" / "v5g_4ph_v3_pdk"
 CTLE_5G_W3_DIR = HERE / "variants" / "ctle_shunt_5g_w3_pdk"
 V2_DIR = HERE / "variants" / "v2_pdk"
 V2P3_DIR = HERE / "variants" / "v2p3_pdk"
@@ -107,8 +101,8 @@ def _write_ref_spice_5g(
     cell_name: str,
     *,
     pi_dir: Path = PI_5G_DIR,
-    slicer_variant: str = "v2p3_pdk",
-    ctle_variant: str = "w3",
+    slicer_variant: str = "slicer_5g_pdk",
+    ctle_variant: str = "ctle_shunt_5g_w3_pdk",
     inductor_open: bool = False,
 ) -> list[str]:
     """Generate flat 100% PDK-primitive LVS reference netlist for `serdes_rx_cmos_top_5g_pdk`.
@@ -116,6 +110,8 @@ def _write_ref_spice_5g(
     Includes the exact evaluated `*_ref.spice` subcircuits for every signed-off submacro so Netgen
     compares true numeric W/L/NF parameters with zero un-evaluated `{param}` defaults.
     """
+    if ctle_variant not in ("w3", "ctle_shunt_5g_w3_pdk"):
+        raise ValueError(f"Unsupported CTLE variant {ctle_variant!r}; use 'ctle_shunt_5g_w3_pdk' (or 'w3').")
     term_ref = top4g._resolve_submacro(V2P3_DIR, "serdes_rx_term_pdk_ref.spice").read_text()
     if slicer_variant == "slicer_5g_pdk":
         slicer_ref = (SLICER_5G_DIR / "serdes_rx_dt_slicer_5g_pdk_ref.spice").read_text()
@@ -125,7 +121,7 @@ def _write_ref_spice_5g(
         slicer_subckt = "serdes_rx_dt_slicer_pdk"
     deser_ref = top4g._resolve_submacro(V2P3_DIR, "serdes_rx_cmos_deser16_pdk_ref.spice").read_text()
     pi_ref = (pi_dir / "serdes_rx_pi_4ph_5g_pdk_ref.spice").read_text()
-    ctle_prim_fn = ctle5g_w3.active_primitive_lines_w3 if ctle_variant == "w3" else ctle5g_b._active_primitive_lines
+    ctle_prim_fn = ctle5g_w3.active_primitive_lines_w3
 
     bias_sub = (
         ".subckt serdes_bias_ctle_v2_pdk iin vss\n"
@@ -189,16 +185,18 @@ def build_rx_cmos_top_5g_pdk(
     add_ports: bool = True,
     include_inductor: bool = True,
     pi_dir: Path = PI_5G_DIR,
-    slicer_variant: str = "v2p3_pdk",
-    ctle_variant: str = "w3",
+    slicer_variant: str = "slicer_5g_pdk",
+    ctle_variant: str = "ctle_shunt_5g_w3_pdk",
     results_dir: Path = RESULTS_DIR,
 ) -> tuple[Cell, dict]:
     """Assemble integrated 5.0 Gb/s `serdes_rx_cmos_top_5g_pdk` (72 ports)."""
     if cache is None:
         cache = PdkCache(results_dir / "_pdk_cache")
+    if ctle_variant not in ("w3", "ctle_shunt_5g_w3_pdk"):
+        raise ValueError(f"Unsupported CTLE variant {ctle_variant!r}; use 'ctle_shunt_5g_w3_pdk' (or 'w3').")
     c = Cell()
-    is_w3 = (ctle_variant == "w3")
-    is_compact = ctle_variant in ("compact", "w3")
+    is_w3 = True
+    is_compact = True
 
     # Load all signed-off sub-macros (strip labels so only top-level perimeter ports exist)
     pi_mag = pi_dir / "serdes_rx_pi_4ph_5g_pdk.mag"
@@ -210,31 +208,13 @@ def build_rx_cmos_top_5g_pdk(
     )
     deser_mag = top4g._resolve_submacro(V2P3_DIR, "serdes_rx_cmos_deser16_pdk.mag")
     if include_inductor:
-        ctle_mag = (
-            CTLE_5G_W3_DIR / "serdes_rx_ctle_shunt_5g_w3_pdk.mag"
-            if is_w3 else (
-                CTLE_5G_COMPACT_DIR / "serdes_rx_ctle_shunt_5g_compact_pdk.mag"
-                if ctle_variant == "compact" else
-                CTLE_5G_DIR / "serdes_rx_ctle_shunt_5g_pdk.mag"
-            )
-        )
+        ctle_mag = CTLE_5G_W3_DIR / "serdes_rx_ctle_shunt_5g_w3_pdk.mag"
         ctle_cell = top4g._read_unlabeled(ctle_mag)
     else:
-        if is_w3:
-            act_cell, act_meta = ctle5g_w3.build_rx_ctle_active_5g_w3_pdk(cache, add_ports=False)
-            ctle_cell, _ = ctle5g_w3.build_w3_ctle_top(
-                act_cell, act_meta, include_inductor=False, add_ports=False
-            )
-        elif ctle_variant == "compact":
-            act_cell, act_meta = ctle5g_b.build_rx_ctle_active_5g_pdk(cache, add_ports=False)
-            ctle_cell, _ = ctle5g_c.build_compact_ctle_top(
-                act_cell, act_meta, include_inductor=False, add_ports=False
-            )
-        else:
-            act_cell, act_meta = ctle5g_b.build_rx_ctle_active_5g_pdk(cache, add_ports=False)
-            ctle_cell, _ = ctle5g_b.build_rx_ctle_shunt_5g_top(
-                act_cell, act_meta, include_inductor=False, add_ports=False
-            )
+        act_cell, act_meta = ctle5g_w3.build_rx_ctle_active_5g_w3_pdk(cache, add_ports=False)
+        ctle_cell, _ = ctle5g_w3.build_w3_ctle_top(
+            act_cell, act_meta, include_inductor=False, add_ports=False
+        )
 
     pi_cell = top4g._read_unlabeled(pi_mag)
     term_cell = top4g._read_unlabeled(term_mag)
@@ -655,12 +635,12 @@ def build_rx_cmos_top_5g_pdk(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--pi-variant", default="v5g_4ph_pdk",
-                    help="4-phase 5G PI variant subdir under variants/ (default: v5g_4ph_pdk; use v5g_4ph_v3_pdk for hardened v3)")
-    ap.add_argument("--slicer-variant", choices=["v2p3_pdk", "slicer_5g_pdk"], default="v2p3_pdk",
-                    help="Slicer variant: v2p3_pdk (legacy 4G double-tail) or slicer_5g_pdk (5G StrongARM 1:1 drop-in)")
-    ap.add_argument("--ctle-variant", choices=["w3", "compact", "m5m3"], default="w3",
-                    help="CTLE variant: w3 (gm/Id=10.7 + 57.6um M4+M2, default), compact (legacy active + M4+M2), or m5m3")
+    ap.add_argument("--pi-variant", default="v5g_4ph_v3_pdk",
+                    help="4-phase 5G PI variant subdir under variants/ (default: v5g_4ph_v3_pdk)")
+    ap.add_argument("--slicer-variant", choices=["slicer_5g_pdk", "v2p3_pdk"], default="slicer_5g_pdk",
+                    help="Slicer variant: slicer_5g_pdk (5G StrongARM 1:1 drop-in, default) or v2p3_pdk (4G double-tail)")
+    ap.add_argument("--ctle-variant", choices=["ctle_shunt_5g_w3_pdk", "w3"], default="ctle_shunt_5g_w3_pdk",
+                    help="CTLE variant: ctle_shunt_5g_w3_pdk (or alias w3: gm/Id=10.7 + 57.6um M4+M2, 0% M5)")
     ap.add_argument("--signoff", action="store_true",
                     help="Run full Magic DRC=0 + DC-LVS + Inductor-Open LVS + CPEX + PNG and install into variants/rx_top_5g_pdk/")
     args = ap.parse_args()
@@ -671,14 +651,7 @@ def main() -> None:
         if args.slicer_variant == "slicer_5g_pdk" else
         top4g._resolve_submacro(V2P3_DIR, "serdes_rx_dt_slicer_pdk.mag")
     )
-    ctle_mag_used = (
-        CTLE_5G_W3_DIR / "serdes_rx_ctle_shunt_5g_w3_pdk.mag"
-        if args.ctle_variant == "w3" else (
-            CTLE_5G_COMPACT_DIR / "serdes_rx_ctle_shunt_5g_compact_pdk.mag"
-            if args.ctle_variant == "compact" else
-            CTLE_5G_DIR / "serdes_rx_ctle_shunt_5g_pdk.mag"
-        )
-    )
+    ctle_mag_used = CTLE_5G_W3_DIR / "serdes_rx_ctle_shunt_5g_w3_pdk.mag"
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     VARIANT_DIR.mkdir(parents=True, exist_ok=True)
     cache = PdkCache(RESULTS_DIR / "_pdk_cache")

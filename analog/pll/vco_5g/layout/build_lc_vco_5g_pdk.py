@@ -79,7 +79,7 @@ BANK_BIT_MAP = [3, 3, 3, 3, 2, 2, 1, 0, 1, 2, 2, 3, 3, 3, 3]
 
 
 def build_active_ref_spice(*, unified: bool = False, variant: str | None = None) -> str:
-    v = variant or ("unified" if unified else "legacy")
+    v = variant or ("unified" if unified else "oct")
     is_uni = v in ("unified", "oct")
     cell_name = {
         "legacy": "vco5g_lc_active_div2_pdk",
@@ -297,7 +297,7 @@ def m2_to_m3(c: Cell, x: float, y: float) -> None:
 
 def build_active_div2_cell(cache: PdkCache, *, unified: bool = False, variant: str | None = None) -> tuple[Cell, dict]:
     c = Cell()
-    v = variant or ("unified" if unified else "legacy")
+    v = variant or ("unified" if unified else "oct")
     unified = v in ("unified", "oct")
     capw = {"legacy": 4.2, "unified": 4.0, "oct": 3.6}[v]
     wt, nft = (60.0, 12) if unified else (80.0, 16)
@@ -944,10 +944,15 @@ def build_active_div2_cell(cache: PdkCache, *, unified: bool = False, variant: s
 def build_hierarchical_top(
     work: Path, active_mag: Path, meta: dict, *, unified: bool = False, variant: str | None = None
 ) -> tuple[Path, dict]:
-    v = variant or ("unified" if unified else "legacy")
+    v = variant or ("unified" if unified else "oct")
     is_oct = v == "oct"
     is_uni = v in ("unified", "oct")
     ind_src = IND_OCT_MAG if is_oct else IND_MAG
+    if not ind_src.exists():
+        raise FileNotFoundError(
+            f"Inductor .mag not found for variant={v!r}: {ind_src}. "
+            f"Use --variant oct for the signed-off octagonal inductor ({IND_OCT_MAG})."
+        )
     ind_cell_name = ind_src.stem
     shutil.copy2(ind_src, work / f"{ind_cell_name}.mag")
     active_cell_name = active_mag.stem
@@ -1092,9 +1097,9 @@ def run_full_drc_and_gds(mag_path: Path, work: Path, *, export_gds: bool = False
 
 def render_hierarchical_png(
     work: Path, top_mag: Path, active_mag: Path, png_path: Path, active_w: float, active_h: float, top_h: float,
-    ind_cy: float = 158.0, *, unified: bool = False, variant: str | None = None, geom: dict | None = None,
+    ind_cy: float = 167.0, *, unified: bool = False, variant: str | None = None, geom: dict | None = None,
 ) -> None:
-    v = variant or ("unified" if unified else "legacy")
+    v = variant or ("unified" if unified else "oct")
     is_oct = v == "oct"
     is_uni = v in ("unified", "oct")
     ind_cell_name = geom["ind_cell_name"] if geom else ("vco5g_ind_oct_2n5_pdk" if is_oct else "vco5g_ind_sym_2n2_pdk")
@@ -1205,7 +1210,7 @@ def render_hierarchical_png(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--variant", choices=["legacy", "unified", "oct"], default="legacy")
+    ap.add_argument("--variant", choices=["legacy", "unified", "oct"], default="oct")
     ap.add_argument("--work-dir", type=Path, default=None)
     ap.add_argument("--install", action="store_true")
     args = ap.parse_args()

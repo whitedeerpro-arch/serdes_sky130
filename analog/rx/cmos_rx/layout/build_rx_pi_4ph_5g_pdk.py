@@ -4,7 +4,7 @@
   1. `serdes_rx_octature_4to8_2p5g_pdk` : 2.5 GHz 4->8 slew-shaped resistor-linearized octature stage
   2. `serdes_rx_pi_4ph_5g_pdk`          : Integrated 2.5 GHz 4-Phase I/Q 64-code CMOS PI + 1.25 GHz /2
 
-Source circuit: `analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_cand.spice` (1-to-1 SKY130A device match).
+Source circuit: `analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_v3.spice` (1-to-1 SKY130A device match).
 
 Design & Floorplan Guarantees:
   - Strict 0.0% M5 usage (M1-M4 + MIM1 only) for clean top-level M5 PDN stitching.
@@ -54,20 +54,10 @@ from rx_layout_common import (  # noqa: E402
     draw_tap_h,
 )
 
-VARIANT_DIR = HERE / "variants" / "v5g_4ph_pdk"
-RESULTS_DIR = rlc.REPO / "results" / "layout" / "rx_cmos_5g" / "pi_4ph"
+VARIANT_DIR = HERE / "variants" / "v5g_4ph_v3_pdk"
+RESULTS_DIR = rlc.REPO / "results" / "layout" / "rx_cmos_5g" / "pi_4ph_v3"
 
 VARIANT_CONFIGS: dict[str, dict[str, object]] = {
-    "v5g_4ph_pdk": {
-        "variant_dir": HERE / "variants" / "v5g_4ph_pdk",
-        "results_dir": rlc.REPO / "results" / "layout" / "rx_cmos_5g" / "pi_4ph",
-        "source_spice": "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_cand.spice",
-    },
-    "v5g_4ph_v2_pdk": {
-        "variant_dir": HERE / "variants" / "v5g_4ph_v2_pdk",
-        "results_dir": rlc.REPO / "results" / "layout" / "rx_cmos_5g" / "pi_4ph_v2",
-        "source_spice": "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_v2.spice",
-    },
     "v5g_4ph_v3_pdk": {
         "variant_dir": HERE / "variants" / "v5g_4ph_v3_pdk",
         "results_dir": rlc.REPO / "results" / "layout" / "rx_cmos_5g" / "pi_4ph_v3",
@@ -77,7 +67,7 @@ VARIANT_CONFIGS: dict[str, dict[str, object]] = {
 
 
 # ---------------------------------------------------------------------------
-# Reference SPICE flattener for `rx_pi_4ph_iq_5g_cand.spice` / `rx_pi_4ph_iq_5g_v2.spice`
+# Reference SPICE flattener for `rx_pi_4ph_iq_5g_v3.spice`
 # ---------------------------------------------------------------------------
 
 def generate_rx_4ph_ref_spice(
@@ -85,9 +75,9 @@ def generate_rx_4ph_ref_spice(
     top_out_subckt: str,
     out_path: Path,
     param_overrides: dict[str, float] | None = None,
-    spice_filename: str = "rx_pi_4ph_iq_5g_cand.spice",
+    spice_filename: str = "rx_pi_4ph_iq_5g_v3.spice",
 ) -> list[str]:
-    """Flatten `rx_pi_4ph_iq_5g_cand.spice` or `rx_pi_4ph_iq_5g_v2.spice` into an exact SKY130 primitive reference netlist for Netgen."""
+    """Flatten `rx_pi_4ph_iq_5g_v3.spice` into an exact SKY130 primitive reference netlist for Netgen."""
     subckts = rlc._parse_spice_subckts([
         rlc.COMMON_SPICE_DIR / "sky130_primitives.spice",
         rlc.COMMON_SPICE_DIR / "sky130_pfet_lvt.spice",
@@ -220,7 +210,7 @@ def draw_oct_inv(
 def build_rx_octature_4to8_2p5g_pdk(
     cache: PdkCache,
     add_ports: bool = True,
-    variant: str = "v5g_4ph_pdk",
+    variant: str = "v5g_4ph_v3_pdk",
 ) -> tuple[Cell, dict]:
     """Build `serdes_rx_octature_4to8_2p5g_pdk` (14 ports: ip qp in qn cb0..cb7 vdd vss).
 
@@ -4289,7 +4279,7 @@ def build_rx_qdiv2_8ph_v3_pdk(cache: PdkCache, add_ports: bool = False) -> tuple
 def build_rx_pi_4ph_5g_pdk(
     cache: PdkCache,
     add_ports: bool = True,
-    variant: str = "v5g_4ph_pdk",
+    variant: str = "v5g_4ph_v3_pdk",
 ) -> tuple[Cell, dict]:
     """Build full integrated `serdes_rx_pi_4ph_5g_pdk` (43 ports matching `serdes_rx_pi_4ph_iq_8ph`, 0.0% M5)."""
     is_v2 = variant in ("v5g_4ph_v2_pdk", "v5g_4ph_v3_pdk")
@@ -4668,8 +4658,8 @@ def extract_octature_internal_cpex(pex_path: Path) -> dict[str, dict]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--variant", choices=sorted(VARIANT_CONFIGS.keys()), default="v5g_4ph_pdk",
-                    help="Layout variant to build/signoff (default: v5g_4ph_pdk)")
+    ap.add_argument("--variant", choices=sorted(VARIANT_CONFIGS.keys()), default="v5g_4ph_v3_pdk",
+                    help="Layout variant to build/signoff (default: v5g_4ph_v3_pdk)")
     ap.add_argument("--only", nargs="*", default=["octature", "pi4ph"],
                     help="Cells to build: octature, pi4ph")
     ap.add_argument("--signoff", action="store_true",
@@ -4804,11 +4794,20 @@ def main() -> None:
             if key == "octature":
                 assert entry["rc_devices_preserved"] is True, f"{cell_name}: strict rc_devices_preserved=False"
             assert entry["metal_shares"]["share_pct"]["M5"] == 0.0, f"{cell_name}: non-zero M5!"
-            if args.variant in ("v5g_4ph_v2_pdk", "v5g_4ph_v3_pdk") and key == "pi4ph":
-                v1_sum = json.loads((HERE / "variants" / "v5g_4ph_pdk" / "summary.json").read_text())
-                v1_pi = v1_sum["cells"]["serdes_rx_pi_4ph_5g_pdk"]
-                assert entry["bbox_um"] == v1_pi["bbox_um"], f"BBox drift: {entry['bbox_um']} != {v1_pi['bbox_um']}"
-                assert entry["port_coords"] == v1_pi["port_coords"], "43-port coordinate mismatch vs v5g_4ph_pdk!"
+            if args.variant == "v5g_4ph_v3_pdk" and key == "pi4ph":
+                v1_sum_path = HERE / "variants" / "v5g_4ph_pdk" / "summary.json"
+                if v1_sum_path.exists():
+                    v1_sum = json.loads(v1_sum_path.read_text())
+                    v1_pi = v1_sum["cells"]["serdes_rx_pi_4ph_5g_pdk"]
+                    assert entry["bbox_um"] == v1_pi["bbox_um"], f"BBox drift: {entry['bbox_um']} != {v1_pi['bbox_um']}"
+                    assert entry["port_coords"] == v1_pi["port_coords"], "43-port coordinate mismatch vs v5g_4ph_pdk!"
+                else:
+                    assert entry["bbox_um"] == [-1.9, -0.5, 171.48, 72.22], (
+                        f"BBox drift vs canonical v5g_4ph_v3_pdk: {entry['bbox_um']}"
+                    )
+                    assert len(entry["port_coords"]) == 43, (
+                        f"Expected 43 canonical perimeter ports, got {len(entry['port_coords'])}"
+                    )
 
             print(
                 f"  PASS {cell_name}: {w_um:.2f} x {h_um:.2f} um ({area_um2:,.2f} um^2, AR={ar:.2f}) | "

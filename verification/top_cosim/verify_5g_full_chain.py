@@ -2,15 +2,15 @@
 """5.0 Gb/s (200 ps UI) End-to-End SKY130A SerDes Analog Co-Simulation Verifier.
 
 Incorporates the REAL extracted Magic DRC=0 / CPEX parameters of:
-  1. `vco5g_ind_sym_2n2_pdk` (L_diff=2.541 nH, R_dc=3.248 Ohm, C_sub=396.51 fF)
-     in `analog/pll/vco_5g/spice/lc_5g_div2_pdk.spice`
-  2. `rx_ctle_ind_6n5_pdk` (L_diff=8.252 nH, R_dc=24.74 Ohm/arm, C_sub=104.71 fF)
+  1. `vco5g_ind_oct_2n5_pdk` (L_diff=2.408 nH, R_dc=3.065 Ohm, C_sub=410.49 fF, Q_5G=7.26)
+     in `analog/pll/vco_5g/spice/lc_5g_div2_oct_pdk.spice`
+  2. `rx_ctle_ind_m4m2_5g_pdk` / `serdes_rx_ctle_shunt_5g_pdk`
      in `analog/rx/cmos_rx/spice/rx_ctle_shunt_5g_pdk.spice`
 
 Modes:
   --mode calib      : CTLE AC characterization across PVT x RC corners.
   --mode stage1     : Closed-loop 5.0 GHz LC-PLL pull-in & lock (sparse solver, zero cshunt!)
-                      with real `pll_div_ab_5g` (/10), `pll_pfd_sc_dly`, `pll_cp_steer_v4`,
+                      with real `pll_div_ab_5g_v2` (/10), `pll_pfd_sc_dly`, `pll_cp_steer_v4`,
                       `pll_loop_filter_k4_fused`, and 2x `serdes_cml_to_cmos_r5` -> 2.5 GHz CMOS I/Q.
   --mode stage2a    : Locked 2.5 GHz I/Q -> TX Q-Div2 -> TX SST v4.3 (FFE=3, 5 Gb/s 112b PRBS-7)
                       -> Pkg RLC -> C2_loss6 -> RX Term + Shunt CTLE (real 8.252 nH coil).
@@ -628,8 +628,8 @@ PLL5G_INCLUDES = [
     "analog/common/cml_to_cmos/spice/cml_to_cmos.spice",
     "analog/common/cml_to_cmos/spice/cml_to_cmos_r4_v4.spice",
     "analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice",
-    "analog/pll/vco_5g/spice/lc_5g_div2_pdk.spice",
-    "analog/pll/divider/spice/pll_div_ab_5g_cand.spice",
+    "analog/pll/vco_5g/spice/lc_5g_div2_oct_pdk.spice",
+    "analog/pll/divider/spice/pll_div_ab_5g_v2.spice",
     "analog/pll/pfd/spice/pfd_sc.spice",
     "analog/pll/cp/spice/charge_pump_steer_v4.spice",
     "analog/pll/loop_filter/spice/passive_rc_precharge.spice",
@@ -652,7 +652,7 @@ def build_stage1_open_probe_deck(cs: dict, code: int, vc_pair: tuple[float, floa
         f"Vdd_div vdd_div 0 {s}",
         f"Vctrl vctrl 0 {v0:.5f}",
         *[f"Vb{b} b{b} 0 {s if ((code >> b) & 1) else 0.0:.5f}" for b in range(4)],
-        f"Xvco vp vn ip in qp qn vctrl b0 b1 b2 b3 vdd_vco 0 vco5g_lc_div2_pdk rm_scale={cs['rm_scale']} c_scale={cs['c_scale']}",
+        f"Xvco vp vn ip in qp qn vctrl b0 b1 b2 b3 vdd_vco 0 vco5g_lc_div2_oct_pdk rm_scale={cs['rm_scale']} c_scale={cs['c_scale']}",
         "Ikick vp vn PWL(0 0 0.2n 0 0.21n 60u 0.26n 60u 0.27n 0)",
         "Ikick_d ip in PWL(0 0 3.0n 0 3.01n 50u 3.06n 50u 3.07n 0)",
         f"Ibias_c2c vdd_clk vbias_c2c dc {i_c2c_u:.3f}u",
@@ -663,9 +663,9 @@ def build_stage1_open_probe_deck(cs: dict, code: int, vc_pair: tuple[float, floa
         "Cbal_qp qc_p 0 30f", "Cbal_qn qc_n 0 30f",
         f"Vmode mode_5g 0 {s}",
         f"Vrst_div rst_div_n 0 PWL(0 0 5.5n 0 5.55n {s})",
-        "Xdiv ic_p ic_n mode_5g rst_div_n fb250 fb250_b vdd_div 0 pll_div_ab_5g",
+        "Xdiv ic_p ic_n mode_5g rst_div_n fb250 fb250_b vdd_div 0 pll_div_ab_5g_v2",
         "Cfb fb250 0 15f", "Cfbb fb250_b 0 15f",
-        ".ic v(xvco.xcore.vbias_f)=0.82 v(xvco.xcore.vbias_lc)=0.82 v(xvco.xcore.tail_d)=0.32 v(xvco.xcore.tail)=0.32 "
+        ".ic v(xvco.xcore.vbias_f)=0.82 v(xvco.xcore.vbias_lc)=0.82 v(xvco.xcore.tail)=0.32 "
         "v(xvco.xdiv2.vbias_d)=0.78 v(xvco.xdiv2.vck_cm)=1.05 v(vp)=1.05 v(vn)=1.00",
         ".nodeset v(vp)=1.0 v(vn)=1.0 v(vbias_c2c)=1.04",
         f".temp {c.temp}",
@@ -713,7 +713,7 @@ def build_stage1_closed_loop_deck(
         f"Vdd_pfd vdd_pfd 0 {s}",
         f"Vdd_cp  vdd_cp  0 {s}",
         *[f"Vb{b} b{b} 0 {s if ((code >> b) & 1) else 0.0:.5f}" for b in range(4)],
-        f"Xvco vp vn ip in qp qn vctrl b0 b1 b2 b3 vdd_vco 0 vco5g_lc_div2_pdk rm_scale={cs['rm_scale']} c_scale={cs['c_scale']}",
+        f"Xvco vp vn ip in qp qn vctrl b0 b1 b2 b3 vdd_vco 0 vco5g_lc_div2_oct_pdk rm_scale={cs['rm_scale']} c_scale={cs['c_scale']}",
         "Ikick vp vn PWL(0 0 0.2n 0 0.21n 60u 0.26n 60u 0.27n 0)",
         "Ikick_d ip in PWL(0 0 3.0n 0 3.01n 50u 3.06n 50u 3.07n 0)",
         f"Ibias_c2c vdd_clk vbias_c2c dc {212.5 / k_rc:.3f}u",
@@ -724,7 +724,7 @@ def build_stage1_closed_loop_deck(
         "Cbal_qp qc_p 0 30f", "Cbal_qn qc_n 0 30f",
         f"Vmode mode_5g 0 {s}",
         f"Vrst_div rst_div_n 0 PWL(0 0 5.5n 0 5.55n {s})",
-        "Xdiv ic_p ic_n mode_5g rst_div_n fb250 fb250_b vdd_div 0 pll_div_ab_5g",
+        "Xdiv ic_p ic_n mode_5g rst_div_n fb250 fb250_b vdd_div 0 pll_div_ab_5g_v2",
         "Cfbb fb250_b 0 15f",
         f"Vref ref 0 PULSE(0 {s} {t_ref_delay:.6e} 30p 30p {TREF / 2 - 30e-12:.4e} {TREF:.4e})",
         f"Vrst_pfd rst_b 0 PWL(0 0 {t_pfd_rel:.6e} 0 {t_pfd_rel + 25e-12:.6e} {s})",
@@ -738,7 +738,7 @@ def build_stage1_closed_loop_deck(
         f"Xlf cpo vctrl z pre_ref pre_en vdd_cp 0 pll_loop_filter_k4_fused rlength={rlength:.2f}",
         "Xcf vctrl 0 sky130_fd_pr__cap_mim_m3_1 w=22.0 l=22.0",
         f".ic v(vctrl)={vctrl_pre:.5f} v(z)={vctrl_pre:.5f} "
-        "v(xvco.xcore.vbias_f)=0.82 v(xvco.xcore.vbias_lc)=0.82 v(xvco.xcore.tail_d)=0.32 v(xvco.xcore.tail)=0.32 "
+        "v(xvco.xcore.vbias_f)=0.82 v(xvco.xcore.vbias_lc)=0.82 v(xvco.xcore.tail)=0.32 "
         "v(xvco.xdiv2.vbias_d)=0.78 v(xvco.xdiv2.vck_cm)=1.05 v(vp)=1.05 v(vn)=1.00",
         f".nodeset v(vctrl)={vctrl_pre:.5f} v(z)={vctrl_pre:.5f} v(vbias_c2c)=1.04 v(vbn_cp)=0.87 "
         f"v(xcp.vbp_srv)={s - 1.23:.3f} v(xcp.rep)={vctrl_pre:.5f}",
@@ -1002,7 +1002,7 @@ TX_CH_INCLUDES = [
     "verification/models/channel/pcb_family/C2_loss6.spice",
     "analog/rx/cmos_rx/spice/rx_ctle_pdk.spice",
     "analog/rx/cmos_rx/spice/rx_ctle_shunt_5g_pdk.spice",
-    "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_cand.spice",
+    "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_v3.spice",
 ]
 
 RX_FULL_INCLUDES = [
@@ -1011,7 +1011,7 @@ RX_FULL_INCLUDES = [
     "analog/bias/spice/bias_v2.spice",
     "analog/rx/cmos_rx/spice/rx_ctle_pdk.spice",
     "analog/rx/cmos_rx/spice/rx_ctle_shunt_5g_pdk.spice",
-    "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_cand.spice",
+    "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_v3.spice",
     "analog/rx/cmos_rx/spice/rx_dt_sampler.spice",
     "analog/rx/cmos_rx/spice/rx_cmos_deser16.spice",
 ]
@@ -1174,7 +1174,7 @@ def build_pi_probe_deck(cs: dict) -> str:
         f'.lib "{spice.corner_values(c)["MODEL_LIBRARY"]}" {c.process}',
         f'.include "{REPO / "analog/common/devices/spice/sky130_primitives.spice"}"',
         f'.include "{REPO / "analog/common/devices/spice/sky130_pfet_lvt.spice"}"',
-        f'.include "{REPO / "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_cand.spice"}"',
+        f'.include "{REPO / "analog/rx/cmos_rx/spice/rx_pi_4ph_iq_5g_v3.spice"}"',
         f"Vdd vdd 0 {s}",
         '.include "clk_iq.inc"',
         f"Vrst rst_n 0 PWL(0 0 {T_S2_RX_REL:.6e} 0 {T_S2_RX_REL + 40e-12:.6e} {s})",
@@ -1596,8 +1596,8 @@ def assemble_summary(camp: Path) -> dict:
         data_rate_gbps=5.0,
         ui_ps=200.0,
         extracted_inductors=dict(
-            vco="vco5g_ind_sym_2n2_pdk (L_diff=2.541 nH, R_dc=3.248 Ohm, C_sub=396.51 fF, Magic DRC=0)",
-            ctle="rx_ctle_ind_6n5_pdk (L_diff=8.252 nH, R_dc=24.74 Ohm/arm, C_sub=104.71 fF, Magic DRC=0)",
+            vco="vco5g_ind_oct_2n5_pdk (L_diff=2.408 nH, R_dc=3.065 Ohm, C_sub=410.49 fF, Q_5G=7.26, Magic+KLayout DRC=0)",
+            ctle="rx_ctle_ind_m4m2_5g_pdk / serdes_rx_ctle_shunt_5g_pdk (Magic DRC=0)",
         ),
         ctle_ac=ctle_ac,
         stage1_pll=s1_res,

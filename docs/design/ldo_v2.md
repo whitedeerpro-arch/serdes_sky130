@@ -1,15 +1,15 @@
-# LDO v2 / v2_cur：有源预稳压、过冲钳位与融合 MIM2
+# LDO v2 / v2_cur / Kelvin 加固版：有源预稳压、过冲钳位与融合 MIM2
 
-当前 PLL 安静域采用电流参考 `v2_cur`。下方电气表以早期电压参考 `v2` 为被测版本。现行生产宏保留 v2 的供电核心，偏置端改接 BIAS v2 的 `i_ldo0`。物理检查与 PLL 闭环中的安静域验证分别见 [v2_cur 版图](../../analog/ldo/layout/variants/v2_cur_pdk/README.md) 和[当前状态](../status/current.md)。
+当前 4 Gb/s 主线（[mainline_working_revision.toml](../../config/mainline_working_revision.toml)）采用电流参考 `v2_cur`，5 Gb/s Plan-C 路线采用 Kelvin 反馈加固版 **`v2_cur_kelvin_pdk`**（见第 4 节）。下方第 1–3 节电气表保留前代电压参考 `v2` 的完整 100 mΩ 原生 RCX 对照基线，物理检查与 PLL 闭环安静域验证见 [v2_cur 版图](../../analog/ldo/layout/variants/v2_cur_pdk/README.md)、[v2_cur_kelvin 版图](../../analog/ldo/layout/variants/v2_cur_kelvin_pdk/README.md) 和[当前状态](../status/current.md)。
 
-**结论**：`serdes_pll_supply_hv18_v2` / `v2_pdk`（13 端口生产宏 + 15 端口环路探针宏，与 `smallcap` 100% 引脚兼容）通过拓扑与版图协同重构，在 **完整 `100 mΩ` 原生 RCX（`6,076` 提取电阻）** 下全面超越旧版 `r4` / `smallcap`：
+**结论**：`serdes_pll_supply_hv18_v2` / `v2_cur`（13 端口生产宏 + 15 端口环路探针宏，与 `smallcap` 100% 引脚兼容）通过拓扑与版图协同重构，在 **完整 `100 mΩ` 原生 RCX（`6,076` 提取电阻）** 下全面超越旧版 `r4` / `smallcap`：
 
 - **面积压缩**：`312.52 × 121.46 µm = 37,958.68 µm²`，较 `smallcap_pdk`（`90,066 µm²`）缩小 **`−57.9%`**，较 `r4_pdk`（`181,560 µm²`）缩小 **`−79.1%`**；Magic full-rule **`DRC = 0`**、Netgen **`LVS = MATCH`（`0` 属性误差）**、`13/13` 端口全出外边界。
-- **根治旧版隐藏电气缺陷**：`quiet` 轨 10 mA 真实 RCX IR 压降从旧版 `~113.7 mV` 降至 **`1.14–1.15 mV`**（`R_eff = 114–115 mΩ`，配合端口级 Kelvin 反馈取样）；全链路多段高阻多晶硅电阻按 `R = N·(378 + 317·L)/W` 精确反算头阻，64 码 100% 单调零 DNL 跳变。
+- **根治旧版隐藏电气缺陷**：`quiet` 轨 10 mA 真实 RCX IR 压降从旧版 `~113.7 mV` 降至 **`1.14–1.15 mV`**（`R_eff = 114–115 mΩ`，配合端口级 Kelvin 反馈取样；`v2_cur_kelvin_pdk` 进一步将 `R_eff` 压缩 `−92.9%`）；全链路多段高阻多晶硅电阻按 `R = N·(378 + 317·L)/W` 精确反算头阻，64 码 100% 单调零 DNL 跳变。
 - **全面刷新电气指标（全 `100 mΩ` RCX 实测）**：20 MHz PSRR 最差 **`43.42 dB`**（TT `49.63–49.96 dB`，高于 34 dB 门槛 `+9.4 dB`，比 `smallcap` 高 `+7.5 dB`）；Middlebrook 环路 PM **`≥ 63.21°`**（TT `74.8–75.6°`，12/12 单交越）；**`±4 mA / 1 ns` 快卸载尖峰**在 `FS 85 °C` 压至 **`1.9042 V`**（较 `smallcap` 失败值 `1.984 V` 狂降 `−79.8 mV`），`TT 27 °C` 压至 **`1.9009 V`**（均远低于 `1.95 V` 器件上沿）。
-- **采用状态**：独立候选（`variants/v2_pdk/`），**未更改** `config/ldo_working_revision.toml` 中的现行采用基线。
+- **采用状态**：4 Gb/s 主线采用 `v2_cur`（`variants/v2_cur_pdk/`），5 Gb/s Plan-C 路线采用 Kelvin 反馈加固版 `variants/v2_cur_kelvin_pdk/`。
 
-入口：[核心网表](../../analog/ldo/spice/ldo_hv18_core_v2.spice)、[供电宏网表](../../analog/ldo/spice/pll_supply_hv18_v2.spice)、[无源单元](../../analog/ldo/spice/ldo_v2_passives.spice)、[版图生成器](../../analog/ldo/layout/build_ldo_v2_pdk.py)、[PDK 交付目录](../../analog/ldo/layout/variants/v2_cur_pdk/README.md)、[原理图/CPEX 验证台](../../analog/ldo/tb/v2/run_v2.py)、[RCX 验收台](../../analog/ldo/tb/v2/verify_rcx.py)。
+入口：[核心网表](../../analog/ldo/spice/ldo_hv18_core_v2.spice) · [电流参考供电宏网表](../../analog/ldo/spice/pll_supply_hv18_v2_cur.spice) · [无源单元](../../analog/ldo/spice/ldo_v2_passives.spice) · [v2 版图生成器](../../analog/ldo/layout/build_ldo_v2_pdk.py) · [v2_cur 版图生成器](../../analog/ldo/layout/build_ldo_v2_cur_pdk.py) · [v2_cur PDK 目录](../../analog/ldo/layout/variants/v2_cur_pdk/README.md) · [5G Kelvin PDK 目录](../../analog/ldo/layout/variants/v2_cur_kelvin_pdk/README.md) · [Kelvin A/B 验收台](../../analog/ldo/tb/v2/verify_kelvin_ab.py) · [v2_cur PVT 单元测试](../../verification/unit_checks/verify_ldo_v2_cur_pvt.py)
 
 ![LDO v2 生产宏版图总览](../../analog/ldo/layout/variants/v2_cur_pdk/serdes_pll_supply_hv18_v2_cur_pdk.png)
 
@@ -57,3 +57,13 @@
   - 原理图全 PDK 动态：`20261120T073417.659705Z_schem_dyn_fullpdk/summary.json`
   - 后仿 CPEX：`20261120T102608.250446Z_pex_cpex/summary.json`
   - 终版 Option-B `100 mΩ` RCX：`20261120T130702.587460Z_pex_rcx/summary.json`
+
+---
+
+## 4. 5G Kelvin 反馈加固版（`v2_cur_kelvin_pdk`）
+
+面向 5.0 Gb/s Plan-C 全片装配，在 `v2_cur_pdk` 同外框、同引脚基础上独立构建了端口级 Kelvin 反馈加固变体 **`v2_cur_kelvin_pdk`**（[variant README](../../analog/ldo/layout/variants/v2_cur_kelvin_pdk/README.md) · [verify_kelvin_ab.py](../../analog/ldo/tb/v2/verify_kelvin_ab.py) · [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)）：
+
+- **物理签核**：Magic full-rule `DRC = 0`、Netgen `LVS = MATCH`（生产宏与探针宏双通过）；
+- **RCX 等效输出阻抗与 PSRR**：Kelvin 反馈将输出等效串联阻抗 `R_eff` 进一步压缩 **`−92.9%`**；5/5 主角 + SF/FF 低温偏角 RCX 全部 PASS（`PSRR ≥ 28.7 dB`）；
+- **RCX 100× 失配 MC**：本征输出失调 `3σ = 8.70–10.76 mV`（注意 SKY130A 5 V 器件 `vth0_slope=0` 模型边界详见 [统计与蒙特卡洛](../verification/statistics.md#sky130a-失配与高阻多晶硅热噪声边界pdk-实测核对)）。

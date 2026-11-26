@@ -1,6 +1,8 @@
 # PLL 反馈 A 与精准分频 B
 
-下一版可把 PFD 反馈与数据时钟分开。A 负责可编程整数反馈，B 负责同源、相位确定的 ÷2、÷4、÷8。两链可共享缓冲后的输入时钟。若共享首级 ÷2，先给 A 单独加负载隔离及互补配平，再核对 B 的各相。A 的反馈在 TX 空闲和 RX 重训时持续运行。[分频器架构对照](pll_tspc_reclock_divider.md#2-四架构多角度对比原理图基准)
+> **2026-11-26 物理签核状态**：本架构已在 5 Gb/s 双速演进路线落地为 **`div_ab_5g_v2_pdk`**（[pll_div_ab_5g_v2.spice](../../analog/pll/divider/spice/pll_div_ab_5g_v2.spice) · [build_div_ab_5g_v2_pdk.py](../../analog/pll/divider/layout/build_div_ab_5g_v2_pdk.py) · [summary.json](../../analog/pll/divider/layout/variants/div_ab_5g_v2_pdk/summary.json)）：Magic `DRC = 0`、Netgen `LVS = MATCH`、`M5 = 0%`，**6/6 角（12/12 `÷8 / ÷10`）CPEX 全通**，**50/50 `SS −40 °C` 失配 MC 100% 达标**（`|diff_sk| ≤ 4.77 ps`），详见 [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)；4 Gb/s 独立 ÷8 预分频宏为 [SAFF-TSPC `saff_reclock_2g`](pll_tspc_reclock_divider.md)（[saff_reclock_2g_pdk](../../analog/pll/divider/layout/variants/saff_reclock_2g_pdk/README.md)）。
+
+本设计将 PFD 反馈（A 链）与数据时钟分频（B 链）解耦：A 负责可编程整数反馈（`÷8 / ÷10`），B 负责同源、相位确定的 `÷2 / ÷4 / ÷8`。两链共享缓冲后的输入时钟，A 的反馈在 TX 空闲和 RX 重训时持续运行。[SAFF-TSPC 架构对照](pll_tspc_reclock_divider.md#2-四架构多角度对比原理图基准)
 
 | 250 MHz 参考 | A 反馈 | B 的 ÷2 / ÷4 / ÷8 |
 |---|---|---|

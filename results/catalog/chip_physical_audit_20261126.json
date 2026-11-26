@@ -1,0 +1,431 @@
+{
+  "date": "2026-11-26",
+  "scope": "Read-only physical audit of assembled 4G full_v8 and 5G Plan C v4p1",
+  "method": {
+    "connectivity": "Magic EXT node, equivalence, device and hierarchy records; isolated drawing includes LI and M1\u2013M5 recognized by extraction",
+    "stubs": "KLayout root GDS drawing rectangles, straight uncontacted ends >=8 um, after considering same-layer paint, top pins, adjacent cuts and child overlap",
+    "density": "GDS LI/M1\u2013M5 drawing purpose 20 by geometric union, 100 um windows, 50 um stride, inside each planned core; no foundry grading",
+    "route_lengths": "Builder centerlines with exact macro pin coordinates from assembly and local MAG"
+  },
+  "cases": {
+    "4g_full_v8": {
+      "root_path_without_suffix": "results/layout/chip_top_20261123/full_v8/serdes_4g_top_pdk",
+      "sha256": {
+        ".ext": "dc3237af904dfd49e9e0f6c07c133af28ae4a1c7a64af64ee9bb668739bdee2b",
+        ".mag": "275dffca2834a65de1ee378b251bbe1f95ef70f6990cf1aafa422eba969e5008",
+        ".gds": "f573e667f977699cc9257ec13a38b54a5dff24e22c1f2e68d047431efe0e8f0b"
+      },
+      "chip_ports": [
+        "RX_IN_N",
+        "RX_IN_P",
+        "TX_PAD_N",
+        "TX_PAD_P",
+        "VDD_A",
+        "VDD_BIAS",
+        "VDD_D",
+        "VDD_HV33",
+        "VDD_Q",
+        "VDD_RX",
+        "VDD_TX",
+        "VSS"
+      ],
+      "root_nodes": 122,
+      "root_unattached_metal_components": 0,
+      "macro_types_scanned": 18,
+      "macro_unattached_metal_components": 0,
+      "root_stubs_at_least_8_um": 5,
+      "root_stub_total_um": 327.05,
+      "longest_root_stubs": [
+        {
+          "layer": "M5",
+          "box_um": [
+            -40.0,
+            415.0,
+            -26.0,
+            519.0
+          ],
+          "span_um": 104.0,
+          "width_um": 14.0,
+          "root_metal_graph_seeds": [
+            "VDD_HV33"
+          ]
+        },
+        {
+          "layer": "M5",
+          "box_um": [
+            -39.0,
+            106.0,
+            -27.0,
+            204.0
+          ],
+          "span_um": 98.0,
+          "width_um": 12.0,
+          "root_metal_graph_seeds": [
+            "VDD_Q"
+          ]
+        },
+        {
+          "layer": "M5",
+          "box_um": [
+            421.0,
+            628.0,
+            494.0,
+            640.0
+          ],
+          "span_um": 73.0,
+          "width_um": 12.0,
+          "root_metal_graph_seeds": [
+            "VDD_A"
+          ]
+        }
+      ],
+      "local_draw_density_pct": {
+        "67": {
+          "windows": 165,
+          "min_pct_and_origin_um": [
+            0.8827,
+            106.0,
+            150.0
+          ],
+          "max_pct_and_origin_um": [
+            60.5634,
+            506.0,
+            300.0
+          ]
+        },
+        "68": {
+          "windows": 165,
+          "min_pct_and_origin_um": [
+            1.053,
+            6.0,
+            450.0
+          ],
+          "max_pct_and_origin_um": [
+            30.3872,
+            556.0,
+            350.0
+          ]
+        },
+        "69": {
+          "windows": 165,
+          "min_pct_and_origin_um": [
+            0.8888,
+            6.0,
+            450.0
+          ],
+          "max_pct_and_origin_um": [
+            18.6607,
+            206.0,
+            450.0
+          ]
+        },
+        "70": {
+          "windows": 165,
+          "min_pct_and_origin_um": [
+            1.8067,
+            706.0,
+            250.0
+          ],
+          "max_pct_and_origin_um": [
+            75.4523,
+            56.0,
+            450.0
+          ]
+        },
+        "71": {
+          "windows": 165,
+          "min_pct_and_origin_um": [
+            0.0,
+            6.0,
+            300.0
+          ],
+          "max_pct_and_origin_um": [
+            78.5159,
+            56.0,
+            450.0
+          ]
+        },
+        "72": {
+          "windows": 165,
+          "min_pct_and_origin_um": [
+            0.0,
+            6.0,
+            300.0
+          ],
+          "max_pct_and_origin_um": [
+            75.1006,
+            56.0,
+            450.0
+          ]
+        }
+      },
+      "pairwise_isolation_gate": {
+        "checked": 45,
+        "different_and_both_present": 45
+      },
+      "verified_interface_groups": {
+        "r5_icml": {
+          "expected_nets": 1,
+          "all_complete": true,
+          "independent_of_each_other_and_supplies": false
+        }
+      },
+      "unattached_pfd_ports": [
+        "ref",
+        "rst_b"
+      ]
+    },
+    "5g_v4p1": {
+      "root_path_without_suffix": "results/layout/chip_top_5g_20261126/plan_v4p1/serdes_5g_top_pdk",
+      "sha256": {
+        ".ext": "318834ba8e7adcc0d412c926c8d847a2ce46af84ddbbabacb87c1d9a535e9f24",
+        ".mag": "1332d300d9852484ebe296172bc72bfe2576e1fe110af5c37187ebf0c6a3ca87",
+        ".gds": "4ca91bbd21b881db6400ea8ccc372e6f97f1c56dbe8256a489a9234f2324c6c5"
+      },
+      "chip_ports": [
+        "RX_IN_N",
+        "RX_IN_P",
+        "TX_PAD_N",
+        "TX_PAD_P",
+        "VDD_A",
+        "VDD_BIAS",
+        "VDD_D",
+        "VDD_HV33",
+        "VDD_Q",
+        "VDD_RX",
+        "VDD_TX",
+        "VSS"
+      ],
+      "root_nodes": 110,
+      "root_unattached_metal_components": 0,
+      "macro_types_scanned": 20,
+      "macro_unattached_metal_components": 0,
+      "root_stubs_at_least_8_um": 14,
+      "root_stub_total_um": 625.5,
+      "longest_root_stubs": [
+        {
+          "layer": "M5",
+          "box_um": [
+            963.0,
+            121.0,
+            975.0,
+            264.0
+          ],
+          "span_um": 143.0,
+          "width_um": 12.0,
+          "root_metal_graph_seeds": [
+            "VDD_RX"
+          ]
+        },
+        {
+          "layer": "M5",
+          "box_um": [
+            -39.0,
+            434.0,
+            -27.0,
+            539.0
+          ],
+          "span_um": 105.0,
+          "width_um": 12.0,
+          "root_metal_graph_seeds": [
+            "VDD_HV33"
+          ]
+        },
+        {
+          "layer": "M5",
+          "box_um": [
+            -39.0,
+            61.0,
+            -27.0,
+            158.0
+          ],
+          "span_um": 97.0,
+          "width_um": 12.0,
+          "root_metal_graph_seeds": [
+            "VDD_Q"
+          ]
+        }
+      ],
+      "local_draw_density_pct": {
+        "67": {
+          "windows": 204,
+          "min_pct_and_origin_um": [
+            0.0,
+            50.0,
+            250.0
+          ],
+          "max_pct_and_origin_um": [
+            58.9177,
+            550.0,
+            300.0
+          ]
+        },
+        "68": {
+          "windows": 204,
+          "min_pct_and_origin_um": [
+            0.0,
+            50.0,
+            250.0
+          ],
+          "max_pct_and_origin_um": [
+            31.0697,
+            700.0,
+            400.0
+          ]
+        },
+        "69": {
+          "windows": 204,
+          "min_pct_and_origin_um": [
+            0.0,
+            0.0,
+            200.0
+          ],
+          "max_pct_and_origin_um": [
+            20.0342,
+            200.0,
+            550.0
+          ]
+        },
+        "70": {
+          "windows": 204,
+          "min_pct_and_origin_um": [
+            0.0,
+            0.0,
+            200.0
+          ],
+          "max_pct_and_origin_um": [
+            76.6931,
+            50.0,
+            550.0
+          ]
+        },
+        "71": {
+          "windows": 204,
+          "min_pct_and_origin_um": [
+            1.0259,
+            100.0,
+            0.0
+          ],
+          "max_pct_and_origin_um": [
+            80.0624,
+            0.0,
+            550.0
+          ]
+        },
+        "72": {
+          "windows": 204,
+          "min_pct_and_origin_um": [
+            0.0,
+            100.0,
+            0.0
+          ],
+          "max_pct_and_origin_um": [
+            75.5346,
+            0.0,
+            550.0
+          ]
+        }
+      },
+      "pairwise_isolation_gate": {
+        "checked": 41,
+        "different_and_both_present": 41
+      },
+      "verified_interface_groups": {
+        "r5_icml": {
+          "expected_nets": 1,
+          "all_complete": true,
+          "independent_of_each_other_and_supplies": true
+        },
+        "pi_control": {
+          "expected_nets": 24,
+          "all_complete": true,
+          "independent_of_each_other_and_supplies": true
+        },
+        "rx_word_and_data": {
+          "expected_nets": 33,
+          "all_complete": true,
+          "independent_of_each_other_and_supplies": true
+        },
+        "tx_word_and_data": {
+          "expected_nets": 17,
+          "all_complete": true,
+          "independent_of_each_other_and_supplies": true
+        },
+        "iq_cmos": {
+          "expected_nets": 4,
+          "all_complete": true,
+          "independent_of_each_other_and_supplies": true
+        }
+      },
+      "unattached_pfd_ports": [
+        "ref",
+        "rst_b"
+      ],
+      "source_route_centerlines": {
+        "pi_control_routed_um": 11435.16,
+        "pi_control_fixed_port_hpwl_um": 10468.76,
+        "cmos_iq_host_to_rx_um_ip_in_qp_qn": [
+          372.725,
+          342.325,
+          389.525,
+          359.125
+        ]
+      }
+    }
+  },
+  "artifacts": [
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/extraction_audit.py",
+      "sha256": "4422094c95d307324f96acabba4ca5dcd63b50e0f17c477c9e490130374d0db8"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/gate_audit.py",
+      "sha256": "706cb21366934a13a9b869190629975d05a9e76632784ad31b49f565758f9849"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/geometry_audit.py",
+      "sha256": "730dca1e45b2afaeac5c8cbf27c553cf3586f63198936be27a9685d18530f629"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/index_audit.py",
+      "sha256": "c284102962328813a9ebbfd5ec433029f79161b24b8b2300a08d6d1699a4c626"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/interface_audit.py",
+      "sha256": "918f35598b289127710adec605416b6e5b60e76f3550fbef01f20866774bcb57"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/leaf_extraction_audit.py",
+      "sha256": "0752ca70b555babfc874dc79437e060057cc1fee8d21b0c0de371e6c81588ad8"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/probe_klayout.py",
+      "sha256": "0653ac6169cbe8530e81f4b46e2ae6d638a1119087c22e3a334ba2ae6594776f"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/extraction_audit.json",
+      "sha256": "5092f42a507ce6141c20ca3df7ac3868c107e2e8ecf3a9159362dfc22539d1ef"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/gate_audit.json",
+      "sha256": "cc7d1ce35702dbb1cae0361d4aa3b2555c4c1ce648ec89dd20d51513e8427114"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/interface_audit.json",
+      "sha256": "eae78b88cd0489a401e05d601804b2cf91194604cef37d8bde53f7501bcc86fc"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/leaf_extraction_audit.json",
+      "sha256": "c09cda3d10dd4f58333eff32eec1a9d90731c66f20ef35fdd5569a67ae586a90"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/serdes_4g_top_pdk_geometry.json",
+      "sha256": "9af0762ceef78d632b70ff521126b6f1410a45c4ace2d17465e462829db424dc"
+    },
+    {
+      "path": "results/layout/physical_audit_20261126_wQO4Sv/serdes_5g_top_pdk_geometry.json",
+      "sha256": "86b1cf8a8cb2eebc719e0b3effda7bf450ec43b5f23479c52f51248e51f3feb8"
+    }
+  ],
+  "report": "docs/layout/chip_floorplan_20261123.md#10-\u5b9e\u88c5\u91d1\u5c5e\u4e0e\u5206\u6790\u7f3a\u53e3\u590d\u68382026-11-26"
+}

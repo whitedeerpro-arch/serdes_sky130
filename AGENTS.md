@@ -2,28 +2,28 @@
 
 这份文件写给接手本项目的 agent（以及项目所有者自己）。项目会在不同 agent 之间迁移，先读这里，再读 [README](README.md)。
 
-跨模块接手入口：[当前状态](docs/status/current.md) → [执行计划](docs/status/prelayout_plan.md) → [模块地图](docs/overview/development_map.md)或[交互设计工作台](web/design/README.md)。完整文档职责见[文档导航](docs/README.md)，任务选择、验收、发布与交接按[工作流](docs/status/workflow.md)。按 SerDes→TX/Bias/RX/PLL/Channel→子模块组织；每个模块承载边界、行为/理论规划、参数、电路改进和验证记录。PLL 完整电路与启动顶层已有，近期修改作为子模块的迭代推进，不以重复整机长仿真作为每步前提。新结果注明迭代与实际激励/负载边界。
+跨模块接手入口：[当前状态](docs/status/current.md) → [执行计划](docs/status/prelayout_plan.md) → [模块地图](docs/overview/development_map.md)或[交互设计工作台](web/design/README.md)。完整文档职责见[文档导航](docs/README.md)，任务选择、验收、发布与交接按[工作流](docs/status/workflow.md)。按 SerDes→PLL/LDO/Bias/TX/RX/Digital/Channel→子模块组织；每个模块承载边界、行为/理论规划、参数、电路改进和验证记录。近期修改作为子模块或片顶收口迭代推进，不以重复整机长仿真作为每步前提。新结果注明迭代与实际激励/负载边界。
 
-当前技术主线以 **Fable 的架构/设计决策与验证顺序**为准；Codex承接基础设施、局部实现及复核。发现测量反例时明确适用边界并反馈，不另开互相冲突的主线，也不将已验证单元笼统改记为“全部待重做”。先器件/版图可实现性与寄生，再模型/定尺寸、局部压力点和必要全角；新结果优先更新模块当前入口，过程留历史。
+当前技术主线以 **Fable 的架构/设计决策与验证顺序**为准；Codex 承接基础设施、局部实现及复核。发现测量反例时明确适用边界并反馈，不另开互相冲突的主线，也不将已验证单元笼统改记为“全部待重做”。先器件/版图可实现性与寄生，再模型/定尺寸、局部压力点和必要全角；新结果优先更新模块当前入口。
 
 ## 项目与规格
 
-SKY130A、1.8 V、4 Gb/s NRZ SerDes：
-- **时钟与供电**：250 MHz 参考 → 2 GHz 四级环振 PLL v4（`r6` + PTAT `28/66` + CP + 融合 LF），由独立 [`analog/ldo/`](analog/ldo/README.md)（HV18 `v2_cur`）与 [`analog/bias/`](analog/bias/README.md)（BIAS v2）供电与偏置。片级采用 SAFF-TSPC ÷8 和 `r5` CML→CMOS，实际闭环台的反馈链见[当前状态](docs/status/current.md)；
-- **TX / RX / Digital**：TX 为 CMOS/SST 16:4 CMOS 串化 + 四相 N-over-N 28-slice SST 线驱动（`analog/tx/sst/`，v4.3，含 2-tap FFE）；RX 为端接/CTLE → 2 GHz 64 码纯 CMOS PI → 四分之一速 Double-Tail 动态 CMOS 采样 → 8→32 解串（`analog/rx/cmos_rx/`，v2.2）；数字为统一精简多速率顶层宏 `serdes_digital_top_v3`（`digital/pnr/`，v3.1）。早期全 CML 版本保留在各自旧目录作历史参考。
+SKY130A、1.8 V 双速 **4/5 Gb/s NRZ SerDes**（主推 5G Plan-C 路线，保留 4G 无电感环振基线对照）：
+- **主推 5.0 Gb/s 双速（4/5 Gb/s）Plan-C（`serdes_5g_top_pdk`，`936 × 650 µm = 0.6084 mm²`）**：250 MHz 参考 → 5.0 GHz 八边形 LC-VCO + 正交 ÷2（`lc_vco_5g_oct_pdk`）+ 双速 A/B 分频 ÷8/÷10（`div_ab_5g_v2_pdk`）+ CP v4 + 融合 LF + PFD `sc_dly` + 5G I/Q 时钟组宏，由 HV18 Kelvin LDO（[`analog/ldo/`](analog/ldo/README.md)，`v2_cur_kelvin_pdk`）与 [`analog/bias/`](analog/bias/README.md)（BIAS v2）供电与偏置；TX 为 CMOS/SST 16:4 + 四相 N-over-N 28-slice SST `v5_pdk`（4/5 Gb/s）；RX 为 W3 紧凑峰化 CTLE + 4→8 I/Q CMOS PI v3 + 5G Double-Tail 采样器（`rx_top_5g_pdk`）；数字为端口协同 32-bit 降频双速顶层 `serdes_digital_top_v4`（`v4p1`，`385.9 × 353.6 µm`）；配 131 块紧缩混合去耦瓦片（`147.03 pF`），Magic 全规则 `DRC=0`，合并 GDS `55.43 MB`，层级提取 `28/28` 连通与 `41/41` 隔离通过。台账见 [`results/catalog/serdes_5g_signoff_20261126.json`](results/catalog/serdes_5g_signoff_20261126.json)。
+- **4.0 Gb/s 无电感环振对照基线（`v1.0` / `full_v8`）**：250 MHz 参考 → 2 GHz 四级环振 PLL v4（`r6` + PTAT `28/66` + CP v4 + 融合 LF）、SAFF-TSPC ÷8 与 `r5` CML→CMOS、HV18 LDO `v2_cur` + BIAS v2、TX SST v4.3/v4.4、RX CMOS v2.2/v2.3 与数字顶层 `serdes_digital_top_v3`（v3.1/v3.2），核心装配 `full_v8`（`DRC=0`）。各模块边界与待收口项统一见[当前状态](docs/status/current.md)。
 
-规格政策（2026-10-30 与所有者确认）：
+规格政策（2026-10-30 与所有者确认，双速 4/5 Gb/s 沿用）：
 
 - 45 个 PVT 条件（TT/SS/FF/SF/FS × 1.65/1.8/1.95 V × −40/27/85 °C）都必须满足功能和规格门槛：边沿散布 ≤ 0.15 UI、位中心有符号裕量 ≥ 75 mV、CML 摆幅目标 400 mVpp。
-- **唯一允许缩水的是高低温下 4 Gb/s 的 BER。** 功能失败不能降格成"低质量通过"。
-- 相位噪声/抖动必须做；抖动预算由设计推导，见规格文档。
+- **唯一允许缩水的是高低温下额定线速的 BER。** 功能失败不能降格成“低质量通过”。
+- 相位噪声/抖动必须做；抖动预算由设计推导，见[规格文档](docs/overview/spec.md)。
 - PPA 追求最优，但排在功能、PVT、噪声之后。
 - 现有拓扑修补难度达到中等时，同时探索替代结构。
 
 ## 仓库与版本
 
-- git 管理源码、文档、配置和小数据；`results/` 只保留在磁盘（索引 `results/catalog/` 入库）。基线用 git 标签标记，不再做"冻结"。
-- 当前各模块的源码、修订和证据入口见 [主线工作修订](config/mainline_working_revision.toml)。单模块 `config/*_working_revision.toml` 保留早期实验及其兼容字段。`releases/v0.1-design-freeze-20261028/` 是历史基线，保持原样。
+- git 管理源码、文档、配置和小数据；`results/` 只保留在磁盘（索引 `results/catalog/` 入库）。基线用 git 标签标记，不再做目录式冻结。
+- 当前 5G Plan-C 与 4G `v1.0` 源码、修订和证据入口见[版本与基线](docs/overview/revisions.md)、[主线工作修订](config/mainline_working_revision.toml)及 `results/catalog/`。历史演进日志、早期全 CML 路线与 `v0.1` 冻结快照均保留在 git 历史（标签 `v1.0` 与提交 `b10e989`）。
 - 提交信息说明改了什么电路、跑了什么验证、结论是什么。
 
 ## 环境
@@ -35,7 +35,7 @@ SKY130A、1.8 V、4 Gb/s NRZ SerDes：
 | ngspice 共享库 | `~/.local/opt/ngspice47-shared`（混合仿真用） |
 | Xyce | `~/.local/eda/bin/Xyce` 7.10，SKY130 兼容性未验证 |
 | PDK | `config/pdk.toml`，sky130A，模型 `libs.tech/ngspice/sky130.lib.spice` |
-| 数字 | Verilator 4.028、iverilog、yosys 0.9（旧）；OpenSTA 2.0.17 在 `~/.local/opt/opensta-focal-20191111/usr/bin/sta`，已用于guard局部可行性检查，尚非签核流程 |
+| 数字 | Verilator 4.028、iverilog、yosys 0.9（旧）；OpenSTA 2.0.17 在 `~/.local/opt/opensta-focal-20191111/usr/bin/sta`，已用于 guard 局部可行性检查，尚非签核流程 |
 
 本机 8 核 / 7 GB 内存：并发 ngspice 不超过 4 个。TX 整链单点约 2 分钟，45 点约 1.7 CPU 小时。
 
@@ -47,21 +47,19 @@ SKY130A、1.8 V、4 Gb/s NRZ SerDes：
 - 新代码写成正常的 `.py`。公共测量函数（边沿、眼图裕量、频率/相位、PVT 网格）收进共享库，不在每个 campaign 里重写。
 - 新 bench 用 `spice.binary_output` 输出二进制 raw，并用 `spice.skip_output_before` 不保存分析窗口之前的启动段；`spice.Waves` 两种格式都能读。瓶颈在求解器，不在波形量（TX bench 文件小 58%，仿真时间不变）。
 - 并发 ngspice 不超过 4 个：并发时单个仿真会慢约 25%，但总吞吐仍是串行的约 2.6–3 倍。
-- 本机近期会意外重启（2026-11-01 两次，与仿真负载无关），长 campaign 必须能按工况断点续跑（见下一条）。窗口类测量先在压力角做完整扫描，其余条件用门槛模式只查门槛跨度两端和中心（例：`link_pvt/pvt.py --gate-codes`），减工作量不减条件覆盖。
-- 长 campaign：每组（deck）一个条件、超时按工况数计（`spice.run(timeout_s=…)`）；中断后按工况续跑（`spice.case_output` / `next_run_dir`，只补缺的工况；传 `t_end`＝tran 结束时间，否则"timestep too small"中止的工况仍会写出截断波形并被当成完整结果）；运行顺序用 `corners.boundary_first`（先边界）；运行中用 `uv run python -m serdes_flow.watch <campaign> --every 600` 探健康（正常 / 停滞 / 报错 / 进程消失 / 失败），只读文件，不影响仿真。
-- 每次启动 ngspice 加载 SKY130 模型库约 15 s。短分析（工作点/AC/DC、短瞬态）按工艺角合并成一个 deck，在控制段里用 `option temp=…`、`alter V… dc=…` 循环电压、温度和控制位（例：`analog/rx/ctle/tb/ac_dc/pvt.py`，45 条件 × 4 档从约 13 min 降到 39 s，结果逐位相同）。`spice.run` 对所有任务设单线程（`num_threads=1`）。
+- 长 campaign 必须能按工况断点续跑（见下一条）。窗口类测量先在压力角做完整扫描，其余条件用门槛模式只查门槛跨度两端和中心（例：`link_pvt/pvt.py --gate-codes`），减工作量不减条件覆盖。
+- 长 campaign：每组（deck）一个条件、超时按工况数计（`spice.run(timeout_s=…)`）；中断后按工况续跑（`spice.case_output` / `next_run_dir`，只补缺的工况；传 `t_end`＝tran 结束时间，否则“timestep too small”中止的工况仍会写出截断波形并被当成完整结果）；运行顺序用 `corners.boundary_first`（先边界）；运行中用 `uv run python -m serdes_flow.watch <campaign> --every 600` 探健康（正常 / 停滞 / 报错 / 进程消失 / 失败），只读文件，不影响仿真。
+- 每次启动 ngspice 加载 SKY130 模型库约 15 s。短分析（工作点/AC/DC、短瞬态）按工艺角合并成一个 deck，在控制段里用 `option temp=…`、`alter V… dc=…` 循环电压、温度和控制位。`spice.run` 对所有任务设单线程（`num_threads=1`）。
 - MC 用 `mc.run_many` 按输入身份和完整样本数续跑；瞬态 `mc.deck` 传 `t_end`，不能只凭 execution.json 判完成。采样器默认 8 样本/块、3 worker；配对旧运行/校准码必须显式传原 `--chunk`，改变分块会改变样本身份。内存增量按 DUT 实测，不沿用旧的 45 MB/样本估计；见 [统计方法](docs/verification/statistics.md#执行续跑与成本)。
 - 扫描异常慢时先用 `uv run python -m serdes_flow.audit <campaign>` 区分收敛超时、截断输出、中断和未启动条件，再决定是否扩展长扫描；不要把所有耗时归为 MC。电阻替换快照与当前源码不一致时使用新 campaign。
-- 涉及时钟相对关系的实验，同时看"眼图健康"和"位映射"（`serial.bit_mapping`），不要只用固定位序的合同检查。
-- 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。参数选择按 [尺寸设计流程](docs/verification/sizing.md)：约束 + 粗模型求解，仿真校准迭代。难角上先在单元上画可行区图（例：`analog/pll/divider/tb/div2_map`），校准后再用全链确认，不在全链上手动试。
-- 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按"最新一次"查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。
-
-**历史脚本：** 原项目 `../simple_serdes` 已停用，本仓库不依赖它。旧 campaign 的 `execution/*.txt` 通过 `/tmp/serdes_*_campaign` 指针读原项目路径，旧 `tb.cir`/`run.json` 里也是原项目的绝对路径；这些文件只作记录，不能直接运行。需要复跑时参照 `results/analog/tx/optimization/20261030T100258Z/execution/fork1_finalize.py`，在内存里把原项目路径换成本仓库路径。
+- 涉及时钟相对关系的实验，同时看“眼图健康”和“位映射”（`serial.bit_mapping`），不要只用固定位序的合同检查。
+- 结构问题（路径上放哪些元件、能否在全 PVT 上配平、单元还剩多少余量）先用 `serdes_flow.balance` 做理论比较，再挑方案做电路；见 [验证方法](docs/verification/methods.md#结构时序平衡分析)。参数选择按 [尺寸设计流程](docs/verification/sizing.md)：约束 + 粗模型求解，仿真校准迭代。难角上先在单元上画可行区图，校准后再用全链确认，不在全链上手动试。
+- 从别的仿真复制来的激励（边界条件）先在 `config/boundary_conditions.json` 登记，下游按 id 引用并检查负载签名，不按“最新一次”查找；见 [验证方法](docs/verification/methods.md#边界条件管理)。`spice.run_many` 默认先做 1 ns 冒烟，换 DUT 变体时不要关掉。
 
 ## 文档
 
 - 读者是所有者和接手 agent，不面向评审。
-- 当前状态写在各模块设计文档里；按时间记录的实验笔记归入 `docs/history/`。
-- 模块设计文档维护详细结论与适用边界；项目级采用状态和验证数字统一在 `docs/status/current.md` 汇总并链接证据。README、模块地图、计划和工作台不重复抄数字；工作修订保留机器参数与历史身份。执行队列只在 `prelayout_plan.md`，临时资源与接手登记在协作页。
-- 结论先行；适用范围和假设集中写在一节，不在每段重复免责声明；不写对话过程（"按用户指令"之类）。
+- 当前设计结论与适用边界维护在各模块设计文档；项目级采用状态和验证数字统一在 `docs/status/current.md` 汇总并链接证据。README、模块地图、计划和工作台不重复抄数字；历史演进归档在 git 标签与提交历史（`v1.0`、`b10e989`），不再在工作树保留过程快照目录。
+- 执行队列与流片前验收顺序只在 `docs/status/prelayout_plan.md` 维护，临时资源与短交接登记在 `docs/work_packages/collaboration.md`。
+- 结论先行；适用范围和假设集中写在一节，不在每段重复免责声明；不写对话过程（“按用户指令”之类）。
 - 正文手写维护，脚本只生成数据和图。

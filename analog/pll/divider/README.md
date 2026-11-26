@@ -1,28 +1,22 @@
-# 反馈分频器
+# PLL 反馈与数据分频器（`analog/pll/divider/`）
 
-当前主线（11 端口 CML 族）采用 `spice/cml_prescaler8.spice`（三级固定 CML ÷8，输出 `/2`、`/4`、`/8` 抽头；2 GHz 输入对应 1 GHz / 500 MHz / 250 MHz）。纯 CMOS / TSPC 2 GHz ÷8 为独立的 10 端口替代研究分支，不与 CML 族混计版本槽位。
+本目录维护 **5.0 Gb/s 双速 A/B 分频器（`div_ab_5g_v2_pdk`）**、**4.0 Gb/s SAFF-TSPC 重定时 ÷8 预分频器（`saff_reclock_2g_pdk` / `v2_cand`）** 及早期 CML ÷8 参考网表。设计报告见 [pll_feedback_data_dividers.md](../../../docs/design/pll_feedback_data_dividers.md) 与 [pll_tspc_reclock_divider.md](../../../docs/design/pll_tspc_reclock_divider.md)，项目级签核状态见 [current.md](../../../docs/status/current.md) 与 [serdes_5g_signoff_20261126.json](../../../results/catalog/serdes_5g_signoff_20261126.json)。
 
-早期全 CML 可编程计数器、`cml_binary_chain`、`cmos_divider_programmable`、`exploratory/latch_candidates` 及已淘汰的 `cmos_sync_prescaler8_2g` 已于 2026-11-20 归档退役（见 [divider_retirement_20261120.md](../../../docs/history/divider_retirement_20261120.md) 与 `results/catalog/retired_divider_vars_20261120.json`）。
+## 现行实现与版图变体
 
-## 当前保留实现（CML 族 2 Var + CMOS/TSPC 族 2 Var）
-
-| 家族 | 实现 | 用途与状态 |
+| 路线 / 变体 | 原理图网表 | PDK 版图与状态 |
 |---|---|---|
-| **CML（11 端口）Var 1（主线）** | [cml_prescaler8.spice](spice/cml_prescaler8.spice)、[cml_div2.spice](spice/cml_div2.spice)、[cml_latch.spice](spice/cml_latch.spice) | 现行工作修订 r3 三级固定 CML ÷8；物理清理版在 [layout/variants/review_clean](layout/variants/review_clean/README.md) |
-| **CML（11 端口）Var 2（候选）** | [sync_prescaler8_2stack.spice](spice/sync_prescaler8_2stack.spice) | 2-Stack 同步 CML 候选，版图在 `layout/variants/sync2_routed`（已归档至 `retired_pre_release_20261123.json`）（见 [pll_sync_prescaler8.md](../../../docs/design/pll_sync_prescaler8.md)，身份与 RC 复核边界未关闭） |
-| **CMOS/TSPC（10 端口）Var 1** | [cmos_prescaler8_2g.spice](spice/cmos_prescaler8_2g.spice) | 级联 C²MOS 纹波 ÷8 基线，版图在 `layout/variants/cmos_2g_pdk`（已归档至 `retired_pre_release_20261123.json`）（`verify_r5_pdk.py` / `pll_pending_review.py` 引用） |
-| **CMOS/TSPC（10 端口）Var 2（主推候选）** | [tspc_reclock_prescaler8_2g.spice](spice/tspc_reclock_prescaler8_2g.spice) | Equalized Nikolic SAFF-TSPC + 1 GHz 同步计数 + 三路 2 GHz 重定时 ÷8（含 9T 动态对照）；版图 v2 在 [layout/variants/saff_reclock_2g_pdk](layout/variants/saff_reclock_2g_pdk/README.md)，报告见 [pll_tspc_reclock_divider.md](../../../docs/design/pll_tspc_reclock_divider.md) |
+| **5G 双速 A/B 分频器（`÷8 / ÷10`）** | [`spice/pll_div_ab_5g_v2.spice`](spice/pll_div_ab_5g_v2.spice) | [`layout/variants/div_ab_5g_v2_pdk/`](layout/variants/div_ab_5g_v2_pdk/)（[`summary.json`](layout/variants/div_ab_5g_v2_pdk/summary.json)）：`DRC=0 / LVS=MATCH / M5=0%`，6/6 角（12/12 `÷8/÷10`）PASS，50/50 `SS −40 °C` MC 100% 达标（`\|diff_sk\| ≤ 4.77 ps`） |
+| **4G SAFF-TSPC 重定时 ÷8（主线片级宏）** | [`spice/tspc_reclock_prescaler8_2g.spice`](spice/tspc_reclock_prescaler8_2g.spice) · [`spice/tspc_reclock_prescaler8_2g_v2_cand.spice`](spice/tspc_reclock_prescaler8_2g_v2_cand.spice) | [`layout/variants/saff_reclock_2g_pdk/`](layout/variants/saff_reclock_2g_pdk/README.md)（`1,705 µm²`，45/45 CPEX 功能通过、`RCX_BOTH` 5/5）与加固候选 [`layout/variants/saff_reclock_2g_v2_pdk/`](layout/variants/saff_reclock_2g_v2_pdk/) |
+| **早期 CML ÷8（历史参考）** | [`spice/cml_prescaler8.spice`](spice/cml_prescaler8.spice) · [`spice/cml_div2.spice`](spice/cml_div2.spice) · [`spice/cml_latch.spice`](spice/cml_latch.spice) | [`layout/variants/review_clean/`](layout/variants/review_clean/)（仅保留供 4G 冻结闭环对照） |
 
-## 测试台
+版图生成器索引见 [`layout/README.md`](layout/README.md)。已退役的早期分频器变体与 SHA-256 收据记录在 [`retired_divider_vars_20261120.json`](../../../results/catalog/retired_divider_vars_20261120.json) 与 [`retired_pre_release_20261123.json`](../../../results/catalog/retired_pre_release_20261123.json)。
 
-| 测试项 | 层次 | 说明 |
+## 现行测试台
+
+| 测试脚本 | 层次 | 说明 |
 |---|---|---|
-| [pvt](tb/pvt/case.toml) / [rcorner.py](tb/pvt/rcorner.py) | block | CML ÷8 低过驱动 45 角与电阻角筛选 |
-| [div2_map](tb/div2_map/run.py) | cell | 首级 CML ÷2 可行区图（保持管宽度 / 频率 / 摆幅） |
-| [layout_pex](tb/layout_pex/run.py) | post-layout | 2 GHz 实际 buffer + CML ÷8 提取网表 + 反馈接收联合台 |
-| [mc](tb/mc/run.py) | block | CML ÷8 失配蒙特卡洛 |
-| [sync2_pvt](tb/sync2_pvt/) / [sync2_mc](tb/sync2_mc/) | block | 2-Stack CML 候选 PVT / MC |
-| [tspc_study](tb/tspc_study/benchmark.py) | block / post-layout | 纯 CMOS/TSPC 多角度对比（9 硬角 / 45 角 / 静态与纹波 `Kd` / 频率 Shmoo / CPEX & RCX / 200 样本 MC） |
-| [functional](tb/functional/case.toml) / [input_range](tb/input_range/case.toml) | cell | CML ÷2 基础功能与输入范围 |
+| [`tb/tspc_study/benchmark.py`](tb/tspc_study/benchmark.py) | block / post-layout | SAFF-TSPC ÷8 四架构对比、45 角 CPEX PVT、静态/纹波 `Kd`、频率 Shmoo、双端原生 RCX 与 200 样本失配 MC |
+| [`tb/tspc_study/harden_xtg2.py`](tb/tspc_study/harden_xtg2.py) | block / post-layout | 加固版 `v2_cand`（静态 LVT XOR 替代 `Xtg2` 传输门）PVT / MC 验证 |
 
-结果统一输出到 `results/analog/pll/divider/<case>/<run_id>/`，按 [测试约定](../../../docs/verification/methods.md) 使用 ngspice 47 执行。
+结果统一输出到 `results/analog/pll/divider/`，执行约定见 [docs/verification/methods.md](../../../docs/verification/methods.md)。

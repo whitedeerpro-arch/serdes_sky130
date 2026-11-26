@@ -10,7 +10,7 @@
   - **45 角 CPEX PVT**（真实 `r5_pdk` v6 CPEX 驱动、0.5 ns 冷上电、零 `Ikick`）：**45/45 功能通过（`bad = 0`）**，**44/45 过 30 ps 级间偏斜门槛**（中位数 **`4.28 ps`**、TT `4.08 ps`、第 2 差 `15.61 ps`、仅 `ss_v1650_t-40_hh` 为 `45.61 ps`），全 45 角 `q8` 占空比 **`0.4972–0.5046`**。
   - **双向原生 RCX（`r5_pdk` RCX → `saff_reclock` RCX）**：**5/5 边界角全过**（含 `SS 1.65 V −40 °C hh` `29.1/14.5/18.1 ps`）。
   - **后仿 200 样本 CPEX Mismatch MC**：`fs_v1650_t85_mm` **`200/200` 全通过**（`CI95 = [98.17%, 100%]`，`q4-q2 = −7.60 ± 2.26 ps`）；`ss_v1650_t-40_mm` 为 **`168/200` 正常分频 / `39/200` 过 30 ps 门槛**，32 颗未翻样本中 23 颗定位到 `Xtg2` 2:1 传输门在 `1.65 V −40 °C` 导通死区，已在“适用边界与下一轮改进”明确给出静态 LVT 逻辑替换方案。
-- **采用状态**：独立纯 CMOS 10 端口候选（CMOS 族 Var 2），**未替换** `config/pll_working_revision.toml` 中的 11 端口 r3 CML ÷8 主线。
+- **采用状态**：4 Gb/s 主线片级反馈采用本纯 CMOS 10 端口宏（[mainline_working_revision.toml](../../config/mainline_working_revision.toml)）；5 Gb/s 双速（`÷8 / ÷10`）演进宏见 [PLL 反馈 A 与精准分频 B（`div_ab_5g_v2_pdk`）](pll_feedback_data_dividers.md)。
 
 入口：[原理图网表](../../analog/pll/divider/spice/tspc_reclock_prescaler8_2g.spice)、[v2 版图生成器](../../analog/pll/divider/layout/build_saff_reclock_prescaler8_2g_pdk.py)、[v2 PDK 版图](../../analog/pll/divider/layout/variants/saff_reclock_2g_pdk/README.md)、[多角度基准脚本](../../analog/pll/divider/tb/tspc_study/benchmark.py)、[绘图脚本](../../verification/plotting/tspc_divider_study.py)。
 

@@ -24,4 +24,4 @@ uv run python analog/pll/vco/tb/ctrl_load/varactor_noise.py --run --enable-rg-no
 uv run python analog/pll/vco/tb/ctrl_load/varactor_equivalence.py --help
 ```
 
-`varactor_equivalence.py`在明确的CG母本上替换八只变容器别名，运行独立1ns冒烟和20ns瞬态，比较相同窗口的电压/控制电流；固定输入与结果见[续做报告](../../../../../docs/design/r6_lock_confirmation.md)。这只证明受检无噪声行为一致，后续ISF/周期噪声预算需显式使用修正副本并记录身份。
+`varactor_equivalence.py`在明确的CG母本上替换八只变容器别名，运行独立1ns冒烟和20ns瞬态，比较相同窗口的电压/控制电流；固定输入与结果见 [r6_lock_confirmation.json](../../../../../results/catalog/r6_lock_confirmation.json)（后续含 `noisy=1` 变容 `rg` 的 VCO 相噪结果见 [pll_vco_r6_perf.md](../../../../../docs/design/pll_vco_r6_perf.md)）。这只证明受检无噪声行为一致，后续ISF/周期噪声预算需显式使用修正副本并记录身份。

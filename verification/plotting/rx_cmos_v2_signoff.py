@@ -23,6 +23,16 @@ PI_SUMMARY = ROOT / "results/analog/rx/cmos_rx/pi/20261121T034553Z/summary.json"
 SLICER_DIR = ROOT / "results/analog/rx/cmos_rx/slicer/20261120T230000Z"
 STAGEA_DIR = ROOT / "results/analog/rx/cmos_rx/link/20261121T112319Z_stageA"
 LEGACY_POWER = ROOT / "docs/work_packages/deliveries/POWER-20261110/evidence.json"
+# Archived 45-corner All-CML baseline from POWER-20261110/evidence.json (used when archive file is absent)
+LEGACY_POWER_FALLBACK = {
+    "rx_tt_mw": 42.41639936868892,
+    "rx_min_mw": 31.899646982797208,
+    "rx_max_mw": 52.06058297540834,
+    "tx_tt_mw": 102.85783716402224,
+    "link_tt_mw": 145.27423653271117,
+    "link_min_mw": 119.59345380712028,
+    "link_max_mw": 168.48512039838698,
+}
 
 CORNER_STYLE = {
     "tt_v1800_t27":  ("TT 1.80V 27°C",   "#1f77b4", "-",  2.2),
@@ -191,15 +201,24 @@ def plot_panel3_eye_and_bbpd(ax: plt.Axes):
 
 
 def plot_panel4_power(ax: plt.Axes, stageB_path: Path | None):
-    ev = json.loads(LEGACY_POWER.read_text())
-    leg_rx_map = ev["rx_historical_45"]["power_mw_by_condition"]
-    leg_tx_map = {k: v["mean_power_mw"] for k, v in ev["tx"].items()}
-    leg_rx_tt = leg_rx_map["tt_v1800_t27"]
-    leg_rx_min, leg_rx_max = min(leg_rx_map.values()), max(leg_rx_map.values())
-    leg_tx_tt = leg_tx_map["tt_v1800_t27"]
-    leg_link_tt = leg_rx_tt + leg_tx_tt
-    leg_link_all = [leg_rx_map[k] + leg_tx_map[k] for k in leg_rx_map if k in leg_tx_map]
-    leg_link_min, leg_link_max = min(leg_link_all), max(leg_link_all)
+    if LEGACY_POWER.exists():
+        ev = json.loads(LEGACY_POWER.read_text())
+        leg_rx_map = ev["rx_historical_45"]["power_mw_by_condition"]
+        leg_tx_map = {k: v["mean_power_mw"] for k, v in ev["tx"].items()}
+        leg_rx_tt = leg_rx_map["tt_v1800_t27"]
+        leg_rx_min, leg_rx_max = min(leg_rx_map.values()), max(leg_rx_map.values())
+        leg_tx_tt = leg_tx_map["tt_v1800_t27"]
+        leg_link_tt = leg_rx_tt + leg_tx_tt
+        leg_link_all = [leg_rx_map[k] + leg_tx_map[k] for k in leg_rx_map if k in leg_tx_map]
+        leg_link_min, leg_link_max = min(leg_link_all), max(leg_link_all)
+    else:
+        leg_rx_tt = LEGACY_POWER_FALLBACK["rx_tt_mw"]
+        leg_rx_min = LEGACY_POWER_FALLBACK["rx_min_mw"]
+        leg_rx_max = LEGACY_POWER_FALLBACK["rx_max_mw"]
+        leg_tx_tt = LEGACY_POWER_FALLBACK["tx_tt_mw"]
+        leg_link_tt = LEGACY_POWER_FALLBACK["link_tt_mw"]
+        leg_link_min = LEGACY_POWER_FALLBACK["link_min_mw"]
+        leg_link_max = LEGACY_POWER_FALLBACK["link_max_mw"]
 
     stageA = json.loads((STAGEA_DIR / "summary.json").read_text())
     tt_a = [r for r in stageA["live"] if r["condition"] == "tt_v1800_t27"][0]

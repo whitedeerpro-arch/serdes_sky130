@@ -1,17 +1,24 @@
 * Shunt-Peaked PDK-Mapped RX CTLE for 5.0 Gb/s SerDes — Real Extracted PDK Spiral Inductor Model
 * SKY130A, 1.8 V, 100% real SKY130A PDK active/res/cap devices + Magic DRC=0 / CPEX extracted
-* parameters for `rx_ctle_ind_6n5_pdk` (analog/rx/cmos_rx/layout/variants/ctle_shunt_ind_5g_pdk/summary.json).
+* parameters for the signed-off compact 0%-M5 M4+M2 stacked inductor `rx_ctle_ind_m4m2_5g_pdk`
+* (analog/rx/cmos_rx/layout/variants/ctle_shunt_ind_compact_5g_pdk/summary.json) and W3 gm/Id=10.7
+* active core `serdes_rx_ctle_shunt_5g_w3_pdk`
+* (analog/rx/cmos_rx/layout/variants/ctle_shunt_5g_w3_pdk/summary.json).
 *
 * =========================================================================================
-* Extracted Physical Inductor Parameters (`rx_ctle_ind_6n5_pdk`, Magic drc_total=0):
-*   - Geometry: 5 turns/deck x 2 stacked decks (10 effective turns), D_out = 74.0 um, D_in = 43.2 um,
-*     W = 1.8 um, S = 1.6 um, bbox = 91.6 x 91.6 um^2 (8,390.56 um^2), deck trace = 1,172 um.
-*   - Inductance: L_stacked_diff = 8.252 nH -> L_half = 2.845 nH, K = 0.45
-*     -> 2 * 2.845 * (1 + 0.45) = 8.2505 nH diff (4.125 nH/side effective differential!).
-*   - Resistance: R_dc = 24.74 Ohm/arm (49.48 Ohm diff) -> Rsa1=Rsa2=12.37 Ohm, Rsb1=Rsb2=12.37 Ohm.
-*   - Magic CPEX total substrate cap: C_sub,total = 104.71 fF
-*     -> 35 fF on pa, 35 fF on pb, plus 35 fF on ct (AC-shorted to VDD), via Rsub = 500 Ohm,
-*        plus inter-winding Cw = 10 fF per half.
+* Signed-Off Compact M4+M2 Inductor (`rx_ctle_ind_m4m2_5g_pdk`, Magic drc_total=0, 0% M5):
+*   - Geometry: 6 turns/deck x 2 stacked M4+M2 decks (12 effective turns), D_out = 48.0 um,
+*     D_in = 29.6 um, W = 1.2 um, S = 0.4 um, bbox = 57.6 x 57.6 um^2 (3,317.76 um^2),
+*     deck trace = 931.2 um, f_SRF = 15.89 GHz.
+*   - Inductance: L_stacked_diff = 8.204 nH (4.102 nH/arm effective) -> lhalf = 2.829 nH, K = 0.45.
+*   - Resistance: R_dc = 66.74 Ohm/arm (133.47 Ohm diff; absorbed by trimming W3 l_rload = 2.83 um).
+*   - Magic CPEX substrate/inter-deck cap: C_sub,total = 58.49 fF (~19.5 fF/node), C_w ~ 15 fF/half.
+*
+* Signed-Off W3 Active Parameters (`serdes_rx_ctle_shunt_5g_w3_pdk`, gm/Id = 10.7 S/A):
+*   - win = 19.2 um (nf=8), wtail = 90.0 um (nf=10), l_rload = 2.83 um, l_rdeg = 5.10 um,
+*     c_w = c_l = 6.00 um (3x MIM1), wsw = 8.0 um (16 um PMOS).
+*   - Legacy parameterized `serdes_rx_ctle_shunt_5g_pdk` subckt is preserved below for callers
+*     overriding device/inductor parameters directly.
 * =========================================================================================
 * Dependencies: sky130_primitives.spice (serdes_nfet, serdes_nfet_lvt, serdes_pfet).
 
@@ -72,3 +79,11 @@ Xsw1 cap1 sn eq1 eq1_b vdd vss ctle5g_tgate_s wn={wsw} wp={2*wsw}
 Xtie0 cap0 eq0_b sp vss serdes_nfet w=0.42 l=0.50 nf=1
 Xtie1 cap1 eq1_b sp vss serdes_nfet w=0.42 l=0.50 nf=1
 .ends serdes_rx_ctle_shunt_5g_pdk
+
+* Signed-Off W3 5.0 Gb/s Shunt-Peaked PDK CTLE (`ctle_shunt_5g_w3_pdk` + compact 57.6x57.6 um M4+M2 8.204 nH coil)
+.subckt serdes_rx_ctle_shunt_5g_w3_pdk inp inn outp outn eq0 eq1 vbias vdd vss
++ params: rm_scale=1.0 c_scale=1.0
+Xw3 inp inn outp outn eq0 eq1 vbias vdd vss serdes_rx_ctle_shunt_5g_pdk
++ win=19.2 nfin=8 wtail=90 nftail=10 l_rload=2.83 l_rdeg=5.10 c_w=6.0 c_l=6.0 wsw=8
++ lhalf=2.829n kmut=0.45 rs=66.74 csub=19.5f rsub=500 cw=15f rm_scale={rm_scale} c_scale={c_scale}
+.ends serdes_rx_ctle_shunt_5g_w3_pdk

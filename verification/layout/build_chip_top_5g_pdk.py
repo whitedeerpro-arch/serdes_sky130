@@ -221,11 +221,12 @@ def count_1d_crossings(pairs: list[tuple[float, float]]) -> int:
 
 
 def build_5g_floorplan_spec(digital_variant: str = "v4p1") -> tuple[float, float, list[MacroMeta], list[DecapBank]]:
-    """Construct exact Plan-C (v4p1) or Plan-B (v4) zero-overlap, zero-alley-conflict 5G chip-top spec."""
-    if digital_variant == "v4p1":
-        dig_dir = "digital/pnr/variants/hd_pnr_v4p1_5g_coopt/serdes_digital_top_v4"
-    else:
-        dig_dir = "digital/pnr/variants/hd_pnr_v4_32b/serdes_digital_top_v4"
+    """Construct exact Plan-C (v4p1) zero-overlap, zero-alley-conflict 5G chip-top spec."""
+    if digital_variant != "v4p1":
+        raise ValueError(
+            f"Unsupported digital_variant={digital_variant!r}; only 'v4p1' (hd_pnr_v4p1_5g_coopt) is supported."
+        )
+    dig_dir = "digital/pnr/variants/hd_pnr_v4p1_5g_coopt/serdes_digital_top_v4"
     dig_def = REPO / dig_dir / "serdes_digital_top_v4.def"
     dig_gds_rel = f"{dig_dir}/serdes_digital_top_v4.gds"
     dig_def_rel = f"{dig_dir}/serdes_digital_top_v4.def"
@@ -251,7 +252,7 @@ def build_5g_floorplan_spec(digital_variant: str = "v4p1") -> tuple[float, float
     #   - South-of-RX PI-ctrl channel (y=38..58): 20.0 um tall
     x_dig = 544.0
     x_rx = 614.0
-    y_dig = 290.0 if digital_variant == "v4p1" else 292.0
+    y_dig = 290.0
     core_h = round(max(650.0, y_dig + dig_h + 6.0), 1)
     core_w = round(max(936.0, x_dig + dig_w + 6.0), 1)
 
@@ -1286,39 +1287,33 @@ def build_chip_top_5g(
         p0 = dig.port_world(dp)
         p1 = rx.port_world(rp)
         y_s = grid(39.4 + idx * 0.88)  # 24 M3 tracks @ 0.88 um pitch in y=[39.4..59.64] (strictly between DEC_RX_S 38 & RX 62!)
-        if digital_variant == "v4p1":
-            # Planar decoupled 3L routing:
-            #   - idx 0..7:  pure M4 -> M3 -> M4 (y_m=266.6..272.6, strictly between clk_2p5g_rx<=265.4 & tx_data>=275.4; 0 M2!)
-            #   - idx 8..23: pure monotonic double-staircase M2 (x_w & x_e both increase with y_m -> 0 crossings & 0 M3/M4!)
-            if idx < 8:
-                x_w = grid(533.2 + idx * 0.88)
-                x_e = grid(601.8 + idx * 0.86)
-                y_m = grid(266.6 + idx * 0.86)
-                v_w, h_m, v_e = "metal4", "metal3", "metal4"
-            else:
-                k = idx - 8  # 0..15
-                x_w = grid(533.2 + k * 0.56)
-                x_e = grid(601.8 + k * 0.56)
-                y_m = grid(273.6 + k * 0.86)
-                v_w, h_m, v_e = "metal2", "metal2", "metal2"
-            pts = [(p0[0], p0[1]), (x_w, p0[1]), (x_w, y_m), (x_e, y_m), (x_e, y_s), (p1[0], y_s), (p1[0], p1[1])]
-            wl = route_poly(rects, p0, p1, [
-                ((p0[0], p0[1]), (x_w, p0[1]), "metal3"),
-                ((x_w, p0[1]), (x_w, y_m), v_w),
-                ((x_w, y_m), (x_e, y_m), h_m),
-                ((x_e, y_m), (x_e, y_s), v_e),
-                ((x_e, y_s), (p1[0], y_s), "metal3"),
-                ((p1[0], y_s), (p1[0], p1[1]), "metal2"),
-            ], width=0.32)
+        # Planar decoupled 3L routing:
+        #   - idx 0..7:  pure M4 -> M3 -> M4 (y_m=266.6..272.6, strictly between clk_2p5g_rx<=265.4 & tx_data>=275.4; 0 M2!)
+        #   - idx 8..23: pure monotonic double-staircase M2 (x_w & x_e both increase with y_m -> 0 crossings & 0 M3/M4!)
+        if idx < 8:
+            x_w = grid(533.2 + idx * 0.88)
+            x_e = grid(601.8 + idx * 0.86)
+            y_m = grid(266.6 + idx * 0.86)
+            v_w, h_m, v_e = "metal4", "metal3", "metal4"
         else:
-            x_e = grid(601.8 + idx * 0.48)
-            pts = [(p0[0], p0[1]), (x_e, p0[1]), (x_e, y_s), (p1[0], y_s), (p1[0], p1[1])]
-            wl = sum(abs(b[0] - a[0]) + abs(b[1] - a[1]) for a, b in zip(pts, pts[1:]))
+            k = idx - 8  # 0..15
+            x_w = grid(533.2 + k * 0.56)
+            x_e = grid(601.8 + k * 0.56)
+            y_m = grid(273.6 + k * 0.86)
+            v_w, h_m, v_e = "metal2", "metal2", "metal2"
+        pts = [(p0[0], p0[1]), (x_w, p0[1]), (x_w, y_m), (x_e, y_m), (x_e, y_s), (p1[0], y_s), (p1[0], p1[1])]
+        wl = route_poly(rects, p0, p1, [
+            ((p0[0], p0[1]), (x_w, p0[1]), "metal3"),
+            ((x_w, p0[1]), (x_w, y_m), v_w),
+            ((x_w, y_m), (x_e, y_m), h_m),
+            ((x_e, y_m), (x_e, y_s), v_e),
+            ((x_e, y_s), (p1[0], y_s), "metal3"),
+            ((p1[0], y_s), (p1[0], p1[1]), "metal2"),
+        ], width=0.32)
         pi_ctrl_wl += wl
         if idx in (0, 8, 16, 23):
             routed_lines_plot.append(("rx_pi_ctrl", "#17becf", pts))
-        if digital_variant == "v4p1":
-            expected_nets.append((f"pi_{rp}", [("digital_v4", dp, p0[2]), ("rx_top_5g", rp, p1[2])]))
+        expected_nets.append((f"pi_{rp}", [("digital_v4", dp, p0[2]), ("rx_top_5g", rp, p1[2])]))
     routed_metrics["rx_pi_ctrl_24b"] = {
         "nets": 24, "total_wl_um": round(pi_ctrl_wl, 1), "avg_wl_um": round(pi_ctrl_wl / 24.0, 1),
     }
@@ -1689,7 +1684,7 @@ def build_chip_top_5g(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--digital-variant", choices=["v4p1", "v4"], default="v4p1")
+    ap.add_argument("--digital-variant", choices=["v4p1"], default="v4p1")
     ap.add_argument("--drc", action="store_true", help="Run real Magic full-rule top-level DRC check")
     ap.add_argument("--gds", action="store_true", help="Export merged full-chip GDSII")
     ap.add_argument("--extract", action="store_true", help="Run real Magic hierarchical ext2spice connectivity/short audit")

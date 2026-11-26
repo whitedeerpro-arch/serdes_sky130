@@ -10,7 +10,7 @@
 - **常温功耗几乎不变**：TT 1.8 V 27 °C（VCO + 4 buf + bias）为 `11.82 mW`（相对基线 `11.74 mW` 仅 `+0.7%`），低温 `−40 °C` 反降 `13.3%`（`10.40 mW`），高温 `85 °C` 仅增 `13.0%`（`12.87 mW`）；
 - **采用状态**：PLL v4 使用 `28/66` 配比。下方码窗结果对应 VCO 局部表征，闭环与物理目标见[当前状态](../status/current.md)。
 
-入口：[混流偏置网表](../../analog/pll/vco/spice/vco_ptat_bias.spice) · [验证脚本](../../analog/pll/vco/tb/tuning/r6_ptat.py) · [原 r6 文档](pll_vco.md) · [BIAS v2 文档](bias_v2.md)
+入口：[混流偏置网表](../../analog/pll/vco/spice/vco_ptat_bias.spice) · [验证脚本](../../analog/pll/vco/tb/tuning/r6_ptat.py) · [r6 性能与相噪报告](pll_vco_r6_perf.md) · [PLL 环路文档](pll_loop.md) · [BIAS v2 文档](bias_v2.md)
 
 ---
 

@@ -12,7 +12,7 @@
 
 ![VCO r6 + PTAT 28/66 与 PLL v4 综合特性](../figures/clocking/vco_r6_ptat_perf_20261123.png)
 
-入口：[复现脚本](../../analog/pll/vco/tb/phase_noise/char_r6_ptat_perf.py) · [r6 主线文档](pll_vco.md) · [PTAT 28/66 调谐报告](pll_vco_r6_ptat.md) · [CP v4 报告](pll_cp_v4.md) · [LDO v2 报告](ldo_v2.md) · [VCO 版图审阅](../../analog/pll/vco/layout/review.md)
+入口：[复现脚本](../../analog/pll/vco/tb/phase_noise/char_r6_ptat_perf.py) · [PLL 环路文档](pll_loop.md) · [PTAT 28/66 调谐报告](pll_vco_r6_ptat.md) · [CP v4 报告](pll_cp_v4.md) · [LDO v2 报告](ldo_v2.md) · [VCO 版图审阅](../../analog/pll/vco/layout/review.md)
 
 ---
 
@@ -65,7 +65,7 @@
 
 ### 2.1 ISF 与器件噪声分解（100 kHz / 1 MHz / 10 MHz）
 
-方法沿用 [isf.py](../../analog/pll/vco/tb/phase_noise/isf.py) 与 [vco_pn.py](../../analog/pll/vco/tb/phase_noise/vco_pn.py) 的 Hajimiri–Lee 周期平稳 ISF 流程（`rp`/`mp`/`mt` 三站点，`0.5 fC` 脉冲，最大相位间隙 `0.063 ≤ 0.08`），并扩展为完整 **7 项 VCO 核器件噪声 + PTAT 偏置线噪声**：
+方法沿用 [char_r6_ptat_perf.py](../../analog/pll/vco/tb/phase_noise/char_r6_ptat_perf.py) 与 [pnoise.py](../../src/serdes_flow/pnoise.py) 的 Hajimiri–Lee 周期平稳 ISF 流程（`rp`/`mp`/`mt` 三站点，`0.5 fC` 脉冲，最大相位间隙 `0.063 ≤ 0.08`），并扩展为完整 **7 项 VCO 核器件噪声 + PTAT 偏置线噪声**：
 - **有源管（`mp` LVT `40/0.15 nf=8`，`mt` r6 实际尺寸 SVT `25.2/0.5 nf=4`）**：各角 `.noise (sparse)` 标定 `γ(Id)` 与 `K_1/f(Id)`，结合周期内实测 `gm(x), Id(x)` 做周期平稳积分。
 - **成对长多晶负载（`16× res_high_po_2p85 l=4.77`）**：经独立 `.noise` 审计确认 SKY130A `res_high_po_2p85` 中 `rend`/`rhrpoly_2p85` 均系缺少 `noisy=1` 标记的表达式电阻（ngspice 输出 `0.0`），故按实测阻值 `R_load`（`281.7–397.5 Ω`，TT `338.0 Ω`）精确施加 `S_I = 4 k T / R_load`。
 - **变容 `rg`（`8× cap_var_lvt_noisy`，`noise_models.varactor_rg()` `noisy=1`）与 5-bit 开关阵（`8×31 pll_vco_cap_unit6`）**：在 `10 MHz–40 GHz` 实测端口电流噪声谱 `S_I(f)`（变容跨 `v0p(x)` 摆幅做时间平均），按 `h_rp(x)` 谐波功率权重 `w_k`（`k = 1..12`）做精确有色谐波 PPV 求和。

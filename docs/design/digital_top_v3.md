@@ -73,7 +73,7 @@
 
 ### 现行 CMOS RX RTL 的独立 CDR 回归
 
-v3.2 工作树的 PI 码递增使采样时钟延后。独立 CDR 台使用与 GLS 台相同的历史 LUT 步长，两路采样都按 CMOS 极性增加延时。以 400,000 UI 的行为时钟、±300 ppm 频偏分别回归，两点各 19,936 字，错字、缺口和滑移均为 0。下节 GLS 收据对应发布的 v3.1。复现步骤见[横向审查记录](../history/project_review_20261124.md#rtl-回归和历史版图复现)。
+v3.2 工作树的 PI 码递增使采样时钟延后。独立 CDR 台使用与 GLS 台相同的历史 LUT 步长，两路采样都按 CMOS 极性增加延时。以 400,000 UI 的行为时钟、±300 ppm 频偏分别回归，两点各 19,936 字，错字、缺口和滑移均为 0。下节 GLS 收据对应发布的 v3.1。审查数据见 [project_review_20261124.json](../data/project_review_20261124.json)。
 
 02:17 的独立核心复跑导入 01:22 的 v3.2 GDS，SS 建立违例位于 RX 字时钟域和 CDR 时钟域。02:31 的后续 GDS 宏级 DRC=0、LVS=MATCH，SS 的 RX 字时钟域达到正裕量，仍有 CDR 建立违例。该版最长路径从 `rx_cdr_phase_applied` 寄存器出发，经过延时单元和运算逻辑。[两版 STA 与 GDS 哈希](../../results/catalog/chip_integration_20261124.json)
 
@@ -100,3 +100,13 @@ v3.2 工作树的 PI 码递增使采样时钟延后。独立 CDR 台使用与 GL
 - FIFO 采用 `DATA_WIDTH=16`、`ADDR_BITS=4`。v3.1 读出固定读取 16 个存储槽，写指针更新按 16 位实现。现有 FIFO 压力台复用 v3.1 RTL 时，默认深度通过，`ADDR_BITS=3/2` 各出现存储越界和读出错误。上述两个参数以采用值作为集成边界。
 - 交付物位于 [digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/)：`.def`、`.gds`、`.v`、`_pg.v`、`.png` 与 [summary.json](../../digital/pnr/variants/hd_pnr_v3_unified/serdes_digital_top_v3/summary.json)。
 - 适用范围：3 角 STA 覆盖 SKY130A `sky130_fd_sc_hd` `tt_025C_1v80` / `ss_100C_1v60` / `ff_n40C_1v95` 与对应 OpenRCX 寄生规则；顶层与模拟核心对接后的片级电源网压降（IR drop）与模拟-数字端口寄生耦合待顶层集成阶段验证。
+
+## 5.0 Gb/s 双速 32-bit 数字顶层演进（`v4` / `v4p1`）
+
+为支撑 5.0 Gb/s / 4.0 Gb/s 双速演进并彻底放宽慢冷角建立裕量，独立演进的 32-bit 降频双速宏 **`serdes_digital_top_v4`**（端口协同优化版 **`v4p1`**）已完成全套 PnR、STA、CDC 与物理签核，并装配进 Plan-C 全片顶层 `serdes_5g_top_pdk`：
+
+- **RTL 与流程**：[digital/pnr/rtl_v4_32b](../../digital/pnr/rtl_v4_32b/) · [run_v4p1_5g_coopt_pnr.py](../../digital/pnr/run_v4p1_5g_coopt_pnr.py) · [v4p1 summary.json](../../digital/pnr/variants/hd_pnr_v4p1_5g_coopt/serdes_digital_top_v4/summary.json) · [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)
+- **核心签核指标（`hd_pnr_v4p1_5g_coopt`）**：
+  - 面积 **`385.9 × 353.6 µm = 136,454.2 µm²`**（较初版 `v4_32b` 缩小 `−7.2%`），利用率 `75.0%`，内置去耦 `88.93 pF`，Magic `DRC = 0`、Netgen `LVS = MATCH`；
+  - **6 角 ±5% OCV（含 1.65 V 冷角插值）5G/4G 全 MET**：最差 `setup ≥ +0.059 ns`、`hold ≥ +0.073 ns`，CDC 首级单扇出 `26/26` 通过；
+  - 端口顺序与 Plan-C 东侧 RX 宏 1-to-1 对齐，实现 **RX 33-bit 总线 `0` 交叉**（最大横向偏移 `0.23 µm`）。

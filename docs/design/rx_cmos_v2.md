@@ -7,7 +7,7 @@
 - **全 45 角 PVT 闭合（Stage B，`TT/SS/FF/SF/FS × 1.65/1.80/1.95 V × −40/27/85 °C`）**：**45/45 PASS（100%）**，全角 **0 数据错、0 边沿错**，45/45 采样窗口 `≥ 0.50 UI`（44/45 通过完整 `[-8, 0, +8]`、`ss_v1650_t-40` 为 `16` 连续无错码 = `0.500 UI`），45/45 BBPD 极性正确，`250 MHz` 字时钟 `wclk` 两侧裕量 `setup ≥ 1,653 ps`、`hold ≥ 2,090 ps`；
 - **功耗大幅下降**：45 角 RX v2 功耗 **`13.72–24.46 mW`**（**TT `19.12 mW = 4.78 pJ/bit`**，较旧全 CML RX `42.42 mW` `[31.90–52.06 mW]` 降 **55% / 2.22×**——即便最差角 `24.46 mW` 仍低于旧 CML RX 最低角 `23%`）；与 TX v4 SST 组成的整条 **4 Gb/s TX+RX 链路 TT 功耗仅 `34.29 mW`（`8.57 pJ/bit`）**，较旧全 CML 整链（`145.28 mW = 36.32 pJ/bit`）降 **76.4% / 4.24×**；
 - **已验证 PDK 版图进展**：已完成 6 个核心模块版图并全部通过 `DRC = 0 / LVS = MATCH`（`term` `545.6 µm²`、`ctle` `979.9 µm²`、`dt_slicer` `933.6 µm²`、`qdiv2_8ph` `2,571.7 µm²`、`pi_rotator_2g` `7,942.3 µm²`、`cmos_pi_8ph` `11,223.4 µm²` 严格 `0.0%` M5），详见 [v2_pdk/README.md](../../analog/rx/cmos_rx/layout/variants/v2_pdk/README.md)；
-- **采用状态**：`v1.0` 主线采用 CMOS RX v2.2，早期 CML 子模块按原试验边界留存。[当前状态](../status/current.md)
+- **采用状态**：`v1.0` 4 Gb/s 主线采用 CMOS RX `v2.2`（[v2_pdk](../../analog/rx/cmos_rx/layout/variants/v2_pdk/README.md)）；5.0 Gb/s Plan-C 路线已签核集成顶层 **`rx_top_5g_pdk`**（见第 5 节与 [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)）。[当前状态](../status/current.md)
 
 入口：[CTLE 网表](../../analog/rx/cmos_rx/spice/rx_ctle_pdk.spice) · [采样器网表](../../analog/rx/cmos_rx/spice/rx_dt_sampler.spice) · [CMOS PI+÷2 网表](../../analog/rx/cmos_rx/spice/rx_cmos_pi.spice) · [CMOS 1:16 解串网表](../../analog/rx/cmos_rx/spice/rx_cmos_deser16.spice) · [RX v2 顶层网表](../../analog/rx/cmos_rx/spice/rx_cmos_top.spice) · [联调脚本](../../analog/rx/cmos_rx/tb/link/verify_link.py) · [绘图脚本](../../verification/plotting/rx_cmos_v2_signoff.py)
 
@@ -123,3 +123,7 @@ PLL 驱动的新增联合台使用 CML 反馈 PLL，四路 `r5` 接收器产生�
 | 重定尺寸，每臂 3.0 nH | 11.18 GHz | 152 mV / 0.095 UI | 2.12 mW | 1.341 V |
 
 现有纯 RC 与紧凑线圈同功耗，最差短窗幅度少 `19 mV`，保留了线圈区域的减面机会。重定尺寸纯 RC 在 C2 无 FFE 时把有符号幅度从 `149 mV` 提到 `188 mV`，边沿散布从 `0.113 UI` 降至 `0.063 UI`，代价是 `0.45 mW` 额外 TT 功耗及偏置重配。优先让前者经八个有时钟的采样器、输出耦合 PEX 与实际 TX 幅度做短窗，沿相同边界比较后者。当前表中的面积机会用现有有源宏 `1,081 µm²` 估量，纯 RC 需要实际布置与提取。
+
+### 5G RX 集成顶层签核入口（`rx_top_5g_pdk`，2026-11-26）
+
+5.0 Gb/s Plan-C 路线已将 **W3 紧凑电感 CTLE**（`ctle_shunt_5g_w3_pdk`：45/45 AC + 400× MC `3σ ≤ 20.28 mV`）、**5G Double-Tail 采样器**（`slicer_5g_pdk`：6/6 PVT + 250/250 MC `3σ ≤ 20.30 mV`）与 **4 相 5G CMOS PI v3**（`v5g_4ph_v3_pdk`：6/6 标称 `ALL_OK` + 24× 冷角 MC `0/24` 翻转/停振）集成为单一顶层宏 **`serdes_rx_cmos_top_5g_pdk`**（`312.1 × 199.4 µm`，`DRC = 0 / FP = 0 / DC & Open LVS = MATCH`，72/74 端口，`ctle_p/n = 57.29 / 57.54 fF`）。源码与签核收据见 [rx_cmos_top_5g_pdk.spice](../../analog/rx/cmos_rx/spice/rx_cmos_top_5g_pdk.spice)、[build_rx_cmos_top_5g_pdk.py](../../analog/rx/cmos_rx/layout/build_rx_cmos_top_5g_pdk.py)、[rx_top_5g_pdk/summary.json](../../analog/rx/cmos_rx/layout/variants/rx_top_5g_pdk/summary.json) 与 [5G 签核台账](../../results/catalog/serdes_5g_signoff_20261126.json)。

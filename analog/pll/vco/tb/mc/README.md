@@ -10,4 +10,4 @@ uv run python analog/pll/vco/tb/mc/r6_pilot.py --analyse results/analog/pll/vco/
 
 固定seed6/chunk4，两块八样本；另跑一份TT名义点、同种子首样本，mc.run_many还在首块前保留单样本完整终点pilot。先独立1ns冒烟，24ns瞬态从14ns后第二至第十二个上升沿测十周期均频；每份输出要求实际24ns终点、完整行数与输入身份。每块最多4样本以限制mc_source内存增长，单worker，与M1合计≤2，全机≤4。原PDK变容模型用于MC；局部noisy副本只在独立噪声审计卡使用，未混用为统计配对输入。
 
-初筛记录、适用边界与固定索引见[持续锁定续做](../../../../../docs/design/r6_lock_confirmation.md)。修改工况、分块或源时准备新campaign，不能在旧目录上更换样本身份。
+初筛记录、适用边界与固定索引见 [r6_lock_confirmation.json](../../../../../results/catalog/r6_lock_confirmation.json)。修改工况、分块或源时准备新campaign，不能在旧目录上更换样本身份。

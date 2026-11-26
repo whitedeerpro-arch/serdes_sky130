@@ -28,7 +28,6 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 import rx_layout_common as rlc  # noqa: E402
-import build_rx_ctle_shunt_5g_pdk as ctle5g  # noqa: E402
 from rx_layout_common import (  # noqa: E402
     Cell,
     PdkCache,
@@ -57,8 +56,13 @@ RESULTS_DIR = REPO / "results" / "layout" / "rx_ctle_shunt_5g_w3_pdk"
 
 ACTIVE_NAME = "serdes_rx_ctle_active_5g_w3_pdk"
 TOP_NAME = "serdes_rx_ctle_shunt_5g_w3_pdk"
-ACTIVE_PORTS = ctle5g.ACTIVE_PORTS
-TOP_PORTS = ctle5g.TOP_PORTS
+ACTIVE_PORTS = [
+    "inp", "inn", "outp", "outn", "lp_mid", "ln_mid",
+    "eq0", "eq1", "vbias", "vdd", "vss",
+]
+TOP_PORTS = [
+    "inp", "inn", "outp", "outn", "eq0", "eq1", "vbias", "vdd", "vss",
+]
 
 
 def active_primitive_lines_w3(lp_node: str = "lp_mid", ln_node: str = "ln_mid") -> list[str]:

@@ -1,8 +1,8 @@
 # CML→CMOS 时钟接收器
 
-现行 PLL r6q 采用 ÷8 后的 250 MHz 反馈接收 `serdes_cml_to_cmos_pvt_candidate`，全速支路的历史 r4 表征见下文。2 GHz 局部候选为交流耦合 r5 v6，已完成 CPEX PVT、原生 RCX 压力点、CPEX 失配与 CMOS ÷8 冷启动夹具验证。r5 v6 的 RC 失配与 PLL 闭环资格仍待验证。[反馈网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice)、[r5 v6 候选与证据](../../analog/common/cml_to_cmos/layout/variants/r5_pdk/README.md)
+现行 PLL r6q 发布闭环台采用 ÷8 后的 250 MHz 反馈接收 `serdes_cml_to_cmos_pvt_candidate`，片级 2 GHz 候选与装配采用交流耦合 `r5` v6（已完成 45 角 CPEX PVT、原生 RCX 6 压力点、TT/SS 冷 200/200 CPEX 失配 MC 与 CMOS ÷8 冷启动夹具验证）。[反馈网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_pvt_candidate.spice) · [r5 网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r5.spice) · [r5 v6 物理目录与证据](../../analog/common/cml_to_cmos/layout/variants/r5_pdk/README.md) · [r5 后仿脚本](../../analog/common/cml_to_cmos/tb/r5_pex/verify_r5_pdk.py)
 
-历史 r4 的幅度余量和过冲数据属于该版全速支路。器件端电压与恢复级复位仍按所用修订逐项核对。[r4 网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4.spice)、[项目状态](../status/current.md)
+下方保留历史 `r3/r4` 全速支路的幅度余量、低压冷角修复和过冲记录供演进对照。[r4_v4 网表](../../analog/common/cml_to_cmos/spice/cml_to_cmos_r4_v4.spice) · [项目状态](../status/current.md)
 
 ## r3/r4 电路与恢复级
 
@@ -20,9 +20,9 @@ flowchart LR
 | 预驱动反相器 | NMOS W = 1.8 µm（v0.1 为 1 µm）、PMOS W = 3.6 µm |
 | 输出 | 反相器 Wn/Wp = 4/12 µm，再经状态恢复级 |
 
-恢复级有记忆：输入停钟时保持状态，不保证静态输入到输出的直流逻辑关系；没有复位或无毛刺门控。RX 数据读出使用另一个无记忆的静态版本 [cml_to_cmos_data.spice](../../analog/common/cml_to_cmos/spice/cml_to_cmos_data.spice)，见 [RX PI 与采样](rx_pi_sampler.md)。
+恢复级有记忆：输入停钟时保持状态，不保证静态输入到输出的直流逻辑关系；没有复位或无毛刺门控。主线接收端现已切换为四分之一速 Double-Tail 动态 CMOS 采样器与纯 CMOS 解串，不再需要 CML→CMOS 数据转换级，见 [CMOS RX v2 / 5G](rx_cmos_v2.md)。
 
-## 已验证结果
+## 已验证结果（历史 r3/r4 全速基线）
 
 ### v0.1 接收器，1.8 V 单模块（2 GHz、400 mVpp、共模 1.632 V、每路 20 fF）
 
@@ -34,13 +34,11 @@ flowchart LR
 | SF / 27 °C | 49.02% | 58.9 ps | 28.0 ps | 3.63 mW |
 | FS / 27 °C | 50.60% | 40.6 ps | 30.1 ps | 3.20 mW |
 
-来源：[接收器记录](../history/cml_clock_receiver_results.md)。
-
 ### 修整与低压边界
 
 SS/1.65 V/85 °C 下原接收器的增益节点仍在摆动，但预驱动 `bp` 最低约 0.744 V、后级只到约 0.722 V，无法翻转；加大尾管与预驱动 NMOS 后 `bp` 摆到约 0.095–1.517 V，时钟恢复。功耗代价约 3.494 → 3.732 mW（TT、2 GHz，+6.8%）。
 
-在该修整版上做的 SS/1.65 V 温度扫描（特定激励：300 mVpp 经 buffer、共模 VDD − 0.15 V），冷端边界落在 (−13, −12] °C。原版在 1.70 V 时的边界在 (47, 48] °C。来源：[修整记录](../history/pll_pvt_refinement.md)。
+在该修整版上做的 SS/1.65 V 温度扫描（特定激励：300 mVpp 经 buffer、共模 VDD − 0.15 V），冷端边界落在 (−13, −12] °C。原版在 1.70 V 时的边界在 (47, 48] °C。
 
 ### r3 中的 SS 冷角缺口
 
@@ -50,16 +48,16 @@ SS/1.65 V/85 °C 下原接收器的增益节点仍在摆动，但预驱动 `bp` 
 | 原生 VCO 码 5（VCO 约 416 mVpp、buffer 后约 537 mVpp） | CML 分频和反馈正常，四相全速 CMOS 全部失效 |
 | 原生 VCO 码 6（频率较低） | 曾有正常 CMOS 输出 |
 
-所以这是转换器的速度/幅度/共模问题，不是 VCO 停振或分频丢失。来源：[r3 记录](../history/pll_buffered_pvt.md)。
+所以这是转换器的速度/幅度/共模问题，不是 VCO 停振或分频丢失。
 
-### 谁依赖全速输出
+### 全速输出去向
 
-- PLL 反馈只用 ÷8 后的 250 MHz CMOS，不受影响。
-- 旧 RX [rx_cmos_pair_align.spice](../../analog/rx/sampler/spice/rx_cmos_pair_align.spice) 把 EDGE 转成2 GHz CMOS再对齐pair。当前物理deser16已改用CML÷2/1:2分路＋匹配静态转换＋CMOS1:4，不依赖这个全速恢复接收器做数据采集；旧pair夹具保留。见[RX读出](rx_pi_sampler.md#cmos-读出2026-11-02)。
+- 4G 发布闭环台的 PLL 反馈用 ÷8 后的 250 MHz CMOS；片级 4G/5G 装配由 4× `r5` v6 时钟接收器（或 5G CML 时钟宿主宏）向 SAFF-TSPC / `div_ab_5g_v2`、TX 与 RX PI 提供高速 CMOS 时钟。
+- 主线 RX 采样器与解串已完全去 CML 化（见 [rx_cmos_v2.md](rx_cmos_v2.md)），不再依赖 CML→CMOS 数据路径。
 
 ### r4：全速 SS 冷角修复（2026-10-31）
 
-bench：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 prescaler 负载后进入转换器，与 r3 的 45 条件测试边界一致（[bench](../../analog/common/cml_to_cmos/tb/fullrate_pvt/run.py)）。
+历史台边界：300 mVpp 源（共模 VDD − 0.15 V）经真实抽出 buffer 和 r3 prescaler 负载后进入转换器，与 r3 的 45 条件测试边界一致。
 
 **根因。** SS/1.65 V/−40 °C 下，增益级输出 `ap` 最高只到约 1.09 V（TT 下约 1.67 V），预驱动输出 `bp` 只能降到约 0.95 V，后级不翻转。输入加到 550 mVpp 也只降到 0.67 V。问题出在差分转单端级 PMOS 镜像负载的上拉：冷端 PMOS 阈值高、镜像节点慢。这一级输出的直流中心又随 PVT 变化，而后级反相器的翻转点是固定的。
 

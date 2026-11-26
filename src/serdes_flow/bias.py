@@ -4,7 +4,7 @@
     text = bias.section(text, "ss", "hh")       # library section MOS corner x resistor corner
 
 The benches so far feed each module's bias diode from an ideal current source on a separate ideal
-supply (docs/design/bias.md).  real() swaps every such source for a PMOS copy of the constant-swing
+supply (docs/design/bias_v2.md).  real() swaps every such source for a PMOS copy of the constant-swing
 reference (analog/bias/spice/bias_dist.spice) on the bench's main supply, so the reference's
 own PVT / resistor-corner behaviour and the supply reach the bias as they would on chip:
 
